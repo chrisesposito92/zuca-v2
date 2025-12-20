@@ -1,4 +1,4 @@
-import { complete, getZuoraMcpTools } from '../../llm/client.js';
+import { complete, getZuoraMcpTools, ReasoningEffort } from '../../llm/client.js';
 import { loadPrompt, PROMPTS } from '../../llm/prompts/index.js';
 import { DetectedCapabilities, DetectedCapabilitiesSchema } from '../../types/output.js';
 import { GoldenUseCaseCapability, KeyTerm } from '../../types/golden-use-cases.js';
@@ -76,7 +76,8 @@ export async function detectCapabilities(
   revRecNotes: string | undefined,
   capabilities: GoldenUseCaseCapability[],
   keyTerms: KeyTerm[],
-  previousCapabilities?: DetectedCapabilities
+  previousCapabilities?: DetectedCapabilities,
+  reasoningEffort: ReasoningEffort = 'medium' // Capability detection needs solid reasoning
 ): Promise<DetectedCapabilities> {
   debugLog('Detecting capabilities from use case');
 
@@ -92,8 +93,9 @@ export async function detectCapabilities(
     systemPrompt,
     userMessage,
     responseSchema: detectCapabilitiesJsonSchema,
-    tools: ['web_search'], // Enable web search for Zuora documentation lookups
-    mcpTools: getZuoraMcpTools(), // Zuora MCP for capability knowledge
+    tools: ['web_search', 'code_interpreter'],
+    mcpTools: getZuoraMcpTools(),
+    reasoningEffort,
   });
 
   if (!result.structured) {

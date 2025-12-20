@@ -1,4 +1,4 @@
-import { complete } from '../../llm/client.js';
+import { complete, getZuoraMcpTools, ReasoningEffort } from '../../llm/client.js';
 import { loadPrompt, PROMPTS } from '../../llm/prompts/index.js';
 import { ContractIntel, ContractIntelSchema } from '../../types/output.js';
 import { ZucaInput } from '../../types/input.js';
@@ -67,7 +67,8 @@ function buildUserMessage(input: ZucaInput): string {
  */
 export async function extractContractIntel(
   input: ZucaInput,
-  previousContractIntel?: ContractIntel
+  previousContractIntel?: ContractIntel,
+  reasoningEffort: ReasoningEffort = 'low' // Simple extraction task
 ): Promise<ContractIntel> {
   debugLog('Extracting contract intel from use case');
 
@@ -83,7 +84,9 @@ export async function extractContractIntel(
     systemPrompt,
     userMessage,
     responseSchema: contractIntelJsonSchema,
-    temperature: 0.3, // Lower temperature for more deterministic extraction
+    tools: ['web_search', 'code_interpreter'],
+    mcpTools: getZuoraMcpTools(),
+    reasoningEffort,
   });
 
   if (!result.structured) {

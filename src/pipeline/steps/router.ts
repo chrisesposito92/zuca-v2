@@ -1,4 +1,4 @@
-import { complete } from '../../llm/client.js';
+import { complete, getZuoraMcpTools, ReasoningEffort } from '../../llm/client.js';
 import { loadPrompt, PROMPTS } from '../../llm/prompts/index.js';
 import { debugLog } from '../../config.js';
 
@@ -43,7 +43,8 @@ const routerJsonSchema = {
  */
 export async function routeQuery(
   userInput: string,
-  hasExistingSolution: boolean = false
+  hasExistingSolution: boolean = false,
+  reasoningEffort: ReasoningEffort = 'low' // Simple classification task
 ): Promise<RouterResult> {
   debugLog('Routing user query', { inputLength: userInput.length, hasExistingSolution });
 
@@ -57,7 +58,9 @@ export async function routeQuery(
     systemPrompt,
     userMessage,
     responseSchema: routerJsonSchema,
-    temperature: 0.1, // Low temperature for consistent classification
+    tools: ['web_search', 'code_interpreter'],
+    mcpTools: getZuoraMcpTools(),
+    reasoningEffort,
   });
 
   if (!result.structured) {

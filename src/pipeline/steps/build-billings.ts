@@ -1,4 +1,4 @@
-import { complete } from '../../llm/client.js';
+import { complete, getZuoraMcpTools, ReasoningEffort } from '../../llm/client.js';
 import { loadPrompt, PROMPTS } from '../../llm/prompts/index.js';
 import {
   BillingsOutput,
@@ -92,7 +92,8 @@ export async function buildBillings(
   input: ZucaInput,
   subscriptionSpec: SubscriptionSpec,
   contractIntel: ContractIntel,
-  previousOutput?: BillingsOutput
+  previousOutput?: BillingsOutput,
+  reasoningEffort: ReasoningEffort = 'medium' // Date calculations need solid reasoning
 ): Promise<BillingsOutput> {
   debugLog('Building Billings table');
 
@@ -108,8 +109,9 @@ export async function buildBillings(
     systemPrompt,
     userMessage,
     responseSchema: billingsJsonSchema,
-    tools: ['code_interpreter'], // Enable for date calculations
-    temperature: 0.3,
+    tools: ['web_search', 'code_interpreter'],
+    mcpTools: getZuoraMcpTools(),
+    reasoningEffort,
   });
 
   if (!result.structured) {

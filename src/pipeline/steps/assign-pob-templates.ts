@@ -1,4 +1,4 @@
-import { complete } from '../../llm/client.js';
+import { complete, getZuoraMcpTools, ReasoningEffort } from '../../llm/client.js';
 import { loadPrompt, PROMPTS } from '../../llm/prompts/index.js';
 import {
   PobMappingOutput,
@@ -168,7 +168,8 @@ export async function assignPobTemplates(
   contractIntel: ContractIntel,
   subscriptionSpec: SubscriptionSpec,
   pobTemplates: PobTemplate[],
-  previousMapping?: PobMappingOutput
+  previousMapping?: PobMappingOutput,
+  reasoningEffort: ReasoningEffort = 'high' // POB assignment requires careful ASC 606 reasoning
 ): Promise<PobMappingOutput> {
   debugLog('Assigning POB templates to charges');
 
@@ -191,7 +192,9 @@ export async function assignPobTemplates(
     systemPrompt,
     userMessage,
     responseSchema: pobMappingJsonSchema,
-    temperature: 0.3,
+    tools: ['web_search', 'code_interpreter'],
+    mcpTools: getZuoraMcpTools(),
+    reasoningEffort,
   });
 
   if (!result.structured) {

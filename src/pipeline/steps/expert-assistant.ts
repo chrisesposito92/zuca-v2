@@ -1,4 +1,4 @@
-import { complete, getZuoraMcpTools } from '../../llm/client.js';
+import { complete, getZuoraMcpTools, ReasoningEffort } from '../../llm/client.js';
 import { loadPrompt, PROMPTS } from '../../llm/prompts/index.js';
 import { ZucaOutput } from '../../types/output.js';
 import { debugLog } from '../../config.js';
@@ -158,7 +158,8 @@ function buildUserMessage(
  */
 export async function expertAssistant(
   question: string,
-  solution?: Partial<ZucaOutput>
+  solution?: Partial<ZucaOutput>,
+  reasoningEffort: ReasoningEffort = 'medium' // Q&A needs balanced reasoning
 ): Promise<ExpertResponse> {
   debugLog('Expert Assistant handling question', { questionLength: question.length });
 
@@ -169,8 +170,9 @@ export async function expertAssistant(
     systemPrompt,
     userMessage,
     responseSchema: expertAssistantJsonSchema,
-    tools: ['web_search'],
-    mcpTools: getZuoraMcpTools(), // Zuora MCP for direct API access
+    tools: ['web_search', 'code_interpreter'],
+    mcpTools: getZuoraMcpTools(),
+    reasoningEffort,
   });
 
   if (!result.structured) {

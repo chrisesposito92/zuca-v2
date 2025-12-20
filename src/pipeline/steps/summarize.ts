@@ -1,4 +1,4 @@
-import { complete } from '../../llm/client.js';
+import { complete, getZuoraMcpTools, ReasoningEffort } from '../../llm/client.js';
 import { loadPrompt, PROMPTS } from '../../llm/prompts/index.js';
 import {
   SummaryOutput,
@@ -126,7 +126,8 @@ export async function summarizeResults(
   pobMapping?: PobMappingOutput,
   contractsOrders?: ContractsOrdersOutput,
   billings?: BillingsOutput,
-  revRecWaterfall?: RevRecWaterfallOutput
+  revRecWaterfall?: RevRecWaterfallOutput,
+  reasoningEffort: ReasoningEffort = 'low' // Simple consolidation task
 ): Promise<SummaryOutput> {
   debugLog('Summarizing assumptions and open questions');
 
@@ -161,7 +162,9 @@ export async function summarizeResults(
     systemPrompt,
     userMessage,
     responseSchema: summaryJsonSchema,
-    temperature: 0.3,
+    tools: ['web_search', 'code_interpreter'],
+    mcpTools: getZuoraMcpTools(),
+    reasoningEffort,
   });
 
   if (!result.structured) {

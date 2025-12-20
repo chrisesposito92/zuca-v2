@@ -1,4 +1,4 @@
-import { complete } from '../../llm/client.js';
+import { complete, getZuoraMcpTools, ReasoningEffort } from '../../llm/client.js';
 import { loadPrompt, PROMPTS } from '../../llm/prompts/index.js';
 import {
   RevRecWaterfallOutput,
@@ -91,7 +91,8 @@ export async function buildRevRecWaterfall(
   contractsOrders: ContractsOrdersOutput,
   pobMapping: PobMappingOutput,
   contractIntel: ContractIntel,
-  previousOutput?: RevRecWaterfallOutput
+  previousOutput?: RevRecWaterfallOutput,
+  reasoningEffort: ReasoningEffort = 'high' // Complex rev rec calculations need thorough reasoning
 ): Promise<RevRecWaterfallOutput> {
   debugLog('Building Rev Rec Waterfall');
 
@@ -107,8 +108,9 @@ export async function buildRevRecWaterfall(
     systemPrompt,
     userMessage,
     responseSchema: revRecWaterfallJsonSchema,
-    tools: ['code_interpreter'], // Enable for waterfall calculations
-    temperature: 0.3,
+    tools: ['web_search', 'code_interpreter'],
+    mcpTools: getZuoraMcpTools(),
+    reasoningEffort,
   });
 
   if (!result.structured) {

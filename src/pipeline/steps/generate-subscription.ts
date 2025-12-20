@@ -1,4 +1,4 @@
-import { complete, getZuoraMcpTools } from '../../llm/client.js';
+import { complete, getZuoraMcpTools, ReasoningEffort } from '../../llm/client.js';
 import { loadPrompt, PROMPTS } from '../../llm/prompts/index.js';
 import { SubscriptionSpec, SubscriptionSpecSchema, ContractIntel } from '../../types/output.js';
 import { MatchGoldenUseCasesOutput } from '../../types/output.js';
@@ -207,7 +207,8 @@ export async function generateSubscriptionSpec(
   matchResults: MatchGoldenUseCasesOutput,
   contextSubs: GoldenSubscription[],
   contextRpcs: GoldenRatePlanChargesDoc[],
-  previousSpec?: SubscriptionSpec
+  previousSpec?: SubscriptionSpec,
+  reasoningEffort: ReasoningEffort = 'high' // Complex subscription design needs thorough reasoning
 ): Promise<SubscriptionSpec> {
   debugLog('Generating subscription spec');
 
@@ -229,8 +230,9 @@ export async function generateSubscriptionSpec(
     systemPrompt,
     userMessage,
     responseSchema: subscriptionSpecJsonSchema,
-    tools: ['web_search'], // Enable for Zuora documentation lookups
-    mcpTools: getZuoraMcpTools(), // Zuora MCP for direct API access
+    tools: ['web_search', 'code_interpreter'],
+    mcpTools: getZuoraMcpTools(),
+    reasoningEffort,
   });
 
   if (!result.structured) {
