@@ -22,6 +22,7 @@ import {
 import {
   formatSubscription,
   formatRatePlanCharges,
+  formatContractsOrdersTable,
   formatBillingsTable,
   formatRevRecWaterfall,
 } from '../utils/markdown-tables.js';
@@ -94,6 +95,11 @@ function printResult(result: any): void {
       console.log(`  Confidence: ${(mapping.confidence * 100).toFixed(0)}%`);
       console.log('');
     });
+  }
+
+  printHeader('Contracts/Orders Table');
+  if (result.contracts_orders) {
+    console.log(formatContractsOrdersTable(result.contracts_orders.zr_contracts_orders));
   }
 
   printHeader('Billings Schedule');

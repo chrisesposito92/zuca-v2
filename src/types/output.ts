@@ -301,6 +301,7 @@ export type ContractsOrdersOutput = z.infer<typeof ContractsOrdersOutputSchema>;
 // ============================================================================
 
 export const BillingsRowSchema = z.object({
+  'Invoice Date': z.string(),
   'Billing Date': z.string(),
   'Charge Name': z.string(),
   'Rate Plan': z.string(),

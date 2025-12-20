@@ -235,13 +235,41 @@ export function formatRatePlanCharges(
 }
 
 /**
+ * Format Contracts/Orders table as Markdown
+ */
+export function formatContractsOrdersTable(
+  rows: Array<Record<string, unknown>>
+): string {
+  if (!rows || rows.length === 0) {
+    return '## Contracts/Orders Table\n_(no rows)_';
+  }
+
+  const columns: ColumnDef[] = [
+    { key: 'Line Item Num', header: 'Line', align: 'right' },
+    { key: 'POB Name', header: 'POB Name' },
+    { key: 'POB Template', header: 'Template' },
+    { key: 'RPC Type', header: 'RPC Type' },
+    { key: 'Revenue Start Date', header: 'Rev Start' },
+    { key: 'Revenue End Date', header: 'Rev End' },
+    { key: 'Ext Sell Price', header: 'Sell $', align: 'right' },
+    { key: 'SSP Price', header: 'SSP $', align: 'right' },
+    { key: 'Ext Allocated Price', header: 'Allocated $', align: 'right' },
+    { key: 'Release Event', header: 'Release Event' },
+    { key: 'Customer Name', header: 'Customer' },
+  ];
+
+  return generateTable(rows, columns, { title: 'Contracts/Orders Table' });
+}
+
+/**
  * Format billings table as Markdown
  */
 export function formatBillingsTable(
   billings: Array<Record<string, unknown>>
 ): string {
   const columns: ColumnDef[] = [
-    { key: 'Billing Date', header: 'Date' },
+    { key: 'Invoice Date', header: 'Invoice Date' },
+    { key: 'Billing Date', header: 'Billing Date' },
     { key: 'Charge Name', header: 'Charge' },
     { key: 'Rate Plan', header: 'Rate Plan' },
     { key: 'Product', header: 'Product' },
@@ -257,7 +285,8 @@ export function formatBillingsTable(
 }
 
 /**
- * Format revenue waterfall as Markdown (pivoted by month)
+ * Format revenue waterfall as Markdown
+ * Handles flat format (one row per POB per period with Period and Amount columns)
  */
 export function formatRevRecWaterfall(
   revRecRows: Array<Record<string, unknown>>
@@ -266,7 +295,29 @@ export function formatRevRecWaterfall(
     return '## Revenue Recognition Waterfall\n_(no rows)_';
   }
 
-  // Collect all month columns
+  // Check if data is in flat format (has Period column) or pivoted format (has month columns)
+  const hasMonthColumns = revRecRows.some(row =>
+    Object.keys(row).some(key => /^[A-Za-z]{3}-\d{2}$/.test(key))
+  );
+
+  if (!hasMonthColumns) {
+    // Flat format: one row per POB per period
+    // Display with Period column showing MMM-YY
+    const columns: ColumnDef[] = [
+      { key: 'Line Item Num', header: 'Line', align: 'right' },
+      { key: 'POB Name', header: 'POB Name' },
+      { key: 'Period', header: 'Period' },
+      { key: 'Revenue Start Date', header: 'Rev Start' },
+      { key: 'Revenue End Date', header: 'Rev End' },
+      { key: 'Event Name', header: 'Event' },
+      { key: 'Ext Allocated Price', header: 'Allocated', align: 'right' },
+      { key: 'Amount', header: 'Amount', align: 'right' },
+    ];
+
+    return generateTable(revRecRows, columns, { title: 'Revenue Recognition Waterfall' });
+  }
+
+  // Pivoted format: month columns as separate keys
   const monthPattern = /^[A-Za-z]{3}-\d{2}$/;
   const monthCols = new Set<string>();
 
@@ -293,10 +344,10 @@ export function formatRevRecWaterfall(
 
   // Build columns
   const columns: ColumnDef[] = [
-    { key: 'Line Item Num', header: 'POB' },
-    { key: 'POB Name', header: 'Name' },
-    { key: 'Revenue Start Date', header: 'Start' },
-    { key: 'Revenue End Date', header: 'End' },
+    { key: 'Line Item Num', header: 'Line', align: 'right' },
+    { key: 'POB Name', header: 'POB Name' },
+    { key: 'Revenue Start Date', header: 'Rev Start' },
+    { key: 'Revenue End Date', header: 'Rev End' },
     { key: 'Event Name', header: 'Event' },
     { key: 'Ext Allocated Price', header: 'Allocated', align: 'right' },
     ...sortedMonths.map((m) => ({ key: m, header: m, align: 'right' as const })),

@@ -1,4 +1,4 @@
-import { complete, createAskZuoraTool } from '../../llm/client.js';
+import { complete, getZuoraMcpTools } from '../../llm/client.js';
 import { loadPrompt, PROMPTS } from '../../llm/prompts/index.js';
 import { SubscriptionSpec, SubscriptionSpecSchema, ContractIntel } from '../../types/output.js';
 import { MatchGoldenUseCasesOutput } from '../../types/output.js';
@@ -229,8 +229,8 @@ export async function generateSubscriptionSpec(
     systemPrompt,
     userMessage,
     responseSchema: subscriptionSpecJsonSchema,
-    customTools: [createAskZuoraTool()], // Enable Zuora MCP for guidance
-    temperature: 0.5,
+    tools: ['web_search'], // Enable for Zuora documentation lookups
+    mcpTools: getZuoraMcpTools(), // Zuora MCP for direct API access
   });
 
   if (!result.structured) {

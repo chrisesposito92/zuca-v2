@@ -1,4 +1,4 @@
-import { complete, createAskZuoraTool } from '../../llm/client.js';
+import { complete, getZuoraMcpTools } from '../../llm/client.js';
 import { loadPrompt, PROMPTS } from '../../llm/prompts/index.js';
 import { ZucaOutput } from '../../types/output.js';
 import { debugLog } from '../../config.js';
@@ -170,8 +170,7 @@ export async function expertAssistant(
     userMessage,
     responseSchema: expertAssistantJsonSchema,
     tools: ['web_search'],
-    customTools: [createAskZuoraTool()],
-    temperature: 0.5,
+    mcpTools: getZuoraMcpTools(), // Zuora MCP for direct API access
   });
 
   if (!result.structured) {

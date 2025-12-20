@@ -1,4 +1,4 @@
-import { complete } from '../../llm/client.js';
+import { complete, getZuoraMcpTools } from '../../llm/client.js';
 import { loadPrompt, PROMPTS } from '../../llm/prompts/index.js';
 import { DetectedCapabilities, DetectedCapabilitiesSchema } from '../../types/output.js';
 import { GoldenUseCaseCapability, KeyTerm } from '../../types/golden-use-cases.js';
@@ -93,7 +93,7 @@ export async function detectCapabilities(
     userMessage,
     responseSchema: detectCapabilitiesJsonSchema,
     tools: ['web_search'], // Enable web search for Zuora documentation lookups
-    temperature: 0.3,
+    mcpTools: getZuoraMcpTools(), // Zuora MCP for capability knowledge
   });
 
   if (!result.structured) {

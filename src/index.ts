@@ -80,7 +80,8 @@ export {
 // LLM Client (for advanced usage)
 export {
   complete,
-  createAskZuoraTool,
+  getZuoraMcpTools,
+  createZuoraMcpTool,
   CompletionOptions,
   CompletionResult,
 } from './llm/client.js';

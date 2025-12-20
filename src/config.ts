@@ -13,6 +13,7 @@ const ConfigSchema = z.object({
     apiKey: z.string().min(1, 'OPENAI_API_KEY is required'),
     model: z.string().default('gpt-5.2'),
     maxRetries: z.number().int().positive().default(3),
+    reasoningEffort: z.enum(['low', 'medium', 'high']).default('medium'),
   }),
 
   // Server Configuration
@@ -47,6 +48,7 @@ export function loadConfig(): Config {
       apiKey: process.env.OPENAI_API_KEY || '',
       model: process.env.OPENAI_MODEL || 'gpt-5.2',
       maxRetries: parseInt(process.env.MAX_RETRIES || '3', 10),
+      reasoningEffort: (process.env.OPENAI_REASONING_EFFORT || 'medium') as 'low' | 'medium' | 'high',
     },
     server: {
       port: parseInt(process.env.PORT || '3000', 10),

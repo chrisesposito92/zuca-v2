@@ -39,9 +39,13 @@ OPENAI_API_KEY=your-openai-api-key
 
 # Optional
 OPENAI_MODEL=gpt-5.2
+OPENAI_REASONING_EFFORT=medium  # low, medium, high - controls gpt-5.2 reasoning depth
 PORT=3000
 NODE_ENV=development
-DEBUG=true
+DEBUG=true  # Set to 'true' for verbose logging
+
+# Zuora MCP (optional - enables direct Zuora API integration)
+ZUORA_MCP_SERVER_URL=http://localhost:8080/mcp  # Your MCP server endpoint
 ```
 
 ### Usage
@@ -201,9 +205,32 @@ ZUCA uses a 10-step pipeline:
 10. **Summarize** - Consolidate assumptions/questions
 
 The pipeline uses OpenAI's Responses API with built-in tools:
-- `web_search` - Zuora documentation lookup
-- `code_interpreter` - Date/amount calculations
-- `ask_zuora` - Zuora MCP knowledge queries
+- `web_search_preview` - Zuora documentation and web lookup
+- `code_interpreter` - Date/amount calculations for billing schedules and waterfalls
+- **Zuora MCP** (optional) - Direct Zuora API access via Model Context Protocol (SSE)
+- `ask_zuora` - Custom function tool fallback when MCP unavailable
+
+### Tool Usage
+
+Tools are provided to the LLM but used at the model's discretion:
+- `web_search` - For up-to-date Zuora documentation lookups
+- `code_interpreter` - For complex date calculations in billing/revenue schedules
+- **Zuora MCP** - When configured, provides `ask_zuora`, `query_objects`, `zuora_codegen` tools
+
+### MCP Configuration
+
+To enable Zuora MCP integration, set the server URL in your `.env`:
+
+```env
+ZUORA_MCP_SERVER_URL=https://your-mcp-server.onrender.com/sse
+```
+
+The MCP server must support SSE (Server-Sent Events) for the OpenAI Responses API. When MCP is configured:
+- The LLM can query Zuora knowledge base in real-time
+- Tool calls show as `mcp_list_tools` and `mcp_call` in debug output
+- Falls back to custom function tools if MCP is unavailable
+
+Set `DEBUG=true` in your environment to see tool usage in the logs.
 
 ## License
 

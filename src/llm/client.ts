@@ -16,6 +16,32 @@ const openai = new OpenAI({
 export type BuiltInTool = 'web_search' | 'code_interpreter';
 
 /**
+ * Reasoning effort levels for gpt-5.2 and reasoning models
+ * - 'low': Minimal reasoning, faster responses
+ * - 'medium': Balanced reasoning and speed (recommended default)
+ * - 'high': Maximum reasoning effort, slower but more thorough
+ */
+export type ReasoningEffort = 'low' | 'medium' | 'high';
+
+/**
+ * MCP server tool configuration for the Responses API
+ * See: https://platform.openai.com/docs/guides/tools-connectors-mcp
+ */
+export interface McpTool {
+  type: 'mcp';
+  /** Label to identify this MCP server in responses */
+  server_label: string;
+  /** Description of what this MCP server does */
+  server_description: string;
+  /** URL of the MCP server (must support Streamable HTTP or HTTP/SSE) */
+  server_url: string;
+  /** Whether tool calls require user approval */
+  require_approval?: 'never' | 'always';
+  /** Optional list of specific tool names to allow from this server */
+  allowed_tools?: string[];
+}
+
+/**
  * Custom tool definition for function calling
  */
 export interface CustomTool {
@@ -59,6 +85,9 @@ export interface CompletionOptions {
   /** Custom function tools */
   customTools?: CustomTool[];
 
+  /** MCP server tools */
+  mcpTools?: McpTool[];
+
   /** JSON schema for structured output */
   responseSchema?: Record<string, unknown>;
 
@@ -70,6 +99,13 @@ export interface CompletionOptions {
 
   /** Model override */
   model?: string;
+
+  /**
+   * Reasoning effort level for gpt-5.2 and reasoning models
+   * Required for gpt-5.2 to enable reasoning capabilities
+   * Defaults to 'medium' for balanced performance
+   */
+  reasoningEffort?: ReasoningEffort;
 }
 
 /**
@@ -103,17 +139,32 @@ export interface CompletionResult<T = unknown> {
  */
 function buildTools(
   builtInTools?: BuiltInTool[],
-  customTools?: CustomTool[]
+  customTools?: CustomTool[],
+  mcpTools?: McpTool[]
 ): OpenAI.Responses.Tool[] | undefined {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const tools: any[] = [];
 
   // Add built-in tools
   if (builtInTools?.includes('web_search')) {
-    tools.push({ type: 'web_search_preview' });
+    tools.push({ type: 'web_search' });
   }
   if (builtInTools?.includes('code_interpreter')) {
     tools.push({ type: 'code_interpreter', container: { type: 'auto' } });
+  }
+
+  // Add MCP server tools
+  if (mcpTools) {
+    for (const mcp of mcpTools) {
+      tools.push({
+        type: 'mcp',
+        server_label: mcp.server_label,
+        server_description: mcp.server_description,
+        server_url: mcp.server_url,
+        require_approval: mcp.require_approval || 'never',
+        ...(mcp.allowed_tools && { allowed_tools: mcp.allowed_tools }),
+      });
+    }
   }
 
   // Add custom function tools
@@ -194,26 +245,45 @@ export async function complete<T = unknown>(
     previousMessages,
     tools,
     customTools,
+    mcpTools,
     responseSchema,
     temperature = 0.7,
     maxTokens,
     model = config.openai.model,
+    reasoningEffort = config.openai.reasoningEffort, // Use config default for gpt-5.2
   } = options;
 
   debugLog('LLM Request:', {
     model,
-    tools,
+    reasoningEffort,
+    builtInTools: tools,
+    customToolCount: customTools?.length || 0,
+    mcpToolCount: mcpTools?.length || 0,
     hasSchema: !!responseSchema,
     messageLength: userMessage.length,
   });
 
   // Build request parameters
-  const requestParams: OpenAI.Responses.ResponseCreateParamsNonStreaming = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const requestParams: any = {
     model,
     input: buildMessages(systemPrompt, userMessage, previousMessages),
-    tools: buildTools(tools, customTools),
-    temperature,
+    tools: buildTools(tools, customTools, mcpTools),
   };
+
+  // Check if model supports reasoning (gpt-5.2 and reasoning models)
+  const isReasoningModel = model.includes('gpt-5') || model.includes('o1') || model.includes('o3');
+
+  if (isReasoningModel) {
+    // Reasoning models don't support temperature - use reasoning.effort instead
+    requestParams.reasoning = {
+      effort: reasoningEffort,
+    };
+    debugLog(`Using reasoning effort: ${reasoningEffort} (temperature not supported for reasoning models)`);
+  } else {
+    // Non-reasoning models use temperature
+    requestParams.temperature = temperature;
+  }
 
   // Add structured output if schema provided
   if (responseSchema) {
@@ -251,15 +321,35 @@ export async function complete<T = unknown>(
         }
       }
 
-      // Extract tool calls if any
+      // Extract tool calls if any (function calls for custom tools)
       const toolCalls: CompletionResult['toolCalls'] = [];
+      const outputTypes: string[] = [];
+
       for (const item of response.output) {
+        outputTypes.push(item.type);
+
         if (item.type === 'function_call') {
           toolCalls.push({
             name: item.name,
             arguments: JSON.parse(item.arguments),
           });
         }
+        // Log built-in tool usage
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const anyItem = item as any;
+        if (item.type === 'web_search_call' || anyItem.type?.includes('web_search')) {
+          debugLog('Web search tool was used');
+        }
+        if (item.type === 'code_interpreter_call' || anyItem.type?.includes('code_interpreter')) {
+          debugLog('Code interpreter tool was used');
+        }
+        if (item.type === 'mcp_call' || anyItem.type?.includes('mcp')) {
+          debugLog('MCP tool was called:', anyItem.server_label || 'unknown server');
+        }
+      }
+
+      if (outputTypes.length > 0) {
+        debugLog('Response output types:', outputTypes);
       }
 
       const result: CompletionResult<T> = {
@@ -279,6 +369,7 @@ export async function complete<T = unknown>(
         textLength: text.length,
         hasStructured: !!structured,
         toolCallCount: toolCalls.length,
+        outputTypes,
         usage: result.usage,
       });
 
@@ -370,34 +461,45 @@ export async function completeWithCodeInterpreter(
 }
 
 /**
- * Create a custom tool definition for Zuora MCP ask_zuora
+ * Create Zuora MCP server tool configuration
+ * Checks for ZUORA_MCP_SERVER_URL or ZUORA_MCP_URL environment variables
+ * Supports both HTTP and SSE endpoints
  */
-export function createAskZuoraTool(): CustomTool {
+export function createZuoraMcpTool(serverUrl?: string): McpTool | null {
+  // Check multiple possible env var names
+  const url =
+    serverUrl ||
+    process.env.ZUORA_MCP_SERVER_URL ||
+    process.env.ZUORA_MCP_URL ||
+    process.env.MCP_ZUORA_URL;
+
+  if (!url) {
+    debugLog('Zuora MCP server URL not configured, skipping MCP tool');
+    return null;
+  }
+
+  debugLog(`Zuora MCP configured with URL: ${url}`);
+
   return {
-    type: 'function',
-    function: {
-      name: 'ask_zuora',
-      description:
-        'Query Zuora knowledge base for product, billing, and revenue recognition information. ' +
-        'Use this to get accurate Zuora-specific guidance on rate plans, charges, POB templates, ' +
-        'and revenue recognition rules.',
-      parameters: {
-        type: 'object',
-        properties: {
-          question: {
-            type: 'string',
-            description: 'The question to ask about Zuora functionality',
-          },
-          context: {
-            type: ['string', 'null'],
-            description: 'Optional context about the use case being analyzed',
-          },
-        },
-        required: ['question', 'context'],
-        additionalProperties: false,
-      },
-    },
+    type: 'mcp',
+    server_label: 'zuora',
+    server_description:
+      'Zuora MCP server for querying Zuora knowledge base, product catalog, ' +
+      'billing configurations, and revenue recognition rules. Use ask_zuora for ' +
+      'questions about Zuora functionality, query_objects to search Zuora data.',
+    server_url: url,
+    require_approval: 'never',
+    allowed_tools: ['ask_zuora', 'query_objects', 'zuora_codegen', 'sdk_upgrade'],
   };
+}
+
+/**
+ * Get Zuora MCP tools array if configured, otherwise empty array
+ * Use this to easily add Zuora MCP to any pipeline step
+ */
+export function getZuoraMcpTools(): McpTool[] {
+  const mcpTool = createZuoraMcpTool();
+  return mcpTool ? [mcpTool] : [];
 }
 
 /**
