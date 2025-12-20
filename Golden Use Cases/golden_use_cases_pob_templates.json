@@ -1,0 +1,242 @@
+[
+  {
+    "POB Identifier": "BK-OT-CONSUMP-RATABLE",
+    "Template Name": "Consumption Ratable without VC upon booking",
+    "Description": "Consumption Ratable without VC upon booking",
+    "Release Event": "Upon Booking (Full Booking Release)",
+    "Ratable Method": "Ratable",
+    "POB Satisfied": "Over Time",
+    "Accounting Method": "Daily",
+    "VC Enabled": "N"
+  },
+  {
+    "POB Identifier": "BK-OT-CONSUMP-RATABLE-VC",
+    "Template Name": "Consumption Ratable with VC upon booking",
+    "Description": "Consumption Ratable with VC upon booking",
+    "Release Event": "Upon Booking (Full Booking Release)",
+    "Ratable Method": "Ratable",
+    "POB Satisfied": "Over Time",
+    "Accounting Method": "Daily",
+    "VC Enabled": "Y"
+  },
+  {
+    "POB Identifier": "BK-OT-RATABLE",
+    "Template Name": "BK-OT-RATABLE",
+    "Description": "UponBooking-Ratable-OverTim",
+    "Release Event": "Upon Booking (Full Booking Release)",
+    "Ratable Method": "Ratable",
+    "POB Satisfied": "Over Time",
+    "Accounting Method": "Daily",
+    "VC Enabled": "N"
+  },
+  {
+    "POB Identifier": "BK-OT-RATABLE-PM",
+    "Template Name": "BK-OT-RATABLE-PM",
+    "Description": "UponBooking-Ratable-Partial Monthly-OverTime",
+    "Release Event": "Upon Booking (Full Booking Release)",
+    "Ratable Method": "Ratable",
+    "POB Satisfied": "Over Time",
+    "Accounting Method": "Partial Monthly",
+    "VC Enabled": "N"
+  },
+  {
+    "POB Identifier": "BK-PIT-CURRENT_PERIOD",
+    "Template Name": "BK-PIT-CURRENT_PERIOD",
+    "Description": "UponBooking-ImmediateUsingOpenPeriod-PointInTime",
+    "Release Event": "Upon Booking (Full Booking Release)",
+    "Ratable Method": "Immediate Using Open Period",
+    "POB Satisfied": "Point In Time",
+    "Accounting Method": "Daily",
+    "VC Enabled": "N"
+  },
+  {
+    "POB Identifier": "BK-PIT-STARTDATE",
+    "Template Name": "BK-PIT-STARTDATE",
+    "Description": "UponBooking-ImmediateUsingStartDate-PointInTime",
+    "Release Event": "Upon Booking (Full Booking Release)",
+    "Ratable Method": "Immediate Using Start Date",
+    "POB Satisfied": "Point In Time",
+    "Accounting Method": "Daily",
+    "VC Enabled": "N"
+  },
+  {
+    "POB Identifier": "BL-OT-INVRAT-PM",
+    "Template Name": "BL-OT-INVRAT-PM",
+    "Description": "UponBilling-InvoiceRatable-PartialMonthly-OverTime",
+    "Release Event": "Upon Billing (Billed Release)",
+    "Ratable Method": "Invoice Ratable",
+    "POB Satisfied": "Over Time",
+    "Accounting Method": "Partial Monthly",
+    "VC Enabled": "N"
+  },
+  {
+    "POB Identifier": "BL-OT-INVRATABLE",
+    "Template Name": "BL-OT-INVRATABLE",
+    "Description": "UponBilling-InvoiceRatable-OverTime",
+    "Release Event": "Upon Billing (Billed Release)",
+    "Ratable Method": "Invoice Ratable",
+    "POB Satisfied": "Over Time",
+    "Accounting Method": "Daily",
+    "VC Enabled": "N"
+  },
+  {
+    "POB Identifier": "BL-PIT-CONSUMP-PAYGO",
+    "Template Name": "Consumption PayGo Billing",
+    "Description": "Consumption PayGo Billing",
+    "Release Event": "Upon Billing (Billed Release)",
+    "Ratable Method": "Immediate Using Open Period",
+    "POB Satisfied": "Point In Time",
+    "Accounting Method": "Daily",
+    "VC Enabled": "N"
+  },
+  {
+    "POB Identifier": "BL-PIT-CURRENT_PERIOD",
+    "Template Name": "BL-PIT-CURRENT_PERIOD",
+    "Description": "UponBilling-ImmediateUsingOpenPeriod-PointInTime",
+    "Release Event": "Upon Billing (Billed Release)",
+    "Ratable Method": "Immediate Using Open Period",
+    "POB Satisfied": "Point In Time",
+    "Accounting Method": "Daily",
+    "VC Enabled": "N"
+  },
+  {
+    "POB Identifier": "BL-PIT-STARTDATE",
+    "Template Name": "BL-PIT-STARTDATE",
+    "Description": "UponBilling-ImmediateUsingStartDate-PointInTime",
+    "Release Event": "Upon Billing (Billed Release)",
+    "Ratable Method": "Immediate Using Start Date",
+    "POB Satisfied": "Point In Time",
+    "Accounting Method": "Daily",
+    "VC Enabled": "N"
+  },
+  {
+    "POB Identifier": "EVT-OT-RATABLE",
+    "Template Name": "EVT-OT-RATABLE",
+    "Description": "UponAcceptanceEvent-Ratable-OverTime",
+    "Release Event": "Acceptance",
+    "Ratable Method": "Ratable",
+    "POB Satisfied": "Over Time",
+    "Accounting Method": "Daily",
+    "VC Enabled": "N"
+  },
+  {
+    "POB Identifier": "EVT-OT-RATABLE-GOLIVE",
+    "Template Name": "EVT-OT-RATABLE-GOLIVE",
+    "Description": "UponGoLiveEvent-Ratable-OverTime",
+    "Release Event": "Go-Live Event",
+    "Ratable Method": "Ratable",
+    "POB Satisfied": "Over Time",
+    "Accounting Method": "Daily",
+    "VC Enabled": "N"
+  },
+  {
+    "POB Identifier": "EVT-PIT-ACCEPTAN",
+    "Template Name": "EVT-PIT-ACCEPTAN",
+    "Description": "UponAcceptanceEvent-ImmediateUsingOpenPeriod-PointInTime",
+    "Release Event": "Acceptance",
+    "Ratable Method": "Immediate Using Start Date",
+    "POB Satisfied": "Point In Time",
+    "Accounting Method": "Daily",
+    "VC Enabled": "N"
+  },
+  {
+    "POB Identifier": "EVT-PIT-AMOUNT",
+    "Template Name": "EVT-PIT-AMOUNT",
+    "Description": "UponAmountEvent-ImmediateUsingOpenPeriod-PointInTime",
+    "Release Event": "BY_AMOUNT",
+    "Ratable Method": "Immediate Using Open Period",
+    "POB Satisfied": "Point In Time",
+    "Accounting Method": "Daily",
+    "VC Enabled": "N"
+  },
+  {
+    "POB Identifier": "EVT-PIT-COMPLETION",
+    "Template Name": "EVT-PIT-COMPLETION",
+    "Description": "UponCompletionEvent-ImmediateUsingOpenPeriod-PointInTime",
+    "Release Event": "Completion",
+    "Ratable Method": "Immediate Using Open Period",
+    "POB Satisfied": "Point In Time",
+    "Accounting Method": "Daily",
+    "VC Enabled": "N"
+  },
+  {
+    "POB Identifier": "EVT-PIT-CONSUMP-DELIVERY",
+    "Template Name": "Consumption by Delivery Event",
+    "Description": "Consumption by Delivery Event",
+    "Release Event": "Upon Consumption",
+    "Ratable Method": "Immediate Using Open Period",
+    "POB Satisfied": "Point In Time",
+    "Accounting Method": "Daily",
+    "VC Enabled": "N"
+  },
+  {
+    "POB Identifier": "EVT-PIT-CONSUMP-PAYGO",
+    "Template Name": "Consumption - Usage Event (Non-Committed)",
+    "Description": "Consumption - Usage Event (Non-Committed)",
+    "Release Event": "Upon Consumption",
+    "Ratable Method": "Immediate Using Open Period",
+    "POB Satisfied": "Point In Time",
+    "Accounting Method": "Daily",
+    "VC Enabled": "N"
+  },
+  {
+    "POB Identifier": "EVT-PIT-CONSUMP-USAGE",
+    "Template Name": "Consumption By Usage Event",
+    "Description": "Consumption By Usage Event",
+    "Release Event": "Upon Consumption",
+    "Ratable Method": "Immediate Using Open Period",
+    "POB Satisfied": "Point In Time",
+    "Accounting Method": "Daily",
+    "VC Enabled": "N"
+  },
+  {
+    "POB Identifier": "EVT-PIT-CUMPERCENT",
+    "Template Name": "EVT-PIT-CUMPERCENT",
+    "Description": "UponCumPercentEvent-ImmediateUsingOpenPeriod-PointInTime",
+    "Release Event": "CUM_PCT_EVNT",
+    "Ratable Method": "Immediate Using Open Period",
+    "POB Satisfied": "Point In Time",
+    "Accounting Method": "Daily",
+    "VC Enabled": "N"
+  },
+  {
+    "POB Identifier": "EVT-PIT-HOURS",
+    "Template Name": "EVT-PIT-HOURS",
+    "Description": "UponHoursEvent-ImmediateUsingOpenPeriod-PointInTime",
+    "Release Event": "Hour Input",
+    "Ratable Method": "Immediate Using Open Period",
+    "POB Satisfied": "Point In Time",
+    "Accounting Method": "Daily",
+    "VC Enabled": "N"
+  },
+  {
+    "POB Identifier": "EVT-PIT-POC",
+    "Template Name": "EVT-PIT-POC",
+    "Description": "UponPOCPercentEvent-ImmediateUsingOpenPeriod-PointInTime",
+    "Release Event": "POC",
+    "Ratable Method": "Immediate Using Open Period",
+    "POB Satisfied": "Point In Time",
+    "Accounting Method": "Daily",
+    "VC Enabled": "N"
+  },
+  {
+    "POB Identifier": "EVT-PIT-QTY",
+    "Template Name": "EVT-PIT-QTY",
+    "Description": "UponQtyEvent-ImmediateUsingOpenPeriod-PointInTime",
+    "Release Event": "BY_QTY",
+    "Ratable Method": "Immediate Using Open Period",
+    "POB Satisfied": "Point In Time",
+    "Accounting Method": "Daily",
+    "VC Enabled": "N"
+  },
+  {
+    "POB Identifier": "EVT-PIT-USAGE",
+    "Template Name": "EVT-PIT-USAGE",
+    "Description": "UponUsageEvent-ImmediateUsingOpenPeriod-PointInTime",
+    "Release Event": "USAGE_QTY",
+    "Ratable Method": "Immediate Using Open Period",
+    "POB Satisfied": "Point In Time",
+    "Accounting Method": "Daily",
+    "VC Enabled": "N"
+  }
+]
