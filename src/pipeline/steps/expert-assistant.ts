@@ -24,12 +24,12 @@ const expertAssistantJsonSchema = {
       description: 'The answer to the user\'s question',
     },
     suggestedModifications: {
-      type: 'array',
+      type: ['array', 'null'],
       items: { type: 'string' },
       description: 'Suggested changes to the current solution, if applicable',
     },
     affectedSteps: {
-      type: 'array',
+      type: ['array', 'null'],
       items: { type: 'string' },
       description: 'Pipeline steps that would need to be re-run for modifications',
     },
@@ -40,7 +40,8 @@ const expertAssistantJsonSchema = {
       description: 'Confidence in the answer',
     },
   },
-  required: ['answer', 'confidence'],
+  required: ['answer', 'suggestedModifications', 'affectedSteps', 'confidence'],
+  additionalProperties: false,
 };
 
 /**

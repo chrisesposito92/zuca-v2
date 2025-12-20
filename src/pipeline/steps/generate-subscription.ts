@@ -8,18 +8,112 @@ import { formatMatchResultsForContext } from './match-golden-use-cases.js';
 import { debugLog } from '../../config.js';
 
 /**
- * JSON schema for subscription spec structured output (simplified for this file)
+ * JSON schema for subscription spec structured output
+ * Must define all nested objects with explicit properties and additionalProperties: false
  */
+const chargeSchema = {
+  type: 'object',
+  properties: {
+    name: { type: 'string' },
+    type: { type: 'string', enum: ['Recurring', 'OneTime', 'Usage'] },
+    model: { type: 'string', enum: ['FlatFee', 'PerUnit', 'Volume', 'Tiered', 'Overage'] },
+    uom: { type: ['string', 'null'] },
+    billingPeriod: { type: ['string', 'null'] },
+    billingTiming: { type: ['string', 'null'], enum: ['InAdvance', 'InArrears', null] },
+    billingDay: { type: ['string', 'null'] },
+    billingPeriodAlignment: { type: ['string', 'null'] },
+    listPriceBase: { type: ['string', 'null'] },
+    triggerEvent: { type: 'string' },
+    specificTriggerDate: { type: ['string', 'null'] },
+    endDateCondition: { type: ['string', 'null'] },
+    specificEndDate: { type: ['string', 'null'] },
+    quantity: { type: ['number', 'null'] },
+    listPrice: { type: ['number', 'null'] },
+    sellPrice: { type: ['number', 'null'] },
+    price: { type: ['number', 'null'] },
+    effectiveStartDate: { type: 'string' },
+    effectiveEndDate: { type: ['string', 'null'] },
+    chargeFunction: { type: ['string', 'null'], enum: ['None', 'Prepayment', 'Drawdown', 'Commitment', 'Overage', null] },
+    isAllocationEligible: { type: ['boolean', 'null'] },
+    drawdownType: { type: ['string', 'null'] },
+    commitmentType: { type: ['string', 'null'] },
+    prepaymentUOM: { type: ['string', 'null'] },
+    prepaymentUnits: { type: ['number', 'null'] },
+    validityPeriod: { type: ['string', 'null'] },
+  },
+  required: [
+    'name', 'type', 'model', 'uom', 'billingPeriod', 'billingTiming',
+    'billingDay', 'billingPeriodAlignment', 'listPriceBase', 'triggerEvent',
+    'specificTriggerDate', 'endDateCondition', 'specificEndDate', 'quantity',
+    'listPrice', 'sellPrice', 'price', 'effectiveStartDate', 'effectiveEndDate',
+    'chargeFunction', 'isAllocationEligible', 'drawdownType', 'commitmentType',
+    'prepaymentUOM', 'prepaymentUnits', 'validityPeriod',
+  ],
+  additionalProperties: false,
+};
+
+const ratePlanSchema = {
+  type: 'object',
+  properties: {
+    productName: { type: 'string' },
+    ratePlanName: { type: 'string' },
+    charges: { type: 'array', items: chargeSchema },
+  },
+  required: ['productName', 'ratePlanName', 'charges'],
+  additionalProperties: false,
+};
+
+const subscriptionSchema = {
+  type: 'object',
+  properties: {
+    name: { type: 'string' },
+    termType: { type: 'string', enum: ['TERMED', 'EVERGREEN'] },
+    status: { type: 'string' },
+    currency: { type: 'string' },
+    contractEffectiveDate: { type: 'string' },
+    serviceActivationDate: { type: 'string' },
+    customerAcceptanceDate: { type: 'string' },
+    subscriptionStartDate: { type: 'string' },
+    subscriptionEndDate: { type: ['string', 'null'] },
+    initialTerm: { type: ['number', 'null'] },
+    initialTermPeriodType: { type: ['string', 'null'], enum: ['Month', 'Year', null] },
+    renewalTerm: { type: ['number', 'null'] },
+    renewalTermPeriodType: { type: ['string', 'null'], enum: ['Month', 'Year', null] },
+    autoRenew: { type: ['boolean', 'null'] },
+  },
+  required: [
+    'name', 'termType', 'status', 'currency', 'contractEffectiveDate',
+    'serviceActivationDate', 'customerAcceptanceDate', 'subscriptionStartDate',
+    'subscriptionEndDate', 'initialTerm', 'initialTermPeriodType',
+    'renewalTerm', 'renewalTermPeriodType', 'autoRenew',
+  ],
+  additionalProperties: false,
+};
+
+const usageRecordSchema = {
+  type: 'object',
+  properties: {
+    Date: { type: 'string' },
+    UOM: { type: 'string' },
+    Quantity: { type: 'number' },
+    'Charge Name': { type: 'string' },
+    Amount: { type: 'number' },
+  },
+  required: ['Date', 'UOM', 'Quantity', 'Charge Name', 'Amount'],
+  additionalProperties: false,
+};
+
 const subscriptionSpecJsonSchema = {
   type: 'object',
   properties: {
-    subscription: { type: 'object' },
-    rate_plans: { type: 'array', items: { type: 'object' } },
-    usage: { type: 'array', items: { type: 'object' } },
+    subscription: subscriptionSchema,
+    rate_plans: { type: 'array', items: ratePlanSchema },
+    usage: { type: 'array', items: usageRecordSchema },
     assumptions: { type: 'array', items: { type: 'string' } },
     open_questions: { type: 'array', items: { type: 'string' } },
   },
   required: ['subscription', 'rate_plans', 'usage', 'assumptions', 'open_questions'],
+  additionalProperties: false,
 };
 
 /**

@@ -28,6 +28,7 @@ const contractIntelJsonSchema = {
   },
   required: [
     'service_start_mdy',
+    'service_end_mdy',
     'term_months',
     'billing_period',
     'billing_timing',

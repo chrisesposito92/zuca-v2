@@ -42,12 +42,14 @@ const revRecWaterfallJsonSchema = {
           'Period',
           'Amount',
         ],
+        additionalProperties: false,
       },
     },
     assumptions: { type: 'array', items: { type: 'string' } },
     open_questions: { type: 'array', items: { type: 'string' } },
   },
   required: ['zr_revrec', 'assumptions', 'open_questions'],
+  additionalProperties: false,
 };
 
 /**

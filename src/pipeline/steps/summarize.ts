@@ -29,6 +29,7 @@ const summaryJsonSchema = {
     },
   },
   required: ['assumptions', 'open_questions'],
+  additionalProperties: false,
 };
 
 /**

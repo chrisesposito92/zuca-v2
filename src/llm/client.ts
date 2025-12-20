@@ -389,11 +389,12 @@ export function createAskZuoraTool(): CustomTool {
             description: 'The question to ask about Zuora functionality',
           },
           context: {
-            type: 'string',
+            type: ['string', 'null'],
             description: 'Optional context about the use case being analyzed',
           },
         },
-        required: ['question'],
+        required: ['question', 'context'],
+        additionalProperties: false,
       },
     },
   };

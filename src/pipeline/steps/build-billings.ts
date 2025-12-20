@@ -37,17 +37,22 @@ const billingsJsonSchema = {
           'Billing Date',
           'Charge Name',
           'Rate Plan',
+          'Product',
           'Billing Period Start',
           'Billing Period End',
+          'Quantity',
+          'Unit Price',
           'Amount',
           'Currency',
         ],
+        additionalProperties: false,
       },
     },
     assumptions: { type: 'array', items: { type: 'string' } },
     open_questions: { type: 'array', items: { type: 'string' } },
   },
   required: ['zb_billings', 'assumptions', 'open_questions'],
+  additionalProperties: false,
 };
 
 /**

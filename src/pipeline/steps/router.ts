@@ -34,6 +34,7 @@ const routerJsonSchema = {
     },
   },
   required: ['classification', 'confidence', 'reasoning'],
+  additionalProperties: false,
 };
 
 /**

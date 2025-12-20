@@ -35,7 +35,7 @@ const detectCapabilitiesJsonSchema = {
   },
   required: ['billing_caps', 'revenue_caps', 'hints', 'confidence'],
   additionalProperties: false,
-};
+} as const;
 
 /**
  * Build the user message for capability detection
