@@ -172,6 +172,33 @@ zuca-v2/
 ## Future Enhancements
 
 1. **Multi-Model Support**: Add Gemini 3 Pro as alternative to gpt-5.2
-2. **Zuora Write Operations**: Create products, rate plans, subscriptions via MCP
+2. **Zuora Write Operations**: Create products, rate plans, subscriptions via API
+   - See [ROADMAP-ZB-API-INTEGRATION.md](./ROADMAP-ZB-API-INTEGRATION.md) for detailed plan
 3. **Streaming Output**: Real-time streaming for long responses
 4. **Caching**: Cache Golden Use Case matches for faster subsequent runs
+
+---
+
+## Schema Architecture
+
+### Current Schemas (Active)
+Used by pipeline steps for LLM structured output:
+- `SubscriptionSchema` - Basic subscription definition
+- `RatePlanSchema` / `ChargeSchema` - Rate plans and charges
+- `BillingsRowSchema` - Billing schedule rows
+- `ContractsOrdersRowSchema` - ZR table rows
+
+### Future Schemas (Dormant)
+Added to `src/types/output.ts` but **not yet wired to any pipeline steps**:
+- `ProductSchema` / `ProductRatePlanSchema` / `ProductRatePlanChargeSchema` - Product catalog
+- `AccountSchema` / `ContactSchema` / `PaymentMethodSchema` - Account with contacts
+- `EnhancedSubscriptionSchema` / `ChargeOverrideSchema` - Orders API compatible
+- `OrderSchema` / `OrderActionSchema` - Full Orders API payload
+- `EnhancedBillingsRowSchema` - Invoice details, tax, accounting codes
+- `ZuoraBillingObjectsSchema` - Master container for all ZB API objects
+
+These schemas are comprehensive and cover all Zuora Billing API requirements. They will be activated when ZB write operations are implemented.
+
+**Important**: Each pipeline step uses hardcoded JSON schemas passed to the LLM, not the Zod schemas. The dormant schemas are invisible to the LLM and won't be accidentally populated.
+
+See [ROADMAP-ZB-API-INTEGRATION.md](./ROADMAP-ZB-API-INTEGRATION.md) for implementation plan

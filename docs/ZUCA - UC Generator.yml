@@ -1,0 +1,930 @@
+app:
+  description: ''
+  icon: 5e69136a-78a7-4c0f-b86a-3ee503d5cb43
+  icon_background: '#FFEAD5'
+  mode: workflow
+  name: ZUCA - UC Generator
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/gemini:0.7.1@48bf314aad49c68acee6545f34b6ddb652c33e7da457dfb197ac514065e776e4
+    version: null
+kind: app
+version: 0.5.0
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        image_file_size_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: true
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInLoop: false
+        sourceType: start
+        targetType: llm
+      id: 1764128320530-source-1764130410827-target
+      source: '1764128320530'
+      sourceHandle: source
+      target: '1764130410827'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: llm
+      id: 1764130410827-source-1764128958786-target
+      source: '1764130410827'
+      sourceHandle: source
+      target: '1764128958786'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: llm
+        targetType: template-transform
+      id: 1764128958786-source-1764136224741-target
+      source: '1764128958786'
+      sourceHandle: source
+      target: '1764136224741'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: template-transform
+        targetType: llm
+      id: 1764136224741-source-1764165572487-target
+      source: '1764136224741'
+      sourceHandle: source
+      target: '1764165572487'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: llm
+        targetType: end
+      id: 1764165572487-source-1764130017413-target
+      source: '1764165572487'
+      sourceHandle: source
+      target: '1764130017413'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        selected: false
+        title: User Input
+        type: start
+        variables:
+        - default: ''
+          hint: ''
+          label: Customer Name
+          max_length: 255
+          options: []
+          placeholder: ''
+          required: true
+          type: text-input
+          variable: customer_name
+        - default: ''
+          hint: ''
+          label: Customer Website
+          max_length: 256
+          options: []
+          placeholder: ''
+          required: true
+          type: text-input
+          variable: customer_website
+        - default: '1'
+          hint: ''
+          label: Number of Use Cases
+          max_length: 48
+          options:
+          - '1'
+          - '2'
+          - '3'
+          placeholder: ''
+          required: true
+          type: select
+          variable: num_use_cases
+        - default: ''
+          hint: ''
+          label: User Notes
+          max_length: 2500
+          options: []
+          placeholder: ''
+          required: false
+          type: paragraph
+          variable: user_notes
+      height: 185
+      id: '1764128320530'
+      position:
+        x: 0
+        y: 0
+      positionAbsolute:
+        x: 0
+        y: 0
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        model:
+          completion_params: {}
+          mode: chat
+          name: gemini-3-pro-preview
+          provider: langgenius/gemini/google
+        prompt_template:
+        - id: 8322bbc4-1981-42fa-b41c-54e8d87b5cba
+          role: system
+          text: "ROLE\nYou are a Zuora solutions architect generating demo-ready use\
+            \ cases for the OTR (Order-to-Revenue) Solutioner workflow.\n\nGOAL\n\
+            Using:\n- The researched catalog summary (JSON),\n- The customer name,\
+            \ website, desired number of use cases,\n- Optional notes from the user,\n\
+            \nyou must produce between 1 and {{ num_use_cases }} detailed but compact\
+            \ use cases that:\n- Are realistic given the research.\n- Are shaped around\
+            \ Zuora Billing concepts (product, rate plan, rate plan charge).\n- Include\
+            \ high-level revenue recognition / POB assumptions.\n- Map cleanly to\
+            \ the existing OTR workflow Start inputs.\n\nDESIGN PRINCIPLES\n- Each\
+            \ use case should feel like something a real prospect would describe in\
+            \ an RFP or discovery call.\n- They should exercise interesting aspects\
+            \ of the catalog:\n  - Example patterns: simple subscription, subscription\
+            \ + onboarding, subscription + usage, multi-year with ramp, bundled support,\
+            \ etc.\n- Prefer scenarios that will stress Zuora (and make a good demo)\
+            \ over trivial ones, as long as they’re still plausible for this customer.\n\
+            - Keep each `use_case` narrative short but dense: roughly 4–10 sentences,\
+            \ not a wall of text.\n\nREVENUE RECOGNITION / POB LOGIC (INFERRED, NOT\
+            \ FACT)\n- Recurring SaaS subscription → usually over-time, ratable over\
+            \ contract term.\n- Onboarding/implementation/training → often point-in-time\
+            \ at go-live or upon completion.\n- Hardware → often point-in-time at\
+            \ shipment/delivery.\n- Usage-based fees → often recognized as usage occurs\
+            \ (consumption/event-based).\nWhen you apply these patterns, treat them\
+            \ as INFERENCES and reflect that in assumptions.\n\nPRICING AND PACKAGING\
+            \ IN SCENARIOS\n- You SHOULD include concrete prices for rate plan charges\
+            \ in the narrative, such as:\n  - \"$20 per user per month\"\n  - \"$500\
+            \ one-time onboarding fee\"\n  - \"$0.10 per GB of storage\"\n- When catalog_summary\
+            \ indicates explicit prices:\n  - Use those prices as-is or with minimal\
+            \ rounding.\n- When catalog_summary indicates inferred pricing:\n  - Use\
+            \ those values as a starting point, but you may adjust slightly to make\
+            \ the scenario more coherent (e.g., simple tier steps).\n- When there\
+            \ is no pricing info at all:\n  - Infer realistic price points based on\
+            \ typical SaaS/industry expectations.\n- Always keep pricing internally\
+            \ consistent within each use case (no contradictory numbers).\n- Treat\
+            \ all pricing as \"for demo use only\" and reflect that in the assumptions.\n\
+            \nMAPPING TO OTR START FIELDS\nFor each use case, you must construct:\n\
+            - `otr_workflow_inputs.use_case`:\n  A narrative tailored for the OTR\
+            \ workflow that explicitly describes:\n  - The products and rate plans\
+            \ (by name or descriptive placeholder).\n  - How charges are grouped on\
+            \ rate plans (recurring vs one-time vs usage).\n  - Commercial terms:\
+            \ contract length, billing period, any discounts, mid-term changes if\
+            \ relevant.\n  - High-level revenue treatment expectations (e.g., “subscription\
+            \ ratable over 12-month term; onboarding recognized at go-live”).\n  -\
+            \ Any other information that would be useful to know when building this\
+            \ out in Zuora.\n- `otr_workflow_inputs.customer_name`: use the provided\
+            \ customer_name.\n- `otr_workflow_inputs.contract_start_date`:\n  - Assume\
+            \ the contract starts on the first day of the next full month from “today”.\n\
+            \  - Format as MM/DD/YYYY.\n  - This is an assumption; mention it in assumptions\
+            \ for each use case.\n- `otr_workflow_inputs.terms_months`:\n  - Typically\
+            \ 12 unless the research strongly indicates a more suitable term (e.g.,\
+            \ multi-year).\n- `otr_workflow_inputs.transaction_currency`:\n  - Prefer\
+            \ the `currency_guess` from catalog_summary if not \"unknown\".\n  - Otherwise\
+            \ default to \"USD\".\n- `otr_workflow_inputs.billing_period`:\n  - Choose\
+            \ from: \"Monthly\", \"Quarterly\", \"Annually\".\n  - Align with how\
+            \ pricing is expressed in the research (monthly price → \"Monthly\"; annual-only\
+            \ → \"Annually\"; ambiguous → choose \"Monthly\" and flag uncertainty).\n\
+            - `otr_workflow_inputs.is_allocations`:\n  - true if the scenario clearly\
+            \ has multiple performance obligations with a shared discount requiring\
+            \ allocation (e.g., subscription + PS with discounts).\n  - false otherwise.\n\
+            - `otr_workflow_inputs.allocation_method`:\n  - \"Use List Price\" if\
+            \ SSP/allocations should be based on list prices.\n  - \"Use Sell Price\"\
+            \ if allocations should use transaction prices.\n  - \"Custom Formula\"\
+            \ ONLY if there is a very specific allocation need; explain the formula\
+            \ in `allocation_custom_formula`.\n- `otr_workflow_inputs.allocation_custom_formula`:\n\
+            \  - Short descriptive formula string if allocation_method is \"Custom\
+            \ Formula\", otherwise empty.\n\nOUTPUT FORMAT\nReturn ONLY one valid\
+            \ JSON object, no commentary, with this exact structure:\n\n{\n\"customer_name\"\
+            : \"<string>\",\n\"customer_website\": \"<string or empty>\",\n\"num_use_cases\"\
+            : <integer>,\n\"use_cases\": [\n{\n\"id\": \"UC1\",\n\"label\": \"<short\
+            \ name for the scenario>\",\n\"otr_workflow_inputs\": {\n\"use_case\"\
+            : \"<narrative description tailored to Zuora, 4–10 sentences>\",\n\"customer_name\"\
+            : \"<string>\",\n\"contract_start_date\": \"<MM/DD/YYYY>\",\n\"terms_months\"\
+            : <integer>,\n\"transaction_currency\": \"USD | EUR | CAD | other\",\n\
+            \"billing_period\": \"Monthly | Quarterly | Annually\",\n\"is_allocations\"\
+            : true or false,\n\"allocation_method\": \"Use List Price\" | \"Use Sell\
+            \ Price\" | \"Custom Formula\" | \"\",\n\"allocation_custom_formula\"\
+            : \"<string or empty>\",\n\"rev_rec_notes\": [\n{\n\"charge_group\": \"\
+            Subscription | Onboarding | Services | Usage | Hardware | Other\",\n\"\
+            likely_pob_type\": \"over_time | point_in_time | consumption | event_based\
+            \ | unknown\",\n\"release_pattern\": \"ratable_over_term | at_go_live\
+            \ | at_delivery | as_billed | as_used | unknown\",\n\"confidence\": \"\
+            low | medium | high\",\n\"notes\": \"<short explanation>\"\n}\n]\n},\n\
+            \"assumptions\": [\n\"<short assumption, including contract_start_date\
+            \ assumption>\",\n\"<another assumption>\"\n],\n\"risks_or_open_questions\"\
+            : [\n\"<short risk or discovery question>\",\n\"<another risk or question>\"\
+            \n]\n}\n]\n}\n\nCONSTRAINTS\n- The length of \"use_cases\" must be between\
+            \ 1 and {{ num_use_cases }}.\n- You MAY invent numeric prices where needed,\
+            \ but they must:\n  - Be plausible for the type of offering and segment\
+            \ implied.\n  - Be consistent with catalog_summary values and narrative\
+            \ context.\n- Do not contradict explicit prices given in catalog_summary.\n\
+            - Do not use Markdown. Plain JSON only.\n- All discovery items, clarifications,\
+            \ and open questions must go ONLY into \"risks_or_open_questions\""
+        - id: 8577d7f8-ac16-430d-8665-ad82428edb51
+          role: user
+          text: '- customer_name: {{#1764128320530.customer_name#}}
+
+            - customer_website: {{#1764128320530.customer_website#}}
+
+            - num_use_cases: {{#1764128320530.num_use_cases#}}
+
+            - user_notes: {{#1764128320530.user_notes#}}
+
+            - catalog_summary: {{#1764130410827.structured_output#}}'
+        selected: false
+        structured_output:
+          schema:
+            additionalProperties: false
+            properties:
+              customer_name:
+                type: string
+              customer_website:
+                type: string
+              num_use_cases:
+                minimum: 1
+                type: integer
+              use_cases:
+                items:
+                  additionalProperties: false
+                  properties:
+                    assumptions:
+                      items:
+                        type: string
+                      minItems: 1
+                      type: array
+                    id:
+                      type: string
+                    label:
+                      type: string
+                    otr_workflow_inputs:
+                      additionalProperties: false
+                      properties:
+                        allocation_custom_formula:
+                          type: string
+                        allocation_method:
+                          enum:
+                          - Use List Price
+                          - Use Sell Price
+                          - Custom Formula
+                          - ''
+                          type: string
+                        billing_period:
+                          enum:
+                          - Monthly
+                          - Quarterly
+                          - Annually
+                          type: string
+                        contract_start_date:
+                          pattern: ^(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])\/\d{4}$
+                          type: string
+                        customer_name:
+                          type: string
+                        is_allocations:
+                          type: boolean
+                        rev_rec_notes:
+                          items:
+                            additionalProperties: false
+                            properties:
+                              charge_group:
+                                enum:
+                                - Subscription
+                                - Onboarding
+                                - Services
+                                - Usage
+                                - Hardware
+                                - Other
+                                type: string
+                              confidence:
+                                enum:
+                                - low
+                                - medium
+                                - high
+                                type: string
+                              likely_pob_type:
+                                enum:
+                                - over_time
+                                - point_in_time
+                                - consumption
+                                - event_based
+                                - unknown
+                                type: string
+                              notes:
+                                type: string
+                              release_pattern:
+                                enum:
+                                - ratable_over_term
+                                - at_go_live
+                                - at_delivery
+                                - as_billed
+                                - as_used
+                                - unknown
+                                type: string
+                            required:
+                            - charge_group
+                            - likely_pob_type
+                            - release_pattern
+                            - confidence
+                            - notes
+                            type: object
+                          minItems: 1
+                          type: array
+                        terms_months:
+                          minimum: 1
+                          type: integer
+                        transaction_currency:
+                          enum:
+                          - USD
+                          - EUR
+                          - CAD
+                          - other
+                          type: string
+                        use_case:
+                          type: string
+                      required:
+                      - use_case
+                      - customer_name
+                      - contract_start_date
+                      - terms_months
+                      - transaction_currency
+                      - billing_period
+                      - is_allocations
+                      - allocation_method
+                      - allocation_custom_formula
+                      - rev_rec_notes
+                      type: object
+                    risks_or_open_questions:
+                      items:
+                        type: string
+                      minItems: 1
+                      type: array
+                  required:
+                  - id
+                  - label
+                  - otr_workflow_inputs
+                  - assumptions
+                  - risks_or_open_questions
+                  type: object
+                minItems: 1
+                type: array
+            required:
+            - customer_name
+            - num_use_cases
+            - use_cases
+            type: object
+        structured_output_enabled: true
+        title: Generate Structured Use Cases
+        type: llm
+        vision:
+          enabled: false
+      height: 86
+      id: '1764128958786'
+      position:
+        x: 683
+        y: 50
+      positionAbsolute:
+        x: 683
+        y: 50
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        outputs:
+        - value_selector:
+          - '1764165572487'
+          - text
+          value_type: string
+          variable: text
+        selected: false
+        title: Output
+        type: end
+      height: 87
+      id: '1764130017413'
+      position:
+        x: 1706
+        y: 49
+      positionAbsolute:
+        x: 1706
+        y: 49
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        model:
+          completion_params:
+            grounding: true
+            include_thoughts: true
+            temperature: 1
+            url_context: true
+          mode: chat
+          name: gemini-3-pro-preview
+          provider: langgenius/gemini/google
+        prompt_template:
+        - id: 6869d02d-b291-42c0-8688-c0dfee13cdc5
+          role: system
+          text: "ROLE\nYou are a pre-sales research analyst helping prepare demo use\
+            \ cases for Zuora’s Order-to-Revenue (OTR) workflow.\n\nGOAL\nGiven a\
+            \ customer name, website, and context, you must:\n- Use web search and\
+            \ the company’s own site to understand WHAT they sell and HOW they sell\
+            \ it.\n- Produce a concise JSON summary of their commercial offering:\
+            \ products, plans/bundles, pricing (when actually visible), billing terms,\
+            \ and high-level revenue recognition implications.\n- Clearly separate\
+            \ facts found in sources from inferences you are making.\n\nTOOL USAGE\n\
+            - Prioritize official company pages: homepage, /pricing, /plans, /products,\
+            \ /solutions, /services, /legal/terms, /tos, /billing, /faq, /support.\n\
+            - Use web search for queries like:\n  - \"{{ customer_name }} pricing\"\
+            \n  - \"{{ customer_name }} plans\"\n  - \"{{ customer_name }} subscriptions\"\
+            \n  - \"site:{{ customer_website }} pricing\" (if website is given)\n\
+            - When you fetch pages, skim for:\n  - Product and plan names\n  - Pricing\
+            \ models (per user, per month, per transaction, tiered, usage, etc.)\n\
+            \  - Contract terms (monthly, annual, multi-year, evergreen)\n  - One-time\
+            \ fees (onboarding, setup, training, implementation)\n  - Usage/overage\
+            \ behaviors\n  - Support or success plans\n\nIMPORTANT RULES\n- You MAY\
+            \ infer plausible exact price points or ranges when pricing is not clearly\
+            \ shown on the site.\n- When pricing IS shown explicitly:\n  - Capture\
+            \ the exact numbers as they appear.\n  - Mark the price_source as \"explicit\"\
+            .\n- When pricing is NOT shown explicitly:\n  - Infer reasonable price\
+            \ points or ranges based on market norms for similar SaaS/offerings.\n\
+            \  - Mark the price_source as \"inferred\".\n  - Keep values realistic\
+            \ (no $1/year enterprise plans or $10,000/user/month nonsense).\n- You\
+            \ MAY also infer product / plan names when the site is vague:\n  - Use\
+            \ descriptive, on-brand names rather than generic \"Plan A\".\n  - Mark\
+            \ name_source as \"explicit\" or \"inferred\" accordingly.\n- You MUST\
+            \ clearly distinguish explicit vs inferred info through the fields described\
+            \ below.\n- Keep all text concise. This JSON is an intermediate artifact\
+            \ that another model will consume.\n\nOUTPUT FORMAT\nReturn ONLY a single\
+            \ valid JSON object, no commentary, with this structure:\n\n{\n  \"company_profile\"\
+            : {\n    \"name\": \"<string>\",\n    \"website\": \"<string or empty>\"\
+            ,\n    \"industry_guess\": \"<short phrase>\",\n    \"go_to_market_notes\"\
+            : \"<1–3 short sentences about self-serve vs sales-led, target segment,\
+            \ etc.>\"\n  },\n  \"product_catalog\": [\n    {\n      \"product_name\"\
+            : \"<string or descriptive placeholder>\",\n      \"name_source\": \"\
+            explicit | inferred\",\n      \"category\": \"SaaS | Service | Hardware\
+            \ | Support | Usage | Other\",\n      \"is_subscription\": true or false,\n\
+            \      \"primary_billing_model\": \"recurring | one_time | usage | mixed\
+            \ | unknown\",\n      \"typical_term\": \"monthly | annual | multi_year\
+            \ | month_to_month | unknown\",\n      \"typical_billing_period\": \"\
+            Monthly | Quarterly | Annually | One-time | Per-usage | unknown\",\n\n\
+            \      \"pricing_visibility\": \"explicit | inferred | not_shown\",\n\
+            \      \"price_source\": \"explicit | inferred | none\",\n      \"list_price_example\"\
+            : \"<short example like '$20/user/month' or 'not shown'>\",\n      \"\
+            list_price_currency\": \"USD | EUR | CAD | other | unknown\",\n      \"\
+            list_price_unit\": \"<e.g. 'per user per month', 'per workspace per year'>\"\
+            ,\n      \"pricing_notes\": \"<1–2 short sentences giving context or assumptions>\"\
+            ,\n\n      \"packaging_notes\": \"<1–3 sentences: how this product is\
+            \ packaged/sold>\",\n      \"key_features\": [\"<short feature>\", \"\
+            <short feature>\"]\n    }\n  ],\n  \"bundles_or_plans\": [\n    {\n  \
+            \    \"plan_name\": \"<string or descriptive placeholder>\",\n      \"\
+            name_source\": \"explicit | inferred\",\n      \"included_products\":\
+            \ [\"<product_name or descriptive placeholder>\"],\n      \"who_it_is_for\"\
+            : \"<short segment description>\",\n      \"price_presentation\": \"<how\
+            \ price is shown on site or inferred>\",\n      \"plan_pricing_visibility\"\
+            : \"explicit | inferred | not_shown\",\n      \"plan_price_example\":\
+            \ \"<e.g. '$49/month for up to 10 users' or 'not shown'>\",\n      \"\
+            plan_price_source\": \"explicit | inferred | none\",\n      \"discount_or_tier_notes\"\
+            : \"<short notes on tiers, volumes, promos>\",\n      \"source_urls\"\
+            : [\"<url>\", \"<url>\"]\n    }\n  ],\n  \"revrec_inferences\": [\n  \
+            \  {\n      \"charge_pattern\": \"recurring_subscription | onboarding_service\
+            \ | implementation | training | support | usage | hardware | other\",\n\
+            \      \"likely_pob_type\": \"over_time | point_in_time | consumption\
+            \ | event_based | unknown\",\n      \"likely_release_pattern\": \"ratable_over_term\
+            \ | at_go_live | at_delivery | as_billed | as_used | unknown\",\n    \
+            \  \"reasoning\": \"<1–2 short sentences>\",\n      \"confidence\": \"\
+            low | medium | high\"\n    }\n  ],\n  \"research_meta\": {\n    \"primary_pages_considered\"\
+            : [\"<url>\", \"<url>\"],\n    \"data_completeness\": \"high | medium\
+            \ | low\",\n    \"known_gaps\": [\"<short description of missing info\
+            \ or ambiguity>\"]\n  }\n}\n\nCONSTRAINTS\n- Do not include any Markdown.\n\
+            - Do not include any text outside the JSON.\n- Keep all string values\
+            \ concise and free of unnecessary line breaks.\n"
+        - id: 7bb7a484-80c8-400c-bf3f-1c407863ab8c
+          role: user
+          text: '- customer_name: {{#1764128320530.customer_name#}}
+
+            - customer_website: {{#1764128320530.customer_website#}}
+
+            - num_use_cases: {{#1764128320530.num_use_cases#}}
+
+            - user_notes: {{#1764128320530.user_notes#}}'
+        reasoning_format: separated
+        selected: false
+        structured_output:
+          schema:
+            additionalProperties: false
+            properties:
+              bundles_or_plans:
+                items:
+                  additionalProperties: false
+                  properties:
+                    discount_or_tier_notes:
+                      type: string
+                    included_products:
+                      items:
+                        type: string
+                      type: array
+                    name_source:
+                      enum:
+                      - explicit
+                      - inferred
+                      type: string
+                    plan_name:
+                      type: string
+                    plan_price_example:
+                      type: string
+                    plan_price_source:
+                      enum:
+                      - explicit
+                      - inferred
+                      - none
+                      type: string
+                    plan_pricing_visibility:
+                      enum:
+                      - explicit
+                      - inferred
+                      - not_shown
+                      type: string
+                    price_presentation:
+                      type: string
+                    source_urls:
+                      items:
+                        type: string
+                      type: array
+                    who_it_is_for:
+                      type: string
+                  required:
+                  - plan_name
+                  - name_source
+                  - included_products
+                  - who_it_is_for
+                  - price_presentation
+                  - plan_pricing_visibility
+                  - plan_price_example
+                  - plan_price_source
+                  - discount_or_tier_notes
+                  - source_urls
+                  type: object
+                type: array
+              company_profile:
+                additionalProperties: false
+                properties:
+                  go_to_market_notes:
+                    type: string
+                  industry_guess:
+                    type: string
+                  name:
+                    type: string
+                  website:
+                    type: string
+                required:
+                - name
+                - website
+                - industry_guess
+                - go_to_market_notes
+                type: object
+              product_catalog:
+                items:
+                  additionalProperties: false
+                  properties:
+                    category:
+                      enum:
+                      - SaaS
+                      - Service
+                      - Hardware
+                      - Support
+                      - Usage
+                      - Other
+                      type: string
+                    is_subscription:
+                      type: boolean
+                    key_features:
+                      items:
+                        type: string
+                      type: array
+                    list_price_currency:
+                      enum:
+                      - USD
+                      - EUR
+                      - CAD
+                      - other
+                      - unknown
+                      type: string
+                    list_price_example:
+                      type: string
+                    list_price_unit:
+                      type: string
+                    name_source:
+                      enum:
+                      - explicit
+                      - inferred
+                      type: string
+                    packaging_notes:
+                      type: string
+                    price_source:
+                      enum:
+                      - explicit
+                      - inferred
+                      - none
+                      type: string
+                    pricing_notes:
+                      type: string
+                    pricing_visibility:
+                      enum:
+                      - explicit
+                      - inferred
+                      - not_shown
+                      type: string
+                    primary_billing_model:
+                      enum:
+                      - recurring
+                      - one_time
+                      - usage
+                      - mixed
+                      - unknown
+                      type: string
+                    product_name:
+                      type: string
+                    typical_billing_period:
+                      enum:
+                      - Monthly
+                      - Quarterly
+                      - Annually
+                      - One-time
+                      - Per-usage
+                      - unknown
+                      type: string
+                    typical_term:
+                      enum:
+                      - monthly
+                      - annual
+                      - multi_year
+                      - month_to_month
+                      - unknown
+                      type: string
+                  required:
+                  - product_name
+                  - name_source
+                  - category
+                  - is_subscription
+                  - primary_billing_model
+                  - typical_term
+                  - typical_billing_period
+                  - pricing_visibility
+                  - price_source
+                  - list_price_example
+                  - list_price_currency
+                  - list_price_unit
+                  - pricing_notes
+                  - packaging_notes
+                  - key_features
+                  type: object
+                type: array
+              research_meta:
+                additionalProperties: false
+                properties:
+                  data_completeness:
+                    enum:
+                    - high
+                    - medium
+                    - low
+                    type: string
+                  known_gaps:
+                    items:
+                      type: string
+                    type: array
+                  primary_pages_considered:
+                    items:
+                      type: string
+                    type: array
+                required:
+                - primary_pages_considered
+                - data_completeness
+                - known_gaps
+                type: object
+              revrec_inferences:
+                items:
+                  additionalProperties: false
+                  properties:
+                    charge_pattern:
+                      enum:
+                      - recurring_subscription
+                      - onboarding_service
+                      - implementation
+                      - training
+                      - support
+                      - usage
+                      - hardware
+                      - other
+                      type: string
+                    confidence:
+                      enum:
+                      - low
+                      - medium
+                      - high
+                      type: string
+                    likely_pob_type:
+                      enum:
+                      - over_time
+                      - point_in_time
+                      - consumption
+                      - event_based
+                      - unknown
+                      type: string
+                    likely_release_pattern:
+                      enum:
+                      - ratable_over_term
+                      - at_go_live
+                      - at_delivery
+                      - as_billed
+                      - as_used
+                      - unknown
+                      type: string
+                    reasoning:
+                      type: string
+                  required:
+                  - charge_pattern
+                  - likely_pob_type
+                  - likely_release_pattern
+                  - reasoning
+                  - confidence
+                  type: object
+                type: array
+            required:
+            - company_profile
+            - product_catalog
+            - bundles_or_plans
+            - revrec_inferences
+            - research_meta
+            type: object
+        structured_output_enabled: true
+        title: Research Customer Offering
+        type: llm
+        vision:
+          enabled: false
+      height: 86
+      id: '1764130410827'
+      position:
+        x: 342
+        y: 50
+      positionAbsolute:
+        x: 342
+        y: 50
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        selected: false
+        template: '{{ use_cases }}'
+        title: Use Cases Output String
+        type: template-transform
+        variables:
+        - value_selector:
+          - '1764128958786'
+          - structured_output
+          - use_cases
+          variable: use_cases
+      height: 50
+      id: '1764136224741'
+      position:
+        x: 1024
+        y: 68
+      positionAbsolute:
+        x: 1024
+        y: 68
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        model:
+          completion_params:
+            temperature: 1
+          mode: chat
+          name: gemini-3-pro-preview
+          provider: langgenius/gemini/google
+        prompt_template:
+        - id: 473b9dc3-5d49-4680-b970-9611c86e9d3d
+          role: system
+          text: "ROLE\nYou are formatting structured use case data for a Zuora pre-sales\
+            \ engineer.\n\nGOAL\nYou receive a single JSON object with this structure:\n\
+            - customer_name\n- customer_website\n- num_use_cases\n- use_cases: [ {\
+            \ id, label, use_case, otr_workflow_inputs, revrec_summary, assumptions,\
+            \ risks_or_open_questions } ]\n\nYou must produce concise, readable Markdown\
+            \ so a human can quickly:\n- Understand each scenario.\n- Copy-paste the\
+            \ `otr_workflow_inputs` JSON directly into the ZUCE workflow Start form.\n\
+            \nINPUT\n{{ structured_use_cases }}\n\nOUTPUT REQUIREMENTS\nFor each item\
+            \ in use_cases:\n- Render a top-level heading like:\n  \"## Use Case 1\
+            \ – <label>\"\n- Then include:\n  - A short 1–2 sentence overview.\n \
+            \ - The full `use_case` narrative.\n  - A short list for:\n    - Rev Rec\
+            \ Summary (1–3 bullets based on revrec_summary).\n    - Key Assumptions\
+            \ (from assumptions).\n    - Risks / Open Questions (from risks_or_open_questions).\n\
+            \  - A fenced JSON code block containing ONLY the `otr_workflow_inputs`\
+            \ object, e.g.:\n\n****SUPER IMPORTANT****\nTHE STRUCTURE AND PHRASING\
+            \ OF THE DIFFERENT SECTIONS MUST ALWAYS BE AS FOLLOWS INCLUDING THE **\
+            \ FOR BOLD. NEVER CHANGE THE HEADERS OR ORDER EVER! AND DO NOT PUT ANY\
+            \ SPACING AT ALL BETWEEN HEADERS AND SECTIONS. YOU MUST FOLLOW THESE RULES\
+            \ EVERY SINGLE TIME\n****SUPER IMPORTANT****\n\n**Overview**\n<overview\
+            \ here>\n\n**Scenario Narrative**\n<scenario narrative here>\n\n**Revenue\
+            \ Recognition Summary**\n<rev rec summary here>\n\n**Key Assumptions**\n\
+            <assumptions here>\n\n**Ricks & Open Questions**\n<risk and questions\
+            \ here>\n\n```json\n{\n  \"use_case\": \"...\",\n  \"customer_name\":\
+            \ \"...\",\n  \"contract_start_date\": \"...\",\n  \"terms_months\": 12,\n\
+            \  \"transaction_currency\": \"USD\",\n  \"billing_period\": \"Monthly\"\
+            ,\n  \"is_allocations\": false,\n  \"allocation_method\": \"Use List Price\"\
+            ,\n  \"allocation_custom_formula\": \"\",\n  \"rev_rec_notes\": []\n}"
+        - id: 62c44152-e265-4e87-b8a5-a76984ed1b5b
+          role: user
+          text: '{{#1764136224741.output#}}'
+        selected: false
+        title: Format Final Output
+        type: llm
+        vision:
+          enabled: false
+      height: 86
+      id: '1764165572487'
+      position:
+        x: 1365
+        y: 50
+      positionAbsolute:
+        x: 1365
+        y: 50
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    viewport:
+      x: -210.44030549314266
+      y: 498.11813399500926
+      zoom: 0.6041282811350357
+  rag_pipeline_variables: []
