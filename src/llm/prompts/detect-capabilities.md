@@ -33,6 +33,7 @@ Return a JSON object with:
 
 ## Mapping Hints (Common Zuora Patterns)
 
+### Basic Billing Patterns
 - "monthly in advance", "prepaid monthly" → ZB billing timing + recurring monthly labels
 - "annual prepay" → ZB prepaid / annual recurring labels
 - "usage", "metered", "overage", "commit", "included quantity" → ZB usage/commit/overage labels
@@ -41,7 +42,54 @@ Return a JSON object with:
 - "amend/add/cancel/mid-term change" → ZB orders/amendment capabilities
 - "discount/promo/credit memo" → ZB discounting/CM capabilities and ZR allocation/VC if explicitly stated
 
+### Contract Modifications (Amendments)
+- "amendment", "modify contract", "upgrade", "downgrade", "add product mid-term" → ZB amendment + ZR contract modification
+- "retrospective", "cumulative catch-up", "restate prior periods" → ZR retrospective modification treatment
+- "prospective", "go-forward only", "no restatement" → ZR prospective modification treatment
+- "new POB added", "new deliverable" → ZR prospective treatment (new performance obligation)
+- Ref: https://docs.zuora.com/en/zuora-revenue/advanced-revenue-operations/contract-modifications/accounting-treatments
+
+### Ramp Deals
+- "ramp", "ramping", "year-over-year increase", "escalating pricing" → ZB ramp charges + ZR ramp allocation
+- "year 1 pricing different from year 2" → ramp deal pattern
+- "volume ramp", "term ramp" → ramp with specific average pricing method
+- Ramp allocation takes precedence over SSP allocation for ramp deal lines
+- Ref: https://docs.zuora.com/en/zuora-revenue/day-to-day-operation/ramp-deals
+
+### Variable Consideration (VC)
+- "variable consideration", "VC", "uncertain amount" → ZR VC allocation
+- "rebate", "refund right", "price concession", "performance bonus" → ZR VC types
+- "constrained", "constraint", "probable reversal" → ZR VC constraint (ASC 606-10-32-11)
+- "usage-based pricing with uncertainty" → may trigger VC treatment
+- VC can be allocated at RC-level or line-level depending on configuration
+- Ref: https://docs.zuora.com/en/zuora-revenue/day-to-day-operation/variable-consideration-processing
+
+### Prepay Drawdown (PPDD)
+- "prepaid credits", "credit pool", "drawdown", "bank of hours" → PPDD pattern
+- "commit and overage", "minimum commit" → minimum commitment with overage
+
+### SSP and Allocations
+- "standalone selling price", "SSP", "fair value" → ZR SSP allocation
+- "relative allocation", "proportional allocation" → ZR standard allocation
+- "carve-out", "carve-in" → ZR allocation adjustment
+- "residual method" → specific allocation approach
+
+### Bundle Explosion
+- "bundle", "bundled product", "package", "suite" → ZR bundle explosion
+- "one SKU with multiple components", "single line item splits into multiple POBs" → ZR bundle explosion
+- "hardware + software + services in one price", "combined offering" → bundle with distinct POBs
+- "explode", "decompose bundle", "unbundle for revenue" → bundle explosion processing
+- Bundle explosion: One billing line splits into multiple revenue lines based on configuration
+- Ref: https://docs.zuora.com/en/zuora-revenue/advanced-revenue-operations/bundle-explosion
+
 ## Output Contract
 - If nothing matches, return empty arrays and a low confidence (e.g., 0.2–0.4).
 - hints should cite the exact phrase that triggered each label (1–2 lines per hint).
 - Do not include any fields other than those in the schema.
+
+## Zuora Documentation References
+Use web_search with these docs.zuora.com links for clarification:
+- Contract Modifications: https://docs.zuora.com/en/zuora-revenue/advanced-revenue-operations/contract-modifications
+- Ramp Deals: https://docs.zuora.com/en/zuora-revenue/day-to-day-operation/ramp-deals
+- Variable Consideration: https://docs.zuora.com/en/zuora-revenue/day-to-day-operation/variable-consideration-processing
+- SSP Allocation: https://docs.zuora.com/en/zuora-revenue/advanced-revenue-operations/ssp-assignment-and-allocation
