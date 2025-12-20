@@ -1,0 +1,11 @@
+{
+  "customer_name": "Acme Corp",
+  "contract_start_date": "01/01/2025",
+  "terms_months": 12,
+  "transaction_currency": "USD",
+  "billing_period": "Monthly",
+  "is_allocations": true,
+  "allocation_method": "Use List Price",
+  "rev_rec_notes": "Standard SaaS revenue recognition over the service period",
+  "use_case_description": "Acme Corp is purchasing an annual SaaS subscription for our cloud platform. The deal includes:\n\n1. Platform License Fee: $12,000/year billed monthly in advance\n2. Professional Services: One-time implementation fee of $5,000 billed upon contract signing\n3. Premium Support: $2,400/year billed quarterly in advance\n\nThe customer wants to start on January 1, 2025. The contract is auto-renewing with 12-month renewal terms.\n\nFor revenue recognition:\n- Platform License: Ratable over the service period\n- Professional Services: Immediate upon booking (no ongoing performance obligations)\n- Premium Support: Ratable over the service period"
+}
