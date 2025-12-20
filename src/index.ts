@@ -61,6 +61,31 @@ export {
   PipelineSession,
 } from './pipeline/index.js';
 
+// UC Generator
+export {
+  runUCGenerator,
+  mapToZucaInput,
+  quickResearch,
+  UCGeneratorOptions,
+} from './pipeline/uc-generator/index.js';
+
+// UC Generator types
+export {
+  UCGeneratorInput,
+  UCGeneratorInputSchema,
+  UCGeneratorOutput,
+  UCGeneratorOutputSchema,
+  CustomerResearch,
+  CustomerResearchSchema,
+  GeneratedUseCases,
+  GeneratedUseCasesSchema,
+  GeneratedUseCase,
+  GeneratedUseCaseSchema,
+  OTRWorkflowInputs,
+  OTRWorkflowInputsSchema,
+  validateUCGeneratorInput,
+} from './types/uc-generator.js';
+
 // Data loading
 export {
   loadGoldenUseCasesData,

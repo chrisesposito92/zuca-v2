@@ -13,12 +13,14 @@ import chalk from 'chalk';
 import { readFile, writeFile } from 'fs/promises';
 import { createInterface } from 'readline';
 import { ZucaInput } from '../types/input.js';
+import { UCGeneratorInput, NumUseCases } from '../types/uc-generator.js';
 import {
   runPipeline,
   handleFollowUp,
   quickAnalysis,
   getSession,
 } from '../pipeline/index.js';
+import { runUCGenerator, mapToZucaInput } from '../pipeline/uc-generator/index.js';
 import {
   formatSubscription,
   formatRatePlanCharges,
@@ -311,6 +313,168 @@ program
   .command('quick <description>')
   .description('Quick capability detection and matching')
   .action(quickCommand);
+
+/**
+ * Generate command - generate use cases for a customer
+ */
+async function generateCommand(
+  customerName: string,
+  options: { website: string; count?: string; notes?: string; output?: string; local?: boolean }
+): Promise<void> {
+  try {
+    const numUseCases = (options.count ? parseInt(options.count, 10) : 1) as NumUseCases;
+    if (numUseCases < 1 || numUseCases > 3) {
+      console.error(chalk.red('Error: count must be 1, 2, or 3'));
+      process.exit(1);
+    }
+
+    const input: UCGeneratorInput = {
+      customer_name: customerName,
+      customer_website: options.website,
+      num_use_cases: numUseCases,
+      user_notes: options.notes,
+    };
+
+    console.log(chalk.blue(`Generating ${numUseCases} use case(s) for ${customerName}...`));
+    console.log(chalk.gray(`Researching ${options.website}...`));
+    console.log('');
+
+    const result = await runUCGenerator(input, {
+      useLocalFormatting: options.local,
+    });
+
+    // Print formatted output
+    console.log(result.formatted);
+    console.log('');
+
+    // Print summary
+    printHeader('Generation Summary');
+    console.log(`Customer: ${chalk.yellow(result.generated.customer_name)}`);
+    console.log(`Use Cases Generated: ${chalk.yellow(result.use_cases.length.toString())}`);
+    console.log(`Research Completeness: ${chalk.yellow(result.research.research_meta.data_completeness)}`);
+    console.log('');
+
+    result.use_cases.forEach((uc, i) => {
+      console.log(`  ${i + 1}. ${chalk.bold(uc.label)} (${uc.id})`);
+    });
+
+    if (options.output) {
+      await writeFile(options.output, JSON.stringify(result, null, 2));
+      console.log('');
+      console.log(chalk.green(`Results saved to ${options.output}`));
+    }
+  } catch (error: any) {
+    console.error(chalk.red(`Error: ${error.message}`));
+    process.exit(1);
+  }
+}
+
+/**
+ * Generate interactive command - interactive use case generation
+ */
+async function generateInteractiveCommand(): Promise<void> {
+  const rl = createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
+
+  const prompt = (question: string): Promise<string> =>
+    new Promise((resolve) => rl.question(question, resolve));
+
+  console.log(chalk.cyan.bold('\n╔════════════════════════════════════════════════════════════╗'));
+  console.log(chalk.cyan.bold('║         ZUCA - Use Case Generator                          ║'));
+  console.log(chalk.cyan.bold('║         Interactive Mode                                   ║'));
+  console.log(chalk.cyan.bold('╚════════════════════════════════════════════════════════════╝\n'));
+
+  try {
+    console.log(chalk.yellow('Enter customer details:'));
+    console.log('');
+
+    const customerName = await prompt(chalk.white('Customer Name: '));
+    const customerWebsite = await prompt(chalk.white('Customer Website: '));
+    const numUseCasesStr = await prompt(chalk.white('Number of Use Cases (1-3): '));
+    const userNotes = await prompt(chalk.white('Additional Notes (optional, press Enter to skip): '));
+
+    const numUseCases = (parseInt(numUseCasesStr, 10) || 1) as NumUseCases;
+    if (numUseCases < 1 || numUseCases > 3) {
+      console.error(chalk.red('Error: count must be 1, 2, or 3'));
+      rl.close();
+      process.exit(1);
+    }
+
+    const input: UCGeneratorInput = {
+      customer_name: customerName,
+      customer_website: customerWebsite,
+      num_use_cases: numUseCases,
+      user_notes: userNotes || undefined,
+    };
+
+    console.log('');
+    console.log(chalk.blue(`Generating ${numUseCases} use case(s) for ${customerName}...`));
+    console.log(chalk.gray(`Researching ${customerWebsite}...`));
+    console.log('');
+
+    const result = await runUCGenerator(input);
+
+    // Print formatted output
+    console.log(result.formatted);
+    console.log('');
+
+    // Ask if user wants to run a use case through the main pipeline
+    const runPipelineAnswer = await prompt(
+      chalk.yellow('Would you like to run one of these use cases through the full ZUCA pipeline? (y/n): ')
+    );
+
+    if (runPipelineAnswer.toLowerCase() === 'y') {
+      const useCaseNumStr = await prompt(chalk.white(`Which use case? (1-${result.use_cases.length}): `));
+      const useCaseNum = parseInt(useCaseNumStr, 10);
+
+      if (useCaseNum >= 1 && useCaseNum <= result.use_cases.length) {
+        const selectedUseCase = result.use_cases[useCaseNum - 1];
+        const zucaInput = mapToZucaInput(selectedUseCase);
+
+        console.log('');
+        console.log(chalk.blue(`Running ${selectedUseCase.label} through ZUCA pipeline...`));
+        console.log('');
+
+        const pipelineResult = await runPipeline(zucaInput);
+        printResult(pipelineResult);
+
+        const saveAnswer = await prompt(chalk.white('Save results? (filename or press Enter to skip): '));
+        if (saveAnswer.trim()) {
+          await writeFile(saveAnswer.trim(), JSON.stringify(pipelineResult, null, 2));
+          console.log(chalk.green(`Results saved to ${saveAnswer.trim()}`));
+        }
+      } else {
+        console.log(chalk.yellow('Invalid selection, skipping pipeline run.'));
+      }
+    }
+
+    console.log('');
+    console.log(chalk.green('Done!'));
+  } catch (error: any) {
+    console.error(chalk.red(`Error: ${error.message}`));
+    process.exit(1);
+  } finally {
+    rl.close();
+  }
+}
+
+program
+  .command('generate <customer_name>')
+  .description('Generate use cases for a customer based on web research')
+  .requiredOption('-w, --website <url>', 'Customer website URL')
+  .option('-c, --count <number>', 'Number of use cases to generate (1-3)', '1')
+  .option('-n, --notes <text>', 'Additional notes to guide generation')
+  .option('-o, --output <file>', 'Save results to a JSON file')
+  .option('-l, --local', 'Use local formatting (faster, no LLM for formatting)')
+  .action(generateCommand);
+
+program
+  .command('generate-interactive')
+  .alias('gi')
+  .description('Interactive mode for use case generation')
+  .action(generateInteractiveCommand);
 
 // Parse and execute
 program.parse();

@@ -5,6 +5,7 @@
  *
  * Endpoints:
  *   POST /api/analyze          - Analyze a new use case
+ *   POST /api/uc-generate      - Generate use cases for a customer
  *   POST /api/sessions/:id/follow-up - Handle follow-up query
  *   GET  /api/sessions         - List all sessions
  *   GET  /api/sessions/:id     - Get session details
@@ -17,6 +18,7 @@ import express, { Request, Response, NextFunction } from 'express';
 import { WebSocketServer, WebSocket } from 'ws';
 import { createServer } from 'http';
 import { ZucaInput, validateZucaInput } from '../types/input.js';
+import { UCGeneratorInput, validateUCGeneratorInput } from '../types/uc-generator.js';
 import {
   runPipeline,
   handleFollowUp,
@@ -25,6 +27,7 @@ import {
   listSessions,
   deleteSession,
 } from '../pipeline/index.js';
+import { runUCGenerator } from '../pipeline/uc-generator/index.js';
 import { config, debugLog } from '../config.js';
 
 const app = express();
@@ -235,6 +238,48 @@ app.post('/api/quick', asyncHandler(async (req: Request, res: Response) => {
 }));
 
 /**
+ * POST /api/uc-generate
+ * Generate use cases for a customer based on web research
+ */
+app.post('/api/uc-generate', asyncHandler(async (req: Request, res: Response) => {
+  const input = req.body as UCGeneratorInput;
+
+  // Validate input
+  try {
+    validateUCGeneratorInput(input);
+  } catch (error: any) {
+    res.status(400).json({
+      error: 'Invalid input',
+      details: error.message,
+    });
+    return;
+  }
+
+  debugLog('Starting UC generation', { customer: input.customer_name, website: input.customer_website });
+
+  try {
+    const result = await runUCGenerator(input, {
+      useLocalFormatting: req.query.local === 'true',
+    });
+
+    res.json({
+      success: true,
+      session_id: result.session_id,
+      research: result.research,
+      generated: result.generated,
+      formatted: result.formatted,
+      use_cases: result.use_cases,
+    });
+  } catch (error: any) {
+    debugLog('UC generation failed', { error: error.message });
+    res.status(500).json({
+      error: 'Use case generation failed',
+      details: error.message,
+    });
+  }
+}));
+
+/**
  * GET /health
  * Health check endpoint
  */
@@ -333,6 +378,7 @@ export function startServer(): void {
     console.log('');
     console.log('Endpoints:');
     console.log('  POST /api/analyze          - Analyze a use case');
+    console.log('  POST /api/uc-generate      - Generate use cases for a customer');
     console.log('  POST /api/sessions/:id/follow-up - Follow-up query');
     console.log('  GET  /api/sessions         - List sessions');
     console.log('  GET  /api/sessions/:id     - Get session');
