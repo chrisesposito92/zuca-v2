@@ -302,7 +302,7 @@ export default function HistoryPage() {
                       <Button
                         size="sm"
                         variant="bordered"
-                        className="border-default-300 hover:border-primary hover:bg-primary/5"
+                        className="border-2 border-default-300 hover:border-primary hover:bg-primary/5"
                       >
                         View
                       </Button>

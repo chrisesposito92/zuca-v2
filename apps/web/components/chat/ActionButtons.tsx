@@ -125,7 +125,7 @@ export function ActionButtons({ sessionId, currentInput, onActionComplete }: Act
             <Button
               variant="bordered"
               size="sm"
-              className="flex-1 border-default-300 hover:border-primary hover:bg-primary/5"
+              className="flex-1 border-2 border-default-300 hover:border-primary hover:bg-primary/5"
               startContent={
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -153,7 +153,7 @@ export function ActionButtons({ sessionId, currentInput, onActionComplete }: Act
         <Button
           variant="bordered"
           size="sm"
-          className="flex-1 border-warning/50 text-warning hover:border-warning hover:bg-warning/10"
+          className="flex-1 border-2 border-warning/50 text-warning hover:border-warning hover:bg-warning/10"
           onPress={regenerateModal.onOpen}
           startContent={
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

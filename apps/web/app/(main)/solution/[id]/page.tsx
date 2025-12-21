@@ -64,7 +64,7 @@ export default function SolutionPage({ params }: PageProps) {
             <Button
               variant="bordered"
               size="sm"
-              className="border-default-300 hover:border-primary"
+              className="border-2 border-default-300 hover:border-primary"
               startContent={
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -205,7 +205,7 @@ export default function SolutionPage({ params }: PageProps) {
             <Button
               variant="bordered"
               size="sm"
-              className="border-default-300 hover:border-primary hover:bg-primary/5"
+              className="border-2 border-default-300 hover:border-primary hover:bg-primary/5"
               onPress={handleCopyToClipboard}
               startContent={
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -220,7 +220,7 @@ export default function SolutionPage({ params }: PageProps) {
             <Button
               variant="bordered"
               size="sm"
-              className="border-default-300 hover:border-primary hover:bg-primary/5"
+              className="border-2 border-default-300 hover:border-primary hover:bg-primary/5"
               onPress={handleExportJSON}
               startContent={
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
