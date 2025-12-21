@@ -1,7 +1,7 @@
 "use client";
 
 import { Button, Textarea } from "@heroui/react";
-import { useState, KeyboardEvent } from "react";
+import { useState } from "react";
 
 interface ChatInputProps {
   onSend: (message: string) => void;
@@ -24,7 +24,7 @@ export function ChatInput({
     setMessage("");
   };
 
-  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSend();

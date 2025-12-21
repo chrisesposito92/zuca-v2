@@ -146,7 +146,7 @@ export default function MainLayout({
 
       {/* Main content */}
       <main className="flex-1 overflow-auto relative ambient-glow">
-        <div className="relative z-10 container mx-auto p-8 max-w-6xl">
+        <div className="relative z-10 p-6 max-w-[1600px] mx-auto">
           {children}
         </div>
       </main>

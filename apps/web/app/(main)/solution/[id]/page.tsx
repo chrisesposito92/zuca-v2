@@ -120,50 +120,30 @@ export default function SolutionPage({ params }: PageProps) {
 
     const workbook = XLSX.utils.book_new();
 
-    // Contracts/Orders sheet
+    // Helper to add a sheet from raw JSON array
+    const addSheetFromArray = (data: unknown[], sheetName: string) => {
+      if (data && data.length > 0) {
+        const sheet = XLSX.utils.json_to_sheet(data as Record<string, unknown>[]);
+        XLSX.utils.book_append_sheet(workbook, sheet, sheetName.slice(0, 31)); // Sheet names max 31 chars
+      }
+    };
+
+    // Contracts/Orders - raw data with all columns
     if (result.contracts_orders?.zr_contracts_orders?.length) {
-      const contractsData = result.contracts_orders.zr_contracts_orders.map(row => ({
-        "Line #": row["Line Item Num"],
-        "POB Name": row["POB Name"],
-        "POB Template": row["POB Template"],
-        "Revenue Start": row["Revenue Start Date"],
-        "Revenue End": row["Revenue End Date"],
-        "Quantity": row["Ordered Qty"],
-        "Ext Sell Price": row["Ext Sell Price"],
-        "Ext Allocated Price": row["Ext Allocated Price"],
-        "SSP Price": row["SSP Price"],
-        "Release Event": row["Release Event"],
-        "Billing Period": row["Billing Period"],
-        "Billing Timing": row["Billing Timing"],
-      }));
-      const contractsSheet = XLSX.utils.json_to_sheet(contractsData);
-      XLSX.utils.book_append_sheet(workbook, contractsSheet, "Contracts-Orders");
+      addSheetFromArray(result.contracts_orders.zr_contracts_orders, "Contracts-Orders");
     }
 
-    // Billings sheet
+    // Billings - raw data with all columns
     if (result.billings?.zb_billings?.length) {
-      const billingsData = result.billings.zb_billings.map(row => ({
-        "Invoice Date": row["Invoice Date"],
-        "Billing Date": row["Billing Date"],
-        "Charge Name": row["Charge Name"],
-        "Rate Plan": row["Rate Plan"],
-        "Product": row["Product"],
-        "Billing Period Start": row["Billing Period Start"],
-        "Billing Period End": row["Billing Period End"],
-        "Quantity": row["Quantity"],
-        "Unit Price": row["Unit Price"],
-        "Amount": row["Amount"],
-        "Currency": row["Currency"],
-      }));
-      const billingsSheet = XLSX.utils.json_to_sheet(billingsData);
-      XLSX.utils.book_append_sheet(workbook, billingsSheet, "Billings");
+      addSheetFromArray(result.billings.zb_billings, "Billings");
     }
 
-    // Rev Rec Waterfall sheet (as pivot table)
+    // Rev Rec Waterfall - raw data
     if (result.revrec_waterfall?.zr_revrec?.length) {
-      const revrec = result.revrec_waterfall.zr_revrec;
+      addSheetFromArray(result.revrec_waterfall.zr_revrec, "Rev Rec Raw");
 
-      // Get unique periods sorted chronologically
+      // Also add pivot table version
+      const revrec = result.revrec_waterfall.zr_revrec;
       const months: Record<string, number> = {
         Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5,
         Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11
@@ -176,7 +156,6 @@ export default function SolutionPage({ params }: PageProps) {
         return aDate.getTime() - bDate.getTime();
       });
 
-      // Build pivot data
       const pobMap = new Map<string, { allocatedPrice: number; periodAmounts: Map<string, number> }>();
       revrec.forEach(row => {
         const key = row["POB Name"];
@@ -188,8 +167,7 @@ export default function SolutionPage({ params }: PageProps) {
         pob.periodAmounts.set(row["Period"], currentAmount + (row["Amount"] || 0));
       });
 
-      // Create rows for Excel
-      const revrecData = Array.from(pobMap.entries()).map(([pobName, data]) => {
+      const pivotData = Array.from(pobMap.entries()).map(([pobName, data]) => {
         const row: Record<string, string | number> = {
           "POB Name": pobName,
           "Allocated Price": data.allocatedPrice,
@@ -203,33 +181,43 @@ export default function SolutionPage({ params }: PageProps) {
         row["Total"] = total;
         return row;
       });
-
-      const revrecSheet = XLSX.utils.json_to_sheet(revrecData);
-      XLSX.utils.book_append_sheet(workbook, revrecSheet, "Rev Rec Waterfall");
+      addSheetFromArray(pivotData, "Rev Rec Pivot");
     }
 
-    // Subscription sheet
+    // Subscription - flatten charges with all fields
     if (result.subscription_spec?.rate_plans?.length) {
-      const subscriptionData: Record<string, string | number | null | undefined>[] = [];
+      const subscriptionData: Record<string, unknown>[] = [];
       result.subscription_spec.rate_plans.forEach(plan => {
         plan.charges?.forEach(charge => {
           subscriptionData.push({
-            "Product": plan.productName,
-            "Rate Plan": plan.ratePlanName,
-            "Charge Name": charge.name,
-            "Type": charge.type,
-            "Model": charge.model,
-            "Billing Period": charge.billingPeriod,
-            "Price": charge.price,
-            "Quantity": charge.quantity,
-            "UOM": charge.uom,
-            "Start Date": charge.effectiveStartDate,
-            "End Date": charge.effectiveEndDate,
+            productName: plan.productName,
+            ratePlanName: plan.ratePlanName,
+            ...charge,
           });
         });
       });
-      const subscriptionSheet = XLSX.utils.json_to_sheet(subscriptionData);
-      XLSX.utils.book_append_sheet(workbook, subscriptionSheet, "Subscription");
+      addSheetFromArray(subscriptionData, "Subscription");
+    }
+
+    // POB Mapping - raw data
+    if (result.pob_mapping?.charge_pob_map?.length) {
+      addSheetFromArray(result.pob_mapping.charge_pob_map, "POB Mapping");
+    }
+
+    // Contract Intel - as single row
+    if (result.contract_intel) {
+      addSheetFromArray([result.contract_intel], "Contract Intel");
+    }
+
+    // Detected Capabilities
+    if (result.detected_capabilities) {
+      const capsData = [{
+        billing_caps: result.detected_capabilities.billing_caps?.join(", "),
+        revenue_caps: result.detected_capabilities.revenue_caps?.join(", "),
+        hints: result.detected_capabilities.hints?.join(", "),
+        confidence: result.detected_capabilities.confidence,
+      }];
+      addSheetFromArray(capsData, "Detected Capabilities");
     }
 
     // Download the workbook
@@ -237,7 +225,7 @@ export default function SolutionPage({ params }: PageProps) {
 
     addToast({
       title: "Exported",
-      description: "Excel file downloaded with all tables",
+      description: "Excel file downloaded with all data",
       color: "success",
     });
   };
@@ -591,40 +579,42 @@ export default function SolutionPage({ params }: PageProps) {
                   </CardHeader>
                   <CardBody className="p-6">
                     {result.contracts_orders?.zr_contracts_orders?.length ? (
-                      <div className="overflow-x-auto rounded-lg border border-default-200/50">
-                        <table className="min-w-[900px] w-full text-sm">
-                          <thead>
-                            <tr className="bg-default-100/80">
-                              <th className="px-4 py-3 text-left font-semibold text-default-600 whitespace-nowrap">Line #</th>
-                              <th className="px-4 py-3 text-left font-semibold text-default-600 whitespace-nowrap">POB Name</th>
-                              <th className="px-4 py-3 text-left font-semibold text-default-600 whitespace-nowrap">Template</th>
-                              <th className="px-4 py-3 text-left font-semibold text-default-600 whitespace-nowrap">Rev Start</th>
-                              <th className="px-4 py-3 text-left font-semibold text-default-600 whitespace-nowrap">Rev End</th>
-                              <th className="px-4 py-3 text-right font-semibold text-default-600 whitespace-nowrap">Qty</th>
-                              <th className="px-4 py-3 text-right font-semibold text-default-600 whitespace-nowrap">Ext Sell Price</th>
-                              <th className="px-4 py-3 text-right font-semibold text-default-600 whitespace-nowrap">Allocated</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {result.contracts_orders.zr_contracts_orders.map((row, i) => (
-                              <tr key={i} className="border-t border-default-200/30 hover:bg-default-100/30 transition-colors">
-                                <td className="px-4 py-3 font-mono text-xs text-default-500 whitespace-nowrap">{row["Line Item Num"]}</td>
-                                <td className="px-4 py-3 text-foreground whitespace-nowrap">{row["POB Name"]}</td>
-                                <td className="px-4 py-3 text-default-500 whitespace-nowrap">{row["POB Template"]}</td>
-                                <td className="px-4 py-3 font-mono text-xs text-default-500 whitespace-nowrap">{row["Revenue Start Date"]}</td>
-                                <td className="px-4 py-3 font-mono text-xs text-default-500 whitespace-nowrap">{row["Revenue End Date"]}</td>
-                                <td className="px-4 py-3 text-right font-mono text-default-500 whitespace-nowrap">{row["Ordered Qty"]}</td>
-                                <td className="px-4 py-3 text-right font-mono text-foreground whitespace-nowrap">
-                                  ${row["Ext Sell Price"]?.toLocaleString() ?? "-"}
-                                </td>
-                                <td className="px-4 py-3 text-right font-mono text-primary whitespace-nowrap">
-                                  ${row["Ext Allocated Price"]?.toLocaleString() ?? "-"}
-                                </td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
+                      (() => {
+                        const rows = result.contracts_orders.zr_contracts_orders;
+                        const columns = Object.keys(rows[0]) as (keyof typeof rows[0])[];
+
+                        return (
+                          <div className="overflow-x-auto rounded-lg border border-default-200/50">
+                            <table className="w-full text-sm">
+                              <thead>
+                                <tr className="bg-default-100/80">
+                                  {columns.map((col) => (
+                                    <th key={col} className="px-3 py-3 text-left font-semibold text-default-600 whitespace-nowrap text-xs">
+                                      {col}
+                                    </th>
+                                  ))}
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {rows.map((row, i) => (
+                                  <tr key={i} className="border-t border-default-200/30 hover:bg-default-100/30 transition-colors">
+                                    {columns.map((col) => {
+                                      const value = row[col];
+                                      const isNumber = typeof value === "number";
+                                      const isBool = typeof value === "boolean";
+                                      return (
+                                        <td key={col} className={`px-3 py-2.5 whitespace-nowrap text-xs ${isNumber ? "text-right font-mono" : ""}`}>
+                                          {isBool ? (value ? "Yes" : "No") : isNumber ? value.toLocaleString() : (value ?? "-")}
+                                        </td>
+                                      );
+                                    })}
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
+                        );
+                      })()
                     ) : (
                       <p className="text-default-500 italic">No contract data available</p>
                     )}
@@ -814,10 +804,10 @@ export default function SolutionPage({ params }: PageProps) {
 
                         return (
                           <div className="overflow-x-auto rounded-lg border border-default-200/50">
-                            <table className="min-w-[800px] w-full text-sm">
+                            <table className="w-full text-sm">
                               <thead>
                                 <tr className="bg-default-100/80">
-                                  <th className="px-4 py-3 text-left font-semibold text-default-600 whitespace-nowrap sticky left-0 bg-default-100/80 z-10">POB Name</th>
+                                  <th className="px-4 py-3 text-left font-semibold text-default-600 whitespace-nowrap">POB Name</th>
                                   <th className="px-3 py-3 text-right font-semibold text-default-600 whitespace-nowrap">Allocated</th>
                                   {periods.map(period => (
                                     <th key={period} className="px-3 py-3 text-right font-semibold text-default-600 whitespace-nowrap">
@@ -833,7 +823,7 @@ export default function SolutionPage({ params }: PageProps) {
                                   const periodAmounts = pivotData.get(pobKey)!;
                                   return (
                                     <tr key={i} className="border-t border-default-200/30 hover:bg-default-100/30 transition-colors">
-                                      <td className="px-4 py-2.5 text-foreground whitespace-nowrap sticky left-0 bg-[#0a1612] z-10">{pob.name}</td>
+                                      <td className="px-4 py-2.5 text-foreground whitespace-nowrap">{pob.name}</td>
                                       <td className="px-3 py-2.5 text-right font-mono text-xs text-default-400 whitespace-nowrap">
                                         ${pob.allocatedPrice.toLocaleString()}
                                       </td>
@@ -841,7 +831,7 @@ export default function SolutionPage({ params }: PageProps) {
                                         const amount = periodAmounts.get(period) || 0;
                                         return (
                                           <td key={period} className={`px-3 py-2.5 text-right font-mono text-xs whitespace-nowrap ${amount > 0 ? "text-foreground" : "text-default-400"}`}>
-                                            {amount > 0 ? `$${amount.toLocaleString()}` : "-"}
+                                            ${amount.toLocaleString()}
                                           </td>
                                         );
                                       })}
@@ -853,7 +843,7 @@ export default function SolutionPage({ params }: PageProps) {
                                 })}
                                 {/* Totals Row */}
                                 <tr className="border-t-2 border-default-300 bg-default-100/50">
-                                  <td className="px-4 py-3 font-semibold text-foreground whitespace-nowrap sticky left-0 bg-default-100/50 z-10">Total</td>
+                                  <td className="px-4 py-3 font-semibold text-foreground whitespace-nowrap">Total</td>
                                   <td className="px-3 py-3 text-right font-mono text-xs text-default-500 whitespace-nowrap">
                                     ${pobs.reduce((sum, pob) => sum + pobMap.get(pob)!.allocatedPrice, 0).toLocaleString()}
                                   </td>
@@ -890,11 +880,13 @@ export default function SolutionPage({ params }: PageProps) {
                   </div>
                 }
               >
-                <Card className="glass-card mt-4">
-                  <CardBody className="p-4">
-                    <pre className="text-xs overflow-x-auto bg-[#050a08] p-4 rounded-lg max-h-96 overflow-y-auto border border-default-200/30 text-default-500 font-mono">
-                      {JSON.stringify(result, null, 2)}
-                    </pre>
+                <Card className="glass-card mt-4 overflow-hidden">
+                  <CardBody className="p-4 overflow-hidden">
+                    <div className="overflow-auto rounded-lg max-h-[500px] border border-default-200/30">
+                      <pre className="text-xs bg-[#050a08] p-4 text-default-500 font-mono whitespace-pre">
+                        {JSON.stringify(result, null, 2)}
+                      </pre>
+                    </div>
                   </CardBody>
                 </Card>
               </Tab>
