@@ -3,12 +3,15 @@
  */
 
 import { useMutation } from "@tanstack/react-query";
-import type { UCGeneratorInput, UCGeneratorOutput } from "@zuca/types/uc-generator";
+import type { UCGeneratorInput, GeneratedUseCase } from "@zuca/types/uc-generator";
 
 interface UCGeneratorResponse {
   success: boolean;
   session_id: string;
-  result: UCGeneratorOutput;
+  use_cases: GeneratedUseCase[];
+  research?: unknown;
+  generated?: unknown;
+  formatted?: unknown;
 }
 
 interface UCGeneratorError {

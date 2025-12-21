@@ -65,6 +65,7 @@ export default function AnalyzePage() {
     num_use_cases: 2,
   });
   const [generatedUseCases, setGeneratedUseCases] = useState<GeneratedUseCase[]>([]);
+  const [selectedUseCaseIndex, setSelectedUseCaseIndex] = useState<number | null>(null);
 
   // Mutations
   const analyzeMutation = useAnalyze();
@@ -99,13 +100,15 @@ export default function AnalyzePage() {
     const customerName = formData.get("customer_name") as string;
     setUcInput((prev) => ({ ...prev, customer_name: customerName || "" }));
     setGeneratedUseCases([]);
+    setSelectedUseCaseIndex(null);
     onOpen();
   };
 
   const handleGenerateUseCases = async () => {
     try {
       const result = await ucGeneratorMutation.mutateAsync(ucInput);
-      setGeneratedUseCases(result.result.use_cases);
+      setGeneratedUseCases(result.use_cases);
+      setSelectedUseCaseIndex(null);
     } catch (error) {
       const err = error as { error?: string; details?: string };
       addToast({
@@ -114,6 +117,12 @@ export default function AnalyzePage() {
         color: "danger",
       });
     }
+  };
+
+  const handleConfirmUseCase = () => {
+    if (selectedUseCaseIndex === null) return;
+    const useCase = generatedUseCases[selectedUseCaseIndex];
+    handleSelectUseCase(useCase);
   };
 
   const formatRevRecNotes = (notes: UCRevRecNote[]): string => {
@@ -127,32 +136,54 @@ export default function AnalyzePage() {
 
     const otr = useCase.otr_workflow_inputs;
 
-    const customerNameInput = formRef.current.querySelector<HTMLInputElement>('[name="customer_name"]');
-    const contractDateInput = formRef.current.querySelector<HTMLInputElement>('[name="contract_start_date"]');
-    const useCaseInput = formRef.current.querySelector<HTMLTextAreaElement>('[name="use_case_description"]');
-    const termsInput = formRef.current.querySelector<HTMLInputElement>('[name="terms_months"]');
-    const currencySelect = formRef.current.querySelector<HTMLSelectElement>('[name="transaction_currency"]');
-    const billingSelect = formRef.current.querySelector<HTMLSelectElement>('[name="billing_period"]');
-    const revRecNotesInput = formRef.current.querySelector<HTMLTextAreaElement>('[name="rev_rec_notes"]');
+    // Helper to set value and trigger React-compatible events
+    const setInputValue = (selector: string, value: string) => {
+      const input = formRef.current?.querySelector<HTMLInputElement | HTMLTextAreaElement>(selector);
+      if (input) {
+        // Use native setter to bypass React's synthetic event system
+        const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
+          window.HTMLInputElement.prototype,
+          "value"
+        )?.set;
+        const nativeTextAreaValueSetter = Object.getOwnPropertyDescriptor(
+          window.HTMLTextAreaElement.prototype,
+          "value"
+        )?.set;
 
-    if (customerNameInput) customerNameInput.value = otr.customer_name;
-    if (contractDateInput) contractDateInput.value = otr.contract_start_date;
-    if (useCaseInput) useCaseInput.value = otr.use_case;
-    if (termsInput) termsInput.value = String(otr.terms_months);
-    if (currencySelect) {
-      const event = new Event("change", { bubbles: true });
-      currencySelect.value = otr.transaction_currency;
-      currencySelect.dispatchEvent(event);
+        if (input.tagName === "TEXTAREA" && nativeTextAreaValueSetter) {
+          nativeTextAreaValueSetter.call(input, value);
+        } else if (nativeInputValueSetter) {
+          nativeInputValueSetter.call(input, value);
+        }
+
+        // Dispatch input event for React to pick up
+        input.dispatchEvent(new Event("input", { bubbles: true }));
+      }
+    };
+
+    // Set all form values
+    setInputValue('[name="customer_name"]', otr.customer_name);
+    setInputValue('[name="contract_start_date"]', otr.contract_start_date);
+    setInputValue('[name="use_case_description"]', otr.use_case);
+    setInputValue('[name="terms_months"]', String(otr.terms_months));
+
+    // Handle selects (HeroUI Select uses hidden input)
+    const currencyInput = formRef.current.querySelector<HTMLInputElement>('[name="transaction_currency"]');
+    const billingInput = formRef.current.querySelector<HTMLInputElement>('[name="billing_period"]');
+
+    if (currencyInput) {
+      currencyInput.value = otr.transaction_currency;
     }
-    if (billingSelect) {
-      const event = new Event("change", { bubbles: true });
-      billingSelect.value = otr.billing_period;
-      billingSelect.dispatchEvent(event);
-    }
-    if (revRecNotesInput && otr.rev_rec_notes?.length > 0) {
-      revRecNotesInput.value = formatRevRecNotes(otr.rev_rec_notes);
+    if (billingInput) {
+      billingInput.value = otr.billing_period;
     }
 
+    // Set rev rec notes if present
+    if (otr.rev_rec_notes?.length > 0) {
+      setInputValue('[name="rev_rec_notes"]', formatRevRecNotes(otr.rev_rec_notes));
+    }
+
+    // Set React state for controlled components
     setIsAllocations(otr.is_allocations);
     if (otr.allocation_method) {
       setAllocationMethod(otr.allocation_method);
@@ -495,7 +526,8 @@ export default function AnalyzePage() {
         scrollBehavior="inside"
         classNames={{
           backdrop: "bg-[#050a08]/80 backdrop-blur-sm",
-          base: "glass-card-elevated",
+          base: "glass-card-elevated max-h-[90vh]",
+          body: "overflow-y-auto",
         }}
       >
         <ModalContent>
@@ -552,6 +584,7 @@ export default function AnalyzePage() {
                   />
                 </div>
 
+                <div className="pt-4">
                 <Select
                   label="Number of Use Cases"
                   selectedKeys={[String(ucInput.num_use_cases)]}
@@ -573,6 +606,7 @@ export default function AnalyzePage() {
                   <SelectItem key="2">2 Use Cases</SelectItem>
                   <SelectItem key="3">3 Use Cases</SelectItem>
                 </Select>
+                </div>
 
                 <Textarea
                   label="Additional Notes (Optional)"
@@ -585,6 +619,7 @@ export default function AnalyzePage() {
                   variant="bordered"
                   size="lg"
                   isDisabled={ucGeneratorMutation.isPending}
+                  className="pt-2"
                   classNames={{
                     inputWrapper: "border-default-200 hover:border-primary/50 focus-within:border-primary",
                   }}
@@ -607,7 +642,7 @@ export default function AnalyzePage() {
                         }}
                       />
                       <p className="text-sm text-default-500 mt-3">
-                        This typically takes 15-30 seconds.
+                        This may take 3-5 minutes while we research the customer&apos;s website and generate detailed use cases.
                       </p>
                     </CardBody>
                   </Card>
@@ -616,47 +651,117 @@ export default function AnalyzePage() {
             ) : (
               <div className="space-y-4">
                 <p className="text-sm text-default-500">
-                  Select a use case to auto-fill the analysis form:
+                  Click a use case to preview details, then confirm your selection:
                 </p>
-                {generatedUseCases.map((useCase, index) => {
-                  const chargeGroups = [...new Set(
-                    useCase.otr_workflow_inputs.rev_rec_notes.map((n) => n.charge_group)
-                  )];
-                  const preview = useCase.otr_workflow_inputs.use_case.slice(0, 200);
 
-                  return (
-                    <Card
-                      key={index}
-                      isPressable
-                      onPress={() => handleSelectUseCase(useCase)}
-                      className="glass-card border-glow"
-                    >
-                      <CardBody className="p-5 space-y-3">
-                        <div className="flex items-start justify-between">
-                          <h4 className="font-semibold text-lg">{useCase.label}</h4>
-                          <Chip size="sm" variant="flat" color="secondary">
-                            {useCase.otr_workflow_inputs.terms_months} months
-                          </Chip>
-                        </div>
+                {/* Use case list */}
+                <div className="space-y-3">
+                  {generatedUseCases.map((useCase, index) => {
+                    const chargeGroups = [...new Set(
+                      useCase.otr_workflow_inputs.rev_rec_notes.map((n) => n.charge_group)
+                    )];
+                    const isSelected = selectedUseCaseIndex === index;
+
+                    return (
+                      <Card
+                        key={index}
+                        isPressable
+                        onPress={() => setSelectedUseCaseIndex(index)}
+                        className={`glass-card transition-all ${
+                          isSelected
+                            ? "border-2 border-primary ring-2 ring-primary/20"
+                            : "border-transparent hover:border-default-300"
+                        }`}
+                      >
+                        <CardBody className="p-4">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                              <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                                isSelected ? "border-primary bg-primary" : "border-default-300"
+                              }`}>
+                                {isSelected && (
+                                  <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                  </svg>
+                                )}
+                              </div>
+                              <div>
+                                <h4 className="font-semibold">{useCase.label}</h4>
+                                <div className="flex items-center gap-2 mt-1">
+                                  <Chip size="sm" variant="flat" color="secondary">
+                                    {useCase.otr_workflow_inputs.terms_months} months
+                                  </Chip>
+                                  {chargeGroups.slice(0, 3).map((group, i) => (
+                                    <Chip key={i} size="sm" variant="bordered" className="border-default-300">
+                                      {group}
+                                    </Chip>
+                                  ))}
+                                  {chargeGroups.length > 3 && (
+                                    <span className="text-xs text-default-400">+{chargeGroups.length - 3} more</span>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </CardBody>
+                      </Card>
+                    );
+                  })}
+                </div>
+
+                {/* Selected use case details */}
+                {selectedUseCaseIndex !== null && (
+                  <Card className="glass-card border-primary/30 mt-4">
+                    <CardBody className="p-5 space-y-4">
+                      <div className="flex items-center gap-2 text-primary">
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span className="font-medium">Use Case Details</span>
+                      </div>
+
+                      <div>
+                        <p className="text-xs text-default-400 uppercase tracking-wide mb-1">Description</p>
                         <p className="text-sm text-default-600 leading-relaxed">
-                          {preview}{preview.length >= 200 ? "..." : ""}
+                          {generatedUseCases[selectedUseCaseIndex].otr_workflow_inputs.use_case}
                         </p>
-                        <div className="flex flex-wrap gap-2">
-                          {chargeGroups.map((group, i) => (
-                            <Chip key={i} size="sm" variant="bordered" className="border-default-300">
-                              {group}
-                            </Chip>
-                          ))}
+                      </div>
+
+                      {generatedUseCases[selectedUseCaseIndex].assumptions.length > 0 && (
+                        <div>
+                          <p className="text-xs text-default-400 uppercase tracking-wide mb-2">Assumptions</p>
+                          <ul className="space-y-1">
+                            {generatedUseCases[selectedUseCaseIndex].assumptions.map((assumption, i) => (
+                              <li key={i} className="text-sm text-default-500 flex items-start gap-2">
+                                <span className="text-primary mt-1">•</span>
+                                {assumption}
+                              </li>
+                            ))}
+                          </ul>
                         </div>
-                        {useCase.assumptions.length > 0 && (
-                          <p className="text-xs text-default-400">
-                            {useCase.assumptions.length} assumptions included
-                          </p>
-                        )}
-                      </CardBody>
-                    </Card>
-                  );
-                })}
+                      )}
+
+                      <div className="grid grid-cols-2 gap-4 pt-2">
+                        <div>
+                          <p className="text-xs text-default-400 uppercase tracking-wide mb-1">Contract Terms</p>
+                          <p className="text-sm font-medium">{generatedUseCases[selectedUseCaseIndex].otr_workflow_inputs.terms_months} months</p>
+                        </div>
+                        <div>
+                          <p className="text-xs text-default-400 uppercase tracking-wide mb-1">Billing Period</p>
+                          <p className="text-sm font-medium capitalize">{generatedUseCases[selectedUseCaseIndex].otr_workflow_inputs.billing_period}</p>
+                        </div>
+                        <div>
+                          <p className="text-xs text-default-400 uppercase tracking-wide mb-1">Currency</p>
+                          <p className="text-sm font-medium">{generatedUseCases[selectedUseCaseIndex].otr_workflow_inputs.transaction_currency}</p>
+                        </div>
+                        <div>
+                          <p className="text-xs text-default-400 uppercase tracking-wide mb-1">Allocations</p>
+                          <p className="text-sm font-medium">{generatedUseCases[selectedUseCaseIndex].otr_workflow_inputs.is_allocations ? "Yes" : "No"}</p>
+                        </div>
+                      </div>
+                    </CardBody>
+                  </Card>
+                )}
               </div>
             )}
           </ModalBody>
@@ -675,12 +780,26 @@ export default function AnalyzePage() {
                 Generate
               </Button>
             ) : (
-              <Button
-                variant="bordered"
-                onPress={() => setGeneratedUseCases([])}
-              >
-                Start Over
-              </Button>
+              <>
+                <Button
+                  variant="bordered"
+                  className="border-2 border-default-300"
+                  onPress={() => {
+                    setGeneratedUseCases([]);
+                    setSelectedUseCaseIndex(null);
+                  }}
+                >
+                  Start Over
+                </Button>
+                <Button
+                  color="primary"
+                  className="font-semibold"
+                  onPress={handleConfirmUseCase}
+                  isDisabled={selectedUseCaseIndex === null}
+                >
+                  Use This Use Case
+                </Button>
+              </>
             )}
           </ModalFooter>
         </ModalContent>
