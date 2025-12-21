@@ -2,15 +2,14 @@
  * Authentication utilities for ZUCA v2
  *
  * Uses JWT tokens stored in httpOnly cookies for security.
- * Supports two auth methods:
- * 1. Shared password (from ZUCA_PASSWORD env var)
- * 2. Invite codes (one-time use, creates user in DB)
+ * Supports email/password authentication with individual user accounts.
+ * Designed to easily add SSO/OAuth providers in the future.
  */
 
 import { SignJWT, jwtVerify } from 'jose';
 import { cookies } from 'next/headers';
 import bcrypt from 'bcryptjs';
-import { getUserById, createUser, validateInviteCode, useInviteCode } from './db';
+import { getUserById, getUserByEmail, createUser } from './db';
 
 // ============================================================================
 // Constants
@@ -21,10 +20,17 @@ const JWT_SECRET = new TextEncoder().encode(
 );
 const COOKIE_NAME = 'auth-token';
 const TOKEN_EXPIRY = '7d'; // 7 days
+const SALT_ROUNDS = 10;
+
+// UUID v4 regex pattern for validation
+const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+// Auth provider types - extensible for future SSO
+export type AuthProvider = 'email' | 'google' | 'okta';
 
 export interface JWTPayload {
   userId: string;
-  type: 'password' | 'invite';
+  provider: AuthProvider;
   iat: number;
   exp: number;
 }
@@ -35,12 +41,18 @@ export interface AuthResult {
   userId?: string;
 }
 
+export interface AuthUser {
+  userId: string;
+  email: string | null;
+  provider: AuthProvider;
+}
+
 // ============================================================================
 // JWT Operations
 // ============================================================================
 
-export async function createToken(userId: string, type: 'password' | 'invite'): Promise<string> {
-  return new SignJWT({ userId, type })
+export async function createToken(userId: string, provider: AuthProvider): Promise<string> {
+  return new SignJWT({ userId, provider })
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
     .setExpirationTime(TOKEN_EXPIRY)
@@ -82,53 +94,63 @@ export async function clearAuthCookie(): Promise<void> {
 }
 
 // ============================================================================
-// Auth Methods
+// Email/Password Auth
 // ============================================================================
 
 /**
- * Authenticate with the shared password
+ * Register a new user with email and password
  */
-export async function loginWithPassword(password: string): Promise<AuthResult> {
-  const correctPassword = process.env.ZUCA_PASSWORD;
-
-  if (!correctPassword) {
-    return { success: false, error: 'Password authentication not configured' };
+export async function register(email: string, password: string): Promise<AuthResult> {
+  // Validate email format
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    return { success: false, error: 'Invalid email format' };
   }
 
-  if (password !== correctPassword) {
-    return { success: false, error: 'Invalid password' };
+  // Validate password strength
+  if (password.length < 8) {
+    return { success: false, error: 'Password must be at least 8 characters' };
   }
 
-  // For password auth, we use a fixed "admin" user ID
-  const userId = 'password-user';
-  const token = await createToken(userId, 'password');
+  // Check if user already exists
+  const existingUser = await getUserByEmail(email);
+  if (existingUser) {
+    return { success: false, error: 'An account with this email already exists' };
+  }
+
+  // Hash password and create user
+  const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
+  const user = await createUser(email, passwordHash, null);
+
+  // Create and set token
+  const token = await createToken(user.id, 'email');
   await setAuthCookie(token);
 
-  return { success: true, userId };
+  return { success: true, userId: user.id };
 }
 
 /**
- * Authenticate with an invite code (creates a new user)
+ * Login with email and password
  */
-export async function loginWithInviteCode(code: string, email?: string): Promise<AuthResult> {
-  // Validate the invite code
-  const isValid = await validateInviteCode(code);
-  if (!isValid) {
-    return { success: false, error: 'Invalid or expired invite code' };
+export async function login(email: string, password: string): Promise<AuthResult> {
+  // Find user by email
+  const user = await getUserByEmail(email);
+  if (!user) {
+    return { success: false, error: 'Invalid email or password' };
   }
 
-  // Use the invite code (increment usage count)
-  const used = await useInviteCode(code);
-  if (!used) {
-    return { success: false, error: 'Failed to use invite code' };
+  // Verify password
+  if (!user.password_hash) {
+    return { success: false, error: 'This account uses a different login method' };
   }
 
-  // Create a new user
-  const passwordHash = email ? await bcrypt.hash(code, 10) : null;
-  const user = await createUser(email ?? null, passwordHash, code);
+  const passwordValid = await bcrypt.compare(password, user.password_hash);
+  if (!passwordValid) {
+    return { success: false, error: 'Invalid email or password' };
+  }
 
   // Create and set token
-  const token = await createToken(user.id, 'invite');
+  const token = await createToken(user.id, 'email');
   await setAuthCookie(token);
 
   return { success: true, userId: user.id };
@@ -141,7 +163,7 @@ export async function loginWithInviteCode(code: string, email?: string): Promise
 /**
  * Get the current authenticated user from the request
  */
-export async function getCurrentUser(): Promise<{ userId: string; type: 'password' | 'invite' } | null> {
+export async function getCurrentUser(): Promise<AuthUser | null> {
   const token = await getAuthCookie();
   if (!token) {
     return null;
@@ -149,27 +171,37 @@ export async function getCurrentUser(): Promise<{ userId: string; type: 'passwor
 
   const payload = await verifyToken(token);
   if (!payload) {
+    // Invalid token - clear the cookie
+    await clearAuthCookie();
     return null;
   }
 
-  // For password auth, skip DB check
-  if (payload.type === 'password') {
-    return { userId: payload.userId, type: 'password' };
+  // Validate userId is a proper UUID (handles legacy "password-user" tokens)
+  if (!UUID_REGEX.test(payload.userId)) {
+    // Legacy or invalid token - clear it
+    await clearAuthCookie();
+    return null;
   }
 
-  // For invite auth, verify user exists and is active
+  // Verify user exists and is active
   const user = await getUserById(payload.userId);
   if (!user) {
+    // User no longer exists - clear the cookie
+    await clearAuthCookie();
     return null;
   }
 
-  return { userId: user.id, type: 'invite' };
+  return {
+    userId: user.id,
+    email: user.email,
+    provider: payload.provider,
+  };
 }
 
 /**
  * Require authentication - throws if not authenticated
  */
-export async function requireAuth(): Promise<{ userId: string; type: 'password' | 'invite' }> {
+export async function requireAuth(): Promise<AuthUser> {
   const user = await getCurrentUser();
   if (!user) {
     throw new Error('Authentication required');
@@ -182,4 +214,25 @@ export async function requireAuth(): Promise<{ userId: string; type: 'password' 
  */
 export async function logout(): Promise<void> {
   await clearAuthCookie();
+}
+
+// ============================================================================
+// Future: SSO/OAuth Helpers (placeholder for Option C)
+// ============================================================================
+
+/**
+ * Handle OAuth callback - to be implemented when adding SSO
+ * @param provider - The OAuth provider (google, okta, etc.)
+ * @param code - The authorization code from the OAuth flow
+ */
+export async function handleOAuthCallback(
+  _provider: 'google' | 'okta',
+  _code: string
+): Promise<AuthResult> {
+  // TODO: Implement when adding SSO support
+  // 1. Exchange code for tokens with provider
+  // 2. Get user info from provider
+  // 3. Create or find user in our DB
+  // 4. Create JWT and set cookie
+  return { success: false, error: 'SSO not yet implemented' };
 }

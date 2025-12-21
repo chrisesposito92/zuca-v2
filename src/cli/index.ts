@@ -12,23 +12,23 @@ import { Command } from 'commander';
 import chalk from 'chalk';
 import { readFile, writeFile } from 'fs/promises';
 import { createInterface } from 'readline';
-import { ZucaInput } from '../types/input.js';
-import { UCGeneratorInput, NumUseCases } from '../types/uc-generator.js';
+import { ZucaInput } from '../types/input';
+import { UCGeneratorInput, NumUseCases } from '../types/uc-generator';
 import {
   runPipeline,
   handleFollowUp,
   quickAnalysis,
   getSession,
-} from '../pipeline/index.js';
-import { runUCGenerator, mapToZucaInput } from '../pipeline/uc-generator/index.js';
+} from '../pipeline/index';
+import { runUCGenerator, mapToZucaInput } from '../pipeline/uc-generator/index';
 import {
   formatSubscription,
   formatRatePlanCharges,
   formatContractsOrdersTable,
   formatBillingsTable,
   formatRevRecWaterfall,
-} from '../utils/markdown-tables.js';
-import { formatSummaryForDisplay } from '../pipeline/steps/summarize.js';
+} from '../utils/markdown-tables';
+import { formatSummaryForDisplay } from '../pipeline/steps/summarize';
 
 const program = new Command();
 

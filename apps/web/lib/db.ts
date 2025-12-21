@@ -65,7 +65,7 @@ export interface DbInviteCode {
 export async function createSession(
   sessionType: SessionType,
   input: ZucaInput | UCGeneratorInput,
-  userId?: string
+  userId?: string | null
 ): Promise<DbSession> {
   const result = await sql<DbSession>`
     INSERT INTO sessions (session_type, input, user_id, status)
@@ -83,7 +83,7 @@ export async function getSession(id: string): Promise<DbSession | null> {
 }
 
 export async function listSessions(
-  userId?: string,
+  userId?: string | null,
   limit = 50,
   offset = 0
 ): Promise<DbSession[]> {

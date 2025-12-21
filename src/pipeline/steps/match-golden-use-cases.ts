@@ -5,10 +5,10 @@
  * to match detected capabilities against the Golden Use Cases database.
  */
 
-import { GoldenUseCaseCapability } from '../../types/golden-use-cases.js';
-import { DetectedCapabilities, MatchGoldenUseCasesOutput } from '../../types/output.js';
-import { matchToGoldenUseCases, formatMatchedGucForContext } from '../../utils/jaccard.js';
-import { debugLog } from '../../config.js';
+import { GoldenUseCaseCapability } from '../../types/golden-use-cases';
+import { DetectedCapabilities, MatchGoldenUseCasesOutput } from '../../types/output';
+import { matchToGoldenUseCases, formatMatchedGucForContext } from '../../utils/jaccard';
+import { debugLog } from '../../config';
 
 export interface MatchOptions {
   /** Number of top matches to return (default: 3) */

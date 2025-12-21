@@ -1,7 +1,7 @@
-import { complete, getZuoraMcpTools, ReasoningEffort } from '../../llm/client.js';
-import { loadPrompt, PROMPTS } from '../../llm/prompts/index.js';
-import { ZucaOutput } from '../../types/output.js';
-import { debugLog } from '../../config.js';
+import { complete, getZuoraMcpTools, ReasoningEffort } from '../../llm/client';
+import { loadPrompt, PROMPTS } from '../../llm/prompts/index';
+import { ZucaOutput } from '../../types/output';
+import { debugLog } from '../../config';
 
 /**
  * Expert assistant response

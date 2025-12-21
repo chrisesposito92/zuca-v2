@@ -1,15 +1,15 @@
-import { complete, getZuoraMcpTools, ReasoningEffort } from '../../llm/client.js';
-import { loadPrompt, PROMPTS } from '../../llm/prompts/index.js';
+import { complete, getZuoraMcpTools, ReasoningEffort } from '../../llm/client';
+import { loadPrompt, PROMPTS } from '../../llm/prompts/index';
 import {
   BillingsOutput,
   BillingsOutputSchema,
   SubscriptionSpec,
   ContractIntel,
-} from '../../types/output.js';
-import { ZucaInput } from '../../types/input.js';
-import { formatSubscriptionSpecForContext } from './generate-subscription.js';
-import { formatContractIntelForContext } from './contract-intel.js';
-import { debugLog } from '../../config.js';
+} from '../../types/output';
+import { ZucaInput } from '../../types/input';
+import { formatSubscriptionSpecForContext } from './generate-subscription';
+import { formatContractIntelForContext } from './contract-intel';
+import { debugLog } from '../../config';
 
 /**
  * JSON schema for Billings structured output

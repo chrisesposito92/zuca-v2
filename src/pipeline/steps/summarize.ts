@@ -1,5 +1,5 @@
-import { complete, getZuoraMcpTools, ReasoningEffort } from '../../llm/client.js';
-import { loadPrompt, PROMPTS } from '../../llm/prompts/index.js';
+import { complete, getZuoraMcpTools, ReasoningEffort } from '../../llm/client';
+import { loadPrompt, PROMPTS } from '../../llm/prompts/index';
 import {
   SummaryOutput,
   SummaryOutputSchema,
@@ -8,8 +8,8 @@ import {
   ContractsOrdersOutput,
   BillingsOutput,
   RevRecWaterfallOutput,
-} from '../../types/output.js';
-import { debugLog } from '../../config.js';
+} from '../../types/output';
+import { debugLog } from '../../config';
 
 /**
  * JSON schema for Summary structured output

@@ -14,7 +14,7 @@ export {
   quickAnalysis,
   type PipelineOptions,
   type PipelineSession,
-} from './orchestrator.js';
+} from './orchestrator';
 
 // All pipeline steps
-export * from './steps/index.js';
+export * from './steps/index';

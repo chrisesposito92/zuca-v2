@@ -5,15 +5,15 @@
  * Produces a structured JSON summary of their commercial offering.
  */
 
-import { complete, getZuoraMcpTools, ReasoningEffort } from '../../../llm/client.js';
-import { loadPrompt, PROMPTS } from '../../../llm/prompts/index.js';
+import { complete, getZuoraMcpTools, ReasoningEffort } from '../../../llm/client';
+import { loadPrompt, PROMPTS } from '../../../llm/prompts/index';
 import {
   UCGeneratorInput,
   CustomerResearch,
   CustomerResearchSchema,
   customerResearchJsonSchema,
-} from '../../../types/uc-generator.js';
-import { debugLog } from '../../../config.js';
+} from '../../../types/uc-generator';
+import { debugLog } from '../../../config';
 
 /**
  * Build the user message for customer research

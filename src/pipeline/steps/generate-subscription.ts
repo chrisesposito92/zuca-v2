@@ -1,11 +1,11 @@
-import { complete, getZuoraMcpTools, ReasoningEffort } from '../../llm/client.js';
-import { loadPrompt, PROMPTS } from '../../llm/prompts/index.js';
-import { SubscriptionSpec, SubscriptionSpecSchema, ContractIntel } from '../../types/output.js';
-import { MatchGoldenUseCasesOutput } from '../../types/output.js';
-import { GoldenSubscription, GoldenRatePlanChargesDoc } from '../../types/golden-use-cases.js';
-import { ZucaInput } from '../../types/input.js';
-import { formatMatchResultsForContext } from './match-golden-use-cases.js';
-import { debugLog } from '../../config.js';
+import { complete, getZuoraMcpTools, ReasoningEffort } from '../../llm/client';
+import { loadPrompt, PROMPTS } from '../../llm/prompts/index';
+import { SubscriptionSpec, SubscriptionSpecSchema, ContractIntel } from '../../types/output';
+import { MatchGoldenUseCasesOutput } from '../../types/output';
+import { GoldenSubscription, GoldenRatePlanChargesDoc } from '../../types/golden-use-cases';
+import { ZucaInput } from '../../types/input';
+import { formatMatchResultsForContext } from './match-golden-use-cases';
+import { debugLog } from '../../config';
 
 /**
  * JSON schema for subscription spec structured output

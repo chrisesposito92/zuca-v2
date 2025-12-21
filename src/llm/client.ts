@@ -1,7 +1,7 @@
 import OpenAI from 'openai';
 import { z } from 'zod';
 
-import { config, debugLog } from '../config.js';
+import { config, debugLog } from '../config';
 
 /**
  * OpenAI client instance

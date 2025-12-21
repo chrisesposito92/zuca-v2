@@ -2,7 +2,7 @@ import { readFile } from 'fs/promises';
 import { join, resolve } from 'path';
 import { z } from 'zod';
 
-import { config, debugLog } from '../config.js';
+import { config, debugLog } from '../config';
 import {
   GoldenUseCaseCapability,
   GoldenUseCaseCapabilitySchema,
@@ -18,7 +18,7 @@ import {
   GoldenZRTableRow,
   GoldenZRTableRowSchema,
   GoldenUseCasesData,
-} from '../types/golden-use-cases.js';
+} from '../types/golden-use-cases';
 
 // Re-export the type for convenience
 export type { GoldenUseCasesData };

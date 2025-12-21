@@ -1,9 +1,9 @@
-import { complete, getZuoraMcpTools, ReasoningEffort } from '../../llm/client.js';
-import { loadPrompt, PROMPTS } from '../../llm/prompts/index.js';
-import { DetectedCapabilities, DetectedCapabilitiesSchema } from '../../types/output.js';
-import { GoldenUseCaseCapability, KeyTerm } from '../../types/golden-use-cases.js';
-import { formatCapabilitiesForContext, formatKeyTermsForContext } from '../../data/loader.js';
-import { debugLog } from '../../config.js';
+import { complete, getZuoraMcpTools, ReasoningEffort } from '../../llm/client';
+import { loadPrompt, PROMPTS } from '../../llm/prompts/index';
+import { DetectedCapabilities, DetectedCapabilitiesSchema } from '../../types/output';
+import { GoldenUseCaseCapability, KeyTerm } from '../../types/golden-use-cases';
+import { formatCapabilitiesForContext, formatKeyTermsForContext } from '../../data/loader';
+import { debugLog } from '../../config';
 
 /**
  * JSON schema for Detect Capabilities structured output

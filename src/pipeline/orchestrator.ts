@@ -6,10 +6,10 @@
  */
 
 import { v4 as uuidv4 } from 'uuid';
-import { ZucaInput, validateZucaInput } from '../types/input.js';
-import { ZucaOutput, DetectedCapabilities, MatchGoldenUseCasesOutput } from '../types/output.js';
-import { loadGoldenUseCasesData } from '../data/loader.js';
-import { debugLog } from '../config.js';
+import { ZucaInput, validateZucaInput } from '../types/input';
+import { ZucaOutput, DetectedCapabilities, MatchGoldenUseCasesOutput } from '../types/output';
+import { loadGoldenUseCasesData } from '../data/loader';
+import { debugLog } from '../config';
 
 // Import all pipeline steps
 import {
@@ -26,7 +26,7 @@ import {
   summarizeResults,
   expertAssistant,
   type ExpertResponse,
-} from './steps/index.js';
+} from './steps/index';
 
 /**
  * Pipeline execution options

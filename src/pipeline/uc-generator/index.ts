@@ -13,7 +13,7 @@ export {
   mapToZucaInput,
   quickResearch,
   type UCGeneratorOptions,
-} from './orchestrator.js';
+} from './orchestrator';
 
 // Step exports (for advanced usage)
 export {
@@ -23,4 +23,4 @@ export {
   formatOutputLocally,
   formatCustomerResearchForContext,
   formatUseCasesForOutput,
-} from './steps/index.js';
+} from './steps/index';

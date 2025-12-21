@@ -1,21 +1,21 @@
 /**
- * POST /api/auth/login
+ * POST /api/auth/register
  *
- * Handles email/password authentication.
- * Each user has their own account with sessions scoped to their user ID.
+ * Creates a new user account with email and password.
+ * Automatically logs in the user after registration.
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { login } from '@/lib/auth';
+import { register } from '@/lib/auth';
 
-interface LoginRequest {
+interface RegisterRequest {
   email: string;
   password: string;
 }
 
 export async function POST(request: NextRequest) {
   try {
-    const body: LoginRequest = await request.json();
+    const body: RegisterRequest = await request.json();
 
     if (!body.email || !body.password) {
       return NextResponse.json(
@@ -24,12 +24,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const result = await login(body.email, body.password);
+    const result = await register(body.email, body.password);
 
     if (!result.success) {
       return NextResponse.json(
         { error: result.error },
-        { status: 401 }
+        { status: 400 }
       );
     }
 
@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
       userId: result.userId,
     });
   } catch (error) {
-    console.error('Login error:', error);
+    console.error('Register error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

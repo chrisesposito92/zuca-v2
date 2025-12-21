@@ -17,8 +17,8 @@
 import express, { Request, Response, NextFunction } from 'express';
 import { WebSocketServer, WebSocket } from 'ws';
 import { createServer } from 'http';
-import { ZucaInput, validateZucaInput } from '../types/input.js';
-import { UCGeneratorInput, validateUCGeneratorInput } from '../types/uc-generator.js';
+import { ZucaInput, validateZucaInput } from '../types/input';
+import { UCGeneratorInput, validateUCGeneratorInput } from '../types/uc-generator';
 import {
   runPipeline,
   handleFollowUp,
@@ -26,9 +26,9 @@ import {
   getSession,
   listSessions,
   deleteSession,
-} from '../pipeline/index.js';
-import { runUCGenerator } from '../pipeline/uc-generator/index.js';
-import { config, debugLog } from '../config.js';
+} from '../pipeline/index';
+import { runUCGenerator } from '../pipeline/uc-generator/index';
+import { config, debugLog } from '../config';
 
 const app = express();
 app.use(express.json({ limit: '10mb' }));

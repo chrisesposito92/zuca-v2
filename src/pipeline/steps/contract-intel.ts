@@ -1,8 +1,8 @@
-import { complete, getZuoraMcpTools, ReasoningEffort } from '../../llm/client.js';
-import { loadPrompt, PROMPTS } from '../../llm/prompts/index.js';
-import { ContractIntel, ContractIntelSchema } from '../../types/output.js';
-import { ZucaInput } from '../../types/input.js';
-import { debugLog } from '../../config.js';
+import { complete, getZuoraMcpTools, ReasoningEffort } from '../../llm/client';
+import { loadPrompt, PROMPTS } from '../../llm/prompts/index';
+import { ContractIntel, ContractIntelSchema } from '../../types/output';
+import { ZucaInput } from '../../types/input';
+import { debugLog } from '../../config';
 
 /**
  * JSON schema for Contract Intel structured output

@@ -5,17 +5,17 @@
  * with otr_workflow_inputs ready for the main ZUCA pipeline.
  */
 
-import { complete, getZuoraMcpTools, ReasoningEffort } from '../../../llm/client.js';
-import { loadPrompt, PROMPTS } from '../../../llm/prompts/index.js';
+import { complete, getZuoraMcpTools, ReasoningEffort } from '../../../llm/client';
+import { loadPrompt, PROMPTS } from '../../../llm/prompts/index';
 import {
   UCGeneratorInput,
   CustomerResearch,
   GeneratedUseCases,
   GeneratedUseCasesSchema,
   generatedUseCasesJsonSchema,
-} from '../../../types/uc-generator.js';
-import { debugLog } from '../../../config.js';
-import { formatCustomerResearchForContext } from './research-customer.js';
+} from '../../../types/uc-generator';
+import { debugLog } from '../../../config';
+import { formatCustomerResearchForContext } from './research-customer';
 
 /**
  * Build the user message for use case generation

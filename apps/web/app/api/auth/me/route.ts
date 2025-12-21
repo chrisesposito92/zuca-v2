@@ -18,7 +18,8 @@ export async function GET() {
     return NextResponse.json({
       user: {
         userId: user.userId,
-        type: user.type,
+        email: user.email,
+        provider: user.provider,
       },
     });
   } catch (error) {

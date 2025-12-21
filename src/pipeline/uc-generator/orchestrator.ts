@@ -12,12 +12,12 @@ import {
   CustomerResearch,
   GeneratedUseCase,
   validateUCGeneratorInput,
-} from '../../types/uc-generator.js';
-import { ZucaInput, BillingPeriod, Currency, AllocationMethod } from '../../types/input.js';
-import { debugLog } from '../../config.js';
+} from '../../types/uc-generator';
+import { ZucaInput, BillingPeriod, Currency, AllocationMethod } from '../../types/input';
+import { debugLog } from '../../config';
 
 // Import all pipeline steps
-import { researchCustomer, generateUseCases, formatOutput, formatOutputLocally } from './steps/index.js';
+import { researchCustomer, generateUseCases, formatOutput, formatOutputLocally } from './steps/index';
 
 /**
  * Pipeline execution options

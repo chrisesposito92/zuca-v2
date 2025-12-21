@@ -1,16 +1,16 @@
-import { complete, getZuoraMcpTools, ReasoningEffort } from '../../llm/client.js';
-import { loadPrompt, PROMPTS } from '../../llm/prompts/index.js';
+import { complete, getZuoraMcpTools, ReasoningEffort } from '../../llm/client';
+import { loadPrompt, PROMPTS } from '../../llm/prompts/index';
 import {
   PobMappingOutput,
   PobMappingOutputSchema,
   SubscriptionSpec,
   ContractIntel,
   MatchGoldenUseCasesOutput,
-} from '../../types/output.js';
-import { PobTemplate } from '../../types/golden-use-cases.js';
-import { formatPobTemplatesForContext } from '../../data/loader.js';
-import { formatMatchResultsForContext } from './match-golden-use-cases.js';
-import { debugLog } from '../../config.js';
+} from '../../types/output';
+import { PobTemplate } from '../../types/golden-use-cases';
+import { formatPobTemplatesForContext } from '../../data/loader';
+import { formatMatchResultsForContext } from './match-golden-use-cases';
+import { debugLog } from '../../config';
 
 /**
  * JSON schema for POB mapping structured output

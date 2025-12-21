@@ -1,5 +1,5 @@
-import { GoldenUseCaseCapability } from '../types/golden-use-cases.js';
-import { DetectedCapabilities, MatchedGoldenUseCase, MatchGoldenUseCasesOutput } from '../types/output.js';
+import { GoldenUseCaseCapability } from '../types/golden-use-cases';
+import { DetectedCapabilities, MatchedGoldenUseCase, MatchGoldenUseCasesOutput } from '../types/output';
 
 /**
  * Canonicalize a label for comparison

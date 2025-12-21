@@ -110,15 +110,15 @@ export default function MainLayout({
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
                   <span className="text-primary text-sm font-semibold">
-                    {user.type === "password" ? "A" : "U"}
+                    {user.email ? user.email[0].toUpperCase() : "U"}
                   </span>
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-foreground truncate">
-                    {user.type === "password" ? "Admin" : "User"}
+                    {user.email || "User"}
                   </p>
                   <p className="text-xs text-default-500 truncate">
-                    {user.type === "password" ? "Full access" : user.userId.slice(0, 12) + "..."}
+                    {user.provider === "email" ? "Email login" : user.provider}
                   </p>
                 </div>
               </div>

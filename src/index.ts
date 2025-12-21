@@ -6,7 +6,7 @@
  */
 
 // Configuration
-export { config, loadConfig, debugLog } from './config.js';
+export { config, loadConfig, debugLog } from './config';
 
 // Input types and validation
 export {
@@ -23,7 +23,7 @@ export {
   parseContractDate,
   formatContractDate,
   formatISODate,
-} from './types/input.js';
+} from './types/input';
 
 // Output types
 export {
@@ -47,7 +47,7 @@ export {
   RevRecWaterfallOutputSchema,
   SummaryOutput,
   SummaryOutputSchema,
-} from './types/output.js';
+} from './types/output';
 
 // Pipeline
 export {
@@ -59,7 +59,7 @@ export {
   deleteSession,
   PipelineOptions,
   PipelineSession,
-} from './pipeline/index.js';
+} from './pipeline/index';
 
 // UC Generator
 export {
@@ -67,7 +67,7 @@ export {
   mapToZucaInput,
   quickResearch,
   UCGeneratorOptions,
-} from './pipeline/uc-generator/index.js';
+} from './pipeline/uc-generator/index';
 
 // UC Generator types
 export {
@@ -84,13 +84,13 @@ export {
   OTRWorkflowInputs,
   OTRWorkflowInputsSchema,
   validateUCGeneratorInput,
-} from './types/uc-generator.js';
+} from './types/uc-generator';
 
 // Data loading
 export {
   loadGoldenUseCasesData,
   GoldenUseCasesData,
-} from './data/loader.js';
+} from './data/loader';
 
 // Utilities
 export {
@@ -100,7 +100,7 @@ export {
   formatBillingsTable,
   formatRevRecWaterfall,
   formatFullOutput,
-} from './utils/markdown-tables.js';
+} from './utils/markdown-tables';
 
 // LLM Client (for advanced usage)
 export {
@@ -109,7 +109,7 @@ export {
   createZuoraMcpTool,
   CompletionOptions,
   CompletionResult,
-} from './llm/client.js';
+} from './llm/client';
 
 // Server (for programmatic server startup)
-export { startServer, app, server } from './api/server.js';
+export { startServer, app, server } from './api/server';

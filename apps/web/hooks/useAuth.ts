@@ -7,9 +7,12 @@
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
+type AuthProvider = "email" | "google" | "okta";
+
 interface AuthUser {
   userId: string;
-  type: "password" | "invite";
+  email: string | null;
+  provider: AuthProvider;
 }
 
 interface UseAuthReturn {

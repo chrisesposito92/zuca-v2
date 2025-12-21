@@ -7,15 +7,17 @@ import {
   Input,
   Tabs,
   Tab,
+  Link,
 } from "@heroui/react";
 import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
-  const [authType, setAuthType] = useState<"password" | "invite">("password");
-  const [value, setValue] = useState("");
+  const [mode, setMode] = useState<"login" | "register">("login");
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
@@ -25,15 +27,26 @@ export default function LoginPage() {
     setIsLoading(true);
     setError("");
 
+    // Validate for registration
+    if (mode === "register") {
+      if (password !== confirmPassword) {
+        setError("Passwords do not match");
+        setIsLoading(false);
+        return;
+      }
+      if (password.length < 8) {
+        setError("Password must be at least 8 characters");
+        setIsLoading(false);
+        return;
+      }
+    }
+
     try {
-      const res = await fetch("/api/auth/login", {
+      const endpoint = mode === "login" ? "/api/auth/login" : "/api/auth/register";
+      const res = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          type: authType,
-          value,
-          ...(authType === "invite" && email ? { email } : {}),
-        }),
+        body: JSON.stringify({ email, password }),
       });
 
       const data = await res.json();
@@ -51,31 +64,15 @@ export default function LoginPage() {
     }
   };
 
+  const isFormValid = mode === "login"
+    ? email.trim() && password.trim()
+    : email.trim() && password.trim() && confirmPassword.trim();
+
   return (
     <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Ambient background effects */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#050a08] via-[#0a1510] to-[#050807]" />
-
-      {/* Large decorative glow */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px]">
-        <div className="absolute inset-0 bg-gradient-to-b from-primary/10 to-transparent rounded-full blur-3xl" />
-      </div>
-
-      {/* Decorative grid pattern */}
-      <div
-        className="absolute inset-0 opacity-[0.02]"
-        style={{
-          backgroundImage: `linear-gradient(rgba(0, 210, 185, 0.3) 1px, transparent 1px),
-                            linear-gradient(90deg, rgba(0, 210, 185, 0.3) 1px, transparent 1px)`,
-          backgroundSize: '60px 60px',
-        }}
-      />
 
       {/* Main card container */}
       <div className="relative z-10 w-full max-w-md animate-fade-in-up">
-        {/* Floating accent elements */}
-        <div className="absolute -top-20 -right-20 w-40 h-40 bg-primary/5 rounded-full blur-3xl" />
-        <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-secondary/5 rounded-full blur-2xl" />
 
         <Card className="glass-card-elevated overflow-hidden">
           {/* Top accent bar */}
@@ -106,14 +103,14 @@ export default function LoginPage() {
               </div>
             </div>
 
-            {/* Auth type tabs */}
+            {/* Auth mode tabs */}
             <Tabs
-              selectedKey={authType}
+              selectedKey={mode}
               onSelectionChange={(key) => {
-                setAuthType(key as "password" | "invite");
-                setValue("");
-                setEmail("");
+                setMode(key as "login" | "register");
                 setError("");
+                setPassword("");
+                setConfirmPassword("");
               }}
               className="mb-6"
               fullWidth
@@ -121,68 +118,72 @@ export default function LoginPage() {
                 tabList: "bg-default-100/50 p-1",
                 cursor: "bg-primary",
                 tab: "h-10",
-                tabContent: "group-data-[selected=true]:text-black font-medium",
+                tabContent: "group-data-[selected=true]:text-white group-data-[selected=false]:text-default-300 font-medium",
               }}
             >
-              <Tab key="password" title="Password" />
-              <Tab key="invite" title="Invite Code" />
+              <Tab key="login" title="Sign In" />
+              <Tab key="register" title="Create Account" />
             </Tabs>
 
             {/* Form */}
-            <form onSubmit={handleSubmit} className="space-y-5">
-              {authType === "password" ? (
-                <div className="space-y-2">
-                  <Input
-                    type="password"
-                    label="Password"
-                    placeholder="Enter your password"
-                    value={value}
-                    onValueChange={setValue}
-                    isInvalid={!!error}
-                    errorMessage={error}
-                    variant="bordered"
-                    size="lg"
-                    classNames={{
-                      inputWrapper: "border-default-200 hover:border-primary/50 focus-within:border-primary",
-                      input: "text-base",
-                    }}
-                    autoFocus
-                  />
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  <Input
-                    type="text"
-                    label="Invite Code"
-                    placeholder="Enter your invite code"
-                    value={value}
-                    onValueChange={setValue}
-                    isInvalid={!!error}
-                    variant="bordered"
-                    size="lg"
-                    classNames={{
-                      inputWrapper: "border-default-200 hover:border-primary/50 focus-within:border-primary",
-                      input: "text-base",
-                    }}
-                    autoFocus
-                  />
-                  <Input
-                    type="email"
-                    label="Email (optional)"
-                    placeholder="your@email.com"
-                    value={email}
-                    onValueChange={setEmail}
-                    description="Link your email for future logins"
-                    variant="bordered"
-                    size="lg"
-                    classNames={{
-                      inputWrapper: "border-default-200 hover:border-primary/50 focus-within:border-primary",
-                      input: "text-base",
-                    }}
-                  />
-                  {error && (
-                    <p className="text-sm text-danger">{error}</p>
-                  )}
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <Input
+                type="email"
+                label="Email"
+                placeholder="you@company.com"
+                value={email}
+                onValueChange={(val) => {
+                  setEmail(val);
+                  setError("");
+                }}
+                variant="bordered"
+                size="lg"
+                classNames={{
+                  inputWrapper: "border-default-200 hover:border-primary/50 focus-within:border-primary",
+                  input: "text-base",
+                }}
+                autoFocus
+              />
+
+              <Input
+                type="password"
+                label="Password"
+                placeholder={mode === "register" ? "Min 8 characters" : "Enter your password"}
+                value={password}
+                onValueChange={(val) => {
+                  setPassword(val);
+                  setError("");
+                }}
+                variant="bordered"
+                size="lg"
+                classNames={{
+                  inputWrapper: "border-default-200 hover:border-primary/50 focus-within:border-primary",
+                  input: "text-base",
+                }}
+              />
+
+              {mode === "register" && (
+                <Input
+                  type="password"
+                  label="Confirm Password"
+                  placeholder="Re-enter your password"
+                  value={confirmPassword}
+                  onValueChange={(val) => {
+                    setConfirmPassword(val);
+                    setError("");
+                  }}
+                  variant="bordered"
+                  size="lg"
+                  classNames={{
+                    inputWrapper: "border-default-200 hover:border-primary/50 focus-within:border-primary",
+                    input: "text-base",
+                  }}
+                />
+              )}
+
+              {error && (
+                <div className="p-3 rounded-lg bg-danger/10 border border-danger/20">
+                  <p className="text-sm text-danger">{error}</p>
                 </div>
               )}
 
@@ -190,18 +191,55 @@ export default function LoginPage() {
                 type="submit"
                 color="primary"
                 size="lg"
-                className="w-full font-semibold h-12 text-base"
+                className="w-full font-semibold h-12 text-base mt-2"
                 isLoading={isLoading}
-                isDisabled={!value.trim()}
+                isDisabled={!isFormValid}
               >
                 {isLoading
-                  ? "Signing in..."
-                  : authType === "password"
-                    ? "Sign In"
-                    : "Continue with Invite"
+                  ? mode === "login" ? "Signing in..." : "Creating account..."
+                  : mode === "login" ? "Sign In" : "Create Account"
                 }
               </Button>
             </form>
+
+            {/* Mode switch prompt */}
+            <div className="mt-6 text-center">
+              <p className="text-sm text-default-400">
+                {mode === "login" ? (
+                  <>
+                    Don&apos;t have an account?{" "}
+                    <Link
+                      as="button"
+                      className="text-primary font-medium"
+                      onPress={() => {
+                        setMode("register");
+                        setError("");
+                        setPassword("");
+                        setConfirmPassword("");
+                      }}
+                    >
+                      Create one
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    Already have an account?{" "}
+                    <Link
+                      as="button"
+                      className="text-primary font-medium"
+                      onPress={() => {
+                        setMode("login");
+                        setError("");
+                        setPassword("");
+                        setConfirmPassword("");
+                      }}
+                    >
+                      Sign in
+                    </Link>
+                  </>
+                )}
+              </p>
+            </div>
 
             {/* Footer */}
             <div className="mt-8 pt-6 border-t border-default-100">

@@ -5,11 +5,11 @@
  * with JSON code blocks for copy-paste into ZUCA.
  */
 
-import { complete, ReasoningEffort } from '../../../llm/client.js';
-import { loadPrompt, PROMPTS } from '../../../llm/prompts/index.js';
-import { GeneratedUseCases, GeneratedUseCase } from '../../../types/uc-generator.js';
-import { debugLog } from '../../../config.js';
-import { formatUseCasesForOutput } from './generate-use-cases.js';
+import { complete, ReasoningEffort } from '../../../llm/client';
+import { loadPrompt, PROMPTS } from '../../../llm/prompts/index';
+import { GeneratedUseCases, GeneratedUseCase } from '../../../types/uc-generator';
+import { debugLog } from '../../../config';
+import { formatUseCasesForOutput } from './generate-use-cases';
 
 /**
  * Execute the Format Output step
