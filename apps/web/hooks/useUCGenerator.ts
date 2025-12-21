@@ -10,8 +10,8 @@ interface UCGeneratorResponse {
   session_id: string;
   use_cases: GeneratedUseCase[];
   research?: unknown;
-  generated?: unknown;
-  formatted?: unknown;
+  generated?: { customer_name?: string };
+  formatted?: string;
 }
 
 interface UCGeneratorError {

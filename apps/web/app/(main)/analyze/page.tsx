@@ -18,6 +18,7 @@ import {
   useDisclosure,
   Chip,
   Progress,
+  Tooltip,
   addToast,
 } from "@heroui/react";
 import { useState, useRef } from "react";
@@ -25,6 +26,14 @@ import { useAnalyze, formDataToZucaInput } from "@/hooks/useAnalyze";
 import { useUCGenerator } from "@/hooks/useUCGenerator";
 import { useFunFacts } from "@/hooks/useFunFacts";
 import { useCompanyFunFacts } from "@/hooks/useCompanyFunFacts";
+import {
+  Document,
+  Packer,
+  Paragraph,
+  TextRun,
+  HeadingLevel,
+  AlignmentType,
+} from "docx";
 import type { UCGeneratorInput, GeneratedUseCase, UCRevRecNote } from "@zuca/types/uc-generator";
 
 const currencies = [
@@ -67,6 +76,7 @@ export default function AnalyzePage() {
     num_use_cases: 2,
   });
   const [generatedUseCases, setGeneratedUseCases] = useState<GeneratedUseCase[]>([]);
+  const [generatedFormatted, setGeneratedFormatted] = useState<string | null>(null);
   const [selectedUseCaseIndex, setSelectedUseCaseIndex] = useState<number | null>(null);
 
   // Mutations
@@ -114,6 +124,7 @@ export default function AnalyzePage() {
     const customerName = formData.get("customer_name") as string;
     setUcInput((prev) => ({ ...prev, customer_name: customerName || "" }));
     setGeneratedUseCases([]);
+    setGeneratedFormatted(null);
     setSelectedUseCaseIndex(null);
     onOpen();
   };
@@ -127,6 +138,7 @@ export default function AnalyzePage() {
 
       const result = await ucGeneratorMutation.mutateAsync(ucInput);
       setGeneratedUseCases(result.use_cases);
+      setGeneratedFormatted(result.formatted || null);
       setSelectedUseCaseIndex(null);
     } catch (error) {
       const err = error as { error?: string; details?: string };
@@ -136,6 +148,113 @@ export default function AnalyzePage() {
         color: "danger",
       });
     }
+  };
+
+  const handleDownloadMarkdown = () => {
+    if (!generatedFormatted) return;
+
+    const blob = new Blob([generatedFormatted], { type: "text/markdown" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${ucInput.customer_name.toLowerCase().replace(/\s+/g, "-")}-use-cases.md`;
+    a.click();
+    URL.revokeObjectURL(url);
+
+    addToast({
+      title: "Exported",
+      description: "Markdown file downloaded",
+      color: "success",
+    });
+  };
+
+  const handleDownloadDocx = async () => {
+    if (!generatedFormatted) return;
+
+    // Parse markdown into docx paragraphs
+    const lines = generatedFormatted.split("\n");
+    const children: Paragraph[] = [];
+
+    for (const line of lines) {
+      if (line.startsWith("## ")) {
+        children.push(
+          new Paragraph({
+            text: line.replace(/^## /, ""),
+            heading: HeadingLevel.HEADING_2,
+            spacing: { before: 400, after: 200 },
+          })
+        );
+      } else if (line.startsWith("### ")) {
+        children.push(
+          new Paragraph({
+            text: line.replace(/^### /, ""),
+            heading: HeadingLevel.HEADING_3,
+            spacing: { before: 300, after: 150 },
+          })
+        );
+      } else if (line.startsWith("**") && line.endsWith("**")) {
+        children.push(
+          new Paragraph({
+            children: [
+              new TextRun({
+                text: line.replace(/^\*\*/, "").replace(/\*\*$/, ""),
+                bold: true,
+              }),
+            ],
+            spacing: { before: 200, after: 100 },
+          })
+        );
+      } else if (line.startsWith("- ")) {
+        children.push(
+          new Paragraph({
+            text: line.replace(/^- /, ""),
+            bullet: { level: 0 },
+          })
+        );
+      } else if (line.startsWith("```")) {
+        continue;
+      } else if (line.trim() === "") {
+        children.push(new Paragraph({ text: "" }));
+      } else {
+        children.push(
+          new Paragraph({
+            text: line,
+            spacing: { after: 100 },
+          })
+        );
+      }
+    }
+
+    const doc = new Document({
+      sections: [
+        {
+          properties: {},
+          children: [
+            new Paragraph({
+              text: `${ucInput.customer_name} - Use Cases`,
+              heading: HeadingLevel.HEADING_1,
+              alignment: AlignmentType.CENTER,
+              spacing: { after: 400 },
+            }),
+            ...children,
+          ],
+        },
+      ],
+    });
+
+    const blob = await Packer.toBlob(doc);
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${ucInput.customer_name.toLowerCase().replace(/\s+/g, "-")}-use-cases.docx`;
+    a.click();
+    URL.revokeObjectURL(url);
+
+    addToast({
+      title: "Exported",
+      description: "Word document downloaded",
+      color: "success",
+    });
   };
 
   const handleConfirmUseCase = () => {
@@ -701,9 +820,45 @@ export default function AnalyzePage() {
               </div>
             ) : (
               <div className="space-y-4">
-                <p className="text-sm text-default-500">
-                  Click a use case to preview details, then confirm your selection:
-                </p>
+                <div className="flex items-center justify-between">
+                  <p className="text-sm text-default-500">
+                    Click a use case to preview details, then confirm your selection:
+                  </p>
+                  {generatedFormatted && (
+                    <div className="flex gap-2">
+                      <Tooltip content="Download as Markdown">
+                        <Button
+                          size="sm"
+                          variant="bordered"
+                          className="border-default-300 hover:border-primary"
+                          onPress={handleDownloadMarkdown}
+                          startContent={
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                            </svg>
+                          }
+                        >
+                          .md
+                        </Button>
+                      </Tooltip>
+                      <Tooltip content="Download as Word Document">
+                        <Button
+                          size="sm"
+                          variant="bordered"
+                          className="border-secondary/50 hover:border-secondary"
+                          onPress={handleDownloadDocx}
+                          startContent={
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                            </svg>
+                          }
+                        >
+                          .docx
+                        </Button>
+                      </Tooltip>
+                    </div>
+                  )}
+                </div>
 
                 {/* Use case list */}
                 <div className="space-y-3">
@@ -837,6 +992,7 @@ export default function AnalyzePage() {
                   className="border-2 border-default-300"
                   onPress={() => {
                     setGeneratedUseCases([]);
+                    setGeneratedFormatted(null);
                     setSelectedUseCaseIndex(null);
                   }}
                 >

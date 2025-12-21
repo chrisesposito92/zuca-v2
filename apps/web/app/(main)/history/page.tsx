@@ -14,13 +14,18 @@ import {
   Skeleton,
   useDisclosure,
   addToast,
+  Tabs,
+  Tab,
 } from "@heroui/react";
 import Link from "next/link";
 import { useState } from "react";
 import { useSessions, useDeleteSession } from "@/hooks/useSessions";
 
+type SessionTypeFilter = "all" | "analyze" | "uc-generate";
+
 export default function HistoryPage() {
   const [searchQuery, setSearchQuery] = useState("");
+  const [sessionTypeFilter, setSessionTypeFilter] = useState<SessionTypeFilter>("all");
   const [sessionToDelete, setSessionToDelete] = useState<string | null>(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -29,12 +34,15 @@ export default function HistoryPage() {
 
   const sessions = data?.sessions || [];
 
-  // Filter sessions by search query
-  const filteredSessions = sessions.filter(
-    (s) =>
+  // Filter sessions by search query and session type
+  const filteredSessions = sessions.filter((s) => {
+    const matchesSearch =
       s.customer_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      s.id.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+      s.id.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesType =
+      sessionTypeFilter === "all" || s.session_type === sessionTypeFilter;
+    return matchesSearch && matchesType;
+  });
 
   const handleDeleteClick = (id: string) => {
     setSessionToDelete(id);
@@ -189,23 +197,84 @@ export default function HistoryPage() {
         </Link>
       </div>
 
-      {/* Search */}
-      <div className="relative">
-        <Input
-          placeholder="Search by customer name or session ID..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
+      {/* Filters */}
+      <div className="flex flex-col sm:flex-row gap-4">
+        {/* Session Type Filter */}
+        <Tabs
+          aria-label="Session type filter"
+          selectedKey={sessionTypeFilter}
+          onSelectionChange={(key) => setSessionTypeFilter(key as SessionTypeFilter)}
           variant="bordered"
-          size="lg"
+          color="primary"
           classNames={{
-            inputWrapper: "border-default-200 hover:border-primary/50 focus-within:border-primary bg-default-50/50",
+            tabList: "border-default-200 bg-default-50/50",
+            cursor: "bg-primary",
+            tab: "h-9 px-4",
+            tabContent: "group-data-[selected=true]:text-white font-medium text-default-500",
           }}
-          startContent={
-            <svg className="w-5 h-5 text-default-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-          }
-        />
+        >
+          <Tab
+            key="all"
+            title={
+              <div className="flex items-center gap-2">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                </svg>
+                <span>All</span>
+                <Chip size="sm" variant="flat" className="bg-default-200 text-default-600 text-xs">
+                  {sessions.length}
+                </Chip>
+              </div>
+            }
+          />
+          <Tab
+            key="analyze"
+            title={
+              <div className="flex items-center gap-2">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                </svg>
+                <span>Analyze</span>
+                <Chip size="sm" variant="flat" className="bg-primary/20 text-primary text-xs">
+                  {sessions.filter((s) => s.session_type === "analyze").length}
+                </Chip>
+              </div>
+            }
+          />
+          <Tab
+            key="uc-generate"
+            title={
+              <div className="flex items-center gap-2">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                </svg>
+                <span>Generate</span>
+                <Chip size="sm" variant="flat" className="bg-secondary/20 text-secondary text-xs">
+                  {sessions.filter((s) => s.session_type === "uc-generate").length}
+                </Chip>
+              </div>
+            }
+          />
+        </Tabs>
+
+        {/* Search */}
+        <div className="flex-1">
+          <Input
+            placeholder="Search by customer name or session ID..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            variant="bordered"
+            size="lg"
+            classNames={{
+              inputWrapper: "border-default-200 hover:border-primary/50 focus-within:border-primary bg-default-50/50",
+            }}
+            startContent={
+              <svg className="w-5 h-5 text-default-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            }
+          />
+        </div>
       </div>
 
       {/* Sessions list */}
@@ -220,12 +289,16 @@ export default function HistoryPage() {
             <p className="text-default-500 text-lg">
               {sessions.length === 0
                 ? "No sessions yet"
+                : sessionTypeFilter !== "all" && sessions.filter(s => s.session_type === sessionTypeFilter).length === 0
+                ? `No ${sessionTypeFilter === "analyze" ? "analysis" : "generation"} sessions yet`
                 : "No sessions match your search"}
             </p>
             <p className="text-default-400 text-sm mt-1">
               {sessions.length === 0
                 ? "Start a new analysis to see your history here"
-                : "Try adjusting your search terms"}
+                : sessionTypeFilter !== "all" && sessions.filter(s => s.session_type === sessionTypeFilter).length === 0
+                ? sessionTypeFilter === "analyze" ? "Run an analysis from the Analyze page" : "Generate use cases from the Analyze page"
+                : "Try adjusting your search terms or filter"}
             </p>
           </CardBody>
         </Card>
@@ -266,8 +339,16 @@ export default function HistoryPage() {
                       >
                         {session.status}
                       </Chip>
-                      <Chip size="sm" variant="bordered" className="border-default-300">
-                        {session.session_type}
+                      <Chip
+                        size="sm"
+                        variant="flat"
+                        className={
+                          session.session_type === "analyze"
+                            ? "bg-primary/20 text-primary"
+                            : "bg-secondary/20 text-secondary"
+                        }
+                      >
+                        {session.session_type === "analyze" ? "Analyze" : "Generate"}
                       </Chip>
                     </div>
                     <div className="flex items-center gap-4 mt-1.5 text-sm text-default-500">
@@ -326,11 +407,11 @@ export default function HistoryPage() {
       {/* Stats footer */}
       {sessions.length > 0 && (
         <div className="flex items-center justify-center gap-6 text-sm text-default-400 pt-4">
-          <span>{sessions.length} total sessions</span>
+          <span>{filteredSessions.length} {sessionTypeFilter === "all" ? "total" : sessionTypeFilter === "analyze" ? "analysis" : "generation"} sessions</span>
           <span className="w-1 h-1 bg-default-300 rounded-full" />
-          <span>{sessions.filter(s => s.status === 'completed').length} completed</span>
+          <span>{filteredSessions.filter(s => s.status === 'completed').length} completed</span>
           <span className="w-1 h-1 bg-default-300 rounded-full" />
-          <span>{sessions.filter(s => s.status === 'failed').length} failed</span>
+          <span>{filteredSessions.filter(s => s.status === 'failed').length} failed</span>
         </div>
       )}
 
