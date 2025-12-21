@@ -16,5 +16,13 @@ export {
   type PipelineSession,
 } from './orchestrator';
 
+// Follow-up processing (for serverless/database-backed contexts)
+export {
+  processFollowUp,
+  type FollowUpContext,
+  type FollowUpResponse,
+  type SuggestedEdit,
+} from './follow-up';
+
 // All pipeline steps
 export * from './steps/index';

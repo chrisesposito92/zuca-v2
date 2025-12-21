@@ -2,12 +2,13 @@
  * POST /api/sessions/[id]/follow-up
  *
  * Handle a follow-up query in an existing session.
- * For now, this stores the message and returns a placeholder response.
- * Full AI-powered follow-up can be implemented later.
+ * Loads context from database, calls LLM, and saves the response.
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { getSession, addMessage } from '@/lib/db';
+import { getSession, addMessage, getMessages } from '@/lib/db';
+import { processFollowUp, type FollowUpContext } from '@zuca/pipeline/follow-up';
+import type { ZucaInput, ZucaOutput } from '@zuca/types';
 
 interface RouteParams {
   params: Promise<{ id: string }>;
@@ -26,7 +27,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       );
     }
 
-    // Verify session exists
+    // 1. Load session from database
     const session = await getSession(id);
     if (!session) {
       return NextResponse.json(
@@ -35,21 +36,42 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       );
     }
 
-    // Add user message to conversation
+    // Verify session has completed results
+    if (!session.result) {
+      return NextResponse.json(
+        { error: 'Session not ready', details: 'Analysis must complete before follow-up queries' },
+        { status: 400 }
+      );
+    }
+
+    // 2. Load conversation history from database
+    const messages = await getMessages(id);
+    const conversationHistory = messages.map((msg) => ({
+      role: msg.role as 'user' | 'assistant',
+      content: msg.content,
+    }));
+
+    // 3. Add user message to database (before processing)
     await addMessage(id, 'user', query);
 
-    // For now, provide a simple acknowledgment response
-    // TODO: Implement proper AI-powered follow-up using session context
-    const assistantResponse = `Thank you for your question. The follow-up feature is being enhanced. Your question has been recorded: "${query.slice(0, 100)}${query.length > 100 ? '...' : ''}"
+    // 4. Build context and call LLM
+    const context: FollowUpContext = {
+      input: session.input as ZucaInput,
+      result: session.result as ZucaOutput,
+      conversationHistory,
+    };
 
-For now, please use the **Edit Field** or **Regenerate** buttons above to make changes to the analysis. Full conversational AI follow-up will be available soon.`;
+    const response = await processFollowUp(query, context);
 
-    await addMessage(id, 'assistant', assistantResponse);
+    // 5. Save assistant response to database
+    await addMessage(id, 'assistant', response.content);
 
+    // 6. Return response
     return NextResponse.json({
       success: true,
-      type: 'clarification',
-      data: assistantResponse,
+      type: response.type,
+      data: response.content,
+      suggestedEdits: response.suggestedEdits,
     });
   } catch (error: unknown) {
     console.error('Follow-up error:', error);

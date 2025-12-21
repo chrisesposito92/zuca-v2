@@ -39,18 +39,21 @@ export function ConversationPanel({
       const response = await followUpMutation.mutateAsync(message);
 
       // Handle different response types
-      if (response.type === "clarification") {
-        // Message was a clarification - result added to conversation
-        onRefresh?.();
-      } else if (response.type === "edit") {
-        // Follow-up triggered an edit - pipeline re-running
+      if (response.type === "suggestion" && response.suggestedEdits?.length) {
+        // Show suggestion notification
         addToast({
-          title: "Updating Analysis",
-          description: "Your changes are being applied...",
-          color: "success",
+          title: "Suggestions Available",
+          description: `${response.suggestedEdits.length} change${response.suggestedEdits.length > 1 ? 's' : ''} suggested. Review in the conversation.`,
+          color: "primary",
         });
-        onRefresh?.();
+      } else if (response.type === "clarification") {
+        // Clarification response - just refresh to show it
+      } else if (response.type === "answer") {
+        // Direct answer - just refresh to show it
       }
+
+      // Always refresh to show the new message
+      onRefresh?.();
     } catch {
       addToast({
         title: "Error",

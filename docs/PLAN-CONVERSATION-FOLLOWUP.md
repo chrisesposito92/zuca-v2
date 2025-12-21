@@ -1,5 +1,14 @@
 # Plan: AI-Powered Conversation Follow-up
 
+> **STATUS: IMPLEMENTED** (December 2025)
+>
+> This plan has been implemented. See:
+> - `src/pipeline/follow-up.ts` - Main follow-up processing logic
+> - `src/llm/prompts/follow-up.md` - System prompt for follow-up assistant
+> - `apps/web/app/api/sessions/[id]/follow-up/route.ts` - API endpoint
+> - `apps/web/hooks/useSessions.ts` - Updated with typed response
+> - `apps/web/components/chat/ConversationPanel.tsx` - Frontend handling
+
 ## Problem Statement
 
 The current follow-up feature doesn't work because `handleFollowUp` in `src/pipeline/orchestrator.ts` relies on an **in-memory session store** (`sessions` Map). In Next.js serverless API routes, this memory doesn't persist between requests, so the session is always "not found."

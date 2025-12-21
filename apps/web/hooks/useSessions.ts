@@ -66,8 +66,21 @@ async function deleteSession(id: string): Promise<void> {
   if (!response.ok) throw data;
 }
 
+// Follow-up response type
+interface FollowUpResponse {
+  success: boolean;
+  type: "answer" | "clarification" | "suggestion";
+  data: string;
+  suggestedEdits?: Array<{
+    field: string;
+    currentValue?: unknown;
+    suggestedValue?: unknown;
+    reason: string;
+  }>;
+}
+
 // Follow-up query
-async function sendFollowUp(sessionId: string, query: string): Promise<{ type: string; data: unknown }> {
+async function sendFollowUp(sessionId: string, query: string): Promise<FollowUpResponse> {
   const response = await fetch(`/api/sessions/${sessionId}/follow-up`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
