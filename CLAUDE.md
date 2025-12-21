@@ -10,6 +10,7 @@ WHEN PLANNING NEW FEATURES OUT YOU SHOULD BE DOCUMENTING THEM IN NEW MD FILES AN
 | File | Purpose |
 |------|---------|
 | `docs/ARCHITECTURE.md` | Overall system design, pipeline steps, technology stack |
+| `docs/ROADMAP-FRONTEND.md` | Web frontend implementation roadmap and status |
 | `docs/ROADMAP-ZB-API-INTEGRATION.md` | Future plan for direct Zuora Billing API integration |
 | `docs/ZUORA-MCP-README.md` | Zuora MCP tool documentation |
 | `src/llm/prompts/*.md` | System prompts for each pipeline step |
@@ -17,6 +18,16 @@ WHEN PLANNING NEW FEATURES OUT YOU SHOULD BE DOCUMENTING THEM IN NEW MD FILES AN
 ## Project Structure
 
 ```
+apps/
+└── web/                      # Next.js 16 frontend (HeroUI + Vercel Postgres)
+    ├── app/                  # App Router pages and API routes
+    │   ├── (auth)/           # Login page
+    │   ├── (main)/           # Protected pages (analyze, history)
+    │   └── api/              # API routes (auth, sessions, etc.)
+    ├── lib/                  # Database, auth utilities
+    ├── hooks/                # React hooks (useAuth)
+    └── components/           # UI components
+
 src/
 ├── types/
 │   ├── input.ts          # Input schema (ZucaInput)
@@ -127,3 +138,45 @@ const result = await runPipeline(zucaInput);
 | `src/llm/prompts/uc-research-customer.md` | Research prompt |
 | `src/llm/prompts/uc-generate-use-cases.md` | Generation prompt |
 | `src/llm/prompts/uc-format-output.md` | Formatting prompt |
+
+## Web Frontend
+
+The web frontend is a Next.js 16 application in `apps/web/` using HeroUI components and Vercel Postgres.
+
+### Development
+
+```bash
+# Start the web dev server
+npm run dev:web
+
+# Or from apps/web directory
+cd apps/web && npm run dev
+```
+
+### Tech Stack
+- **Framework**: Next.js 16 App Router (Turbopack)
+- **UI**: HeroUI with custom Zuora theme (`herouitheme.json`)
+- **Database**: Vercel Postgres (Neon)
+- **Auth**: JWT cookies (jose + bcrypt)
+- **State**: React Query (server) + Zustand (client)
+
+### Key Files
+| File | Purpose |
+|------|---------|
+| `apps/web/lib/db.ts` | Database operations (sessions, feedback, bugs) |
+| `apps/web/lib/auth.ts` | JWT authentication utilities |
+| `apps/web/lib/schema.sql` | PostgreSQL schema |
+| `apps/web/middleware.ts` | Route protection |
+
+### Environment Variables
+```bash
+POSTGRES_URL=              # Vercel Postgres connection string
+JWT_SECRET=                # Min 32 chars for production
+ZUCA_PASSWORD=             # Shared password for simple auth
+OPENAI_API_KEY=            # For pipeline processing
+GITHUB_TOKEN=              # For bug reporting (optional)
+GITHUB_OWNER=              # Repository owner (optional)
+GITHUB_REPO=               # Repository name (optional)
+```
+
+See `docs/ROADMAP-FRONTEND.md` for full implementation status and roadmap.

@@ -16,11 +16,11 @@ This document tracks the implementation of the ZUCA v2 web frontend.
 |-------|--------|-------|
 | 1. Foundation | ✅ Complete | Monorepo + HeroUI + Next.js 16 |
 | 2. Database & Auth | ✅ Complete | JWT + cookies, password/invite auth |
-| 3. API Migration | ⏳ Pending | |
-| 4. Core UI Forms | ⏳ Pending | |
-| 5. Solution View | ⏳ Pending | |
-| 6. Conversation | ⏳ Pending | |
-| 7. History & Polish | ⏳ Pending | |
+| 3. API Migration | ✅ Complete | 13 endpoints migrated |
+| 4. Core UI Forms | ✅ Complete | AnalyzeForm + UCGeneratorModal |
+| 5. Solution View | ✅ Complete | Tabs: Summary/Subscription/Contracts/Billings/RevRec |
+| 6. Conversation | ✅ Complete | Follow-up chat panel with Edit Field/Regenerate actions |
+| 7. History & Polish | ✅ Complete | Session list with search/delete |
 | 8. Deployment | ⏳ Pending | |
 
 ---
@@ -111,27 +111,38 @@ apps/web/
 
 ---
 
-## Phase 3: API Migration
+## Phase 3: API Migration ✅
 
-### Endpoints to Migrate
-| Express | Next.js | Status |
-|---------|---------|--------|
-| POST /api/analyze | app/api/analyze/route.ts | ⏳ |
-| POST /api/uc-generate | app/api/uc-generate/route.ts | ⏳ |
-| GET /api/sessions | app/api/sessions/route.ts | ⏳ |
-| GET /api/sessions/:id | app/api/sessions/[id]/route.ts | ⏳ |
-| DELETE /api/sessions/:id | app/api/sessions/[id]/route.ts | ⏳ |
-| POST /api/sessions/:id/follow-up | app/api/sessions/[id]/follow-up/route.ts | ⏳ |
+### Endpoints Migrated
+| Route | Method | Status |
+|-------|--------|--------|
+| /api/analyze | POST | ✅ |
+| /api/uc-generate | POST | ✅ |
+| /api/sessions | GET | ✅ |
+| /api/sessions/[id] | GET/DELETE | ✅ |
+| /api/sessions/[id]/follow-up | POST | ✅ |
+| /api/sessions/[id]/edit | POST | ✅ |
+| /api/sessions/[id]/regenerate | POST | ✅ |
+| /api/feedback | POST/GET | ✅ |
+| /api/bugs | POST/GET | ✅ |
+| /api/health | GET | ✅ |
+| /api/auth/login | POST | ✅ |
+| /api/auth/logout | POST | ✅ |
+| /api/auth/me | GET | ✅ |
 
-### New Endpoints
-| Route | Purpose |
-|-------|---------|
-| POST /api/sessions/[id]/edit | Smart rerun (edit field) |
-| POST /api/sessions/[id]/regenerate | Full regeneration |
-| POST /api/feedback | Submit thumbs up/down feedback |
-| GET /api/feedback/stats | Get feedback statistics (admin) |
-| POST /api/bugs | Submit bug report (auto-creates GitHub issue) |
-| GET /api/bugs | List bug reports (admin) |
+### Smart Rerun Logic
+The `/api/sessions/[id]/edit` endpoint implements field-level reruns:
+- Tracks field → pipeline step dependencies
+- Only clears affected step results from `previousResult`
+- Pipeline skips steps that already have cached results
+
+| Field | Affected Steps |
+|-------|----------------|
+| customer_name | (display only) |
+| contract_start_date | contract_intel, contracts_orders, billings, revrec_waterfall |
+| terms_months | contract_intel, subscription_spec, contracts_orders, billings, revrec_waterfall |
+| use_case_description | detected_capabilities, matched_golden_use_cases, subscription_spec, pob_mapping |
+| is_allocations | pob_mapping, contracts_orders, revrec_waterfall |
 
 ### GitHub Integration
 Bug reports auto-create issues in `zuca-v2` repo via GitHub API:
@@ -139,68 +150,98 @@ Bug reports auto-create issues in `zuca-v2` repo via GitHub API:
 - Issues include full context: session input/output, browser info, error logs
 - Bug report record updated with issue URL after creation
 
----
-
-## Phase 4: Core UI Forms
-
-### Components to Build
-- [ ] `components/layout/Sidebar.tsx` (refactor from layout)
-- [ ] `components/layout/Header.tsx`
-- [ ] `components/forms/AnalyzeForm.tsx` (already exists, needs API integration)
-- [ ] `components/forms/UCGeneratorModal.tsx`
-- [ ] `components/forms/UseCaseCard.tsx`
-- [ ] `components/feedback/BugReportModal.tsx` (global bug report form)
-
-### Pages
-- [x] `app/(main)/analyze/page.tsx` (form built, needs API wiring)
-
----
-
-## Phase 5: Solution View
-
-### Components to Build
-- [ ] `components/solution/SolutionView.tsx`
-- [ ] `components/solution/SolutionTabs.tsx`
-- [ ] `components/solution/DataTable.tsx`
-- [ ] `components/solution/ExportDropdown.tsx`
-- [ ] `components/feedback/FeedbackButtons.tsx` (thumbs up/down per section)
-- [ ] `components/feedback/FeedbackComment.tsx` (optional comment for thumbs down)
-
-### Table Types
-- Contracts/Orders (50+ columns)
-- Billings
-- Rev Rec Waterfall
+### Key Files Created
+```
+apps/web/app/api/
+├── health/route.ts
+├── analyze/route.ts
+├── uc-generate/route.ts
+├── sessions/
+│   ├── route.ts
+│   └── [id]/
+│       ├── route.ts
+│       ├── follow-up/route.ts
+│       ├── edit/route.ts
+│       └── regenerate/route.ts
+├── feedback/route.ts
+└── bugs/route.ts
+```
 
 ---
 
-## Phase 6: Conversation
+## Phase 4: Core UI Forms ✅
 
-### Components to Build
-- [ ] `components/chat/ConversationPanel.tsx`
-- [ ] `components/chat/MessageBubble.tsx`
-- [ ] `components/chat/ChatInput.tsx`
-- [ ] `components/chat/ActionButtons.tsx`
+### Completed
+- [x] `app/(main)/analyze/page.tsx` - Full form with API integration
+- [x] UC Generator Modal integrated in analyze page
+- [x] Use Case Card selection from generated results
+- [x] React Query hooks for API calls (`hooks/useAnalyze.ts`, `hooks/useUCGenerator.ts`, `hooks/useSessions.ts`)
+- [x] Form validation and error handling with toast notifications
+- [x] Loading states and disabled form during submission
+
+### Key Files Created
+```
+apps/web/
+├── hooks/
+│   ├── useAnalyze.ts      # Analyze mutation + form helper
+│   ├── useUCGenerator.ts  # UC Generator mutation
+│   └── useSessions.ts     # Sessions CRUD hooks
+└── app/(main)/analyze/page.tsx  # Updated with full API integration
+```
+
+---
+
+## Phase 5: Solution View ✅
+
+### Completed
+- [x] `app/(main)/solution/[id]/page.tsx` - Full solution view with tabs
+- [x] Summary tab with markdown rendering
+- [x] Subscription Spec tab with rate plans and charges
+- [x] Contracts/Orders table with ZR data
+- [x] Billings table with ZB data
+- [x] Rev Rec Waterfall table
+- [x] Raw JSON tab for debugging
+- [x] Export to JSON and clipboard copy functionality
+- [x] Loading skeletons and error states
+
+### Tables Rendered
+- Contracts/Orders (POB Name, Template, Sell Price, Allocated Price)
+- Billings (Invoice Date, Charge, Rate Plan, Amount)
+- Rev Rec Waterfall (POB, Period, Event, Amount)
+
+---
+
+## Phase 6: Conversation ✅
+
+### Components Built
+- [x] `components/chat/ConversationPanel.tsx` - Main panel with message history
+- [x] `components/chat/MessageBubble.tsx` - User/assistant message display with markdown
+- [x] `components/chat/ChatInput.tsx` - Text input with send button
+- [x] `components/chat/ActionButtons.tsx` - Edit Field dropdown + Regenerate button
 
 ### Features
-- Edit Field (smart rerun)
-- Regenerate (full rerun)
-- Follow-up questions
+- [x] Edit Field (smart rerun) - Dropdown to select field, modal to edit, only reruns affected steps
+- [x] Regenerate (full rerun) - Confirmation modal, runs full pipeline from scratch
+- [x] Follow-up questions - Chat input sends to `/api/sessions/[id]/follow-up`
+- [x] Integrated into solution view as right sidebar panel
 
 ---
 
-## Phase 7: History & Polish
+## Phase 7: History & Polish ✅
 
-### Components to Build
-- [ ] `components/history/SessionList.tsx`
-- [ ] `components/history/SessionCard.tsx`
+### Completed
+- [x] `app/(main)/history/page.tsx` - Full session list with search and delete
+- [x] Session cards with status chips and customer names
+- [x] Search/filter by customer name or session ID
+- [x] Delete confirmation modal
+- [x] Loading skeletons
+- [x] Error states
 
-### Pages
-- [ ] `app/(main)/history/page.tsx` (placeholder exists)
-
-### Polish
-- [ ] Responsive design
-- [ ] Error boundaries
-- [ ] Loading skeletons
+### Remaining Polish (Nice to Have)
+- [ ] Responsive design pass for mobile
+- [ ] Global error boundaries
+- [ ] Feedback buttons (thumbs up/down) per section
+- [ ] Bug report modal
 
 ---
 

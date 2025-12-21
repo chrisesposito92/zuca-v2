@@ -1,0 +1,39 @@
+/**
+ * React Query hooks for the UC Generator API endpoint.
+ */
+
+import { useMutation } from "@tanstack/react-query";
+import type { UCGeneratorInput, UCGeneratorOutput } from "@zuca/types/uc-generator";
+
+interface UCGeneratorResponse {
+  success: boolean;
+  session_id: string;
+  result: UCGeneratorOutput;
+}
+
+interface UCGeneratorError {
+  error: string;
+  details?: string;
+}
+
+async function runUCGenerator(input: UCGeneratorInput): Promise<UCGeneratorResponse> {
+  const response = await fetch("/api/uc-generate", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(input),
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw data as UCGeneratorError;
+  }
+
+  return data;
+}
+
+export function useUCGenerator() {
+  return useMutation({
+    mutationFn: runUCGenerator,
+  });
+}
