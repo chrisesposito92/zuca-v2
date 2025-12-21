@@ -76,18 +76,57 @@ export default function HistoryPage() {
     }
   };
 
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case "completed":
+        return (
+          <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+          </svg>
+        );
+      case "failed":
+        return (
+          <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+            <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+          </svg>
+        );
+      case "running":
+        return (
+          <svg className="w-3.5 h-3.5 animate-spin" fill="none" viewBox="0 0 24 24">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+          </svg>
+        );
+      default:
+        return null;
+    }
+  };
+
   if (isLoading) {
     return (
-      <div className="space-y-6">
+      <div className="space-y-8">
         <div>
-          <h1 className="text-2xl font-bold">Session History</h1>
-          <p className="text-default-500">
+          <h1 className="text-3xl font-bold tracking-tight">
+            <span className="gradient-text">Session History</span>
+          </h1>
+          <p className="text-default-500 text-lg mt-1">
             View and resume your previous analysis sessions
           </p>
         </div>
         <div className="space-y-4">
           {[1, 2, 3].map((i) => (
-            <Skeleton key={i} className="h-24 rounded-lg" />
+            <Card key={i} className="glass-card">
+              <CardBody className="p-5">
+                <div className="flex items-center gap-4">
+                  <Skeleton className="w-10 h-10 rounded-lg" />
+                  <div className="flex-1 space-y-2">
+                    <Skeleton className="h-5 w-40 rounded" />
+                    <Skeleton className="h-4 w-24 rounded" />
+                  </div>
+                  <Skeleton className="h-8 w-20 rounded-lg" />
+                </div>
+              </CardBody>
+            </Card>
           ))}
         </div>
       </div>
@@ -96,16 +135,26 @@ export default function HistoryPage() {
 
   if (error) {
     return (
-      <div className="space-y-6">
+      <div className="space-y-8">
         <div>
-          <h1 className="text-2xl font-bold">Session History</h1>
-          <p className="text-default-500">
+          <h1 className="text-3xl font-bold tracking-tight">
+            <span className="gradient-text">Session History</span>
+          </h1>
+          <p className="text-default-500 text-lg mt-1">
             View and resume your previous analysis sessions
           </p>
         </div>
-        <Card className="border-danger">
-          <CardBody>
-            <p className="text-danger">Failed to load sessions</p>
+        <Card className="glass-card border-danger/30">
+          <CardBody className="p-6 flex items-center gap-4">
+            <div className="w-12 h-12 rounded-full bg-danger/20 flex items-center justify-center">
+              <svg className="w-6 h-6 text-danger" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <div>
+              <p className="font-medium text-danger">Failed to load sessions</p>
+              <p className="text-sm text-default-500">Please try refreshing the page</p>
+            </div>
           </CardBody>
         </Card>
       </div>
@@ -113,73 +162,148 @@ export default function HistoryPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
+    <div className="space-y-8">
+      {/* Header */}
+      <div className="flex justify-between items-start">
         <div>
-          <h1 className="text-2xl font-bold">Session History</h1>
-          <p className="text-default-500">
+          <h1 className="text-3xl font-bold tracking-tight">
+            <span className="gradient-text">Session History</span>
+          </h1>
+          <p className="text-default-500 text-lg mt-1">
             View and resume your previous analysis sessions
           </p>
         </div>
         <Link href="/analyze">
-          <Button color="primary">New Analysis</Button>
+          <Button
+            color="primary"
+            size="lg"
+            className="font-semibold teal-glow-subtle"
+            startContent={
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+              </svg>
+            }
+          >
+            New Analysis
+          </Button>
         </Link>
       </div>
 
-      <Input
-        placeholder="Search by customer name or session ID..."
-        startContent={<span>🔍</span>}
-        className="max-w-md"
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-      />
+      {/* Search */}
+      <div className="relative">
+        <Input
+          placeholder="Search by customer name or session ID..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          variant="bordered"
+          size="lg"
+          classNames={{
+            inputWrapper: "border-default-200 hover:border-primary/50 focus-within:border-primary bg-default-50/50",
+          }}
+          startContent={
+            <svg className="w-5 h-5 text-default-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          }
+        />
+      </div>
 
+      {/* Sessions list */}
       {filteredSessions.length === 0 ? (
-        <Card>
-          <CardBody className="text-center py-12">
-            <p className="text-default-500">
+        <Card className="glass-card">
+          <CardBody className="py-16 text-center">
+            <div className="w-16 h-16 rounded-full bg-default-100 flex items-center justify-center mx-auto mb-4">
+              <svg className="w-8 h-8 text-default-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+            </div>
+            <p className="text-default-500 text-lg">
               {sessions.length === 0
-                ? "No sessions yet. Start a new analysis to see your history here."
-                : "No sessions match your search."}
+                ? "No sessions yet"
+                : "No sessions match your search"}
+            </p>
+            <p className="text-default-400 text-sm mt-1">
+              {sessions.length === 0
+                ? "Start a new analysis to see your history here"
+                : "Try adjusting your search terms"}
             </p>
           </CardBody>
         </Card>
       ) : (
         <div className="space-y-3">
-          {filteredSessions.map((session) => (
-            <Card key={session.id} className="hover:border-primary transition-colors">
-              <CardBody>
-                <div className="flex items-center justify-between">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3">
+          {filteredSessions.map((session, index) => (
+            <Card
+              key={session.id}
+              className="glass-card border-glow overflow-hidden animate-fade-in-up"
+              style={{ animationDelay: `${index * 0.05}s` }}
+            >
+              <CardBody className="p-5">
+                <div className="flex items-center gap-4">
+                  {/* Status indicator */}
+                  <div className={`
+                    w-10 h-10 rounded-lg flex items-center justify-center
+                    ${session.status === 'completed' ? 'bg-success/20 text-success' :
+                      session.status === 'failed' ? 'bg-danger/20 text-danger' :
+                      session.status === 'running' ? 'bg-warning/20 text-warning' :
+                      'bg-default-100 text-default-500'}
+                  `}>
+                    {getStatusIcon(session.status)}
+                  </div>
+
+                  {/* Session info */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-3 flex-wrap">
                       <Link href={`/solution/${session.id}`}>
-                        <h3 className="font-semibold hover:text-primary transition-colors cursor-pointer">
+                        <h3 className="font-semibold text-lg hover:text-primary transition-colors cursor-pointer truncate">
                           {session.customer_name || "Untitled"}
                         </h3>
                       </Link>
-                      <Chip size="sm" color={getStatusColor(session.status)} variant="flat">
+                      <Chip
+                        size="sm"
+                        color={getStatusColor(session.status)}
+                        variant="flat"
+                        className="capitalize"
+                      >
                         {session.status}
                       </Chip>
-                      <Chip size="sm" variant="bordered">
+                      <Chip size="sm" variant="bordered" className="border-default-300">
                         {session.session_type}
                       </Chip>
                     </div>
-                    <p className="text-sm text-default-500 mt-1">
-                      {new Date(session.created_at).toLocaleDateString(undefined, {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
-                    </p>
-                    <p className="text-xs text-default-400 font-mono mt-1">
-                      {session.id.slice(0, 8)}...
-                    </p>
+                    <div className="flex items-center gap-4 mt-1.5 text-sm text-default-500">
+                      <span className="flex items-center gap-1.5">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        {new Date(session.created_at).toLocaleDateString(undefined, {
+                          year: "numeric",
+                          month: "short",
+                          day: "numeric",
+                        })}
+                      </span>
+                      <span className="flex items-center gap-1.5">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        {new Date(session.created_at).toLocaleTimeString(undefined, {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </span>
+                      <span className="font-mono text-xs text-default-400">
+                        {session.id.slice(0, 8)}
+                      </span>
+                    </div>
                   </div>
+
+                  {/* Actions */}
                   <div className="flex gap-2">
                     <Link href={`/solution/${session.id}`}>
-                      <Button size="sm" variant="bordered">
+                      <Button
+                        size="sm"
+                        variant="bordered"
+                        className="border-default-300 hover:border-primary hover:bg-primary/5"
+                      >
                         View
                       </Button>
                     </Link>
@@ -199,16 +323,41 @@ export default function HistoryPage() {
         </div>
       )}
 
+      {/* Stats footer */}
+      {sessions.length > 0 && (
+        <div className="flex items-center justify-center gap-6 text-sm text-default-400 pt-4">
+          <span>{sessions.length} total sessions</span>
+          <span className="w-1 h-1 bg-default-300 rounded-full" />
+          <span>{sessions.filter(s => s.status === 'completed').length} completed</span>
+          <span className="w-1 h-1 bg-default-300 rounded-full" />
+          <span>{sessions.filter(s => s.status === 'failed').length} failed</span>
+        </div>
+      )}
+
       {/* Delete Confirmation Modal */}
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal
+        isOpen={isOpen}
+        onClose={onClose}
+        classNames={{
+          backdrop: "bg-[#050a08]/80 backdrop-blur-sm",
+          base: "glass-card-elevated",
+        }}
+      >
         <ModalContent>
-          <ModalHeader>Delete Session</ModalHeader>
+          <ModalHeader className="flex items-center gap-3 pt-6">
+            <div className="w-10 h-10 rounded-full bg-danger/20 flex items-center justify-center">
+              <svg className="w-5 h-5 text-danger" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+            </div>
+            <span>Delete Session</span>
+          </ModalHeader>
           <ModalBody>
-            <p>
-              Are you sure you want to delete this session? This action cannot be undone.
+            <p className="text-default-600">
+              Are you sure you want to delete this session? This action cannot be undone and all associated data will be permanently removed.
             </p>
           </ModalBody>
-          <ModalFooter>
+          <ModalFooter className="pb-6">
             <Button variant="light" onPress={onClose}>
               Cancel
             </Button>
@@ -217,7 +366,7 @@ export default function HistoryPage() {
               onPress={handleDeleteConfirm}
               isLoading={deleteMutation.isPending}
             >
-              Delete
+              Delete Session
             </Button>
           </ModalFooter>
         </ModalContent>
