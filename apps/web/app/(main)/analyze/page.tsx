@@ -23,6 +23,8 @@ import {
 import { useState, useRef } from "react";
 import { useAnalyze, formDataToZucaInput } from "@/hooks/useAnalyze";
 import { useUCGenerator } from "@/hooks/useUCGenerator";
+import { useFunFacts } from "@/hooks/useFunFacts";
+import { useCompanyFunFacts } from "@/hooks/useCompanyFunFacts";
 import type { UCGeneratorInput, GeneratedUseCase, UCRevRecNote } from "@zuca/types/uc-generator";
 
 const currencies = [
@@ -71,6 +73,18 @@ export default function AnalyzePage() {
   const analyzeMutation = useAnalyze();
   const ucGeneratorMutation = useUCGenerator();
 
+  // Fun facts for loading screen - rotates every 10 seconds
+  const { currentFact } = useFunFacts({ interval: 10000 });
+
+  // Company-specific fun facts for UC Generator loading
+  const {
+    fetchFacts: fetchCompanyFacts,
+    currentFact: companyFact,
+    isLoading: factsLoading,
+    isReady: factsReady,
+    reset: resetFacts,
+  } = useCompanyFunFacts({ interval: 10000 });
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
@@ -106,6 +120,11 @@ export default function AnalyzePage() {
 
   const handleGenerateUseCases = async () => {
     try {
+      // Start fetching company fun facts in parallel
+      if (ucInput.customer_name) {
+        fetchCompanyFacts(ucInput.customer_name, ucInput.customer_website);
+      }
+
       const result = await ucGeneratorMutation.mutateAsync(ucInput);
       setGeneratedUseCases(result.use_cases);
       setSelectedUseCaseIndex(null);
@@ -252,7 +271,12 @@ export default function AnalyzePage() {
                 indicator: "bg-gradient-to-r from-primary to-secondary",
               }}
             />
-            <p className="text-sm text-default-400 mt-3">
+            <div className="mt-4 p-4 rounded-xl bg-default-100/30 border border-default-200/30">
+              <p className="text-sm text-default-600 italic leading-relaxed min-h-[2.5rem] transition-opacity duration-300">
+                &ldquo;{currentFact}&rdquo;
+              </p>
+            </div>
+            <p className="text-xs text-default-400 mt-3">
               This typically takes 8-10 minutes. You&apos;ll be redirected when complete.
             </p>
           </CardBody>
@@ -522,7 +546,10 @@ export default function AnalyzePage() {
       <Modal
         size="3xl"
         isOpen={isOpen}
-        onClose={onClose}
+        onClose={() => {
+          onClose();
+          resetFacts();
+        }}
         scrollBehavior="inside"
         classNames={{
           backdrop: "bg-[#050a08]/80 backdrop-blur-sm",
@@ -641,7 +668,31 @@ export default function AnalyzePage() {
                           indicator: "bg-gradient-to-r from-secondary to-primary",
                         }}
                       />
-                      <p className="text-sm text-default-500 mt-3">
+
+                      {/* Company fun facts */}
+                      {(factsLoading || factsReady) && (
+                        <div className="mt-4 p-4 rounded-xl bg-secondary/10 border border-secondary/20">
+                          <div className="flex items-center gap-2 mb-2 text-secondary">
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <span className="text-xs font-medium uppercase tracking-wider">
+                              Did you know about {ucInput.customer_name}?
+                            </span>
+                          </div>
+                          {factsLoading && !companyFact ? (
+                            <p className="text-sm text-default-400 italic">
+                              Finding interesting facts...
+                            </p>
+                          ) : companyFact ? (
+                            <p className="text-sm text-default-600 leading-relaxed min-h-[2.5rem] transition-opacity duration-300">
+                              {companyFact}
+                            </p>
+                          ) : null}
+                        </div>
+                      )}
+
+                      <p className="text-xs text-default-400 mt-3">
                         This may take 3-5 minutes while we research the customer&apos;s website and generate detailed use cases.
                       </p>
                     </CardBody>

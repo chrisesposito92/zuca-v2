@@ -7,3 +7,8 @@
 export { researchCustomer, formatCustomerResearchForContext } from './research-customer';
 export { generateUseCases, formatUseCasesForOutput } from './generate-use-cases';
 export { formatOutput, formatOutputLocally } from './format-output';
+export {
+  generateCompanyFunFacts,
+  type CompanyFunFactsInput,
+  type CompanyFunFactsOutput,
+} from './generate-company-fun-facts';

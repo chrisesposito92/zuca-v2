@@ -1,4 +1,4 @@
-import { complete, getZuoraMcpTools, ReasoningEffort } from '../../llm/client';
+import { complete, ReasoningEffort } from '../../llm/client';
 import { loadPrompt, PROMPTS } from '../../llm/prompts/index';
 import {
   PobMappingOutput,
@@ -188,12 +188,13 @@ export async function assignPobTemplates(
     userMessage = `Previous Results:\n${JSON.stringify(previousMapping, null, 2)}\n\nUser Query:\n${userMessage}`;
   }
 
+  // Note: Zuora MCP is intentionally NOT included here because POB templates
+  // must come from our golden use case templates, not from Zuora's generic docs
   const result = await complete<PobMappingOutput>({
     systemPrompt,
     userMessage,
     responseSchema: pobMappingJsonSchema,
     tools: ['web_search', 'code_interpreter'],
-    mcpTools: getZuoraMcpTools(),
     reasoningEffort,
   });
 

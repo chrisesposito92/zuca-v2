@@ -21,7 +21,7 @@ Each mapping object contains:
 - chargeName: string
 - productName: string | null
 - ratePlanName: string | null
-- pob_identifier: string (from POB list or "AUTO-<ratable_method>")
+- pob_identifier: string (MUST be an exact identifier from the provided POB template list)
 - pob_name: string
 - ratable_method: "Ratable" | "Immediate Using Open Period" | "Immediate Using Start Date" | "Invoice Ratable"
 - release_event: one of the specified enum values
@@ -175,14 +175,25 @@ Create separate mapping entries for each child component:
 Ref: https://docs.zuora.com/en/zuora-revenue/advanced-revenue-operations/bundle-explosion
 
 ## Constraints
-- Use only POB identifiers/names from the provided list; otherwise use AUTO-* placeholder
+- **CRITICAL**: You MUST use ONLY POB identifiers from the "Available ZR POB templates" list provided in the user message. These are custom templates configured in our Zuora Revenue tenant.
+- **NEVER** use AUTO-*, placeholder, or invented identifiers. Every pob_identifier MUST match exactly one from the provided list.
+- If no template seems to fit perfectly, choose the CLOSEST match from the available templates and explain in the rationale why it was chosen.
 - Use exact enum strings for ratable_method and release_event
 - Dates in YYYY-MM-DD format or null
 - No extra fields beyond the schema
 
-## Zuora Documentation References
-Use web_search for detailed guidance:
-- POB Templates: https://docs.zuora.com/en/zuora-revenue/product-configuration/pob-templates
-- Contract Modifications: https://docs.zuora.com/en/zuora-revenue/advanced-revenue-operations/contract-modifications
-- VC Processing: https://docs.zuora.com/en/zuora-revenue/day-to-day-operation/variable-consideration-processing
-- Ramp Allocation: https://docs.zuora.com/en/zuora-revenue/day-to-day-operation/ramp-deals
+## Valid POB Template Categories (for reference)
+
+### Booking-Based Release (BK-*)
+- BK-OT-* templates: Release upon booking, recognize over time (ratable)
+- BK-PIT-* templates: Release upon booking, recognize point-in-time (immediate)
+
+### Billing-Based Release (BL-*)
+- BL-OT-* templates: Release upon billing, recognize over time (invoice ratable)
+- BL-PIT-* templates: Release upon billing, recognize point-in-time (immediate)
+
+### Event-Based Release (EVT-*)
+- EVT-OT-* templates: Release upon event, recognize over time
+- EVT-PIT-* templates: Release upon event, recognize point-in-time
+
+Always select from the exact identifiers provided in the "Available ZR POB templates" section of the user message.

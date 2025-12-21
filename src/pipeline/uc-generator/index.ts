@@ -23,4 +23,7 @@ export {
   formatOutputLocally,
   formatCustomerResearchForContext,
   formatUseCasesForOutput,
+  generateCompanyFunFacts,
+  type CompanyFunFactsInput,
+  type CompanyFunFactsOutput,
 } from './steps/index';

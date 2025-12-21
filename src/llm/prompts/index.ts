@@ -49,6 +49,7 @@ export const PROMPTS = {
   UC_RESEARCH_CUSTOMER: 'uc-research-customer',
   UC_GENERATE_USE_CASES: 'uc-generate-use-cases',
   UC_FORMAT_OUTPUT: 'uc-format-output',
+  UC_COMPANY_FUN_FACTS: 'uc-company-fun-facts',
 } as const;
 
 export type PromptName = typeof PROMPTS[keyof typeof PROMPTS];
