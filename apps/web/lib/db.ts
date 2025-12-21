@@ -202,6 +202,13 @@ export async function getMessages(sessionId: string): Promise<DbMessage[]> {
   return result.rows;
 }
 
+export async function clearMessages(sessionId: string): Promise<void> {
+  await sql`
+    DELETE FROM messages
+    WHERE session_id = ${sessionId}
+  `;
+}
+
 // ============================================================================
 // User Operations
 // ============================================================================

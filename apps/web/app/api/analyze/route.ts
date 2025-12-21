@@ -42,15 +42,6 @@ export async function POST(request: NextRequest) {
       // Store the result
       await updateSessionResult(session.id, result);
 
-      // Add initial assistant message with summary
-      if (result.summary) {
-        await addMessage(
-          session.id,
-          'assistant',
-          typeof result.summary === 'string' ? result.summary : JSON.stringify(result.summary)
-        );
-      }
-
       return NextResponse.json({
         success: true,
         session_id: session.id,

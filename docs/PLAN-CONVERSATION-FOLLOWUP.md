@@ -2,12 +2,21 @@
 
 > **STATUS: IMPLEMENTED** (December 2025)
 >
-> This plan has been implemented. See:
+> This plan has been implemented with full hybrid editing support. See:
+>
+> **Core Follow-up:**
 > - `src/pipeline/follow-up.ts` - Main follow-up processing logic
 > - `src/llm/prompts/follow-up.md` - System prompt for follow-up assistant
 > - `apps/web/app/api/sessions/[id]/follow-up/route.ts` - API endpoint
-> - `apps/web/hooks/useSessions.ts` - Updated with typed response
-> - `apps/web/components/chat/ConversationPanel.tsx` - Frontend handling
+>
+> **Incremental Patch System (Hybrid Editing):**
+> - `src/pipeline/patch.ts` - Output patching and incremental updates
+> - `apps/web/app/api/sessions/[id]/patch/route.ts` - Patch API endpoint
+> - `apps/web/components/chat/SuggestedEditsCard.tsx` - UI for applying suggestions
+>
+> **Hooks & State:**
+> - `apps/web/hooks/useSessions.ts` - useFollowUp, usePatchOutput hooks
+> - `apps/web/components/chat/ConversationPanel.tsx` - Conversation with suggestion state
 
 ## Problem Statement
 

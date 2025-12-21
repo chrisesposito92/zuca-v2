@@ -1,16 +1,24 @@
 "use client";
 
-import { Card, CardBody, CardHeader, addToast } from "@heroui/react";
-import { useRef, useEffect } from "react";
+import { Card, CardBody, CardHeader, Button, Tooltip, addToast } from "@heroui/react";
+import { useRef, useEffect, useState } from "react";
 import { MessageBubble } from "./MessageBubble";
 import { ChatInput } from "./ChatInput";
 import { ActionButtons } from "./ActionButtons";
-import { useFollowUp } from "@/hooks/useSessions";
+import { SuggestedEditsCard } from "./SuggestedEditsCard";
+import { useFollowUp, useClearConversation } from "@/hooks/useSessions";
 
 interface Message {
   role: "user" | "assistant";
   content: string;
   created_at: string;
+}
+
+interface SuggestedEdit {
+  field: string;
+  currentValue?: unknown;
+  suggestedValue?: unknown;
+  reason: string;
 }
 
 interface ConversationPanelProps {
@@ -28,28 +36,52 @@ export function ConversationPanel({
 }: ConversationPanelProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const followUpMutation = useFollowUp(sessionId);
+  const clearMutation = useClearConversation(sessionId);
+
+  // Track pending suggestions from the most recent response
+  const [pendingSuggestions, setPendingSuggestions] = useState<SuggestedEdit[]>([]);
+
+  const handleClearConversation = async () => {
+    try {
+      await clearMutation.mutateAsync();
+      setPendingSuggestions([]);
+      addToast({
+        title: "Conversation Cleared",
+        description: "All messages have been removed.",
+        color: "success",
+      });
+      onRefresh?.();
+    } catch {
+      addToast({
+        title: "Error",
+        description: "Failed to clear conversation.",
+        color: "danger",
+      });
+    }
+  };
 
   // Scroll to bottom when new messages arrive
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+  }, [messages, pendingSuggestions]);
 
   const handleSendMessage = async (message: string) => {
+    // Clear previous suggestions when sending a new message
+    setPendingSuggestions([]);
+
     try {
       const response = await followUpMutation.mutateAsync(message);
 
       // Handle different response types
       if (response.type === "suggestion" && response.suggestedEdits?.length) {
-        // Show suggestion notification
+        // Store suggestions for display
+        setPendingSuggestions(response.suggestedEdits);
+
         addToast({
-          title: "Suggestions Available",
-          description: `${response.suggestedEdits.length} change${response.suggestedEdits.length > 1 ? 's' : ''} suggested. Review in the conversation.`,
+          title: "Suggestions Ready",
+          description: `${response.suggestedEdits.length} change${response.suggestedEdits.length > 1 ? "s" : ""} suggested. Review below.`,
           color: "primary",
         });
-      } else if (response.type === "clarification") {
-        // Clarification response - just refresh to show it
-      } else if (response.type === "answer") {
-        // Direct answer - just refresh to show it
       }
 
       // Always refresh to show the new message
@@ -61,6 +93,15 @@ export function ConversationPanel({
         color: "danger",
       });
     }
+  };
+
+  const handleSuggestionApplied = () => {
+    setPendingSuggestions([]);
+    onRefresh?.();
+  };
+
+  const handleSuggestionDismiss = () => {
+    setPendingSuggestions([]);
   };
 
   return (
@@ -75,9 +116,25 @@ export function ConversationPanel({
               Conversation
             </h3>
             <p className="text-sm text-default-400 mt-1.5">
-              Ask questions or refine your analysis
+              Ask questions or request changes to the analysis
             </p>
           </div>
+          {messages.length > 0 && (
+            <Tooltip content="Clear conversation" placement="left">
+              <Button
+                isIconOnly
+                size="sm"
+                variant="light"
+                className="text-default-400 hover:text-danger"
+                onPress={handleClearConversation}
+                isLoading={clearMutation.isPending}
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+              </Button>
+            </Tooltip>
+          )}
         </div>
         <ActionButtons
           sessionId={sessionId}
@@ -101,7 +158,7 @@ export function ConversationPanel({
                 No messages yet
               </p>
               <p className="text-default-400 text-xs mt-1">
-                Ask a question about this analysis or use the actions above
+                Try: &quot;Change the billing timing to In Arrears&quot; or &quot;Why was this POB template chosen?&quot;
               </p>
             </div>
           </div>
@@ -115,6 +172,17 @@ export function ConversationPanel({
                 timestamp={msg.created_at}
               />
             ))}
+
+            {/* Show pending suggestions after the last message */}
+            {pendingSuggestions.length > 0 && (
+              <SuggestedEditsCard
+                sessionId={sessionId}
+                edits={pendingSuggestions}
+                onApplied={handleSuggestionApplied}
+                onDismiss={handleSuggestionDismiss}
+              />
+            )}
+
             <div ref={messagesEndRef} />
           </>
         )}
@@ -126,7 +194,7 @@ export function ConversationPanel({
         <ChatInput
           onSend={handleSendMessage}
           isLoading={followUpMutation.isPending}
-          placeholder="Ask a follow-up question..."
+          placeholder="Ask a question or request a change..."
         />
       </div>
     </Card>

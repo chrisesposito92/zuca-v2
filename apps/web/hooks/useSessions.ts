@@ -122,6 +122,43 @@ async function regenerateSession(
   return data;
 }
 
+// Patch response type
+interface PatchResponse {
+  success: boolean;
+  message: string;
+  session_id: string;
+  affected_steps: string[];
+  changes: Array<{ step: string; description: string }>;
+  result: ZucaOutput;
+}
+
+// Patch output (incremental update)
+async function patchOutput(
+  sessionId: string,
+  path: string,
+  value: unknown,
+  description?: string
+): Promise<PatchResponse> {
+  const response = await fetch(`/api/sessions/${sessionId}/patch`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ path, value, description }),
+  });
+  const data = await response.json();
+  if (!response.ok) throw data;
+  return data;
+}
+
+// Clear conversation
+async function clearConversation(sessionId: string): Promise<{ success: boolean }> {
+  const response = await fetch(`/api/sessions/${sessionId}/messages`, {
+    method: "DELETE",
+  });
+  const data = await response.json();
+  if (!response.ok) throw data;
+  return data;
+}
+
 // Hooks
 
 export function useSessions(limit = 50, offset = 0) {
@@ -184,3 +221,36 @@ export function useRegenerate(sessionId: string) {
     },
   });
 }
+
+export function usePatchOutput(sessionId: string) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      path,
+      value,
+      description,
+    }: {
+      path: string;
+      value: unknown;
+      description?: string;
+    }) => patchOutput(sessionId, path, value, description),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["session", sessionId] });
+    },
+  });
+}
+
+export function useClearConversation(sessionId: string) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: () => clearConversation(sessionId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["session", sessionId] });
+    },
+  });
+}
+
+// Re-export types for convenience
+export type { FollowUpResponse, PatchResponse };

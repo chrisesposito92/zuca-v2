@@ -24,5 +24,17 @@ export {
   type SuggestedEdit,
 } from './follow-up';
 
+// Patch/incremental update processing
+export {
+  applyPatch,
+  getAffectedSteps,
+  getValueAtPath,
+  setValueAtPath,
+  parsePathContext,
+  type PatchOperation,
+  type PatchResult,
+  type IncrementalContext,
+} from './patch';
+
 // All pipeline steps
 export * from './steps/index';

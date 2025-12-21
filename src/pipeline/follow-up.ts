@@ -121,14 +121,19 @@ function summarizeSubscription(spec: SubscriptionSpec | undefined): string {
     lines.push(`- Initial Term: ${subscription.initialTerm} ${subscription.initialTermPeriodType || 'Month'}(s)`);
   }
 
-  lines.push('\n**Rate Plans & Charges:**');
-  for (const rp of rate_plans) {
-    lines.push(`- ${rp.productName} / ${rp.ratePlanName}`);
-    for (const charge of rp.charges) {
+  lines.push('\n**Rate Plans & Charges (with paths for editing):**');
+  rate_plans.forEach((rp, rpIndex) => {
+    lines.push(`\n### Rate Plan [${rpIndex}]: ${rp.productName} / ${rp.ratePlanName}`);
+    rp.charges.forEach((charge, chargeIndex) => {
       const price = charge.sellPrice ?? charge.listPrice ?? charge.price ?? 0;
-      lines.push(`  - ${charge.name}: ${charge.type} ${charge.model}, $${price}`);
-    }
-  }
+      const path = `subscription_spec.rate_plans[${rpIndex}].charges[${chargeIndex}]`;
+      lines.push(`\n**Charge [${chargeIndex}]: ${charge.name}** (path: \`${path}\`)`);
+      lines.push(`- Type: ${charge.type}, Model: ${charge.model}`);
+      lines.push(`- Price: $${price}${charge.quantity ? `, Qty: ${charge.quantity}` : ''}`);
+      lines.push(`- Billing: ${charge.billingPeriod || 'N/A'} ${charge.billingTiming || ''}`);
+      lines.push(`- Trigger: ${charge.triggerEvent}`);
+    });
+  });
 
   return lines.join('\n');
 }
@@ -137,14 +142,19 @@ function summarizePobMappings(mapping: PobMappingOutput | undefined): string {
   if (!mapping) return 'No POB mapping data available.';
 
   const lines: string[] = [];
-  for (const item of mapping.charge_pob_map) {
-    lines.push(`- **${item.chargeName}** → ${item.pob_name} (${item.pob_identifier})`);
-    lines.push(`  - Method: ${item.ratable_method}, Release: ${item.release_event}`);
-    lines.push(`  - Recognition: ${item.recognition_window.start} to ${item.recognition_window.end || 'End of Term'}`);
+  lines.push('**POB Mappings (with paths for editing):**\n');
+  mapping.charge_pob_map.forEach((item, index) => {
+    const path = `pob_mapping.charge_pob_map[${index}]`;
+    lines.push(`### [${index}] ${item.chargeName} (path: \`${path}\`)`);
+    lines.push(`- POB: ${item.pob_name} (\`${item.pob_identifier}\`)`);
+    lines.push(`- Method: ${item.ratable_method}`);
+    lines.push(`- Release Event: ${item.release_event}`);
+    lines.push(`- Recognition: ${item.recognition_window.start} to ${item.recognition_window.end || 'End of Term'}`);
     if (item.rationale) {
-      lines.push(`  - Rationale: ${item.rationale}`);
+      lines.push(`- Rationale: ${item.rationale}`);
     }
-  }
+    lines.push('');
+  });
   return lines.join('\n');
 }
 
@@ -231,18 +241,18 @@ const followUpResponseSchema = {
       items: {
         type: 'object',
         properties: {
-          field: { type: 'string' },
-          currentValue: {},
-          suggestedValue: {},
-          reason: { type: 'string' },
+          field: { type: 'string', description: 'JSON path to the field to change' },
+          currentValue: { type: 'string', description: 'Current value (stringified)' },
+          suggestedValue: { type: 'string', description: 'New value to set (stringified)' },
+          reason: { type: 'string', description: 'Why this change is recommended' },
         },
-        required: ['field', 'reason'],
+        required: ['field', 'currentValue', 'suggestedValue', 'reason'],
         additionalProperties: false,
       },
       description: 'Suggested edits when type is suggestion',
     },
   },
-  required: ['type', 'content'],
+  required: ['type', 'content', 'suggestedEdits'],
   additionalProperties: false,
 };
 
