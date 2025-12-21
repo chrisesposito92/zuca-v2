@@ -19,6 +19,7 @@ import { useSession } from "@/hooks/useSessions";
 import { useQueryClient } from "@tanstack/react-query";
 import { ConversationPanel } from "@/components/chat";
 import type { ZucaOutput } from "@zuca/types";
+import * as XLSX from "xlsx";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -110,6 +111,133 @@ export default function SolutionPage({ params }: PageProps) {
     addToast({
       title: "Exported",
       description: "JSON file downloaded",
+      color: "success",
+    });
+  };
+
+  const handleExportExcel = () => {
+    if (!result) return;
+
+    const workbook = XLSX.utils.book_new();
+
+    // Contracts/Orders sheet
+    if (result.contracts_orders?.zr_contracts_orders?.length) {
+      const contractsData = result.contracts_orders.zr_contracts_orders.map(row => ({
+        "Line #": row["Line Item Num"],
+        "POB Name": row["POB Name"],
+        "POB Template": row["POB Template"],
+        "Revenue Start": row["Revenue Start Date"],
+        "Revenue End": row["Revenue End Date"],
+        "Quantity": row["Ordered Qty"],
+        "Ext Sell Price": row["Ext Sell Price"],
+        "Ext Allocated Price": row["Ext Allocated Price"],
+        "SSP Price": row["SSP Price"],
+        "Release Event": row["Release Event"],
+        "Billing Period": row["Billing Period"],
+        "Billing Timing": row["Billing Timing"],
+      }));
+      const contractsSheet = XLSX.utils.json_to_sheet(contractsData);
+      XLSX.utils.book_append_sheet(workbook, contractsSheet, "Contracts-Orders");
+    }
+
+    // Billings sheet
+    if (result.billings?.zb_billings?.length) {
+      const billingsData = result.billings.zb_billings.map(row => ({
+        "Invoice Date": row["Invoice Date"],
+        "Billing Date": row["Billing Date"],
+        "Charge Name": row["Charge Name"],
+        "Rate Plan": row["Rate Plan"],
+        "Product": row["Product"],
+        "Billing Period Start": row["Billing Period Start"],
+        "Billing Period End": row["Billing Period End"],
+        "Quantity": row["Quantity"],
+        "Unit Price": row["Unit Price"],
+        "Amount": row["Amount"],
+        "Currency": row["Currency"],
+      }));
+      const billingsSheet = XLSX.utils.json_to_sheet(billingsData);
+      XLSX.utils.book_append_sheet(workbook, billingsSheet, "Billings");
+    }
+
+    // Rev Rec Waterfall sheet (as pivot table)
+    if (result.revrec_waterfall?.zr_revrec?.length) {
+      const revrec = result.revrec_waterfall.zr_revrec;
+
+      // Get unique periods sorted chronologically
+      const months: Record<string, number> = {
+        Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5,
+        Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11
+      };
+      const periods = [...new Set(revrec.map(r => r["Period"]))].sort((a, b) => {
+        const [aMonth, aYear] = a.split("-");
+        const [bMonth, bYear] = b.split("-");
+        const aDate = new Date(2000 + parseInt(aYear), months[aMonth] || 0);
+        const bDate = new Date(2000 + parseInt(bYear), months[bMonth] || 0);
+        return aDate.getTime() - bDate.getTime();
+      });
+
+      // Build pivot data
+      const pobMap = new Map<string, { allocatedPrice: number; periodAmounts: Map<string, number> }>();
+      revrec.forEach(row => {
+        const key = row["POB Name"];
+        if (!pobMap.has(key)) {
+          pobMap.set(key, { allocatedPrice: row["Ext Allocated Price"] || 0, periodAmounts: new Map() });
+        }
+        const pob = pobMap.get(key)!;
+        const currentAmount = pob.periodAmounts.get(row["Period"]) || 0;
+        pob.periodAmounts.set(row["Period"], currentAmount + (row["Amount"] || 0));
+      });
+
+      // Create rows for Excel
+      const revrecData = Array.from(pobMap.entries()).map(([pobName, data]) => {
+        const row: Record<string, string | number> = {
+          "POB Name": pobName,
+          "Allocated Price": data.allocatedPrice,
+        };
+        let total = 0;
+        periods.forEach(period => {
+          const amount = data.periodAmounts.get(period) || 0;
+          row[period] = amount;
+          total += amount;
+        });
+        row["Total"] = total;
+        return row;
+      });
+
+      const revrecSheet = XLSX.utils.json_to_sheet(revrecData);
+      XLSX.utils.book_append_sheet(workbook, revrecSheet, "Rev Rec Waterfall");
+    }
+
+    // Subscription sheet
+    if (result.subscription_spec?.rate_plans?.length) {
+      const subscriptionData: Record<string, string | number | null | undefined>[] = [];
+      result.subscription_spec.rate_plans.forEach(plan => {
+        plan.charges?.forEach(charge => {
+          subscriptionData.push({
+            "Product": plan.productName,
+            "Rate Plan": plan.ratePlanName,
+            "Charge Name": charge.name,
+            "Type": charge.type,
+            "Model": charge.model,
+            "Billing Period": charge.billingPeriod,
+            "Price": charge.price,
+            "Quantity": charge.quantity,
+            "UOM": charge.uom,
+            "Start Date": charge.effectiveStartDate,
+            "End Date": charge.effectiveEndDate,
+          });
+        });
+      });
+      const subscriptionSheet = XLSX.utils.json_to_sheet(subscriptionData);
+      XLSX.utils.book_append_sheet(workbook, subscriptionSheet, "Subscription");
+    }
+
+    // Download the workbook
+    XLSX.writeFile(workbook, `zuca-${id.slice(0, 8)}.xlsx`);
+
+    addToast({
+      title: "Exported",
+      description: "Excel file downloaded with all tables",
       color: "success",
     });
   };
@@ -216,6 +344,21 @@ export default function SolutionPage({ params }: PageProps) {
               Copy
             </Button>
           </Tooltip>
+          <Tooltip content="Download Excel file with all tables">
+            <Button
+              variant="bordered"
+              size="sm"
+              className="border-2 border-secondary/50 hover:border-secondary hover:bg-secondary/5"
+              onPress={handleExportExcel}
+              startContent={
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+              }
+            >
+              Excel
+            </Button>
+          </Tooltip>
           <Tooltip content="Download JSON file">
             <Button
               variant="bordered"
@@ -228,7 +371,7 @@ export default function SolutionPage({ params }: PageProps) {
                 </svg>
               }
             >
-              Export
+              JSON
             </Button>
           </Tooltip>
           <Link href="/analyze">
@@ -371,26 +514,49 @@ export default function SolutionPage({ params }: PageProps) {
                                 {plan.productName}
                               </Chip>
                             </div>
-                            <div className="space-y-2">
+                            <div className="space-y-3">
                               {plan.charges?.map((charge, j) => (
-                                <div key={j} className="ml-2 pl-3 border-l-2 border-primary/30">
-                                  <p className="font-medium text-sm text-foreground">{charge.name}</p>
-                                  <p className="text-xs text-default-500 mt-0.5">
-                                    <span className="inline-flex items-center gap-1.5">
+                                <div key={j} className="ml-2 pl-3 border-l-2 border-primary/30 py-1">
+                                  <div className="flex items-center justify-between">
+                                    <p className="font-medium text-sm text-foreground">{charge.name}</p>
+                                    {charge.quantity != null && (
+                                      <span className="text-xs text-default-500 bg-default-200/50 px-2 py-0.5 rounded">
+                                        Qty: {charge.quantity}
+                                      </span>
+                                    )}
+                                  </div>
+                                  <div className="text-xs text-default-500 mt-1 space-y-1">
+                                    <div className="flex items-center gap-1.5 flex-wrap">
                                       <span className="px-1.5 py-0.5 bg-default-200/50 rounded">{charge.type}</span>
                                       <span className="text-default-400">•</span>
                                       <span className="px-1.5 py-0.5 bg-default-200/50 rounded">{charge.model}</span>
                                       {charge.price != null && (
                                         <>
                                           <span className="text-default-400">•</span>
-                                          <span className="text-primary font-medium">${charge.price}</span>
+                                          <span className="text-primary font-medium">${charge.price.toLocaleString()}</span>
                                         </>
                                       )}
                                       {charge.uom && (
                                         <span className="text-default-400">/ {charge.uom}</span>
                                       )}
-                                    </span>
-                                  </p>
+                                      {charge.billingPeriod && (
+                                        <>
+                                          <span className="text-default-400">•</span>
+                                          <span className="px-1.5 py-0.5 bg-secondary/10 text-secondary rounded">{charge.billingPeriod}</span>
+                                        </>
+                                      )}
+                                    </div>
+                                    {(charge.effectiveStartDate || charge.effectiveEndDate) && (
+                                      <div className="flex items-center gap-1.5 text-default-400">
+                                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                        </svg>
+                                        <span>{charge.effectiveStartDate || "—"}</span>
+                                        <span>→</span>
+                                        <span>{charge.effectiveEndDate || "Ongoing"}</span>
+                                      </div>
+                                    )}
+                                  </div>
                                 </div>
                               ))}
                             </div>
@@ -412,7 +578,7 @@ export default function SolutionPage({ params }: PageProps) {
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                     </svg>
-                    Contracts
+                    Contracts/Orders
                   </div>
                 }
               >
@@ -426,26 +592,32 @@ export default function SolutionPage({ params }: PageProps) {
                   <CardBody className="p-6">
                     {result.contracts_orders?.zr_contracts_orders?.length ? (
                       <div className="overflow-x-auto rounded-lg border border-default-200/50">
-                        <table className="min-w-full text-sm">
+                        <table className="min-w-[900px] w-full text-sm">
                           <thead>
                             <tr className="bg-default-100/80">
-                              <th className="px-4 py-3 text-left font-semibold text-default-600">Line #</th>
-                              <th className="px-4 py-3 text-left font-semibold text-default-600">POB Name</th>
-                              <th className="px-4 py-3 text-left font-semibold text-default-600">Template</th>
-                              <th className="px-4 py-3 text-right font-semibold text-default-600">Ext Sell Price</th>
-                              <th className="px-4 py-3 text-right font-semibold text-default-600">Allocated</th>
+                              <th className="px-4 py-3 text-left font-semibold text-default-600 whitespace-nowrap">Line #</th>
+                              <th className="px-4 py-3 text-left font-semibold text-default-600 whitespace-nowrap">POB Name</th>
+                              <th className="px-4 py-3 text-left font-semibold text-default-600 whitespace-nowrap">Template</th>
+                              <th className="px-4 py-3 text-left font-semibold text-default-600 whitespace-nowrap">Rev Start</th>
+                              <th className="px-4 py-3 text-left font-semibold text-default-600 whitespace-nowrap">Rev End</th>
+                              <th className="px-4 py-3 text-right font-semibold text-default-600 whitespace-nowrap">Qty</th>
+                              <th className="px-4 py-3 text-right font-semibold text-default-600 whitespace-nowrap">Ext Sell Price</th>
+                              <th className="px-4 py-3 text-right font-semibold text-default-600 whitespace-nowrap">Allocated</th>
                             </tr>
                           </thead>
                           <tbody>
                             {result.contracts_orders.zr_contracts_orders.map((row, i) => (
                               <tr key={i} className="border-t border-default-200/30 hover:bg-default-100/30 transition-colors">
-                                <td className="px-4 py-3 font-mono text-xs text-default-500">{row["Line Item Num"]}</td>
-                                <td className="px-4 py-3 text-foreground">{row["POB Name"]}</td>
-                                <td className="px-4 py-3 text-default-500">{row["POB Template"]}</td>
-                                <td className="px-4 py-3 text-right font-mono text-foreground">
+                                <td className="px-4 py-3 font-mono text-xs text-default-500 whitespace-nowrap">{row["Line Item Num"]}</td>
+                                <td className="px-4 py-3 text-foreground whitespace-nowrap">{row["POB Name"]}</td>
+                                <td className="px-4 py-3 text-default-500 whitespace-nowrap">{row["POB Template"]}</td>
+                                <td className="px-4 py-3 font-mono text-xs text-default-500 whitespace-nowrap">{row["Revenue Start Date"]}</td>
+                                <td className="px-4 py-3 font-mono text-xs text-default-500 whitespace-nowrap">{row["Revenue End Date"]}</td>
+                                <td className="px-4 py-3 text-right font-mono text-default-500 whitespace-nowrap">{row["Ordered Qty"]}</td>
+                                <td className="px-4 py-3 text-right font-mono text-foreground whitespace-nowrap">
                                   ${row["Ext Sell Price"]?.toLocaleString() ?? "-"}
                                 </td>
-                                <td className="px-4 py-3 text-right font-mono text-primary">
+                                <td className="px-4 py-3 text-right font-mono text-primary whitespace-nowrap">
                                   ${row["Ext Allocated Price"]?.toLocaleString() ?? "-"}
                                 </td>
                               </tr>
@@ -481,30 +653,85 @@ export default function SolutionPage({ params }: PageProps) {
                   </CardHeader>
                   <CardBody className="p-6">
                     {result.billings?.zb_billings?.length ? (
-                      <div className="overflow-x-auto rounded-lg border border-default-200/50">
-                        <table className="min-w-full text-sm">
-                          <thead>
-                            <tr className="bg-default-100/80">
-                              <th className="px-4 py-3 text-left font-semibold text-default-600">Invoice Date</th>
-                              <th className="px-4 py-3 text-left font-semibold text-default-600">Charge</th>
-                              <th className="px-4 py-3 text-left font-semibold text-default-600">Rate Plan</th>
-                              <th className="px-4 py-3 text-right font-semibold text-default-600">Amount</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {result.billings.zb_billings.map((row, i) => (
-                              <tr key={i} className="border-t border-default-200/30 hover:bg-default-100/30 transition-colors">
-                                <td className="px-4 py-3 font-mono text-xs text-default-500">{row["Invoice Date"]}</td>
-                                <td className="px-4 py-3 text-foreground">{row["Charge Name"]}</td>
-                                <td className="px-4 py-3 text-default-500">{row["Rate Plan"]}</td>
-                                <td className="px-4 py-3 text-right font-mono text-primary font-medium">
-                                  ${row["Amount"]?.toLocaleString() ?? "-"}
-                                </td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
+                      (() => {
+                        // Group billings by invoice date
+                        const groupedBillings = result.billings.zb_billings.reduce((acc, row) => {
+                          const date = row["Invoice Date"];
+                          if (!acc[date]) {
+                            acc[date] = [];
+                          }
+                          acc[date].push(row);
+                          return acc;
+                        }, {} as Record<string, typeof result.billings.zb_billings>);
+
+                        const invoiceDates = Object.keys(groupedBillings).sort((a, b) =>
+                          new Date(a).getTime() - new Date(b).getTime()
+                        );
+
+                        return (
+                          <div className="space-y-4">
+                            {invoiceDates.map((invoiceDate, groupIndex) => {
+                              const rows = groupedBillings[invoiceDate];
+                              const total = rows.reduce((sum, r) => sum + (r["Amount"] || 0), 0);
+
+                              return (
+                                <div key={invoiceDate} className="rounded-lg border border-default-200/50 overflow-hidden">
+                                  {/* Invoice Date Header */}
+                                  <div className="bg-default-100/80 px-4 py-3 flex items-center justify-between">
+                                    <div className="flex items-center gap-3">
+                                      <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center text-primary text-xs font-bold">
+                                        {groupIndex + 1}
+                                      </div>
+                                      <div>
+                                        <span className="font-semibold text-foreground">Invoice Date: {invoiceDate}</span>
+                                        <span className="text-xs text-default-500 ml-3">({rows.length} line{rows.length > 1 ? "s" : ""})</span>
+                                      </div>
+                                    </div>
+                                    <div className="text-right">
+                                      <span className="text-xs text-default-500">Total:</span>
+                                      <span className="ml-2 font-mono font-semibold text-primary">${total.toLocaleString()}</span>
+                                    </div>
+                                  </div>
+
+                                  {/* Billing Lines Table */}
+                                  <div className="overflow-x-auto">
+                                    <table className="min-w-[800px] w-full text-sm">
+                                      <thead>
+                                        <tr className="bg-default-50/50">
+                                          <th className="px-4 py-2 text-left font-medium text-default-500 whitespace-nowrap">Charge</th>
+                                          <th className="px-4 py-2 text-left font-medium text-default-500 whitespace-nowrap">Rate Plan</th>
+                                          <th className="px-4 py-2 text-left font-medium text-default-500 whitespace-nowrap">Period</th>
+                                          <th className="px-4 py-2 text-right font-medium text-default-500 whitespace-nowrap">Qty</th>
+                                          <th className="px-4 py-2 text-right font-medium text-default-500 whitespace-nowrap">Unit Price</th>
+                                          <th className="px-4 py-2 text-right font-medium text-default-500 whitespace-nowrap">Amount</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        {rows.map((row, i) => (
+                                          <tr key={i} className="border-t border-default-200/30 hover:bg-default-100/30 transition-colors">
+                                            <td className="px-4 py-2.5 text-foreground whitespace-nowrap">{row["Charge Name"]}</td>
+                                            <td className="px-4 py-2.5 text-default-500 whitespace-nowrap">{row["Rate Plan"]}</td>
+                                            <td className="px-4 py-2.5 text-default-400 text-xs whitespace-nowrap">
+                                              {row["Billing Period Start"]} → {row["Billing Period End"]}
+                                            </td>
+                                            <td className="px-4 py-2.5 text-right font-mono text-default-500 whitespace-nowrap">{row["Quantity"]}</td>
+                                            <td className="px-4 py-2.5 text-right font-mono text-default-500 whitespace-nowrap">
+                                              ${row["Unit Price"]?.toLocaleString() ?? "-"}
+                                            </td>
+                                            <td className="px-4 py-2.5 text-right font-mono text-primary font-medium whitespace-nowrap">
+                                              ${row["Amount"]?.toLocaleString() ?? "-"}
+                                            </td>
+                                          </tr>
+                                        ))}
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        );
+                      })()
                     ) : (
                       <p className="text-default-500 italic">No billing data available</p>
                     )}
@@ -533,30 +760,117 @@ export default function SolutionPage({ params }: PageProps) {
                   </CardHeader>
                   <CardBody className="p-6">
                     {result.revrec_waterfall?.zr_revrec?.length ? (
-                      <div className="overflow-x-auto rounded-lg border border-default-200/50">
-                        <table className="min-w-full text-sm">
-                          <thead>
-                            <tr className="bg-default-100/80">
-                              <th className="px-4 py-3 text-left font-semibold text-default-600">POB</th>
-                              <th className="px-4 py-3 text-left font-semibold text-default-600">Period</th>
-                              <th className="px-4 py-3 text-left font-semibold text-default-600">Event</th>
-                              <th className="px-4 py-3 text-right font-semibold text-default-600">Amount</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {result.revrec_waterfall.zr_revrec.map((row, i) => (
-                              <tr key={i} className="border-t border-default-200/30 hover:bg-default-100/30 transition-colors">
-                                <td className="px-4 py-3 text-foreground">{row["POB Name"]}</td>
-                                <td className="px-4 py-3 font-mono text-xs text-default-500">{row["Period"]}</td>
-                                <td className="px-4 py-3 text-default-500">{row["Event Name"]}</td>
-                                <td className="px-4 py-3 text-right font-mono text-primary font-medium">
-                                  ${row["Amount"]?.toLocaleString() ?? "-"}
-                                </td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
+                      (() => {
+                        // Build pivot table: POB rows × Period columns
+                        const revrec = result.revrec_waterfall.zr_revrec;
+
+                        // Get unique periods sorted chronologically
+                        const periods = [...new Set(revrec.map(r => r["Period"]))].sort((a, b) => {
+                          // Parse period like "Jan-25" into a sortable format
+                          const months: Record<string, number> = {
+                            Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5,
+                            Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11
+                          };
+                          const [aMonth, aYear] = a.split("-");
+                          const [bMonth, bYear] = b.split("-");
+                          const aDate = new Date(2000 + parseInt(aYear), months[aMonth] || 0);
+                          const bDate = new Date(2000 + parseInt(bYear), months[bMonth] || 0);
+                          return aDate.getTime() - bDate.getTime();
+                        });
+
+                        // Get unique POBs with their metadata
+                        const pobMap = new Map<string, { name: string; total: number; allocatedPrice: number }>();
+                        revrec.forEach(row => {
+                          const key = row["POB Name"];
+                          if (!pobMap.has(key)) {
+                            pobMap.set(key, {
+                              name: row["POB Name"],
+                              total: 0,
+                              allocatedPrice: row["Ext Allocated Price"] || 0
+                            });
+                          }
+                          const pob = pobMap.get(key)!;
+                          pob.total += row["Amount"] || 0;
+                        });
+
+                        // Build pivot data: POB → Period → Amount
+                        const pivotData = new Map<string, Map<string, number>>();
+                        revrec.forEach(row => {
+                          const pobKey = row["POB Name"];
+                          if (!pivotData.has(pobKey)) {
+                            pivotData.set(pobKey, new Map());
+                          }
+                          const periodMap = pivotData.get(pobKey)!;
+                          const currentAmount = periodMap.get(row["Period"]) || 0;
+                          periodMap.set(row["Period"], currentAmount + (row["Amount"] || 0));
+                        });
+
+                        const pobs = Array.from(pobMap.keys());
+
+                        // Calculate column totals
+                        const columnTotals = periods.map(period =>
+                          pobs.reduce((sum, pob) => sum + (pivotData.get(pob)?.get(period) || 0), 0)
+                        );
+
+                        return (
+                          <div className="overflow-x-auto rounded-lg border border-default-200/50">
+                            <table className="min-w-[800px] w-full text-sm">
+                              <thead>
+                                <tr className="bg-default-100/80">
+                                  <th className="px-4 py-3 text-left font-semibold text-default-600 whitespace-nowrap sticky left-0 bg-default-100/80 z-10">POB Name</th>
+                                  <th className="px-3 py-3 text-right font-semibold text-default-600 whitespace-nowrap">Allocated</th>
+                                  {periods.map(period => (
+                                    <th key={period} className="px-3 py-3 text-right font-semibold text-default-600 whitespace-nowrap">
+                                      {period}
+                                    </th>
+                                  ))}
+                                  <th className="px-3 py-3 text-right font-semibold text-primary whitespace-nowrap">Total</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {pobs.map((pobKey, i) => {
+                                  const pob = pobMap.get(pobKey)!;
+                                  const periodAmounts = pivotData.get(pobKey)!;
+                                  return (
+                                    <tr key={i} className="border-t border-default-200/30 hover:bg-default-100/30 transition-colors">
+                                      <td className="px-4 py-2.5 text-foreground whitespace-nowrap sticky left-0 bg-[#0a1612] z-10">{pob.name}</td>
+                                      <td className="px-3 py-2.5 text-right font-mono text-xs text-default-400 whitespace-nowrap">
+                                        ${pob.allocatedPrice.toLocaleString()}
+                                      </td>
+                                      {periods.map(period => {
+                                        const amount = periodAmounts.get(period) || 0;
+                                        return (
+                                          <td key={period} className={`px-3 py-2.5 text-right font-mono text-xs whitespace-nowrap ${amount > 0 ? "text-foreground" : "text-default-400"}`}>
+                                            {amount > 0 ? `$${amount.toLocaleString()}` : "-"}
+                                          </td>
+                                        );
+                                      })}
+                                      <td className="px-3 py-2.5 text-right font-mono text-sm text-primary font-medium whitespace-nowrap">
+                                        ${pob.total.toLocaleString()}
+                                      </td>
+                                    </tr>
+                                  );
+                                })}
+                                {/* Totals Row */}
+                                <tr className="border-t-2 border-default-300 bg-default-100/50">
+                                  <td className="px-4 py-3 font-semibold text-foreground whitespace-nowrap sticky left-0 bg-default-100/50 z-10">Total</td>
+                                  <td className="px-3 py-3 text-right font-mono text-xs text-default-500 whitespace-nowrap">
+                                    ${pobs.reduce((sum, pob) => sum + pobMap.get(pob)!.allocatedPrice, 0).toLocaleString()}
+                                  </td>
+                                  {columnTotals.map((total, i) => (
+                                    <td key={i} className="px-3 py-3 text-right font-mono text-xs font-medium text-foreground whitespace-nowrap">
+                                      ${total.toLocaleString()}
+                                    </td>
+                                  ))}
+                                  <td className="px-3 py-3 text-right font-mono text-sm text-primary font-bold whitespace-nowrap">
+                                    ${pobs.reduce((sum, pob) => sum + pobMap.get(pob)!.total, 0).toLocaleString()}
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        );
+                      })()
                     ) : (
                       <p className="text-default-500 italic">No rev rec data available</p>
                     )}

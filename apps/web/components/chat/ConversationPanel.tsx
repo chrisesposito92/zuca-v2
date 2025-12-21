@@ -62,7 +62,7 @@ export function ConversationPanel({
 
   return (
     <Card className="glass-card h-full flex flex-col">
-      <CardHeader className="flex flex-col gap-3 px-5 pt-5 pb-4">
+      <CardHeader className="flex flex-col gap-4 px-6 pt-6 pb-4">
         <div className="flex justify-between items-start w-full">
           <div>
             <h3 className="text-lg font-semibold flex items-center gap-2">
@@ -71,7 +71,7 @@ export function ConversationPanel({
               </svg>
               Conversation
             </h3>
-            <p className="text-sm text-default-500 mt-1">
+            <p className="text-sm text-default-400 mt-1.5">
               Ask questions or refine your analysis
             </p>
           </div>
@@ -83,9 +83,9 @@ export function ConversationPanel({
         />
       </CardHeader>
 
-      <div className="divider-glow mx-5" />
+      <div className="divider-glow mx-6" />
 
-      <CardBody className="flex-1 overflow-y-auto space-y-4 min-h-[250px] px-5 py-4">
+      <CardBody className="flex-1 overflow-y-auto space-y-5 min-h-[300px] px-6 py-5">
         {messages.length === 0 ? (
           <div className="flex items-center justify-center h-full">
             <div className="text-center max-w-xs">
@@ -117,9 +117,9 @@ export function ConversationPanel({
         )}
       </CardBody>
 
-      <div className="divider-glow mx-5" />
+      <div className="divider-glow mx-6" />
 
-      <div className="p-5 pt-4">
+      <div className="p-6 pt-5">
         <ChatInput
           onSend={handleSendMessage}
           isLoading={followUpMutation.isPending}

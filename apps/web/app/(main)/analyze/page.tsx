@@ -253,7 +253,7 @@ export default function AnalyzePage() {
               }}
             />
             <p className="text-sm text-default-400 mt-3">
-              This typically takes 30-60 seconds. You&apos;ll be redirected when complete.
+              This typically takes 8-10 minutes. You&apos;ll be redirected when complete.
             </p>
           </CardBody>
         </Card>
