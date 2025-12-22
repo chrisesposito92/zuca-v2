@@ -1,0 +1,4759 @@
+{
+  "session_id": "fe09c158-be40-4546-9493-5482604b01cd",
+  "timestamp": "2025-12-22T05:51:04.156Z",
+  "input": {
+    "customer_name": "MongoDB Atlas",
+    "contract_start_date": "01/01/2026",
+    "terms_months": 24,
+    "transaction_currency": "USD",
+    "billing_period": "Monthly",
+    "is_allocations": true,
+    "allocation_method": "Use List Price",
+    "rev_rec_notes": "Committed cluster instance revenue recognized ratably over term. Storage and data transfer usage recognized as consumed (event-driven). Professional services milestone-based. Backup retention add-on prorated and ratable from activation date.",
+    "use_case_description": "MongoDB Atlas signs a 24-month Enterprise Agreement combining committed cluster capacity with consumption-based storage and data transfer. The core commitment is for 3 M50 clusters (dedicated, high-availability) at $2,500/cluster/month list price, billed monthly in advance with an 18% enterprise discount applied. The agreement includes metered usage components billed monthly in arrears: storage at $0.25/GB-month and data transfer at $0.10/GB. In month 10, the customer adds a 4th M50 cluster (co-termed, prorated for remaining 15 months) and activates the Premium Backup add-on at $500/month per cluster (applied to all 4 clusters from month 10 forward). Professional Services are included: a $75,000 migration/onboarding engagement delivered over the first 6 months with milestone billing (25% at kickoff, 50% at data migration complete, 25% at go-live). The bundle discount of 18% applies to all fixed recurring components (clusters + backup) but not to usage or services. Revenue expectation: committed clusters recognized ratably; usage recognized as-consumed; backup add-on recognized ratably from activation; services recognized as milestones achieved."
+  },
+  "contract_intel": {
+    "service_start_mdy": "01/01/2026",
+    "service_end_mdy": null,
+    "term_months": 24,
+    "billing_period": "Month",
+    "billing_timing": "InAdvance",
+    "trigger_event": "ContractEffective",
+    "go_live_mdy": "01/01/2026",
+    "booking_mdy": "01/01/2026",
+    "renewal_term_months": 12
+  },
+  "detected_capabilities": {
+    "billing_caps": [
+      "RECURRING",
+      "USAGE",
+      "DISCOUNT",
+      "AMENDMENT",
+      "PRORATION",
+      "ONE-TIME"
+    ],
+    "revenue_caps": [
+      "BUNDLE",
+      "CUSTOM EVENT",
+      "CONTRACT MOD"
+    ],
+    "hints": [
+      "“3 M50 clusters … billed monthly in advance” -> RECURRING",
+      "“storage … data transfer … metered usage … billed monthly in arrears” -> USAGE",
+      "“18% enterprise discount applied … to all fixed recurring components” -> DISCOUNT",
+      "“In month 10, the customer adds a 4th M50 cluster … activates the Premium Backup add-on” -> AMENDMENT",
+      "“co-termed, prorated for remaining 15 months” -> PRORATION",
+      "“$75,000 migration/onboarding … milestone billing” -> ONE-TIME",
+      "“Enterprise Agreement combining … clusters + usage + backup + Professional Services” -> BUNDLE",
+      "“usage recognized as-consumed (event-driven)” and “services recognized as milestones achieved” -> CUSTOM EVENT",
+      "“adds a 4th … in month 10” / “activation date” changing scope mid-term -> CONTRACT MOD"
+    ],
+    "confidence": 0.84
+  },
+  "matched_golden_use_cases": {
+    "matched_guc": [
+      {
+        "id": "UC-0010",
+        "title": "MEA  Prospective (ADV)",
+        "score": 0.446857,
+        "score_raw": 0.485714,
+        "jaccard_billing": 0.571429,
+        "jaccard_revenue": 0.4,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "AMENDMENT",
+            "PRORATION",
+            "ONE-TIME"
+          ],
+          "missing": [
+            "USAGE",
+            "DISCOUNT"
+          ],
+          "unmatched": [
+            "VOLUME PRICING"
+          ]
+        },
+        "revenue": {
+          "intersection": [
+            "CUSTOM EVENT",
+            "CONTRACT MOD"
+          ],
+          "missing": [
+            "BUNDLE"
+          ],
+          "unmatched": [
+            "ALLOCATION",
+            "COST"
+          ]
+        }
+      },
+      {
+        "id": "UC-0011",
+        "title": "MEA  Retrospective (ADV)",
+        "score": 0.446857,
+        "score_raw": 0.485714,
+        "jaccard_billing": 0.571429,
+        "jaccard_revenue": 0.4,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "AMENDMENT",
+            "PRORATION",
+            "ONE-TIME"
+          ],
+          "missing": [
+            "USAGE",
+            "DISCOUNT"
+          ],
+          "unmatched": [
+            "VOLUME PRICING"
+          ]
+        },
+        "revenue": {
+          "intersection": [
+            "CUSTOM EVENT",
+            "CONTRACT MOD"
+          ],
+          "missing": [
+            "BUNDLE"
+          ],
+          "unmatched": [
+            "ALLOCATION",
+            "COST"
+          ]
+        }
+      },
+      {
+        "id": "UC-0002",
+        "title": "Bundle & PS (ADV)",
+        "score": 0.361429,
+        "score_raw": 0.392857,
+        "jaccard_billing": 0.285714,
+        "jaccard_revenue": 0.5,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "ONE-TIME"
+          ],
+          "missing": [
+            "USAGE",
+            "DISCOUNT",
+            "AMENDMENT",
+            "PRORATION"
+          ],
+          "unmatched": [
+            "VOLUME PRICING"
+          ]
+        },
+        "revenue": {
+          "intersection": [
+            "BUNDLE",
+            "CUSTOM EVENT"
+          ],
+          "missing": [
+            "CONTRACT MOD"
+          ],
+          "unmatched": [
+            "ALLOCATION"
+          ]
+        }
+      }
+    ],
+    "scores_all": [
+      {
+        "id": "UC-0010",
+        "title": "MEA  Prospective (ADV)",
+        "score": 0.446857,
+        "score_raw": 0.485714,
+        "jaccard_billing": 0.571429,
+        "jaccard_revenue": 0.4,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "AMENDMENT",
+            "PRORATION",
+            "ONE-TIME"
+          ],
+          "missing": [
+            "USAGE",
+            "DISCOUNT"
+          ],
+          "unmatched": [
+            "VOLUME PRICING"
+          ]
+        },
+        "revenue": {
+          "intersection": [
+            "CUSTOM EVENT",
+            "CONTRACT MOD"
+          ],
+          "missing": [
+            "BUNDLE"
+          ],
+          "unmatched": [
+            "ALLOCATION",
+            "COST"
+          ]
+        }
+      },
+      {
+        "id": "UC-0011",
+        "title": "MEA  Retrospective (ADV)",
+        "score": 0.446857,
+        "score_raw": 0.485714,
+        "jaccard_billing": 0.571429,
+        "jaccard_revenue": 0.4,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "AMENDMENT",
+            "PRORATION",
+            "ONE-TIME"
+          ],
+          "missing": [
+            "USAGE",
+            "DISCOUNT"
+          ],
+          "unmatched": [
+            "VOLUME PRICING"
+          ]
+        },
+        "revenue": {
+          "intersection": [
+            "CUSTOM EVENT",
+            "CONTRACT MOD"
+          ],
+          "missing": [
+            "BUNDLE"
+          ],
+          "unmatched": [
+            "ALLOCATION",
+            "COST"
+          ]
+        }
+      },
+      {
+        "id": "UC-0002",
+        "title": "Bundle & PS (ADV)",
+        "score": 0.361429,
+        "score_raw": 0.392857,
+        "jaccard_billing": 0.285714,
+        "jaccard_revenue": 0.5,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "ONE-TIME"
+          ],
+          "missing": [
+            "USAGE",
+            "DISCOUNT",
+            "AMENDMENT",
+            "PRORATION"
+          ],
+          "unmatched": [
+            "VOLUME PRICING"
+          ]
+        },
+        "revenue": {
+          "intersection": [
+            "BUNDLE",
+            "CUSTOM EVENT"
+          ],
+          "missing": [
+            "CONTRACT MOD"
+          ],
+          "unmatched": [
+            "ALLOCATION"
+          ]
+        }
+      },
+      {
+        "id": "UC-0023",
+        "title": "Subscription - Cancel w Accel",
+        "score": 0.350476,
+        "score_raw": 0.380952,
+        "jaccard_billing": 0.428571,
+        "jaccard_revenue": 0.333333,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "AMENDMENT",
+            "PRORATION"
+          ],
+          "missing": [
+            "USAGE",
+            "DISCOUNT",
+            "ONE-TIME"
+          ],
+          "unmatched": [
+            "TIERED PRICING"
+          ]
+        },
+        "revenue": {
+          "intersection": [
+            "CONTRACT MOD"
+          ],
+          "missing": [
+            "BUNDLE",
+            "CUSTOM EVENT"
+          ],
+          "unmatched": []
+        }
+      },
+      {
+        "id": "UC-0026",
+        "title": "MEA with FX -ADV",
+        "score": 0.345,
+        "score_raw": 0.375,
+        "jaccard_billing": 0.5,
+        "jaccard_revenue": 0.25,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "PRORATION",
+            "ONE-TIME"
+          ],
+          "missing": [
+            "USAGE",
+            "DISCOUNT",
+            "AMENDMENT"
+          ],
+          "unmatched": []
+        },
+        "revenue": {
+          "intersection": [
+            "CUSTOM EVENT"
+          ],
+          "missing": [
+            "BUNDLE",
+            "CONTRACT MOD"
+          ],
+          "unmatched": [
+            "ALLOCATION"
+          ]
+        }
+      },
+      {
+        "id": "UC-0030",
+        "title": "MEA - Software with RSSP",
+        "score": 0.345,
+        "score_raw": 0.375,
+        "jaccard_billing": 0.5,
+        "jaccard_revenue": 0.25,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "PRORATION",
+            "ONE-TIME"
+          ],
+          "missing": [
+            "USAGE",
+            "DISCOUNT",
+            "AMENDMENT"
+          ],
+          "unmatched": []
+        },
+        "revenue": {
+          "intersection": [
+            "CUSTOM EVENT"
+          ],
+          "missing": [
+            "BUNDLE",
+            "CONTRACT MOD"
+          ],
+          "unmatched": [
+            "ALLOCATION"
+          ]
+        }
+      },
+      {
+        "id": "UC-0004",
+        "title": "Ramp  - Prospective",
+        "score": 0.322,
+        "score_raw": 0.35,
+        "jaccard_billing": 0.5,
+        "jaccard_revenue": 0.2,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "AMENDMENT",
+            "PRORATION"
+          ],
+          "missing": [
+            "USAGE",
+            "DISCOUNT",
+            "ONE-TIME"
+          ],
+          "unmatched": []
+        },
+        "revenue": {
+          "intersection": [
+            "CONTRACT MOD"
+          ],
+          "missing": [
+            "BUNDLE",
+            "CUSTOM EVENT"
+          ],
+          "unmatched": [
+            "ALLOCATION",
+            "RAMP"
+          ]
+        }
+      },
+      {
+        "id": "UC-0024",
+        "title": "Subscription & PS (Milestones) - ADV",
+        "score": 0.312143,
+        "score_raw": 0.339286,
+        "jaccard_billing": 0.428571,
+        "jaccard_revenue": 0.25,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "PRORATION",
+            "ONE-TIME"
+          ],
+          "missing": [
+            "USAGE",
+            "DISCOUNT",
+            "AMENDMENT"
+          ],
+          "unmatched": [
+            "TIERED PRICING"
+          ]
+        },
+        "revenue": {
+          "intersection": [
+            "CUSTOM EVENT"
+          ],
+          "missing": [
+            "BUNDLE",
+            "CONTRACT MOD"
+          ],
+          "unmatched": [
+            "ALLOCATION"
+          ]
+        }
+      },
+      {
+        "id": "UC-0038",
+        "title": "B2C Cancellation",
+        "score": 0.306667,
+        "score_raw": 0.333333,
+        "jaccard_billing": 0.333333,
+        "jaccard_revenue": 0.333333,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "AMENDMENT"
+          ],
+          "missing": [
+            "USAGE",
+            "DISCOUNT",
+            "PRORATION",
+            "ONE-TIME"
+          ],
+          "unmatched": []
+        },
+        "revenue": {
+          "intersection": [
+            "CONTRACT MOD"
+          ],
+          "missing": [
+            "BUNDLE",
+            "CUSTOM EVENT"
+          ],
+          "unmatched": []
+        }
+      },
+      {
+        "id": "UC-0012",
+        "title": "ACB - PPDD (Ratable)",
+        "score": 0.246429,
+        "score_raw": 0.267857,
+        "jaccard_billing": 0.285714,
+        "jaccard_revenue": 0.25,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "USAGE"
+          ],
+          "missing": [
+            "DISCOUNT",
+            "AMENDMENT",
+            "PRORATION",
+            "ONE-TIME"
+          ],
+          "unmatched": [
+            "PREPAID DRAWDOWN"
+          ]
+        },
+        "revenue": {
+          "intersection": [
+            "CUSTOM EVENT"
+          ],
+          "missing": [
+            "BUNDLE",
+            "CONTRACT MOD"
+          ],
+          "unmatched": [
+            "ADVANCED CONSUMPTION"
+          ]
+        }
+      },
+      {
+        "id": "UC-0013",
+        "title": "ACB - PPDD (Usage)",
+        "score": 0.246429,
+        "score_raw": 0.267857,
+        "jaccard_billing": 0.285714,
+        "jaccard_revenue": 0.25,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "USAGE"
+          ],
+          "missing": [
+            "DISCOUNT",
+            "AMENDMENT",
+            "PRORATION",
+            "ONE-TIME"
+          ],
+          "unmatched": [
+            "PREPAID DRAWDOWN"
+          ]
+        },
+        "revenue": {
+          "intersection": [
+            "CUSTOM EVENT"
+          ],
+          "missing": [
+            "BUNDLE",
+            "CONTRACT MOD"
+          ],
+          "unmatched": [
+            "ADVANCED CONSUMPTION"
+          ]
+        }
+      },
+      {
+        "id": "UC-0028",
+        "title": "Subscription w T&M PS - OLI",
+        "score": 0.246429,
+        "score_raw": 0.267857,
+        "jaccard_billing": 0.285714,
+        "jaccard_revenue": 0.25,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "PRORATION"
+          ],
+          "missing": [
+            "USAGE",
+            "DISCOUNT",
+            "AMENDMENT",
+            "ONE-TIME"
+          ],
+          "unmatched": [
+            "ORDER LINE ITEM"
+          ]
+        },
+        "revenue": {
+          "intersection": [
+            "CUSTOM EVENT"
+          ],
+          "missing": [
+            "BUNDLE",
+            "CONTRACT MOD"
+          ],
+          "unmatched": [
+            "ALLOCATION"
+          ]
+        }
+      },
+      {
+        "id": "UC-0027",
+        "title": "Subscription with Setup Fee - CNTRL",
+        "score": 0.23,
+        "score_raw": 0.25,
+        "jaccard_billing": 0.5,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "PRORATION",
+            "ONE-TIME"
+          ],
+          "missing": [
+            "USAGE",
+            "DISCOUNT",
+            "AMENDMENT"
+          ],
+          "unmatched": []
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "BUNDLE",
+            "CUSTOM EVENT",
+            "CONTRACT MOD"
+          ],
+          "unmatched": []
+        }
+      },
+      {
+        "id": "UC-0032",
+        "title": "Subscription - Suspend/Resume",
+        "score": 0.23,
+        "score_raw": 0.25,
+        "jaccard_billing": 0.5,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "AMENDMENT",
+            "PRORATION"
+          ],
+          "missing": [
+            "USAGE",
+            "DISCOUNT",
+            "ONE-TIME"
+          ],
+          "unmatched": []
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "BUNDLE",
+            "CUSTOM EVENT",
+            "CONTRACT MOD"
+          ],
+          "unmatched": []
+        }
+      },
+      {
+        "id": "UC-0008",
+        "title": "MEA w Cost (ADV)",
+        "score": 0.223429,
+        "score_raw": 0.242857,
+        "jaccard_billing": 0.285714,
+        "jaccard_revenue": 0.2,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "ONE-TIME"
+          ],
+          "missing": [
+            "USAGE",
+            "DISCOUNT",
+            "AMENDMENT",
+            "PRORATION"
+          ],
+          "unmatched": [
+            "VOLUME PRICING"
+          ]
+        },
+        "revenue": {
+          "intersection": [
+            "CUSTOM EVENT"
+          ],
+          "missing": [
+            "BUNDLE",
+            "CONTRACT MOD"
+          ],
+          "unmatched": [
+            "ALLOCATION",
+            "COST"
+          ]
+        }
+      },
+      {
+        "id": "UC-0009",
+        "title": "MEA with OLI HW - ADV",
+        "score": 0.197143,
+        "score_raw": 0.214286,
+        "jaccard_billing": 0.428571,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "PRORATION",
+            "ONE-TIME"
+          ],
+          "missing": [
+            "USAGE",
+            "DISCOUNT",
+            "AMENDMENT"
+          ],
+          "unmatched": [
+            "ORDER LINE ITEM"
+          ]
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "BUNDLE",
+            "CUSTOM EVENT",
+            "CONTRACT MOD"
+          ],
+          "unmatched": [
+            "ALLOCATION"
+          ]
+        }
+      },
+      {
+        "id": "UC-0031",
+        "title": "ACB-PPDD(Usage) with Top-off",
+        "score": 0.197143,
+        "score_raw": 0.214286,
+        "jaccard_billing": 0.428571,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "USAGE",
+            "AMENDMENT"
+          ],
+          "missing": [
+            "DISCOUNT",
+            "PRORATION",
+            "ONE-TIME"
+          ],
+          "unmatched": [
+            "PREPAID DRAWDOWN"
+          ]
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "BUNDLE",
+            "CUSTOM EVENT",
+            "CONTRACT MOD"
+          ],
+          "unmatched": [
+            "ADVANCED CONSUMPTION"
+          ]
+        }
+      },
+      {
+        "id": "UC-0001",
+        "title": "Subscription",
+        "score": 0.153333,
+        "score_raw": 0.166667,
+        "jaccard_billing": 0.333333,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "PRORATION"
+          ],
+          "missing": [
+            "USAGE",
+            "DISCOUNT",
+            "AMENDMENT",
+            "ONE-TIME"
+          ],
+          "unmatched": []
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "BUNDLE",
+            "CUSTOM EVENT",
+            "CONTRACT MOD"
+          ],
+          "unmatched": []
+        }
+      },
+      {
+        "id": "UC-0003",
+        "title": "Ramp - SL",
+        "score": 0.153333,
+        "score_raw": 0.166667,
+        "jaccard_billing": 0.333333,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "PRORATION"
+          ],
+          "missing": [
+            "USAGE",
+            "DISCOUNT",
+            "AMENDMENT",
+            "ONE-TIME"
+          ],
+          "unmatched": []
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "BUNDLE",
+            "CUSTOM EVENT",
+            "CONTRACT MOD"
+          ],
+          "unmatched": [
+            "ALLOCATION",
+            "RAMP"
+          ]
+        }
+      },
+      {
+        "id": "UC-0025",
+        "title": "Subscription - free mos - CNTRL",
+        "score": 0.153333,
+        "score_raw": 0.166667,
+        "jaccard_billing": 0.333333,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "DISCOUNT"
+          ],
+          "missing": [
+            "USAGE",
+            "AMENDMENT",
+            "PRORATION",
+            "ONE-TIME"
+          ],
+          "unmatched": []
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "BUNDLE",
+            "CUSTOM EVENT",
+            "CONTRACT MOD"
+          ],
+          "unmatched": []
+        }
+      },
+      {
+        "id": "UC-0037",
+        "title": "B2C Promo",
+        "score": 0.153333,
+        "score_raw": 0.166667,
+        "jaccard_billing": 0.333333,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "DISCOUNT"
+          ],
+          "missing": [
+            "USAGE",
+            "AMENDMENT",
+            "PRORATION",
+            "ONE-TIME"
+          ],
+          "unmatched": []
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "BUNDLE",
+            "CUSTOM EVENT",
+            "CONTRACT MOD"
+          ],
+          "unmatched": []
+        }
+      },
+      {
+        "id": "UC-0005",
+        "title": "Ramp - Inv Schedules",
+        "score": 0.131429,
+        "score_raw": 0.142857,
+        "jaccard_billing": 0.285714,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "PRORATION"
+          ],
+          "missing": [
+            "USAGE",
+            "DISCOUNT",
+            "AMENDMENT",
+            "ONE-TIME"
+          ],
+          "unmatched": [
+            "TIERED PRICING"
+          ]
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "BUNDLE",
+            "CUSTOM EVENT",
+            "CONTRACT MOD"
+          ],
+          "unmatched": [
+            "RAMP"
+          ]
+        }
+      },
+      {
+        "id": "UC-0006",
+        "title": "MEA w Royalty (ADV)",
+        "score": 0.131429,
+        "score_raw": 0.142857,
+        "jaccard_billing": 0.285714,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "ONE-TIME"
+          ],
+          "missing": [
+            "USAGE",
+            "DISCOUNT",
+            "AMENDMENT",
+            "PRORATION"
+          ],
+          "unmatched": [
+            "VOLUME PRICING"
+          ]
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "BUNDLE",
+            "CUSTOM EVENT",
+            "CONTRACT MOD"
+          ],
+          "unmatched": [
+            "ALLOCATION",
+            "COST",
+            "VC"
+          ]
+        }
+      },
+      {
+        "id": "UC-0016",
+        "title": "ACB - PPDD (Ratable-VC)",
+        "score": 0.131429,
+        "score_raw": 0.142857,
+        "jaccard_billing": 0.285714,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "USAGE"
+          ],
+          "missing": [
+            "DISCOUNT",
+            "AMENDMENT",
+            "PRORATION",
+            "ONE-TIME"
+          ],
+          "unmatched": [
+            "PREPAID DRAWDOWN"
+          ]
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "BUNDLE",
+            "CUSTOM EVENT",
+            "CONTRACT MOD"
+          ],
+          "unmatched": [
+            "VC",
+            "ADVANCED CONSUMPTION"
+          ]
+        }
+      },
+      {
+        "id": "UC-0017",
+        "title": "ACB - PPDD (Usage - Multi Prod)",
+        "score": 0.131429,
+        "score_raw": 0.142857,
+        "jaccard_billing": 0.285714,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "USAGE"
+          ],
+          "missing": [
+            "DISCOUNT",
+            "AMENDMENT",
+            "PRORATION",
+            "ONE-TIME"
+          ],
+          "unmatched": [
+            "PREPAID DRAWDOWN"
+          ]
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "BUNDLE",
+            "CUSTOM EVENT",
+            "CONTRACT MOD"
+          ],
+          "unmatched": [
+            "ADVANCED CONSUMPTION"
+          ]
+        }
+      },
+      {
+        "id": "UC-0019",
+        "title": "ACB - Commit Arrears (Usage)",
+        "score": 0.131429,
+        "score_raw": 0.142857,
+        "jaccard_billing": 0.285714,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "USAGE"
+          ],
+          "missing": [
+            "DISCOUNT",
+            "AMENDMENT",
+            "PRORATION",
+            "ONE-TIME"
+          ],
+          "unmatched": [
+            "PREPAID DRAWDOWN"
+          ]
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "BUNDLE",
+            "CUSTOM EVENT",
+            "CONTRACT MOD"
+          ],
+          "unmatched": [
+            "ADVANCED CONSUMPTION"
+          ]
+        }
+      },
+      {
+        "id": "UC-0020",
+        "title": "ACB-Min Commit - Under",
+        "score": 0.131429,
+        "score_raw": 0.142857,
+        "jaccard_billing": 0.285714,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "USAGE"
+          ],
+          "missing": [
+            "DISCOUNT",
+            "AMENDMENT",
+            "PRORATION",
+            "ONE-TIME"
+          ],
+          "unmatched": [
+            "MIN COMMIT"
+          ]
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "BUNDLE",
+            "CUSTOM EVENT",
+            "CONTRACT MOD"
+          ],
+          "unmatched": [
+            "ADVANCED CONSUMPTION"
+          ]
+        }
+      },
+      {
+        "id": "UC-0018",
+        "title": "ACB - Commit Arrears (Ratable)",
+        "score": 0.115,
+        "score_raw": 0.125,
+        "jaccard_billing": 0.25,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "USAGE"
+          ],
+          "missing": [
+            "DISCOUNT",
+            "AMENDMENT",
+            "PRORATION",
+            "ONE-TIME"
+          ],
+          "unmatched": [
+            "PREPAID DRAWDOWN",
+            "TIERED PRICING"
+          ]
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "BUNDLE",
+            "CUSTOM EVENT",
+            "CONTRACT MOD"
+          ],
+          "unmatched": [
+            "ADVANCED CONSUMPTION"
+          ]
+        }
+      },
+      {
+        "id": "UC-0021",
+        "title": "ACB-Min Commit - Over",
+        "score": 0.115,
+        "score_raw": 0.125,
+        "jaccard_billing": 0.25,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "USAGE"
+          ],
+          "missing": [
+            "DISCOUNT",
+            "AMENDMENT",
+            "PRORATION",
+            "ONE-TIME"
+          ],
+          "unmatched": [
+            "MIN COMMIT",
+            "OVERAGE"
+          ]
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "BUNDLE",
+            "CUSTOM EVENT",
+            "CONTRACT MOD"
+          ],
+          "unmatched": [
+            "ADVANCED CONSUMPTION"
+          ]
+        }
+      },
+      {
+        "id": "UC-0014",
+        "title": "ACB - Paygo",
+        "score": 0.076667,
+        "score_raw": 0.083333,
+        "jaccard_billing": 0.166667,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "USAGE"
+          ],
+          "missing": [
+            "RECURRING",
+            "DISCOUNT",
+            "AMENDMENT",
+            "PRORATION",
+            "ONE-TIME"
+          ],
+          "unmatched": []
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "BUNDLE",
+            "CUSTOM EVENT",
+            "CONTRACT MOD"
+          ],
+          "unmatched": [
+            "ADVANCED CONSUMPTION"
+          ]
+        }
+      },
+      {
+        "id": "UC-0034",
+        "title": "B2C  Monthly",
+        "score": 0.076667,
+        "score_raw": 0.083333,
+        "jaccard_billing": 0.166667,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "RECURRING"
+          ],
+          "missing": [
+            "USAGE",
+            "DISCOUNT",
+            "AMENDMENT",
+            "PRORATION",
+            "ONE-TIME"
+          ],
+          "unmatched": []
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "BUNDLE",
+            "CUSTOM EVENT",
+            "CONTRACT MOD"
+          ],
+          "unmatched": []
+        }
+      },
+      {
+        "id": "UC-0035",
+        "title": "B2C Annual",
+        "score": 0.076667,
+        "score_raw": 0.083333,
+        "jaccard_billing": 0.166667,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "RECURRING"
+          ],
+          "missing": [
+            "USAGE",
+            "DISCOUNT",
+            "AMENDMENT",
+            "PRORATION",
+            "ONE-TIME"
+          ],
+          "unmatched": []
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "BUNDLE",
+            "CUSTOM EVENT",
+            "CONTRACT MOD"
+          ],
+          "unmatched": []
+        }
+      },
+      {
+        "id": "UC-0036",
+        "title": "B2C MTM",
+        "score": 0.076667,
+        "score_raw": 0.083333,
+        "jaccard_billing": 0.166667,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "RECURRING"
+          ],
+          "missing": [
+            "USAGE",
+            "DISCOUNT",
+            "AMENDMENT",
+            "PRORATION",
+            "ONE-TIME"
+          ],
+          "unmatched": []
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "BUNDLE",
+            "CUSTOM EVENT",
+            "CONTRACT MOD"
+          ],
+          "unmatched": []
+        }
+      },
+      {
+        "id": "UC-0007",
+        "title": "Subscription & VC",
+        "score": 0.065714,
+        "score_raw": 0.071429,
+        "jaccard_billing": 0.142857,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "RECURRING"
+          ],
+          "missing": [
+            "USAGE",
+            "DISCOUNT",
+            "AMENDMENT",
+            "PRORATION",
+            "ONE-TIME"
+          ],
+          "unmatched": [
+            "TIERED PRICING"
+          ]
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "BUNDLE",
+            "CUSTOM EVENT",
+            "CONTRACT MOD"
+          ],
+          "unmatched": [
+            "VC"
+          ]
+        }
+      },
+      {
+        "id": "UC-0015",
+        "title": "Subscription - Weekend Delivery",
+        "score": 0.065714,
+        "score_raw": 0.071429,
+        "jaccard_billing": 0.142857,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "RECURRING"
+          ],
+          "missing": [
+            "USAGE",
+            "DISCOUNT",
+            "AMENDMENT",
+            "PRORATION",
+            "ONE-TIME"
+          ],
+          "unmatched": [
+            "DELIVERY PRICING"
+          ]
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "BUNDLE",
+            "CUSTOM EVENT",
+            "CONTRACT MOD"
+          ],
+          "unmatched": [
+            "ADVANCED CONSUMPTION",
+            "DELIVERY"
+          ]
+        }
+      },
+      {
+        "id": "UC-0022",
+        "title": "ACB-Paygo - Prerated",
+        "score": 0.065714,
+        "score_raw": 0.071429,
+        "jaccard_billing": 0.142857,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "USAGE"
+          ],
+          "missing": [
+            "RECURRING",
+            "DISCOUNT",
+            "AMENDMENT",
+            "PRORATION",
+            "ONE-TIME"
+          ],
+          "unmatched": [
+            "PRERATED PRICING"
+          ]
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "BUNDLE",
+            "CUSTOM EVENT",
+            "CONTRACT MOD"
+          ],
+          "unmatched": [
+            "ADVANCED CONSUMPTION"
+          ]
+        }
+      },
+      {
+        "id": "UC-0029",
+        "title": "SFC - ADV",
+        "score": 0,
+        "score_raw": 0,
+        "jaccard_billing": 0,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [],
+          "missing": [
+            "RECURRING",
+            "USAGE",
+            "DISCOUNT",
+            "AMENDMENT",
+            "PRORATION",
+            "ONE-TIME"
+          ],
+          "unmatched": []
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "BUNDLE",
+            "CUSTOM EVENT",
+            "CONTRACT MOD"
+          ],
+          "unmatched": [
+            "ALLOCATION",
+            "SFC"
+          ]
+        }
+      },
+      {
+        "id": "UC-0033",
+        "title": "MEA-Multi-Currency -ADV",
+        "score": 0,
+        "score_raw": 0,
+        "jaccard_billing": 0,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [],
+          "missing": [
+            "RECURRING",
+            "USAGE",
+            "DISCOUNT",
+            "AMENDMENT",
+            "PRORATION",
+            "ONE-TIME"
+          ],
+          "unmatched": []
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "BUNDLE",
+            "CUSTOM EVENT",
+            "CONTRACT MOD"
+          ],
+          "unmatched": [
+            "ALLOCATION",
+            "COST"
+          ]
+        }
+      }
+    ],
+    "normalized_inputs": {
+      "billing_caps": [
+        "RECURRING",
+        "USAGE",
+        "DISCOUNT",
+        "AMENDMENT",
+        "PRORATION",
+        "ONE-TIME"
+      ],
+      "revenue_caps": [
+        "BUNDLE",
+        "CUSTOM EVENT",
+        "CONTRACT MOD"
+      ]
+    }
+  },
+  "subscription_spec": {
+    "subscription": {
+      "name": "MongoDB Atlas - 24M Enterprise Agreement (Clusters + Usage + PS) - 2026-01-01",
+      "termType": "TERMED",
+      "status": "Draft",
+      "currency": "USD",
+      "contractEffectiveDate": "2026-01-01",
+      "serviceActivationDate": "2026-01-01",
+      "customerAcceptanceDate": "2026-01-01",
+      "subscriptionStartDate": "2026-01-01",
+      "subscriptionEndDate": "2028-01-01",
+      "initialTerm": 24,
+      "initialTermPeriodType": "Month",
+      "renewalTerm": null,
+      "renewalTermPeriodType": null,
+      "autoRenew": false
+    },
+    "rate_plans": [
+      {
+        "productName": "MongoDB Atlas Enterprise - Committed Clusters",
+        "ratePlanName": "Atlas M50 Cluster Commitment (EA)",
+        "charges": [
+          {
+            "name": "M50 Cluster Commitment - Base (3 Clusters)",
+            "type": "Recurring",
+            "model": "PerUnit",
+            "uom": "Cluster-Month",
+            "billingPeriod": "Month",
+            "billingTiming": "InAdvance",
+            "billingDay": "1",
+            "billingPeriodAlignment": null,
+            "listPriceBase": "Per Unit",
+            "triggerEvent": "ContractEffective",
+            "specificTriggerDate": null,
+            "endDateCondition": "Subscription_End",
+            "specificEndDate": null,
+            "quantity": 3,
+            "listPrice": 2500,
+            "sellPrice": 2050,
+            "price": 2050,
+            "effectiveStartDate": "2026-01-01",
+            "effectiveEndDate": "2028-01-01",
+            "chargeFunction": "None",
+            "isAllocationEligible": true,
+            "drawdownType": null,
+            "commitmentType": null,
+            "prepaymentUOM": null,
+            "prepaymentUnits": null,
+            "validityPeriod": null
+          },
+          {
+            "name": "M50 Cluster Commitment - Add-on (1 Cluster from Month 10)",
+            "type": "Recurring",
+            "model": "PerUnit",
+            "uom": "Cluster-Month",
+            "billingPeriod": "Month",
+            "billingTiming": "InAdvance",
+            "billingDay": "1",
+            "billingPeriodAlignment": null,
+            "listPriceBase": "Per Unit",
+            "triggerEvent": "ContractEffective",
+            "specificTriggerDate": null,
+            "endDateCondition": "Subscription_End",
+            "specificEndDate": null,
+            "quantity": 1,
+            "listPrice": 2500,
+            "sellPrice": 2050,
+            "price": 2050,
+            "effectiveStartDate": "2026-10-01",
+            "effectiveEndDate": "2028-01-01",
+            "chargeFunction": "None",
+            "isAllocationEligible": true,
+            "drawdownType": null,
+            "commitmentType": null,
+            "prepaymentUOM": null,
+            "prepaymentUnits": null,
+            "validityPeriod": null
+          }
+        ]
+      },
+      {
+        "productName": "MongoDB Atlas Enterprise - Premium Backup",
+        "ratePlanName": "Premium Backup Add-on (EA)",
+        "charges": [
+          {
+            "name": "Premium Backup - Per Cluster (4 Clusters from Month 10)",
+            "type": "Recurring",
+            "model": "PerUnit",
+            "uom": "Cluster-Month",
+            "billingPeriod": "Month",
+            "billingTiming": "InAdvance",
+            "billingDay": "1",
+            "billingPeriodAlignment": null,
+            "listPriceBase": "Per Unit",
+            "triggerEvent": "ContractEffective",
+            "specificTriggerDate": null,
+            "endDateCondition": "Subscription_End",
+            "specificEndDate": null,
+            "quantity": 4,
+            "listPrice": 500,
+            "sellPrice": 410,
+            "price": 410,
+            "effectiveStartDate": "2026-10-01",
+            "effectiveEndDate": "2028-01-01",
+            "chargeFunction": "None",
+            "isAllocationEligible": true,
+            "drawdownType": null,
+            "commitmentType": null,
+            "prepaymentUOM": null,
+            "prepaymentUnits": null,
+            "validityPeriod": null
+          }
+        ]
+      },
+      {
+        "productName": "MongoDB Atlas - Metered Usage",
+        "ratePlanName": "Atlas Usage (Storage + Data Transfer)",
+        "charges": [
+          {
+            "name": "Atlas Storage Usage",
+            "type": "Usage",
+            "model": "PerUnit",
+            "uom": "GB-Month",
+            "billingPeriod": "Month",
+            "billingTiming": "InArrears",
+            "billingDay": null,
+            "billingPeriodAlignment": null,
+            "listPriceBase": "Per Unit",
+            "triggerEvent": "ContractEffective",
+            "specificTriggerDate": null,
+            "endDateCondition": "Subscription_End",
+            "specificEndDate": null,
+            "quantity": null,
+            "listPrice": 0.25,
+            "sellPrice": 0.25,
+            "price": 0.25,
+            "effectiveStartDate": "2026-01-01",
+            "effectiveEndDate": "2028-01-01",
+            "chargeFunction": "None",
+            "isAllocationEligible": false,
+            "drawdownType": null,
+            "commitmentType": null,
+            "prepaymentUOM": null,
+            "prepaymentUnits": null,
+            "validityPeriod": null
+          },
+          {
+            "name": "Atlas Data Transfer Usage",
+            "type": "Usage",
+            "model": "PerUnit",
+            "uom": "GB",
+            "billingPeriod": "Month",
+            "billingTiming": "InArrears",
+            "billingDay": null,
+            "billingPeriodAlignment": null,
+            "listPriceBase": "Per Unit",
+            "triggerEvent": "ContractEffective",
+            "specificTriggerDate": null,
+            "endDateCondition": "Subscription_End",
+            "specificEndDate": null,
+            "quantity": null,
+            "listPrice": 0.1,
+            "sellPrice": 0.1,
+            "price": 0.1,
+            "effectiveStartDate": "2026-01-01",
+            "effectiveEndDate": "2028-01-01",
+            "chargeFunction": "None",
+            "isAllocationEligible": false,
+            "drawdownType": null,
+            "commitmentType": null,
+            "prepaymentUOM": null,
+            "prepaymentUnits": null,
+            "validityPeriod": null
+          }
+        ]
+      },
+      {
+        "productName": "MongoDB Professional Services",
+        "ratePlanName": "Migration / Onboarding Professional Services (Milestones)",
+        "charges": [
+          {
+            "name": "PS Milestone - Kickoff (25%)",
+            "type": "OneTime",
+            "model": "FlatFee",
+            "uom": null,
+            "billingPeriod": null,
+            "billingTiming": "InAdvance",
+            "billingDay": null,
+            "billingPeriodAlignment": null,
+            "listPriceBase": null,
+            "triggerEvent": "SpecificDate",
+            "specificTriggerDate": "2026-01-01",
+            "endDateCondition": "OneTime",
+            "specificEndDate": null,
+            "quantity": 1,
+            "listPrice": 18750,
+            "sellPrice": 18750,
+            "price": 18750,
+            "effectiveStartDate": "2026-01-01",
+            "effectiveEndDate": null,
+            "chargeFunction": "None",
+            "isAllocationEligible": true,
+            "drawdownType": null,
+            "commitmentType": null,
+            "prepaymentUOM": null,
+            "prepaymentUnits": null,
+            "validityPeriod": null
+          },
+          {
+            "name": "PS Milestone - Data Migration Complete (50%)",
+            "type": "OneTime",
+            "model": "FlatFee",
+            "uom": null,
+            "billingPeriod": null,
+            "billingTiming": "InAdvance",
+            "billingDay": null,
+            "billingPeriodAlignment": null,
+            "listPriceBase": null,
+            "triggerEvent": "SpecificDate",
+            "specificTriggerDate": "2026-04-01",
+            "endDateCondition": "OneTime",
+            "specificEndDate": null,
+            "quantity": 1,
+            "listPrice": 37500,
+            "sellPrice": 37500,
+            "price": 37500,
+            "effectiveStartDate": "2026-04-01",
+            "effectiveEndDate": null,
+            "chargeFunction": "None",
+            "isAllocationEligible": true,
+            "drawdownType": null,
+            "commitmentType": null,
+            "prepaymentUOM": null,
+            "prepaymentUnits": null,
+            "validityPeriod": null
+          },
+          {
+            "name": "PS Milestone - Go-Live (25%)",
+            "type": "OneTime",
+            "model": "FlatFee",
+            "uom": null,
+            "billingPeriod": null,
+            "billingTiming": "InAdvance",
+            "billingDay": null,
+            "billingPeriodAlignment": null,
+            "listPriceBase": null,
+            "triggerEvent": "SpecificDate",
+            "specificTriggerDate": "2026-06-30",
+            "endDateCondition": "OneTime",
+            "specificEndDate": null,
+            "quantity": 1,
+            "listPrice": 18750,
+            "sellPrice": 18750,
+            "price": 18750,
+            "effectiveStartDate": "2026-06-30",
+            "effectiveEndDate": null,
+            "chargeFunction": "None",
+            "isAllocationEligible": true,
+            "drawdownType": null,
+            "commitmentType": null,
+            "prepaymentUOM": null,
+            "prepaymentUnits": null,
+            "validityPeriod": null
+          }
+        ]
+      }
+    ],
+    "usage": [
+      {
+        "Date": "2026-01-31",
+        "UOM": "GB-Month",
+        "Quantity": 1200,
+        "Charge Name": "Atlas Storage Usage",
+        "Amount": 300
+      },
+      {
+        "Date": "2026-01-31",
+        "UOM": "GB",
+        "Quantity": 800,
+        "Charge Name": "Atlas Data Transfer Usage",
+        "Amount": 80
+      },
+      {
+        "Date": "2026-02-28",
+        "UOM": "GB-Month",
+        "Quantity": 1350,
+        "Charge Name": "Atlas Storage Usage",
+        "Amount": 337.5
+      },
+      {
+        "Date": "2026-02-28",
+        "UOM": "GB",
+        "Quantity": 920,
+        "Charge Name": "Atlas Data Transfer Usage",
+        "Amount": 92
+      },
+      {
+        "Date": "2026-03-31",
+        "UOM": "GB-Month",
+        "Quantity": 1500,
+        "Charge Name": "Atlas Storage Usage",
+        "Amount": 375
+      },
+      {
+        "Date": "2026-03-31",
+        "UOM": "GB",
+        "Quantity": 1100,
+        "Charge Name": "Atlas Data Transfer Usage",
+        "Amount": 110
+      },
+      {
+        "Date": "2026-10-31",
+        "UOM": "GB-Month",
+        "Quantity": 2100,
+        "Charge Name": "Atlas Storage Usage",
+        "Amount": 525
+      },
+      {
+        "Date": "2026-10-31",
+        "UOM": "GB",
+        "Quantity": 1650,
+        "Charge Name": "Atlas Data Transfer Usage",
+        "Amount": 165
+      }
+    ],
+    "assumptions": [
+      "Term end is derived from serviceStart 2026-01-01 plus 24 months, resulting in subscriptionEndDate 2028-01-01 (service period last day 2027-12-31).",
+      "Month 10 add-on is effective 2026-10-01 (co-termed through 2027-12-31) and is modeled as a prospective new charge segment (not a retrospective repricing of the original 3 clusters).",
+      "18% enterprise discount is implemented via reduced sellPrice on fixed recurring charges (clusters and backup) only; usage and professional services remain at list price per requirement.",
+      "Usage charges are treated as variable consideration and excluded from allocation (isAllocationEligible=false) to avoid allocating fixed discount into variable usage amounts.",
+      "Professional services milestone dates are assumed for modeling: kickoff=2026-01-01, migration complete=2026-04-01, go-live=2026-06-30; these should be updated to the actual milestone completion dates in production."
+    ],
+    "open_questions": [
+      "Confirm the exact effective date for the Month 10 add-on (is it 2026-10-01, or a mid-month date requiring proration).",
+      "Confirm actual milestone completion/billing dates for PS (kickoff, data migration complete, go-live) and whether billing can occur before completion.",
+      "Should backup apply to all clusters starting month 10 exactly (quantity=4), or should backup be modeled as quantity=3 plus an incremental quantity=1 to align strictly with cluster adds?",
+      "Do you want booking-based release (BK-OT-RATABLE) for recurring items, or billing-based release (BL-OT-INVRATABLE) to align contract liability strictly to invoicing timing?"
+    ]
+  },
+  "pob_mapping": {
+    "charge_pob_map": [
+      {
+        "chargeName": "M50 Cluster Commitment - Base (3 Clusters)",
+        "productName": "MongoDB Atlas Enterprise - Committed Clusters",
+        "ratePlanName": "Atlas M50 Cluster Commitment (EA)",
+        "pob_identifier": "BK-OT-RATABLE",
+        "pob_name": "Committed Cluster Capacity (Base 3 M50)",
+        "ratable_method": "Ratable",
+        "release_event": "Upon Booking (Full Booking Release)",
+        "recognition_window": {
+          "start": "2026-01-01",
+          "end": "2027-12-31"
+        },
+        "rationale": "Fixed committed capacity; revenue recognized ratably over the full contract term regardless of monthly billing.",
+        "confidence": 0.9,
+        "alternatives": [
+          {
+            "pob_identifier": "BL-OT-INVRATABLE",
+            "pob_name": "Committed Cluster Capacity (Invoice Ratable)",
+            "why_not": "Would recognize invoice-by-invoice (monthly) rather than a single booking-based ratable schedule over the 24-month term."
+          }
+        ]
+      },
+      {
+        "chargeName": "M50 Cluster Commitment - Add-on (1 Cluster from Month 10)",
+        "productName": "MongoDB Atlas Enterprise - Committed Clusters",
+        "ratePlanName": "Atlas M50 Cluster Commitment (EA)",
+        "pob_identifier": "BK-OT-RATABLE",
+        "pob_name": "Committed Cluster Capacity (Add-on 1 M50, Co-termed)",
+        "ratable_method": "Ratable",
+        "release_event": "Upon Booking (Full Booking Release)",
+        "recognition_window": {
+          "start": "2026-10-01",
+          "end": "2027-12-31"
+        },
+        "rationale": "Prospective add-on deliverable co-termed to the EA; revenue recognized ratably from activation through term end.",
+        "confidence": 0.88,
+        "alternatives": [
+          {
+            "pob_identifier": "BL-OT-INVRATABLE",
+            "pob_name": "Add-on Cluster Capacity (Invoice Ratable)",
+            "why_not": "Does not match the stated expectation of ratable recognition from activation over the remaining contract period independent of billing pattern."
+          }
+        ]
+      },
+      {
+        "chargeName": "Premium Backup - Per Cluster (4 Clusters from Month 10)",
+        "productName": "MongoDB Atlas Enterprise - Premium Backup",
+        "ratePlanName": "Premium Backup Add-on (EA)",
+        "pob_identifier": "BK-OT-RATABLE",
+        "pob_name": "Premium Backup Add-on (Co-termed, Month 10+)",
+        "ratable_method": "Ratable",
+        "release_event": "Upon Booking (Full Booking Release)",
+        "recognition_window": {
+          "start": "2026-10-01",
+          "end": "2027-12-31"
+        },
+        "rationale": "Fixed recurring add-on activated in month 10; recognized ratably from activation through contract end.",
+        "confidence": 0.87,
+        "alternatives": [
+          {
+            "pob_identifier": "BL-OT-INVRATABLE",
+            "pob_name": "Premium Backup (Invoice Ratable)",
+            "why_not": "Would typically ratable only over invoice periods; less aligned to a single co-termed service period from activation to term end."
+          }
+        ]
+      },
+      {
+        "chargeName": "Atlas Storage Usage",
+        "productName": "MongoDB Atlas - Metered Usage",
+        "ratePlanName": "Atlas Usage (Storage + Data Transfer)",
+        "pob_identifier": "EVT-PIT-CONSUMP-USAGE",
+        "pob_name": "Metered Storage (As-Consumed)",
+        "ratable_method": "Immediate Using Open Period",
+        "release_event": "Upon Consumption",
+        "recognition_window": {
+          "start": "2026-01-01",
+          "end": null
+        },
+        "rationale": "Usage is variable consideration and should be recognized as consumption events occur (GB-month usage records).",
+        "confidence": 0.92,
+        "alternatives": [
+          {
+            "pob_identifier": "BL-PIT-CONSUMP-PAYGO",
+            "pob_name": "Metered Storage (Billing PayGo)",
+            "why_not": "Would tie recognition to billing rather than consumption; not aligned to the explicit 'as-consumed' expectation."
+          }
+        ]
+      },
+      {
+        "chargeName": "Atlas Data Transfer Usage",
+        "productName": "MongoDB Atlas - Metered Usage",
+        "ratePlanName": "Atlas Usage (Storage + Data Transfer)",
+        "pob_identifier": "EVT-PIT-CONSUMP-USAGE",
+        "pob_name": "Metered Data Transfer (As-Consumed)",
+        "ratable_method": "Immediate Using Open Period",
+        "release_event": "Upon Consumption",
+        "recognition_window": {
+          "start": "2026-01-01",
+          "end": null
+        },
+        "rationale": "Usage is variable consideration and recognized upon consumption (GB usage records).",
+        "confidence": 0.92,
+        "alternatives": [
+          {
+            "pob_identifier": "BL-PIT-CONSUMP-PAYGO",
+            "pob_name": "Metered Data Transfer (Billing PayGo)",
+            "why_not": "Recognizes based on billed amounts instead of consumption events."
+          }
+        ]
+      },
+      {
+        "chargeName": "PS Milestone - Kickoff (25%)",
+        "productName": "MongoDB Professional Services",
+        "ratePlanName": "Migration / Onboarding Professional Services (Milestones)",
+        "pob_identifier": "EVT-PIT-COMPLETION",
+        "pob_name": "Professional Services - Kickoff Milestone",
+        "ratable_method": "Immediate Using Open Period",
+        "release_event": "Completion",
+        "recognition_window": {
+          "start": "2026-01-01",
+          "end": null
+        },
+        "rationale": "Milestone-based professional services; recognize revenue when the kickoff milestone is completed.",
+        "confidence": 0.84,
+        "alternatives": [
+          {
+            "pob_identifier": "BK-PIT-STARTDATE",
+            "pob_name": "Professional Services - Kickoff (Immediate on Start)",
+            "why_not": "If kickoff completion is tracked as an operational event, event-based completion provides cleaner auditability than automatic start-date recognition."
+          }
+        ]
+      },
+      {
+        "chargeName": "PS Milestone - Data Migration Complete (50%)",
+        "productName": "MongoDB Professional Services",
+        "ratePlanName": "Migration / Onboarding Professional Services (Milestones)",
+        "pob_identifier": "EVT-PIT-COMPLETION",
+        "pob_name": "Professional Services - Data Migration Complete Milestone",
+        "ratable_method": "Immediate Using Open Period",
+        "release_event": "Completion",
+        "recognition_window": {
+          "start": "2026-04-01",
+          "end": null
+        },
+        "rationale": "Recognize upon completion of the data migration milestone (distinct delivery point).",
+        "confidence": 0.86,
+        "alternatives": [
+          {
+            "pob_identifier": "BL-PIT-CURRENT_PERIOD",
+            "pob_name": "Professional Services - Migration Milestone (Billed PIT)",
+            "why_not": "Billing may not always coincide with completion; completion-based template better matches 'milestones achieved'."
+          }
+        ]
+      },
+      {
+        "chargeName": "PS Milestone - Go-Live (25%)",
+        "productName": "MongoDB Professional Services",
+        "ratePlanName": "Migration / Onboarding Professional Services (Milestones)",
+        "pob_identifier": "EVT-PIT-COMPLETION",
+        "pob_name": "Professional Services - Go-Live Milestone",
+        "ratable_method": "Immediate Using Open Period",
+        "release_event": "Completion",
+        "recognition_window": {
+          "start": "2026-06-30",
+          "end": null
+        },
+        "rationale": "Recognize revenue when go-live milestone is completed; aligns to milestone deliverable and acceptance of completion.",
+        "confidence": 0.85,
+        "alternatives": [
+          {
+            "pob_identifier": "EVT-PIT-ACCEPTAN",
+            "pob_name": "Professional Services - Go-Live (Acceptance)",
+            "why_not": "Use only if the control transfer criterion is formal customer acceptance rather than internal completion."
+          }
+        ]
+      }
+    ],
+    "mapping_notes": [
+      "For EVT-PIT-CONSUMP-USAGE usage POBs, Zuora Revenue must receive consumption/usage events (typically from usage interface) so revenue releases upon consumption rather than upon billing.",
+      "For EVT-PIT-COMPLETION PS milestones, ensure completion events (or the equivalent event feed) are created in Zuora Revenue at the time each milestone is achieved; otherwise revenue may not release.",
+      "Allocation method is assumed to be based on list price/SSP; with usage excluded from allocation eligibility, allocation should primarily affect the fixed recurring + PS POBs."
+    ]
+  },
+  "contracts_orders": {
+    "zr_contracts_orders": [
+      {
+        "POB Name": "Committed Cluster Capacity (Base 3 M50)",
+        "POB Template": "BK-OT-RATABLE",
+        "POB Satisfied": false,
+        "Release Event": "Upon Booking (Full Booking Release)",
+        "Billing Period": "Month",
+        "Billing Timing": "InAdvance",
+        "Terms Months": 24,
+        "Trigger Event": "ContractEffective",
+        "Lead Line": true,
+        "Ordered Qty": 72,
+        "Line Item Num": 1,
+        "Subscription Name": "MongoDB Atlas - 24M Enterprise Agreement (Clusters + Usage + PS) - 2026-01-01",
+        "Subscription Version": 1,
+        "Sales Order Date": "2026-01-01",
+        "RPC Segment": "M50_CLUSTER_BASE_3",
+        "RPC Type": "Recurring",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Unit List Price": 2500,
+        "Unit Sell Price": 2050,
+        "Ext List Price": 180000,
+        "Ext Sell Price": 147600,
+        "SSP Price": 2500,
+        "Ext SSP Price": 180000,
+        "SSP Percent": 72.727273,
+        "Ext Allocated Price": 147600,
+        "Carves Adjustment": 0,
+        "Allocation Eligible Flag": true,
+        "Unreleased Revenue": 147600,
+        "Released Revenue": 0,
+        "Customer Name": "MongoDB Atlas",
+        "POB IDENTIFIER": "BK-OT-RATABLE",
+        "Product Category": "Committed Clusters",
+        "Product Family": "Atlas M50"
+      },
+      {
+        "POB Name": "Committed Cluster Capacity (Add-on 1 M50, Co-termed)",
+        "POB Template": "BK-OT-RATABLE",
+        "POB Satisfied": false,
+        "Release Event": "Upon Booking (Full Booking Release)",
+        "Billing Period": "Month",
+        "Billing Timing": "InAdvance",
+        "Terms Months": 15,
+        "Trigger Event": "ContractEffective",
+        "Lead Line": false,
+        "Ordered Qty": 15,
+        "Line Item Num": 2,
+        "Subscription Name": "MongoDB Atlas - 24M Enterprise Agreement (Clusters + Usage + PS) - 2026-01-01",
+        "Subscription Version": 2,
+        "Sales Order Date": "2026-10-01",
+        "RPC Segment": "M50_CLUSTER_ADDON_1_M10",
+        "RPC Type": "Recurring",
+        "Revenue Start Date": "2026-10-01",
+        "Revenue End Date": "2027-12-31",
+        "Unit List Price": 2500,
+        "Unit Sell Price": 2050,
+        "Ext List Price": 37500,
+        "Ext Sell Price": 30750,
+        "SSP Price": 2500,
+        "Ext SSP Price": 37500,
+        "SSP Percent": 15.151515,
+        "Ext Allocated Price": 30750,
+        "Carves Adjustment": 0,
+        "Allocation Eligible Flag": true,
+        "Unreleased Revenue": 30750,
+        "Released Revenue": 0,
+        "Customer Name": "MongoDB Atlas",
+        "POB IDENTIFIER": "BK-OT-RATABLE",
+        "Product Category": "Committed Clusters",
+        "Product Family": "Atlas M50"
+      },
+      {
+        "POB Name": "Premium Backup Add-on (Co-termed, Month 10+)",
+        "POB Template": "BK-OT-RATABLE",
+        "POB Satisfied": false,
+        "Release Event": "Upon Booking (Full Booking Release)",
+        "Billing Period": "Month",
+        "Billing Timing": "InAdvance",
+        "Terms Months": 15,
+        "Trigger Event": "ContractEffective",
+        "Lead Line": false,
+        "Ordered Qty": 60,
+        "Line Item Num": 3,
+        "Subscription Name": "MongoDB Atlas - 24M Enterprise Agreement (Clusters + Usage + PS) - 2026-01-01",
+        "Subscription Version": 2,
+        "Sales Order Date": "2026-10-01",
+        "RPC Segment": "PREMIUM_BACKUP_4_M10",
+        "RPC Type": "Recurring",
+        "Revenue Start Date": "2026-10-01",
+        "Revenue End Date": "2027-12-31",
+        "Unit List Price": 500,
+        "Unit Sell Price": 410,
+        "Ext List Price": 30000,
+        "Ext Sell Price": 24600,
+        "SSP Price": 500,
+        "Ext SSP Price": 30000,
+        "SSP Percent": 12.121212,
+        "Ext Allocated Price": 24600,
+        "Carves Adjustment": 0,
+        "Allocation Eligible Flag": true,
+        "Unreleased Revenue": 24600,
+        "Released Revenue": 0,
+        "Customer Name": "MongoDB Atlas",
+        "POB IDENTIFIER": "BK-OT-RATABLE",
+        "Product Category": "Add-ons",
+        "Product Family": "Premium Backup"
+      },
+      {
+        "POB Name": "Metered Storage (As-Consumed)",
+        "POB Template": "EVT-PIT-CONSUMP-USAGE",
+        "POB Satisfied": false,
+        "Release Event": "Upon Consumption",
+        "Billing Period": "Month",
+        "Billing Timing": "InArrears",
+        "Terms Months": 24,
+        "Trigger Event": "ContractEffective",
+        "Lead Line": false,
+        "Ordered Qty": 0,
+        "Line Item Num": 4,
+        "Subscription Name": "MongoDB Atlas - 24M Enterprise Agreement (Clusters + Usage + PS) - 2026-01-01",
+        "Subscription Version": 1,
+        "Sales Order Date": "2026-01-01",
+        "RPC Segment": "USAGE_STORAGE",
+        "RPC Type": "Usage",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Unit List Price": 0.25,
+        "Unit Sell Price": 0.25,
+        "Ext List Price": 0,
+        "Ext Sell Price": 0,
+        "SSP Price": 0.25,
+        "Ext SSP Price": 0,
+        "SSP Percent": 0,
+        "Ext Allocated Price": 0,
+        "Carves Adjustment": 0,
+        "Allocation Eligible Flag": false,
+        "Unreleased Revenue": 0,
+        "Released Revenue": 0,
+        "Customer Name": "MongoDB Atlas",
+        "POB IDENTIFIER": "EVT-PIT-CONSUMP-USAGE",
+        "Product Category": "Usage",
+        "Product Family": "Storage"
+      },
+      {
+        "POB Name": "Metered Data Transfer (As-Consumed)",
+        "POB Template": "EVT-PIT-CONSUMP-USAGE",
+        "POB Satisfied": false,
+        "Release Event": "Upon Consumption",
+        "Billing Period": "Month",
+        "Billing Timing": "InArrears",
+        "Terms Months": 24,
+        "Trigger Event": "ContractEffective",
+        "Lead Line": false,
+        "Ordered Qty": 0,
+        "Line Item Num": 5,
+        "Subscription Name": "MongoDB Atlas - 24M Enterprise Agreement (Clusters + Usage + PS) - 2026-01-01",
+        "Subscription Version": 1,
+        "Sales Order Date": "2026-01-01",
+        "RPC Segment": "USAGE_DATA_TRANSFER",
+        "RPC Type": "Usage",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Unit List Price": 0.1,
+        "Unit Sell Price": 0.1,
+        "Ext List Price": 0,
+        "Ext Sell Price": 0,
+        "SSP Price": 0.1,
+        "Ext SSP Price": 0,
+        "SSP Percent": 0,
+        "Ext Allocated Price": 0,
+        "Carves Adjustment": 0,
+        "Allocation Eligible Flag": false,
+        "Unreleased Revenue": 0,
+        "Released Revenue": 0,
+        "Customer Name": "MongoDB Atlas",
+        "POB IDENTIFIER": "EVT-PIT-CONSUMP-USAGE",
+        "Product Category": "Usage",
+        "Product Family": "Data Transfer"
+      },
+      {
+        "POB Name": "Professional Services - Kickoff Milestone",
+        "POB Template": "EVT-PIT-COMPLETION",
+        "POB Satisfied": false,
+        "Release Event": "Completion",
+        "Billing Period": "N/A",
+        "Billing Timing": "InAdvance",
+        "Terms Months": 0,
+        "Trigger Event": "SpecificDate",
+        "Lead Line": false,
+        "Ordered Qty": 1,
+        "Line Item Num": 6,
+        "Subscription Name": "MongoDB Atlas - 24M Enterprise Agreement (Clusters + Usage + PS) - 2026-01-01",
+        "Subscription Version": 1,
+        "Sales Order Date": "2026-01-01",
+        "RPC Segment": "PS_KICKOFF_25PCT",
+        "RPC Type": "OneTime",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-01-01",
+        "Unit List Price": 18750,
+        "Unit Sell Price": 18750,
+        "Ext List Price": 18750,
+        "Ext Sell Price": 18750,
+        "SSP Price": 18750,
+        "Ext SSP Price": 18750,
+        "SSP Percent": 0,
+        "Ext Allocated Price": 18750,
+        "Carves Adjustment": 0,
+        "Allocation Eligible Flag": false,
+        "Unreleased Revenue": 18750,
+        "Released Revenue": 0,
+        "Customer Name": "MongoDB Atlas",
+        "POB IDENTIFIER": "EVT-PIT-COMPLETION",
+        "Product Category": "Professional Services",
+        "Product Family": "Migration/Onboarding"
+      },
+      {
+        "POB Name": "Professional Services - Data Migration Complete Milestone",
+        "POB Template": "EVT-PIT-COMPLETION",
+        "POB Satisfied": false,
+        "Release Event": "Completion",
+        "Billing Period": "N/A",
+        "Billing Timing": "InAdvance",
+        "Terms Months": 0,
+        "Trigger Event": "SpecificDate",
+        "Lead Line": false,
+        "Ordered Qty": 1,
+        "Line Item Num": 7,
+        "Subscription Name": "MongoDB Atlas - 24M Enterprise Agreement (Clusters + Usage + PS) - 2026-01-01",
+        "Subscription Version": 1,
+        "Sales Order Date": "2026-01-01",
+        "RPC Segment": "PS_DATA_MIGRATION_COMPLETE_50PCT",
+        "RPC Type": "OneTime",
+        "Revenue Start Date": "2026-04-01",
+        "Revenue End Date": "2026-04-01",
+        "Unit List Price": 37500,
+        "Unit Sell Price": 37500,
+        "Ext List Price": 37500,
+        "Ext Sell Price": 37500,
+        "SSP Price": 37500,
+        "Ext SSP Price": 37500,
+        "SSP Percent": 0,
+        "Ext Allocated Price": 37500,
+        "Carves Adjustment": 0,
+        "Allocation Eligible Flag": false,
+        "Unreleased Revenue": 37500,
+        "Released Revenue": 0,
+        "Customer Name": "MongoDB Atlas",
+        "POB IDENTIFIER": "EVT-PIT-COMPLETION",
+        "Product Category": "Professional Services",
+        "Product Family": "Migration/Onboarding"
+      },
+      {
+        "POB Name": "Professional Services - Go-Live Milestone",
+        "POB Template": "EVT-PIT-COMPLETION",
+        "POB Satisfied": false,
+        "Release Event": "Completion",
+        "Billing Period": "N/A",
+        "Billing Timing": "InAdvance",
+        "Terms Months": 0,
+        "Trigger Event": "SpecificDate",
+        "Lead Line": false,
+        "Ordered Qty": 1,
+        "Line Item Num": 8,
+        "Subscription Name": "MongoDB Atlas - 24M Enterprise Agreement (Clusters + Usage + PS) - 2026-01-01",
+        "Subscription Version": 1,
+        "Sales Order Date": "2026-01-01",
+        "RPC Segment": "PS_GO_LIVE_25PCT",
+        "RPC Type": "OneTime",
+        "Revenue Start Date": "2026-06-30",
+        "Revenue End Date": "2026-06-30",
+        "Unit List Price": 18750,
+        "Unit Sell Price": 18750,
+        "Ext List Price": 18750,
+        "Ext Sell Price": 18750,
+        "SSP Price": 18750,
+        "Ext SSP Price": 18750,
+        "SSP Percent": 0,
+        "Ext Allocated Price": 18750,
+        "Carves Adjustment": 0,
+        "Allocation Eligible Flag": false,
+        "Unreleased Revenue": 18750,
+        "Released Revenue": 0,
+        "Customer Name": "MongoDB Atlas",
+        "POB IDENTIFIER": "EVT-PIT-COMPLETION",
+        "Product Category": "Professional Services",
+        "Product Family": "Migration/Onboarding"
+      }
+    ],
+    "assumptions": [
+      "Recurring ‘Ordered Qty’ is expressed in unit-months so Ext List/Sell represent total contract value for the revenue term: Base clusters = 3×24=72; Add-on cluster = 1×15=15; Premium Backup = 4×15=60.",
+      "An 18% enterprise discount is applied only to fixed recurring components (clusters and backup), so Unit Sell Price = Unit List Price × 0.82 for those lines; usage and services are not discounted.",
+      "Month-10 changes are modeled as a co-termed amendment (Subscription Version = 2) with Sales Order Date = 2026-10-01; revenue for those POBs starts 2026-10-01 and ends 2027-12-31.",
+      "Allocation method ‘Use List Price’ is implemented as SSP Price = Unit List Price. Relative SSP allocation is applied only to allocation-eligible (fixed recurring) lines; PS milestones and usage are set Allocation Eligible Flag = false to keep their consideration from being reallocated.",
+      "Usage lines are included at contract inception with Ordered Qty/Ext amounts = 0 because actual billable usage quantities are unknown at booking; usage-based revenue is expected to be driven by monthly usage transactions (in arrears) and recognized as-consumed.",
+      "Revenue End Date for the 24-month term is represented as 2027-12-31 (with subscription end 2028-01-01) to match the provided POB mappings.",
+      "No carve-ins/outs, ramp averaging, or variable consideration constraint adjustments were applied (Carves Adjustment = 0 on all lines)."
+    ],
+    "open_questions": [
+      "Should Professional Services milestone POBs participate in SSP allocation (and potentially absorb a portion of the recurring discount), or remain excluded as modeled?",
+      "Should usage be treated as variable consideration that is always excluded from allocation (and created only via usage uploads), or do you want an estimated usage amount included in initial allocation?",
+      "Confirm the exact amendment effective date for the added 4th cluster and Premium Backup activation (assumed 2026-10-01) and whether any intra-month proration is required.",
+      "Confirm whether Premium Backup is priced and sold for all 4 clusters starting month 10 exactly as stated, or whether it should apply only to the incremental cluster initially.",
+      "Confirm the operational milestone completion dates (especially Go-Live on 2026-06-30) and whether revenue should release on completion date or customer acceptance date if different.",
+      "Confirm whether ‘Upon Booking (Full Booking Release)’ is the intended release event wording/config for BK-OT-RATABLE in your ZR setup (vs. a different release event label)."
+    ]
+  },
+  "billings": {
+    "zb_billings": [
+      {
+        "Invoice Date": "01/01/2026",
+        "Billing Date": "01/01/2026",
+        "Charge Name": "M50 Cluster Commitment - Base (3 Clusters)",
+        "Rate Plan": "Atlas M50 Cluster Commitment (EA)",
+        "Product": "MongoDB Atlas Enterprise - Committed Clusters",
+        "Billing Period Start": "01/01/2026",
+        "Billing Period End": "02/01/2026",
+        "Quantity": 3,
+        "Unit Price": 2050,
+        "Amount": 6150,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "01/01/2026",
+        "Billing Date": "01/01/2026",
+        "Charge Name": "PS Milestone - Kickoff (25%)",
+        "Rate Plan": "Migration / Onboarding Professional Services (Milestones)",
+        "Product": "MongoDB Professional Services",
+        "Billing Period Start": "01/01/2026",
+        "Billing Period End": "01/01/2026",
+        "Quantity": 1,
+        "Unit Price": 18750,
+        "Amount": 18750,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "02/01/2026",
+        "Billing Date": "02/01/2026",
+        "Charge Name": "Atlas Data Transfer Usage",
+        "Rate Plan": "Atlas Usage (Storage + Data Transfer)",
+        "Product": "MongoDB Atlas - Metered Usage",
+        "Billing Period Start": "01/01/2026",
+        "Billing Period End": "02/01/2026",
+        "Quantity": 0,
+        "Unit Price": 0.1,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "02/01/2026",
+        "Billing Date": "02/01/2026",
+        "Charge Name": "Atlas Storage Usage",
+        "Rate Plan": "Atlas Usage (Storage + Data Transfer)",
+        "Product": "MongoDB Atlas - Metered Usage",
+        "Billing Period Start": "01/01/2026",
+        "Billing Period End": "02/01/2026",
+        "Quantity": 0,
+        "Unit Price": 0.25,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "02/01/2026",
+        "Billing Date": "02/01/2026",
+        "Charge Name": "M50 Cluster Commitment - Base (3 Clusters)",
+        "Rate Plan": "Atlas M50 Cluster Commitment (EA)",
+        "Product": "MongoDB Atlas Enterprise - Comitted Clusters",
+        "Billing Period Start": "02/01/2026",
+        "Billing Period End": "03/01/2026",
+        "Quantity": 3,
+        "Unit Price": 2050,
+        "Amount": 6150,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "03/01/2026",
+        "Billing Date": "03/01/2026",
+        "Charge Name": "Atlas Data Transfer Usage",
+        "Rate Plan": "Atlas Usage (Storage + Data Transfer)",
+        "Product": "MongoDB Atlas - Metered Usage",
+        "Billing Period Start": "02/01/2026",
+        "Billing Period End": "03/01/2026",
+        "Quantity": 0,
+        "Unit Price": 0.1,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "03/01/2026",
+        "Billing Date": "03/01/2026",
+        "Charge Name": "Atlas Storage Usage",
+        "Rate Plan": "Atlas Usage (Storage + Data Transfer)",
+        "Product": "MongoDB Atlas - Metered Usage",
+        "Billing Period Start": "02/01/2026",
+        "Billing Period End": "03/01/2026",
+        "Quantity": 0,
+        "Unit Price": 0.25,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "03/01/2026",
+        "Billing Date": "03/01/2026",
+        "Charge Name": "M50 Cluster Commitment - Base (3 Clusters)",
+        "Rate Plan": "Atlas M50 Cluster Commitment (EA)",
+        "Product": "MongoDB Atlas Enterprise - Committed Clusters",
+        "Billing Period Start": "03/01/2026",
+        "Billing Period End": "04/01/2026",
+        "Quantity": 3,
+        "Unit Price": 2050,
+        "Amount": 6150,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "04/01/2026",
+        "Billing Date": "04/01/2026",
+        "Charge Name": "Atlas Data Transfer Usage",
+        "Rate Plan": "Atlas Usage (Storage + Data Transfer)",
+        "Product": "MongoDB Atlas - Metered Usage",
+        "Billing Period Start": "03/01/2026",
+        "Billing Period End": "04/01/2026",
+        "Quantity": 0,
+        "Unit Price": 0.1,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "04/01/2026",
+        "Billing Date": "04/01/2026",
+        "Charge Name": "Atlas Storage Usage",
+        "Rate Plan": "Atlas Usage (Storage + Data Transfer)",
+        "Product": "MongoDB Atlas - Metered Usage",
+        "Billing Period Start": "03/01/2026",
+        "Billing Period End": "04/01/2026",
+        "Quantity": 0,
+        "Unit Price": 0.25,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "04/01/2026",
+        "Billing Date": "04/01/2026",
+        "Charge Name": "M50 Cluster Commitment - Base (3 Clusters)",
+        "Rate Plan": "Atlas M50 Cluster Commitment (EA)",
+        "Product": "MongoDB Atlas Enterprise - Committed Clusters",
+        "Billing Period Start": "04/01/2026",
+        "Billing Period End": "05/01/2026",
+        "Quantity": 3,
+        "Unit Price": 2050,
+        "Amount": 6150,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "04/01/2026",
+        "Billing Date": "04/01/2026",
+        "Charge Name": "PS Milestone - Data Migration Complete (50%)",
+        "Rate Plan": "Migration / Onboarding Professional Services (Milestones)",
+        "Product": "MongoDB Professional Services",
+        "Billing Period Start": "04/01/2026",
+        "Billing Period End": "04/01/2026",
+        "Quantity": 1,
+        "Unit Price": 37500,
+        "Amount": 37500,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "05/01/2026",
+        "Billing Date": "05/01/2026",
+        "Charge Name": "Atlas Data Transfer Usage",
+        "Rate Plan": "Atlas Usage (Storage + Data Transfer)",
+        "Product": "MongoDB Atlas - Metered Usage",
+        "Billing Period Start": "04/01/2026",
+        "Billing Period End": "05/01/2026",
+        "Quantity": 0,
+        "Unit Price": 0.1,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "05/01/2026",
+        "Billing Date": "05/01/2026",
+        "Charge Name": "Atlas Storage Usage",
+        "Rate Plan": "Atlas Usage (Storage + Data Transfer)",
+        "Product": "MongoDB Atlas - Metered Usage",
+        "Billing Period Start": "04/01/2026",
+        "Billing Period End": "05/01/2026",
+        "Quantity": 0,
+        "Unit Price": 0.25,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "05/01/2026",
+        "Billing Date": "05/01/2026",
+        "Charge Name": "M50 Cluster Commitment - Base (3 Clusters)",
+        "Rate Plan": "Atlas M50 Cluster Commitment (EA)",
+        "Product": "MongoDB Atlas Enterprise - Committed Clusters",
+        "Billing Period Start": "05/01/2026",
+        "Billing Period End": "06/01/2026",
+        "Quantity": 3,
+        "Unit Price": 2050,
+        "Amount": 6150,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "06/01/2026",
+        "Billing Date": "06/01/2026",
+        "Charge Name": "Atlas Data Transfer Usage",
+        "Rate Plan": "Atlas Usage (Storage + Data Transfer)",
+        "Product": "MongoDB Atlas - Metered Usage",
+        "Billing Period Start": "05/01/2026",
+        "Billing Period End": "06/01/2026",
+        "Quantity": 0,
+        "Unit Price": 0.1,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "06/01/2026",
+        "Billing Date": "06/01/2026",
+        "Charge Name": "Atlas Storage Usage",
+        "Rate Plan": "Atlas Usage (Storage + Data Transfer)",
+        "Product": "MongoDB Atlas - Metered Usage",
+        "Billing Period Start": "05/01/2026",
+        "Billing Period End": "06/01/2026",
+        "Quantity": 0,
+        "Unit Price": 0.25,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "06/01/2026",
+        "Billing Date": "06/01/2026",
+        "Charge Name": "M50 Cluster Commitment - Base (3 Clusters)",
+        "Rate Plan": "Atlas M50 Cluster Commitment (EA)",
+        "Product": "MongoDB Atlas Enterprise - Committed Clusters",
+        "Billing Period Start": "06/01/2026",
+        "Billing Period End": "07/01/2026",
+        "Quantity": 3,
+        "Unit Price": 2050,
+        "Amount": 6150,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "07/01/2026",
+        "Billing Date": "07/01/2026",
+        "Charge Name": "Atlas Data Transfer Usage",
+        "Rate Plan": "Atlas Usage (Storage + Data Transfer)",
+        "Product": "MongoDB Atlas - Metered Usage",
+        "Billing Period Start": "06/01/2026",
+        "Billing Period End": "07/01/2026",
+        "Quantity": 0,
+        "Unit Price": 0.1,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "07/01/2026",
+        "Billing Date": "07/01/2026",
+        "Charge Name": "Atlas Storage Usage",
+        "Rate Plan": "Atlas Usage (Storage + Data Transfer)",
+        "Product": "MongoDB Atlas - Metered Usage",
+        "Billing Period Start": "06/01/2026",
+        "Billing Period End": "07/01/2026",
+        "Quantity": 0,
+        "Unit Price": 0.25,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "07/01/2026",
+        "Billing Date": "07/01/2026",
+        "Charge Name": "M50 Cluster Commitment - Base (3 Clusters)",
+        "Rate Plan": "Atlas M50 Cluster Commitment (EA)",
+        "Product": "MongoDB Atlas Enterprise - Committed Clusters",
+        "Billing Period Start": "07/01/2026",
+        "Billing Period End": "08/01/2026",
+        "Quantity": 3,
+        "Unit Price": 2050,
+        "Amount": 6150,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "07/01/2026",
+        "Billing Date": "07/01/2026",
+        "Charge Name": "PS Milestone - Go-Live (25%)",
+        "Rate Plan": "Migration / Onboarding Professional Services (Milestones)",
+        "Product": "MongoDB Professional Services",
+        "Billing Period Start": "07/01/2026",
+        "Billing Period End": "07/01/2026",
+        "Quantity": 1,
+        "Unit Price": 18750,
+        "Amount": 18750,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "08/01/2026",
+        "Billing Date": "08/01/2026",
+        "Charge Name": "Atlas Data Transfer Usage",
+        "Rate Plan": "Atlas Usage (Storage + Data Transfer)",
+        "Product": "MongoDB Atlas - Metered Usage",
+        "Billing Period Start": "07/01/2026",
+        "Billing Period End": "08/01/2026",
+        "Quantity": 0,
+        "Unit Price": 0.1,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "08/01/2026",
+        "Billing Date": "08/01/2026",
+        "Charge Name": "Atlas Storage Usage",
+        "Rate Plan": "Atlas Usage (Storage + Data Transfer)",
+        "Product": "MongoDB Atlas - Metered Usage",
+        "Billing Period Start": "07/01/2026",
+        "Billing Period End": "08/01/2026",
+        "Quantity": 0,
+        "Unit Price": 0.25,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "08/01/2026",
+        "Billing Date": "08/01/2026",
+        "Charge Name": "M50 Cluster Commitment - Base (3 Clusters)",
+        "Rate Plan": "Atlas M50 Cluster Commitment (EA)",
+        "Product": "MongoDB Atlas Enterprise - Committed Clusters",
+        "Billing Period Start": "08/01/2026",
+        "Billing Period End": "09/01/2026",
+        "Quantity": 3,
+        "Unit Price": 2050,
+        "Amount": 6150,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "09/01/2026",
+        "Billing Date": "09/01/2026",
+        "Charge Name": "Atlas Data Transfer Usage",
+        "Rate Plan": "Atlas Usage (Storage + Data Transfer)",
+        "Product": "MongoDB Atlas - Metered Usage",
+        "Billing Period Start": "08/01/2026",
+        "Billing Period End": "09/01/2026",
+        "Quantity": 0,
+        "Unit Price": 0.1,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "09/01/2026",
+        "Billing Date": "09/01/2026",
+        "Charge Name": "Atlas Storage Usage",
+        "Rate Plan": "Atlas Usage (Storage + Data Transfer)",
+        "Product": "MongoDB Atlas - Metered Usage",
+        "Billing Period Start": "08/01/2026",
+        "Billing Period End": "09/01/2026",
+        "Quantity": 0,
+        "Unit Price": 0.25,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "09/01/2026",
+        "Billing Date": "09/01/2026",
+        "Charge Name": "M50 Cluster Commitment - Base (3 Clusters)",
+        "Rate Plan": "Atlas M50 Cluster Commitment (EA)",
+        "Product": "MongoDB Atlas Enterprise - Committed Clusters",
+        "Billing Period Start": "09/01/2026",
+        "Billing Period End": "10/01/2026",
+        "Quantity": 3,
+        "Unit Price": 2050,
+        "Amount": 6150,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "10/01/2026",
+        "Billing Date": "10/01/2026",
+        "Charge Name": "Atlas Data Transfer Usage",
+        "Rate Plan": "Atlas Usage (Storage + Data Transfer)",
+        "Product": "MongoDB Atlas - Metered Usage",
+        "Billing Period Start": "09/01/2026",
+        "Billing Period End": "10/01/2026",
+        "Quantity": 0,
+        "Unit Price": 0.1,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "10/01/2026",
+        "Billing Date": "10/01/2026",
+        "Charge Name": "Atlas Storage Usage",
+        "Rate Plan": "Atlas Usage (Storage + Data Transfer)",
+        "Product": "MongoDB Atlas - Metered Usage",
+        "Billing Period Start": "09/01/2026",
+        "Billing Period End": "10/01/2026",
+        "Quantity": 0,
+        "Unit Price": 0.25,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "10/01/2026",
+        "Billing Date": "10/01/2026",
+        "Charge Name": "M50 Cluster Commitment - Add-on (1 Cluster from Month 10)",
+        "Rate Plan": "Atlas M50 Cluster Commitment (EA)",
+        "Product": "MongoDB Atlas Enterprise - Committed Clusters",
+        "Billing Period Start": "10/01/2026",
+        "Billing Period End": "11/01/2026",
+        "Quantity": 1,
+        "Unit Price": 2050,
+        "Amount": 2050,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "10/01/2026",
+        "Billing Date": "10/01/2026",
+        "Charge Name": "M50 Cluster Commitment - Base (3 Clusters)",
+        "Rate Plan": "Atlas M50 Cluster Commitment (EA)",
+        "Product": "MongoDB Atlas Enterprise - Committed Clusters",
+        "Billing Period Start": "10/01/2026",
+        "Billing Period End": "11/01/2026",
+        "Quantity": 3,
+        "Unit Price": 2050,
+        "Amount": 6150,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "10/01/2026",
+        "Billing Date": "10/01/2026",
+        "Charge Name": "Premium Backup - Per Cluster (4 Clusters from Month 10)",
+        "Rate Plan": "Premium Backup Add-on (EA)",
+        "Product": "MongoDB Atlas Enterprise - Premium Backup",
+        "Billing Period Start": "10/01/2026",
+        "Billing Period End": "11/01/2026",
+        "Quantity": 4,
+        "Unit Price": 410,
+        "Amount": 1640,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "11/01/2026",
+        "Billing Date": "11/01/2026",
+        "Charge Name": "Atlas Data Transfer Usage",
+        "Rate Plan": "Atlas Usage (Storage + Data Transfer)",
+        "Product": "MongoDB Atlas - Metered Usage",
+        "Billing Period Start": "10/01/2026",
+        "Billing Period End": "11/01/2026",
+        "Quantity": 0,
+        "Unit Price": 0.1,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "11/01/2026",
+        "Billing Date": "11/01/2026",
+        "Charge Name": "Atlas Storage Usage",
+        "Rate Plan": "Atlas Usage (Storage + Data Transfer)",
+        "Product": "MongoDB Atlas - Metered Usage",
+        "Billing Period Start": "10/01/2026",
+        "Billing Period End": "11/01/2026",
+        "Quantity": 0,
+        "Unit Price": 0.25,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "11/01/2026",
+        "Billing Date": "11/01/2026",
+        "Charge Name": "M50 Cluster Commitment - Add-on (1 Cluster from Month 10)",
+        "Rate Plan": "Atlas M50 Cluster Commitment (EA)",
+        "Product": "MongoDB Atlas Enterprise - Committed Clusters",
+        "Billing Period Start": "11/01/2026",
+        "Billing Period End": "12/01/2026",
+        "Quantity": 1,
+        "Unit Price": 2050,
+        "Amount": 2050,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "11/01/2026",
+        "Billing Date": "11/01/2026",
+        "Charge Name": "M50 Cluster Commitment - Base (3 Clusters)",
+        "Rate Plan": "Atlas M50 Cluster Commitment (EA)",
+        "Product": "MongoDB Atlas Enterprise - Committed Clusters",
+        "Billing Period Start": "11/01/2026",
+        "Billing Period End": "12/01/2026",
+        "Quantity": 3,
+        "Unit Price": 2050,
+        "Amount": 6150,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "11/01/2026",
+        "Billing Date": "11/01/2026",
+        "Charge Name": "Premium Backup - Per Cluster (4 Clusters from Month 10)",
+        "Rate Plan": "Premium Backup Add-on (EA)",
+        "Product": "MongoDB Atlas Enterprise - Premium Backup",
+        "Billing Period Start": "11/01/2026",
+        "Billing Period End": "12/01/2026",
+        "Quantity": 4,
+        "Unit Price": 410,
+        "Amount": 1640,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "12/01/2026",
+        "Billing Date": "12/01/2026",
+        "Charge Name": "Atlas Data Transfer Usage",
+        "Rate Plan": "Atlas Usage (Storage + Data Transfer)",
+        "Product": "MongoDB Atlas - Metered Usage",
+        "Billing Period Start": "11/01/2026",
+        "Billing Period End": "12/01/2026",
+        "Quantity": 0,
+        "Unit Price": 0.1,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "12/01/2026",
+        "Billing Date": "12/01/2026",
+        "Charge Name": "Atlas Storage Usage",
+        "Rate Plan": "Atlas Usage (Storage + Data Transfer)",
+        "Product": "MongoDB Atlas - Metered Usage",
+        "Billing Period Start": "11/01/2026",
+        "Billing Period End": "12/01/2026",
+        "Quantity": 0,
+        "Unit Price": 0.25,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "12/01/2026",
+        "Billing Date": "12/01/2026",
+        "Charge Name": "M50 Cluster Commitment - Add-on (1 Cluster from Month 10)",
+        "Rate Plan": "Atlas M50 Cluster Commitment (EA)",
+        "Product": "MongoDB Atlas Enterprise - Committed Clusters",
+        "Billing Period Start": "12/01/2026",
+        "Billing Period End": "01/01/2027",
+        "Quantity": 1,
+        "Unit Price": 2050,
+        "Amount": 2050,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "12/01/2026",
+        "Billing Date": "12/01/2026",
+        "Charge Name": "M50 Cluster Commitment - Base (3 Clusters)",
+        "Rate Plan": "Atlas M50 Cluster Commitment (EA)",
+        "Product": "MongoDB Atlas Enterprise - Committed Clusters",
+        "Billing Period Start": "12/01/2026",
+        "Billing Period End": "01/01/2027",
+        "Quantity": 3,
+        "Unit Price": 2050,
+        "Amount": 6150,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "12/01/2026",
+        "Billing Date": "12/01/2026",
+        "Charge Name": "Premium Backup - Per Cluster (4 Clusters from Month 10)",
+        "Rate Plan": "Premium Backup Add-on (EA)",
+        "Product": "MongoDB Atlas Enterprise - Premium Backup",
+        "Billing Period Start": "12/01/2026",
+        "Billing Period End": "01/01/2027",
+        "Quantity": 4,
+        "Unit Price": 410,
+        "Amount": 1640,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "01/01/2027",
+        "Billing Date": "01/01/2027",
+        "Charge Name": "Atlas Data Transfer Usage",
+        "Rate Plan": "Atlas Usage (Storage + Data Transfer)",
+        "Product": "MongoDB Atlas - Metered Usage",
+        "Billing Period Start": "12/01/2026",
+        "Billing Period End": "01/01/2027",
+        "Quantity": 0,
+        "Unit Price": 0.1,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "01/01/2027",
+        "Billing Date": "01/01/2027",
+        "Charge Name": "Atlas Storage Usage",
+        "Rate Plan": "Atlas Usage (Storage + Data Transfer)",
+        "Product": "MongoDB Atlas - Metered Usage",
+        "Billing Period Start": "12/01/2026",
+        "Billing Period End": "01/01/2027",
+        "Quantity": 0,
+        "Unit Price": 0.25,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "01/01/2027",
+        "Billing Date": "01/01/2027",
+        "Charge Name": "M50 Cluster Commitment - Add-on (1 Cluster from Month 10)",
+        "Rate Plan": "Atlas M50 Cluster Commitment (EA)",
+        "Product": "MongoDB Atlas Enterprise - Committed Clusters",
+        "Billing Period Start": "01/01/2027",
+        "Billing Period End": "02/01/2027",
+        "Quantity": 1,
+        "Unit Price": 2050,
+        "Amount": 2050,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "01/01/2027",
+        "Billing Date": "01/01/2027",
+        "Charge Name": "M50 Cluster Commitment - Base (3 Clusters)",
+        "Rate Plan": "Atlas M50 Cluster Commitment (EA)",
+        "Product": "MongoDB Atlas Enterprise - Committed Clusters",
+        "Billing Period Start": "01/01/2027",
+        "Billing Period End": "02/01/2027",
+        "Quantity": 3,
+        "Unit Price": 2050,
+        "Amount": 6150,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "01/01/2027",
+        "Billing Date": "01/01/2027",
+        "Charge Name": "Premium Backup - Per Cluster (4 Clusters from Month 10)",
+        "Rate Plan": "Premium Backup Add-on (EA)",
+        "Product": "MongoDB Atlas Enterprise - Premium Backup",
+        "Billing Period Start": "01/01/2027",
+        "Billing Period End": "02/01/2027",
+        "Quantity": 4,
+        "Unit Price": 410,
+        "Amount": 1640,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "02/01/2027",
+        "Billing Date": "02/01/2027",
+        "Charge Name": "Atlas Data Transfer Usage",
+        "Rate Plan": "Atlas Usage (Storage + Data Transfer)",
+        "Product": "MongoDB Atlas - Metered Usage",
+        "Billing Period Start": "01/01/2027",
+        "Billing Period End": "02/01/2027",
+        "Quantity": 0,
+        "Unit Price": 0.1,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "02/01/2027",
+        "Billing Date": "02/01/2027",
+        "Charge Name": "Atlas Storage Usage",
+        "Rate Plan": "Atlas Usage (Storage + Data Transfer)",
+        "Product": "MongoDB Atlas - Metered Usage",
+        "Billing Period Start": "01/01/2027",
+        "Billing Period End": "02/01/2027",
+        "Quantity": 0,
+        "Unit Price": 0.25,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "02/01/2027",
+        "Billing Date": "02/01/2027",
+        "Charge Name": "M50 Cluster Commitment - Add-on (1 Cluster from Month 10)",
+        "Rate Plan": "Atlas M50 Cluster Commitment (EA)",
+        "Product": "MongoDB Atlas Enterprise - Committed Clusters",
+        "Billing Period Start": "02/01/2027",
+        "Billing Period End": "03/01/2027",
+        "Quantity": 1,
+        "Unit Price": 2050,
+        "Amount": 2050,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "02/01/2027",
+        "Billing Date": "02/01/2027",
+        "Charge Name": "M50 Cluster Commitment - Base (3 Clusters)",
+        "Rate Plan": "Atlas M50 Cluster Commitment (EA)",
+        "Product": "MongoDB Atlas Enterprise - Committed Clusters",
+        "Billing Period Start": "02/01/2027",
+        "Billing Period End": "03/01/2027",
+        "Quantity": 3,
+        "Unit Price": 2050,
+        "Amount": 6150,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "02/01/2027",
+        "Billing Date": "02/01/2027",
+        "Charge Name": "Premium Backup - Per Cluster (4 Clusters from Month 10)",
+        "Rate Plan": "Premium Backup Add-on (EA)",
+        "Product": "MongoDB Atlas Enterprise - Premium Backup",
+        "Billing Period Start": "02/01/2027",
+        "Billing Period End": "03/01/2027",
+        "Quantity": 4,
+        "Unit Price": 410,
+        "Amount": 1640,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "03/01/2027",
+        "Billing Date": "03/01/2027",
+        "Charge Name": "Atlas Data Transfer Usage",
+        "Rate Plan": "Atlas Usage (Storage + Data Transfer)",
+        "Product": "MongoDB Atlas - Metered Usage",
+        "Billing Period Start": "02/01/2027",
+        "Billing Period End": "03/01/2027",
+        "Quantity": 0,
+        "Unit Price": 0.1,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "03/01/2027",
+        "Billing Date": "03/01/2027",
+        "Charge Name": "Atlas Storage Usage",
+        "Rate Plan": "Atlas Usage (Storage + Data Transfer)",
+        "Product": "MongoDB Atlas - Metered Usage",
+        "Billing Period Start": "02/01/2027",
+        "Billing Period End": "03/01/2027",
+        "Quantity": 0,
+        "Unit Price": 0.25,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "03/01/2027",
+        "Billing Date": "03/01/2027",
+        "Charge Name": "M50 Cluster Commitment - Add-on (1 Cluster from Month 10)",
+        "Rate Plan": "Atlas M50 Cluster Commitment (EA)",
+        "Product": "MongoDB Atlas Enterprise - Committed Clusters",
+        "Billing Period Start": "03/01/2027",
+        "Billing Period End": "04/01/2027",
+        "Quantity": 1,
+        "Unit Price": 2050,
+        "Amount": 2050,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "03/01/2027",
+        "Billing Date": "03/01/2027",
+        "Charge Name": "M50 Cluster Commitment - Base (3 Clusters)",
+        "Rate Plan": "Atlas M50 Cluster Commitment (EA)",
+        "Product": "MongoDB Atlas Enterprise - Committed Clusters",
+        "Billing Period Start": "03/01/2027",
+        "Billing Period End": "04/01/2027",
+        "Quantity": 3,
+        "Unit Price": 2050,
+        "Amount": 6150,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "03/01/2027",
+        "Billing Date": "03/01/2027",
+        "Charge Name": "Premium Backup - Per Cluster (4 Clusters from Month 10)",
+        "Rate Plan": "Premium Backup Add-on (EA)",
+        "Product": "MongoDB Atlas Enterprise - Premium Backup",
+        "Billing Period Start": "03/01/2027",
+        "Billing Period End": "04/01/2027",
+        "Quantity": 4,
+        "Unit Price": 410,
+        "Amount": 1640,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "04/01/2027",
+        "Billing Date": "04/01/2027",
+        "Charge Name": "Atlas Data Transfer Usage",
+        "Rate Plan": "Atlas Usage (Storage + Data Transfer)",
+        "Product": "MongoDB Atlas - Metered Usage",
+        "Billing Period Start": "03/01/2027",
+        "Billing Period End": "04/01/2027",
+        "Quantity": 0,
+        "Unit Price": 0.1,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "04/01/2027",
+        "Billing Date": "04/01/2027",
+        "Charge Name": "Atlas Storage Usage",
+        "Rate Plan": "Atlas Usage (Storage + Data Transfer)",
+        "Product": "MongoDB Atlas - Metered Usage",
+        "Billing Period Start": "03/01/2027",
+        "Billing Period End": "04/01/2027",
+        "Quantity": 0,
+        "Unit Price": 0.25,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "04/01/2027",
+        "Billing Date": "04/01/2027",
+        "Charge Name": "M50 Cluster Commitment - Add-on (1 Cluster from Month 10)",
+        "Rate Plan": "Atlas M50 Cluster Commitment (EA)",
+        "Product": "MongoDB Atlas Enterprise - Committed Clusters",
+        "Billing Period Start": "04/01/2027",
+        "Billing Period End": "05/01/2027",
+        "Quantity": 1,
+        "Unit Price": 2050,
+        "Amount": 2050,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "04/01/2027",
+        "Billing Date": "04/01/2027",
+        "Charge Name": "M50 Cluster Commitment - Base (3 Clusters)",
+        "Rate Plan": "Atlas M50 Cluster Commitment (EA)",
+        "Product": "MongoDB Atlas Enterprise - Committed Clusters",
+        "Billing Period Start": "04/01/2027",
+        "Billing Period End": "05/01/2027",
+        "Quantity": 3,
+        "Unit Price": 2050,
+        "Amount": 6150,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "04/01/2027",
+        "Billing Date": "04/01/2027",
+        "Charge Name": "Premium Backup - Per Cluster (4 Clusters from Month 10)",
+        "Rate Plan": "Premium Backup Add-on (EA)",
+        "Product": "MongoDB Atlas Enterprise - Premium Backup",
+        "Billing Period Start": "04/01/2027",
+        "Billing Period End": "05/01/2027",
+        "Quantity": 4,
+        "Unit Price": 410,
+        "Amount": 1640,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "05/01/2027",
+        "Billing Date": "05/01/2027",
+        "Charge Name": "Atlas Data Transfer Usage",
+        "Rate Plan": "Atlas Usage (Storage + Data Transfer)",
+        "Product": "MongoDB Atlas - Metered Usage",
+        "Billing Period Start": "04/01/2027",
+        "Billing Period End": "05/01/2027",
+        "Quantity": 0,
+        "Unit Price": 0.1,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "05/01/2027",
+        "Billing Date": "05/01/2027",
+        "Charge Name": "Atlas Storage Usage",
+        "Rate Plan": "Atlas Usage (Storage + Data Transfer)",
+        "Product": "MongoDB Atlas - Metered Usage",
+        "Billing Period Start": "04/01/2027",
+        "Billing Period End": "05/01/2027",
+        "Quantity": 0,
+        "Unit Price": 0.25,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "05/01/2027",
+        "Billing Date": "05/01/2027",
+        "Charge Name": "M50 Cluster Commitment - Add-on (1 Cluster from Month 10)",
+        "Rate Plan": "Atlas M50 Cluster Commitment (EA)",
+        "Product": "MongoDB Atlas Enterprise - Committed Clusters",
+        "Billing Period Start": "05/01/2027",
+        "Billing Period End": "06/01/2027",
+        "Quantity": 1,
+        "Unit Price": 2050,
+        "Amount": 2050,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "05/01/2027",
+        "Billing Date": "05/01/2027",
+        "Charge Name": "M50 Cluster Commitment - Base (3 Clusters)",
+        "Rate Plan": "Atlas M50 Cluster Commitment (EA)",
+        "Product": "MongoDB Atlas Enterprise - Committed Clusters",
+        "Billing Period Start": "05/01/2027",
+        "Billing Period End": "06/01/2027",
+        "Quantity": 3,
+        "Unit Price": 2050,
+        "Amount": 6150,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "05/01/2027",
+        "Billing Date": "05/01/2027",
+        "Charge Name": "Premium Backup - Per Cluster (4 Clusters from Month 10)",
+        "Rate Plan": "Premium Backup Add-on (EA)",
+        "Product": "MongoDB Atlas Enterprise - Premium Backup",
+        "Billing Period Start": "05/01/2027",
+        "Billing Period End": "06/01/2027",
+        "Quantity": 4,
+        "Unit Price": 410,
+        "Amount": 1640,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "06/01/2027",
+        "Billing Date": "06/01/2027",
+        "Charge Name": "Atlas Data Transfer Usage",
+        "Rate Plan": "Atlas Usage (Storage + Data Transfer)",
+        "Product": "MongoDB Atlas - Metered Usage",
+        "Billing Period Start": "05/01/2027",
+        "Billing Period End": "06/01/2027",
+        "Quantity": 0,
+        "Unit Price": 0.1,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "06/01/2027",
+        "Billing Date": "06/01/2027",
+        "Charge Name": "Atlas Storage Usage",
+        "Rate Plan": "Atlas Usage (Storage + Data Transfer)",
+        "Product": "MongoDB Atlas - Metered Usage",
+        "Billing Period Start": "05/01/2027",
+        "Billing Period End": "06/01/2027",
+        "Quantity": 0,
+        "Unit Price": 0.25,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "06/01/2027",
+        "Billing Date": "06/01/2027",
+        "Charge Name": "M50 Cluster Commitment - Add-on (1 Cluster from Month 10)",
+        "Rate Plan": "Atlas M50 Cluster Commitment (EA)",
+        "Product": "MongoDB Atlas Enterprise - Committed Clusters",
+        "Billing Period Start": "06/01/2027",
+        "Billing Period End": "07/01/2027",
+        "Quantity": 1,
+        "Unit Price": 2050,
+        "Amount": 2050,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "06/01/2027",
+        "Billing Date": "06/01/2027",
+        "Charge Name": "M50 Cluster Commitment - Base (3 Clusters)",
+        "Rate Plan": "Atlas M50 Cluster Commitment (EA)",
+        "Product": "MongoDB Atlas Enterprise - Committed Clusters",
+        "Billing Period Start": "06/01/2027",
+        "Billing Period End": "07/01/2027",
+        "Quantity": 3,
+        "Unit Price": 2050,
+        "Amount": 6150,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "06/01/2027",
+        "Billing Date": "06/01/2027",
+        "Charge Name": "Premium Backup - Per Cluster (4 Clusters from Month 10)",
+        "Rate Plan": "Premium Backup Add-on (EA)",
+        "Product": "MongoDB Atlas Enterprise - Premium Backup",
+        "Billing Period Start": "06/01/2027",
+        "Billing Period End": "07/01/2027",
+        "Quantity": 4,
+        "Unit Price": 410,
+        "Amount": 1640,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "07/01/2027",
+        "Billing Date": "07/01/2027",
+        "Charge Name": "Atlas Data Transfer Usage",
+        "Rate Plan": "Atlas Usage (Storage + Data Transfer)",
+        "Product": "MongoDB Atlas - Metered Usage",
+        "Billing Period Start": "06/01/2027",
+        "Billing Period End": "07/01/2027",
+        "Quantity": 0,
+        "Unit Price": 0.1,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "07/01/2027",
+        "Billing Date": "07/01/2027",
+        "Charge Name": "Atlas Storage Usage",
+        "Rate Plan": "Atlas Usage (Storage + Data Transfer)",
+        "Product": "MongoDB Atlas - Metered Usage",
+        "Billing Period Start": "06/01/2027",
+        "Billing Period End": "07/01/2027",
+        "Quantity": 0,
+        "Unit Price": 0.25,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "07/01/2027",
+        "Billing Date": "07/01/2027",
+        "Charge Name": "M50 Cluster Commitment - Add-on (1 Cluster from Month 10)",
+        "Rate Plan": "Atlas M50 Cluster Commitment (EA)",
+        "Product": "MongoDB Atlas Enterprise - Committed Clusters",
+        "Billing Period Start": "07/01/2027",
+        "Billing Period End": "08/01/2027",
+        "Quantity": 1,
+        "Unit Price": 2050,
+        "Amount": 2050,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "07/01/2027",
+        "Billing Date": "07/01/2027",
+        "Charge Name": "M50 Cluster Commitment - Base (3 Clusters)",
+        "Rate Plan": "Atlas M50 Cluster Commitment (EA)",
+        "Product": "MongoDB Atlas Enterprise - Committed Clusters",
+        "Billing Period Start": "07/01/2027",
+        "Billing Period End": "08/01/2027",
+        "Quantity": 3,
+        "Unit Price": 2050,
+        "Amount": 6150,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "07/01/2027",
+        "Billing Date": "07/01/2027",
+        "Charge Name": "Premium Backup - Per Cluster (4 Clusters from Month 10)",
+        "Rate Plan": "Premium Backup Add-on (EA)",
+        "Product": "MongoDB Atlas Enterprise - Premium Backup",
+        "Billing Period Start": "07/01/2027",
+        "Billing Period End": "08/01/2027",
+        "Quantity": 4,
+        "Unit Price": 410,
+        "Amount": 1640,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "08/01/2027",
+        "Billing Date": "08/01/2027",
+        "Charge Name": "Atlas Data Transfer Usage",
+        "Rate Plan": "Atlas Usage (Storage + Data Transfer)",
+        "Product": "MongoDB Atlas - Metered Usage",
+        "Billing Period Start": "07/01/2027",
+        "Billing Period End": "08/01/2027",
+        "Quantity": 0,
+        "Unit Price": 0.1,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "08/01/2027",
+        "Billing Date": "08/01/2027",
+        "Charge Name": "Atlas Storage Usage",
+        "Rate Plan": "Atlas Usage (Storage + Data Transfer)",
+        "Product": "MongoDB Atlas - Metered Usage",
+        "Billing Period Start": "07/01/2027",
+        "Billing Period End": "08/01/2027",
+        "Quantity": 0,
+        "Unit Price": 0.25,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "08/01/2027",
+        "Billing Date": "08/01/2027",
+        "Charge Name": "M50 Cluster Commitment - Add-on (1 Cluster from Month 10)",
+        "Rate Plan": "Atlas M50 Cluster Commitment (EA)",
+        "Product": "MongoDB Atlas Enterprise - Committed Clusters",
+        "Billing Period Start": "08/01/2027",
+        "Billing Period End": "09/01/2027",
+        "Quantity": 1,
+        "Unit Price": 2050,
+        "Amount": 2050,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "08/01/2027",
+        "Billing Date": "08/01/2027",
+        "Charge Name": "M50 Cluster Commitment - Base (3 Clusters)",
+        "Rate Plan": "Atlas M50 Cluster Commitment (EA)",
+        "Product": "MongoDB Atlas Enterprise - Committed Clusters",
+        "Billing Period Start": "08/01/2027",
+        "Billing Period End": "09/01/2027",
+        "Quantity": 3,
+        "Unit Price": 2050,
+        "Amount": 6150,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "08/01/2027",
+        "Billing Date": "08/01/2027",
+        "Charge Name": "Premium Backup - Per Cluster (4 Clusters from Month 10)",
+        "Rate Plan": "Premium Backup Add-on (EA)",
+        "Product": "MongoDB Atlas Enterprise - Premium Backup",
+        "Billing Period Start": "08/01/2027",
+        "Billing Period End": "09/01/2027",
+        "Quantity": 4,
+        "Unit Price": 410,
+        "Amount": 1640,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "09/01/2027",
+        "Billing Date": "09/01/2027",
+        "Charge Name": "Atlas Data Transfer Usage",
+        "Rate Plan": "Atlas Usage (Storage + Data Transfer)",
+        "Product": "MongoDB Atlas - Metered Usage",
+        "Billing Period Start": "08/01/2027",
+        "Billing Period End": "09/01/2027",
+        "Quantity": 0,
+        "Unit Price": 0.1,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "09/01/2027",
+        "Billing Date": "09/01/2027",
+        "Charge Name": "Atlas Storage Usage",
+        "Rate Plan": "Atlas Usage (Storage + Data Transfer)",
+        "Product": "MongoDB Atlas - Metered Usage",
+        "Billing Period Start": "08/01/2027",
+        "Billing Period End": "09/01/2027",
+        "Quantity": 0,
+        "Unit Price": 0.25,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "09/01/2027",
+        "Billing Date": "09/01/2027",
+        "Charge Name": "M50 Cluster Commitment - Add-on (1 Cluster from Month 10)",
+        "Rate Plan": "Atlas M50 Cluster Commitment (EA)",
+        "Product": "MongoDB Atlas Enterprise - Committed Clusters",
+        "Billing Period Start": "09/01/2027",
+        "Billing Period End": "10/01/2027",
+        "Quantity": 1,
+        "Unit Price": 2050,
+        "Amount": 2050,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "09/01/2027",
+        "Billing Date": "09/01/2027",
+        "Charge Name": "M50 Cluster Commitment - Base (3 Clusters)",
+        "Rate Plan": "Atlas M50 Cluster Commitment (EA)",
+        "Product": "MongoDB Atlas Enterprise - Committed Clusters",
+        "Billing Period Start": "09/01/2027",
+        "Billing Period End": "10/01/2027",
+        "Quantity": 3,
+        "Unit Price": 2050,
+        "Amount": 6150,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "09/01/2027",
+        "Billing Date": "09/01/2027",
+        "Charge Name": "Premium Backup - Per Cluster (4 Clusters from Month 10)",
+        "Rate Plan": "Premium Backup Add-on (EA)",
+        "Product": "MongoDB Atlas Enterprise - Premium Backup",
+        "Billing Period Start": "09/01/2027",
+        "Billing Period End": "10/01/2027",
+        "Quantity": 4,
+        "Unit Price": 410,
+        "Amount": 1640,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "10/01/2027",
+        "Billing Date": "10/01/2027",
+        "Charge Name": "Atlas Data Transfer Usage",
+        "Rate Plan": "Atlas Usage (Storage + Data Transfer)",
+        "Product": "MongoDB Atlas - Metered Usage",
+        "Billing Period Start": "09/01/2027",
+        "Billing Period End": "10/01/2027",
+        "Quantity": 0,
+        "Unit Price": 0.1,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "10/01/2027",
+        "Billing Date": "10/01/2027",
+        "Charge Name": "Atlas Storage Usage",
+        "Rate Plan": "Atlas Usage (Storage + Data Transfer)",
+        "Product": "MongoDB Atlas - Metered Usage",
+        "Billing Period Start": "09/01/2027",
+        "Billing Period End": "10/01/2027",
+        "Quantity": 0,
+        "Unit Price": 0.25,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "10/01/2027",
+        "Billing Date": "10/01/2027",
+        "Charge Name": "M50 Cluster Commitment - Add-on (1 Cluster from Month 10)",
+        "Rate Plan": "Atlas M50 Cluster Commitment (EA)",
+        "Product": "MongoDB Atlas Enterprise - Committed Clusters",
+        "Billing Period Start": "10/01/2027",
+        "Billing Period End": "11/01/2027",
+        "Quantity": 1,
+        "Unit Price": 2050,
+        "Amount": 2050,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "10/01/2027",
+        "Billing Date": "10/01/2027",
+        "Charge Name": "M50 Cluster Commitment - Base (3 Clusters)",
+        "Rate Plan": "Atlas M50 Cluster Commitment (EA)",
+        "Product": "MongoDB Atlas Enterprise - Committed Clusters",
+        "Billing Period Start": "10/01/2027",
+        "Billing Period End": "11/01/2027",
+        "Quantity": 3,
+        "Unit Price": 2050,
+        "Amount": 6150,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "10/01/2027",
+        "Billing Date": "10/01/2027",
+        "Charge Name": "Premium Backup - Per Cluster (4 Clusters from Month 10)",
+        "Rate Plan": "Premium Backup Add-on (EA)",
+        "Product": "MongoDB Atlas Enterprise - Premium Backup",
+        "Billing Period Start": "10/01/2027",
+        "Billing Period End": "11/01/2027",
+        "Quantity": 4,
+        "Unit Price": 410,
+        "Amount": 1640,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "11/01/2027",
+        "Billing Date": "11/01/2027",
+        "Charge Name": "Atlas Data Transfer Usage",
+        "Rate Plan": "Atlas Usage (Storage + Data Transfer)",
+        "Product": "MongoDB Atlas - Metered Usage",
+        "Billing Period Start": "10/01/2027",
+        "Billing Period End": "11/01/2027",
+        "Quantity": 0,
+        "Unit Price": 0.1,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "11/01/2027",
+        "Billing Date": "11/01/2027",
+        "Charge Name": "Atlas Storage Usage",
+        "Rate Plan": "Atlas Usage (Storage + Data Transfer)",
+        "Product": "MongoDB Atlas - Metered Usage",
+        "Billing Period Start": "10/01/2027",
+        "Billing Period End": "11/01/2027",
+        "Quantity": 0,
+        "Unit Price": 0.25,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "11/01/2027",
+        "Billing Date": "11/01/2027",
+        "Charge Name": "M50 Cluster Commitment - Add-on (1 Cluster from Month 10)",
+        "Rate Plan": "Atlas M50 Cluster Commitment (EA)",
+        "Product": "MongoDB Atlas Enterprise - Committed Clusters",
+        "Billing Period Start": "11/01/2027",
+        "Billing Period End": "12/01/2027",
+        "Quantity": 1,
+        "Unit Price": 2050,
+        "Amount": 2050,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "11/01/2027",
+        "Billing Date": "11/01/2027",
+        "Charge Name": "M50 Cluster Commitment - Base (3 Clusters)",
+        "Rate Plan": "Atlas M50 Cluster Commitment (EA)",
+        "Product": "MongoDB Atlas Enterprise - Committed Clusters",
+        "Billing Period Start": "11/01/2027",
+        "Billing Period End": "12/01/2027",
+        "Quantity": 3,
+        "Unit Price": 2050,
+        "Amount": 6150,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "11/01/2027",
+        "Billing Date": "11/01/2027",
+        "Charge Name": "Premium Backup - Per Cluster (4 Clusters from Month 10)",
+        "Rate Plan": "Premium Backup Add-on (EA)",
+        "Product": "MongoDB Atlas Enterprise - Premium Backup",
+        "Billing Period Start": "11/01/2027",
+        "Billing Period End": "12/01/2027",
+        "Quantity": 4,
+        "Unit Price": 410,
+        "Amount": 1640,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "12/01/2027",
+        "Billing Date": "12/01/2027",
+        "Charge Name": "Atlas Data Transfer Usage",
+        "Rate Plan": "Atlas Usage (Storage + Data Transfer)",
+        "Product": "MongoDB Atlas - Metered Usage",
+        "Billing Period Start": "11/01/2027",
+        "Billing Period End": "12/01/2027",
+        "Quantity": 0,
+        "Unit Price": 0.1,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "12/01/2027",
+        "Billing Date": "12/01/2027",
+        "Charge Name": "Atlas Storage Usage",
+        "Rate Plan": "Atlas Usage (Storage + Data Transfer)",
+        "Product": "MongoDB Atlas - Metered Usage",
+        "Billing Period Start": "11/01/2027",
+        "Billing Period End": "12/01/2027",
+        "Quantity": 0,
+        "Unit Price": 0.25,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "12/01/2027",
+        "Billing Date": "12/01/2027",
+        "Charge Name": "M50 Cluster Commitment - Add-on (1 Cluster from Month 10)",
+        "Rate Plan": "Atlas M50 Cluster Commitment (EA)",
+        "Product": "MongoDB Atlas Enterprise - Committed Clusters",
+        "Billing Period Start": "12/01/2027",
+        "Billing Period End": "01/01/2028",
+        "Quantity": 1,
+        "Unit Price": 2050,
+        "Amount": 2050,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "12/01/2027",
+        "Billing Date": "12/01/2027",
+        "Charge Name": "M50 Cluster Commitment - Base (3 Clusters)",
+        "Rate Plan": "Atlas M50 Cluster Commitment (EA)",
+        "Product": "MongoDB Atlas Enterprise - Committed Clusters",
+        "Billing Period Start": "12/01/2027",
+        "Billing Period End": "01/01/2028",
+        "Quantity": 3,
+        "Unit Price": 2050,
+        "Amount": 6150,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "12/01/2027",
+        "Billing Date": "12/01/2027",
+        "Charge Name": "Premium Backup - Per Cluster (4 Clusters from Month 10)",
+        "Rate Plan": "Premium Backup Add-on (EA)",
+        "Product": "MongoDB Atlas Enterprise - Premium Backup",
+        "Billing Period Start": "12/01/2027",
+        "Billing Period End": "01/01/2028",
+        "Quantity": 4,
+        "Unit Price": 410,
+        "Amount": 1640,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "01/01/2028",
+        "Billing Date": "01/01/2028",
+        "Charge Name": "Atlas Data Transfer Usage",
+        "Rate Plan": "Atlas Usage (Storage + Data Transfer)",
+        "Product": "MongoDB Atlas - Metered Usage",
+        "Billing Period Start": "12/01/2027",
+        "Billing Period End": "01/01/2028",
+        "Quantity": 0,
+        "Unit Price": 0.1,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "01/01/2028",
+        "Billing Date": "01/01/2028",
+        "Charge Name": "Atlas Storage Usage",
+        "Rate Plan": "Atlas Usage (Storage + Data Transfer)",
+        "Product": "MongoDB Atlas - Metered Usage",
+        "Billing Period Start": "12/01/2027",
+        "Billing Period End": "01/01/2028",
+        "Quantity": 0,
+        "Unit Price": 0.25,
+        "Amount": 0,
+        "Currency": "USD"
+      }
+    ],
+    "assumptions": [
+      "Invoice Date is assumed to equal Billing Date (invoice generated on the charge’s bill cycle day).",
+      "Monthly periods are assumed to align perfectly to the subscription term: 01/01/2026–01/01/2028, so no proration is applied on the base 3-cluster commitment.",
+      "Enterprise discount of 18% is applied only to fixed recurring charges (clusters + backup): M50 cluster net unit price = $2,500 * 0.82 = $2,050 per cluster-month; Backup net unit price = $500 * 0.82 = $410 per cluster-month.",
+      "Month 10 is assumed to start on 10/01/2026 (i.e., month 1 = Jan 2026). The 4th M50 cluster add-on and Premium Backup (for all 4 clusters) are assumed effective 10/01/2026 and co-termed through 01/01/2028 (15 monthly bill periods).",
+      "Usage charges (Storage at $0.25/GB-month and Data Transfer at $0.10/GB) are billed monthly in arrears with billing date = period end; because no usage quantities were provided, Quantity and Amount are set to 0 as placeholders.",
+      "Professional Services total is $75,000 and is not discounted; milestone billing dates were assumed due to missing specific dates: Kickoff 01/01/2026 (25%), Data Migration Complete 04/01/2026 (50%), Go-Live 07/01/2026 (25%).",
+      "Taxes, payment terms, and invoice-level adjustments/rounding beyond cents are excluded."
+    ],
+    "open_questions": [
+      "Confirm the exact effective date/time for the Month 10 changes (4th cluster + backup). If it is mid-month, the add-on/backup rows should be prorated for that partial month.",
+      "Provide expected or actual monthly usage (GB-month storage and GB data transfer) so the in-arrears usage invoice amounts can be calculated instead of using zero placeholders.",
+      "Confirm Professional Services milestone achievement dates. Contract Intel lists Go-Live Date as 01/01/2026, which conflicts with ‘delivered over the first 6 months’; if Go-Live is actually later, the final milestone billing date should move accordingly.",
+      "Confirm whether Premium Backup should apply to the initial 3 clusters before Month 10 (spec says it applies from Month 10 forward to all 4 clusters).",
+      "Confirm bill cycle day / bill run schedule (e.g., always the 1st) and whether usage is invoiced exactly on the period end date or on the next invoice run date."
+    ]
+  },
+  "revrec_waterfall": {
+    "zr_revrec": [
+      {
+        "Line Item Num": 1,
+        "POB Name": "Committed Cluster Capacity (Base 3 M50)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 147600,
+        "Period": "Jan-26",
+        "Amount": 6267.95
+      },
+      {
+        "Line Item Num": 1,
+        "POB Name": "Committed Cluster Capacity (Base 3 M50)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 147600,
+        "Period": "Feb-26",
+        "Amount": 5661.37
+      },
+      {
+        "Line Item Num": 1,
+        "POB Name": "Committed Cluster Capacity (Base 3 M50)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 147600,
+        "Period": "Mar-26",
+        "Amount": 6267.95
+      },
+      {
+        "Line Item Num": 1,
+        "POB Name": "Committed Cluster Capacity (Base 3 M50)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 147600,
+        "Period": "Apr-26",
+        "Amount": 6065.75
+      },
+      {
+        "Line Item Num": 1,
+        "POB Name": "Committed Cluster Capacity (Base 3 M50)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 147600,
+        "Period": "May-26",
+        "Amount": 6267.95
+      },
+      {
+        "Line Item Num": 1,
+        "POB Name": "Committed Cluster Capacity (Base 3 M50)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 147600,
+        "Period": "Jun-26",
+        "Amount": 6065.75
+      },
+      {
+        "Line Item Num": 1,
+        "POB Name": "Committed Cluster Capacity (Base 3 M50)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 147600,
+        "Period": "Jul-26",
+        "Amount": 6267.95
+      },
+      {
+        "Line Item Num": 1,
+        "POB Name": "Committed Cluster Capacity (Base 3 M50)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 147600,
+        "Period": "Aug-26",
+        "Amount": 6267.95
+      },
+      {
+        "Line Item Num": 1,
+        "POB Name": "Committed Cluster Capacity (Base 3 M50)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 147600,
+        "Period": "Sep-26",
+        "Amount": 6065.75
+      },
+      {
+        "Line Item Num": 1,
+        "POB Name": "Committed Cluster Capacity (Base 3 M50)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 147600,
+        "Period": "Oct-26",
+        "Amount": 6267.95
+      },
+      {
+        "Line Item Num": 1,
+        "POB Name": "Committed Cluster Capacity (Base 3 M50)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 147600,
+        "Period": "Nov-26",
+        "Amount": 6065.75
+      },
+      {
+        "Line Item Num": 1,
+        "POB Name": "Committed Cluster Capacity (Base 3 M50)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 147600,
+        "Period": "Dec-26",
+        "Amount": 6267.95
+      },
+      {
+        "Line Item Num": 1,
+        "POB Name": "Committed Cluster Capacity (Base 3 M50)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 147600,
+        "Period": "Jan-27",
+        "Amount": 6267.95
+      },
+      {
+        "Line Item Num": 1,
+        "POB Name": "Committed Cluster Capacity (Base 3 M50)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 147600,
+        "Period": "Feb-27",
+        "Amount": 5661.37
+      },
+      {
+        "Line Item Num": 1,
+        "POB Name": "Committed Cluster Capacity (Base 3 M50)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 147600,
+        "Period": "Mar-27",
+        "Amount": 6267.95
+      },
+      {
+        "Line Item Num": 1,
+        "POB Name": "Committed Cluster Capacity (Base 3 M50)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 147600,
+        "Period": "Apr-27",
+        "Amount": 6065.75
+      },
+      {
+        "Line Item Num": 1,
+        "POB Name": "Committed Cluster Capacity (Base 3 M50)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 147600,
+        "Period": "May-27",
+        "Amount": 6267.95
+      },
+      {
+        "Line Item Num": 1,
+        "POB Name": "Committed Cluster Capacity (Base 3 M50)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 147600,
+        "Period": "Jun-27",
+        "Amount": 6065.75
+      },
+      {
+        "Line Item Num": 1,
+        "POB Name": "Committed Cluster Capacity (Base 3 M50)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 147600,
+        "Period": "Jul-27",
+        "Amount": 6267.95
+      },
+      {
+        "Line Item Num": 1,
+        "POB Name": "Committed Cluster Capacity (Base 3 M50)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 147600,
+        "Period": "Aug-27",
+        "Amount": 6267.95
+      },
+      {
+        "Line Item Num": 1,
+        "POB Name": "Committed Cluster Capacity (Base 3 M50)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 147600,
+        "Period": "Sep-27",
+        "Amount": 6065.75
+      },
+      {
+        "Line Item Num": 1,
+        "POB Name": "Committed Cluster Capacity (Base 3 M50)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 147600,
+        "Period": "Oct-27",
+        "Amount": 6267.95
+      },
+      {
+        "Line Item Num": 1,
+        "POB Name": "Committed Cluster Capacity (Base 3 M50)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 147600,
+        "Period": "Nov-27",
+        "Amount": 6065.75
+      },
+      {
+        "Line Item Num": 1,
+        "POB Name": "Committed Cluster Capacity (Base 3 M50)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 147600,
+        "Period": "Dec-27",
+        "Amount": 6267.91
+      },
+      {
+        "Line Item Num": 2,
+        "POB Name": "Committed Cluster Capacity (Add-on 1 M50, Co-termed)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-10-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 30750,
+        "Period": "Oct-26",
+        "Amount": 2085.89
+      },
+      {
+        "Line Item Num": 2,
+        "POB Name": "Committed Cluster Capacity (Add-on 1 M50, Co-termed)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-10-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 30750,
+        "Period": "Nov-26",
+        "Amount": 2018.6
+      },
+      {
+        "Line Item Num": 2,
+        "POB Name": "Committed Cluster Capacity (Add-on 1 M50, Co-termed)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-10-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 30750,
+        "Period": "Dec-26",
+        "Amount": 2085.89
+      },
+      {
+        "Line Item Num": 2,
+        "POB Name": "Committed Cluster Capacity (Add-on 1 M50, Co-termed)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-10-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 30750,
+        "Period": "Jan-27",
+        "Amount": 2085.89
+      },
+      {
+        "Line Item Num": 2,
+        "POB Name": "Committed Cluster Capacity (Add-on 1 M50, Co-termed)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-10-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 30750,
+        "Period": "Feb-27",
+        "Amount": 1884.03
+      },
+      {
+        "Line Item Num": 2,
+        "POB Name": "Committed Cluster Capacity (Add-on 1 M50, Co-termed)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-10-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 30750,
+        "Period": "Mar-27",
+        "Amount": 2085.89
+      },
+      {
+        "Line Item Num": 2,
+        "POB Name": "Committed Cluster Capacity (Add-on 1 M50, Co-termed)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-10-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 30750,
+        "Period": "Apr-27",
+        "Amount": 2018.6
+      },
+      {
+        "Line Item Num": 2,
+        "POB Name": "Committed Cluster Capacity (Add-on 1 M50, Co-termed)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-10-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 30750,
+        "Period": "May-27",
+        "Amount": 2085.89
+      },
+      {
+        "Line Item Num": 2,
+        "POB Name": "Committed Cluster Capacity (Add-on 1 M50, Co-termed)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-10-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 30750,
+        "Period": "Jun-27",
+        "Amount": 2018.6
+      },
+      {
+        "Line Item Num": 2,
+        "POB Name": "Committed Cluster Capacity (Add-on 1 M50, Co-termed)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-10-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 30750,
+        "Period": "Jul-27",
+        "Amount": 2085.89
+      },
+      {
+        "Line Item Num": 2,
+        "POB Name": "Committed Cluster Capacity (Add-on 1 M50, Co-termed)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-10-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 30750,
+        "Period": "Aug-27",
+        "Amount": 2085.89
+      },
+      {
+        "Line Item Num": 2,
+        "POB Name": "Committed Cluster Capacity (Add-on 1 M50, Co-termed)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-10-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 30750,
+        "Period": "Sep-27",
+        "Amount": 2018.6
+      },
+      {
+        "Line Item Num": 2,
+        "POB Name": "Committed Cluster Capacity (Add-on 1 M50, Co-termed)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-10-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 30750,
+        "Period": "Oct-27",
+        "Amount": 2085.89
+      },
+      {
+        "Line Item Num": 2,
+        "POB Name": "Committed Cluster Capacity (Add-on 1 M50, Co-termed)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-10-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 30750,
+        "Period": "Nov-27",
+        "Amount": 2018.6
+      },
+      {
+        "Line Item Num": 2,
+        "POB Name": "Committed Cluster Capacity (Add-on 1 M50, Co-termed)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-10-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 30750,
+        "Period": "Dec-27",
+        "Amount": 2085.85
+      },
+      {
+        "Line Item Num": 3,
+        "POB Name": "Premium Backup Add-on (Co-termed, Month 10+)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-10-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 24600,
+        "Period": "Oct-26",
+        "Amount": 1668.71
+      },
+      {
+        "Line Item Num": 3,
+        "POB Name": "Premium Backup Add-on (Co-termed, Month 10+)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-10-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 24600,
+        "Period": "Nov-26",
+        "Amount": 1614.88
+      },
+      {
+        "Line Item Num": 3,
+        "POB Name": "Premium Backup Add-on (Co-termed, Month 10+)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-10-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 24600,
+        "Period": "Dec-26",
+        "Amount": 1668.71
+      },
+      {
+        "Line Item Num": 3,
+        "POB Name": "Premium Backup Add-on (Co-termed, Month 10+)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-10-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 24600,
+        "Period": "Jan-27",
+        "Amount": 1668.71
+      },
+      {
+        "Line Item Num": 3,
+        "POB Name": "Premium Backup Add-on (Co-termed, Month 10+)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-10-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 24600,
+        "Period": "Feb-27",
+        "Amount": 1507.22
+      },
+      {
+        "Line Item Num": 3,
+        "POB Name": "Premium Backup Add-on (Co-termed, Month 10+)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-10-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 24600,
+        "Period": "Mar-27",
+        "Amount": 1668.71
+      },
+      {
+        "Line Item Num": 3,
+        "POB Name": "Premium Backup Add-on (Co-termed, Month 10+)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-10-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 24600,
+        "Period": "Apr-27",
+        "Amount": 1614.88
+      },
+      {
+        "Line Item Num": 3,
+        "POB Name": "Premium Backup Add-on (Co-termed, Month 10+)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-10-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 24600,
+        "Period": "May-27",
+        "Amount": 1668.71
+      },
+      {
+        "Line Item Num": 3,
+        "POB Name": "Premium Backup Add-on (Co-termed, Month 10+)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-10-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 24600,
+        "Period": "Jun-27",
+        "Amount": 1614.88
+      },
+      {
+        "Line Item Num": 3,
+        "POB Name": "Premium Backup Add-on (Co-termed, Month 10+)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-10-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 24600,
+        "Period": "Jul-27",
+        "Amount": 1668.71
+      },
+      {
+        "Line Item Num": 3,
+        "POB Name": "Premium Backup Add-on (Co-termed, Month 10+)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-10-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 24600,
+        "Period": "Aug-27",
+        "Amount": 1668.71
+      },
+      {
+        "Line Item Num": 3,
+        "POB Name": "Premium Backup Add-on (Co-termed, Month 10+)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-10-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 24600,
+        "Period": "Sep-27",
+        "Amount": 1614.88
+      },
+      {
+        "Line Item Num": 3,
+        "POB Name": "Premium Backup Add-on (Co-termed, Month 10+)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-10-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 24600,
+        "Period": "Oct-27",
+        "Amount": 1668.71
+      },
+      {
+        "Line Item Num": 3,
+        "POB Name": "Premium Backup Add-on (Co-termed, Month 10+)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-10-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 24600,
+        "Period": "Nov-27",
+        "Amount": 1614.88
+      },
+      {
+        "Line Item Num": 3,
+        "POB Name": "Premium Backup Add-on (Co-termed, Month 10+)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-10-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 24600,
+        "Period": "Dec-27",
+        "Amount": 1668.7
+      },
+      {
+        "Line Item Num": 4,
+        "POB Name": "Metered Storage (As-Consumed)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Jan-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 4,
+        "POB Name": "Metered Storage (As-Consumed)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Feb-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 4,
+        "POB Name": "Metered Storage (As-Consumed)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Mar-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 4,
+        "POB Name": "Metered Storage (As-Consumed)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Apr-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 4,
+        "POB Name": "Metered Storage (As-Consumed)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "May-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 4,
+        "POB Name": "Metered Storage (As-Consumed)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Jun-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 4,
+        "POB Name": "Metered Storage (As-Consumed)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Jul-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 4,
+        "POB Name": "Metered Storage (As-Consumed)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Aug-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 4,
+        "POB Name": "Metered Storage (As-Consumed)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Sep-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 4,
+        "POB Name": "Metered Storage (As-Consumed)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Oct-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 4,
+        "POB Name": "Metered Storage (As-Consumed)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Nov-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 4,
+        "POB Name": "Metered Storage (As-Consumed)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Dec-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 4,
+        "POB Name": "Metered Storage (As-Consumed)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Jan-27",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 4,
+        "POB Name": "Metered Storage (As-Consumed)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Feb-27",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 4,
+        "POB Name": "Metered Storage (As-Consumed)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Mar-27",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 4,
+        "POB Name": "Metered Storage (As-Consumed)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Apr-27",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 4,
+        "POB Name": "Metered Storage (As-Consumed)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "May-27",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 4,
+        "POB Name": "Metered Storage (As-Consumed)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Jun-27",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 4,
+        "POB Name": "Metered Storage (As-Consumed)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Jul-27",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 4,
+        "POB Name": "Metered Storage (As-Consumed)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Aug-27",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 4,
+        "POB Name": "Metered Storage (As-Consumed)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Sep-27",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 4,
+        "POB Name": "Metered Storage (As-Consumed)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Oct-27",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 4,
+        "POB Name": "Metered Storage (As-Consumed)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Nov-27",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 4,
+        "POB Name": "Metered Storage (As-Consumed)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Dec-27",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 5,
+        "POB Name": "Metered Data Transfer (As-Consumed)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Jan-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 5,
+        "POB Name": "Metered Data Transfer (As-Consumed)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Feb-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 5,
+        "POB Name": "Metered Data Transfer (As-Consumed)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Mar-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 5,
+        "POB Name": "Metered Data Transfer (As-Consumed)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Apr-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 5,
+        "POB Name": "Metered Data Transfer (As-Consumed)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "May-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 5,
+        "POB Name": "Metered Data Transfer (As-Consumed)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Jun-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 5,
+        "POB Name": "Metered Data Transfer (As-Consumed)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Jul-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 5,
+        "POB Name": "Metered Data Transfer (As-Consumed)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Aug-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 5,
+        "POB Name": "Metered Data Transfer (As-Consumed)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Sep-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 5,
+        "POB Name": "Metered Data Transfer (As-Consumed)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Oct-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 5,
+        "POB Name": "Metered Data Transfer (As-Consumed)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Nov-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 5,
+        "POB Name": "Metered Data Transfer (As-Consumed)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Dec-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 5,
+        "POB Name": "Metered Data Transfer (As-Consumed)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Jan-27",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 5,
+        "POB Name": "Metered Data Transfer (As-Consumed)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Feb-27",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 5,
+        "POB Name": "Metered Data Transfer (As-Consumed)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Mar-27",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 5,
+        "POB Name": "Metered Data Transfer (As-Consumed)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Apr-27",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 5,
+        "POB Name": "Metered Data Transfer (As-Consumed)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "May-27",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 5,
+        "POB Name": "Metered Data Transfer (As-Consumed)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Jun-27",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 5,
+        "POB Name": "Metered Data Transfer (As-Consumed)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Jul-27",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 5,
+        "POB Name": "Metered Data Transfer (As-Consumed)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Aug-27",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 5,
+        "POB Name": "Metered Data Transfer (As-Consumed)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Sep-27",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 5,
+        "POB Name": "Metered Data Transfer (As-Consumed)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Oct-27",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 5,
+        "POB Name": "Metered Data Transfer (As-Consumed)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Nov-27",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 5,
+        "POB Name": "Metered Data Transfer (As-Consumed)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2027-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Dec-27",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 6,
+        "POB Name": "Professional Services - Kickoff Milestone",
+        "Event Name": "Completion",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-01-01",
+        "Ext Allocated Price": 18750,
+        "Period": "Jan-26",
+        "Amount": 18750
+      },
+      {
+        "Line Item Num": 7,
+        "POB Name": "Professional Services - Data Migration Complete Milestone",
+        "Event Name": "Completion",
+        "Revenue Start Date": "2026-04-01",
+        "Revenue End Date": "2026-04-01",
+        "Ext Allocated Price": 37500,
+        "Period": "Apr-26",
+        "Amount": 37500
+      },
+      {
+        "Line Item Num": 8,
+        "POB Name": "Professional Services - Go-Live Milestone",
+        "Event Name": "Completion",
+        "Revenue Start Date": "2026-06-30",
+        "Revenue End Date": "2026-06-30",
+        "Ext Allocated Price": 18750,
+        "Period": "Jun-26",
+        "Amount": 18750
+      }
+    ],
+    "assumptions": [
+      "Revenue End Date is treated as inclusive when calculating total days for straight-line daily recognition.",
+      "Ratable POBs use standard straight-line daily revenue recognition: daily rate = Ext Allocated Price / total days in the recognition window; each month recognizes daily rate × days-in-month within the window.",
+      "Monthly recognition amounts are rounded to 2 decimals; the final month in each ratable line is adjusted for rounding so the sum equals Ext Allocated Price.",
+      "For milestone POBs, the completion date is assumed to be the single date provided on the line (Revenue Start Date = Revenue End Date), and 100% is recognized in that calendar month.",
+      "For EVT-PIT-CONSUMP-USAGE POBs (storage and data transfer), no usage/consumption events were provided; therefore Amount is shown as $0 for all periods."
+    ],
+    "open_questions": [
+      "For Line 4 (Metered Storage) and Line 5 (Metered Data Transfer), please provide the consumption events (units by period and the applicable unit rate / prepaid drawdown rate) so revenue can be recognized upon consumption instead of $0.",
+      "Please confirm the actual completion dates for the PS milestones (Lines 6-8). If they differ from the line dates (2026-01-01, 2026-04-01, 2026-06-30), the point-in-time revenue months should be updated accordingly."
+    ]
+  },
+  "summary": {
+    "assumptions": [
+      "Contract start is 2026-01-01 with a 24-month term; subscriptionEndDate is 2028-01-01 (service period runs through 2027-12-31).",
+      "Base committed capacity is 3× M50 clusters for the full 24 months with no proration (monthly periods align perfectly to the term).",
+      "Month-10 change is modeled as a co-termed amendment (Subscription Version 2 / Sales Order Date 2026-10-01) adding 1× M50 cluster and activating Premium Backup; both run prospectively from 2026-10-01 through 2027-12-31 (15 monthly bill periods).",
+      "Premium Backup from month 10 forward is priced/applied for all 4 clusters (quantity=4) through the co-termed remainder of the term.",
+      "Enterprise discount is 18% and applies only to fixed recurring components (clusters + backup); it is implemented via reduced sell price (Unit Sell = Unit List × 0.82). Usage and professional services are not discounted.",
+      "Fixed recurring net prices used for billing/rev modeling: M50 cluster $2,050 per cluster-month (2,500×0.82) and Premium Backup $410 per cluster-month (500×0.82).",
+      "Usage (storage at $0.25/GB-month; data transfer at $0.10/GB) is billed monthly in arrears; because actual usage quantities are unknown at booking, usage lines are included with zero quantities/amounts and are expected to be driven by monthly usage transactions.",
+      "Professional Services is a $75,000 migration/onboarding engagement delivered in the first ~6 months and billed via milestones (25%/50%/25%); milestone dates were assumed for modeling due to missing actual completion dates.",
+      "Billing assumption: invoice date equals billing date; taxes, payment terms, and invoice-level rounding/adjustments beyond cents are excluded.",
+      "Revenue policy assumption aligns to the stated expectation: committed clusters and backup are recognized ratably over their respective service windows; usage is recognized as-consumed; services are recognized at milestone achievement.",
+      "Ratable revenue uses straight-line daily recognition with the revenue end date treated as inclusive; monthly amounts are rounded to 2 decimals with a final-month true-up for rounding.",
+      "Allocation/SSP assumptions: SSP is based on list price (“Use List Price”); usage is treated as variable consideration and excluded from allocation eligibility so fixed discounts do not get allocated into usage.",
+      "Operational integration assumptions for Zuora Revenue: (a) usage/consumption events must be provided to release usage revenue; (b) milestone completion events (or equivalent) must be provided to release PS milestone revenue; otherwise revenue may not release as expected.",
+      "Data modeling assumption: recurring “Ordered Qty” is represented in unit-months for contract value reporting (e.g., base clusters 3×24=72; add-on cluster 1×15=15; backup 4×15=60).",
+      "No carve-ins/outs, ramp averaging, or variable consideration constraint adjustments were applied (carve adjustment assumed 0)."
+    ],
+    "open_questions": [
+      "[BLOCKING] What is the exact effective date/time for the month-10 amendment (4th cluster + Premium Backup activation)? If it’s not exactly 2026-10-01 (e.g., mid-month), this affects proration for billing and the ratable revenue windows.",
+      "[BLOCKING] What are the actual milestone completion dates for Professional Services (kickoff, migration complete, go-live), and is revenue recognized on completion date or customer acceptance date (if different)? This determines both milestone billing timing and point-in-time revenue release months.",
+      "[BLOCKING] Provide expected/actual monthly usage quantities (GB-month storage and GB data transfer) and/or the consumption events feed to Zuora Revenue. Without this, usage invoices and usage revenue remain $0 placeholders.",
+      "[HIGH] For recurring revenue release in Zuora Revenue, should the fixed recurring items (clusters/backup) be booking-based ratable (BK-OT-RATABLE) or billing/invoice-based ratable (e.g., BL-OT-INVRATABLE)? This affects the contract asset/liability pattern vs invoicing timing.",
+      "[HIGH] Should Professional Services milestone POBs be allocation-eligible and participate in SSP allocation (potentially absorbing some discount from recurring items), or remain excluded as modeled? This affects allocated prices and revenue by POB.",
+      "[HIGH] For Premium Backup modeling, should it be represented as quantity=4 starting 2026-10-01 (as assumed), or as (a) base qty=3 plus (b) incremental qty=1 to mirror cluster adds? This impacts charge segmentation, reporting, and amendment traceability but may not change total $ if dates align.",
+      "[MEDIUM] Should usage always be excluded from allocation and recognized only from actual usage uploads (current assumption), or do you want an estimated usage consideration included at booking for allocation/forecasting? This affects initial transaction price and allocation mechanics.",
+      "[MEDIUM] Confirm whether Premium Backup should apply to the initial 3 clusters prior to month 10 (current assumption: no; starts month 10 forward only). This affects months 1–9 billing and ratable revenue.",
+      "[MEDIUM] Confirm bill cycle day / billing run schedule: are advance recurring invoices always generated on the 1st, and are arrears usage invoices generated on period end or on the next invoice run date? This affects invoicing dates and any billing-to-revenue timing reconciliations.",
+      "[LOW] Confirm the specific Zuora Revenue “release event” label/config used in your tenant for booking-based ratable release (e.g., whether it is literally named “Upon Booking (Full Booking Release)” or another configured event name). This affects implementation/config mapping rather than commercial economics."
+    ]
+  }
+}

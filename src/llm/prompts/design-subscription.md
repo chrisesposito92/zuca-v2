@@ -98,9 +98,18 @@ For each charge you design, immediately assign its POB template:
 - Consumption-based: `EVT-PIT-CONSUMP-USAGE`
 - Billing-based: `BL-PIT-CONSUMP-PAYGO`
 
-**Prepayment charges (PPDD):**
-- Ratable recognition: `BK-OT-CONSUMP-RATABLE`
-- Consumption recognition: `EVT-PIT-CONSUMP-USAGE`
+**Prepayment charges (PPDD) - CRITICAL:**
+When the use case mentions "consumption-based", "as-used", "drawdown", or "release based on usage":
+- **Prepayment charge**: Use `BK-OT-CONSUMP-RATABLE` ONLY if you want ratable recognition spread over time
+- **For TRUE consumption-based recognition** (revenue deferred until credits consumed):
+  - Prepayment charge: Map to drawdown template (deferred revenue, no auto-release)
+  - Drawdown usage charge: Use `EVT-PIT-CONSUMP-USAGE` - this triggers recognition as consumption occurs
+  - Revenue waterfall for prepayment should show $0 until consumption events occur
+  - The drawdown charge "releases" revenue from the prepaid pool based on usage
+
+IMPORTANT: If the user says revenue is recognized "as credits are consumed" or "upon consumption",
+do NOT use a ratable template for the prepayment. The prepayment stays deferred and the
+drawdown charge's consumption events trigger the actual revenue recognition.
 
 **Overage charges:**
 - `BL-PIT-CONSUMP-PAYGO` or `EVT-PIT-CONSUMP-PAYGO`

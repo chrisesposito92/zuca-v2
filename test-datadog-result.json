@@ -1,0 +1,3585 @@
+{
+  "session_id": "e7ab6c9c-94f1-4f4a-b4e3-0b56679ee153",
+  "timestamp": "2025-12-22T05:35:13.748Z",
+  "input": {
+    "customer_name": "Datadog",
+    "contract_start_date": "01/01/2026",
+    "terms_months": 12,
+    "transaction_currency": "USD",
+    "billing_period": "Monthly",
+    "is_allocations": true,
+    "allocation_method": "Use List Price",
+    "rev_rec_notes": "Committed host subscriptions recognized ratably over term. Usage/overages (host-hours, APM spans, logs) recognized as consumption occurs. Month-7 upgrade is a contract modification adding 200 more Infra hosts plus APM + Logs - may require reallocation depending on treatment.",
+    "use_case_description": "Customer signs a 12-month observability agreement anchored on Infrastructure Monitoring (Enterprise) with a committed baseline of 500 hosts at $23/host/month (list), billed monthly in advance but committed for the full annual term. The Infra rate plan also includes a separate usage/overage charge for any host-hours above the 500-host commitment, priced at the on-demand equivalent of $27/host/month (modeled as a usage charge rated monthly from host-hour consumption). Starting in month 7 (a mid-term upgrade / contract modification), the customer adds 200 more committed Infra hosts (bringing the baseline to 700) and also adds APM at 150 APM hosts at $31/APM host/month (list), billed monthly for the remainder of the term with proration from the effective date. APM also includes monthly usage overages billed in arrears: $1.70 per million indexed spans and $0.10 per GB ingested spans beyond included allotments (modeled as separate usage charges). In the same month-7 upgrade, the customer adds Log Management usage charges for ongoing consumption billed monthly in arrears: Log Ingest at $0.10/GB and Standard Indexing at $1.70 per million events (billed-annually rates used as list for the demo). Commercially, the seller applies a 12% bundle discount to the fixed recurring components (Infra committed hosts + APM host subscription) starting at the upgrade effective date; usage overages remain undiscounted and bill at list. Revenue expectation (inferred): fixed SaaS subscription components recognized ratably over the service period; usage/overage charges recognized as consumption occurs; the mid-term upgrade is treated as a contract modification that may require reallocation across remaining performance obligations depending on SSP and modification treatment."
+  },
+  "contract_intel": {
+    "service_start_mdy": "01/01/2026",
+    "service_end_mdy": null,
+    "term_months": 12,
+    "billing_period": "Month",
+    "billing_timing": "InAdvance",
+    "trigger_event": "ContractEffective",
+    "go_live_mdy": "01/01/2026",
+    "booking_mdy": "01/01/2026",
+    "renewal_term_months": 12
+  },
+  "detected_capabilities": {
+    "billing_caps": [
+      "RECURRING",
+      "USAGE",
+      "OVERAGE",
+      "MIN COMMIT",
+      "AMENDMENT",
+      "PRORATION",
+      "DISCOUNT"
+    ],
+    "revenue_caps": [
+      "CONTRACT MOD",
+      "ALLOCATION"
+    ],
+    "hints": [
+      "“12-month … agreement” and per-host / per-APM-host monthly pricing → RECURRING",
+      "“billed monthly in advance” for committed baseline → supports recurring billing pattern (billing_timing captured as InAdvance)",
+      "“committed baseline of 500 hosts … committed for the full annual term” → MIN COMMIT",
+      "“usage/overage … above the 500-host commitment … modeled as a usage charge” and “usage overages billed in arrears” → USAGE + OVERAGE",
+      "“Starting in month 7 (a mid-term upgrade / contract modification)” adding quantities/products → AMENDMENT and Revenue CONTRACT MOD",
+      "“proration from the effective date” → PRORATION",
+      "“12% bundle discount to the fixed recurring components … usage overages remain undiscounted” → DISCOUNT (on recurring only)",
+      "“may require reallocation … depending on SSP and modification treatment” → Revenue ALLOCATION"
+    ],
+    "confidence": 0.86
+  },
+  "matched_golden_use_cases": {
+    "matched_guc": [
+      {
+        "id": "UC-0004",
+        "title": "Ramp  - Prospective",
+        "score": 0.509286,
+        "score_raw": 0.547619,
+        "jaccard_billing": 0.428571,
+        "jaccard_revenue": 0.666667,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "AMENDMENT",
+            "PRORATION"
+          ],
+          "missing": [
+            "USAGE",
+            "OVERAGE",
+            "MIN COMMIT",
+            "DISCOUNT"
+          ],
+          "unmatched": []
+        },
+        "revenue": {
+          "intersection": [
+            "CONTRACT MOD",
+            "ALLOCATION"
+          ],
+          "missing": [],
+          "unmatched": [
+            "RAMP"
+          ]
+        }
+      },
+      {
+        "id": "UC-0023",
+        "title": "Subscription - Cancel w Accel",
+        "score": 0.406875,
+        "score_raw": 0.4375,
+        "jaccard_billing": 0.375,
+        "jaccard_revenue": 0.5,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "AMENDMENT",
+            "PRORATION"
+          ],
+          "missing": [
+            "USAGE",
+            "OVERAGE",
+            "MIN COMMIT",
+            "DISCOUNT"
+          ],
+          "unmatched": [
+            "TIERED PRICING"
+          ]
+        },
+        "revenue": {
+          "intersection": [
+            "CONTRACT MOD"
+          ],
+          "missing": [
+            "ALLOCATION"
+          ],
+          "unmatched": []
+        }
+      },
+      {
+        "id": "UC-0010",
+        "title": "MEA  Prospective (ADV)",
+        "score": 0.3875,
+        "score_raw": 0.416667,
+        "jaccard_billing": 0.333333,
+        "jaccard_revenue": 0.5,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "AMENDMENT",
+            "PRORATION"
+          ],
+          "missing": [
+            "USAGE",
+            "OVERAGE",
+            "MIN COMMIT",
+            "DISCOUNT"
+          ],
+          "unmatched": [
+            "ONE-TIME",
+            "VOLUME PRICING"
+          ]
+        },
+        "revenue": {
+          "intersection": [
+            "CONTRACT MOD",
+            "ALLOCATION"
+          ],
+          "missing": [],
+          "unmatched": [
+            "CUSTOM EVENT",
+            "COST"
+          ]
+        }
+      }
+    ],
+    "scores_all": [
+      {
+        "id": "UC-0004",
+        "title": "Ramp  - Prospective",
+        "score": 0.509286,
+        "score_raw": 0.547619,
+        "jaccard_billing": 0.428571,
+        "jaccard_revenue": 0.666667,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "AMENDMENT",
+            "PRORATION"
+          ],
+          "missing": [
+            "USAGE",
+            "OVERAGE",
+            "MIN COMMIT",
+            "DISCOUNT"
+          ],
+          "unmatched": []
+        },
+        "revenue": {
+          "intersection": [
+            "CONTRACT MOD",
+            "ALLOCATION"
+          ],
+          "missing": [],
+          "unmatched": [
+            "RAMP"
+          ]
+        }
+      },
+      {
+        "id": "UC-0023",
+        "title": "Subscription - Cancel w Accel",
+        "score": 0.406875,
+        "score_raw": 0.4375,
+        "jaccard_billing": 0.375,
+        "jaccard_revenue": 0.5,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "AMENDMENT",
+            "PRORATION"
+          ],
+          "missing": [
+            "USAGE",
+            "OVERAGE",
+            "MIN COMMIT",
+            "DISCOUNT"
+          ],
+          "unmatched": [
+            "TIERED PRICING"
+          ]
+        },
+        "revenue": {
+          "intersection": [
+            "CONTRACT MOD"
+          ],
+          "missing": [
+            "ALLOCATION"
+          ],
+          "unmatched": []
+        }
+      },
+      {
+        "id": "UC-0010",
+        "title": "MEA  Prospective (ADV)",
+        "score": 0.3875,
+        "score_raw": 0.416667,
+        "jaccard_billing": 0.333333,
+        "jaccard_revenue": 0.5,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "AMENDMENT",
+            "PRORATION"
+          ],
+          "missing": [
+            "USAGE",
+            "OVERAGE",
+            "MIN COMMIT",
+            "DISCOUNT"
+          ],
+          "unmatched": [
+            "ONE-TIME",
+            "VOLUME PRICING"
+          ]
+        },
+        "revenue": {
+          "intersection": [
+            "CONTRACT MOD",
+            "ALLOCATION"
+          ],
+          "missing": [],
+          "unmatched": [
+            "CUSTOM EVENT",
+            "COST"
+          ]
+        }
+      },
+      {
+        "id": "UC-0011",
+        "title": "MEA  Retrospective (ADV)",
+        "score": 0.3875,
+        "score_raw": 0.416667,
+        "jaccard_billing": 0.333333,
+        "jaccard_revenue": 0.5,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "AMENDMENT",
+            "PRORATION"
+          ],
+          "missing": [
+            "USAGE",
+            "OVERAGE",
+            "MIN COMMIT",
+            "DISCOUNT"
+          ],
+          "unmatched": [
+            "ONE-TIME",
+            "VOLUME PRICING"
+          ]
+        },
+        "revenue": {
+          "intersection": [
+            "CONTRACT MOD",
+            "ALLOCATION"
+          ],
+          "missing": [],
+          "unmatched": [
+            "CUSTOM EVENT",
+            "COST"
+          ]
+        }
+      },
+      {
+        "id": "UC-0038",
+        "title": "B2C Cancellation",
+        "score": 0.365357,
+        "score_raw": 0.392857,
+        "jaccard_billing": 0.285714,
+        "jaccard_revenue": 0.5,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "AMENDMENT"
+          ],
+          "missing": [
+            "USAGE",
+            "OVERAGE",
+            "MIN COMMIT",
+            "PRORATION",
+            "DISCOUNT"
+          ],
+          "unmatched": []
+        },
+        "revenue": {
+          "intersection": [
+            "CONTRACT MOD"
+          ],
+          "missing": [
+            "ALLOCATION"
+          ],
+          "unmatched": []
+        }
+      },
+      {
+        "id": "UC-0009",
+        "title": "MEA with OLI HW - ADV",
+        "score": 0.335833,
+        "score_raw": 0.361111,
+        "jaccard_billing": 0.222222,
+        "jaccard_revenue": 0.5,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "PRORATION"
+          ],
+          "missing": [
+            "USAGE",
+            "OVERAGE",
+            "MIN COMMIT",
+            "AMENDMENT",
+            "DISCOUNT"
+          ],
+          "unmatched": [
+            "ONE-TIME",
+            "ORDER LINE ITEM"
+          ]
+        },
+        "revenue": {
+          "intersection": [
+            "ALLOCATION"
+          ],
+          "missing": [
+            "CONTRACT MOD"
+          ],
+          "unmatched": []
+        }
+      },
+      {
+        "id": "UC-0003",
+        "title": "Ramp - SL",
+        "score": 0.287857,
+        "score_raw": 0.309524,
+        "jaccard_billing": 0.285714,
+        "jaccard_revenue": 0.333333,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "PRORATION"
+          ],
+          "missing": [
+            "USAGE",
+            "OVERAGE",
+            "MIN COMMIT",
+            "AMENDMENT",
+            "DISCOUNT"
+          ],
+          "unmatched": []
+        },
+        "revenue": {
+          "intersection": [
+            "ALLOCATION"
+          ],
+          "missing": [
+            "CONTRACT MOD"
+          ],
+          "unmatched": [
+            "RAMP"
+          ]
+        }
+      },
+      {
+        "id": "UC-0026",
+        "title": "MEA with FX -ADV",
+        "score": 0.27125,
+        "score_raw": 0.291667,
+        "jaccard_billing": 0.25,
+        "jaccard_revenue": 0.333333,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "PRORATION"
+          ],
+          "missing": [
+            "USAGE",
+            "OVERAGE",
+            "MIN COMMIT",
+            "AMENDMENT",
+            "DISCOUNT"
+          ],
+          "unmatched": [
+            "ONE-TIME"
+          ]
+        },
+        "revenue": {
+          "intersection": [
+            "ALLOCATION"
+          ],
+          "missing": [
+            "CONTRACT MOD"
+          ],
+          "unmatched": [
+            "CUSTOM EVENT"
+          ]
+        }
+      },
+      {
+        "id": "UC-0028",
+        "title": "Subscription w T&M PS - OLI",
+        "score": 0.27125,
+        "score_raw": 0.291667,
+        "jaccard_billing": 0.25,
+        "jaccard_revenue": 0.333333,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "PRORATION"
+          ],
+          "missing": [
+            "USAGE",
+            "OVERAGE",
+            "MIN COMMIT",
+            "AMENDMENT",
+            "DISCOUNT"
+          ],
+          "unmatched": [
+            "ORDER LINE ITEM"
+          ]
+        },
+        "revenue": {
+          "intersection": [
+            "ALLOCATION"
+          ],
+          "missing": [
+            "CONTRACT MOD"
+          ],
+          "unmatched": [
+            "CUSTOM EVENT"
+          ]
+        }
+      },
+      {
+        "id": "UC-0030",
+        "title": "MEA - Software with RSSP",
+        "score": 0.27125,
+        "score_raw": 0.291667,
+        "jaccard_billing": 0.25,
+        "jaccard_revenue": 0.333333,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "PRORATION"
+          ],
+          "missing": [
+            "USAGE",
+            "OVERAGE",
+            "MIN COMMIT",
+            "AMENDMENT",
+            "DISCOUNT"
+          ],
+          "unmatched": [
+            "ONE-TIME"
+          ]
+        },
+        "revenue": {
+          "intersection": [
+            "ALLOCATION"
+          ],
+          "missing": [
+            "CONTRACT MOD"
+          ],
+          "unmatched": [
+            "CUSTOM EVENT"
+          ]
+        }
+      },
+      {
+        "id": "UC-0021",
+        "title": "ACB-Min Commit - Over",
+        "score": 0.265714,
+        "score_raw": 0.285714,
+        "jaccard_billing": 0.571429,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "USAGE",
+            "OVERAGE",
+            "MIN COMMIT"
+          ],
+          "missing": [
+            "AMENDMENT",
+            "PRORATION",
+            "DISCOUNT"
+          ],
+          "unmatched": []
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "CONTRACT MOD",
+            "ALLOCATION"
+          ],
+          "unmatched": [
+            "ADVANCED CONSUMPTION"
+          ]
+        }
+      },
+      {
+        "id": "UC-0024",
+        "title": "Subscription & PS (Milestones) - ADV",
+        "score": 0.258333,
+        "score_raw": 0.277778,
+        "jaccard_billing": 0.222222,
+        "jaccard_revenue": 0.333333,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "PRORATION"
+          ],
+          "missing": [
+            "USAGE",
+            "OVERAGE",
+            "MIN COMMIT",
+            "AMENDMENT",
+            "DISCOUNT"
+          ],
+          "unmatched": [
+            "ONE-TIME",
+            "TIERED PRICING"
+          ]
+        },
+        "revenue": {
+          "intersection": [
+            "ALLOCATION"
+          ],
+          "missing": [
+            "CONTRACT MOD"
+          ],
+          "unmatched": [
+            "CUSTOM EVENT"
+          ]
+        }
+      },
+      {
+        "id": "UC-0020",
+        "title": "ACB-Min Commit - Under",
+        "score": 0.199286,
+        "score_raw": 0.214286,
+        "jaccard_billing": 0.428571,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "USAGE",
+            "MIN COMMIT"
+          ],
+          "missing": [
+            "OVERAGE",
+            "AMENDMENT",
+            "PRORATION",
+            "DISCOUNT"
+          ],
+          "unmatched": []
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "CONTRACT MOD",
+            "ALLOCATION"
+          ],
+          "unmatched": [
+            "ADVANCED CONSUMPTION"
+          ]
+        }
+      },
+      {
+        "id": "UC-0032",
+        "title": "Subscription - Suspend/Resume",
+        "score": 0.199286,
+        "score_raw": 0.214286,
+        "jaccard_billing": 0.428571,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "AMENDMENT",
+            "PRORATION"
+          ],
+          "missing": [
+            "USAGE",
+            "OVERAGE",
+            "MIN COMMIT",
+            "DISCOUNT"
+          ],
+          "unmatched": []
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "CONTRACT MOD",
+            "ALLOCATION"
+          ],
+          "unmatched": []
+        }
+      },
+      {
+        "id": "UC-0031",
+        "title": "ACB-PPDD(Usage) with Top-off",
+        "score": 0.174375,
+        "score_raw": 0.1875,
+        "jaccard_billing": 0.375,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "USAGE",
+            "AMENDMENT"
+          ],
+          "missing": [
+            "OVERAGE",
+            "MIN COMMIT",
+            "PRORATION",
+            "DISCOUNT"
+          ],
+          "unmatched": [
+            "PREPAID DRAWDOWN"
+          ]
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "CONTRACT MOD",
+            "ALLOCATION"
+          ],
+          "unmatched": [
+            "ADVANCED CONSUMPTION"
+          ]
+        }
+      },
+      {
+        "id": "UC-0002",
+        "title": "Bundle & PS (ADV)",
+        "score": 0.167917,
+        "score_raw": 0.180556,
+        "jaccard_billing": 0.111111,
+        "jaccard_revenue": 0.25,
+        "billing": {
+          "intersection": [
+            "RECURRING"
+          ],
+          "missing": [
+            "USAGE",
+            "OVERAGE",
+            "MIN COMMIT",
+            "AMENDMENT",
+            "PRORATION",
+            "DISCOUNT"
+          ],
+          "unmatched": [
+            "ONE-TIME",
+            "VOLUME PRICING"
+          ]
+        },
+        "revenue": {
+          "intersection": [
+            "ALLOCATION"
+          ],
+          "missing": [
+            "CONTRACT MOD"
+          ],
+          "unmatched": [
+            "CUSTOM EVENT",
+            "BUNDLE"
+          ]
+        }
+      },
+      {
+        "id": "UC-0006",
+        "title": "MEA w Royalty (ADV)",
+        "score": 0.167917,
+        "score_raw": 0.180556,
+        "jaccard_billing": 0.111111,
+        "jaccard_revenue": 0.25,
+        "billing": {
+          "intersection": [
+            "RECURRING"
+          ],
+          "missing": [
+            "USAGE",
+            "OVERAGE",
+            "MIN COMMIT",
+            "AMENDMENT",
+            "PRORATION",
+            "DISCOUNT"
+          ],
+          "unmatched": [
+            "ONE-TIME",
+            "VOLUME PRICING"
+          ]
+        },
+        "revenue": {
+          "intersection": [
+            "ALLOCATION"
+          ],
+          "missing": [
+            "CONTRACT MOD"
+          ],
+          "unmatched": [
+            "COST",
+            "VC"
+          ]
+        }
+      },
+      {
+        "id": "UC-0008",
+        "title": "MEA w Cost (ADV)",
+        "score": 0.167917,
+        "score_raw": 0.180556,
+        "jaccard_billing": 0.111111,
+        "jaccard_revenue": 0.25,
+        "billing": {
+          "intersection": [
+            "RECURRING"
+          ],
+          "missing": [
+            "USAGE",
+            "OVERAGE",
+            "MIN COMMIT",
+            "AMENDMENT",
+            "PRORATION",
+            "DISCOUNT"
+          ],
+          "unmatched": [
+            "ONE-TIME",
+            "VOLUME PRICING"
+          ]
+        },
+        "revenue": {
+          "intersection": [
+            "ALLOCATION"
+          ],
+          "missing": [
+            "CONTRACT MOD"
+          ],
+          "unmatched": [
+            "CUSTOM EVENT",
+            "COST"
+          ]
+        }
+      },
+      {
+        "id": "UC-0029",
+        "title": "SFC - ADV",
+        "score": 0.155,
+        "score_raw": 0.166667,
+        "jaccard_billing": 0,
+        "jaccard_revenue": 0.333333,
+        "billing": {
+          "intersection": [],
+          "missing": [
+            "RECURRING",
+            "USAGE",
+            "OVERAGE",
+            "MIN COMMIT",
+            "AMENDMENT",
+            "PRORATION",
+            "DISCOUNT"
+          ],
+          "unmatched": []
+        },
+        "revenue": {
+          "intersection": [
+            "ALLOCATION"
+          ],
+          "missing": [
+            "CONTRACT MOD"
+          ],
+          "unmatched": [
+            "SFC"
+          ]
+        }
+      },
+      {
+        "id": "UC-0033",
+        "title": "MEA-Multi-Currency -ADV",
+        "score": 0.155,
+        "score_raw": 0.166667,
+        "jaccard_billing": 0,
+        "jaccard_revenue": 0.333333,
+        "billing": {
+          "intersection": [],
+          "missing": [
+            "RECURRING",
+            "USAGE",
+            "OVERAGE",
+            "MIN COMMIT",
+            "AMENDMENT",
+            "PRORATION",
+            "DISCOUNT"
+          ],
+          "unmatched": []
+        },
+        "revenue": {
+          "intersection": [
+            "ALLOCATION"
+          ],
+          "missing": [
+            "CONTRACT MOD"
+          ],
+          "unmatched": [
+            "COST"
+          ]
+        }
+      },
+      {
+        "id": "UC-0001",
+        "title": "Subscription",
+        "score": 0.132857,
+        "score_raw": 0.142857,
+        "jaccard_billing": 0.285714,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "PRORATION"
+          ],
+          "missing": [
+            "USAGE",
+            "OVERAGE",
+            "MIN COMMIT",
+            "AMENDMENT",
+            "DISCOUNT"
+          ],
+          "unmatched": []
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "CONTRACT MOD",
+            "ALLOCATION"
+          ],
+          "unmatched": []
+        }
+      },
+      {
+        "id": "UC-0025",
+        "title": "Subscription - free mos - CNTRL",
+        "score": 0.132857,
+        "score_raw": 0.142857,
+        "jaccard_billing": 0.285714,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "DISCOUNT"
+          ],
+          "missing": [
+            "USAGE",
+            "OVERAGE",
+            "MIN COMMIT",
+            "AMENDMENT",
+            "PRORATION"
+          ],
+          "unmatched": []
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "CONTRACT MOD",
+            "ALLOCATION"
+          ],
+          "unmatched": []
+        }
+      },
+      {
+        "id": "UC-0037",
+        "title": "B2C Promo",
+        "score": 0.132857,
+        "score_raw": 0.142857,
+        "jaccard_billing": 0.285714,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "DISCOUNT"
+          ],
+          "missing": [
+            "USAGE",
+            "OVERAGE",
+            "MIN COMMIT",
+            "AMENDMENT",
+            "PRORATION"
+          ],
+          "unmatched": []
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "CONTRACT MOD",
+            "ALLOCATION"
+          ],
+          "unmatched": []
+        }
+      },
+      {
+        "id": "UC-0005",
+        "title": "Ramp - Inv Schedules",
+        "score": 0.11625,
+        "score_raw": 0.125,
+        "jaccard_billing": 0.25,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "PRORATION"
+          ],
+          "missing": [
+            "USAGE",
+            "OVERAGE",
+            "MIN COMMIT",
+            "AMENDMENT",
+            "DISCOUNT"
+          ],
+          "unmatched": [
+            "TIERED PRICING"
+          ]
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "CONTRACT MOD",
+            "ALLOCATION"
+          ],
+          "unmatched": [
+            "RAMP"
+          ]
+        }
+      },
+      {
+        "id": "UC-0012",
+        "title": "ACB - PPDD (Ratable)",
+        "score": 0.11625,
+        "score_raw": 0.125,
+        "jaccard_billing": 0.25,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "USAGE"
+          ],
+          "missing": [
+            "OVERAGE",
+            "MIN COMMIT",
+            "AMENDMENT",
+            "PRORATION",
+            "DISCOUNT"
+          ],
+          "unmatched": [
+            "PREPAID DRAWDOWN"
+          ]
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "CONTRACT MOD",
+            "ALLOCATION"
+          ],
+          "unmatched": [
+            "CUSTOM EVENT",
+            "ADVANCED CONSUMPTION"
+          ]
+        }
+      },
+      {
+        "id": "UC-0013",
+        "title": "ACB - PPDD (Usage)",
+        "score": 0.11625,
+        "score_raw": 0.125,
+        "jaccard_billing": 0.25,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "USAGE"
+          ],
+          "missing": [
+            "OVERAGE",
+            "MIN COMMIT",
+            "AMENDMENT",
+            "PRORATION",
+            "DISCOUNT"
+          ],
+          "unmatched": [
+            "PREPAID DRAWDOWN"
+          ]
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "CONTRACT MOD",
+            "ALLOCATION"
+          ],
+          "unmatched": [
+            "CUSTOM EVENT",
+            "ADVANCED CONSUMPTION"
+          ]
+        }
+      },
+      {
+        "id": "UC-0016",
+        "title": "ACB - PPDD (Ratable-VC)",
+        "score": 0.11625,
+        "score_raw": 0.125,
+        "jaccard_billing": 0.25,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "USAGE"
+          ],
+          "missing": [
+            "OVERAGE",
+            "MIN COMMIT",
+            "AMENDMENT",
+            "PRORATION",
+            "DISCOUNT"
+          ],
+          "unmatched": [
+            "PREPAID DRAWDOWN"
+          ]
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "CONTRACT MOD",
+            "ALLOCATION"
+          ],
+          "unmatched": [
+            "VC",
+            "ADVANCED CONSUMPTION"
+          ]
+        }
+      },
+      {
+        "id": "UC-0017",
+        "title": "ACB - PPDD (Usage - Multi Prod)",
+        "score": 0.11625,
+        "score_raw": 0.125,
+        "jaccard_billing": 0.25,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "USAGE"
+          ],
+          "missing": [
+            "OVERAGE",
+            "MIN COMMIT",
+            "AMENDMENT",
+            "PRORATION",
+            "DISCOUNT"
+          ],
+          "unmatched": [
+            "PREPAID DRAWDOWN"
+          ]
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "CONTRACT MOD",
+            "ALLOCATION"
+          ],
+          "unmatched": [
+            "ADVANCED CONSUMPTION"
+          ]
+        }
+      },
+      {
+        "id": "UC-0019",
+        "title": "ACB - Commit Arrears (Usage)",
+        "score": 0.11625,
+        "score_raw": 0.125,
+        "jaccard_billing": 0.25,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "USAGE"
+          ],
+          "missing": [
+            "OVERAGE",
+            "MIN COMMIT",
+            "AMENDMENT",
+            "PRORATION",
+            "DISCOUNT"
+          ],
+          "unmatched": [
+            "PREPAID DRAWDOWN"
+          ]
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "CONTRACT MOD",
+            "ALLOCATION"
+          ],
+          "unmatched": [
+            "ADVANCED CONSUMPTION"
+          ]
+        }
+      },
+      {
+        "id": "UC-0027",
+        "title": "Subscription with Setup Fee - CNTRL",
+        "score": 0.11625,
+        "score_raw": 0.125,
+        "jaccard_billing": 0.25,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "PRORATION"
+          ],
+          "missing": [
+            "USAGE",
+            "OVERAGE",
+            "MIN COMMIT",
+            "AMENDMENT",
+            "DISCOUNT"
+          ],
+          "unmatched": [
+            "ONE-TIME"
+          ]
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "CONTRACT MOD",
+            "ALLOCATION"
+          ],
+          "unmatched": []
+        }
+      },
+      {
+        "id": "UC-0018",
+        "title": "ACB - Commit Arrears (Ratable)",
+        "score": 0.103333,
+        "score_raw": 0.111111,
+        "jaccard_billing": 0.222222,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "USAGE"
+          ],
+          "missing": [
+            "OVERAGE",
+            "MIN COMMIT",
+            "AMENDMENT",
+            "PRORATION",
+            "DISCOUNT"
+          ],
+          "unmatched": [
+            "PREPAID DRAWDOWN",
+            "TIERED PRICING"
+          ]
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "CONTRACT MOD",
+            "ALLOCATION"
+          ],
+          "unmatched": [
+            "ADVANCED CONSUMPTION"
+          ]
+        }
+      },
+      {
+        "id": "UC-0014",
+        "title": "ACB - Paygo",
+        "score": 0.066429,
+        "score_raw": 0.071429,
+        "jaccard_billing": 0.142857,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "USAGE"
+          ],
+          "missing": [
+            "RECURRING",
+            "OVERAGE",
+            "MIN COMMIT",
+            "AMENDMENT",
+            "PRORATION",
+            "DISCOUNT"
+          ],
+          "unmatched": []
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "CONTRACT MOD",
+            "ALLOCATION"
+          ],
+          "unmatched": [
+            "ADVANCED CONSUMPTION"
+          ]
+        }
+      },
+      {
+        "id": "UC-0034",
+        "title": "B2C  Monthly",
+        "score": 0.066429,
+        "score_raw": 0.071429,
+        "jaccard_billing": 0.142857,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "RECURRING"
+          ],
+          "missing": [
+            "USAGE",
+            "OVERAGE",
+            "MIN COMMIT",
+            "AMENDMENT",
+            "PRORATION",
+            "DISCOUNT"
+          ],
+          "unmatched": []
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "CONTRACT MOD",
+            "ALLOCATION"
+          ],
+          "unmatched": []
+        }
+      },
+      {
+        "id": "UC-0035",
+        "title": "B2C Annual",
+        "score": 0.066429,
+        "score_raw": 0.071429,
+        "jaccard_billing": 0.142857,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "RECURRING"
+          ],
+          "missing": [
+            "USAGE",
+            "OVERAGE",
+            "MIN COMMIT",
+            "AMENDMENT",
+            "PRORATION",
+            "DISCOUNT"
+          ],
+          "unmatched": []
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "CONTRACT MOD",
+            "ALLOCATION"
+          ],
+          "unmatched": []
+        }
+      },
+      {
+        "id": "UC-0036",
+        "title": "B2C MTM",
+        "score": 0.066429,
+        "score_raw": 0.071429,
+        "jaccard_billing": 0.142857,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "RECURRING"
+          ],
+          "missing": [
+            "USAGE",
+            "OVERAGE",
+            "MIN COMMIT",
+            "AMENDMENT",
+            "PRORATION",
+            "DISCOUNT"
+          ],
+          "unmatched": []
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "CONTRACT MOD",
+            "ALLOCATION"
+          ],
+          "unmatched": []
+        }
+      },
+      {
+        "id": "UC-0007",
+        "title": "Subscription & VC",
+        "score": 0.058125,
+        "score_raw": 0.0625,
+        "jaccard_billing": 0.125,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "RECURRING"
+          ],
+          "missing": [
+            "USAGE",
+            "OVERAGE",
+            "MIN COMMIT",
+            "AMENDMENT",
+            "PRORATION",
+            "DISCOUNT"
+          ],
+          "unmatched": [
+            "TIERED PRICING"
+          ]
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "CONTRACT MOD",
+            "ALLOCATION"
+          ],
+          "unmatched": [
+            "VC"
+          ]
+        }
+      },
+      {
+        "id": "UC-0015",
+        "title": "Subscription - Weekend Delivery",
+        "score": 0.058125,
+        "score_raw": 0.0625,
+        "jaccard_billing": 0.125,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "RECURRING"
+          ],
+          "missing": [
+            "USAGE",
+            "OVERAGE",
+            "MIN COMMIT",
+            "AMENDMENT",
+            "PRORATION",
+            "DISCOUNT"
+          ],
+          "unmatched": [
+            "DELIVERY PRICING"
+          ]
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "CONTRACT MOD",
+            "ALLOCATION"
+          ],
+          "unmatched": [
+            "ADVANCED CONSUMPTION",
+            "DELIVERY"
+          ]
+        }
+      },
+      {
+        "id": "UC-0022",
+        "title": "ACB-Paygo - Prerated",
+        "score": 0.058125,
+        "score_raw": 0.0625,
+        "jaccard_billing": 0.125,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "USAGE"
+          ],
+          "missing": [
+            "RECURRING",
+            "OVERAGE",
+            "MIN COMMIT",
+            "AMENDMENT",
+            "PRORATION",
+            "DISCOUNT"
+          ],
+          "unmatched": [
+            "PRERATED PRICING"
+          ]
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "CONTRACT MOD",
+            "ALLOCATION"
+          ],
+          "unmatched": [
+            "ADVANCED CONSUMPTION"
+          ]
+        }
+      }
+    ],
+    "normalized_inputs": {
+      "billing_caps": [
+        "RECURRING",
+        "USAGE",
+        "OVERAGE",
+        "MIN COMMIT",
+        "AMENDMENT",
+        "PRORATION",
+        "DISCOUNT"
+      ],
+      "revenue_caps": [
+        "CONTRACT MOD",
+        "ALLOCATION"
+      ]
+    }
+  },
+  "subscription_spec": {
+    "subscription": {
+      "name": "Datadog - Observability Agreement (Infra + Upgrade w/ APM + Logs) - 2026",
+      "termType": "TERMED",
+      "status": "Draft",
+      "currency": "USD",
+      "contractEffectiveDate": "2026-01-01",
+      "serviceActivationDate": "2026-01-01",
+      "customerAcceptanceDate": "2026-01-01",
+      "subscriptionStartDate": "2026-01-01",
+      "subscriptionEndDate": "2027-01-01",
+      "initialTerm": 12,
+      "initialTermPeriodType": "Month",
+      "renewalTerm": 12,
+      "renewalTermPeriodType": "Month",
+      "autoRenew": true
+    },
+    "rate_plans": [
+      {
+        "productName": "Datadog Infrastructure Monitoring (Enterprise)",
+        "ratePlanName": "Infrastructure Monitoring - Enterprise",
+        "charges": [
+          {
+            "name": "Infra Committed Hosts - Months 1-6 (500 @ $23 list)",
+            "type": "Recurring",
+            "model": "PerUnit",
+            "uom": "Host",
+            "billingPeriod": "Month",
+            "billingTiming": "InAdvance",
+            "billingDay": null,
+            "billingPeriodAlignment": "SubscriptionStart",
+            "listPriceBase": "Per Unit",
+            "triggerEvent": "ContractEffective",
+            "specificTriggerDate": null,
+            "endDateCondition": "SpecificEndDate",
+            "specificEndDate": "2026-06-30",
+            "quantity": 500,
+            "listPrice": 23,
+            "sellPrice": 23,
+            "price": 23,
+            "effectiveStartDate": "2026-01-01",
+            "effectiveEndDate": "2026-07-01",
+            "chargeFunction": "Commitment",
+            "isAllocationEligible": true,
+            "drawdownType": null,
+            "commitmentType": "Minimum Commitment",
+            "prepaymentUOM": null,
+            "prepaymentUnits": null,
+            "validityPeriod": null
+          },
+          {
+            "name": "Infra Committed Hosts - Months 7-12 (700 @ $23 list, 12% disc)",
+            "type": "Recurring",
+            "model": "PerUnit",
+            "uom": "Host",
+            "billingPeriod": "Month",
+            "billingTiming": "InAdvance",
+            "billingDay": null,
+            "billingPeriodAlignment": "SubscriptionStart",
+            "listPriceBase": "Per Unit",
+            "triggerEvent": "ContractEffective",
+            "specificTriggerDate": null,
+            "endDateCondition": "SubscriptionEnd",
+            "specificEndDate": null,
+            "quantity": 700,
+            "listPrice": 23,
+            "sellPrice": 20.24,
+            "price": 20.24,
+            "effectiveStartDate": "2026-07-01",
+            "effectiveEndDate": "2027-01-01",
+            "chargeFunction": "Commitment",
+            "isAllocationEligible": true,
+            "drawdownType": null,
+            "commitmentType": "Minimum Commitment",
+            "prepaymentUOM": null,
+            "prepaymentUnits": null,
+            "validityPeriod": null
+          },
+          {
+            "name": "Infra Host-Hour Overage (above committed baseline)",
+            "type": "Usage",
+            "model": "PerUnit",
+            "uom": "HostHour",
+            "billingPeriod": "Month",
+            "billingTiming": "InArrears",
+            "billingDay": null,
+            "billingPeriodAlignment": "SubscriptionStart",
+            "listPriceBase": "Per Unit",
+            "triggerEvent": "Usage",
+            "specificTriggerDate": null,
+            "endDateCondition": "SubscriptionEnd",
+            "specificEndDate": null,
+            "quantity": null,
+            "listPrice": 0.0375,
+            "sellPrice": 0.0375,
+            "price": 0.0375,
+            "effectiveStartDate": "2026-01-01",
+            "effectiveEndDate": "2027-01-01",
+            "chargeFunction": "Overage",
+            "isAllocationEligible": false,
+            "drawdownType": null,
+            "commitmentType": null,
+            "prepaymentUOM": null,
+            "prepaymentUnits": null,
+            "validityPeriod": null
+          }
+        ]
+      },
+      {
+        "productName": "Datadog APM",
+        "ratePlanName": "APM - Host Subscription + Usage Overages",
+        "charges": [
+          {
+            "name": "APM Hosts - Months 7-12 (150 @ $31 list, 12% disc)",
+            "type": "Recurring",
+            "model": "PerUnit",
+            "uom": "APM Host",
+            "billingPeriod": "Month",
+            "billingTiming": "InAdvance",
+            "billingDay": null,
+            "billingPeriodAlignment": "SubscriptionStart",
+            "listPriceBase": "Per Unit",
+            "triggerEvent": "ContractEffective",
+            "specificTriggerDate": null,
+            "endDateCondition": "SubscriptionEnd",
+            "specificEndDate": null,
+            "quantity": 150,
+            "listPrice": 31,
+            "sellPrice": 27.28,
+            "price": 27.28,
+            "effectiveStartDate": "2026-07-01",
+            "effectiveEndDate": "2027-01-01",
+            "chargeFunction": "None",
+            "isAllocationEligible": true,
+            "drawdownType": null,
+            "commitmentType": null,
+            "prepaymentUOM": null,
+            "prepaymentUnits": null,
+            "validityPeriod": null
+          },
+          {
+            "name": "APM Indexed Spans Overage ($/M spans)",
+            "type": "Usage",
+            "model": "PerUnit",
+            "uom": "MillionSpans",
+            "billingPeriod": "Month",
+            "billingTiming": "InArrears",
+            "billingDay": null,
+            "billingPeriodAlignment": "SubscriptionStart",
+            "listPriceBase": "Per Unit",
+            "triggerEvent": "Usage",
+            "specificTriggerDate": null,
+            "endDateCondition": "SubscriptionEnd",
+            "specificEndDate": null,
+            "quantity": null,
+            "listPrice": 1.7,
+            "sellPrice": 1.7,
+            "price": 1.7,
+            "effectiveStartDate": "2026-07-01",
+            "effectiveEndDate": "2027-01-01",
+            "chargeFunction": "Overage",
+            "isAllocationEligible": false,
+            "drawdownType": null,
+            "commitmentType": null,
+            "prepaymentUOM": null,
+            "prepaymentUnits": null,
+            "validityPeriod": null
+          },
+          {
+            "name": "APM Ingested Spans Overage ($/GB)",
+            "type": "Usage",
+            "model": "PerUnit",
+            "uom": "GB",
+            "billingPeriod": "Month",
+            "billingTiming": "InArrears",
+            "billingDay": null,
+            "billingPeriodAlignment": "SubscriptionStart",
+            "listPriceBase": "Per Unit",
+            "triggerEvent": "Usage",
+            "specificTriggerDate": null,
+            "endDateCondition": "SubscriptionEnd",
+            "specificEndDate": null,
+            "quantity": null,
+            "listPrice": 0.1,
+            "sellPrice": 0.1,
+            "price": 0.1,
+            "effectiveStartDate": "2026-07-01",
+            "effectiveEndDate": "2027-01-01",
+            "chargeFunction": "Overage",
+            "isAllocationEligible": false,
+            "drawdownType": null,
+            "commitmentType": null,
+            "prepaymentUOM": null,
+            "prepaymentUnits": null,
+            "validityPeriod": null
+          }
+        ]
+      },
+      {
+        "productName": "Datadog Log Management",
+        "ratePlanName": "Logs - Usage (In Arrears)",
+        "charges": [
+          {
+            "name": "Logs - Log Ingest ($/GB)",
+            "type": "Usage",
+            "model": "PerUnit",
+            "uom": "GB",
+            "billingPeriod": "Month",
+            "billingTiming": "InArrears",
+            "billingDay": null,
+            "billingPeriodAlignment": "SubscriptionStart",
+            "listPriceBase": "Per Unit",
+            "triggerEvent": "Usage",
+            "specificTriggerDate": null,
+            "endDateCondition": "SubscriptionEnd",
+            "specificEndDate": null,
+            "quantity": null,
+            "listPrice": 0.1,
+            "sellPrice": 0.1,
+            "price": 0.1,
+            "effectiveStartDate": "2026-07-01",
+            "effectiveEndDate": "2027-01-01",
+            "chargeFunction": "None",
+            "isAllocationEligible": false,
+            "drawdownType": null,
+            "commitmentType": null,
+            "prepaymentUOM": null,
+            "prepaymentUnits": null,
+            "validityPeriod": null
+          },
+          {
+            "name": "Logs - Standard Indexing ($/M events)",
+            "type": "Usage",
+            "model": "PerUnit",
+            "uom": "MillionEvents",
+            "billingPeriod": "Month",
+            "billingTiming": "InArrears",
+            "billingDay": null,
+            "billingPeriodAlignment": "SubscriptionStart",
+            "listPriceBase": "Per Unit",
+            "triggerEvent": "Usage",
+            "specificTriggerDate": null,
+            "endDateCondition": "SubscriptionEnd",
+            "specificEndDate": null,
+            "quantity": null,
+            "listPrice": 1.7,
+            "sellPrice": 1.7,
+            "price": 1.7,
+            "effectiveStartDate": "2026-07-01",
+            "effectiveEndDate": "2027-01-01",
+            "chargeFunction": "None",
+            "isAllocationEligible": false,
+            "drawdownType": null,
+            "commitmentType": null,
+            "prepaymentUOM": null,
+            "prepaymentUnits": null,
+            "validityPeriod": null
+          }
+        ]
+      }
+    ],
+    "usage": [
+      {
+        "Date": "2026-01-31",
+        "UOM": "HostHour",
+        "Quantity": 10000,
+        "Charge Name": "Infra Host-Hour Overage (above committed baseline)",
+        "Amount": 375
+      },
+      {
+        "Date": "2026-02-28",
+        "UOM": "HostHour",
+        "Quantity": 20000,
+        "Charge Name": "Infra Host-Hour Overage (above committed baseline)",
+        "Amount": 750
+      },
+      {
+        "Date": "2026-07-31",
+        "UOM": "HostHour",
+        "Quantity": 30000,
+        "Charge Name": "Infra Host-Hour Overage (above committed baseline)",
+        "Amount": 1125
+      },
+      {
+        "Date": "2026-07-31",
+        "UOM": "MillionSpans",
+        "Quantity": 50,
+        "Charge Name": "APM Indexed Spans Overage ($/M spans)",
+        "Amount": 85
+      },
+      {
+        "Date": "2026-07-31",
+        "UOM": "GB",
+        "Quantity": 200,
+        "Charge Name": "APM Ingested Spans Overage ($/GB)",
+        "Amount": 20
+      },
+      {
+        "Date": "2026-07-31",
+        "UOM": "GB",
+        "Quantity": 1000,
+        "Charge Name": "Logs - Log Ingest ($/GB)",
+        "Amount": 100
+      },
+      {
+        "Date": "2026-07-31",
+        "UOM": "MillionEvents",
+        "Quantity": 80,
+        "Charge Name": "Logs - Standard Indexing ($/M events)",
+        "Amount": 136
+      },
+      {
+        "Date": "2026-08-31",
+        "UOM": "MillionEvents",
+        "Quantity": 120,
+        "Charge Name": "Logs - Standard Indexing ($/M events)",
+        "Amount": 204
+      }
+    ],
+    "assumptions": [
+      "Term end date assumed as 2027-01-01 (i.e., 12 months from 2026-01-01). For ratable recognition windows, end is treated as 2026-12-31.",
+      "Month-7 upgrade effective date assumed to be 2026-07-01 (start of month 7) to align with monthly billing periods; proration is therefore minimal/none in this design.",
+      "The 12% bundle discount is modeled directly via sellPrice on the fixed recurring components starting 2026-07-01; usage charges remain at list price (undiscounted).",
+      "Infra host-hour overage rate assumes 720 host-hours per month (30 days * 24 hours) to convert $27/host/month into $0.0375/host-hour for demo purposes.",
+      "Usage charges are configured as billed monthly in arrears and recognized upon consumption events (usage import / consumption event).",
+      "Included usage allotments (if any) for APM/logs are not modeled; only overage usage charges are represented.",
+      "Allocations are expected to be performed in ZR using list price as SSP, primarily across the fixed recurring components (Infra committed + APM hosts), especially at the month-7 contract modification."
+    ],
+    "open_questions": [
+      "Confirm the intended subscription end date handling: should the 12-month term end on 2026-12-31 (inclusive) or 2027-01-01 (exclusive/end date)?",
+      "For Infra committed hosts after the upgrade, does the 12% discount apply to the entire 700-host baseline (including the original 500) or only to the incremental 200 and the new APM subscription?",
+      "Should Infra host-hour overages be billed strictly in arrears (typical for usage) or can they be billed in advance/estimated then trued up?",
+      "For revenue, confirm modification treatment in ZR: prospective, retrospective (cumulative catch-up), or separate contract; this affects whether/how reallocation is performed over the remaining term.",
+      "Do APM/logs usage charges require invoice-based recognition instead of consumption-event recognition (i.e., use BL-PIT-CONSUMP-PAYGO)?"
+    ]
+  },
+  "pob_mapping": {
+    "charge_pob_map": [
+      {
+        "chargeName": "Infra Committed Hosts - Months 1-6 (500 @ $23 list)",
+        "productName": "Datadog Infrastructure Monitoring (Enterprise)",
+        "ratePlanName": "Infrastructure Monitoring - Enterprise",
+        "pob_identifier": "BK-OT-RATABLE",
+        "pob_name": "SaaS Subscription (Committed Hosts) - Booking Ratable",
+        "ratable_method": "Ratable",
+        "release_event": "Upon Booking (Full Booking Release)",
+        "recognition_window": {
+          "start": "2026-01-01",
+          "end": "2026-06-30"
+        },
+        "rationale": "Fixed stand-ready SaaS service; recognize ratably over the service period based on booking release.",
+        "confidence": 0.9,
+        "alternatives": [
+          {
+            "pob_identifier": "BL-OT-INVRATABLE",
+            "pob_name": "SaaS Subscription - Invoice Ratable",
+            "why_not": "Would defer release until billing; the stated expectation is ratable over service with allocations based on contract/booking."
+          }
+        ]
+      },
+      {
+        "chargeName": "Infra Committed Hosts - Months 7-12 (700 @ $23 list, 12% disc)",
+        "productName": "Datadog Infrastructure Monitoring (Enterprise)",
+        "ratePlanName": "Infrastructure Monitoring - Enterprise",
+        "pob_identifier": "BK-OT-RATABLE",
+        "pob_name": "SaaS Subscription (Committed Hosts) - Booking Ratable",
+        "ratable_method": "Ratable",
+        "release_event": "Upon Booking (Full Booking Release)",
+        "recognition_window": {
+          "start": "2026-07-01",
+          "end": "2026-12-31"
+        },
+        "rationale": "Contract modification segment (price/qty change on same stand-ready service); recognize ratably over remaining service period.",
+        "confidence": 0.85,
+        "alternatives": [
+          {
+            "pob_identifier": "BL-OT-INVRATABLE",
+            "pob_name": "SaaS Subscription - Invoice Ratable",
+            "why_not": "If policy requires release only as billed; not aligned to stated booking-based ratable expectation."
+          }
+        ]
+      },
+      {
+        "chargeName": "Infra Host-Hour Overage (above committed baseline)",
+        "productName": "Datadog Infrastructure Monitoring (Enterprise)",
+        "ratePlanName": "Infrastructure Monitoring - Enterprise",
+        "pob_identifier": "EVT-PIT-CONSUMP-USAGE",
+        "pob_name": "Usage / Overage - Recognize Upon Consumption (Usage Event)",
+        "ratable_method": "Immediate Using Open Period",
+        "release_event": "Upon Consumption",
+        "recognition_window": {
+          "start": "2026-01-01",
+          "end": null
+        },
+        "rationale": "Variable consideration tied to actual host-hour consumption; recognize as the usage occurs.",
+        "confidence": 0.9,
+        "alternatives": [
+          {
+            "pob_identifier": "BL-PIT-CONSUMP-PAYGO",
+            "pob_name": "Usage - PayGo (Billed Release)",
+            "why_not": "Use only if revenue policy recognizes usage when billed rather than when consumed."
+          },
+          {
+            "pob_identifier": "EVT-PIT-USAGE",
+            "pob_name": "Usage - Recognize by Usage Quantity Event",
+            "why_not": "Could be used if your integration posts USAGE_QTY events (not 'Upon Consumption') and you want that event type specifically."
+          }
+        ]
+      },
+      {
+        "chargeName": "APM Hosts - Months 7-12 (150 @ $31 list, 12% disc)",
+        "productName": "Datadog APM",
+        "ratePlanName": "APM - Host Subscription + Usage Overages",
+        "pob_identifier": "BK-OT-RATABLE",
+        "pob_name": "SaaS Subscription (APM Hosts) - Booking Ratable",
+        "ratable_method": "Ratable",
+        "release_event": "Upon Booking (Full Booking Release)",
+        "recognition_window": {
+          "start": "2026-07-01",
+          "end": "2026-12-31"
+        },
+        "rationale": "Fixed stand-ready SaaS service added mid-term; recognize ratably over remaining service period (subject to contract modification allocation).",
+        "confidence": 0.85,
+        "alternatives": [
+          {
+            "pob_identifier": "BL-OT-INVRATABLE",
+            "pob_name": "SaaS Subscription - Invoice Ratable",
+            "why_not": "Only if your accounting requires billing-based release for monthly in-advance invoices."
+          }
+        ]
+      },
+      {
+        "chargeName": "APM Indexed Spans Overage ($/M spans)",
+        "productName": "Datadog APM",
+        "ratePlanName": "APM - Host Subscription + Usage Overages",
+        "pob_identifier": "EVT-PIT-CONSUMP-USAGE",
+        "pob_name": "Usage / Overage - Recognize Upon Consumption (Usage Event)",
+        "ratable_method": "Immediate Using Open Period",
+        "release_event": "Upon Consumption",
+        "recognition_window": {
+          "start": "2026-07-01",
+          "end": null
+        },
+        "rationale": "Variable consideration based on actual spans indexed; recognize as consumption occurs.",
+        "confidence": 0.9,
+        "alternatives": [
+          {
+            "pob_identifier": "BL-PIT-CONSUMP-PAYGO",
+            "pob_name": "Usage - PayGo (Billed Release)",
+            "why_not": "Use only if you recognize usage when invoiced (monthly in arrears) instead of when consumed."
+          }
+        ]
+      },
+      {
+        "chargeName": "APM Ingested Spans Overage ($/GB)",
+        "productName": "Datadog APM",
+        "ratePlanName": "APM - Host Subscription + Usage Overages",
+        "pob_identifier": "EVT-PIT-CONSUMP-USAGE",
+        "pob_name": "Usage / Overage - Recognize Upon Consumption (Usage Event)",
+        "ratable_method": "Immediate Using Open Period",
+        "release_event": "Upon Consumption",
+        "recognition_window": {
+          "start": "2026-07-01",
+          "end": null
+        },
+        "rationale": "Variable consideration based on actual GB ingested; recognize as consumption occurs.",
+        "confidence": 0.9,
+        "alternatives": [
+          {
+            "pob_identifier": "BL-PIT-CONSUMP-PAYGO",
+            "pob_name": "Usage - PayGo (Billed Release)",
+            "why_not": "Use only if policy is invoice-based recognition for usage."
+          }
+        ]
+      },
+      {
+        "chargeName": "Logs - Log Ingest ($/GB)",
+        "productName": "Datadog Log Management",
+        "ratePlanName": "Logs - Usage (In Arrears)",
+        "pob_identifier": "EVT-PIT-CONSUMP-USAGE",
+        "pob_name": "Usage - Logs Ingest - Recognize Upon Consumption",
+        "ratable_method": "Immediate Using Open Period",
+        "release_event": "Upon Consumption",
+        "recognition_window": {
+          "start": "2026-07-01",
+          "end": null
+        },
+        "rationale": "Pure consumption-based logs ingest; revenue recognized as usage occurs (not ratable).",
+        "confidence": 0.9,
+        "alternatives": [
+          {
+            "pob_identifier": "BL-PIT-CONSUMP-PAYGO",
+            "pob_name": "Usage - PayGo (Billed Release)",
+            "why_not": "Only if logs usage should be recognized upon billing rather than upon consumption events."
+          }
+        ]
+      },
+      {
+        "chargeName": "Logs - Standard Indexing ($/M events)",
+        "productName": "Datadog Log Management",
+        "ratePlanName": "Logs - Usage (In Arrears)",
+        "pob_identifier": "EVT-PIT-CONSUMP-USAGE",
+        "pob_name": "Usage - Logs Indexing - Recognize Upon Consumption",
+        "ratable_method": "Immediate Using Open Period",
+        "release_event": "Upon Consumption",
+        "recognition_window": {
+          "start": "2026-07-01",
+          "end": null
+        },
+        "rationale": "Consumption-based indexing; recognize revenue as events are processed/consumed.",
+        "confidence": 0.9,
+        "alternatives": [
+          {
+            "pob_identifier": "BL-PIT-CONSUMP-PAYGO",
+            "pob_name": "Usage - PayGo (Billed Release)",
+            "why_not": "Only if your accounting policy recognizes usage when invoiced (monthly in arrears)."
+          }
+        ]
+      }
+    ],
+    "mapping_notes": [
+      "Fixed recurring SaaS components are mapped to BK-OT-RATABLE to support ratable recognition over service and compatibility with list-price-based SSP allocation in ZR.",
+      "Usage/overage components are mapped to EVT-PIT-CONSUMP-USAGE to recognize as consumption occurs; ensure your integration posts the appropriate consumption/usage events to ZR for timely release.",
+      "The month-7 upgrade is modeled via charge segmentation and new mid-term charges; this supports contract-modification allocation/reallocation over the remaining service period when enabled in ZR.",
+      "If operationally you prefer invoice-driven recognition for usage (common when consumption events are not available), switch usage mappings to BL-PIT-CONSUMP-PAYGO and align the revenue expectation accordingly."
+    ]
+  },
+  "billings": {
+    "zb_billings": [
+      {
+        "Invoice Date": "2026-01-01",
+        "Billing Date": "2026-01-01",
+        "Charge Name": "Infra Committed Hosts - Months 1-6",
+        "Rate Plan": "Infrastructure Monitoring - Enterprise",
+        "Product": "Datadog Infrastructure Monitoring (Enterprise)",
+        "Billing Period Start": "2026-01-01",
+        "Billing Period End": "2026-01-31",
+        "Quantity": 500,
+        "Unit Price": 23,
+        "Amount": 11500,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-01-31",
+        "Billing Date": "2026-01-31",
+        "Charge Name": "Infra Host-Hour Overage (above committed baseline)",
+        "Rate Plan": "Infrastructure Monitoring - Enterprise",
+        "Product": "Datadog Infrastructure Monitoring (Enterprise)",
+        "Billing Period Start": "2026-01-01",
+        "Billing Period End": "2026-01-31",
+        "Quantity": 0,
+        "Unit Price": 0.0369863,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-02-01",
+        "Billing Date": "2026-02-01",
+        "Charge Name": "Infra Committed Hosts - Months 1-6",
+        "Rate Plan": "Infrastructure Monitoring - Enterprise",
+        "Product": "Datadog Infrastructure Monitoring (Enterprise)",
+        "Billing Period Start": "2026-02-01",
+        "Billing Period End": "2026-02-28",
+        "Quantity": 500,
+        "Unit Price": 23,
+        "Amount": 11500,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-02-28",
+        "Billing Date": "2026-02-28",
+        "Charge Name": "Infra Host-Hour Overage (above committed baseline)",
+        "Rate Plan": "Infrastructure Monitoring - Enterprise",
+        "Product": "Datadog Infrastructure Monitoring (Enterprise)",
+        "Billing Period Start": "2026-02-01",
+        "Billing Period End": "2026-02-28",
+        "Quantity": 0,
+        "Unit Price": 0.0369863,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-03-01",
+        "Billing Date": "2026-03-01",
+        "Charge Name": "Infra Committed Hosts - Months 1-6",
+        "Rate Plan": "Infrastructure Monitoring - Enterprise",
+        "Product": "Datadog Infrastructure Monitoring (Enterprise)",
+        "Billing Period Start": "2026-03-01",
+        "Billing Period End": "2026-03-31",
+        "Quantity": 500,
+        "Unit Price": 23,
+        "Amount": 11500,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-03-31",
+        "Billing Date": "2026-03-31",
+        "Charge Name": "Infra Host-Hour Overage (above committed baseline)",
+        "Rate Plan": "Infrastructure Monitoring - Enterprise",
+        "Product": "Datadog Infrastructure Monitoring (Enterprise)",
+        "Billing Period Start": "2026-03-01",
+        "Billing Period End": "2026-03-31",
+        "Quantity": 0,
+        "Unit Price": 0.0369863,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-04-01",
+        "Billing Date": "2026-04-01",
+        "Charge Name": "Infra Committed Hosts - Months 1-6",
+        "Rate Plan": "Infrastructure Monitoring - Enterprise",
+        "Product": "Datadog Infrastructure Monitoring (Enterprise)",
+        "Billing Period Start": "2026-04-01",
+        "Billing Period End": "2026-04-30",
+        "Quantity": 500,
+        "Unit Price": 23,
+        "Amount": 11500,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-04-30",
+        "Billing Date": "2026-04-30",
+        "Charge Name": "Infra Host-Hour Overage (above committed baseline)",
+        "Rate Plan": "Infrastructure Monitoring - Enterprise",
+        "Product": "Datadog Infrastructure Monitoring (Enterprise)",
+        "Billing Period Start": "2026-04-01",
+        "Billing Period End": "2026-04-30",
+        "Quantity": 0,
+        "Unit Price": 0.0369863,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-05-01",
+        "Billing Date": "2026-05-01",
+        "Charge Name": "Infra Committed Hosts - Months 1-6",
+        "Rate Plan": "Infrastructure Monitoring - Enterprise",
+        "Product": "Datadog Infrastructure Monitoring (Enterprise)",
+        "Billing Period Start": "2026-05-01",
+        "Billing Period End": "2026-05-31",
+        "Quantity": 500,
+        "Unit Price": 23,
+        "Amount": 11500,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-05-31",
+        "Billing Date": "2026-05-31",
+        "Charge Name": "Infra Host-Hour Overage (above committed baseline)",
+        "Rate Plan": "Infrastructure Monitoring - Enterprise",
+        "Product": "Datadog Infrastructure Monitoring (Enterprise)",
+        "Billing Period Start": "2026-05-01",
+        "Billing Period End": "2026-05-31",
+        "Quantity": 0,
+        "Unit Price": 0.0369863,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-06-01",
+        "Billing Date": "2026-06-01",
+        "Charge Name": "Infra Committed Hosts - Months 1-6",
+        "Rate Plan": "Infrastructure Monitoring - Enterprise",
+        "Product": "Datadog Infrastructure Monitoring (Enterprise)",
+        "Billing Period Start": "2026-06-01",
+        "Billing Period End": "2026-06-30",
+        "Quantity": 500,
+        "Unit Price": 23,
+        "Amount": 11500,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-06-30",
+        "Billing Date": "2026-06-30",
+        "Charge Name": "Infra Host-Hour Overage (above committed baseline)",
+        "Rate Plan": "Infrastructure Monitoring - Enterprise",
+        "Product": "Datadog Infrastructure Monitoring (Enterprise)",
+        "Billing Period Start": "2026-06-01",
+        "Billing Period End": "2026-06-30",
+        "Quantity": 0,
+        "Unit Price": 0.0369863,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-07-01",
+        "Billing Date": "2026-07-01",
+        "Charge Name": "Infra Committed Hosts - Months 7-12",
+        "Rate Plan": "Infrastructure Monitoring - Enterprise",
+        "Product": "Datadog Infrastructure Monitoring (Enterprise)",
+        "Billing Period Start": "2026-07-01",
+        "Billing Period End": "2026-07-31",
+        "Quantity": 700,
+        "Unit Price": 20.24,
+        "Amount": 14168,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-07-01",
+        "Billing Date": "2026-07-01",
+        "Charge Name": "APM Hosts - Months 7-12",
+        "Rate Plan": "APM - Host Subscription + Usage Overages",
+        "Product": "Datadog APM",
+        "Billing Period Start": "2026-07-01",
+        "Billing Period End": "2026-07-31",
+        "Quantity": 150,
+        "Unit Price": 27.28,
+        "Amount": 4092,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-07-31",
+        "Billing Date": "2026-07-31",
+        "Charge Name": "Infra Host-Hour Overage (above committed baseline)",
+        "Rate Plan": "Infrastructure Monitoring - Enterprise",
+        "Product": "Datadog Infrastructure Monitoring (Enterprise)",
+        "Billing Period Start": "2026-07-01",
+        "Billing Period End": "2026-07-31",
+        "Quantity": 0,
+        "Unit Price": 0.0369863,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-07-31",
+        "Billing Date": "2026-07-31",
+        "Charge Name": "APM Indexed Spans Overage ($/M spans)",
+        "Rate Plan": "APM - Host Subscription + Usage Overages",
+        "Product": "Datadog APM",
+        "Billing Period Start": "2026-07-01",
+        "Billing Period End": "2026-07-31",
+        "Quantity": 0,
+        "Unit Price": 1.7,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-07-31",
+        "Billing Date": "2026-07-31",
+        "Charge Name": "APM Ingested Spans Overage ($/GB)",
+        "Rate Plan": "APM - Host Subscription + Usage Overages",
+        "Product": "Datadog APM",
+        "Billing Period Start": "2026-07-01",
+        "Billing Period End": "2026-07-31",
+        "Quantity": 0,
+        "Unit Price": 0.1,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-07-31",
+        "Billing Date": "2026-07-31",
+        "Charge Name": "Logs - Log Ingest ($/GB)",
+        "Rate Plan": "Logs - Usage (In Arrears)",
+        "Product": "Datadog Log Management",
+        "Billing Period Start": "2026-07-01",
+        "Billing Period End": "2026-07-31",
+        "Quantity": 0,
+        "Unit Price": 0.1,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-07-31",
+        "Billing Date": "2026-07-31",
+        "Charge Name": "Logs - Standard Indexing ($/M events)",
+        "Rate Plan": "Logs - Usage (In Arrears)",
+        "Product": "Datadog Log Management",
+        "Billing Period Start": "2026-07-01",
+        "Billing Period End": "2026-07-31",
+        "Quantity": 0,
+        "Unit Price": 1.7,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-08-01",
+        "Billing Date": "2026-08-01",
+        "Charge Name": "Infra Committed Hosts - Months 7-12",
+        "Rate Plan": "Infrastructure Monitoring - Enterprise",
+        "Product": "Datadog Infrastructure Monitoring (Enterprise)",
+        "Billing Period Start": "2026-08-01",
+        "Billing Period End": "2026-08-31",
+        "Quantity": 700,
+        "Unit Price": 20.24,
+        "Amount": 14168,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-08-01",
+        "Billing Date": "2026-08-01",
+        "Charge Name": "APM Hosts - Months 7-12",
+        "Rate Plan": "APM - Host Subscription + Usage Overages",
+        "Product": "Datadog APM",
+        "Billing Period Start": "2026-08-01",
+        "Billing Period End": "2026-08-31",
+        "Quantity": 150,
+        "Unit Price": 27.28,
+        "Amount": 4092,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-08-31",
+        "Billing Date": "2026-08-31",
+        "Charge Name": "Infra Host-Hour Overage (above committed baseline)",
+        "Rate Plan": "Infrastructure Monitoring - Enterprise",
+        "Product": "Datadog Infrastructure Monitoring (Enterprise)",
+        "Billing Period Start": "2026-08-01",
+        "Billing Period End": "2026-08-31",
+        "Quantity": 0,
+        "Unit Price": 0.0369863,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-08-31",
+        "Billing Date": "2026-08-31",
+        "Charge Name": "APM Indexed Spans Overage ($/M spans)",
+        "Rate Plan": "APM - Host Subscription + Usage Overages",
+        "Product": "Datadog APM",
+        "Billing Period Start": "2026-08-01",
+        "Billing Period End": "2026-08-31",
+        "Quantity": 0,
+        "Unit Price": 1.7,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-08-31",
+        "Billing Date": "2026-08-31",
+        "Charge Name": "APM Ingested Spans Overage ($/GB)",
+        "Rate Plan": "APM - Host Subscription + Usage Overages",
+        "Product": "Datadog APM",
+        "Billing Period Start": "2026-08-01",
+        "Billing Period End": "2026-08-31",
+        "Quantity": 0,
+        "Unit Price": 0.1,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-08-31",
+        "Billing Date": "2026-08-31",
+        "Charge Name": "Logs - Log Ingest ($/GB)",
+        "Rate Plan": "Logs - Usage (In Arrears)",
+        "Product": "Datadog Log Management",
+        "Billing Period Start": "2026-08-01",
+        "Billing Period End": "2026-08-31",
+        "Quantity": 0,
+        "Unit Price": 0.1,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-08-31",
+        "Billing Date": "2026-08-31",
+        "Charge Name": "Logs - Standard Indexing ($/M events)",
+        "Rate Plan": "Logs - Usage (In Arrears)",
+        "Product": "Datadog Log Management",
+        "Billing Period Start": "2026-08-01",
+        "Billing Period End": "2026-08-31",
+        "Quantity": 0,
+        "Unit Price": 1.7,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-09-01",
+        "Billing Date": "2026-09-01",
+        "Charge Name": "Infra Committed Hosts - Months 7-12",
+        "Rate Plan": "Infrastructure Monitoring - Enterprise",
+        "Product": "Datadog Infrastructure Monitoring (Enterprise)",
+        "Billing Period Start": "2026-09-01",
+        "Billing Period End": "2026-09-30",
+        "Quantity": 700,
+        "Unit Price": 20.24,
+        "Amount": 14168,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-09-01",
+        "Billing Date": "2026-09-01",
+        "Charge Name": "APM Hosts - Months 7-12",
+        "Rate Plan": "APM - Host Subscription + Usage Overages",
+        "Product": "Datadog APM",
+        "Billing Period Start": "2026-09-01",
+        "Billing Period End": "2026-09-30",
+        "Quantity": 150,
+        "Unit Price": 27.28,
+        "Amount": 4092,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-09-30",
+        "Billing Date": "2026-09-30",
+        "Charge Name": "Infra Host-Hour Overage (above committed baseline)",
+        "Rate Plan": "Infrastructure Monitoring - Enterprise",
+        "Product": "Datadog Infrastructure Monitoring (Enterprise)",
+        "Billing Period Start": "2026-09-01",
+        "Billing Period End": "2026-09-30",
+        "Quantity": 0,
+        "Unit Price": 0.0369863,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-09-30",
+        "Billing Date": "2026-09-30",
+        "Charge Name": "APM Indexed Spans Overage ($/M spans)",
+        "Rate Plan": "APM - Host Subscription + Usage Overages",
+        "Product": "Datadog APM",
+        "Billing Period Start": "2026-09-01",
+        "Billing Period End": "2026-09-30",
+        "Quantity": 0,
+        "Unit Price": 1.7,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-09-30",
+        "Billing Date": "2026-09-30",
+        "Charge Name": "APM Ingested Spans Overage ($/GB)",
+        "Rate Plan": "APM - Host Subscription + Usage Overages",
+        "Product": "Datadog APM",
+        "Billing Period Start": "2026-09-01",
+        "Billing Period End": "2026-09-30",
+        "Quantity": 0,
+        "Unit Price": 0.1,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-09-30",
+        "Billing Date": "2026-09-30",
+        "Charge Name": "Logs - Log Ingest ($/GB)",
+        "Rate Plan": "Logs - Usage (In Arrears)",
+        "Product": "Datadog Log Management",
+        "Billing Period Start": "2026-09-01",
+        "Billing Period End": "2026-09-30",
+        "Quantity": 0,
+        "Unit Price": 0.1,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-09-30",
+        "Billing Date": "2026-09-30",
+        "Charge Name": "Logs - Standard Indexing ($/M events)",
+        "Rate Plan": "Logs - Usage (In Arrears)",
+        "Product": "Datadog Log Management",
+        "Billing Period Start": "2026-09-01",
+        "Billing Period End": "2026-09-30",
+        "Quantity": 0,
+        "Unit Price": 1.7,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-10-01",
+        "Billing Date": "2026-10-01",
+        "Charge Name": "Infra Committed Hosts - Months 7-12",
+        "Rate Plan": "Infrastructure Monitoring - Enterprise",
+        "Product": "Datadog Infrastructure Monitoring (Enterprise)",
+        "Billing Period Start": "2026-10-01",
+        "Billing Period End": "2026-10-31",
+        "Quantity": 700,
+        "Unit Price": 20.24,
+        "Amount": 14168,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-10-01",
+        "Billing Date": "2026-10-01",
+        "Charge Name": "APM Hosts - Months 7-12",
+        "Rate Plan": "APM - Host Subscription + Usage Overages",
+        "Product": "Datadog APM",
+        "Billing Period Start": "2026-10-01",
+        "Billing Period End": "2026-10-31",
+        "Quantity": 150,
+        "Unit Price": 27.28,
+        "Amount": 4092,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-10-31",
+        "Billing Date": "2026-10-31",
+        "Charge Name": "Infra Host-Hour Overage (above committed baseline)",
+        "Rate Plan": "Infrastructure Monitoring - Enterprise",
+        "Product": "Datadog Infrastructure Monitoring (Enterprise)",
+        "Billing Period Start": "2026-10-01",
+        "Billing Period End": "2026-10-31",
+        "Quantity": 0,
+        "Unit Price": 0.0369863,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-10-31",
+        "Billing Date": "2026-10-31",
+        "Charge Name": "APM Indexed Spans Overage ($/M spans)",
+        "Rate Plan": "APM - Host Subscription + Usage Overages",
+        "Product": "Datadog APM",
+        "Billing Period Start": "2026-10-01",
+        "Billing Period End": "2026-10-31",
+        "Quantity": 0,
+        "Unit Price": 1.7,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-10-31",
+        "Billing Date": "2026-10-31",
+        "Charge Name": "APM Ingested Spans Overage ($/GB)",
+        "Rate Plan": "APM - Host Subscription + Usage Overages",
+        "Product": "Datadog APM",
+        "Billing Period Start": "2026-10-01",
+        "Billing Period End": "2026-10-31",
+        "Quantity": 0,
+        "Unit Price": 0.1,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-10-31",
+        "Billing Date": "2026-10-31",
+        "Charge Name": "Logs - Log Ingest ($/GB)",
+        "Rate Plan": "Logs - Usage (In Arrears)",
+        "Product": "Datadog Log Management",
+        "Billing Period Start": "2026-10-01",
+        "Billing Period End": "2026-10-31",
+        "Quantity": 0,
+        "Unit Price": 0.1,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-10-31",
+        "Billing Date": "2026-10-31",
+        "Charge Name": "Logs - Standard Indexing ($/M events)",
+        "Rate Plan": "Logs - Usage (In Arrears)",
+        "Product": "Datadog Log Management",
+        "Billing Period Start": "2026-10-01",
+        "Billing Period End": "2026-10-31",
+        "Quantity": 0,
+        "Unit Price": 1.7,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-11-01",
+        "Billing Date": "2026-11-01",
+        "Charge Name": "Infra Committed Hosts - Months 7-12",
+        "Rate Plan": "Infrastructure Monitoring - Enterprise",
+        "Product": "Datadog Infrastructure Monitoring (Enterprise)",
+        "Billing Period Start": "2026-11-01",
+        "Billing Period End": "2026-11-30",
+        "Quantity": 700,
+        "Unit Price": 20.24,
+        "Amount": 14168,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-11-01",
+        "Billing Date": "2026-11-01",
+        "Charge Name": "APM Hosts - Months 7-12",
+        "Rate Plan": "APM - Host Subscription + Usage Overages",
+        "Product": "Datadog APM",
+        "Billing Period Start": "2026-11-01",
+        "Billing Period End": "2026-11-30",
+        "Quantity": 150,
+        "Unit Price": 27.28,
+        "Amount": 4092,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-11-30",
+        "Billing Date": "2026-11-30",
+        "Charge Name": "Infra Host-Hour Overage (above committed baseline)",
+        "Rate Plan": "Infrastructure Monitoring - Enterprise",
+        "Product": "Datadog Infrastructure Monitoring (Enterprise)",
+        "Billing Period Start": "2026-11-01",
+        "Billing Period End": "2026-11-30",
+        "Quantity": 0,
+        "Unit Price": 0.0369863,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-11-30",
+        "Billing Date": "2026-11-30",
+        "Charge Name": "APM Indexed Spans Overage ($/M spans)",
+        "Rate Plan": "APM - Host Subscription + Usage Overages",
+        "Product": "Datadog APM",
+        "Billing Period Start": "2026-11-01",
+        "Billing Period End": "2026-11-30",
+        "Quantity": 0,
+        "Unit Price": 1.7,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-11-30",
+        "Billing Date": "2026-11-30",
+        "Charge Name": "APM Ingested Spans Overage ($/GB)",
+        "Rate Plan": "APM - Host Subscription + Usage Overages",
+        "Product": "Datadog APM",
+        "Billing Period Start": "2026-11-01",
+        "Billing Period End": "2026-11-30",
+        "Quantity": 0,
+        "Unit Price": 0.1,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-11-30",
+        "Billing Date": "2026-11-30",
+        "Charge Name": "Logs - Log Ingest ($/GB)",
+        "Rate Plan": "Logs - Usage (In Arrears)",
+        "Product": "Datadog Log Management",
+        "Billing Period Start": "2026-11-01",
+        "Billing Period End": "2026-11-30",
+        "Quantity": 0,
+        "Unit Price": 0.1,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-11-30",
+        "Billing Date": "2026-11-30",
+        "Charge Name": "Logs - Standard Indexing ($/M events)",
+        "Rate Plan": "Logs - Usage (In Arrears)",
+        "Product": "Datadog Log Management",
+        "Billing Period Start": "2026-11-01",
+        "Billing Period End": "2026-11-30",
+        "Quantity": 0,
+        "Unit Price": 1.7,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-12-01",
+        "Billing Date": "2026-12-01",
+        "Charge Name": "Infra Committed Hosts - Months 7-12",
+        "Rate Plan": "Infrastructure Monitoring - Enterprise",
+        "Product": "Datadog Infrastructure Monitoring (Enterprise)",
+        "Billing Period Start": "2026-12-01",
+        "Billing Period End": "2026-12-31",
+        "Quantity": 700,
+        "Unit Price": 20.24,
+        "Amount": 14168,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-12-01",
+        "Billing Date": "2026-12-01",
+        "Charge Name": "APM Hosts - Months 7-12",
+        "Rate Plan": "APM - Host Subscription + Usage Overages",
+        "Product": "Datadog APM",
+        "Billing Period Start": "2026-12-01",
+        "Billing Period End": "2026-12-31",
+        "Quantity": 150,
+        "Unit Price": 27.28,
+        "Amount": 4092,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-12-31",
+        "Billing Date": "2026-12-31",
+        "Charge Name": "Infra Host-Hour Overage (above committed baseline)",
+        "Rate Plan": "Infrastructure Monitoring - Enterprise",
+        "Product": "Datadog Infrastructure Monitoring (Enterprise)",
+        "Billing Period Start": "2026-12-01",
+        "Billing Period End": "2026-12-31",
+        "Quantity": 0,
+        "Unit Price": 0.0369863,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-12-31",
+        "Billing Date": "2026-12-31",
+        "Charge Name": "APM Indexed Spans Overage ($/M spans)",
+        "Rate Plan": "APM - Host Subscription + Usage Overages",
+        "Product": "Datadog APM",
+        "Billing Period Start": "2026-12-01",
+        "Billing Period End": "2026-12-31",
+        "Quantity": 0,
+        "Unit Price": 1.7,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-12-31",
+        "Billing Date": "2026-12-31",
+        "Charge Name": "APM Ingested Spans Overage ($/GB)",
+        "Rate Plan": "APM - Host Subscription + Usage Overages",
+        "Product": "Datadog APM",
+        "Billing Period Start": "2026-12-01",
+        "Billing Period End": "2026-12-31",
+        "Quantity": 0,
+        "Unit Price": 0.1,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-12-31",
+        "Billing Date": "2026-12-31",
+        "Charge Name": "Logs - Log Ingest ($/GB)",
+        "Rate Plan": "Logs - Usage (In Arrears)",
+        "Product": "Datadog Log Management",
+        "Billing Period Start": "2026-12-01",
+        "Billing Period End": "2026-12-31",
+        "Quantity": 0,
+        "Unit Price": 0.1,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-12-31",
+        "Billing Date": "2026-12-31",
+        "Charge Name": "Logs - Standard Indexing ($/M events)",
+        "Rate Plan": "Logs - Usage (In Arrears)",
+        "Product": "Datadog Log Management",
+        "Billing Period Start": "2026-12-01",
+        "Billing Period End": "2026-12-31",
+        "Quantity": 0,
+        "Unit Price": 1.7,
+        "Amount": 0,
+        "Currency": "USD"
+      }
+    ],
+    "assumptions": [
+      "Upgrade (month-7) effective date is assumed to be 2026-07-01 (start of the 7th monthly period), so no mid-month proration is applied.",
+      "Billing periods are aligned to calendar months; Billing Period End is shown as the last calendar day of the month (for readability).",
+      "Billing Timing handling: Monthly InAdvance recurring charges bill on the period start date; Monthly InArrears usage charges bill on the period end date.",
+      "12% bundle discount is applied only to fixed recurring components starting 2026-07-01 (Infra committed hosts and APM host subscription). Usage/overage charges remain undiscounted at list.",
+      "Usage charges are included as billing events with Quantity=0 and Amount=0 as placeholders because no consumption inputs (host-hours, spans, GB, events) were provided.",
+      "Infra overage is modeled as a host-hour usage rate converted from $27/host-month using a standard 730 hours/month, resulting in $0.03698630 per host-hour."
+    ],
+    "open_questions": [
+      "Confirm the contract modification / upgrade effective date. If it is not exactly 2026-07-01 (e.g., mid-month), the recurring charges for July 2026 should be prorated accordingly.",
+      "Confirm the intended unit of measure for Infra overage (host-hour vs host-month) and the conversion convention (actual hours in month vs fixed 730) used for rating.",
+      "Provide included allotments (and actual monthly consumption) for APM Indexed Spans, APM Ingested Spans, Log Ingest (GB), and Log Indexing (million events) to calculate usage/overage quantities and amounts.",
+      "Confirm whether your invoicing process dates in-arrears invoices on the period end date (e.g., 2026-07-31) or on the following day / next period start (e.g., 2026-08-01) based on your Zuora bill run schedule configuration."
+    ]
+  },
+  "contracts_orders": {
+    "zr_contracts_orders": [
+      {
+        "POB Name": "SaaS Subscription (Committed Hosts)",
+        "POB Template": "SaaS Subscription (Committed Hosts) - Booking Ratable (BK-OT-RATABLE)",
+        "POB Satisfied": false,
+        "Release Event": "Upon Booking (Full Booking Release)",
+        "Billing Period": "Month",
+        "Billing Timing": "InAdvance",
+        "Terms Months": 6,
+        "Trigger Event": "ContractEffective",
+        "Lead Line": true,
+        "Ordered Qty": 3000,
+        "Line Item Num": 1,
+        "Subscription Name": "Datadog - Observability Agreement (Infra + Upgrade w/ APM + Logs) - 2026",
+        "Subscription Version": 1,
+        "Sales Order Date": "2026-01-01",
+        "RPC Segment": "Infra Committed Hosts - Months 1-6",
+        "RPC Type": "Recurring",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-06-30",
+        "Unit List Price": 23,
+        "Unit Sell Price": 23,
+        "Ext List Price": 69000,
+        "Ext Sell Price": 69000,
+        "SSP Price": 23,
+        "Ext SSP Price": 69000,
+        "SSP Percent": 100,
+        "Ext Allocated Price": 69000,
+        "Carves Adjustment": 0,
+        "Allocation Eligible Flag": true,
+        "Unreleased Revenue": 69000,
+        "Released Revenue": 0,
+        "Customer Name": "Datadog",
+        "POB IDENTIFIER": "BK-OT-RATABLE",
+        "Product Category": "Observability",
+        "Product Family": "Infrastructure Monitoring (Enterprise)"
+      },
+      {
+        "POB Name": "Usage / Overage - Recognize Upon Consumption (Usage Event)",
+        "POB Template": "Usage / Overage - Recognize Upon Consumption (Usage Event) (EVT-PIT-CONSUMP-USAGE)",
+        "POB Satisfied": false,
+        "Release Event": "Upon Consumption",
+        "Billing Period": "Month",
+        "Billing Timing": "InArrears",
+        "Terms Months": 12,
+        "Trigger Event": "Usage",
+        "Lead Line": false,
+        "Ordered Qty": 0,
+        "Line Item Num": 2,
+        "Subscription Name": "Datadog - Observability Agreement (Infra + Upgrade w/ APM + Logs) - 2026",
+        "Subscription Version": 1,
+        "Sales Order Date": "2026-01-01",
+        "RPC Segment": "Infra Host-Hour Overage (above committed baseline)",
+        "RPC Type": "Usage",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Unit List Price": 27,
+        "Unit Sell Price": 27,
+        "Ext List Price": 0,
+        "Ext Sell Price": 0,
+        "SSP Price": 27,
+        "Ext SSP Price": 0,
+        "SSP Percent": 0,
+        "Ext Allocated Price": 0,
+        "Carves Adjustment": 0,
+        "Allocation Eligible Flag": false,
+        "Unreleased Revenue": 0,
+        "Released Revenue": 0,
+        "Customer Name": "Datadog",
+        "POB IDENTIFIER": "EVT-PIT-CONSUMP-USAGE",
+        "Product Category": "Observability",
+        "Product Family": "Infrastructure Monitoring (Enterprise)"
+      },
+      {
+        "POB Name": "SaaS Subscription (Committed Hosts)",
+        "POB Template": "SaaS Subscription (Committed Hosts) - Booking Ratable (BK-OT-RATABLE)",
+        "POB Satisfied": false,
+        "Release Event": "Upon Booking (Full Booking Release)",
+        "Billing Period": "Month",
+        "Billing Timing": "InAdvance",
+        "Terms Months": 6,
+        "Trigger Event": "ContractEffective",
+        "Lead Line": true,
+        "Ordered Qty": 4200,
+        "Line Item Num": 3,
+        "Subscription Name": "Datadog - Observability Agreement (Infra + Upgrade w/ APM + Logs) - 2026",
+        "Subscription Version": 2,
+        "Sales Order Date": "2026-07-01",
+        "RPC Segment": "Infra Committed Hosts - Months 7-12",
+        "RPC Type": "Recurring",
+        "Revenue Start Date": "2026-07-01",
+        "Revenue End Date": "2026-12-31",
+        "Unit List Price": 23,
+        "Unit Sell Price": 20.24,
+        "Ext List Price": 96600,
+        "Ext Sell Price": 85008,
+        "SSP Price": 23,
+        "Ext SSP Price": 96600,
+        "SSP Percent": 77.590361,
+        "Ext Allocated Price": 85008,
+        "Carves Adjustment": 0,
+        "Allocation Eligible Flag": true,
+        "Unreleased Revenue": 85008,
+        "Released Revenue": 0,
+        "Customer Name": "Datadog",
+        "POB IDENTIFIER": "BK-OT-RATABLE",
+        "Product Category": "Observability",
+        "Product Family": "Infrastructure Monitoring (Enterprise)"
+      },
+      {
+        "POB Name": "SaaS Subscription (APM Hosts)",
+        "POB Template": "SaaS Subscription (APM Hosts) - Booking Ratable (BK-OT-RATABLE)",
+        "POB Satisfied": false,
+        "Release Event": "Upon Booking (Full Booking Release)",
+        "Billing Period": "Month",
+        "Billing Timing": "InAdvance",
+        "Terms Months": 6,
+        "Trigger Event": "ContractEffective",
+        "Lead Line": false,
+        "Ordered Qty": 900,
+        "Line Item Num": 4,
+        "Subscription Name": "Datadog - Observability Agreement (Infra + Upgrade w/ APM + Logs) - 2026",
+        "Subscription Version": 2,
+        "Sales Order Date": "2026-07-01",
+        "RPC Segment": "APM Hosts - Months 7-12",
+        "RPC Type": "Recurring",
+        "Revenue Start Date": "2026-07-01",
+        "Revenue End Date": "2026-12-31",
+        "Unit List Price": 31,
+        "Unit Sell Price": 27.28,
+        "Ext List Price": 27900,
+        "Ext Sell Price": 24552,
+        "SSP Price": 31,
+        "Ext SSP Price": 27900,
+        "SSP Percent": 22.409639,
+        "Ext Allocated Price": 24552,
+        "Carves Adjustment": 0,
+        "Allocation Eligible Flag": true,
+        "Unreleased Revenue": 24552,
+        "Released Revenue": 0,
+        "Customer Name": "Datadog",
+        "POB IDENTIFIER": "BK-OT-RATABLE",
+        "Product Category": "Observability",
+        "Product Family": "APM"
+      },
+      {
+        "POB Name": "Usage / Overage - Recognize Upon Consumption (Usage Event)",
+        "POB Template": "Usage / Overage - Recognize Upon Consumption (Usage Event) (EVT-PIT-CONSUMP-USAGE)",
+        "POB Satisfied": false,
+        "Release Event": "Upon Consumption",
+        "Billing Period": "Month",
+        "Billing Timing": "InArrears",
+        "Terms Months": 6,
+        "Trigger Event": "Usage",
+        "Lead Line": false,
+        "Ordered Qty": 0,
+        "Line Item Num": 5,
+        "Subscription Name": "Datadog - Observability Agreement (Infra + Upgrade w/ APM + Logs) - 2026",
+        "Subscription Version": 2,
+        "Sales Order Date": "2026-07-01",
+        "RPC Segment": "APM Indexed Spans Overage ($/M spans)",
+        "RPC Type": "Usage",
+        "Revenue Start Date": "2026-07-01",
+        "Revenue End Date": "2026-12-31",
+        "Unit List Price": 1.7,
+        "Unit Sell Price": 1.7,
+        "Ext List Price": 0,
+        "Ext Sell Price": 0,
+        "SSP Price": 1.7,
+        "Ext SSP Price": 0,
+        "SSP Percent": 0,
+        "Ext Allocated Price": 0,
+        "Carves Adjustment": 0,
+        "Allocation Eligible Flag": false,
+        "Unreleased Revenue": 0,
+        "Released Revenue": 0,
+        "Customer Name": "Datadog",
+        "POB IDENTIFIER": "EVT-PIT-CONSUMP-USAGE",
+        "Product Category": "Observability",
+        "Product Family": "APM"
+      },
+      {
+        "POB Name": "Usage / Overage - Recognize Upon Consumption (Usage Event)",
+        "POB Template": "Usage / Overage - Recognize Upon Consumption (Usage Event) (EVT-PIT-CONSUMP-USAGE)",
+        "POB Satisfied": false,
+        "Release Event": "Upon Consumption",
+        "Billing Period": "Month",
+        "Billing Timing": "InArrears",
+        "Terms Months": 6,
+        "Trigger Event": "Usage",
+        "Lead Line": false,
+        "Ordered Qty": 0,
+        "Line Item Num": 6,
+        "Subscription Name": "Datadog - Observability Agreement (Infra + Upgrade w/ APM + Logs) - 2026",
+        "Subscription Version": 2,
+        "Sales Order Date": "2026-07-01",
+        "RPC Segment": "APM Ingested Spans Overage ($/GB)",
+        "RPC Type": "Usage",
+        "Revenue Start Date": "2026-07-01",
+        "Revenue End Date": "2026-12-31",
+        "Unit List Price": 0.1,
+        "Unit Sell Price": 0.1,
+        "Ext List Price": 0,
+        "Ext Sell Price": 0,
+        "SSP Price": 0.1,
+        "Ext SSP Price": 0,
+        "SSP Percent": 0,
+        "Ext Allocated Price": 0,
+        "Carves Adjustment": 0,
+        "Allocation Eligible Flag": false,
+        "Unreleased Revenue": 0,
+        "Released Revenue": 0,
+        "Customer Name": "Datadog",
+        "POB IDENTIFIER": "EVT-PIT-CONSUMP-USAGE",
+        "Product Category": "Observability",
+        "Product Family": "APM"
+      },
+      {
+        "POB Name": "Usage - Logs Ingest - Recognize Upon Consumption",
+        "POB Template": "Usage - Logs Ingest - Recognize Upon Consumption (EVT-PIT-CONSUMP-USAGE)",
+        "POB Satisfied": false,
+        "Release Event": "Upon Consumption",
+        "Billing Period": "Month",
+        "Billing Timing": "InArrears",
+        "Terms Months": 6,
+        "Trigger Event": "Usage",
+        "Lead Line": false,
+        "Ordered Qty": 0,
+        "Line Item Num": 7,
+        "Subscription Name": "Datadog - Observability Agreement (Infra + Upgrade w/ APM + Logs) - 2026",
+        "Subscription Version": 2,
+        "Sales Order Date": "2026-07-01",
+        "RPC Segment": "Logs - Log Ingest ($/GB)",
+        "RPC Type": "Usage",
+        "Revenue Start Date": "2026-07-01",
+        "Revenue End Date": "2026-12-31",
+        "Unit List Price": 0.1,
+        "Unit Sell Price": 0.1,
+        "Ext List Price": 0,
+        "Ext Sell Price": 0,
+        "SSP Price": 0.1,
+        "Ext SSP Price": 0,
+        "SSP Percent": 0,
+        "Ext Allocated Price": 0,
+        "Carves Adjustment": 0,
+        "Allocation Eligible Flag": false,
+        "Unreleased Revenue": 0,
+        "Released Revenue": 0,
+        "Customer Name": "Datadog",
+        "POB IDENTIFIER": "EVT-PIT-CONSUMP-USAGE",
+        "Product Category": "Observability",
+        "Product Family": "Log Management"
+      },
+      {
+        "POB Name": "Usage - Logs Indexing - Recognize Upon Consumption",
+        "POB Template": "Usage - Logs Indexing - Recognize Upon Consumption (EVT-PIT-CONSUMP-USAGE)",
+        "POB Satisfied": false,
+        "Release Event": "Upon Consumption",
+        "Billing Period": "Month",
+        "Billing Timing": "InArrears",
+        "Terms Months": 6,
+        "Trigger Event": "Usage",
+        "Lead Line": false,
+        "Ordered Qty": 0,
+        "Line Item Num": 8,
+        "Subscription Name": "Datadog - Observability Agreement (Infra + Upgrade w/ APM + Logs) - 2026",
+        "Subscription Version": 2,
+        "Sales Order Date": "2026-07-01",
+        "RPC Segment": "Logs - Standard Indexing ($/M events)",
+        "RPC Type": "Usage",
+        "Revenue Start Date": "2026-07-01",
+        "Revenue End Date": "2026-12-31",
+        "Unit List Price": 1.7,
+        "Unit Sell Price": 1.7,
+        "Ext List Price": 0,
+        "Ext Sell Price": 0,
+        "SSP Price": 1.7,
+        "Ext SSP Price": 0,
+        "SSP Percent": 0,
+        "Ext Allocated Price": 0,
+        "Carves Adjustment": 0,
+        "Allocation Eligible Flag": false,
+        "Unreleased Revenue": 0,
+        "Released Revenue": 0,
+        "Customer Name": "Datadog",
+        "POB IDENTIFIER": "EVT-PIT-CONSUMP-USAGE",
+        "Product Category": "Observability",
+        "Product Family": "Log Management"
+      }
+    ],
+    "assumptions": [
+      "For recurring committed-host charges, Ordered Qty is modeled as host-months (hosts × number of service months in the POB service period) so that Ext List/Sell/SSP reflect total contract value for that service period.",
+      "Allocation is performed using List Price as SSP for allocation-eligible recurring POBs only; usage/overage POBs are excluded from allocation (Allocation Eligible Flag = false).",
+      "The month-7 upgrade is modeled as a contract modification / amendment with Subscription Version = 2 and Sales Order Date = 2026-07-01; allocation is applied within that amendment’s fixed recurring components (Infra months 7-12 and APM months 7-12).",
+      "The 12% bundle discount is applied only to fixed recurring components starting 2026-07-01; usage charges remain at list (and have $0 booking amounts in this Contracts/Orders table until consumption is reported).",
+      "All currency amounts are in USD; money fields are effectively treated as 2-decimal values (even where shown as whole numbers).",
+      "Usage charge lines are included for completeness with $0 quantities/amounts at booking because expected consumption was not provided; revenue for these POBs is assumed to be recognized upon consumption as usage is uploaded and priced.",
+      "For 'ongoing' usage periods, Revenue End Date is set to the contract term end date 2026-12-31 for the purposes of this table."
+    ],
+    "open_questions": [
+      "Contract modification treatment: should the month-7 upgrade be treated prospectively (allocate only new/remaining POBs) or retrospectively (reallocate from inception / adjust prior allocations)?",
+      "Infra baseline modeling: do you intend months 7-12 to represent the full committed baseline of 700 hosts, or should it be modeled as (a) continuation of 500 hosts plus (b) an incremental 200-host add-on line?",
+      "Should any usage/overage expected value (estimate) be included in transaction price at booking (variable consideration subject to constraint), or should all usage remain excluded until billed/consumed?",
+      "Do APM spans and Logs indexing/ingest include any bundled allotments that would change when/what is considered 'overage' and therefore impact expected usage billings?"
+    ]
+  },
+  "revrec_waterfall": {
+    "zr_revrec": [
+      {
+        "Line Item Num": 1,
+        "POB Name": "Infra Committed Hosts - Months 1-6",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-06-30",
+        "Ext Allocated Price": 69000,
+        "Period": "Jan-26",
+        "Amount": 11817.68
+      },
+      {
+        "Line Item Num": 1,
+        "POB Name": "Infra Committed Hosts - Months 1-6",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-06-30",
+        "Ext Allocated Price": 69000,
+        "Period": "Feb-26",
+        "Amount": 10674.03
+      },
+      {
+        "Line Item Num": 1,
+        "POB Name": "Infra Committed Hosts - Months 1-6",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-06-30",
+        "Ext Allocated Price": 69000,
+        "Period": "Mar-26",
+        "Amount": 11817.68
+      },
+      {
+        "Line Item Num": 1,
+        "POB Name": "Infra Committed Hosts - Months 1-6",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-06-30",
+        "Ext Allocated Price": 69000,
+        "Period": "Apr-26",
+        "Amount": 11436.46
+      },
+      {
+        "Line Item Num": 1,
+        "POB Name": "Infra Committed Hosts - Months 1-6",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-06-30",
+        "Ext Allocated Price": 69000,
+        "Period": "May-26",
+        "Amount": 11817.68
+      },
+      {
+        "Line Item Num": 1,
+        "POB Name": "Infra Committed Hosts - Months 1-6",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-06-30",
+        "Ext Allocated Price": 69000,
+        "Period": "Jun-26",
+        "Amount": 11436.47
+      },
+      {
+        "Line Item Num": 2,
+        "POB Name": "Infra Host-Hour Overage (above committed baseline)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Jan-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 2,
+        "POB Name": "Infra Host-Hour Overage (above committed baseline)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Feb-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 2,
+        "POB Name": "Infra Host-Hour Overage (above committed baseline)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Mar-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 2,
+        "POB Name": "Infra Host-Hour Overage (above committed baseline)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Apr-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 2,
+        "POB Name": "Infra Host-Hour Overage (above committed baseline)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "May-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 2,
+        "POB Name": "Infra Host-Hour Overage (above committed baseline)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Jun-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 2,
+        "POB Name": "Infra Host-Hour Overage (above committed baseline)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Jul-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 2,
+        "POB Name": "Infra Host-Hour Overage (above committed baseline)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Aug-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 2,
+        "POB Name": "Infra Host-Hour Overage (above committed baseline)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Sep-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 2,
+        "POB Name": "Infra Host-Hour Overage (above committed baseline)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Oct-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 2,
+        "POB Name": "Infra Host-Hour Overage (above committed baseline)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Nov-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 2,
+        "POB Name": "Infra Host-Hour Overage (above committed baseline)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Dec-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 3,
+        "POB Name": "Infra Committed Hosts - Months 7-12",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-07-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 85008,
+        "Period": "Jul-26",
+        "Amount": 14322
+      },
+      {
+        "Line Item Num": 3,
+        "POB Name": "Infra Committed Hosts - Months 7-12",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-07-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 85008,
+        "Period": "Aug-26",
+        "Amount": 14322
+      },
+      {
+        "Line Item Num": 3,
+        "POB Name": "Infra Committed Hosts - Months 7-12",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-07-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 85008,
+        "Period": "Sep-26",
+        "Amount": 13860
+      },
+      {
+        "Line Item Num": 3,
+        "POB Name": "Infra Committed Hosts - Months 7-12",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-07-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 85008,
+        "Period": "Oct-26",
+        "Amount": 14322
+      },
+      {
+        "Line Item Num": 3,
+        "POB Name": "Infra Committed Hosts - Months 7-12",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-07-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 85008,
+        "Period": "Nov-26",
+        "Amount": 13860
+      },
+      {
+        "Line Item Num": 3,
+        "POB Name": "Infra Committed Hosts - Months 7-12",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-07-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 85008,
+        "Period": "Dec-26",
+        "Amount": 14322
+      },
+      {
+        "Line Item Num": 4,
+        "POB Name": "APM Hosts - Months 7-12",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-07-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 24552,
+        "Period": "Jul-26",
+        "Amount": 4136.48
+      },
+      {
+        "Line Item Num": 4,
+        "POB Name": "APM Hosts - Months 7-12",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-07-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 24552,
+        "Period": "Aug-26",
+        "Amount": 4136.48
+      },
+      {
+        "Line Item Num": 4,
+        "POB Name": "APM Hosts - Months 7-12",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-07-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 24552,
+        "Period": "Sep-26",
+        "Amount": 4003.04
+      },
+      {
+        "Line Item Num": 4,
+        "POB Name": "APM Hosts - Months 7-12",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-07-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 24552,
+        "Period": "Oct-26",
+        "Amount": 4136.48
+      },
+      {
+        "Line Item Num": 4,
+        "POB Name": "APM Hosts - Months 7-12",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-07-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 24552,
+        "Period": "Nov-26",
+        "Amount": 4003.04
+      },
+      {
+        "Line Item Num": 4,
+        "POB Name": "APM Hosts - Months 7-12",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-07-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 24552,
+        "Period": "Dec-26",
+        "Amount": 4136.48
+      },
+      {
+        "Line Item Num": 5,
+        "POB Name": "APM Indexed Spans Overage ($/M spans)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-07-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Jul-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 5,
+        "POB Name": "APM Indexed Spans Overage ($/M spans)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-07-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Aug-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 5,
+        "POB Name": "APM Indexed Spans Overage ($/M spans)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-07-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Sep-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 5,
+        "POB Name": "APM Indexed Spans Overage ($/M spans)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-07-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Oct-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 5,
+        "POB Name": "APM Indexed Spans Overage ($/M spans)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-07-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Nov-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 5,
+        "POB Name": "APM Indexed Spans Overage ($/M spans)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-07-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Dec-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 6,
+        "POB Name": "APM Ingested Spans Overage ($/GB)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-07-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Jul-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 6,
+        "POB Name": "APM Ingested Spans Overage ($/GB)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-07-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Aug-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 6,
+        "POB Name": "APM Ingested Spans Overage ($/GB)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-07-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Sep-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 6,
+        "POB Name": "APM Ingested Spans Overage ($/GB)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-07-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Oct-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 6,
+        "POB Name": "APM Ingested Spans Overage ($/GB)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-07-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Nov-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 6,
+        "POB Name": "APM Ingested Spans Overage ($/GB)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-07-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Dec-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 7,
+        "POB Name": "Logs - Log Ingest ($/GB)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-07-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Jul-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 7,
+        "POB Name": "Logs - Log Ingest ($/GB)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-07-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Aug-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 7,
+        "POB Name": "Logs - Log Ingest ($/GB)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-07-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Sep-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 7,
+        "POB Name": "Logs - Log Ingest ($/GB)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-07-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Oct-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 7,
+        "POB Name": "Logs - Log Ingest ($/GB)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-07-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Nov-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 7,
+        "POB Name": "Logs - Log Ingest ($/GB)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-07-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Dec-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 8,
+        "POB Name": "Logs - Standard Indexing ($/M events)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-07-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Jul-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 8,
+        "POB Name": "Logs - Standard Indexing ($/M events)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-07-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Aug-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 8,
+        "POB Name": "Logs - Standard Indexing ($/M events)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-07-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Sep-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 8,
+        "POB Name": "Logs - Standard Indexing ($/M events)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-07-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Oct-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 8,
+        "POB Name": "Logs - Standard Indexing ($/M events)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-07-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Nov-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 8,
+        "POB Name": "Logs - Standard Indexing ($/M events)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-07-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Dec-26",
+        "Amount": 0
+      }
+    ],
+    "assumptions": [
+      "Daily straight-line recognition uses an inclusive day count (Revenue Start Date and Revenue End Date both included).",
+      "Monthly amounts are based on the number of service days that fall within each calendar month in the recognition window.",
+      "Amounts are rounded to 2 decimals per month; the final month in each ratable line is trued-up to ensure the sum of period Amounts equals Ext Allocated Price exactly.",
+      "For EVT-PIT-CONSUMP-USAGE (event-driven usage) lines, no usage/consumption events were provided, so all periods are shown as $0 per instructions."
+    ],
+    "open_questions": [
+      "For Line 2 (Infra Host-Hour Overage), please provide the 2026 monthly usage/consumption quantities (or dated usage events) and the applicable unit rate (or prepaid pool rate) so revenue can be recognized 'Upon Consumption'.",
+      "For Lines 5-8 (APM/Logs overages), please provide monthly consumption quantities for Jul-2026 through Dec-2026 (or dated usage events) and the applicable unit rates (or prepaid pool rates) to calculate event-driven revenue recognition."
+    ]
+  },
+  "summary": {
+    "assumptions": [
+      "Contract term is 12 months starting 2026-01-01; term end is treated as 2026-12-31 for recognition windows (with an administrative end date of 2027-01-01 used in some subscription constructs).",
+      "Month-7 upgrade / contract modification is effective 2026-07-01 (aligned to a billing period boundary), so no mid-month proration is modeled.",
+      "Billing calendar is aligned to calendar months; recurring committed components are billed monthly in advance on the period start date; usage/overage is billed monthly in arrears on the period end date.",
+      "Infrastructure Monitoring committed baseline is 500 hosts for months 1–6 at $23/host/month list, and the post-upgrade baseline is assumed to be 700 hosts for months 7–12 (unless modeled as separate 500 + 200 lines).",
+      "APM committed subscription is added effective 2026-07-01 for the remainder of the term: 150 APM hosts at $31/APM host/month list; billed monthly for months 7–12.",
+      "A 12% bundle discount is applied only to fixed recurring subscription components (Infra committed hosts + APM host subscription) starting 2026-07-01; all usage/overage charges remain undiscounted at list.",
+      "All currency amounts are in USD; monetary fields are treated as 2-decimal precision, with rounding managed at the schedule level.",
+      "Usage/overage components (Infra host-hours, APM spans, logs ingest/indexing) are modeled as consumption-based charges billed in arrears; revenue is assumed to be recognized upon consumption events (usage import / consumption events) when available.",
+      "Included usage allotments (if any) for APM and Logs are not modeled; only overage usage charges are represented.",
+      "No usage quantities were provided; therefore usage billing events and event-driven revenue schedules are shown as placeholders with zero quantity and zero amount until consumption is supplied.",
+      "Infrastructure overage pricing is modeled as on-demand equivalent of $27/host/month converted to a host-hour rate using a fixed hours-per-month convention for demo purposes (noting two conventions appeared in the pipeline: 720 vs 730 hours/month).",
+      "Performance obligation mapping assumes fixed recurring SaaS components are ratable over the service period (e.g., mapped to a ratable POB such as BK-OT-RATABLE), while usage/overage components are consumption/event-driven (e.g., mapped to an event-driven POB such as EVT-PIT-CONSUMP-USAGE).",
+      "Revenue allocation assumption: allocation is performed in Zuora Revenue using list price as SSP for allocation-eligible fixed recurring POBs; usage/overage POBs are excluded from allocation (allocation eligible flag set to false).",
+      "Contract modification is implemented via segmentation/new mid-term charges (Subscription Version = 2, Sales Order Date = 2026-07-01), enabling reallocation across remaining fixed recurring performance obligations depending on Zuora Revenue modification settings.",
+      "For Contracts/Orders modeling, ordered quantities for recurring committed-host charges are represented as host-months across the applicable service months so extended list/sell/SSP represent the total transaction price for that service period.",
+      "For reporting convenience in the tables, ongoing usage POB revenue windows are set through the contract term end date (2026-12-31), even though actual recognition is driven by consumption timing.",
+      "Ratable recognition uses daily straight-line with inclusive day counts; monthly amounts are derived from service days in each month, rounded to 2 decimals, with a final-period true-up to match the allocated amount exactly.",
+      "If operational constraints prevent consumption-event recognition, an alternate assumption is that usage revenue could be recognized from billing/invoices (switch mapping to an invoice-driven paygo POB such as BL-PIT-CONSUMP-PAYGO), with the revenue expectation adjusted accordingly."
+    ],
+    "open_questions": [
+      "[BLOCKING] What is the definitive contract end-date convention for the 12-month term: end on 2026-12-31 (inclusive) vs 2027-01-01 (exclusive/end date)? (Affects billing periods, recognition windows, and day counts.)",
+      "[BLOCKING] What revenue modification treatment should be applied in Zuora Revenue for the 2026-07-01 upgrade: prospective, retrospective/cumulative catch-up, or treat as a separate contract? (Directly affects whether/how reallocation and catch-up entries occur.)",
+      "[BLOCKING] Does the 12% bundle discount starting 2026-07-01 apply to (a) the entire post-upgrade fixed recurring baseline (all 700 Infra hosts + APM hosts) or (b) only the incremental adds (200 Infra + new APM)? (Affects transaction price, allocation, and revenue.)",
+      "[HIGH] How should the Infra committed baseline be represented for months 7–12: a single 700-host recurring line, or two lines (continuation of 500 + incremental 200)? (Affects amendment structure, allocation pools, and reporting.)",
+      "[HIGH] For usage revenue recognition, do you require consumption/event-driven recognition (usage events) or invoice-driven recognition for APM/Logs/Infra overages? (Determines POB mapping and integration requirements.)",
+      "[HIGH] Should any expected/estimated usage (variable consideration) be included in the transaction price at booking (subject to constraint), or should all usage remain excluded until billed/consumed? (Affects allocation and revenue timing.)",
+      "[HIGH] Confirm Infra overage rating details: unit of measure (host-hour vs host-month), whether strictly billed in arrears, and the hours-per-month conversion convention (actual hours by month vs fixed 720/730). (Affects invoicing accuracy and usage revenue amounts.)",
+      "[HIGH] Were there any included/bundled allotments for APM indexed spans, APM ingested spans, log ingest (GB), and log indexing (million events) that define what qualifies as “overage”? (Affects usage charge quantities and customer invoicing.)",
+      "[HIGH] Provide actual consumption inputs (or dated usage events) for Infra overage host-hours and APM/Logs usage metrics for Jul–Dec 2026 (and earlier months for Infra overage if applicable). (Required to compute usage billings and event-driven revenue schedules.)",
+      "[MEDIUM] Confirm the actual upgrade effective date/time. If not exactly 2026-07-01 (e.g., mid-month), should July 2026 recurring charges be prorated, and what proration policy applies? (Affects July billing and revenue schedules.)",
+      "[MEDIUM] For in-arrears invoicing, do invoices date on the service period end date (e.g., 2026-07-31) or the next day/next period start (e.g., 2026-08-01) based on your Zuora bill run schedule? (Affects invoice dating, accounting period cutoffs, and revenue/billing alignment.)"
+    ]
+  }
+}

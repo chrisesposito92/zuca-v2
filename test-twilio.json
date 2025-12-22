@@ -1,0 +1,11 @@
+{
+  "customer_name": "Twilio",
+  "contract_start_date": "01/01/2026",
+  "terms_months": 12,
+  "transaction_currency": "USD",
+  "billing_period": "Monthly",
+  "is_allocations": false,
+  "allocation_method": "N/A",
+  "rev_rec_notes": "Pure consumption model - all usage recognized as consumed. Committed usage is a prepaid balance that draws down with usage. Revenue recognized as usage occurs, whether from committed pool or PAYG overage. Breakage/true-up at contract end for unused commitment.",
+  "use_case_description": "Twilio sells a 12-month enterprise communications agreement modeled as pure consumption across three usage products: Twilio SMS (US), Programmable Voice (US), and SendGrid Email API (Premier). The customer can run on Pay-as-you-go (PAYG) tiered pricing, where SMS is billed per segment with monthly volume tiers (e.g., $0.0083/segment for 1-150k per month stepping down to $0.0073/segment for 1,000,001+), and Voice is billed per minute with monthly volume tiers. For Email API (Premier), model as metered email credits with demo tier pricing. The same customer also signs a committed-use contract that provides contracted discounted unit rates in exchange for an annual commitment (modeled as a prepaid committed-usage deposit/balance that draws down as usage occurs): SMS at $0.0069/segment, Voice outbound at $0.0098/min and inbound local at $0.0028/min, and Email at $0.0006/email. Billing is monthly in arrears for actual usage, applying committed discounted rates while commitment balance remains; if the commitment is exhausted mid-term, overage reverts to the standard PAYG tier schedule for that month. At contract end, any shortfall vs commitment is subject to a true-up invoice (or breakage rules), while any overage is already billed as consumed."
+}

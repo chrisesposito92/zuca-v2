@@ -1,0 +1,2864 @@
+{
+  "session_id": "9625c4bb-89cb-42c8-bfac-2c3f103cf6fa",
+  "timestamp": "2025-12-22T05:26:55.626Z",
+  "input": {
+    "customer_name": "Salesforce",
+    "contract_start_date": "01/01/2026",
+    "terms_months": 12,
+    "transaction_currency": "USD",
+    "billing_period": "Annually",
+    "is_allocations": true,
+    "allocation_method": "Use List Price",
+    "rev_rec_notes": "Subscriptions (Sales Cloud, Service Cloud, Premier Success) recognized ratably over term. Implementation services recognized over time by milestone (kickoff + go-live). Training recognized when delivered. ~15% bundle discount allocated across POBs using SSP/list price method. Mid-term expansion on 07/01/2026 adds 200 Service Cloud users co-termed.",
+    "use_case_description": "Salesforce sells an enterprise multi-cloud agreement that includes Sales Cloud (Enterprise) and Service Cloud (Enterprise) user licenses, plus a fixed-scope implementation services package and instructor-led training for admins/agents. The subscription portion is modeled as two separate product rate plans: (1) Sales Cloud (Enterprise) with a recurring per-user charge at $175/user/month billed annually, and (2) Service Cloud (Enterprise) with a recurring per-user charge at $175/user/month billed annually; the initial order is for 2,000 Sales Cloud users and 1,200 Service Cloud users. As part of the enterprise bundle, the customer negotiates a single commercial discount that reduces total contract consideration by ~15% versus combined list pricing across the subscription and services components, so we expect allocation across multiple performance obligations using SSP/list prices. Add Premier Success Plan as an attached subscription add-on rate plan priced at 30% of net license fees (calculated from the discounted Sales+Service license amount) and billed on the same annual schedule. Implementation Services are sold as a separate services product rate plan with a one-time fixed fee list price of $150,000 (discounted in the deal to $135,000) invoiced 50% at kickoff and 50% at go-live/acceptance. Trailhead Academy training is sold as a separate product rate plan with one-time per-attendee charges at $3,000 per attendee per course; the customer prepurchases 60 seats (list $180,000) discounted to $153,000 and training is delivered in the first 90 days. Mid-term expansion: on 07/01/2026 the customer adds 200 additional Service Cloud users co-termed to the 12-month agreement with proration for the remaining term and billed on the next invoice. Revenue expectation (inferred): subscriptions (including Success Plan) recognized ratably over the term; implementation recognized over time as services are performed (or by milestone if that best reflects progress); training recognized when delivered."
+  },
+  "contract_intel": {
+    "service_start_mdy": "01/01/2026",
+    "service_end_mdy": null,
+    "term_months": 12,
+    "billing_period": "Year",
+    "billing_timing": "InAdvance",
+    "trigger_event": "ContractEffective",
+    "go_live_mdy": "01/01/2026",
+    "booking_mdy": "01/01/2026",
+    "renewal_term_months": 12
+  },
+  "detected_capabilities": {
+    "billing_caps": [
+      "RECURRING",
+      "ONE-TIME",
+      "DISCOUNT",
+      "AMENDMENT",
+      "PRORATION"
+    ],
+    "revenue_caps": [
+      "ALLOCATION",
+      "BUNDLE",
+      "CUSTOM EVENT",
+      "CONTRACT MOD"
+    ],
+    "hints": [
+      "“recurring per-user charge … billed annually” → RECURRING (and billing_period=Year)",
+      "“fixed-scope implementation services package” and “instructor-led training… one-time … charges” → ONE-TIME",
+      "“single commercial discount … reduces total contract consideration by ~15%” → DISCOUNT",
+      "“Mid-term expansion… adds 200 additional Service Cloud users co-termed” → AMENDMENT + CONTRACT MOD",
+      "“with proration for the remaining term” → PRORATION",
+      "“expect allocation across multiple performance obligations using SSP/list prices” → ALLOCATION (and enterprise ‘bundle’)",
+      "“invoiced 50% at kickoff and 50% at go-live/acceptance” and “recognized… by milestone (kickoff + go-live)” → CUSTOM EVENT"
+    ],
+    "confidence": 0.88
+  },
+  "matched_golden_use_cases": {
+    "matched_guc": [
+      {
+        "id": "UC-0010",
+        "title": "MEA  Prospective (ADV)",
+        "score": 0.595333,
+        "score_raw": 0.633333,
+        "jaccard_billing": 0.666667,
+        "jaccard_revenue": 0.6,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "ONE-TIME",
+            "AMENDMENT",
+            "PRORATION"
+          ],
+          "missing": [
+            "DISCOUNT"
+          ],
+          "unmatched": [
+            "VOLUME PRICING"
+          ]
+        },
+        "revenue": {
+          "intersection": [
+            "ALLOCATION",
+            "CUSTOM EVENT",
+            "CONTRACT MOD"
+          ],
+          "missing": [
+            "BUNDLE"
+          ],
+          "unmatched": [
+            "COST"
+          ]
+        }
+      },
+      {
+        "id": "UC-0011",
+        "title": "MEA  Retrospective (ADV)",
+        "score": 0.595333,
+        "score_raw": 0.633333,
+        "jaccard_billing": 0.666667,
+        "jaccard_revenue": 0.6,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "ONE-TIME",
+            "AMENDMENT",
+            "PRORATION"
+          ],
+          "missing": [
+            "DISCOUNT"
+          ],
+          "unmatched": [
+            "VOLUME PRICING"
+          ]
+        },
+        "revenue": {
+          "intersection": [
+            "ALLOCATION",
+            "CUSTOM EVENT",
+            "CONTRACT MOD"
+          ],
+          "missing": [
+            "BUNDLE"
+          ],
+          "unmatched": [
+            "COST"
+          ]
+        }
+      },
+      {
+        "id": "UC-0026",
+        "title": "MEA with FX -ADV",
+        "score": 0.517,
+        "score_raw": 0.55,
+        "jaccard_billing": 0.6,
+        "jaccard_revenue": 0.5,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "ONE-TIME",
+            "PRORATION"
+          ],
+          "missing": [
+            "DISCOUNT",
+            "AMENDMENT"
+          ],
+          "unmatched": []
+        },
+        "revenue": {
+          "intersection": [
+            "ALLOCATION",
+            "CUSTOM EVENT"
+          ],
+          "missing": [
+            "BUNDLE",
+            "CONTRACT MOD"
+          ],
+          "unmatched": []
+        }
+      }
+    ],
+    "scores_all": [
+      {
+        "id": "UC-0010",
+        "title": "MEA  Prospective (ADV)",
+        "score": 0.595333,
+        "score_raw": 0.633333,
+        "jaccard_billing": 0.666667,
+        "jaccard_revenue": 0.6,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "ONE-TIME",
+            "AMENDMENT",
+            "PRORATION"
+          ],
+          "missing": [
+            "DISCOUNT"
+          ],
+          "unmatched": [
+            "VOLUME PRICING"
+          ]
+        },
+        "revenue": {
+          "intersection": [
+            "ALLOCATION",
+            "CUSTOM EVENT",
+            "CONTRACT MOD"
+          ],
+          "missing": [
+            "BUNDLE"
+          ],
+          "unmatched": [
+            "COST"
+          ]
+        }
+      },
+      {
+        "id": "UC-0011",
+        "title": "MEA  Retrospective (ADV)",
+        "score": 0.595333,
+        "score_raw": 0.633333,
+        "jaccard_billing": 0.666667,
+        "jaccard_revenue": 0.6,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "ONE-TIME",
+            "AMENDMENT",
+            "PRORATION"
+          ],
+          "missing": [
+            "DISCOUNT"
+          ],
+          "unmatched": [
+            "VOLUME PRICING"
+          ]
+        },
+        "revenue": {
+          "intersection": [
+            "ALLOCATION",
+            "CUSTOM EVENT",
+            "CONTRACT MOD"
+          ],
+          "missing": [
+            "BUNDLE"
+          ],
+          "unmatched": [
+            "COST"
+          ]
+        }
+      },
+      {
+        "id": "UC-0026",
+        "title": "MEA with FX -ADV",
+        "score": 0.517,
+        "score_raw": 0.55,
+        "jaccard_billing": 0.6,
+        "jaccard_revenue": 0.5,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "ONE-TIME",
+            "PRORATION"
+          ],
+          "missing": [
+            "DISCOUNT",
+            "AMENDMENT"
+          ],
+          "unmatched": []
+        },
+        "revenue": {
+          "intersection": [
+            "ALLOCATION",
+            "CUSTOM EVENT"
+          ],
+          "missing": [
+            "BUNDLE",
+            "CONTRACT MOD"
+          ],
+          "unmatched": []
+        }
+      },
+      {
+        "id": "UC-0030",
+        "title": "MEA - Software with RSSP",
+        "score": 0.517,
+        "score_raw": 0.55,
+        "jaccard_billing": 0.6,
+        "jaccard_revenue": 0.5,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "ONE-TIME",
+            "PRORATION"
+          ],
+          "missing": [
+            "DISCOUNT",
+            "AMENDMENT"
+          ],
+          "unmatched": []
+        },
+        "revenue": {
+          "intersection": [
+            "ALLOCATION",
+            "CUSTOM EVENT"
+          ],
+          "missing": [
+            "BUNDLE",
+            "CONTRACT MOD"
+          ],
+          "unmatched": []
+        }
+      },
+      {
+        "id": "UC-0002",
+        "title": "Bundle & PS (ADV)",
+        "score": 0.509167,
+        "score_raw": 0.541667,
+        "jaccard_billing": 0.333333,
+        "jaccard_revenue": 0.75,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "ONE-TIME"
+          ],
+          "missing": [
+            "DISCOUNT",
+            "AMENDMENT",
+            "PRORATION"
+          ],
+          "unmatched": [
+            "VOLUME PRICING"
+          ]
+        },
+        "revenue": {
+          "intersection": [
+            "ALLOCATION",
+            "BUNDLE",
+            "CUSTOM EVENT"
+          ],
+          "missing": [
+            "CONTRACT MOD"
+          ],
+          "unmatched": []
+        }
+      },
+      {
+        "id": "UC-0004",
+        "title": "Ramp  - Prospective",
+        "score": 0.47,
+        "score_raw": 0.5,
+        "jaccard_billing": 0.6,
+        "jaccard_revenue": 0.4,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "AMENDMENT",
+            "PRORATION"
+          ],
+          "missing": [
+            "ONE-TIME",
+            "DISCOUNT"
+          ],
+          "unmatched": []
+        },
+        "revenue": {
+          "intersection": [
+            "ALLOCATION",
+            "CONTRACT MOD"
+          ],
+          "missing": [
+            "BUNDLE",
+            "CUSTOM EVENT"
+          ],
+          "unmatched": [
+            "RAMP"
+          ]
+        }
+      },
+      {
+        "id": "UC-0024",
+        "title": "Subscription & PS (Milestones) - ADV",
+        "score": 0.47,
+        "score_raw": 0.5,
+        "jaccard_billing": 0.5,
+        "jaccard_revenue": 0.5,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "ONE-TIME",
+            "PRORATION"
+          ],
+          "missing": [
+            "DISCOUNT",
+            "AMENDMENT"
+          ],
+          "unmatched": [
+            "TIERED PRICING"
+          ]
+        },
+        "revenue": {
+          "intersection": [
+            "ALLOCATION",
+            "CUSTOM EVENT"
+          ],
+          "missing": [
+            "BUNDLE",
+            "CONTRACT MOD"
+          ],
+          "unmatched": []
+        }
+      },
+      {
+        "id": "UC-0028",
+        "title": "Subscription w T&M PS - OLI",
+        "score": 0.391667,
+        "score_raw": 0.416667,
+        "jaccard_billing": 0.333333,
+        "jaccard_revenue": 0.5,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "PRORATION"
+          ],
+          "missing": [
+            "ONE-TIME",
+            "DISCOUNT",
+            "AMENDMENT"
+          ],
+          "unmatched": [
+            "ORDER LINE ITEM"
+          ]
+        },
+        "revenue": {
+          "intersection": [
+            "ALLOCATION",
+            "CUSTOM EVENT"
+          ],
+          "missing": [
+            "BUNDLE",
+            "CONTRACT MOD"
+          ],
+          "unmatched": []
+        }
+      },
+      {
+        "id": "UC-0009",
+        "title": "MEA with OLI HW - ADV",
+        "score": 0.3525,
+        "score_raw": 0.375,
+        "jaccard_billing": 0.5,
+        "jaccard_revenue": 0.25,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "ONE-TIME",
+            "PRORATION"
+          ],
+          "missing": [
+            "DISCOUNT",
+            "AMENDMENT"
+          ],
+          "unmatched": [
+            "ORDER LINE ITEM"
+          ]
+        },
+        "revenue": {
+          "intersection": [
+            "ALLOCATION"
+          ],
+          "missing": [
+            "BUNDLE",
+            "CUSTOM EVENT",
+            "CONTRACT MOD"
+          ],
+          "unmatched": []
+        }
+      },
+      {
+        "id": "UC-0023",
+        "title": "Subscription - Cancel w Accel",
+        "score": 0.3525,
+        "score_raw": 0.375,
+        "jaccard_billing": 0.5,
+        "jaccard_revenue": 0.25,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "AMENDMENT",
+            "PRORATION"
+          ],
+          "missing": [
+            "ONE-TIME",
+            "DISCOUNT"
+          ],
+          "unmatched": [
+            "TIERED PRICING"
+          ]
+        },
+        "revenue": {
+          "intersection": [
+            "CONTRACT MOD"
+          ],
+          "missing": [
+            "ALLOCATION",
+            "BUNDLE",
+            "CUSTOM EVENT"
+          ],
+          "unmatched": []
+        }
+      },
+      {
+        "id": "UC-0008",
+        "title": "MEA w Cost (ADV)",
+        "score": 0.344667,
+        "score_raw": 0.366667,
+        "jaccard_billing": 0.333333,
+        "jaccard_revenue": 0.4,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "ONE-TIME"
+          ],
+          "missing": [
+            "DISCOUNT",
+            "AMENDMENT",
+            "PRORATION"
+          ],
+          "unmatched": [
+            "VOLUME PRICING"
+          ]
+        },
+        "revenue": {
+          "intersection": [
+            "ALLOCATION",
+            "CUSTOM EVENT"
+          ],
+          "missing": [
+            "BUNDLE",
+            "CONTRACT MOD"
+          ],
+          "unmatched": [
+            "COST"
+          ]
+        }
+      },
+      {
+        "id": "UC-0038",
+        "title": "B2C Cancellation",
+        "score": 0.3055,
+        "score_raw": 0.325,
+        "jaccard_billing": 0.4,
+        "jaccard_revenue": 0.25,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "AMENDMENT"
+          ],
+          "missing": [
+            "ONE-TIME",
+            "DISCOUNT",
+            "PRORATION"
+          ],
+          "unmatched": []
+        },
+        "revenue": {
+          "intersection": [
+            "CONTRACT MOD"
+          ],
+          "missing": [
+            "ALLOCATION",
+            "BUNDLE",
+            "CUSTOM EVENT"
+          ],
+          "unmatched": []
+        }
+      },
+      {
+        "id": "UC-0003",
+        "title": "Ramp - SL",
+        "score": 0.282,
+        "score_raw": 0.3,
+        "jaccard_billing": 0.4,
+        "jaccard_revenue": 0.2,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "PRORATION"
+          ],
+          "missing": [
+            "ONE-TIME",
+            "DISCOUNT",
+            "AMENDMENT"
+          ],
+          "unmatched": []
+        },
+        "revenue": {
+          "intersection": [
+            "ALLOCATION"
+          ],
+          "missing": [
+            "BUNDLE",
+            "CUSTOM EVENT",
+            "CONTRACT MOD"
+          ],
+          "unmatched": [
+            "RAMP"
+          ]
+        }
+      },
+      {
+        "id": "UC-0027",
+        "title": "Subscription with Setup Fee - CNTRL",
+        "score": 0.282,
+        "score_raw": 0.3,
+        "jaccard_billing": 0.6,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "ONE-TIME",
+            "PRORATION"
+          ],
+          "missing": [
+            "DISCOUNT",
+            "AMENDMENT"
+          ],
+          "unmatched": []
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "ALLOCATION",
+            "BUNDLE",
+            "CUSTOM EVENT",
+            "CONTRACT MOD"
+          ],
+          "unmatched": []
+        }
+      },
+      {
+        "id": "UC-0032",
+        "title": "Subscription - Suspend/Resume",
+        "score": 0.282,
+        "score_raw": 0.3,
+        "jaccard_billing": 0.6,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "AMENDMENT",
+            "PRORATION"
+          ],
+          "missing": [
+            "ONE-TIME",
+            "DISCOUNT"
+          ],
+          "unmatched": []
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "ALLOCATION",
+            "BUNDLE",
+            "CUSTOM EVENT",
+            "CONTRACT MOD"
+          ],
+          "unmatched": []
+        }
+      },
+      {
+        "id": "UC-0006",
+        "title": "MEA w Royalty (ADV)",
+        "score": 0.235,
+        "score_raw": 0.25,
+        "jaccard_billing": 0.333333,
+        "jaccard_revenue": 0.166667,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "ONE-TIME"
+          ],
+          "missing": [
+            "DISCOUNT",
+            "AMENDMENT",
+            "PRORATION"
+          ],
+          "unmatched": [
+            "VOLUME PRICING"
+          ]
+        },
+        "revenue": {
+          "intersection": [
+            "ALLOCATION"
+          ],
+          "missing": [
+            "BUNDLE",
+            "CUSTOM EVENT",
+            "CONTRACT MOD"
+          ],
+          "unmatched": [
+            "COST",
+            "VC"
+          ]
+        }
+      },
+      {
+        "id": "UC-0001",
+        "title": "Subscription",
+        "score": 0.188,
+        "score_raw": 0.2,
+        "jaccard_billing": 0.4,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "PRORATION"
+          ],
+          "missing": [
+            "ONE-TIME",
+            "DISCOUNT",
+            "AMENDMENT"
+          ],
+          "unmatched": []
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "ALLOCATION",
+            "BUNDLE",
+            "CUSTOM EVENT",
+            "CONTRACT MOD"
+          ],
+          "unmatched": []
+        }
+      },
+      {
+        "id": "UC-0025",
+        "title": "Subscription - free mos - CNTRL",
+        "score": 0.188,
+        "score_raw": 0.2,
+        "jaccard_billing": 0.4,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "DISCOUNT"
+          ],
+          "missing": [
+            "ONE-TIME",
+            "AMENDMENT",
+            "PRORATION"
+          ],
+          "unmatched": []
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "ALLOCATION",
+            "BUNDLE",
+            "CUSTOM EVENT",
+            "CONTRACT MOD"
+          ],
+          "unmatched": []
+        }
+      },
+      {
+        "id": "UC-0037",
+        "title": "B2C Promo",
+        "score": 0.188,
+        "score_raw": 0.2,
+        "jaccard_billing": 0.4,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "DISCOUNT"
+          ],
+          "missing": [
+            "ONE-TIME",
+            "AMENDMENT",
+            "PRORATION"
+          ],
+          "unmatched": []
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "ALLOCATION",
+            "BUNDLE",
+            "CUSTOM EVENT",
+            "CONTRACT MOD"
+          ],
+          "unmatched": []
+        }
+      },
+      {
+        "id": "UC-0012",
+        "title": "ACB - PPDD (Ratable)",
+        "score": 0.161143,
+        "score_raw": 0.171429,
+        "jaccard_billing": 0.142857,
+        "jaccard_revenue": 0.2,
+        "billing": {
+          "intersection": [
+            "RECURRING"
+          ],
+          "missing": [
+            "ONE-TIME",
+            "DISCOUNT",
+            "AMENDMENT",
+            "PRORATION"
+          ],
+          "unmatched": [
+            "USAGE",
+            "PREPAID DRAWDOWN"
+          ]
+        },
+        "revenue": {
+          "intersection": [
+            "CUSTOM EVENT"
+          ],
+          "missing": [
+            "ALLOCATION",
+            "BUNDLE",
+            "CONTRACT MOD"
+          ],
+          "unmatched": [
+            "ADVANCED CONSUMPTION"
+          ]
+        }
+      },
+      {
+        "id": "UC-0013",
+        "title": "ACB - PPDD (Usage)",
+        "score": 0.161143,
+        "score_raw": 0.171429,
+        "jaccard_billing": 0.142857,
+        "jaccard_revenue": 0.2,
+        "billing": {
+          "intersection": [
+            "RECURRING"
+          ],
+          "missing": [
+            "ONE-TIME",
+            "DISCOUNT",
+            "AMENDMENT",
+            "PRORATION"
+          ],
+          "unmatched": [
+            "USAGE",
+            "PREPAID DRAWDOWN"
+          ]
+        },
+        "revenue": {
+          "intersection": [
+            "CUSTOM EVENT"
+          ],
+          "missing": [
+            "ALLOCATION",
+            "BUNDLE",
+            "CONTRACT MOD"
+          ],
+          "unmatched": [
+            "ADVANCED CONSUMPTION"
+          ]
+        }
+      },
+      {
+        "id": "UC-0005",
+        "title": "Ramp - Inv Schedules",
+        "score": 0.156667,
+        "score_raw": 0.166667,
+        "jaccard_billing": 0.333333,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "PRORATION"
+          ],
+          "missing": [
+            "ONE-TIME",
+            "DISCOUNT",
+            "AMENDMENT"
+          ],
+          "unmatched": [
+            "TIERED PRICING"
+          ]
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "ALLOCATION",
+            "BUNDLE",
+            "CUSTOM EVENT",
+            "CONTRACT MOD"
+          ],
+          "unmatched": [
+            "RAMP"
+          ]
+        }
+      },
+      {
+        "id": "UC-0031",
+        "title": "ACB-PPDD(Usage) with Top-off",
+        "score": 0.134286,
+        "score_raw": 0.142857,
+        "jaccard_billing": 0.285714,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "RECURRING",
+            "AMENDMENT"
+          ],
+          "missing": [
+            "ONE-TIME",
+            "DISCOUNT",
+            "PRORATION"
+          ],
+          "unmatched": [
+            "USAGE",
+            "PREPAID DRAWDOWN"
+          ]
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "ALLOCATION",
+            "BUNDLE",
+            "CUSTOM EVENT",
+            "CONTRACT MOD"
+          ],
+          "unmatched": [
+            "ADVANCED CONSUMPTION"
+          ]
+        }
+      },
+      {
+        "id": "UC-0029",
+        "title": "SFC - ADV",
+        "score": 0.094,
+        "score_raw": 0.1,
+        "jaccard_billing": 0,
+        "jaccard_revenue": 0.2,
+        "billing": {
+          "intersection": [],
+          "missing": [
+            "RECURRING",
+            "ONE-TIME",
+            "DISCOUNT",
+            "AMENDMENT",
+            "PRORATION"
+          ],
+          "unmatched": []
+        },
+        "revenue": {
+          "intersection": [
+            "ALLOCATION"
+          ],
+          "missing": [
+            "BUNDLE",
+            "CUSTOM EVENT",
+            "CONTRACT MOD"
+          ],
+          "unmatched": [
+            "SFC"
+          ]
+        }
+      },
+      {
+        "id": "UC-0033",
+        "title": "MEA-Multi-Currency -ADV",
+        "score": 0.094,
+        "score_raw": 0.1,
+        "jaccard_billing": 0,
+        "jaccard_revenue": 0.2,
+        "billing": {
+          "intersection": [],
+          "missing": [
+            "RECURRING",
+            "ONE-TIME",
+            "DISCOUNT",
+            "AMENDMENT",
+            "PRORATION"
+          ],
+          "unmatched": []
+        },
+        "revenue": {
+          "intersection": [
+            "ALLOCATION"
+          ],
+          "missing": [
+            "BUNDLE",
+            "CUSTOM EVENT",
+            "CONTRACT MOD"
+          ],
+          "unmatched": [
+            "COST"
+          ]
+        }
+      },
+      {
+        "id": "UC-0034",
+        "title": "B2C  Monthly",
+        "score": 0.094,
+        "score_raw": 0.1,
+        "jaccard_billing": 0.2,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "RECURRING"
+          ],
+          "missing": [
+            "ONE-TIME",
+            "DISCOUNT",
+            "AMENDMENT",
+            "PRORATION"
+          ],
+          "unmatched": []
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "ALLOCATION",
+            "BUNDLE",
+            "CUSTOM EVENT",
+            "CONTRACT MOD"
+          ],
+          "unmatched": []
+        }
+      },
+      {
+        "id": "UC-0035",
+        "title": "B2C Annual",
+        "score": 0.094,
+        "score_raw": 0.1,
+        "jaccard_billing": 0.2,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "RECURRING"
+          ],
+          "missing": [
+            "ONE-TIME",
+            "DISCOUNT",
+            "AMENDMENT",
+            "PRORATION"
+          ],
+          "unmatched": []
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "ALLOCATION",
+            "BUNDLE",
+            "CUSTOM EVENT",
+            "CONTRACT MOD"
+          ],
+          "unmatched": []
+        }
+      },
+      {
+        "id": "UC-0036",
+        "title": "B2C MTM",
+        "score": 0.094,
+        "score_raw": 0.1,
+        "jaccard_billing": 0.2,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "RECURRING"
+          ],
+          "missing": [
+            "ONE-TIME",
+            "DISCOUNT",
+            "AMENDMENT",
+            "PRORATION"
+          ],
+          "unmatched": []
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "ALLOCATION",
+            "BUNDLE",
+            "CUSTOM EVENT",
+            "CONTRACT MOD"
+          ],
+          "unmatched": []
+        }
+      },
+      {
+        "id": "UC-0007",
+        "title": "Subscription & VC",
+        "score": 0.078333,
+        "score_raw": 0.083333,
+        "jaccard_billing": 0.166667,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "RECURRING"
+          ],
+          "missing": [
+            "ONE-TIME",
+            "DISCOUNT",
+            "AMENDMENT",
+            "PRORATION"
+          ],
+          "unmatched": [
+            "TIERED PRICING"
+          ]
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "ALLOCATION",
+            "BUNDLE",
+            "CUSTOM EVENT",
+            "CONTRACT MOD"
+          ],
+          "unmatched": [
+            "VC"
+          ]
+        }
+      },
+      {
+        "id": "UC-0015",
+        "title": "Subscription - Weekend Delivery",
+        "score": 0.078333,
+        "score_raw": 0.083333,
+        "jaccard_billing": 0.166667,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "RECURRING"
+          ],
+          "missing": [
+            "ONE-TIME",
+            "DISCOUNT",
+            "AMENDMENT",
+            "PRORATION"
+          ],
+          "unmatched": [
+            "DELIVERY PRICING"
+          ]
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "ALLOCATION",
+            "BUNDLE",
+            "CUSTOM EVENT",
+            "CONTRACT MOD"
+          ],
+          "unmatched": [
+            "ADVANCED CONSUMPTION",
+            "DELIVERY"
+          ]
+        }
+      },
+      {
+        "id": "UC-0016",
+        "title": "ACB - PPDD (Ratable-VC)",
+        "score": 0.067143,
+        "score_raw": 0.071429,
+        "jaccard_billing": 0.142857,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "RECURRING"
+          ],
+          "missing": [
+            "ONE-TIME",
+            "DISCOUNT",
+            "AMENDMENT",
+            "PRORATION"
+          ],
+          "unmatched": [
+            "USAGE",
+            "PREPAID DRAWDOWN"
+          ]
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "ALLOCATION",
+            "BUNDLE",
+            "CUSTOM EVENT",
+            "CONTRACT MOD"
+          ],
+          "unmatched": [
+            "VC",
+            "ADVANCED CONSUMPTION"
+          ]
+        }
+      },
+      {
+        "id": "UC-0017",
+        "title": "ACB - PPDD (Usage - Multi Prod)",
+        "score": 0.067143,
+        "score_raw": 0.071429,
+        "jaccard_billing": 0.142857,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "RECURRING"
+          ],
+          "missing": [
+            "ONE-TIME",
+            "DISCOUNT",
+            "AMENDMENT",
+            "PRORATION"
+          ],
+          "unmatched": [
+            "USAGE",
+            "PREPAID DRAWDOWN"
+          ]
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "ALLOCATION",
+            "BUNDLE",
+            "CUSTOM EVENT",
+            "CONTRACT MOD"
+          ],
+          "unmatched": [
+            "ADVANCED CONSUMPTION"
+          ]
+        }
+      },
+      {
+        "id": "UC-0019",
+        "title": "ACB - Commit Arrears (Usage)",
+        "score": 0.067143,
+        "score_raw": 0.071429,
+        "jaccard_billing": 0.142857,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "RECURRING"
+          ],
+          "missing": [
+            "ONE-TIME",
+            "DISCOUNT",
+            "AMENDMENT",
+            "PRORATION"
+          ],
+          "unmatched": [
+            "USAGE",
+            "PREPAID DRAWDOWN"
+          ]
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "ALLOCATION",
+            "BUNDLE",
+            "CUSTOM EVENT",
+            "CONTRACT MOD"
+          ],
+          "unmatched": [
+            "ADVANCED CONSUMPTION"
+          ]
+        }
+      },
+      {
+        "id": "UC-0020",
+        "title": "ACB-Min Commit - Under",
+        "score": 0.067143,
+        "score_raw": 0.071429,
+        "jaccard_billing": 0.142857,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "RECURRING"
+          ],
+          "missing": [
+            "ONE-TIME",
+            "DISCOUNT",
+            "AMENDMENT",
+            "PRORATION"
+          ],
+          "unmatched": [
+            "USAGE",
+            "MIN COMMIT"
+          ]
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "ALLOCATION",
+            "BUNDLE",
+            "CUSTOM EVENT",
+            "CONTRACT MOD"
+          ],
+          "unmatched": [
+            "ADVANCED CONSUMPTION"
+          ]
+        }
+      },
+      {
+        "id": "UC-0018",
+        "title": "ACB - Commit Arrears (Ratable)",
+        "score": 0.05875,
+        "score_raw": 0.0625,
+        "jaccard_billing": 0.125,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "RECURRING"
+          ],
+          "missing": [
+            "ONE-TIME",
+            "DISCOUNT",
+            "AMENDMENT",
+            "PRORATION"
+          ],
+          "unmatched": [
+            "USAGE",
+            "PREPAID DRAWDOWN",
+            "TIERED PRICING"
+          ]
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "ALLOCATION",
+            "BUNDLE",
+            "CUSTOM EVENT",
+            "CONTRACT MOD"
+          ],
+          "unmatched": [
+            "ADVANCED CONSUMPTION"
+          ]
+        }
+      },
+      {
+        "id": "UC-0021",
+        "title": "ACB-Min Commit - Over",
+        "score": 0.05875,
+        "score_raw": 0.0625,
+        "jaccard_billing": 0.125,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "RECURRING"
+          ],
+          "missing": [
+            "ONE-TIME",
+            "DISCOUNT",
+            "AMENDMENT",
+            "PRORATION"
+          ],
+          "unmatched": [
+            "USAGE",
+            "MIN COMMIT",
+            "OVERAGE"
+          ]
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "ALLOCATION",
+            "BUNDLE",
+            "CUSTOM EVENT",
+            "CONTRACT MOD"
+          ],
+          "unmatched": [
+            "ADVANCED CONSUMPTION"
+          ]
+        }
+      },
+      {
+        "id": "UC-0014",
+        "title": "ACB - Paygo",
+        "score": 0,
+        "score_raw": 0,
+        "jaccard_billing": 0,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [],
+          "missing": [
+            "RECURRING",
+            "ONE-TIME",
+            "DISCOUNT",
+            "AMENDMENT",
+            "PRORATION"
+          ],
+          "unmatched": [
+            "USAGE"
+          ]
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "ALLOCATION",
+            "BUNDLE",
+            "CUSTOM EVENT",
+            "CONTRACT MOD"
+          ],
+          "unmatched": [
+            "ADVANCED CONSUMPTION"
+          ]
+        }
+      },
+      {
+        "id": "UC-0022",
+        "title": "ACB-Paygo - Prerated",
+        "score": 0,
+        "score_raw": 0,
+        "jaccard_billing": 0,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [],
+          "missing": [
+            "RECURRING",
+            "ONE-TIME",
+            "DISCOUNT",
+            "AMENDMENT",
+            "PRORATION"
+          ],
+          "unmatched": [
+            "USAGE",
+            "PRERATED PRICING"
+          ]
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "ALLOCATION",
+            "BUNDLE",
+            "CUSTOM EVENT",
+            "CONTRACT MOD"
+          ],
+          "unmatched": [
+            "ADVANCED CONSUMPTION"
+          ]
+        }
+      }
+    ],
+    "normalized_inputs": {
+      "billing_caps": [
+        "RECURRING",
+        "ONE-TIME",
+        "DISCOUNT",
+        "AMENDMENT",
+        "PRORATION"
+      ],
+      "revenue_caps": [
+        "ALLOCATION",
+        "BUNDLE",
+        "CUSTOM EVENT",
+        "CONTRACT MOD"
+      ]
+    }
+  },
+  "subscription_spec": {
+    "subscription": {
+      "name": "Salesforce - Enterprise Multi-Cloud Agreement (Sales+Service+Success+Services+Training)",
+      "termType": "TERMED",
+      "status": "Draft",
+      "currency": "USD",
+      "contractEffectiveDate": "2026-01-01",
+      "serviceActivationDate": "2026-01-01",
+      "customerAcceptanceDate": "2026-01-01",
+      "subscriptionStartDate": "2026-01-01",
+      "subscriptionEndDate": "2026-12-31",
+      "initialTerm": 12,
+      "initialTermPeriodType": "Month",
+      "renewalTerm": 12,
+      "renewalTermPeriodType": "Month",
+      "autoRenew": true
+    },
+    "rate_plans": [
+      {
+        "productName": "Sales Cloud (Enterprise)",
+        "ratePlanName": "Sales Cloud (Enterprise) - User Licenses",
+        "charges": [
+          {
+            "name": "Sales Cloud Enterprise User License",
+            "type": "Recurring",
+            "model": "PerUnit",
+            "uom": "User",
+            "billingPeriod": "Year",
+            "billingTiming": "InAdvance",
+            "billingDay": null,
+            "billingPeriodAlignment": "SubscriptionStart",
+            "listPriceBase": "175 USD per user per month (expressed as 2,100 per user per year for annual billing)",
+            "triggerEvent": "ContractEffective",
+            "specificTriggerDate": null,
+            "endDateCondition": "SubscriptionEnd",
+            "specificEndDate": null,
+            "quantity": 2000,
+            "listPrice": 2100,
+            "sellPrice": 1785,
+            "price": 1785,
+            "effectiveStartDate": "2026-01-01",
+            "effectiveEndDate": "2026-12-31",
+            "chargeFunction": "None",
+            "isAllocationEligible": true,
+            "drawdownType": null,
+            "commitmentType": null,
+            "prepaymentUOM": null,
+            "prepaymentUnits": null,
+            "validityPeriod": null
+          }
+        ]
+      },
+      {
+        "productName": "Service Cloud (Enterprise)",
+        "ratePlanName": "Service Cloud (Enterprise) - User Licenses",
+        "charges": [
+          {
+            "name": "Service Cloud Enterprise User License",
+            "type": "Recurring",
+            "model": "PerUnit",
+            "uom": "User",
+            "billingPeriod": "Year",
+            "billingTiming": "InAdvance",
+            "billingDay": null,
+            "billingPeriodAlignment": "SubscriptionStart",
+            "listPriceBase": "175 USD per user per month (expressed as 2,100 per user per year for annual billing)",
+            "triggerEvent": "ContractEffective",
+            "specificTriggerDate": null,
+            "endDateCondition": "SubscriptionEnd",
+            "specificEndDate": null,
+            "quantity": 1200,
+            "listPrice": 2100,
+            "sellPrice": 1785,
+            "price": 1785,
+            "effectiveStartDate": "2026-01-01",
+            "effectiveEndDate": "2026-12-31",
+            "chargeFunction": "None",
+            "isAllocationEligible": true,
+            "drawdownType": null,
+            "commitmentType": null,
+            "prepaymentUOM": null,
+            "prepaymentUnits": null,
+            "validityPeriod": null
+          },
+          {
+            "name": "Service Cloud Enterprise User License - Expansion (Added 07/01/2026)",
+            "type": "Recurring",
+            "model": "PerUnit",
+            "uom": "User",
+            "billingPeriod": "Year",
+            "billingTiming": "InAdvance",
+            "billingDay": null,
+            "billingPeriodAlignment": "ChargeTriggerDate",
+            "listPriceBase": "Co-termed add: 175 USD per user per month (2,100 per user per year); prorated for remaining term",
+            "triggerEvent": "SpecificTriggerDate",
+            "specificTriggerDate": "2026-07-01",
+            "endDateCondition": "SpecificEndDate",
+            "specificEndDate": "2026-12-31",
+            "quantity": 200,
+            "listPrice": 2100,
+            "sellPrice": 1785,
+            "price": 1785,
+            "effectiveStartDate": "2026-07-01",
+            "effectiveEndDate": "2026-12-31",
+            "chargeFunction": "None",
+            "isAllocationEligible": true,
+            "drawdownType": null,
+            "commitmentType": null,
+            "prepaymentUOM": null,
+            "prepaymentUnits": null,
+            "validityPeriod": null
+          }
+        ]
+      },
+      {
+        "productName": "Premier Success Plan",
+        "ratePlanName": "Premier Success Plan - Attached Add-on",
+        "charges": [
+          {
+            "name": "Premier Success Plan (30% of Net License Fees)",
+            "type": "Recurring",
+            "model": "FlatFee",
+            "uom": null,
+            "billingPeriod": "Year",
+            "billingTiming": "InAdvance",
+            "billingDay": null,
+            "billingPeriodAlignment": "SubscriptionStart",
+            "listPriceBase": "0.30 * (Sales+Service license fees). List calculated off list license value; sell calculated off discounted/net license value.",
+            "triggerEvent": "ContractEffective",
+            "specificTriggerDate": null,
+            "endDateCondition": "SubscriptionEnd",
+            "specificEndDate": null,
+            "quantity": 1,
+            "listPrice": 2016000,
+            "sellPrice": 1713600,
+            "price": 1713600,
+            "effectiveStartDate": "2026-01-01",
+            "effectiveEndDate": "2026-12-31",
+            "chargeFunction": "None",
+            "isAllocationEligible": true,
+            "drawdownType": null,
+            "commitmentType": null,
+            "prepaymentUOM": null,
+            "prepaymentUnits": null,
+            "validityPeriod": null
+          }
+        ]
+      },
+      {
+        "productName": "Implementation Services",
+        "ratePlanName": "Implementation Services - Fixed Scope Package",
+        "charges": [
+          {
+            "name": "Implementation Services - Kickoff Milestone (50%)",
+            "type": "OneTime",
+            "model": "FlatFee",
+            "uom": null,
+            "billingPeriod": null,
+            "billingTiming": "InAdvance",
+            "billingDay": null,
+            "billingPeriodAlignment": null,
+            "listPriceBase": "50% of 150,000 list fixed fee",
+            "triggerEvent": "ContractEffective",
+            "specificTriggerDate": null,
+            "endDateCondition": "SpecificEndDate",
+            "specificEndDate": "2026-01-01",
+            "quantity": null,
+            "listPrice": 75000,
+            "sellPrice": 67500,
+            "price": 67500,
+            "effectiveStartDate": "2026-01-01",
+            "effectiveEndDate": "2026-01-01",
+            "chargeFunction": "None",
+            "isAllocationEligible": true,
+            "drawdownType": null,
+            "commitmentType": null,
+            "prepaymentUOM": null,
+            "prepaymentUnits": null,
+            "validityPeriod": null
+          },
+          {
+            "name": "Implementation Services - Go-Live/Acceptance Milestone (50%)",
+            "type": "OneTime",
+            "model": "FlatFee",
+            "uom": null,
+            "billingPeriod": null,
+            "billingTiming": "InAdvance",
+            "billingDay": null,
+            "billingPeriodAlignment": null,
+            "listPriceBase": "50% of 150,000 list fixed fee",
+            "triggerEvent": "Acceptance",
+            "specificTriggerDate": "2026-03-31",
+            "endDateCondition": "SpecificEndDate",
+            "specificEndDate": "2026-03-31",
+            "quantity": null,
+            "listPrice": 75000,
+            "sellPrice": 67500,
+            "price": 67500,
+            "effectiveStartDate": "2026-03-31",
+            "effectiveEndDate": "2026-03-31",
+            "chargeFunction": "None",
+            "isAllocationEligible": true,
+            "drawdownType": null,
+            "commitmentType": null,
+            "prepaymentUOM": null,
+            "prepaymentUnits": null,
+            "validityPeriod": null
+          }
+        ]
+      },
+      {
+        "productName": "Trailhead Academy Training",
+        "ratePlanName": "Trailhead Academy - Instructor Led Training (Prepaid Seats)",
+        "charges": [
+          {
+            "name": "Trailhead Academy Training Seat (Prepaid)",
+            "type": "OneTime",
+            "model": "PerUnit",
+            "uom": "Seat",
+            "billingPeriod": null,
+            "billingTiming": "InAdvance",
+            "billingDay": null,
+            "billingPeriodAlignment": null,
+            "listPriceBase": "3,000 per attendee per course seat",
+            "triggerEvent": "ContractEffective",
+            "specificTriggerDate": null,
+            "endDateCondition": "SpecificEndDate",
+            "specificEndDate": "2026-03-31",
+            "quantity": 60,
+            "listPrice": 3000,
+            "sellPrice": 2550,
+            "price": 2550,
+            "effectiveStartDate": "2026-01-01",
+            "effectiveEndDate": "2026-03-31",
+            "chargeFunction": "None",
+            "isAllocationEligible": true,
+            "drawdownType": null,
+            "commitmentType": null,
+            "prepaymentUOM": null,
+            "prepaymentUnits": null,
+            "validityPeriod": null
+          }
+        ]
+      }
+    ],
+    "usage": [],
+    "assumptions": [
+      "Subscription term is 12 months starting 2026-01-01, so subscription end date is modeled as 2026-12-31.",
+      "Currency assumed USD.",
+      "Annual billing is implemented by setting billingPeriod=Year and converting 175/user/month into 2,100/user/year for list pricing; Zuora proration is assumed for partial-year segments.",
+      "The ~15% negotiated bundle discount is represented in Billing by using sellPrice values (net) rather than creating a separate discount charge line; Revenue allocation uses listPrice as SSP per instruction.",
+      "License net price assumed to be 15% off list (2,100 -> 1,785 per user/year) because an explicit net license discount was not provided.",
+      "Premier Success Plan list is calculated as 30% of list license fees (0.30 * 6,720,000 = 2,016,000) and sell is calculated as 30% of assumed net license fees (0.30 * 5,712,000 = 1,713,600).",
+      "Implementation milestone dates assumed: kickoff on 2026-01-01 and go-live/acceptance on 2026-03-31 (within first 90 days).",
+      "Training delivery assumed to occur primarily by 2026-02-15 (within first 90 days) and completed by 2026-03-31; recognition is driven by delivery/consumption events in Revenue.",
+      "Mid-term expansion on 2026-07-01 is modeled as a separate recurring charge segment (prospective add) co-termed to 2026-12-31 and billed on the next invoice run after 2026-07-01.",
+      "All charges are marked allocation-eligible because allocations are required and list price is the SSP basis."
+    ],
+    "open_questions": [
+      "What is the actual Contract Effective Date (can differ from service start)?",
+      "What are the exact kickoff date and go-live/acceptance date for implementation (used for invoicing and event-based recognition)?",
+      "Will training be delivered in multiple sessions/dates (requiring multiple delivery events), and what are those dates?",
+      "Is auto-renew intended for this agreement, and if yes, should renewal be at 12 months with the same products/prices?"
+    ]
+  },
+  "pob_mapping": {
+    "charge_pob_map": [
+      {
+        "chargeName": "Sales Cloud Enterprise User License",
+        "productName": "Sales Cloud (Enterprise)",
+        "ratePlanName": "Sales Cloud (Enterprise) - User Licenses",
+        "pob_identifier": "BK-OT-RATABLE",
+        "pob_name": "BK-OT-RATABLE",
+        "ratable_method": "Ratable",
+        "release_event": "Upon Booking (Full Booking Release)",
+        "recognition_window": {
+          "start": "2026-01-01",
+          "end": "2026-12-31"
+        },
+        "rationale": "SaaS user license is a stand-ready service; recognize ratably over the contracted term with booking-based release.",
+        "confidence": 0.9,
+        "alternatives": [
+          {
+            "pob_identifier": "BL-OT-INVRATABLE",
+            "pob_name": "BL-OT-INVRATABLE",
+            "why_not": "Billing-based release is not preferred here because the rev policy states ratable over term and billing is in advance; booking-based aligns better for term-based SaaS."
+          }
+        ]
+      },
+      {
+        "chargeName": "Service Cloud Enterprise User License",
+        "productName": "Service Cloud (Enterprise)",
+        "ratePlanName": "Service Cloud (Enterprise) - User Licenses",
+        "pob_identifier": "BK-OT-RATABLE",
+        "pob_name": "BK-OT-RATABLE",
+        "ratable_method": "Ratable",
+        "release_event": "Upon Booking (Full Booking Release)",
+        "recognition_window": {
+          "start": "2026-01-01",
+          "end": "2026-12-31"
+        },
+        "rationale": "SaaS license recognized ratably over the term; booking-based release fits in-advance annual invoicing.",
+        "confidence": 0.9,
+        "alternatives": [
+          {
+            "pob_identifier": "BL-OT-INVRATABLE",
+            "pob_name": "BL-OT-INVRATABLE",
+            "why_not": "Would shift release to billing events rather than booking; not aligned to stated approach."
+          }
+        ]
+      },
+      {
+        "chargeName": "Service Cloud Enterprise User License - Expansion (Added 07/01/2026)",
+        "productName": "Service Cloud (Enterprise)",
+        "ratePlanName": "Service Cloud (Enterprise) - User Licenses",
+        "pob_identifier": "BK-OT-RATABLE",
+        "pob_name": "BK-OT-RATABLE",
+        "ratable_method": "Ratable",
+        "release_event": "Upon Booking (Full Booking Release)",
+        "recognition_window": {
+          "start": "2026-07-01",
+          "end": "2026-12-31"
+        },
+        "rationale": "Co-termed add-on licenses are a distinct contract modification line; recognize ratably over the remaining term from the expansion effective date.",
+        "confidence": 0.85,
+        "alternatives": [
+          {
+            "pob_identifier": "BL-OT-INVRATABLE",
+            "pob_name": "BL-OT-INVRATABLE",
+            "why_not": "If invoicing timing is delayed beyond 07/01/2026, billing-based could be considered; stated expectation is ratable over the remaining service window."
+          }
+        ]
+      },
+      {
+        "chargeName": "Premier Success Plan (30% of Net License Fees)",
+        "productName": "Premier Success Plan",
+        "ratePlanName": "Premier Success Plan - Attached Add-on",
+        "pob_identifier": "BK-OT-RATABLE",
+        "pob_name": "BK-OT-RATABLE",
+        "ratable_method": "Ratable",
+        "release_event": "Upon Booking (Full Booking Release)",
+        "recognition_window": {
+          "start": "2026-01-01",
+          "end": "2026-12-31"
+        },
+        "rationale": "Success Plan is a support/stand-ready service delivered continuously; recognize ratably over the term with booking-based release.",
+        "confidence": 0.88,
+        "alternatives": [
+          {
+            "pob_identifier": "BK-OT-RATABLE-PM",
+            "pob_name": "BK-OT-RATABLE-PM",
+            "why_not": "Only needed if your rev design requires a PM-specific template; not required by the stated policy."
+          }
+        ]
+      },
+      {
+        "chargeName": "Implementation Services - Kickoff Milestone (50%)",
+        "productName": "Implementation Services",
+        "ratePlanName": "Implementation Services - Fixed Scope Package",
+        "pob_identifier": "BK-PIT-STARTDATE",
+        "pob_name": "BK-PIT-STARTDATE",
+        "ratable_method": "Immediate Using Start Date",
+        "release_event": "Upon Booking (Full Booking Release)",
+        "recognition_window": {
+          "start": "2026-01-01",
+          "end": null
+        },
+        "rationale": "Milestone-based recognition: kickoff portion recognized at start/kickoff (treated as a point-in-time milestone).",
+        "confidence": 0.75,
+        "alternatives": [
+          {
+            "pob_identifier": "BK-OT-RATABLE",
+            "pob_name": "BK-OT-RATABLE",
+            "why_not": "Use only if implementation is recognized over time (e.g., percent-complete) rather than milestone-based."
+          }
+        ]
+      },
+      {
+        "chargeName": "Implementation Services - Go-Live/Acceptance Milestone (50%)",
+        "productName": "Implementation Services",
+        "ratePlanName": "Implementation Services - Fixed Scope Package",
+        "pob_identifier": "EVT-PIT-ACCEPTAN",
+        "pob_name": "EVT-PIT-ACCEPTAN",
+        "ratable_method": "Immediate Using Start Date",
+        "release_event": "Acceptance",
+        "recognition_window": {
+          "start": "2026-03-31",
+          "end": null
+        },
+        "rationale": "Second milestone recognized upon go-live/acceptance event; event-based release matches the stated policy.",
+        "confidence": 0.8,
+        "alternatives": [
+          {
+            "pob_identifier": "EVT-OT-RATABLE-GOLIVE",
+            "pob_name": "EVT-OT-RATABLE-GOLIVE",
+            "why_not": "This would ratably recognize from go-live forward, which does not match milestone recognition for the go-live portion."
+          }
+        ]
+      },
+      {
+        "chargeName": "Trailhead Academy Training Seat (Prepaid)",
+        "productName": "Trailhead Academy Training",
+        "ratePlanName": "Trailhead Academy - Instructor Led Training (Prepaid Seats)",
+        "pob_identifier": "EVT-PIT-CONSUMP-DELIVERY",
+        "pob_name": "Consumption by Delivery Event",
+        "ratable_method": "Immediate Using Open Period",
+        "release_event": "Upon Consumption",
+        "recognition_window": {
+          "start": "2026-02-15",
+          "end": null
+        },
+        "rationale": "Instructor-led training is recognized when delivered; map to a delivery/consumption event to recognize upon delivery dates.",
+        "confidence": 0.78,
+        "alternatives": [
+          {
+            "pob_identifier": "BK-PIT-STARTDATE",
+            "pob_name": "BK-PIT-STARTDATE",
+            "why_not": "Would recognize at start date regardless of delivery, which conflicts with the stated 'recognized when delivered' policy."
+          }
+        ]
+      }
+    ],
+    "mapping_notes": [
+      "Allocation setup (List Price SSP): ensure ZR is configured to allocate transaction price across all POBs using the listPrice as SSP and sellPrice as transaction price.",
+      "Commercial discount: because the deal discount is represented via sellPrice per charge (not a separate discount line), the allocation will naturally allocate the total discount across POBs based on relative SSP (list).",
+      "Implementation milestones: modeled as two separate POB lines (kickoff + acceptance) to match the stated milestone-based recognition; if your policy is actually over-time (progress-based), remap to BK-OT-RATABLE or use POC-based events.",
+      "Training: mapped to EVT-PIT-CONSUMP-DELIVERY to ensure recognition happens upon delivery events rather than invoice/booking date; confirm your operational process can provide the delivery events to ZR."
+    ]
+  },
+  "billings": {
+    "zb_billings": [
+      {
+        "Invoice Date": "2026-01-01",
+        "Billing Date": "2026-01-01",
+        "Charge Name": "Sales Cloud Enterprise User License",
+        "Rate Plan": "Sales Cloud (Enterprise) - User Licenses",
+        "Product": "Sales Cloud (Enterprise)",
+        "Billing Period Start": "2026-01-01",
+        "Billing Period End": "2026-12-31",
+        "Quantity": 2000,
+        "Unit Price": 148.75,
+        "Amount": 3570000,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-01-01",
+        "Billing Date": "2026-01-01",
+        "Charge Name": "Service Cloud Enterprise User License",
+        "Rate Plan": "Service Cloud (Enterprise) - User Licenses",
+        "Product": "Service Cloud (Enterprise)",
+        "Billing Period Start": "2026-01-01",
+        "Billing Period End": "2026-12-31",
+        "Quantity": 1200,
+        "Unit Price": 148.75,
+        "Amount": 2142000,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-01-01",
+        "Billing Date": "2026-01-01",
+        "Charge Name": "Premier Success Plan (30% of Net License Fees)",
+        "Rate Plan": "Premier Success Plan - Attached Add-on",
+        "Product": "Premier Success Plan",
+        "Billing Period Start": "2026-01-01",
+        "Billing Period End": "2026-12-31",
+        "Quantity": 1,
+        "Unit Price": 1713600,
+        "Amount": 1713600,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-01-01",
+        "Billing Date": "2026-01-01",
+        "Charge Name": "Implementation Services - Kickoff Milestone (50%)",
+        "Rate Plan": "Implementation Services - Fixed Scope Package",
+        "Product": "Implementation Services",
+        "Billing Period Start": "2026-01-01",
+        "Billing Period End": "2026-01-01",
+        "Quantity": 1,
+        "Unit Price": 67500,
+        "Amount": 67500,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-01-01",
+        "Billing Date": "2026-01-01",
+        "Charge Name": "Implementation Services - Go-Live/Acceptance Milestone (50%)",
+        "Rate Plan": "Implementation Services - Fixed Scope Package",
+        "Product": "Implementation Services",
+        "Billing Period Start": "2026-01-01",
+        "Billing Period End": "2026-01-01",
+        "Quantity": 1,
+        "Unit Price": 67500,
+        "Amount": 67500,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-01-01",
+        "Billing Date": "2026-01-01",
+        "Charge Name": "Trailhead Academy Training Seat (Prepaid)",
+        "Rate Plan": "Trailhead Academy - Instructor Led Training (Prepaid Seats)",
+        "Product": "Trailhead Academy Training",
+        "Billing Period Start": "2026-01-01",
+        "Billing Period End": "2026-01-01",
+        "Quantity": 60,
+        "Unit Price": 2550,
+        "Amount": 153000,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-07-01",
+        "Billing Date": "2026-07-01",
+        "Charge Name": "Service Cloud Enterprise User License - Expansion (Added 07/01/2026)",
+        "Rate Plan": "Service Cloud (Enterprise) - User Licenses",
+        "Product": "Service Cloud (Enterprise)",
+        "Billing Period Start": "2026-07-01",
+        "Billing Period End": "2026-12-31",
+        "Quantity": 200,
+        "Unit Price": 148.75,
+        "Amount": 178500,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-07-01",
+        "Billing Date": "2026-07-01",
+        "Charge Name": "Premier Success Plan (30% of Net License Fees) - Expansion Proration",
+        "Rate Plan": "Premier Success Plan - Attached Add-on",
+        "Product": "Premier Success Plan",
+        "Billing Period Start": "2026-07-01",
+        "Billing Period End": "2026-12-31",
+        "Quantity": 1,
+        "Unit Price": 53550,
+        "Amount": 53550,
+        "Currency": "USD"
+      }
+    ],
+    "assumptions": [
+      "License pricing: applied an overall ~15% commercial discount to license list price ($175/user/month), resulting in a net price of $148.75/user/month for both Sales Cloud and Service Cloud recurring charges.",
+      "Annual billing in advance: billed on 2026-01-01 for the period 2026-01-01 through 2026-12-31 (12-month termed subscription).",
+      "Premier Success Plan: billed as a flat fee equal to 30% of *net* (discounted) license fees for the billed period; also increases with the mid-term license expansion and is billed prorated for the remaining term.",
+      "Mid-term expansion: 200 Service Cloud users added on 2026-07-01, co-termed to 2026-12-31, prorated for 6 months (2026-07-01 through 2026-12-31) and billed on 2026-07-01 as the 'next invoice'.",
+      "Implementation Services: used the provided discounted total ($135,000) and split 50/50 into two one-time milestone billings ($67,500 each).",
+      "Acceptance / Go-Live milestone date: treated as 2026-01-01 based on the provided Go-Live Date (so both implementation milestones invoice on 2026-01-01).",
+      "Training: used the provided discounted total ($153,000) for 60 prepaid seats, implying a net unit price of $2,550 per seat; billed on 2026-01-01 (ContractEffective).",
+      "One-time charges: set Billing Period Start and End equal to the billing date since they are not recurring-period based."
+    ],
+    "open_questions": [
+      "What is the exact discount mechanism in Zuora for licenses (e.g., explicit discount charge, price overrides, or separate discount rate plan)? I assumed a simple 15% net price for license recurring charges.",
+      "What is the actual Acceptance (Go-Live/Acceptance) date for the second implementation milestone? If it occurs after 2026-01-01, that billing row’s Billing Date should move accordingly.",
+      "For the 07/01/2026 expansion, should the proration be exactly 6 months (Jul–Dec) or based on exact day-count (e.g., 184/366 days in 2026)? I assumed a clean 6/12 proration.",
+      "Should the expansion be invoiced immediately on 2026-07-01, or only on the next scheduled annual invoice date (e.g., 2027-01-01) per your operational billing practice? I assumed immediate invoicing on 2026-07-01.",
+      "Is Premier Success Plan intended to be strictly 30% of net license fees within the same invoice period (so it always scales with expansions mid-term)? I assumed yes and billed a prorated delta on 2026-07-01."
+    ]
+  },
+  "contracts_orders": {
+    "zr_contracts_orders": [
+      {
+        "POB Name": "Sales Cloud Enterprise User License",
+        "POB Template": "BK-OT-RATABLE",
+        "POB Satisfied": false,
+        "Release Event": "Upon Booking (Full Booking Release)",
+        "Billing Period": "Year",
+        "Billing Timing": "InAdvance",
+        "Terms Months": 12,
+        "Trigger Event": "ContractEffective",
+        "Lead Line": true,
+        "Ordered Qty": 2000,
+        "Line Item Num": 1,
+        "Subscription Name": "Salesforce - Enterprise Multi-Cloud Agreement (Sales+Service+Success+Services+Training)",
+        "Subscription Version": 1,
+        "Sales Order Date": "2026-01-01",
+        "RPC Segment": "Sales Cloud (Enterprise) - User Licenses / Sales Cloud Enterprise User License",
+        "RPC Type": "Recurring",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Unit List Price": 2100,
+        "Unit Sell Price": 1782.65625,
+        "Ext List Price": 4200000,
+        "Ext Sell Price": 3565312.5,
+        "SSP Price": 2100,
+        "Ext SSP Price": 4200000,
+        "SSP Percent": 46.32693580410324,
+        "Ext Allocated Price": 3568957.64,
+        "Carves Adjustment": 0,
+        "Allocation Eligible Flag": true,
+        "Unreleased Revenue": 3568957.64,
+        "Released Revenue": 0,
+        "Customer Name": "Salesforce",
+        "POB IDENTIFIER": "BK-OT-RATABLE",
+        "Product Category": "Subscription",
+        "Product Family": "Sales Cloud (Enterprise)"
+      },
+      {
+        "POB Name": "Service Cloud Enterprise User License",
+        "POB Template": "BK-OT-RATABLE",
+        "POB Satisfied": false,
+        "Release Event": "Upon Booking (Full Booking Release)",
+        "Billing Period": "Year",
+        "Billing Timing": "InAdvance",
+        "Terms Months": 12,
+        "Trigger Event": "ContractEffective",
+        "Lead Line": false,
+        "Ordered Qty": 1200,
+        "Line Item Num": 2,
+        "Subscription Name": "Salesforce - Enterprise Multi-Cloud Agreement (Sales+Service+Success+Services+Training)",
+        "Subscription Version": 1,
+        "Sales Order Date": "2026-01-01",
+        "RPC Segment": "Service Cloud (Enterprise) - User Licenses / Service Cloud Enterprise User License",
+        "RPC Type": "Recurring",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Unit List Price": 2100,
+        "Unit Sell Price": 1782.65625,
+        "Ext List Price": 2520000,
+        "Ext Sell Price": 2139187.5,
+        "SSP Price": 2100,
+        "Ext SSP Price": 2520000,
+        "SSP Percent": 27.796161482461944,
+        "Ext Allocated Price": 2141374.59,
+        "Carves Adjustment": 0,
+        "Allocation Eligible Flag": true,
+        "Unreleased Revenue": 2141374.59,
+        "Released Revenue": 0,
+        "Customer Name": "Salesforce",
+        "POB IDENTIFIER": "BK-OT-RATABLE",
+        "Product Category": "Subscription",
+        "Product Family": "Service Cloud (Enterprise)"
+      },
+      {
+        "POB Name": "Premier Success Plan (30% of Net License Fees)",
+        "POB Template": "BK-OT-RATABLE",
+        "POB Satisfied": false,
+        "Release Event": "Upon Booking (Full Booking Release)",
+        "Billing Period": "Year",
+        "Billing Timing": "InAdvance",
+        "Terms Months": 12,
+        "Trigger Event": "ContractEffective",
+        "Lead Line": false,
+        "Ordered Qty": 1,
+        "Line Item Num": 3,
+        "Subscription Name": "Salesforce - Enterprise Multi-Cloud Agreement (Sales+Service+Success+Services+Training)",
+        "Subscription Version": 1,
+        "Sales Order Date": "2026-01-01",
+        "RPC Segment": "Premier Success Plan - Attached Add-on / Premier Success Plan (30% of Net License Fees)",
+        "RPC Type": "Recurring",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Unit List Price": 2016000,
+        "Unit Sell Price": 1711350,
+        "Ext List Price": 2016000,
+        "Ext Sell Price": 1711350,
+        "SSP Price": 2016000,
+        "Ext SSP Price": 2016000,
+        "SSP Percent": 22.236929185969558,
+        "Ext Allocated Price": 1713099.67,
+        "Carves Adjustment": 0,
+        "Allocation Eligible Flag": true,
+        "Unreleased Revenue": 1713099.67,
+        "Released Revenue": 0,
+        "Customer Name": "Salesforce",
+        "POB IDENTIFIER": "BK-OT-RATABLE",
+        "Product Category": "Support",
+        "Product Family": "Premier Success Plan"
+      },
+      {
+        "POB Name": "Implementation Services - Kickoff Milestone (50%)",
+        "POB Template": "BK-PIT-STARTDATE",
+        "POB Satisfied": false,
+        "Release Event": "Upon Booking (Full Booking Release)",
+        "Billing Period": "N/A",
+        "Billing Timing": "InAdvance",
+        "Terms Months": 0,
+        "Trigger Event": "ContractEffective",
+        "Lead Line": false,
+        "Ordered Qty": 1,
+        "Line Item Num": 4,
+        "Subscription Name": "Salesforce - Enterprise Multi-Cloud Agreement (Sales+Service+Success+Services+Training)",
+        "Subscription Version": 1,
+        "Sales Order Date": "2026-01-01",
+        "RPC Segment": "Implementation Services - Fixed Scope Package / Implementation Services - Kickoff Milestone (50%)",
+        "RPC Type": "OneTime",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-01-01",
+        "Unit List Price": 75000,
+        "Unit Sell Price": 67500,
+        "Ext List Price": 75000,
+        "Ext Sell Price": 67500,
+        "SSP Price": 75000,
+        "Ext SSP Price": 75000,
+        "SSP Percent": 0.8272667107875579,
+        "Ext Allocated Price": 63731.39,
+        "Carves Adjustment": 0,
+        "Allocation Eligible Flag": true,
+        "Unreleased Revenue": 63731.39,
+        "Released Revenue": 0,
+        "Customer Name": "Salesforce",
+        "POB IDENTIFIER": "BK-PIT-STARTDATE",
+        "Product Category": "Professional Services",
+        "Product Family": "Implementation Services"
+      },
+      {
+        "POB Name": "Implementation Services - Go-Live/Acceptance Milestone (50%)",
+        "POB Template": "EVT-PIT-ACCEPTAN",
+        "POB Satisfied": false,
+        "Release Event": "Acceptance",
+        "Billing Period": "N/A",
+        "Billing Timing": "InAdvance",
+        "Terms Months": 0,
+        "Trigger Event": "Acceptance",
+        "Lead Line": false,
+        "Ordered Qty": 1,
+        "Line Item Num": 5,
+        "Subscription Name": "Salesforce - Enterprise Multi-Cloud Agreement (Sales+Service+Success+Services+Training)",
+        "Subscription Version": 1,
+        "Sales Order Date": "2026-01-01",
+        "RPC Segment": "Implementation Services - Fixed Scope Package / Implementation Services - Go-Live/Acceptance Milestone (50%)",
+        "RPC Type": "OneTime",
+        "Revenue Start Date": "2026-03-31",
+        "Revenue End Date": "2026-03-31",
+        "Unit List Price": 75000,
+        "Unit Sell Price": 67500,
+        "Ext List Price": 75000,
+        "Ext Sell Price": 67500,
+        "SSP Price": 75000,
+        "Ext SSP Price": 75000,
+        "SSP Percent": 0.8272667107875579,
+        "Ext Allocated Price": 63731.39,
+        "Carves Adjustment": 0,
+        "Allocation Eligible Flag": true,
+        "Unreleased Revenue": 63731.39,
+        "Released Revenue": 0,
+        "Customer Name": "Salesforce",
+        "POB IDENTIFIER": "EVT-PIT-ACCEPTAN",
+        "Product Category": "Professional Services",
+        "Product Family": "Implementation Services"
+      },
+      {
+        "POB Name": "Trailhead Academy Training Seat (Prepaid)",
+        "POB Template": "EVT-PIT-CONSUMP-DELIVERY",
+        "POB Satisfied": false,
+        "Release Event": "Upon Consumption",
+        "Billing Period": "N/A",
+        "Billing Timing": "InAdvance",
+        "Terms Months": 0,
+        "Trigger Event": "ContractEffective",
+        "Lead Line": false,
+        "Ordered Qty": 60,
+        "Line Item Num": 6,
+        "Subscription Name": "Salesforce - Enterprise Multi-Cloud Agreement (Sales+Service+Success+Services+Training)",
+        "Subscription Version": 1,
+        "Sales Order Date": "2026-01-01",
+        "RPC Segment": "Trailhead Academy - Instructor Led Training (Prepaid Seats) / Trailhead Academy Training Seat (Prepaid)",
+        "RPC Type": "OneTime",
+        "Revenue Start Date": "2026-02-15",
+        "Revenue End Date": "2026-02-15",
+        "Unit List Price": 3000,
+        "Unit Sell Price": 2550,
+        "Ext List Price": 180000,
+        "Ext Sell Price": 153000,
+        "SSP Price": 3000,
+        "Ext SSP Price": 180000,
+        "SSP Percent": 1.9854401058901392,
+        "Ext Allocated Price": 152955.32,
+        "Carves Adjustment": 0,
+        "Allocation Eligible Flag": true,
+        "Unreleased Revenue": 152955.32,
+        "Released Revenue": 0,
+        "Customer Name": "Salesforce",
+        "POB IDENTIFIER": "EVT-PIT-CONSUMP-DELIVERY",
+        "Product Category": "Training",
+        "Product Family": "Trailhead Academy Training"
+      },
+      {
+        "POB Name": "Service Cloud Enterprise User License - Expansion (Added 07/01/2026)",
+        "POB Template": "BK-OT-RATABLE",
+        "POB Satisfied": false,
+        "Release Event": "Upon Booking (Full Booking Release)",
+        "Billing Period": "Year",
+        "Billing Timing": "InAdvance",
+        "Terms Months": 6,
+        "Trigger Event": "SpecificTriggerDate",
+        "Lead Line": true,
+        "Ordered Qty": 200,
+        "Line Item Num": 7,
+        "Subscription Name": "Salesforce - Enterprise Multi-Cloud Agreement (Sales+Service+Success+Services+Training)",
+        "Subscription Version": 2,
+        "Sales Order Date": "2026-07-01",
+        "RPC Segment": "Service Cloud (Enterprise) - User Licenses / Service Cloud Enterprise User License - Expansion (Added 07/01/2026)",
+        "RPC Type": "Recurring",
+        "Revenue Start Date": "2026-07-01",
+        "Revenue End Date": "2026-12-31",
+        "Unit List Price": 1050,
+        "Unit Sell Price": 891.328125,
+        "Ext List Price": 210000,
+        "Ext Sell Price": 178265.63,
+        "SSP Price": 1050,
+        "Ext SSP Price": 210000,
+        "SSP Percent": 100,
+        "Ext Allocated Price": 178265.63,
+        "Carves Adjustment": 0,
+        "Allocation Eligible Flag": true,
+        "Unreleased Revenue": 178265.63,
+        "Released Revenue": 0,
+        "Customer Name": "Salesforce",
+        "POB IDENTIFIER": "BK-OT-RATABLE",
+        "Product Category": "Subscription",
+        "Product Family": "Service Cloud (Enterprise)"
+      }
+    ],
+    "assumptions": [
+      "Overall enterprise commercial discount interpreted as 15% off the combined LIST amount of (Sales+Service licenses + Implementation list + Training list), excluding the Premier Success Plan which is priced via a formula; this implies net license factor = 0.8488839285714286 (15.111607% discount) applied uniformly to Sales Cloud and Service Cloud licenses.",
+      "Premier Success Plan SSP/List assumed to equal 30% of LIST license fees for the term (0.30 × (Sales+Service list)); Premier Success Plan Sell assumed to equal 30% of NET license fees (0.30 × (Sales+Service net)).",
+      "Allocation performed at the initial booking (Subscription Version 1) across all lines using relative SSP where SSP = List Price (per your Allocation Method = Use List Price). This results in line-level Ext Allocated Price differing from line-level Ext Sell Price.",
+      "Implementation milestone POBs treated as immediate recognition on the stated event dates (start=end) based on the provided POB templates (BK-PIT-STARTDATE and EVT-PIT-ACCEPTAN).",
+      "Training POB treated as immediate recognition at a single delivery/consumption date (2026-02-15) based on EVT-PIT-CONSUMP-DELIVERY, although the narrative says “delivered in the first 90 days”.",
+      "Mid-term expansion (effective 2026-07-01) treated as a prospective contract modification (Subscription Version 2) with standalone allocation (only one line, so allocated = sell).",
+      "Expansion proration assumed to be exactly 6/12 of the annual price for 2026-07-01 through 2026-12-31 (no day-count convention applied).",
+      "All lines flagged Allocation Eligible (no ramp/VC/carve rules provided).",
+      "Unreleased Revenue initialized to Ext Allocated Price and Released Revenue initialized to 0 per your instruction, regardless of immediate vs ratable POB behavior."
+    ],
+    "open_questions": [
+      "Should the Premier Success Plan also be amended on 2026-07-01 to reflect 30% of the incremental net license fees for the added 200 Service Cloud users (prorated for the remaining term)? If yes, we need an additional Success Plan expansion line/POB.",
+      "For Implementation Services, do you want revenue recognized strictly by milestones (as modeled by the provided POB templates), or over time using a progress measure? If over time, we need the services POB template(s), start/end dates, and progress method.",
+      "Confirm the exact discounting approach intended: (a) single discount rate applied to all non-formula components, or (b) the explicitly stated discounts only (Implementation 10%, Training 15%) with a different discount rate for licenses; the current table assumes a blended approach to achieve ~15% overall discount on the non-success-plan components.",
+      "Confirm the proration convention for the 2026-07-01 expansion (daily proration vs month-based) and the exact billed-through end date (2026-12-31 vs 2026-06-30/2027-06-30 style co-terming).",
+      "Confirm whether any lines should be excluded from allocation eligibility (e.g., certain service milestones) per your ZR allocation setup/configuration."
+    ]
+  },
+  "revrec_waterfall": {
+    "zr_revrec": [
+      {
+        "Line Item Num": 1,
+        "POB Name": "Sales Cloud Enterprise User License",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 3568957.64,
+        "Period": "Jan-26",
+        "Amount": 303116.95
+      },
+      {
+        "Line Item Num": 1,
+        "POB Name": "Sales Cloud Enterprise User License",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 3568957.64,
+        "Period": "Feb-26",
+        "Amount": 273783.05
+      },
+      {
+        "Line Item Num": 1,
+        "POB Name": "Sales Cloud Enterprise User License",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 3568957.64,
+        "Period": "Mar-26",
+        "Amount": 303116.95
+      },
+      {
+        "Line Item Num": 1,
+        "POB Name": "Sales Cloud Enterprise User License",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 3568957.64,
+        "Period": "Apr-26",
+        "Amount": 293338.98
+      },
+      {
+        "Line Item Num": 1,
+        "POB Name": "Sales Cloud Enterprise User License",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 3568957.64,
+        "Period": "May-26",
+        "Amount": 303116.95
+      },
+      {
+        "Line Item Num": 1,
+        "POB Name": "Sales Cloud Enterprise User License",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 3568957.64,
+        "Period": "Jun-26",
+        "Amount": 293338.98
+      },
+      {
+        "Line Item Num": 1,
+        "POB Name": "Sales Cloud Enterprise User License",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 3568957.64,
+        "Period": "Jul-26",
+        "Amount": 303116.95
+      },
+      {
+        "Line Item Num": 1,
+        "POB Name": "Sales Cloud Enterprise User License",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 3568957.64,
+        "Period": "Aug-26",
+        "Amount": 303116.95
+      },
+      {
+        "Line Item Num": 1,
+        "POB Name": "Sales Cloud Enterprise User License",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 3568957.64,
+        "Period": "Sep-26",
+        "Amount": 293338.98
+      },
+      {
+        "Line Item Num": 1,
+        "POB Name": "Sales Cloud Enterprise User License",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 3568957.64,
+        "Period": "Oct-26",
+        "Amount": 303116.95
+      },
+      {
+        "Line Item Num": 1,
+        "POB Name": "Sales Cloud Enterprise User License",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 3568957.64,
+        "Period": "Nov-26",
+        "Amount": 293338.98
+      },
+      {
+        "Line Item Num": 1,
+        "POB Name": "Sales Cloud Enterprise User License",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 3568957.64,
+        "Period": "Dec-26",
+        "Amount": 303116.97
+      },
+      {
+        "Line Item Num": 2,
+        "POB Name": "Service Cloud Enterprise User License",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 2141374.59,
+        "Period": "Jan-26",
+        "Amount": 181870.17
+      },
+      {
+        "Line Item Num": 2,
+        "POB Name": "Service Cloud Enterprise User License",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 2141374.59,
+        "Period": "Feb-26",
+        "Amount": 164269.83
+      },
+      {
+        "Line Item Num": 2,
+        "POB Name": "Service Cloud Enterprise User License",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 2141374.59,
+        "Period": "Mar-26",
+        "Amount": 181870.17
+      },
+      {
+        "Line Item Num": 2,
+        "POB Name": "Service Cloud Enterprise User License",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 2141374.59,
+        "Period": "Apr-26",
+        "Amount": 176003.39
+      },
+      {
+        "Line Item Num": 2,
+        "POB Name": "Service Cloud Enterprise User License",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 2141374.59,
+        "Period": "May-26",
+        "Amount": 181870.17
+      },
+      {
+        "Line Item Num": 2,
+        "POB Name": "Service Cloud Enterprise User License",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 2141374.59,
+        "Period": "Jun-26",
+        "Amount": 176003.39
+      },
+      {
+        "Line Item Num": 2,
+        "POB Name": "Service Cloud Enterprise User License",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 2141374.59,
+        "Period": "Jul-26",
+        "Amount": 181870.17
+      },
+      {
+        "Line Item Num": 2,
+        "POB Name": "Service Cloud Enterprise User License",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 2141374.59,
+        "Period": "Aug-26",
+        "Amount": 181870.17
+      },
+      {
+        "Line Item Num": 2,
+        "POB Name": "Service Cloud Enterprise User License",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 2141374.59,
+        "Period": "Sep-26",
+        "Amount": 176003.39
+      },
+      {
+        "Line Item Num": 2,
+        "POB Name": "Service Cloud Enterprise User License",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 2141374.59,
+        "Period": "Oct-26",
+        "Amount": 181870.17
+      },
+      {
+        "Line Item Num": 2,
+        "POB Name": "Service Cloud Enterprise User License",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 2141374.59,
+        "Period": "Nov-26",
+        "Amount": 176003.39
+      },
+      {
+        "Line Item Num": 2,
+        "POB Name": "Service Cloud Enterprise User License",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 2141374.59,
+        "Period": "Dec-26",
+        "Amount": 181870.18
+      },
+      {
+        "Line Item Num": 3,
+        "POB Name": "Premier Success Plan (30% of Net License Fees)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 1713099.67,
+        "Period": "Jan-26",
+        "Amount": 145496.14
+      },
+      {
+        "Line Item Num": 3,
+        "POB Name": "Premier Success Plan (30% of Net License Fees)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 1713099.67,
+        "Period": "Feb-26",
+        "Amount": 131415.86
+      },
+      {
+        "Line Item Num": 3,
+        "POB Name": "Premier Success Plan (30% of Net License Fees)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 1713099.67,
+        "Period": "Mar-26",
+        "Amount": 145496.14
+      },
+      {
+        "Line Item Num": 3,
+        "POB Name": "Premier Success Plan (30% of Net License Fees)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 1713099.67,
+        "Period": "Apr-26",
+        "Amount": 140802.72
+      },
+      {
+        "Line Item Num": 3,
+        "POB Name": "Premier Success Plan (30% of Net License Fees)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 1713099.67,
+        "Period": "May-26",
+        "Amount": 145496.14
+      },
+      {
+        "Line Item Num": 3,
+        "POB Name": "Premier Success Plan (30% of Net License Fees)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 1713099.67,
+        "Period": "Jun-26",
+        "Amount": 140802.72
+      },
+      {
+        "Line Item Num": 3,
+        "POB Name": "Premier Success Plan (30% of Net License Fees)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 1713099.67,
+        "Period": "Jul-26",
+        "Amount": 145496.14
+      },
+      {
+        "Line Item Num": 3,
+        "POB Name": "Premier Success Plan (30% of Net License Fees)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 1713099.67,
+        "Period": "Aug-26",
+        "Amount": 145496.14
+      },
+      {
+        "Line Item Num": 3,
+        "POB Name": "Premier Success Plan (30% of Net License Fees)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 1713099.67,
+        "Period": "Sep-26",
+        "Amount": 140802.72
+      },
+      {
+        "Line Item Num": 3,
+        "POB Name": "Premier Success Plan (30% of Net License Fees)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 1713099.67,
+        "Period": "Oct-26",
+        "Amount": 145496.14
+      },
+      {
+        "Line Item Num": 3,
+        "POB Name": "Premier Success Plan (30% of Net License Fees)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 1713099.67,
+        "Period": "Nov-26",
+        "Amount": 140802.72
+      },
+      {
+        "Line Item Num": 3,
+        "POB Name": "Premier Success Plan (30% of Net License Fees)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 1713099.67,
+        "Period": "Dec-26",
+        "Amount": 145496.12
+      },
+      {
+        "Line Item Num": 4,
+        "POB Name": "Implementation Services - Kickoff Milestone (50%)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-01-01",
+        "Ext Allocated Price": 63731.39,
+        "Period": "Jan-26",
+        "Amount": 63731.39
+      },
+      {
+        "Line Item Num": 5,
+        "POB Name": "Implementation Services - Go-Live/Acceptance Milestone (50%)",
+        "Event Name": "Acceptance",
+        "Revenue Start Date": "2026-03-31",
+        "Revenue End Date": "2026-03-31",
+        "Ext Allocated Price": 63731.39,
+        "Period": "Mar-26",
+        "Amount": 63731.39
+      },
+      {
+        "Line Item Num": 6,
+        "POB Name": "Trailhead Academy Training Seat (Prepaid)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-02-15",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 152955.32,
+        "Period": "Feb-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 6,
+        "POB Name": "Trailhead Academy Training Seat (Prepaid)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-02-15",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 152955.32,
+        "Period": "Mar-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 6,
+        "POB Name": "Trailhead Academy Training Seat (Prepaid)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-02-15",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 152955.32,
+        "Period": "Apr-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 6,
+        "POB Name": "Trailhead Academy Training Seat (Prepaid)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-02-15",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 152955.32,
+        "Period": "May-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 6,
+        "POB Name": "Trailhead Academy Training Seat (Prepaid)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-02-15",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 152955.32,
+        "Period": "Jun-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 6,
+        "POB Name": "Trailhead Academy Training Seat (Prepaid)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-02-15",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 152955.32,
+        "Period": "Jul-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 6,
+        "POB Name": "Trailhead Academy Training Seat (Prepaid)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-02-15",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 152955.32,
+        "Period": "Aug-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 6,
+        "POB Name": "Trailhead Academy Training Seat (Prepaid)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-02-15",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 152955.32,
+        "Period": "Sep-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 6,
+        "POB Name": "Trailhead Academy Training Seat (Prepaid)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-02-15",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 152955.32,
+        "Period": "Oct-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 6,
+        "POB Name": "Trailhead Academy Training Seat (Prepaid)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-02-15",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 152955.32,
+        "Period": "Nov-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 6,
+        "POB Name": "Trailhead Academy Training Seat (Prepaid)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-02-15",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 152955.32,
+        "Period": "Dec-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 7,
+        "POB Name": "Service Cloud Enterprise User License - Expansion (Added 07/01/2026)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-07-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 178265.63,
+        "Period": "Jul-26",
+        "Amount": 30033.88
+      },
+      {
+        "Line Item Num": 7,
+        "POB Name": "Service Cloud Enterprise User License - Expansion (Added 07/01/2026)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-07-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 178265.63,
+        "Period": "Aug-26",
+        "Amount": 30033.88
+      },
+      {
+        "Line Item Num": 7,
+        "POB Name": "Service Cloud Enterprise User License - Expansion (Added 07/01/2026)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-07-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 178265.63,
+        "Period": "Sep-26",
+        "Amount": 29065.05
+      },
+      {
+        "Line Item Num": 7,
+        "POB Name": "Service Cloud Enterprise User License - Expansion (Added 07/01/2026)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-07-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 178265.63,
+        "Period": "Oct-26",
+        "Amount": 30033.88
+      },
+      {
+        "Line Item Num": 7,
+        "POB Name": "Service Cloud Enterprise User License - Expansion (Added 07/01/2026)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-07-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 178265.63,
+        "Period": "Nov-26",
+        "Amount": 29065.05
+      },
+      {
+        "Line Item Num": 7,
+        "POB Name": "Service Cloud Enterprise User License - Expansion (Added 07/01/2026)",
+        "Event Name": "Upon Booking",
+        "Revenue Start Date": "2026-07-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 178265.63,
+        "Period": "Dec-26",
+        "Amount": 30033.89
+      }
+    ],
+    "assumptions": [
+      "Revenue start/end dates are treated as inclusive for daily straight-line recognition (2026 is a non-leap year with 365 days).",
+      "For BK-OT-RATABLE POBs, revenue is recognized using a daily rate (Allocated Price / Total Days) multiplied by the number of service days in each calendar month; amounts are rounded to 2 decimals and the final month is trued-up for rounding.",
+      "Line 5 Acceptance milestone is assumed to occur on 2026-03-31 (per Contracts/Orders table), so 100% is recognized in Mar-26.",
+      "For the Trailhead Academy Training Seat (EVT-PIT-CONSUMP-DELIVERY), no delivery/consumption events were provided; the waterfall shows $0 recognized for Feb-26 through Dec-26 and assumes the remaining balance stays deferred. 'Ongoing' is modeled through 2026-12-31 as the reporting horizon."
+    ],
+    "open_questions": [
+      "Trailhead Academy Training Seat (Line 6): Please provide the delivery/consumption event schedule (by date or by month) including units delivered and the unit rate (or enough data to derive the unit rate) so revenue can be released.",
+      "For Line 6, does the consumption/delivery window extend beyond 2026-12-31 (i.e., do seats expire after 12 months or remain available longer)?",
+      "Are there any contract modifications (price/term changes, partial terminations, or additional expansions) after 2026-07-01 that should be reflected in the waterfall?"
+    ]
+  },
+  "summary": {
+    "assumptions": [
+      "Commercial construct & scope: One enterprise agreement bundles (a) Sales Cloud Enterprise user subscriptions, (b) Service Cloud Enterprise user subscriptions, (c) fixed-scope Implementation Services, and (d) Trailhead Academy instructor-led training seats; Premier Success Plan is an attached subscription add-on priced as a formula based on license fees.",
+      "Contract term & currency: Initial subscription term is assumed to be 12 months from 2026-01-01 through 2026-12-31, in USD.",
+      "Billing cadence (subscriptions): License subscriptions and Premier Success Plan are billed annually in advance for the term starting 2026-01-01; the mid-term expansion is invoiced on/near its effective date (assumed 2026-07-01) as the 'next invoice'.",
+      "Product/rate plan modeling: Sales Cloud and Service Cloud are modeled as separate recurring per-user charges; Implementation and Training are modeled as separate one-time service/product rate plans; Premier Success Plan is modeled as a separate add-on subscription charge.",
+      "List price (SSP) basis: Revenue allocation SSP is assumed to be the listPrice on each line (allocation method = use list price), and all relevant lines are marked allocation-eligible.",
+      "Discount representation (billing): The negotiated bundle discount is represented via per-charge sellPrice overrides (no separate discount rate plan/discount charge line is created), while listPrice is retained for SSP-based allocation.",
+      "Discount math assumption for licenses: Because an explicit net license unit price was not provided, license net pricing is assumed to reflect an ~15% overall commercial discount vs combined list across non-Success-Plan components; a uniform net factor is applied to Sales Cloud and Service Cloud licenses (resulting in ~$148.75/user/month, i.e., $1,785/user/year).",
+      "Annual price conversion & proration: Annual billing is implemented by setting billingPeriod=Year and converting $175/user/month to $2,100/user/year list; proration for partial terms is assumed to be supported by Zuora for co-termed segments.",
+      "Premier Success Plan pricing: Premier Success Plan sell price is assumed to be 30% of net (discounted) license fees for the billed period; its SSP/list is assumed to be 30% of list license fees for the term.",
+      "Initial quantities: Initial order quantities are assumed to be 2,000 Sales Cloud users and 1,200 Service Cloud users for the full 12-month term.",
+      "Mid-term expansion modeling: On 2026-07-01, 200 additional Service Cloud users are added co-termed to 2026-12-31 as a prospective modification; expansion pricing is assumed prorated for the remaining term and allocated standalone for that modification.",
+      "Expansion proration convention: Expansion proration is assumed to be a clean 6/12 of the annual price for 2026-07-01 through 2026-12-31 (no day-count convention applied).",
+      "Implementation fee & invoicing: Implementation Services list is $150,000 and is discounted in the deal to $135,000; invoicing is assumed 50% at kickoff and 50% at go-live/acceptance.",
+      "Implementation milestone dates (working assumptions): Kickoff is assumed 2026-01-01; go-live/acceptance is inconsistently assumed across steps (either 2026-03-31 for rev rec/event recognition or 2026-01-01 for invoicing), implying the current billing vs revenue schedules may be misaligned until dates are confirmed.",
+      "Training pricing & billing: Training is modeled as 60 prepaid seats with list $180,000 discounted to $153,000 (net $2,550 per seat); billed at contract effective/start (assumed 2026-01-01).",
+      "Training delivery & recognition: Training is assumed delivered within the first 90 days; however, because no actual delivery/consumption events were provided, the revenue model assumes no releases occur (revenue remains deferred) within the current reporting horizon unless events are supplied.",
+      "Revenue recognition policy (subscriptions): Subscription licenses and Premier Success Plan are recognized ratably over the service term.",
+      "Revenue recognition policy (implementation): Implementation is assumed to be recognized either (a) by milestones (two POBs aligned to kickoff and acceptance) or (b) over time; the current modeling primarily assumes milestone-based recognition with event dates driving recognition.",
+      "Revenue recognition mechanics (ratable POBs): Ratable recognition uses daily straight-line with inclusive dates; monthly revenue is computed by service days per month, rounded to 2 decimals with final-month true-up (2026 treated as 365 days).",
+      "Allocation timing & journal initialization: Allocation is assumed performed at initial booking (subscription version 1), producing allocated revenue amounts that may differ from sell; unreleased revenue is initialized to allocated price and released revenue starts at 0 (per instruction).",
+      "Operational dependency: Event-based templates (implementation acceptance; training delivery/consumption) require operational processes to provide the required events to Zuora Revenue; absent events, revenue remains deferred."
+    ],
+    "open_questions": [
+      "[BLOCKING] What is the authoritative Contract Effective Date and the service start date for each component (licenses, success plan, implementation, training)? (Affects invoicing start, revenue start, and allocation timing.)",
+      "[BLOCKING] What are the confirmed Implementation Services milestone dates (kickoff and go-live/acceptance), and should the second milestone be invoiced on the acceptance date (not 2026-01-01)? (Currently billing and rev-rec assumptions conflict.)",
+      "[BLOCKING] For Implementation Services, should revenue be recognized strictly by milestones or over time using a progress measure? If over time, provide POB template(s), service period dates, and progress methodology (e.g., cost-to-cost, labor hours).",
+      "[BLOCKING] Provide the Training delivery/consumption schedule (dates/sessions, seats delivered per date) and confirm whether seats expire; without events, Zuora Revenue cannot release training revenue appropriately.",
+      "[HIGH] Confirm the intended discounting approach across components: a single blended commercial discount applied uniformly to all non-formula components vs using only the explicitly stated discounts (Implementation 10%, Training 15%) with potentially different license discounting. (This drives sell prices, allocation, and reporting.)",
+      "[HIGH] Confirm the Premier Success Plan behavior for mid-term expansions: should it automatically adjust to 30% of incremental net license fees for added users and be prorated/invoiced at expansion (2026-07-01)? (Affects billing, modification modeling, and revenue.)",
+      "[HIGH] Confirm the proration convention for the 2026-07-01 expansion (exact day-count vs month-based) and the exact billed-through end date for the co-termed segment (e.g., through 2026-12-31). (Affects invoice amount and revenue schedules.)",
+      "[HIGH] Should the 2026-07-01 expansion be invoiced immediately on/after 2026-07-01 or only on the next scheduled annual invoice date per operational practice? (Affects cash, AR, and timing of billed amounts.)",
+      "[MEDIUM] How should the negotiated discount be implemented in Zuora Billing operationally: price overrides (sellPrice), an explicit discount charge, or a discount percentage plan? (Affects auditability, amendment behavior, and downstream integrations.)",
+      "[MEDIUM] Are any lines intended to be excluded from allocation eligibility under your Zuora Revenue configuration (e.g., certain services, training, or specific milestones)? (Affects allocation and revenue postings.)",
+      "[MEDIUM] Are renewals in scope (auto-renewal, renewal term length, and whether pricing/products carry forward)? (Affects forward-looking order setup and forecasting, not initial-year accounting.)",
+      "[LOW] Are there any additional contract modifications after 2026-07-01 (price changes, further expansions, partial terminations)? (Affects later-period billing and revenue waterfall accuracy.)"
+    ]
+  }
+}

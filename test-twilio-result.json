@@ -1,0 +1,4367 @@
+{
+  "session_id": "bfef0049-bfb2-4267-968d-f19485c8206a",
+  "timestamp": "2025-12-22T05:42:17.120Z",
+  "input": {
+    "customer_name": "Twilio",
+    "contract_start_date": "01/01/2026",
+    "terms_months": 12,
+    "transaction_currency": "USD",
+    "billing_period": "Monthly",
+    "is_allocations": false,
+    "allocation_method": "N/A",
+    "rev_rec_notes": "Pure consumption model - all usage recognized as consumed. Committed usage is a prepaid balance that draws down with usage. Revenue recognized as usage occurs, whether from committed pool or PAYG overage. Breakage/true-up at contract end for unused commitment.",
+    "use_case_description": "Twilio sells a 12-month enterprise communications agreement modeled as pure consumption across three usage products: Twilio SMS (US), Programmable Voice (US), and SendGrid Email API (Premier). The customer can run on Pay-as-you-go (PAYG) tiered pricing, where SMS is billed per segment with monthly volume tiers (e.g., $0.0083/segment for 1-150k per month stepping down to $0.0073/segment for 1,000,001+), and Voice is billed per minute with monthly volume tiers. For Email API (Premier), model as metered email credits with demo tier pricing. The same customer also signs a committed-use contract that provides contracted discounted unit rates in exchange for an annual commitment (modeled as a prepaid committed-usage deposit/balance that draws down as usage occurs): SMS at $0.0069/segment, Voice outbound at $0.0098/min and inbound local at $0.0028/min, and Email at $0.0006/email. Billing is monthly in arrears for actual usage, applying committed discounted rates while commitment balance remains; if the commitment is exhausted mid-term, overage reverts to the standard PAYG tier schedule for that month. At contract end, any shortfall vs commitment is subject to a true-up invoice (or breakage rules), while any overage is already billed as consumed."
+  },
+  "contract_intel": {
+    "service_start_mdy": "01/01/2026",
+    "service_end_mdy": null,
+    "term_months": 12,
+    "billing_period": "Month",
+    "billing_timing": "InArrears",
+    "trigger_event": "ContractEffective",
+    "go_live_mdy": "01/01/2026",
+    "booking_mdy": "01/01/2026",
+    "renewal_term_months": 12
+  },
+  "detected_capabilities": {
+    "billing_caps": [
+      "USAGE",
+      "PREPAID DRAWDOWN",
+      "TIERED PRICING",
+      "OVERAGE"
+    ],
+    "revenue_caps": [
+      "ADVANCED CONSUMPTION"
+    ],
+    "hints": [
+      "\"pure consumption\" and \"billed per segment/per minute\" and \"actual usage\" -> USAGE",
+      "\"monthly volume tiers\" / \"tiered pricing\" -> TIERED PRICING",
+      "\"prepaid committed-usage deposit/balance that draws down as usage occurs\" -> PREPAID DRAWDOWN",
+      "\"if the commitment is exhausted mid-term, overage reverts to the standard PAYG tier schedule\" -> OVERAGE",
+      "\"Revenue recognized as usage occurs\" and committed drawdown/overage usage recognition -> ADVANCED CONSUMPTION"
+    ],
+    "confidence": 0.9
+  },
+  "matched_golden_use_cases": {
+    "matched_guc": [
+      {
+        "id": "UC-0018",
+        "title": "ACB - Commit Arrears (Ratable)",
+        "score": 0.76,
+        "score_raw": 0.8,
+        "jaccard_billing": 0.6,
+        "jaccard_revenue": 1,
+        "billing": {
+          "intersection": [
+            "USAGE",
+            "PREPAID DRAWDOWN",
+            "TIERED PRICING"
+          ],
+          "missing": [
+            "OVERAGE"
+          ],
+          "unmatched": [
+            "RECURRING"
+          ]
+        },
+        "revenue": {
+          "intersection": [
+            "ADVANCED CONSUMPTION"
+          ],
+          "missing": [],
+          "unmatched": []
+        }
+      },
+      {
+        "id": "UC-0017",
+        "title": "ACB - PPDD (Usage - Multi Prod)",
+        "score": 0.665,
+        "score_raw": 0.7,
+        "jaccard_billing": 0.4,
+        "jaccard_revenue": 1,
+        "billing": {
+          "intersection": [
+            "USAGE",
+            "PREPAID DRAWDOWN"
+          ],
+          "missing": [
+            "TIERED PRICING",
+            "OVERAGE"
+          ],
+          "unmatched": [
+            "RECURRING"
+          ]
+        },
+        "revenue": {
+          "intersection": [
+            "ADVANCED CONSUMPTION"
+          ],
+          "missing": [],
+          "unmatched": []
+        }
+      },
+      {
+        "id": "UC-0019",
+        "title": "ACB - Commit Arrears (Usage)",
+        "score": 0.665,
+        "score_raw": 0.7,
+        "jaccard_billing": 0.4,
+        "jaccard_revenue": 1,
+        "billing": {
+          "intersection": [
+            "USAGE",
+            "PREPAID DRAWDOWN"
+          ],
+          "missing": [
+            "TIERED PRICING",
+            "OVERAGE"
+          ],
+          "unmatched": [
+            "RECURRING"
+          ]
+        },
+        "revenue": {
+          "intersection": [
+            "ADVANCED CONSUMPTION"
+          ],
+          "missing": [],
+          "unmatched": []
+        }
+      }
+    ],
+    "scores_all": [
+      {
+        "id": "UC-0018",
+        "title": "ACB - Commit Arrears (Ratable)",
+        "score": 0.76,
+        "score_raw": 0.8,
+        "jaccard_billing": 0.6,
+        "jaccard_revenue": 1,
+        "billing": {
+          "intersection": [
+            "USAGE",
+            "PREPAID DRAWDOWN",
+            "TIERED PRICING"
+          ],
+          "missing": [
+            "OVERAGE"
+          ],
+          "unmatched": [
+            "RECURRING"
+          ]
+        },
+        "revenue": {
+          "intersection": [
+            "ADVANCED CONSUMPTION"
+          ],
+          "missing": [],
+          "unmatched": []
+        }
+      },
+      {
+        "id": "UC-0017",
+        "title": "ACB - PPDD (Usage - Multi Prod)",
+        "score": 0.665,
+        "score_raw": 0.7,
+        "jaccard_billing": 0.4,
+        "jaccard_revenue": 1,
+        "billing": {
+          "intersection": [
+            "USAGE",
+            "PREPAID DRAWDOWN"
+          ],
+          "missing": [
+            "TIERED PRICING",
+            "OVERAGE"
+          ],
+          "unmatched": [
+            "RECURRING"
+          ]
+        },
+        "revenue": {
+          "intersection": [
+            "ADVANCED CONSUMPTION"
+          ],
+          "missing": [],
+          "unmatched": []
+        }
+      },
+      {
+        "id": "UC-0019",
+        "title": "ACB - Commit Arrears (Usage)",
+        "score": 0.665,
+        "score_raw": 0.7,
+        "jaccard_billing": 0.4,
+        "jaccard_revenue": 1,
+        "billing": {
+          "intersection": [
+            "USAGE",
+            "PREPAID DRAWDOWN"
+          ],
+          "missing": [
+            "TIERED PRICING",
+            "OVERAGE"
+          ],
+          "unmatched": [
+            "RECURRING"
+          ]
+        },
+        "revenue": {
+          "intersection": [
+            "ADVANCED CONSUMPTION"
+          ],
+          "missing": [],
+          "unmatched": []
+        }
+      },
+      {
+        "id": "UC-0021",
+        "title": "ACB-Min Commit - Over",
+        "score": 0.633333,
+        "score_raw": 0.666667,
+        "jaccard_billing": 0.333333,
+        "jaccard_revenue": 1,
+        "billing": {
+          "intersection": [
+            "USAGE",
+            "OVERAGE"
+          ],
+          "missing": [
+            "PREPAID DRAWDOWN",
+            "TIERED PRICING"
+          ],
+          "unmatched": [
+            "RECURRING",
+            "MIN COMMIT"
+          ]
+        },
+        "revenue": {
+          "intersection": [
+            "ADVANCED CONSUMPTION"
+          ],
+          "missing": [],
+          "unmatched": []
+        }
+      },
+      {
+        "id": "UC-0031",
+        "title": "ACB-PPDD(Usage) with Top-off",
+        "score": 0.633333,
+        "score_raw": 0.666667,
+        "jaccard_billing": 0.333333,
+        "jaccard_revenue": 1,
+        "billing": {
+          "intersection": [
+            "USAGE",
+            "PREPAID DRAWDOWN"
+          ],
+          "missing": [
+            "TIERED PRICING",
+            "OVERAGE"
+          ],
+          "unmatched": [
+            "AMENDMENT",
+            "RECURRING"
+          ]
+        },
+        "revenue": {
+          "intersection": [
+            "ADVANCED CONSUMPTION"
+          ],
+          "missing": [],
+          "unmatched": []
+        }
+      },
+      {
+        "id": "UC-0014",
+        "title": "ACB - Paygo",
+        "score": 0.59375,
+        "score_raw": 0.625,
+        "jaccard_billing": 0.25,
+        "jaccard_revenue": 1,
+        "billing": {
+          "intersection": [
+            "USAGE"
+          ],
+          "missing": [
+            "PREPAID DRAWDOWN",
+            "TIERED PRICING",
+            "OVERAGE"
+          ],
+          "unmatched": []
+        },
+        "revenue": {
+          "intersection": [
+            "ADVANCED CONSUMPTION"
+          ],
+          "missing": [],
+          "unmatched": []
+        }
+      },
+      {
+        "id": "UC-0022",
+        "title": "ACB-Paygo - Prerated",
+        "score": 0.57,
+        "score_raw": 0.6,
+        "jaccard_billing": 0.2,
+        "jaccard_revenue": 1,
+        "billing": {
+          "intersection": [
+            "USAGE"
+          ],
+          "missing": [
+            "PREPAID DRAWDOWN",
+            "TIERED PRICING",
+            "OVERAGE"
+          ],
+          "unmatched": [
+            "PRERATED PRICING"
+          ]
+        },
+        "revenue": {
+          "intersection": [
+            "ADVANCED CONSUMPTION"
+          ],
+          "missing": [],
+          "unmatched": []
+        }
+      },
+      {
+        "id": "UC-0020",
+        "title": "ACB-Min Commit - Under",
+        "score": 0.554167,
+        "score_raw": 0.583333,
+        "jaccard_billing": 0.166667,
+        "jaccard_revenue": 1,
+        "billing": {
+          "intersection": [
+            "USAGE"
+          ],
+          "missing": [
+            "PREPAID DRAWDOWN",
+            "TIERED PRICING",
+            "OVERAGE"
+          ],
+          "unmatched": [
+            "RECURRING",
+            "MIN COMMIT"
+          ]
+        },
+        "revenue": {
+          "intersection": [
+            "ADVANCED CONSUMPTION"
+          ],
+          "missing": [],
+          "unmatched": []
+        }
+      },
+      {
+        "id": "UC-0012",
+        "title": "ACB - PPDD (Ratable)",
+        "score": 0.4275,
+        "score_raw": 0.45,
+        "jaccard_billing": 0.4,
+        "jaccard_revenue": 0.5,
+        "billing": {
+          "intersection": [
+            "USAGE",
+            "PREPAID DRAWDOWN"
+          ],
+          "missing": [
+            "TIERED PRICING",
+            "OVERAGE"
+          ],
+          "unmatched": [
+            "RECURRING"
+          ]
+        },
+        "revenue": {
+          "intersection": [
+            "ADVANCED CONSUMPTION"
+          ],
+          "missing": [],
+          "unmatched": [
+            "CUSTOM EVENT"
+          ]
+        }
+      },
+      {
+        "id": "UC-0013",
+        "title": "ACB - PPDD (Usage)",
+        "score": 0.4275,
+        "score_raw": 0.45,
+        "jaccard_billing": 0.4,
+        "jaccard_revenue": 0.5,
+        "billing": {
+          "intersection": [
+            "USAGE",
+            "PREPAID DRAWDOWN"
+          ],
+          "missing": [
+            "TIERED PRICING",
+            "OVERAGE"
+          ],
+          "unmatched": [
+            "RECURRING"
+          ]
+        },
+        "revenue": {
+          "intersection": [
+            "ADVANCED CONSUMPTION"
+          ],
+          "missing": [],
+          "unmatched": [
+            "CUSTOM EVENT"
+          ]
+        }
+      },
+      {
+        "id": "UC-0016",
+        "title": "ACB - PPDD (Ratable-VC)",
+        "score": 0.4275,
+        "score_raw": 0.45,
+        "jaccard_billing": 0.4,
+        "jaccard_revenue": 0.5,
+        "billing": {
+          "intersection": [
+            "USAGE",
+            "PREPAID DRAWDOWN"
+          ],
+          "missing": [
+            "TIERED PRICING",
+            "OVERAGE"
+          ],
+          "unmatched": [
+            "RECURRING"
+          ]
+        },
+        "revenue": {
+          "intersection": [
+            "ADVANCED CONSUMPTION"
+          ],
+          "missing": [],
+          "unmatched": [
+            "VC"
+          ]
+        }
+      },
+      {
+        "id": "UC-0015",
+        "title": "Subscription - Weekend Delivery",
+        "score": 0.2375,
+        "score_raw": 0.25,
+        "jaccard_billing": 0,
+        "jaccard_revenue": 0.5,
+        "billing": {
+          "intersection": [],
+          "missing": [
+            "USAGE",
+            "PREPAID DRAWDOWN",
+            "TIERED PRICING",
+            "OVERAGE"
+          ],
+          "unmatched": [
+            "RECURRING",
+            "DELIVERY PRICING"
+          ]
+        },
+        "revenue": {
+          "intersection": [
+            "ADVANCED CONSUMPTION"
+          ],
+          "missing": [],
+          "unmatched": [
+            "DELIVERY"
+          ]
+        }
+      },
+      {
+        "id": "UC-0007",
+        "title": "Subscription & VC",
+        "score": 0.095,
+        "score_raw": 0.1,
+        "jaccard_billing": 0.2,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "TIERED PRICING"
+          ],
+          "missing": [
+            "USAGE",
+            "PREPAID DRAWDOWN",
+            "OVERAGE"
+          ],
+          "unmatched": [
+            "RECURRING"
+          ]
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "ADVANCED CONSUMPTION"
+          ],
+          "unmatched": [
+            "VC"
+          ]
+        }
+      },
+      {
+        "id": "UC-0005",
+        "title": "Ramp - Inv Schedules",
+        "score": 0.079167,
+        "score_raw": 0.083333,
+        "jaccard_billing": 0.166667,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "TIERED PRICING"
+          ],
+          "missing": [
+            "USAGE",
+            "PREPAID DRAWDOWN",
+            "OVERAGE"
+          ],
+          "unmatched": [
+            "RECURRING",
+            "PRORATION"
+          ]
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "ADVANCED CONSUMPTION"
+          ],
+          "unmatched": [
+            "RAMP"
+          ]
+        }
+      },
+      {
+        "id": "UC-0023",
+        "title": "Subscription - Cancel w Accel",
+        "score": 0.067857,
+        "score_raw": 0.071429,
+        "jaccard_billing": 0.142857,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "TIERED PRICING"
+          ],
+          "missing": [
+            "USAGE",
+            "PREPAID DRAWDOWN",
+            "OVERAGE"
+          ],
+          "unmatched": [
+            "AMENDMENT",
+            "RECURRING",
+            "PRORATION"
+          ]
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "ADVANCED CONSUMPTION"
+          ],
+          "unmatched": [
+            "CONTRACT MOD"
+          ]
+        }
+      },
+      {
+        "id": "UC-0024",
+        "title": "Subscription & PS (Milestones) - ADV",
+        "score": 0.067857,
+        "score_raw": 0.071429,
+        "jaccard_billing": 0.142857,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [
+            "TIERED PRICING"
+          ],
+          "missing": [
+            "USAGE",
+            "PREPAID DRAWDOWN",
+            "OVERAGE"
+          ],
+          "unmatched": [
+            "RECURRING",
+            "ONE-TIME",
+            "PRORATION"
+          ]
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "ADVANCED CONSUMPTION"
+          ],
+          "unmatched": [
+            "ALLOCATION",
+            "CUSTOM EVENT"
+          ]
+        }
+      },
+      {
+        "id": "UC-0001",
+        "title": "Subscription",
+        "score": 0,
+        "score_raw": 0,
+        "jaccard_billing": 0,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [],
+          "missing": [
+            "USAGE",
+            "PREPAID DRAWDOWN",
+            "TIERED PRICING",
+            "OVERAGE"
+          ],
+          "unmatched": [
+            "RECURRING",
+            "PRORATION"
+          ]
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "ADVANCED CONSUMPTION"
+          ],
+          "unmatched": []
+        }
+      },
+      {
+        "id": "UC-0002",
+        "title": "Bundle & PS (ADV)",
+        "score": 0,
+        "score_raw": 0,
+        "jaccard_billing": 0,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [],
+          "missing": [
+            "USAGE",
+            "PREPAID DRAWDOWN",
+            "TIERED PRICING",
+            "OVERAGE"
+          ],
+          "unmatched": [
+            "RECURRING",
+            "ONE-TIME",
+            "VOLUME PRICING"
+          ]
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "ADVANCED CONSUMPTION"
+          ],
+          "unmatched": [
+            "ALLOCATION",
+            "CUSTOM EVENT",
+            "BUNDLE"
+          ]
+        }
+      },
+      {
+        "id": "UC-0003",
+        "title": "Ramp - SL",
+        "score": 0,
+        "score_raw": 0,
+        "jaccard_billing": 0,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [],
+          "missing": [
+            "USAGE",
+            "PREPAID DRAWDOWN",
+            "TIERED PRICING",
+            "OVERAGE"
+          ],
+          "unmatched": [
+            "RECURRING",
+            "PRORATION"
+          ]
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "ADVANCED CONSUMPTION"
+          ],
+          "unmatched": [
+            "ALLOCATION",
+            "RAMP"
+          ]
+        }
+      },
+      {
+        "id": "UC-0004",
+        "title": "Ramp  - Prospective",
+        "score": 0,
+        "score_raw": 0,
+        "jaccard_billing": 0,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [],
+          "missing": [
+            "USAGE",
+            "PREPAID DRAWDOWN",
+            "TIERED PRICING",
+            "OVERAGE"
+          ],
+          "unmatched": [
+            "AMENDMENT",
+            "RECURRING",
+            "PRORATION"
+          ]
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "ADVANCED CONSUMPTION"
+          ],
+          "unmatched": [
+            "ALLOCATION",
+            "CONTRACT MOD",
+            "RAMP"
+          ]
+        }
+      },
+      {
+        "id": "UC-0006",
+        "title": "MEA w Royalty (ADV)",
+        "score": 0,
+        "score_raw": 0,
+        "jaccard_billing": 0,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [],
+          "missing": [
+            "USAGE",
+            "PREPAID DRAWDOWN",
+            "TIERED PRICING",
+            "OVERAGE"
+          ],
+          "unmatched": [
+            "RECURRING",
+            "ONE-TIME",
+            "VOLUME PRICING"
+          ]
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "ADVANCED CONSUMPTION"
+          ],
+          "unmatched": [
+            "ALLOCATION",
+            "COST",
+            "VC"
+          ]
+        }
+      },
+      {
+        "id": "UC-0008",
+        "title": "MEA w Cost (ADV)",
+        "score": 0,
+        "score_raw": 0,
+        "jaccard_billing": 0,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [],
+          "missing": [
+            "USAGE",
+            "PREPAID DRAWDOWN",
+            "TIERED PRICING",
+            "OVERAGE"
+          ],
+          "unmatched": [
+            "RECURRING",
+            "ONE-TIME",
+            "VOLUME PRICING"
+          ]
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "ADVANCED CONSUMPTION"
+          ],
+          "unmatched": [
+            "ALLOCATION",
+            "CUSTOM EVENT",
+            "COST"
+          ]
+        }
+      },
+      {
+        "id": "UC-0009",
+        "title": "MEA with OLI HW - ADV",
+        "score": 0,
+        "score_raw": 0,
+        "jaccard_billing": 0,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [],
+          "missing": [
+            "USAGE",
+            "PREPAID DRAWDOWN",
+            "TIERED PRICING",
+            "OVERAGE"
+          ],
+          "unmatched": [
+            "RECURRING",
+            "ONE-TIME",
+            "ORDER LINE ITEM",
+            "PRORATION"
+          ]
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "ADVANCED CONSUMPTION"
+          ],
+          "unmatched": [
+            "ALLOCATION"
+          ]
+        }
+      },
+      {
+        "id": "UC-0010",
+        "title": "MEA  Prospective (ADV)",
+        "score": 0,
+        "score_raw": 0,
+        "jaccard_billing": 0,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [],
+          "missing": [
+            "USAGE",
+            "PREPAID DRAWDOWN",
+            "TIERED PRICING",
+            "OVERAGE"
+          ],
+          "unmatched": [
+            "AMENDMENT",
+            "RECURRING",
+            "ONE-TIME",
+            "PRORATION",
+            "VOLUME PRICING"
+          ]
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "ADVANCED CONSUMPTION"
+          ],
+          "unmatched": [
+            "ALLOCATION",
+            "CONTRACT MOD",
+            "CUSTOM EVENT",
+            "COST"
+          ]
+        }
+      },
+      {
+        "id": "UC-0011",
+        "title": "MEA  Retrospective (ADV)",
+        "score": 0,
+        "score_raw": 0,
+        "jaccard_billing": 0,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [],
+          "missing": [
+            "USAGE",
+            "PREPAID DRAWDOWN",
+            "TIERED PRICING",
+            "OVERAGE"
+          ],
+          "unmatched": [
+            "AMENDMENT",
+            "RECURRING",
+            "ONE-TIME",
+            "PRORATION",
+            "VOLUME PRICING"
+          ]
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "ADVANCED CONSUMPTION"
+          ],
+          "unmatched": [
+            "ALLOCATION",
+            "CONTRACT MOD",
+            "CUSTOM EVENT",
+            "COST"
+          ]
+        }
+      },
+      {
+        "id": "UC-0025",
+        "title": "Subscription - free mos - CNTRL",
+        "score": 0,
+        "score_raw": 0,
+        "jaccard_billing": 0,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [],
+          "missing": [
+            "USAGE",
+            "PREPAID DRAWDOWN",
+            "TIERED PRICING",
+            "OVERAGE"
+          ],
+          "unmatched": [
+            "RECURRING",
+            "DISCOUNT"
+          ]
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "ADVANCED CONSUMPTION"
+          ],
+          "unmatched": []
+        }
+      },
+      {
+        "id": "UC-0026",
+        "title": "MEA with FX -ADV",
+        "score": 0,
+        "score_raw": 0,
+        "jaccard_billing": 0,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [],
+          "missing": [
+            "USAGE",
+            "PREPAID DRAWDOWN",
+            "TIERED PRICING",
+            "OVERAGE"
+          ],
+          "unmatched": [
+            "RECURRING",
+            "ONE-TIME",
+            "PRORATION"
+          ]
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "ADVANCED CONSUMPTION"
+          ],
+          "unmatched": [
+            "ALLOCATION",
+            "CUSTOM EVENT"
+          ]
+        }
+      },
+      {
+        "id": "UC-0027",
+        "title": "Subscription with Setup Fee - CNTRL",
+        "score": 0,
+        "score_raw": 0,
+        "jaccard_billing": 0,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [],
+          "missing": [
+            "USAGE",
+            "PREPAID DRAWDOWN",
+            "TIERED PRICING",
+            "OVERAGE"
+          ],
+          "unmatched": [
+            "RECURRING",
+            "ONE-TIME",
+            "PRORATION"
+          ]
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "ADVANCED CONSUMPTION"
+          ],
+          "unmatched": []
+        }
+      },
+      {
+        "id": "UC-0028",
+        "title": "Subscription w T&M PS - OLI",
+        "score": 0,
+        "score_raw": 0,
+        "jaccard_billing": 0,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [],
+          "missing": [
+            "USAGE",
+            "PREPAID DRAWDOWN",
+            "TIERED PRICING",
+            "OVERAGE"
+          ],
+          "unmatched": [
+            "RECURRING",
+            "ORDER LINE ITEM",
+            "PRORATION"
+          ]
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "ADVANCED CONSUMPTION"
+          ],
+          "unmatched": [
+            "ALLOCATION",
+            "CUSTOM EVENT"
+          ]
+        }
+      },
+      {
+        "id": "UC-0029",
+        "title": "SFC - ADV",
+        "score": 0,
+        "score_raw": 0,
+        "jaccard_billing": 0,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [],
+          "missing": [
+            "USAGE",
+            "PREPAID DRAWDOWN",
+            "TIERED PRICING",
+            "OVERAGE"
+          ],
+          "unmatched": []
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "ADVANCED CONSUMPTION"
+          ],
+          "unmatched": [
+            "ALLOCATION",
+            "SFC"
+          ]
+        }
+      },
+      {
+        "id": "UC-0030",
+        "title": "MEA - Software with RSSP",
+        "score": 0,
+        "score_raw": 0,
+        "jaccard_billing": 0,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [],
+          "missing": [
+            "USAGE",
+            "PREPAID DRAWDOWN",
+            "TIERED PRICING",
+            "OVERAGE"
+          ],
+          "unmatched": [
+            "RECURRING",
+            "ONE-TIME",
+            "PRORATION"
+          ]
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "ADVANCED CONSUMPTION"
+          ],
+          "unmatched": [
+            "ALLOCATION",
+            "CUSTOM EVENT"
+          ]
+        }
+      },
+      {
+        "id": "UC-0032",
+        "title": "Subscription - Suspend/Resume",
+        "score": 0,
+        "score_raw": 0,
+        "jaccard_billing": 0,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [],
+          "missing": [
+            "USAGE",
+            "PREPAID DRAWDOWN",
+            "TIERED PRICING",
+            "OVERAGE"
+          ],
+          "unmatched": [
+            "AMENDMENT",
+            "RECURRING",
+            "PRORATION"
+          ]
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "ADVANCED CONSUMPTION"
+          ],
+          "unmatched": []
+        }
+      },
+      {
+        "id": "UC-0033",
+        "title": "MEA-Multi-Currency -ADV",
+        "score": 0,
+        "score_raw": 0,
+        "jaccard_billing": 0,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [],
+          "missing": [
+            "USAGE",
+            "PREPAID DRAWDOWN",
+            "TIERED PRICING",
+            "OVERAGE"
+          ],
+          "unmatched": []
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "ADVANCED CONSUMPTION"
+          ],
+          "unmatched": [
+            "ALLOCATION",
+            "COST"
+          ]
+        }
+      },
+      {
+        "id": "UC-0034",
+        "title": "B2C  Monthly",
+        "score": 0,
+        "score_raw": 0,
+        "jaccard_billing": 0,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [],
+          "missing": [
+            "USAGE",
+            "PREPAID DRAWDOWN",
+            "TIERED PRICING",
+            "OVERAGE"
+          ],
+          "unmatched": [
+            "RECURRING"
+          ]
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "ADVANCED CONSUMPTION"
+          ],
+          "unmatched": []
+        }
+      },
+      {
+        "id": "UC-0035",
+        "title": "B2C Annual",
+        "score": 0,
+        "score_raw": 0,
+        "jaccard_billing": 0,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [],
+          "missing": [
+            "USAGE",
+            "PREPAID DRAWDOWN",
+            "TIERED PRICING",
+            "OVERAGE"
+          ],
+          "unmatched": [
+            "RECURRING"
+          ]
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "ADVANCED CONSUMPTION"
+          ],
+          "unmatched": []
+        }
+      },
+      {
+        "id": "UC-0036",
+        "title": "B2C MTM",
+        "score": 0,
+        "score_raw": 0,
+        "jaccard_billing": 0,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [],
+          "missing": [
+            "USAGE",
+            "PREPAID DRAWDOWN",
+            "TIERED PRICING",
+            "OVERAGE"
+          ],
+          "unmatched": [
+            "RECURRING"
+          ]
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "ADVANCED CONSUMPTION"
+          ],
+          "unmatched": []
+        }
+      },
+      {
+        "id": "UC-0037",
+        "title": "B2C Promo",
+        "score": 0,
+        "score_raw": 0,
+        "jaccard_billing": 0,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [],
+          "missing": [
+            "USAGE",
+            "PREPAID DRAWDOWN",
+            "TIERED PRICING",
+            "OVERAGE"
+          ],
+          "unmatched": [
+            "RECURRING",
+            "DISCOUNT"
+          ]
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "ADVANCED CONSUMPTION"
+          ],
+          "unmatched": []
+        }
+      },
+      {
+        "id": "UC-0038",
+        "title": "B2C Cancellation",
+        "score": 0,
+        "score_raw": 0,
+        "jaccard_billing": 0,
+        "jaccard_revenue": 0,
+        "billing": {
+          "intersection": [],
+          "missing": [
+            "USAGE",
+            "PREPAID DRAWDOWN",
+            "TIERED PRICING",
+            "OVERAGE"
+          ],
+          "unmatched": [
+            "AMENDMENT",
+            "RECURRING"
+          ]
+        },
+        "revenue": {
+          "intersection": [],
+          "missing": [
+            "ADVANCED CONSUMPTION"
+          ],
+          "unmatched": [
+            "CONTRACT MOD"
+          ]
+        }
+      }
+    ],
+    "normalized_inputs": {
+      "billing_caps": [
+        "USAGE",
+        "PREPAID DRAWDOWN",
+        "TIERED PRICING",
+        "OVERAGE"
+      ],
+      "revenue_caps": [
+        "ADVANCED CONSUMPTION"
+      ]
+    }
+  },
+  "subscription_spec": {
+    "subscription": {
+      "name": "Twilio - Enterprise Consumption + Committed Use (US) - 2026",
+      "termType": "TERMED",
+      "status": "Draft",
+      "currency": "USD",
+      "contractEffectiveDate": "2026-01-01",
+      "serviceActivationDate": "2026-01-01",
+      "customerAcceptanceDate": "2026-01-01",
+      "subscriptionStartDate": "2026-01-01",
+      "subscriptionEndDate": "2027-01-01",
+      "initialTerm": 12,
+      "initialTermPeriodType": "Month",
+      "renewalTerm": null,
+      "renewalTermPeriodType": null,
+      "autoRenew": null
+    },
+    "rate_plans": [
+      {
+        "productName": "Twilio Enterprise Commitment",
+        "ratePlanName": "Committed Use - Prepaid Deposit (USD Pool)",
+        "charges": [
+          {
+            "name": "Annual Committed-Use Deposit (USD Pool)",
+            "type": "OneTime",
+            "model": "FlatFee",
+            "uom": "USD",
+            "billingPeriod": null,
+            "billingTiming": "InAdvance",
+            "billingDay": null,
+            "billingPeriodAlignment": null,
+            "listPriceBase": null,
+            "triggerEvent": "ContractEffective",
+            "specificTriggerDate": null,
+            "endDateCondition": "OneTime",
+            "specificEndDate": null,
+            "quantity": 1,
+            "listPrice": null,
+            "sellPrice": null,
+            "price": null,
+            "effectiveStartDate": "2026-01-01",
+            "effectiveEndDate": null,
+            "chargeFunction": "Prepayment",
+            "isAllocationEligible": null,
+            "drawdownType": null,
+            "commitmentType": null,
+            "prepaymentUOM": "USD",
+            "prepaymentUnits": null,
+            "validityPeriod": "2026-01-01 to 2026-12-31"
+          }
+        ]
+      },
+      {
+        "productName": "Twilio SMS (US)",
+        "ratePlanName": "SMS (US) - Committed + PAYG Overage",
+        "charges": [
+          {
+            "name": "SMS (US) - Committed Drawdown @ $0.0069/segment",
+            "type": "Usage",
+            "model": "PerUnit",
+            "uom": "Segment",
+            "billingPeriod": "Month",
+            "billingTiming": "InArrears",
+            "billingDay": null,
+            "billingPeriodAlignment": "SubscriptionStart",
+            "listPriceBase": null,
+            "triggerEvent": "ContractEffective",
+            "specificTriggerDate": null,
+            "endDateCondition": "Subscription_End",
+            "specificEndDate": null,
+            "quantity": null,
+            "listPrice": 0.0069,
+            "sellPrice": 0.0069,
+            "price": 0.0069,
+            "effectiveStartDate": "2026-01-01",
+            "effectiveEndDate": "2027-01-01",
+            "chargeFunction": "Drawdown",
+            "isAllocationEligible": null,
+            "drawdownType": "PrepaidBalance",
+            "commitmentType": null,
+            "prepaymentUOM": "USD",
+            "prepaymentUnits": null,
+            "validityPeriod": null
+          },
+          {
+            "name": "SMS (US) - PAYG Overage (Tiered per segment)",
+            "type": "Usage",
+            "model": "Tiered",
+            "uom": "Segment",
+            "billingPeriod": "Month",
+            "billingTiming": "InArrears",
+            "billingDay": null,
+            "billingPeriodAlignment": "SubscriptionStart",
+            "listPriceBase": null,
+            "triggerEvent": "ContractEffective",
+            "specificTriggerDate": null,
+            "endDateCondition": "Subscription_End",
+            "specificEndDate": null,
+            "quantity": null,
+            "listPrice": null,
+            "sellPrice": null,
+            "price": null,
+            "effectiveStartDate": "2026-01-01",
+            "effectiveEndDate": "2027-01-01",
+            "chargeFunction": "Overage",
+            "isAllocationEligible": null,
+            "drawdownType": null,
+            "commitmentType": null,
+            "prepaymentUOM": null,
+            "prepaymentUnits": null,
+            "validityPeriod": null
+          }
+        ]
+      },
+      {
+        "productName": "Programmable Voice (US)",
+        "ratePlanName": "Voice (US) - Committed + PAYG Overage",
+        "charges": [
+          {
+            "name": "Voice Outbound (US) - Committed Drawdown @ $0.0098/min",
+            "type": "Usage",
+            "model": "PerUnit",
+            "uom": "Minute",
+            "billingPeriod": "Month",
+            "billingTiming": "InArrears",
+            "billingDay": null,
+            "billingPeriodAlignment": "SubscriptionStart",
+            "listPriceBase": null,
+            "triggerEvent": "ContractEffective",
+            "specificTriggerDate": null,
+            "endDateCondition": "Subscription_End",
+            "specificEndDate": null,
+            "quantity": null,
+            "listPrice": 0.0098,
+            "sellPrice": 0.0098,
+            "price": 0.0098,
+            "effectiveStartDate": "2026-01-01",
+            "effectiveEndDate": "2027-01-01",
+            "chargeFunction": "Drawdown",
+            "isAllocationEligible": null,
+            "drawdownType": "PrepaidBalance",
+            "commitmentType": null,
+            "prepaymentUOM": "USD",
+            "prepaymentUnits": null,
+            "validityPeriod": null
+          },
+          {
+            "name": "Voice Inbound Local (US) - Committed Drawdown @ $0.0028/min",
+            "type": "Usage",
+            "model": "PerUnit",
+            "uom": "Minute",
+            "billingPeriod": "Month",
+            "billingTiming": "InArrears",
+            "billingDay": null,
+            "billingPeriodAlignment": "SubscriptionStart",
+            "listPriceBase": null,
+            "triggerEvent": "ContractEffective",
+            "specificTriggerDate": null,
+            "endDateCondition": "Subscription_End",
+            "specificEndDate": null,
+            "quantity": null,
+            "listPrice": 0.0028,
+            "sellPrice": 0.0028,
+            "price": 0.0028,
+            "effectiveStartDate": "2026-01-01",
+            "effectiveEndDate": "2027-01-01",
+            "chargeFunction": "Drawdown",
+            "isAllocationEligible": null,
+            "drawdownType": "PrepaidBalance",
+            "commitmentType": null,
+            "prepaymentUOM": "USD",
+            "prepaymentUnits": null,
+            "validityPeriod": null
+          },
+          {
+            "name": "Voice (US) - PAYG Overage (Tiered per minute)",
+            "type": "Usage",
+            "model": "Tiered",
+            "uom": "Minute",
+            "billingPeriod": "Month",
+            "billingTiming": "InArrears",
+            "billingDay": null,
+            "billingPeriodAlignment": "SubscriptionStart",
+            "listPriceBase": null,
+            "triggerEvent": "ContractEffective",
+            "specificTriggerDate": null,
+            "endDateCondition": "Subscription_End",
+            "specificEndDate": null,
+            "quantity": null,
+            "listPrice": null,
+            "sellPrice": null,
+            "price": null,
+            "effectiveStartDate": "2026-01-01",
+            "effectiveEndDate": "2027-01-01",
+            "chargeFunction": "Overage",
+            "isAllocationEligible": null,
+            "drawdownType": null,
+            "commitmentType": null,
+            "prepaymentUOM": null,
+            "prepaymentUnits": null,
+            "validityPeriod": null
+          }
+        ]
+      },
+      {
+        "productName": "SendGrid Email API (Premier)",
+        "ratePlanName": "Email API (Premier) - Committed + PAYG Overage",
+        "charges": [
+          {
+            "name": "Email API (Premier) - Committed Drawdown @ $0.0006/email",
+            "type": "Usage",
+            "model": "PerUnit",
+            "uom": "Email",
+            "billingPeriod": "Month",
+            "billingTiming": "InArrears",
+            "billingDay": null,
+            "billingPeriodAlignment": "SubscriptionStart",
+            "listPriceBase": null,
+            "triggerEvent": "ContractEffective",
+            "specificTriggerDate": null,
+            "endDateCondition": "Subscription_End",
+            "specificEndDate": null,
+            "quantity": null,
+            "listPrice": 0.0006,
+            "sellPrice": 0.0006,
+            "price": 0.0006,
+            "effectiveStartDate": "2026-01-01",
+            "effectiveEndDate": "2027-01-01",
+            "chargeFunction": "Drawdown",
+            "isAllocationEligible": null,
+            "drawdownType": "PrepaidBalance",
+            "commitmentType": null,
+            "prepaymentUOM": "USD",
+            "prepaymentUnits": null,
+            "validityPeriod": null
+          },
+          {
+            "name": "Email API (Premier) - PAYG Overage (Tiered credits)",
+            "type": "Usage",
+            "model": "Tiered",
+            "uom": "Email",
+            "billingPeriod": "Month",
+            "billingTiming": "InArrears",
+            "billingDay": null,
+            "billingPeriodAlignment": "SubscriptionStart",
+            "listPriceBase": null,
+            "triggerEvent": "ContractEffective",
+            "specificTriggerDate": null,
+            "endDateCondition": "Subscription_End",
+            "specificEndDate": null,
+            "quantity": null,
+            "listPrice": null,
+            "sellPrice": null,
+            "price": null,
+            "effectiveStartDate": "2026-01-01",
+            "effectiveEndDate": "2027-01-01",
+            "chargeFunction": "Overage",
+            "isAllocationEligible": null,
+            "drawdownType": null,
+            "commitmentType": null,
+            "prepaymentUOM": null,
+            "prepaymentUnits": null,
+            "validityPeriod": null
+          }
+        ]
+      },
+      {
+        "productName": "Twilio Enterprise Commitment",
+        "ratePlanName": "End-of-Term True-Up / Breakage (If Applicable)",
+        "charges": [
+          {
+            "name": "Commitment Shortfall True-Up / Breakage Settlement",
+            "type": "OneTime",
+            "model": "FlatFee",
+            "uom": "USD",
+            "billingPeriod": null,
+            "billingTiming": "InArrears",
+            "billingDay": null,
+            "billingPeriodAlignment": null,
+            "listPriceBase": null,
+            "triggerEvent": "SpecificDate",
+            "specificTriggerDate": "2026-12-31",
+            "endDateCondition": "OneTime",
+            "specificEndDate": null,
+            "quantity": 1,
+            "listPrice": null,
+            "sellPrice": null,
+            "price": null,
+            "effectiveStartDate": "2026-12-31",
+            "effectiveEndDate": null,
+            "chargeFunction": "None",
+            "isAllocationEligible": null,
+            "drawdownType": null,
+            "commitmentType": null,
+            "prepaymentUOM": null,
+            "prepaymentUnits": null,
+            "validityPeriod": null
+          }
+        ]
+      }
+    ],
+    "usage": [
+      {
+        "Date": "2026-01-31",
+        "UOM": "Segment",
+        "Quantity": 2000000,
+        "Charge Name": "SMS (US) - Committed Drawdown @ $0.0069/segment",
+        "Amount": 13800
+      },
+      {
+        "Date": "2026-01-31",
+        "UOM": "Minute",
+        "Quantity": 600000,
+        "Charge Name": "Voice Outbound (US) - Committed Drawdown @ $0.0098/min",
+        "Amount": 5880
+      },
+      {
+        "Date": "2026-01-31",
+        "UOM": "Minute",
+        "Quantity": 1200000,
+        "Charge Name": "Voice Inbound Local (US) - Committed Drawdown @ $0.0028/min",
+        "Amount": 3360
+      },
+      {
+        "Date": "2026-01-31",
+        "UOM": "Email",
+        "Quantity": 20000000,
+        "Charge Name": "Email API (Premier) - Committed Drawdown @ $0.0006/email",
+        "Amount": 12000
+      },
+      {
+        "Date": "2026-02-28",
+        "UOM": "Segment",
+        "Quantity": 3500000,
+        "Charge Name": "SMS (US) - Committed Drawdown @ $0.0069/segment",
+        "Amount": 24150
+      },
+      {
+        "Date": "2026-02-28",
+        "UOM": "Minute",
+        "Quantity": 800000,
+        "Charge Name": "Voice Outbound (US) - Committed Drawdown @ $0.0098/min",
+        "Amount": 7840
+      },
+      {
+        "Date": "2026-02-28",
+        "UOM": "Email",
+        "Quantity": 25000000,
+        "Charge Name": "Email API (Premier) - Committed Drawdown @ $0.0006/email",
+        "Amount": 15000
+      },
+      {
+        "Date": "2026-06-30",
+        "UOM": "Segment",
+        "Quantity": 1000000,
+        "Charge Name": "SMS (US) - PAYG Overage (Tiered per segment)",
+        "Amount": 7500
+      },
+      {
+        "Date": "2026-06-30",
+        "UOM": "Minute",
+        "Quantity": 200000,
+        "Charge Name": "Voice (US) - PAYG Overage (Tiered per minute)",
+        "Amount": 2200
+      }
+    ],
+    "assumptions": [
+      "Subscription term is modeled as 12 months from 2026-01-01 through 2027-01-01 (last service day 2026-12-31).",
+      "A single committed-use prepaid pool is modeled in USD (not separate SMS/Voice/Email pools). If pools are separate per product, split the deposit into multiple prepayment charges/pools.",
+      "Committed usage is priced at the contracted discounted rates for purposes of drawdown valuation.",
+      "Overage reverts to PAYG tiered pricing; detailed tier ladders are maintained in the Zuora product catalog (not enumerated in this JSON).",
+      "Operationally, usage quantities must be split between committed drawdown vs PAYG overage based on remaining commitment balance (mid-month exhaustion supported via usage processing/rating logic).",
+      "Revenue is recognized upon consumption (usage events) for both committed drawdown and PAYG overage.",
+      "The end-of-term true-up/breakage settlement charge is included as an optional placeholder and may be omitted depending on whether you bill a true-up invoice, recognize breakage, or both."
+    ],
+    "open_questions": [
+      "What is the annual commitment amount (USD) and is it billed fully upfront on 2026-01-01 or billed in installments (e.g., quarterly/monthly minimums)?",
+      "Is the commitment shared across SMS/Voice/Email (one USD pool) or are there separate commitments per product and/or per usage dimension (e.g., voice outbound vs inbound)?",
+      "For the PAYG overage month where commitment is exhausted mid-month: do PAYG tiers apply to (a) total monthly usage, or (b) only the overage quantity after exhaustion?",
+      "At contract end, do you (1) issue a true-up invoice for unused commitment, (2) recognize breakage without billing, or (3) a combination with a specified breakage estimate methodology?"
+    ]
+  },
+  "pob_mapping": {
+    "charge_pob_map": [
+      {
+        "chargeName": "Annual Committed-Use Deposit (USD Pool)",
+        "productName": "Twilio Enterprise Commitment",
+        "ratePlanName": "Committed Use - Prepaid Deposit (USD Pool)",
+        "pob_identifier": "EVT-PIT-AMOUNT",
+        "pob_name": "EVT-PIT-AMOUNT | Release by Amount Event (Commitment Pool)",
+        "ratable_method": "Immediate Using Open Period",
+        "release_event": "BY_AMOUNT",
+        "recognition_window": {
+          "start": "2026-01-01",
+          "end": "2026-12-31"
+        },
+        "rationale": "Treat the deposit as a deferred commitment pool; revenue releases are driven by amount-based drawdown/consumption events rather than straight-line ratable recognition.",
+        "confidence": 0.78,
+        "alternatives": [
+          {
+            "pob_identifier": "BK-OT-CONSUMP-RATABLE",
+            "pob_name": "Consumption Ratable without VC upon booking",
+            "why_not": "Would recognize ratably over time, which conflicts with the stated policy: revenue recognized only as usage is consumed."
+          }
+        ]
+      },
+      {
+        "chargeName": "SMS (US) - Committed Drawdown @ $0.0069/segment",
+        "productName": "Twilio SMS (US)",
+        "ratePlanName": "SMS (US) - Committed + PAYG Overage",
+        "pob_identifier": "EVT-PIT-CONSUMP-USAGE",
+        "pob_name": "EVT-PIT-CONSUMP-USAGE | Consumption By Usage Event",
+        "ratable_method": "Immediate Using Open Period",
+        "release_event": "Upon Consumption",
+        "recognition_window": {
+          "start": "2026-01-01",
+          "end": "2026-12-31"
+        },
+        "rationale": "Committed consumption is recognized as the customer uses SMS; usage events are the recognition driver.",
+        "confidence": 0.9,
+        "alternatives": []
+      },
+      {
+        "chargeName": "SMS (US) - PAYG Overage (Tiered per segment)",
+        "productName": "Twilio SMS (US)",
+        "ratePlanName": "SMS (US) - Committed + PAYG Overage",
+        "pob_identifier": "EVT-PIT-CONSUMP-PAYGO",
+        "pob_name": "EVT-PIT-CONSUMP-PAYGO | Consumption - Usage Event (Non-Committed)",
+        "ratable_method": "Immediate Using Open Period",
+        "release_event": "Upon Consumption",
+        "recognition_window": {
+          "start": "2026-01-01",
+          "end": "2026-12-31"
+        },
+        "rationale": "Non-committed overage is still pure consumption; recognize on usage events, regardless of invoice timing.",
+        "confidence": 0.88,
+        "alternatives": [
+          {
+            "pob_identifier": "BL-PIT-CONSUMP-PAYGO",
+            "pob_name": "Consumption PayGo Billing",
+            "why_not": "Would recognize on billing release; use only if you do not load usage events into Zuora Revenue."
+          }
+        ]
+      },
+      {
+        "chargeName": "Voice Outbound (US) - Committed Drawdown @ $0.0098/min",
+        "productName": "Programmable Voice (US)",
+        "ratePlanName": "Voice (US) - Committed + PAYG Overage",
+        "pob_identifier": "EVT-PIT-CONSUMP-USAGE",
+        "pob_name": "EVT-PIT-CONSUMP-USAGE | Consumption By Usage Event",
+        "ratable_method": "Immediate Using Open Period",
+        "release_event": "Upon Consumption",
+        "recognition_window": {
+          "start": "2026-01-01",
+          "end": "2026-12-31"
+        },
+        "rationale": "Committed outbound voice usage is recognized as minutes are consumed.",
+        "confidence": 0.9,
+        "alternatives": []
+      },
+      {
+        "chargeName": "Voice Inbound Local (US) - Committed Drawdown @ $0.0028/min",
+        "productName": "Programmable Voice (US)",
+        "ratePlanName": "Voice (US) - Committed + PAYG Overage",
+        "pob_identifier": "EVT-PIT-CONSUMP-USAGE",
+        "pob_name": "EVT-PIT-CONSUMP-USAGE | Consumption By Usage Event",
+        "ratable_method": "Immediate Using Open Period",
+        "release_event": "Upon Consumption",
+        "recognition_window": {
+          "start": "2026-01-01",
+          "end": "2026-12-31"
+        },
+        "rationale": "Committed inbound voice usage is recognized as minutes are consumed.",
+        "confidence": 0.9,
+        "alternatives": []
+      },
+      {
+        "chargeName": "Voice (US) - PAYG Overage (Tiered per minute)",
+        "productName": "Programmable Voice (US)",
+        "ratePlanName": "Voice (US) - Committed + PAYG Overage",
+        "pob_identifier": "EVT-PIT-CONSUMP-PAYGO",
+        "pob_name": "EVT-PIT-CONSUMP-PAYGO | Consumption - Usage Event (Non-Committed)",
+        "ratable_method": "Immediate Using Open Period",
+        "release_event": "Upon Consumption",
+        "recognition_window": {
+          "start": "2026-01-01",
+          "end": "2026-12-31"
+        },
+        "rationale": "Overage voice minutes are PAYG and should be recognized upon consumption (usage event).",
+        "confidence": 0.88,
+        "alternatives": [
+          {
+            "pob_identifier": "BL-PIT-CONSUMP-PAYGO",
+            "pob_name": "Consumption PayGo Billing",
+            "why_not": "Billing-based recognition is acceptable only if usage events are not used in Revenue."
+          }
+        ]
+      },
+      {
+        "chargeName": "Email API (Premier) - Committed Drawdown @ $0.0006/email",
+        "productName": "SendGrid Email API (Premier)",
+        "ratePlanName": "Email API (Premier) - Committed + PAYG Overage",
+        "pob_identifier": "EVT-PIT-CONSUMP-USAGE",
+        "pob_name": "EVT-PIT-CONSUMP-USAGE | Consumption By Usage Event",
+        "ratable_method": "Immediate Using Open Period",
+        "release_event": "Upon Consumption",
+        "recognition_window": {
+          "start": "2026-01-01",
+          "end": "2026-12-31"
+        },
+        "rationale": "Committed email credits are recognized as emails are consumed (usage event driven).",
+        "confidence": 0.9,
+        "alternatives": []
+      },
+      {
+        "chargeName": "Email API (Premier) - PAYG Overage (Tiered credits)",
+        "productName": "SendGrid Email API (Premier)",
+        "ratePlanName": "Email API (Premier) - Committed + PAYG Overage",
+        "pob_identifier": "EVT-PIT-CONSUMP-PAYGO",
+        "pob_name": "EVT-PIT-CONSUMP-PAYGO | Consumption - Usage Event (Non-Committed)",
+        "ratable_method": "Immediate Using Open Period",
+        "release_event": "Upon Consumption",
+        "recognition_window": {
+          "start": "2026-01-01",
+          "end": "2026-12-31"
+        },
+        "rationale": "Non-committed email overage is consumption-based and should be recognized as used.",
+        "confidence": 0.88,
+        "alternatives": [
+          {
+            "pob_identifier": "BL-PIT-CONSUMP-PAYGO",
+            "pob_name": "Consumption PayGo Billing",
+            "why_not": "Billing-based recognition is a fallback if usage events are not provided to Revenue."
+          }
+        ]
+      },
+      {
+        "chargeName": "Commitment Shortfall True-Up / Breakage Settlement",
+        "productName": "Twilio Enterprise Commitment",
+        "ratePlanName": "End-of-Term True-Up / Breakage (If Applicable)",
+        "pob_identifier": "BL-PIT-CURRENT_PERIOD",
+        "pob_name": "BL-PIT-CURRENT_PERIOD | Immediate Using Open Period (Billed Release)",
+        "ratable_method": "Immediate Using Open Period",
+        "release_event": "Upon Billing (Billed Release)",
+        "recognition_window": {
+          "start": "2026-12-31",
+          "end": "2026-12-31"
+        },
+        "rationale": "If a true-up invoice is issued at term end, recognize the settlement when billed in the billing period.",
+        "confidence": 0.7,
+        "alternatives": [
+          {
+            "pob_identifier": "BK-PIT-CURRENT_PERIOD",
+            "pob_name": "BK-PIT-CURRENT_PERIOD | Immediate Using Open Period (Booking Release)",
+            "why_not": "Only appropriate if the shortfall/breakage is booked and released without an actual invoice at term end."
+          },
+          {
+            "pob_identifier": "EVT-PIT-AMOUNT",
+            "pob_name": "EVT-PIT-AMOUNT | Release by Amount Event",
+            "why_not": "Use if breakage is released via a managed event process rather than a billed true-up."
+          }
+        ]
+      }
+    ],
+    "mapping_notes": [
+      "Key PPDD constraint: because revenue must be recognized as credits are consumed (not ratably), the deposit is mapped to EVT-PIT-AMOUNT so releases can be driven by amount events rather than time-based ratable schedules.",
+      "To make EVT-PIT-AMOUNT work as a deferred pool with consumption-based releases, you need an event feed/process that posts BY_AMOUNT releases that correspond to committed drawdown consumption (often derived from rated usage).",
+      "Committed drawdown and PAYG overage usage charges are mapped to consumption templates (EVT-PIT-CONSUMP-USAGE / EVT-PIT-CONSUMP-PAYGO) so revenue is recognized when usage occurs, independent of monthly arrears billing.",
+      "If your Zuora Revenue implementation does not ingest usage events and instead recognizes from invoices only, switch PAYG overage mappings (and possibly committed usage) to BL-PIT-CONSUMP-PAYGO as a billing-driven fallback."
+    ]
+  },
+  "billings": {
+    "zb_billings": [
+      {
+        "Invoice Date": "2026-01-01",
+        "Billing Date": "2026-01-01",
+        "Charge Name": "Annual Committed-Use Deposit (USD Pool)",
+        "Rate Plan": "Committed Use - Prepaid Deposit (USD Pool)",
+        "Product": "Twilio Enterprise Commitment",
+        "Billing Period Start": "2026-01-01",
+        "Billing Period End": "2026-01-01",
+        "Quantity": 1,
+        "Unit Price": 0,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-01-31",
+        "Billing Date": "2026-01-31",
+        "Charge Name": "SMS (US) - Committed Drawdown @ $0.0069/segment",
+        "Rate Plan": "SMS (US) - Committed + PAYG Overage",
+        "Product": "Twilio SMS (US)",
+        "Billing Period Start": "2026-01-01",
+        "Billing Period End": "2026-01-31",
+        "Quantity": 0,
+        "Unit Price": 0.0069,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-01-31",
+        "Billing Date": "2026-01-31",
+        "Charge Name": "SMS (US) - PAYG Overage (Tiered per segment)",
+        "Rate Plan": "SMS (US) - Committed + PAYG Overage",
+        "Product": "Twilio SMS (US)",
+        "Billing Period Start": "2026-01-01",
+        "Billing Period End": "2026-01-31",
+        "Quantity": 0,
+        "Unit Price": 0,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-01-31",
+        "Billing Date": "2026-01-31",
+        "Charge Name": "Voice Outbound (US) - Committed Drawdown @ $0.0098/min",
+        "Rate Plan": "Voice (US) - Committed + PAYG Overage",
+        "Product": "Programmable Voice (US)",
+        "Billing Period Start": "2026-01-01",
+        "Billing Period End": "2026-01-31",
+        "Quantity": 0,
+        "Unit Price": 0.0098,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-01-31",
+        "Billing Date": "2026-01-31",
+        "Charge Name": "Voice Inbound Local (US) - Committed Drawdown @ $0.0028/min",
+        "Rate Plan": "Voice (US) - Committed + PAYG Overage",
+        "Product": "Programmable Voice (US)",
+        "Billing Period Start": "2026-01-01",
+        "Billing Period End": "2026-01-31",
+        "Quantity": 0,
+        "Unit Price": 0.0028,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-01-31",
+        "Billing Date": "2026-01-31",
+        "Charge Name": "Voice (US) - PAYG Overage (Tiered per minute)",
+        "Rate Plan": "Voice (US) - Committed + PAYG Overage",
+        "Product": "Programmable Voice (US)",
+        "Billing Period Start": "2026-01-01",
+        "Billing Period End": "2026-01-31",
+        "Quantity": 0,
+        "Unit Price": 0,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-01-31",
+        "Billing Date": "2026-01-31",
+        "Charge Name": "Email API (Premier) - Committed Drawdown @ $0.0006/email",
+        "Rate Plan": "Email API (Premier) - Committed + PAYG Overage",
+        "Product": "SendGrid Email API (Premier)",
+        "Billing Period Start": "2026-01-01",
+        "Billing Period End": "2026-01-31",
+        "Quantity": 0,
+        "Unit Price": 0.0006,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-01-31",
+        "Billing Date": "2026-01-31",
+        "Charge Name": "Email API (Premier) - PAYG Overage (Tiered credits)",
+        "Rate Plan": "Email API (Premier) - Committed + PAYG Overage",
+        "Product": "SendGrid Email API (Premier)",
+        "Billing Period Start": "2026-01-01",
+        "Billing Period End": "2026-01-31",
+        "Quantity": 0,
+        "Unit Price": 0,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-02-28",
+        "Billing Date": "2026-02-28",
+        "Charge Name": "SMS (US) - Committed Drawdown @ $0.0069/segment",
+        "Rate Plan": "SMS (US) - Committed + PAYG Overage",
+        "Product": "Twilio SMS (US)",
+        "Billing Period Start": "2026-02-01",
+        "Billing Period End": "2026-02-28",
+        "Quantity": 0,
+        "Unit Price": 0.0069,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-02-28",
+        "Billing Date": "2026-02-28",
+        "Charge Name": "SMS (US) - PAYG Overage (Tiered per segment)",
+        "Rate Plan": "SMS (US) - Committed + PAYG Overage",
+        "Product": "Twilio SMS (US)",
+        "Billing Period Start": "2026-02-01",
+        "Billing Period End": "2026-02-28",
+        "Quantity": 0,
+        "Unit Price": 0,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-02-28",
+        "Billing Date": "2026-02-28",
+        "Charge Name": "Voice Outbound (US) - Committed Drawdown @ $0.0098/min",
+        "Rate Plan": "Voice (US) - Committed + PAYG Overage",
+        "Product": "Programmable Voice (US)",
+        "Billing Period Start": "2026-02-01",
+        "Billing Period End": "2026-02-28",
+        "Quantity": 0,
+        "Unit Price": 0.0098,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-02-28",
+        "Billing Date": "2026-02-28",
+        "Charge Name": "Voice Inbound Local (US) - Committed Drawdown @ $0.0028/min",
+        "Rate Plan": "Voice (US) - Committed + PAYG Overage",
+        "Product": "Programmable Voice (US)",
+        "Billing Period Start": "2026-02-01",
+        "Billing Period End": "2026-02-28",
+        "Quantity": 0,
+        "Unit Price": 0.0028,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-02-28",
+        "Billing Date": "2026-02-28",
+        "Charge Name": "Voice (US) - PAYG Overage (Tiered per minute)",
+        "Rate Plan": "Voice (US) - Committed + PAYG Overage",
+        "Product": "Programmable Voice (US)",
+        "Billing Period Start": "2026-02-01",
+        "Billing Period End": "2026-02-28",
+        "Quantity": 0,
+        "Unit Price": 0,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-02-28",
+        "Billing Date": "2026-02-28",
+        "Charge Name": "Email API (Premier) - Committed Drawdown @ $0.0006/email",
+        "Rate Plan": "Email API (Premier) - Committed + PAYG Overage",
+        "Product": "SendGrid Email API (Premier)",
+        "Billing Period Start": "2026-02-01",
+        "Billing Period End": "2026-02-28",
+        "Quantity": 0,
+        "Unit Price": 0.0006,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-02-28",
+        "Billing Date": "2026-02-28",
+        "Charge Name": "Email API (Premier) - PAYG Overage (Tiered credits)",
+        "Rate Plan": "Email API (Premier) - Committed + PAYG Overage",
+        "Product": "SendGrid Email API (Premier)",
+        "Billing Period Start": "2026-02-01",
+        "Billing Period End": "2026-02-28",
+        "Quantity": 0,
+        "Unit Price": 0,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-03-31",
+        "Billing Date": "2026-03-31",
+        "Charge Name": "SMS (US) - Committed Drawdown @ $0.0069/segment",
+        "Rate Plan": "SMS (US) - Committed + PAYG Overage",
+        "Product": "Twilio SMS (US)",
+        "Billing Period Start": "2026-03-01",
+        "Billing Period End": "2026-03-31",
+        "Quantity": 0,
+        "Unit Price": 0.0069,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-03-31",
+        "Billing Date": "2026-03-31",
+        "Charge Name": "SMS (US) - PAYG Overage (Tiered per segment)",
+        "Rate Plan": "SMS (US) - Committed + PAYG Overage",
+        "Product": "Twilio SMS (US)",
+        "Billing Period Start": "2026-03-01",
+        "Billing Period End": "2026-03-31",
+        "Quantity": 0,
+        "Unit Price": 0,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-03-31",
+        "Billing Date": "2026-03-31",
+        "Charge Name": "Voice Outbound (US) - Committed Drawdown @ $0.0098/min",
+        "Rate Plan": "Voice (US) - Committed + PAYG Overage",
+        "Product": "Programmable Voice (US)",
+        "Billing Period Start": "2026-03-01",
+        "Billing Period End": "2026-03-31",
+        "Quantity": 0,
+        "Unit Price": 0.0098,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-03-31",
+        "Billing Date": "2026-03-31",
+        "Charge Name": "Voice Inbound Local (US) - Committed Drawdown @ $0.0028/min",
+        "Rate Plan": "Voice (US) - Committed + PAYG Overage",
+        "Product": "Programmable Voice (US)",
+        "Billing Period Start": "2026-03-01",
+        "Billing Period End": "2026-03-31",
+        "Quantity": 0,
+        "Unit Price": 0.0028,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-03-31",
+        "Billing Date": "2026-03-31",
+        "Charge Name": "Voice (US) - PAYG Overage (Tiered per minute)",
+        "Rate Plan": "Voice (US) - Committed + PAYG Overage",
+        "Product": "Programmable Voice (US)",
+        "Billing Period Start": "2026-03-01",
+        "Billing Period End": "2026-03-31",
+        "Quantity": 0,
+        "Unit Price": 0,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-03-31",
+        "Billing Date": "2026-03-31",
+        "Charge Name": "Email API (Premier) - Committed Drawdown @ $0.0006/email",
+        "Rate Plan": "Email API (Premier) - Committed + PAYG Overage",
+        "Product": "SendGrid Email API (Premier)",
+        "Billing Period Start": "2026-03-01",
+        "Billing Period End": "2026-03-31",
+        "Quantity": 0,
+        "Unit Price": 0.0006,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-03-31",
+        "Billing Date": "2026-03-31",
+        "Charge Name": "Email API (Premier) - PAYG Overage (Tiered credits)",
+        "Rate Plan": "Email API (Premier) - Committed + PAYG Overage",
+        "Product": "SendGrid Email API (Premier)",
+        "Billing Period Start": "2026-03-01",
+        "Billing Period End": "2026-03-31",
+        "Quantity": 0,
+        "Unit Price": 0,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-04-30",
+        "Billing Date": "2026-04-30",
+        "Charge Name": "SMS (US) - Committed Drawdown @ $0.0069/segment",
+        "Rate Plan": "SMS (US) - Committed + PAYG Overage",
+        "Product": "Twilio SMS (US)",
+        "Billing Period Start": "2026-04-01",
+        "Billing Period End": "2026-04-30",
+        "Quantity": 0,
+        "Unit Price": 0.0069,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-04-30",
+        "Billing Date": "2026-04-30",
+        "Charge Name": "SMS (US) - PAYG Overage (Tiered per segment)",
+        "Rate Plan": "SMS (US) - Committed + PAYG Overage",
+        "Product": "Twilio SMS (US)",
+        "Billing Period Start": "2026-04-01",
+        "Billing Period End": "2026-04-30",
+        "Quantity": 0,
+        "Unit Price": 0,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-04-30",
+        "Billing Date": "2026-04-30",
+        "Charge Name": "Voice Outbound (US) - Committed Drawdown @ $0.0098/min",
+        "Rate Plan": "Voice (US) - Committed + PAYG Overage",
+        "Product": "Programmable Voice (US)",
+        "Billing Period Start": "2026-04-01",
+        "Billing Period End": "2026-04-30",
+        "Quantity": 0,
+        "Unit Price": 0.0098,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-04-30",
+        "Billing Date": "2026-04-30",
+        "Charge Name": "Voice Inbound Local (US) - Committed Drawdown @ $0.0028/min",
+        "Rate Plan": "Voice (US) - Committed + PAYG Overage",
+        "Product": "Programmable Voice (US)",
+        "Billing Period Start": "2026-04-01",
+        "Billing Period End": "2026-04-30",
+        "Quantity": 0,
+        "Unit Price": 0.0028,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-04-30",
+        "Billing Date": "2026-04-30",
+        "Charge Name": "Voice (US) - PAYG Overage (Tiered per minute)",
+        "Rate Plan": "Voice (US) - Committed + PAYG Overage",
+        "Product": "Programmable Voice (US)",
+        "Billing Period Start": "2026-04-01",
+        "Billing Period End": "2026-04-30",
+        "Quantity": 0,
+        "Unit Price": 0,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-04-30",
+        "Billing Date": "2026-04-30",
+        "Charge Name": "Email API (Premier) - Committed Drawdown @ $0.0006/email",
+        "Rate Plan": "Email API (Premier) - Committed + PAYG Overage",
+        "Product": "SendGrid Email API (Premier)",
+        "Billing Period Start": "2026-04-01",
+        "Billing Period End": "2026-04-30",
+        "Quantity": 0,
+        "Unit Price": 0.0006,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-04-30",
+        "Billing Date": "2026-04-30",
+        "Charge Name": "Email API (Premier) - PAYG Overage (Tiered credits)",
+        "Rate Plan": "Email API (Premier) - Committed + PAYG Overage",
+        "Product": "SendGrid Email API (Premier)",
+        "Billing Period Start": "2026-04-01",
+        "Billing Period End": "2026-04-30",
+        "Quantity": 0,
+        "Unit Price": 0,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-05-31",
+        "Billing Date": "2026-05-31",
+        "Charge Name": "SMS (US) - Committed Drawdown @ $0.0069/segment",
+        "Rate Plan": "SMS (US) - Committed + PAYG Overage",
+        "Product": "Twilio SMS (US)",
+        "Billing Period Start": "2026-05-01",
+        "Billing Period End": "2026-05-31",
+        "Quantity": 0,
+        "Unit Price": 0.0069,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-05-31",
+        "Billing Date": "2026-05-31",
+        "Charge Name": "SMS (US) - PAYG Overage (Tiered per segment)",
+        "Rate Plan": "SMS (US) - Committed + PAYG Overage",
+        "Product": "Twilio SMS (US)",
+        "Billing Period Start": "2026-05-01",
+        "Billing Period End": "2026-05-31",
+        "Quantity": 0,
+        "Unit Price": 0,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-05-31",
+        "Billing Date": "2026-05-31",
+        "Charge Name": "Voice Outbound (US) - Committed Drawdown @ $0.0098/min",
+        "Rate Plan": "Voice (US) - Committed + PAYG Overage",
+        "Product": "Programmable Voice (US)",
+        "Billing Period Start": "2026-05-01",
+        "Billing Period End": "2026-05-31",
+        "Quantity": 0,
+        "Unit Price": 0.0098,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-05-31",
+        "Billing Date": "2026-05-31",
+        "Charge Name": "Voice Inbound Local (US) - Committed Drawdown @ $0.0028/min",
+        "Rate Plan": "Voice (US) - Committed + PAYG Overage",
+        "Product": "Programmable Voice (US)",
+        "Billing Period Start": "2026-05-01",
+        "Billing Period End": "2026-05-31",
+        "Quantity": 0,
+        "Unit Price": 0.0028,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-05-31",
+        "Billing Date": "2026-05-31",
+        "Charge Name": "Voice (US) - PAYG Overage (Tiered per minute)",
+        "Rate Plan": "Voice (US) - Committed + PAYG Overage",
+        "Product": "Programmable Voice (US)",
+        "Billing Period Start": "2026-05-01",
+        "Billing Period End": "2026-05-31",
+        "Quantity": 0,
+        "Unit Price": 0,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-05-31",
+        "Billing Date": "2026-05-31",
+        "Charge Name": "Email API (Premier) - Committed Drawdown @ $0.0006/email",
+        "Rate Plan": "Email API (Premier) - Committed + PAYG Overage",
+        "Product": "SendGrid Email API (Premier)",
+        "Billing Period Start": "2026-05-01",
+        "Billing Period End": "2026-05-31",
+        "Quantity": 0,
+        "Unit Price": 0.0006,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-05-31",
+        "Billing Date": "2026-05-31",
+        "Charge Name": "Email API (Premier) - PAYG Overage (Tiered credits)",
+        "Rate Plan": "Email API (Premier) - Committed + PAYG Overage",
+        "Product": "SendGrid Email API (Premier)",
+        "Billing Period Start": "2026-05-01",
+        "Billing Period End": "2026-05-31",
+        "Quantity": 0,
+        "Unit Price": 0,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-06-30",
+        "Billing Date": "2026-06-30",
+        "Charge Name": "SMS (US) - Committed Drawdown @ $0.0069/segment",
+        "Rate Plan": "SMS (US) - Committed + PAYG Overage",
+        "Product": "Twilio SMS (US)",
+        "Billing Period Start": "2026-06-01",
+        "Billing Period End": "2026-06-30",
+        "Quantity": 0,
+        "Unit Price": 0.0069,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-06-30",
+        "Billing Date": "2026-06-30",
+        "Charge Name": "SMS (US) - PAYG Overage (Tiered per segment)",
+        "Rate Plan": "SMS (US) - Committed + PAYG Overage",
+        "Product": "Twilio SMS (US)",
+        "Billing Period Start": "2026-06-01",
+        "Billing Period End": "2026-06-30",
+        "Quantity": 0,
+        "Unit Price": 0,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-06-30",
+        "Billing Date": "2026-06-30",
+        "Charge Name": "Voice Outbound (US) - Committed Drawdown @ $0.0098/min",
+        "Rate Plan": "Voice (US) - Committed + PAYG Overage",
+        "Product": "Programmable Voice (US)",
+        "Billing Period Start": "2026-06-01",
+        "Billing Period End": "2026-06-30",
+        "Quantity": 0,
+        "Unit Price": 0.0098,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-06-30",
+        "Billing Date": "2026-06-30",
+        "Charge Name": "Voice Inbound Local (US) - Committed Drawdown @ $0.0028/min",
+        "Rate Plan": "Voice (US) - Committed + PAYG Overage",
+        "Product": "Programmable Voice (US)",
+        "Billing Period Start": "2026-06-01",
+        "Billing Period End": "2026-06-30",
+        "Quantity": 0,
+        "Unit Price": 0.0028,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-06-30",
+        "Billing Date": "2026-06-30",
+        "Charge Name": "Voice (US) - PAYG Overage (Tiered per minute)",
+        "Rate Plan": "Voice (US) - Committed + PAYG Overage",
+        "Product": "Programmable Voice (US)",
+        "Billing Period Start": "2026-06-01",
+        "Billing Period End": "2026-06-30",
+        "Quantity": 0,
+        "Unit Price": 0,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-06-30",
+        "Billing Date": "2026-06-30",
+        "Charge Name": "Email API (Premier) - Committed Drawdown @ $0.0006/email",
+        "Rate Plan": "Email API (Premier) - Committed + PAYG Overage",
+        "Product": "SendGrid Email API (Premier)",
+        "Billing Period Start": "2026-06-01",
+        "Billing Period End": "2026-06-30",
+        "Quantity": 0,
+        "Unit Price": 0.0006,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-06-30",
+        "Billing Date": "2026-06-30",
+        "Charge Name": "Email API (Premier) - PAYG Overage (Tiered credits)",
+        "Rate Plan": "Email API (Premier) - Committed + PAYG Overage",
+        "Product": "SendGrid Email API (Premier)",
+        "Billing Period Start": "2026-06-01",
+        "Billing Period End": "2026-06-30",
+        "Quantity": 0,
+        "Unit Price": 0,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-07-31",
+        "Billing Date": "2026-07-31",
+        "Charge Name": "SMS (US) - Committed Drawdown @ $0.0069/segment",
+        "Rate Plan": "SMS (US) - Committed + PAYG Overage",
+        "Product": "Twilio SMS (US)",
+        "Billing Period Start": "2026-07-01",
+        "Billing Period End": "2026-07-31",
+        "Quantity": 0,
+        "Unit Price": 0.0069,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-07-31",
+        "Billing Date": "2026-07-31",
+        "Charge Name": "SMS (US) - PAYG Overage (Tiered per segment)",
+        "Rate Plan": "SMS (US) - Committed + PAYG Overage",
+        "Product": "Twilio SMS (US)",
+        "Billing Period Start": "2026-07-01",
+        "Billing Period End": "2026-07-31",
+        "Quantity": 0,
+        "Unit Price": 0,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-07-31",
+        "Billing Date": "2026-07-31",
+        "Charge Name": "Voice Outbound (US) - Committed Drawdown @ $0.0098/min",
+        "Rate Plan": "Voice (US) - Committed + PAYG Overage",
+        "Product": "Programmable Voice (US)",
+        "Billing Period Start": "2026-07-01",
+        "Billing Period End": "2026-07-31",
+        "Quantity": 0,
+        "Unit Price": 0.0098,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-07-31",
+        "Billing Date": "2026-07-31",
+        "Charge Name": "Voice Inbound Local (US) - Committed Drawdown @ $0.0028/min",
+        "Rate Plan": "Voice (US) - Committed + PAYG Overage",
+        "Product": "Programmable Voice (US)",
+        "Billing Period Start": "2026-07-01",
+        "Billing Period End": "2026-07-31",
+        "Quantity": 0,
+        "Unit Price": 0.0028,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-07-31",
+        "Billing Date": "2026-07-31",
+        "Charge Name": "Voice (US) - PAYG Overage (Tiered per minute)",
+        "Rate Plan": "Voice (US) - Committed + PAYG Overage",
+        "Product": "Programmable Voice (US)",
+        "Billing Period Start": "2026-07-01",
+        "Billing Period End": "2026-07-31",
+        "Quantity": 0,
+        "Unit Price": 0,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-07-31",
+        "Billing Date": "2026-07-31",
+        "Charge Name": "Email API (Premier) - Committed Drawdown @ $0.0006/email",
+        "Rate Plan": "Email API (Premier) - Committed + PAYG Overage",
+        "Product": "SendGrid Email API (Premier)",
+        "Billing Period Start": "2026-07-01",
+        "Billing Period End": "2026-07-31",
+        "Quantity": 0,
+        "Unit Price": 0.0006,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-07-31",
+        "Billing Date": "2026-07-31",
+        "Charge Name": "Email API (Premier) - PAYG Overage (Tiered credits)",
+        "Rate Plan": "Email API (Premier) - Committed + PAYG Overage",
+        "Product": "SendGrid Email API (Premier)",
+        "Billing Period Start": "2026-07-01",
+        "Billing Period End": "2026-07-31",
+        "Quantity": 0,
+        "Unit Price": 0,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-08-31",
+        "Billing Date": "2026-08-31",
+        "Charge Name": "SMS (US) - Committed Drawdown @ $0.0069/segment",
+        "Rate Plan": "SMS (US) - Committed + PAYG Overage",
+        "Product": "Twilio SMS (US)",
+        "Billing Period Start": "2026-08-01",
+        "Billing Period End": "2026-08-31",
+        "Quantity": 0,
+        "Unit Price": 0.0069,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-08-31",
+        "Billing Date": "2026-08-31",
+        "Charge Name": "SMS (US) - PAYG Overage (Tiered per segment)",
+        "Rate Plan": "SMS (US) - Committed + PAYG Overage",
+        "Product": "Twilio SMS (US)",
+        "Billing Period Start": "2026-08-01",
+        "Billing Period End": "2026-08-31",
+        "Quantity": 0,
+        "Unit Price": 0,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-08-31",
+        "Billing Date": "2026-08-31",
+        "Charge Name": "Voice Outbound (US) - Committed Drawdown @ $0.0098/min",
+        "Rate Plan": "Voice (US) - Committed + PAYG Overage",
+        "Product": "Programmable Voice (US)",
+        "Billing Period Start": "2026-08-01",
+        "Billing Period End": "2026-08-31",
+        "Quantity": 0,
+        "Unit Price": 0.0098,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-08-31",
+        "Billing Date": "2026-08-31",
+        "Charge Name": "Voice Inbound Local (US) - Committed Drawdown @ $0.0028/min",
+        "Rate Plan": "Voice (US) - Committed + PAYG Overage",
+        "Product": "Programmable Voice (US)",
+        "Billing Period Start": "2026-08-01",
+        "Billing Period End": "2026-08-31",
+        "Quantity": 0,
+        "Unit Price": 0.0028,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-08-31",
+        "Billing Date": "2026-08-31",
+        "Charge Name": "Voice (US) - PAYG Overage (Tiered per minute)",
+        "Rate Plan": "Voice (US) - Committed + PAYG Overage",
+        "Product": "Programmable Voice (US)",
+        "Billing Period Start": "2026-08-01",
+        "Billing Period End": "2026-08-31",
+        "Quantity": 0,
+        "Unit Price": 0,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-08-31",
+        "Billing Date": "2026-08-31",
+        "Charge Name": "Email API (Premier) - Committed Drawdown @ $0.0006/email",
+        "Rate Plan": "Email API (Premier) - Committed + PAYG Overage",
+        "Product": "SendGrid Email API (Premier)",
+        "Billing Period Start": "2026-08-01",
+        "Billing Period End": "2026-08-31",
+        "Quantity": 0,
+        "Unit Price": 0.0006,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-08-31",
+        "Billing Date": "2026-08-31",
+        "Charge Name": "Email API (Premier) - PAYG Overage (Tiered credits)",
+        "Rate Plan": "Email API (Premier) - Committed + PAYG Overage",
+        "Product": "SendGrid Email API (Premier)",
+        "Billing Period Start": "2026-08-01",
+        "Billing Period End": "2026-08-31",
+        "Quantity": 0,
+        "Unit Price": 0,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-09-30",
+        "Billing Date": "2026-09-30",
+        "Charge Name": "SMS (US) - Committed Drawdown @ $0.0069/segment",
+        "Rate Plan": "SMS (US) - Committed + PAYG Overage",
+        "Product": "Twilio SMS (US)",
+        "Billing Period Start": "2026-09-01",
+        "Billing Period End": "2026-09-30",
+        "Quantity": 0,
+        "Unit Price": 0.0069,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-09-30",
+        "Billing Date": "2026-09-30",
+        "Charge Name": "SMS (US) - PAYG Overage (Tiered per segment)",
+        "Rate Plan": "SMS (US) - Committed + PAYG Overage",
+        "Product": "Twilio SMS (US)",
+        "Billing Period Start": "2026-09-01",
+        "Billing Period End": "2026-09-30",
+        "Quantity": 0,
+        "Unit Price": 0,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-09-30",
+        "Billing Date": "2026-09-30",
+        "Charge Name": "Voice Outbound (US) - Committed Drawdown @ $0.0098/min",
+        "Rate Plan": "Voice (US) - Committed + PAYG Overage",
+        "Product": "Programmable Voice (US)",
+        "Billing Period Start": "2026-09-01",
+        "Billing Period End": "2026-09-30",
+        "Quantity": 0,
+        "Unit Price": 0.0098,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-09-30",
+        "Billing Date": "2026-09-30",
+        "Charge Name": "Voice Inbound Local (US) - Committed Drawdown @ $0.0028/min",
+        "Rate Plan": "Voice (US) - Committed + PAYG Overage",
+        "Product": "Programmable Voice (US)",
+        "Billing Period Start": "2026-09-01",
+        "Billing Period End": "2026-09-30",
+        "Quantity": 0,
+        "Unit Price": 0.0028,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-09-30",
+        "Billing Date": "2026-09-30",
+        "Charge Name": "Voice (US) - PAYG Overage (Tiered per minute)",
+        "Rate Plan": "Voice (US) - Committed + PAYG Overage",
+        "Product": "Programmable Voice (US)",
+        "Billing Period Start": "2026-09-01",
+        "Billing Period End": "2026-09-30",
+        "Quantity": 0,
+        "Unit Price": 0,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-09-30",
+        "Billing Date": "2026-09-30",
+        "Charge Name": "Email API (Premier) - Committed Drawdown @ $0.0006/email",
+        "Rate Plan": "Email API (Premier) - Committed + PAYG Overage",
+        "Product": "SendGrid Email API (Premier)",
+        "Billing Period Start": "2026-09-01",
+        "Billing Period End": "2026-09-30",
+        "Quantity": 0,
+        "Unit Price": 0.0006,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-09-30",
+        "Billing Date": "2026-09-30",
+        "Charge Name": "Email API (Premier) - PAYG Overage (Tiered credits)",
+        "Rate Plan": "Email API (Premier) - Committed + PAYG Overage",
+        "Product": "SendGrid Email API (Premier)",
+        "Billing Period Start": "2026-09-01",
+        "Billing Period End": "2026-09-30",
+        "Quantity": 0,
+        "Unit Price": 0,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-10-31",
+        "Billing Date": "2026-10-31",
+        "Charge Name": "SMS (US) - Committed Drawdown @ $0.0069/segment",
+        "Rate Plan": "SMS (US) - Committed + PAYG Overage",
+        "Product": "Twilio SMS (US)",
+        "Billing Period Start": "2026-10-01",
+        "Billing Period End": "2026-10-31",
+        "Quantity": 0,
+        "Unit Price": 0.0069,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-10-31",
+        "Billing Date": "2026-10-31",
+        "Charge Name": "SMS (US) - PAYG Overage (Tiered per segment)",
+        "Rate Plan": "SMS (US) - Committed + PAYG Overage",
+        "Product": "Twilio SMS (US)",
+        "Billing Period Start": "2026-10-01",
+        "Billing Period End": "2026-10-31",
+        "Quantity": 0,
+        "Unit Price": 0,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-10-31",
+        "Billing Date": "2026-10-31",
+        "Charge Name": "Voice Outbound (US) - Committed Drawdown @ $0.0098/min",
+        "Rate Plan": "Voice (US) - Committed + PAYG Overage",
+        "Product": "Programmable Voice (US)",
+        "Billing Period Start": "2026-10-01",
+        "Billing Period End": "2026-10-31",
+        "Quantity": 0,
+        "Unit Price": 0.0098,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-10-31",
+        "Billing Date": "2026-10-31",
+        "Charge Name": "Voice Inbound Local (US) - Committed Drawdown @ $0.0028/min",
+        "Rate Plan": "Voice (US) - Committed + PAYG Overage",
+        "Product": "Programmable Voice (US)",
+        "Billing Period Start": "2026-10-01",
+        "Billing Period End": "2026-10-31",
+        "Quantity": 0,
+        "Unit Price": 0.0028,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-10-31",
+        "Billing Date": "2026-10-31",
+        "Charge Name": "Voice (US) - PAYG Overage (Tiered per minute)",
+        "Rate Plan": "Voice (US) - Committed + PAYG Overage",
+        "Product": "Programmable Voice (US)",
+        "Billing Period Start": "2026-10-01",
+        "Billing Period End": "2026-10-31",
+        "Quantity": 0,
+        "Unit Price": 0,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-10-31",
+        "Billing Date": "2026-10-31",
+        "Charge Name": "Email API (Premier) - Committed Drawdown @ $0.0006/email",
+        "Rate Plan": "Email API (Premier) - Committed + PAYG Overage",
+        "Product": "SendGrid Email API (Premier)",
+        "Billing Period Start": "2026-10-01",
+        "Billing Period End": "2026-10-31",
+        "Quantity": 0,
+        "Unit Price": 0.0006,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-10-31",
+        "Billing Date": "2026-10-31",
+        "Charge Name": "Email API (Premier) - PAYG Overage (Tiered credits)",
+        "Rate Plan": "Email API (Premier) - Committed + PAYG Overage",
+        "Product": "SendGrid Email API (Premier)",
+        "Billing Period Start": "2026-10-01",
+        "Billing Period End": "2026-10-31",
+        "Quantity": 0,
+        "Unit Price": 0,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-11-30",
+        "Billing Date": "2026-11-30",
+        "Charge Name": "SMS (US) - Committed Drawdown @ $0.0069/segment",
+        "Rate Plan": "SMS (US) - Committed + PAYG Overage",
+        "Product": "Twilio SMS (US)",
+        "Billing Period Start": "2026-11-01",
+        "Billing Period End": "2026-11-30",
+        "Quantity": 0,
+        "Unit Price": 0.0069,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-11-30",
+        "Billing Date": "2026-11-30",
+        "Charge Name": "SMS (US) - PAYG Overage (Tiered per segment)",
+        "Rate Plan": "SMS (US) - Committed + PAYG Overage",
+        "Product": "Twilio SMS (US)",
+        "Billing Period Start": "2026-11-01",
+        "Billing Period End": "2026-11-30",
+        "Quantity": 0,
+        "Unit Price": 0,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-11-30",
+        "Billing Date": "2026-11-30",
+        "Charge Name": "Voice Outbound (US) - Committed Drawdown @ $0.0098/min",
+        "Rate Plan": "Voice (US) - Committed + PAYG Overage",
+        "Product": "Programmable Voice (US)",
+        "Billing Period Start": "2026-11-01",
+        "Billing Period End": "2026-11-30",
+        "Quantity": 0,
+        "Unit Price": 0.0098,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-11-30",
+        "Billing Date": "2026-11-30",
+        "Charge Name": "Voice Inbound Local (US) - Committed Drawdown @ $0.0028/min",
+        "Rate Plan": "Voice (US) - Committed + PAYG Overage",
+        "Product": "Programmable Voice (US)",
+        "Billing Period Start": "2026-11-01",
+        "Billing Period End": "2026-11-30",
+        "Quantity": 0,
+        "Unit Price": 0.0028,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-11-30",
+        "Billing Date": "2026-11-30",
+        "Charge Name": "Voice (US) - PAYG Overage (Tiered per minute)",
+        "Rate Plan": "Voice (US) - Committed + PAYG Overage",
+        "Product": "Programmable Voice (US)",
+        "Billing Period Start": "2026-11-01",
+        "Billing Period End": "2026-11-30",
+        "Quantity": 0,
+        "Unit Price": 0,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-11-30",
+        "Billing Date": "2026-11-30",
+        "Charge Name": "Email API (Premier) - Committed Drawdown @ $0.0006/email",
+        "Rate Plan": "Email API (Premier) - Committed + PAYG Overage",
+        "Product": "SendGrid Email API (Premier)",
+        "Billing Period Start": "2026-11-01",
+        "Billing Period End": "2026-11-30",
+        "Quantity": 0,
+        "Unit Price": 0.0006,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-11-30",
+        "Billing Date": "2026-11-30",
+        "Charge Name": "Email API (Premier) - PAYG Overage (Tiered credits)",
+        "Rate Plan": "Email API (Premier) - Committed + PAYG Overage",
+        "Product": "SendGrid Email API (Premier)",
+        "Billing Period Start": "2026-11-01",
+        "Billing Period End": "2026-11-30",
+        "Quantity": 0,
+        "Unit Price": 0,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-12-31",
+        "Billing Date": "2026-12-31",
+        "Charge Name": "SMS (US) - Committed Drawdown @ $0.0069/segment",
+        "Rate Plan": "SMS (US) - Committed + PAYG Overage",
+        "Product": "Twilio SMS (US)",
+        "Billing Period Start": "2026-12-01",
+        "Billing Period End": "2026-12-31",
+        "Quantity": 0,
+        "Unit Price": 0.0069,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-12-31",
+        "Billing Date": "2026-12-31",
+        "Charge Name": "SMS (US) - PAYG Overage (Tiered per segment)",
+        "Rate Plan": "SMS (US) - Committed + PAYG Overage",
+        "Product": "Twilio SMS (US)",
+        "Billing Period Start": "2026-12-01",
+        "Billing Period End": "2026-12-31",
+        "Quantity": 0,
+        "Unit Price": 0,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-12-31",
+        "Billing Date": "2026-12-31",
+        "Charge Name": "Voice Outbound (US) - Committed Drawdown @ $0.0098/min",
+        "Rate Plan": "Voice (US) - Committed + PAYG Overage",
+        "Product": "Programmable Voice (US)",
+        "Billing Period Start": "2026-12-01",
+        "Billing Period End": "2026-12-31",
+        "Quantity": 0,
+        "Unit Price": 0.0098,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-12-31",
+        "Billing Date": "2026-12-31",
+        "Charge Name": "Voice Inbound Local (US) - Committed Drawdown @ $0.0028/min",
+        "Rate Plan": "Voice (US) - Committed + PAYG Overage",
+        "Product": "Programmable Voice (US)",
+        "Billing Period Start": "2026-12-01",
+        "Billing Period End": "2026-12-31",
+        "Quantity": 0,
+        "Unit Price": 0.0028,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-12-31",
+        "Billing Date": "2026-12-31",
+        "Charge Name": "Voice (US) - PAYG Overage (Tiered per minute)",
+        "Rate Plan": "Voice (US) - Committed + PAYG Overage",
+        "Product": "Programmable Voice (US)",
+        "Billing Period Start": "2026-12-01",
+        "Billing Period End": "2026-12-31",
+        "Quantity": 0,
+        "Unit Price": 0,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-12-31",
+        "Billing Date": "2026-12-31",
+        "Charge Name": "Email API (Premier) - Committed Drawdown @ $0.0006/email",
+        "Rate Plan": "Email API (Premier) - Committed + PAYG Overage",
+        "Product": "SendGrid Email API (Premier)",
+        "Billing Period Start": "2026-12-01",
+        "Billing Period End": "2026-12-31",
+        "Quantity": 0,
+        "Unit Price": 0.0006,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2026-12-31",
+        "Billing Date": "2026-12-31",
+        "Charge Name": "Email API (Premier) - PAYG Overage (Tiered credits)",
+        "Rate Plan": "Email API (Premier) - Committed + PAYG Overage",
+        "Product": "SendGrid Email API (Premier)",
+        "Billing Period Start": "2026-12-01",
+        "Billing Period End": "2026-12-31",
+        "Quantity": 0,
+        "Unit Price": 0,
+        "Amount": 0,
+        "Currency": "USD"
+      },
+      {
+        "Invoice Date": "2027-01-01",
+        "Billing Date": "2027-01-01",
+        "Charge Name": "Commitment Shortfall True-Up / Breakage Settlement",
+        "Rate Plan": "End-of-Term True-Up / Breakage (If Applicable)",
+        "Product": "Twilio Enterprise Commitment",
+        "Billing Period Start": "2026-01-01",
+        "Billing Period End": "2026-12-31",
+        "Quantity": 1,
+        "Unit Price": 0,
+        "Amount": 0,
+        "Currency": "USD"
+      }
+    ],
+    "assumptions": [
+      "ContractEffective is 2026-01-01 (same as Subscription Start / Go-Live), so the prepaid deposit bills on 2026-01-01 and usage rating starts 2026-01-01.",
+      "Monthly usage service periods are aligned to calendar months (e.g., 2026-01-01 to 2026-01-31) and, with Billing Timing = InArrears, the billing date/invoice date is the last day of each month.",
+      "No usage quantities were provided; therefore all Usage charge rows are included as billing events with Quantity=0 and Amount=0 as placeholders. Actual invoiced quantities/amounts depend on metered usage records and rating.",
+      "Committed drawdown unit prices are modeled as the contracted discounted rates provided: SMS $0.0069/segment, Voice outbound $0.0098/min, Voice inbound local $0.0028/min, Email $0.0006/email.",
+      "PAYG Overage tiered charges are included as monthly billing events, but Unit Price is set to 0 because the detailed tier tables (and the effective tier reached each month) were not provided. In production, the effective price is determined by the tier schedule and the monthly rated usage after commitment exhaustion (if any).",
+      "The annual committed-use deposit amount (USD pool) is not specified; the deposit row is included with Amount=0 placeholder. In Zuora, this would typically fund a prepaid balance that is drawn down by committed-usage charges.",
+      "End-of-term true-up/breakage settlement is shown as a single billing event dated 2027-01-01 (the Subscription End date). Amount is 0 placeholder because it depends on the remaining commitment shortfall (if any) and the agreed breakage/true-up rules."
+    ],
+    "open_questions": [
+      "What is the annual commitment amount (the prepaid deposit / USD pool value) that should be billed on 2026-01-01?",
+      "Confirm the exact billing run/invoice date convention for monthly arrears: invoice dated on the month end (e.g., 2026-01-31) vs generated on the next day/month (e.g., 2026-02-01) while still covering the prior month’s usage.",
+      "Provide the full PAYG tier schedules for: (a) SMS per segment, (b) Voice per minute, (c) Email tiered credits (including tier boundaries, prices, and whether tiers are per-month and per-charge).",
+      "Is the commitment a single shared USD pool across SMS/Voice/Email, or separate commitments/pools per product? (This affects how drawdowns are prioritized and when overage starts.)",
+      "What is the exact ‘SpecificDate’ for the end-of-term true-up/breakage charge: 2026-12-31 (last service day) vs 2027-01-01 (contract end date) vs a later invoicing date?",
+      "For the end-of-term settlement: is shortfall always invoiced as a true-up, or can it be recognized as breakage (no invoice) under certain conditions? If invoiced, is it taxable and does it require allocation by product?"
+    ]
+  },
+  "contracts_orders": {
+    "zr_contracts_orders": [
+      {
+        "POB Name": "Annual Committed-Use Deposit (USD Pool)",
+        "POB Template": "Release by Amount Event (Commitment Pool) (EVT-PIT-AMOUNT)",
+        "POB Satisfied": false,
+        "Release Event": "Immediate Using Open Period",
+        "Billing Period": "N/A",
+        "Billing Timing": "InAdvance",
+        "Terms Months": 12,
+        "Trigger Event": "BY_AMOUNT",
+        "Lead Line": true,
+        "Ordered Qty": 1,
+        "Line Item Num": 1,
+        "Subscription Name": "Twilio - Enterprise Consumption + Committed Use (US) - 2026",
+        "Subscription Version": 1,
+        "Sales Order Date": "2026-01-01",
+        "RPC Segment": "Twilio Enterprise Commitment|Annual Committed-Use Deposit (USD Pool)",
+        "RPC Type": "OneTime",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Unit List Price": 0,
+        "Unit Sell Price": 0,
+        "Ext List Price": 0,
+        "Ext Sell Price": 0,
+        "SSP Price": 0,
+        "Ext SSP Price": 0,
+        "SSP Percent": 0,
+        "Ext Allocated Price": 0,
+        "Carves Adjustment": 0,
+        "Allocation Eligible Flag": false,
+        "Unreleased Revenue": 0,
+        "Released Revenue": 0,
+        "Customer Name": "Twilio",
+        "POB IDENTIFIER": "EVT-PIT-AMOUNT",
+        "Product Category": "Commitment",
+        "Product Family": "Committed-Use Deposit Pool"
+      },
+      {
+        "POB Name": "SMS (US) - Committed Drawdown @ $0.0069/segment",
+        "POB Template": "Consumption By Usage Event (EVT-PIT-CONSUMP-USAGE)",
+        "POB Satisfied": false,
+        "Release Event": "Immediate Using Open Period",
+        "Billing Period": "Month",
+        "Billing Timing": "InArrears",
+        "Terms Months": 12,
+        "Trigger Event": "Upon Consumption",
+        "Lead Line": false,
+        "Ordered Qty": 0,
+        "Line Item Num": 2,
+        "Subscription Name": "Twilio - Enterprise Consumption + Committed Use (US) - 2026",
+        "Subscription Version": 1,
+        "Sales Order Date": "2026-01-01",
+        "RPC Segment": "Twilio SMS (US)|Committed Drawdown",
+        "RPC Type": "Usage",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Unit List Price": 0.0069,
+        "Unit Sell Price": 0.0069,
+        "Ext List Price": 0,
+        "Ext Sell Price": 0,
+        "SSP Price": 0.0069,
+        "Ext SSP Price": 0,
+        "SSP Percent": 0,
+        "Ext Allocated Price": 0,
+        "Carves Adjustment": 0,
+        "Allocation Eligible Flag": false,
+        "Unreleased Revenue": 0,
+        "Released Revenue": 0,
+        "Customer Name": "Twilio",
+        "POB IDENTIFIER": "EVT-PIT-CONSUMP-USAGE",
+        "Product Category": "Usage",
+        "Product Family": "SMS (US)"
+      },
+      {
+        "POB Name": "SMS (US) - PAYG Overage (Tiered per segment)",
+        "POB Template": "Consumption - Usage Event (Non-Committed) (EVT-PIT-CONSUMP-PAYGO)",
+        "POB Satisfied": false,
+        "Release Event": "Immediate Using Open Period",
+        "Billing Period": "Month",
+        "Billing Timing": "InArrears",
+        "Terms Months": 12,
+        "Trigger Event": "Upon Consumption",
+        "Lead Line": false,
+        "Ordered Qty": 0,
+        "Line Item Num": 3,
+        "Subscription Name": "Twilio - Enterprise Consumption + Committed Use (US) - 2026",
+        "Subscription Version": 1,
+        "Sales Order Date": "2026-01-01",
+        "RPC Segment": "Twilio SMS (US)|PAYG Overage Tiered",
+        "RPC Type": "Usage",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Unit List Price": 0.0083,
+        "Unit Sell Price": 0.0083,
+        "Ext List Price": 0,
+        "Ext Sell Price": 0,
+        "SSP Price": 0.0083,
+        "Ext SSP Price": 0,
+        "SSP Percent": 0,
+        "Ext Allocated Price": 0,
+        "Carves Adjustment": 0,
+        "Allocation Eligible Flag": false,
+        "Unreleased Revenue": 0,
+        "Released Revenue": 0,
+        "Customer Name": "Twilio",
+        "POB IDENTIFIER": "EVT-PIT-CONSUMP-PAYGO",
+        "Product Category": "Usage",
+        "Product Family": "SMS (US)"
+      },
+      {
+        "POB Name": "Voice Outbound (US) - Committed Drawdown @ $0.0098/min",
+        "POB Template": "Consumption By Usage Event (EVT-PIT-CONSUMP-USAGE)",
+        "POB Satisfied": false,
+        "Release Event": "Immediate Using Open Period",
+        "Billing Period": "Month",
+        "Billing Timing": "InArrears",
+        "Terms Months": 12,
+        "Trigger Event": "Upon Consumption",
+        "Lead Line": false,
+        "Ordered Qty": 0,
+        "Line Item Num": 4,
+        "Subscription Name": "Twilio - Enterprise Consumption + Committed Use (US) - 2026",
+        "Subscription Version": 1,
+        "Sales Order Date": "2026-01-01",
+        "RPC Segment": "Programmable Voice (US)|Committed Drawdown|Outbound",
+        "RPC Type": "Usage",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Unit List Price": 0.0098,
+        "Unit Sell Price": 0.0098,
+        "Ext List Price": 0,
+        "Ext Sell Price": 0,
+        "SSP Price": 0.0098,
+        "Ext SSP Price": 0,
+        "SSP Percent": 0,
+        "Ext Allocated Price": 0,
+        "Carves Adjustment": 0,
+        "Allocation Eligible Flag": false,
+        "Unreleased Revenue": 0,
+        "Released Revenue": 0,
+        "Customer Name": "Twilio",
+        "POB IDENTIFIER": "EVT-PIT-CONSUMP-USAGE",
+        "Product Category": "Usage",
+        "Product Family": "Voice (US)"
+      },
+      {
+        "POB Name": "Voice Inbound Local (US) - Committed Drawdown @ $0.0028/min",
+        "POB Template": "Consumption By Usage Event (EVT-PIT-CONSUMP-USAGE)",
+        "POB Satisfied": false,
+        "Release Event": "Immediate Using Open Period",
+        "Billing Period": "Month",
+        "Billing Timing": "InArrears",
+        "Terms Months": 12,
+        "Trigger Event": "Upon Consumption",
+        "Lead Line": false,
+        "Ordered Qty": 0,
+        "Line Item Num": 5,
+        "Subscription Name": "Twilio - Enterprise Consumption + Committed Use (US) - 2026",
+        "Subscription Version": 1,
+        "Sales Order Date": "2026-01-01",
+        "RPC Segment": "Programmable Voice (US)|Committed Drawdown|Inbound Local",
+        "RPC Type": "Usage",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Unit List Price": 0.0028,
+        "Unit Sell Price": 0.0028,
+        "Ext List Price": 0,
+        "Ext Sell Price": 0,
+        "SSP Price": 0.0028,
+        "Ext SSP Price": 0,
+        "SSP Percent": 0,
+        "Ext Allocated Price": 0,
+        "Carves Adjustment": 0,
+        "Allocation Eligible Flag": false,
+        "Unreleased Revenue": 0,
+        "Released Revenue": 0,
+        "Customer Name": "Twilio",
+        "POB IDENTIFIER": "EVT-PIT-CONSUMP-USAGE",
+        "Product Category": "Usage",
+        "Product Family": "Voice (US)"
+      },
+      {
+        "POB Name": "Voice (US) - PAYG Overage (Tiered per minute)",
+        "POB Template": "Consumption - Usage Event (Non-Committed) (EVT-PIT-CONSUMP-PAYGO)",
+        "POB Satisfied": false,
+        "Release Event": "Immediate Using Open Period",
+        "Billing Period": "Month",
+        "Billing Timing": "InArrears",
+        "Terms Months": 12,
+        "Trigger Event": "Upon Consumption",
+        "Lead Line": false,
+        "Ordered Qty": 0,
+        "Line Item Num": 6,
+        "Subscription Name": "Twilio - Enterprise Consumption + Committed Use (US) - 2026",
+        "Subscription Version": 1,
+        "Sales Order Date": "2026-01-01",
+        "RPC Segment": "Programmable Voice (US)|PAYG Overage Tiered",
+        "RPC Type": "Usage",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Unit List Price": 0,
+        "Unit Sell Price": 0,
+        "Ext List Price": 0,
+        "Ext Sell Price": 0,
+        "SSP Price": 0,
+        "Ext SSP Price": 0,
+        "SSP Percent": 0,
+        "Ext Allocated Price": 0,
+        "Carves Adjustment": 0,
+        "Allocation Eligible Flag": false,
+        "Unreleased Revenue": 0,
+        "Released Revenue": 0,
+        "Customer Name": "Twilio",
+        "POB IDENTIFIER": "EVT-PIT-CONSUMP-PAYGO",
+        "Product Category": "Usage",
+        "Product Family": "Voice (US)"
+      },
+      {
+        "POB Name": "Email API (Premier) - Committed Drawdown @ $0.0006/email",
+        "POB Template": "Consumption By Usage Event (EVT-PIT-CONSUMP-USAGE)",
+        "POB Satisfied": false,
+        "Release Event": "Immediate Using Open Period",
+        "Billing Period": "Month",
+        "Billing Timing": "InArrears",
+        "Terms Months": 12,
+        "Trigger Event": "Upon Consumption",
+        "Lead Line": false,
+        "Ordered Qty": 0,
+        "Line Item Num": 7,
+        "Subscription Name": "Twilio - Enterprise Consumption + Committed Use (US) - 2026",
+        "Subscription Version": 1,
+        "Sales Order Date": "2026-01-01",
+        "RPC Segment": "SendGrid Email API (Premier)|Committed Drawdown",
+        "RPC Type": "Usage",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Unit List Price": 0.0006,
+        "Unit Sell Price": 0.0006,
+        "Ext List Price": 0,
+        "Ext Sell Price": 0,
+        "SSP Price": 0.0006,
+        "Ext SSP Price": 0,
+        "SSP Percent": 0,
+        "Ext Allocated Price": 0,
+        "Carves Adjustment": 0,
+        "Allocation Eligible Flag": false,
+        "Unreleased Revenue": 0,
+        "Released Revenue": 0,
+        "Customer Name": "Twilio",
+        "POB IDENTIFIER": "EVT-PIT-CONSUMP-USAGE",
+        "Product Category": "Usage",
+        "Product Family": "Email API (Premier)"
+      },
+      {
+        "POB Name": "Email API (Premier) - PAYG Overage (Tiered credits)",
+        "POB Template": "Consumption - Usage Event (Non-Committed) (EVT-PIT-CONSUMP-PAYGO)",
+        "POB Satisfied": false,
+        "Release Event": "Immediate Using Open Period",
+        "Billing Period": "Month",
+        "Billing Timing": "InArrears",
+        "Terms Months": 12,
+        "Trigger Event": "Upon Consumption",
+        "Lead Line": false,
+        "Ordered Qty": 0,
+        "Line Item Num": 8,
+        "Subscription Name": "Twilio - Enterprise Consumption + Committed Use (US) - 2026",
+        "Subscription Version": 1,
+        "Sales Order Date": "2026-01-01",
+        "RPC Segment": "SendGrid Email API (Premier)|PAYG Overage Tiered",
+        "RPC Type": "Usage",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Unit List Price": 0,
+        "Unit Sell Price": 0,
+        "Ext List Price": 0,
+        "Ext Sell Price": 0,
+        "SSP Price": 0,
+        "Ext SSP Price": 0,
+        "SSP Percent": 0,
+        "Ext Allocated Price": 0,
+        "Carves Adjustment": 0,
+        "Allocation Eligible Flag": false,
+        "Unreleased Revenue": 0,
+        "Released Revenue": 0,
+        "Customer Name": "Twilio",
+        "POB IDENTIFIER": "EVT-PIT-CONSUMP-PAYGO",
+        "Product Category": "Usage",
+        "Product Family": "Email API (Premier)"
+      },
+      {
+        "POB Name": "Commitment Shortfall True-Up / Breakage Settlement",
+        "POB Template": "Immediate Using Open Period (Billed Release) (BL-PIT-CURRENT_PERIOD)",
+        "POB Satisfied": false,
+        "Release Event": "Immediate Using Open Period",
+        "Billing Period": "N/A",
+        "Billing Timing": "InArrears",
+        "Terms Months": 12,
+        "Trigger Event": "Upon Billing (Billed Release)",
+        "Lead Line": false,
+        "Ordered Qty": 1,
+        "Line Item Num": 9,
+        "Subscription Name": "Twilio - Enterprise Consumption + Committed Use (US) - 2026",
+        "Subscription Version": 1,
+        "Sales Order Date": "2026-01-01",
+        "RPC Segment": "Twilio Enterprise Commitment|End-of-Term True-Up/Breakage",
+        "RPC Type": "OneTime",
+        "Revenue Start Date": "2026-12-31",
+        "Revenue End Date": "2026-12-31",
+        "Unit List Price": 0,
+        "Unit Sell Price": 0,
+        "Ext List Price": 0,
+        "Ext Sell Price": 0,
+        "SSP Price": 0,
+        "Ext SSP Price": 0,
+        "SSP Percent": 0,
+        "Ext Allocated Price": 0,
+        "Carves Adjustment": 0,
+        "Allocation Eligible Flag": false,
+        "Unreleased Revenue": 0,
+        "Released Revenue": 0,
+        "Customer Name": "Twilio",
+        "POB IDENTIFIER": "BL-PIT-CURRENT_PERIOD",
+        "Product Category": "True-Up/Breakage",
+        "Product Family": "Committed-Use Settlement"
+      }
+    ],
+    "assumptions": [
+      "No allocation is performed (Allocations: No). Therefore, Ext Allocated Price = Ext Sell Price for each line; SSP Percent is set to 0 as not applicable.",
+      "Usage charges are modeled as pure consumption; because no estimated usage quantities or committed dollar amount were provided, Ordered Qty and extended amounts for usage lines are set to 0 at contract inception and are expected to be populated by downstream usage rating / billing / revenue events.",
+      "Annual commitment (prepaid deposit) amount was not provided; the deposit line pricing is set to 0 and must be replaced with the contracted annual committed-use amount (USD).",
+      "PAYG tiered pricing is maintained in billing/rating; for 'SMS PAYG Overage' the Unit price shown (0.0083) reflects the example starting tier rate provided. For Voice PAYG and Email PAYG, tier tables were not provided so Unit prices are set to 0 pending the rate-card details.",
+      "Revenue End Date is set to 2026-12-31 (inclusive) for the 12-month term starting 2026-01-01; subscription End is 2027-01-01 but is treated as an exclusive boundary.",
+      "Unreleased Revenue is initialized to Ext Allocated Price and Released Revenue is initialized to 0 for all lines."
+    ],
+    "open_questions": [
+      "What is the contracted annual committed-use deposit amount (USD) for the 'Annual Committed-Use Deposit (USD Pool)' line?",
+      "Should committed drawdown usage be billed at the discounted rates (and offset by prepaid balance application), or billed at $0 with only balance drawdown events—i.e., what is the intended billing/invoicing representation feeding ZR?",
+      "Please provide the full PAYG tier schedules for (a) Programmable Voice (US) PAYG tiered per minute and (b) Email API (Premier) PAYG tiered credits so Unit List/Sell pricing can be represented consistently (or confirm that tier pricing should be left to billing-derived amounts only).",
+      "For the end-of-term settlement line: should the specific date be 2026-12-31 (as provided) or aligned to subscription end boundary 2027-01-01, and is it always invoiced (true-up) vs potentially recognized as breakage based on policy?"
+    ]
+  },
+  "revrec_waterfall": {
+    "zr_revrec": [
+      {
+        "Line Item Num": 1,
+        "POB Name": "Annual Committed-Use Deposit (USD Pool)",
+        "Event Name": "BY_AMOUNT",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Jan-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 1,
+        "POB Name": "Annual Committed-Use Deposit (USD Pool)",
+        "Event Name": "BY_AMOUNT",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Feb-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 1,
+        "POB Name": "Annual Committed-Use Deposit (USD Pool)",
+        "Event Name": "BY_AMOUNT",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Mar-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 1,
+        "POB Name": "Annual Committed-Use Deposit (USD Pool)",
+        "Event Name": "BY_AMOUNT",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Apr-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 1,
+        "POB Name": "Annual Committed-Use Deposit (USD Pool)",
+        "Event Name": "BY_AMOUNT",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "May-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 1,
+        "POB Name": "Annual Committed-Use Deposit (USD Pool)",
+        "Event Name": "BY_AMOUNT",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Jun-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 1,
+        "POB Name": "Annual Committed-Use Deposit (USD Pool)",
+        "Event Name": "BY_AMOUNT",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Jul-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 1,
+        "POB Name": "Annual Committed-Use Deposit (USD Pool)",
+        "Event Name": "BY_AMOUNT",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Aug-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 1,
+        "POB Name": "Annual Committed-Use Deposit (USD Pool)",
+        "Event Name": "BY_AMOUNT",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Sep-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 1,
+        "POB Name": "Annual Committed-Use Deposit (USD Pool)",
+        "Event Name": "BY_AMOUNT",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Oct-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 1,
+        "POB Name": "Annual Committed-Use Deposit (USD Pool)",
+        "Event Name": "BY_AMOUNT",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Nov-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 1,
+        "POB Name": "Annual Committed-Use Deposit (USD Pool)",
+        "Event Name": "BY_AMOUNT",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Dec-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 2,
+        "POB Name": "SMS (US) - Committed Drawdown @ $0.0069/segment",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Jan-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 2,
+        "POB Name": "SMS (US) - Committed Drawdown @ $0.0069/segment",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Feb-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 2,
+        "POB Name": "SMS (US) - Committed Drawdown @ $0.0069/segment",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Mar-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 2,
+        "POB Name": "SMS (US) - Committed Drawdown @ $0.0069/segment",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Apr-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 2,
+        "POB Name": "SMS (US) - Committed Drawdown @ $0.0069/segment",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "May-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 2,
+        "POB Name": "SMS (US) - Committed Drawdown @ $0.0069/segment",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Jun-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 2,
+        "POB Name": "SMS (US) - Committed Drawdown @ $0.0069/segment",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Jul-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 2,
+        "POB Name": "SMS (US) - Committed Drawdown @ $0.0069/segment",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Aug-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 2,
+        "POB Name": "SMS (US) - Committed Drawdown @ $0.0069/segment",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Sep-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 2,
+        "POB Name": "SMS (US) - Committed Drawdown @ $0.0069/segment",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Oct-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 2,
+        "POB Name": "SMS (US) - Committed Drawdown @ $0.0069/segment",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Nov-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 2,
+        "POB Name": "SMS (US) - Committed Drawdown @ $0.0069/segment",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Dec-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 3,
+        "POB Name": "SMS (US) - PAYG Overage (Tiered per segment)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Jan-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 3,
+        "POB Name": "SMS (US) - PAYG Overage (Tiered per segment)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Feb-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 3,
+        "POB Name": "SMS (US) - PAYG Overage (Tiered per segment)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Mar-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 3,
+        "POB Name": "SMS (US) - PAYG Overage (Tiered per segment)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Apr-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 3,
+        "POB Name": "SMS (US) - PAYG Overage (Tiered per segment)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "May-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 3,
+        "POB Name": "SMS (US) - PAYG Overage (Tiered per segment)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Jun-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 3,
+        "POB Name": "SMS (US) - PAYG Overage (Tiered per segment)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Jul-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 3,
+        "POB Name": "SMS (US) - PAYG Overage (Tiered per segment)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Aug-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 3,
+        "POB Name": "SMS (US) - PAYG Overage (Tiered per segment)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Sep-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 3,
+        "POB Name": "SMS (US) - PAYG Overage (Tiered per segment)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Oct-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 3,
+        "POB Name": "SMS (US) - PAYG Overage (Tiered per segment)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Nov-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 3,
+        "POB Name": "SMS (US) - PAYG Overage (Tiered per segment)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Dec-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 4,
+        "POB Name": "Voice Outbound (US) - Committed Drawdown @ $0.0098/min",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Jan-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 4,
+        "POB Name": "Voice Outbound (US) - Committed Drawdown @ $0.0098/min",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Feb-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 4,
+        "POB Name": "Voice Outbound (US) - Committed Drawdown @ $0.0098/min",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Mar-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 4,
+        "POB Name": "Voice Outbound (US) - Committed Drawdown @ $0.0098/min",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Apr-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 4,
+        "POB Name": "Voice Outbound (US) - Committed Drawdown @ $0.0098/min",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "May-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 4,
+        "POB Name": "Voice Outbound (US) - Committed Drawdown @ $0.0098/min",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Jun-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 4,
+        "POB Name": "Voice Outbound (US) - Committed Drawdown @ $0.0098/min",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Jul-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 4,
+        "POB Name": "Voice Outbound (US) - Committed Drawdown @ $0.0098/min",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Aug-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 4,
+        "POB Name": "Voice Outbound (US) - Committed Drawdown @ $0.0098/min",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Sep-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 4,
+        "POB Name": "Voice Outbound (US) - Committed Drawdown @ $0.0098/min",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Oct-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 4,
+        "POB Name": "Voice Outbound (US) - Committed Drawdown @ $0.0098/min",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Nov-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 4,
+        "POB Name": "Voice Outbound (US) - Committed Drawdown @ $0.0098/min",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Dec-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 5,
+        "POB Name": "Voice Inbound Local (US) - Committed Drawdown @ $0.0028/min",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Jan-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 5,
+        "POB Name": "Voice Inbound Local (US) - Committed Drawdown @ $0.0028/min",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Feb-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 5,
+        "POB Name": "Voice Inbound Local (US) - Committed Drawdown @ $0.0028/min",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Mar-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 5,
+        "POB Name": "Voice Inbound Local (US) - Committed Drawdown @ $0.0028/min",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Apr-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 5,
+        "POB Name": "Voice Inbound Local (US) - Committed Drawdown @ $0.0028/min",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "May-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 5,
+        "POB Name": "Voice Inbound Local (US) - Committed Drawdown @ $0.0028/min",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Jun-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 5,
+        "POB Name": "Voice Inbound Local (US) - Committed Drawdown @ $0.0028/min",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Jul-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 5,
+        "POB Name": "Voice Inbound Local (US) - Committed Drawdown @ $0.0028/min",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Aug-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 5,
+        "POB Name": "Voice Inbound Local (US) - Committed Drawdown @ $0.0028/min",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Sep-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 5,
+        "POB Name": "Voice Inbound Local (US) - Committed Drawdown @ $0.0028/min",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Oct-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 5,
+        "POB Name": "Voice Inbound Local (US) - Committed Drawdown @ $0.0028/min",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Nov-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 5,
+        "POB Name": "Voice Inbound Local (US) - Committed Drawdown @ $0.0028/min",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Dec-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 6,
+        "POB Name": "Voice (US) - PAYG Overage (Tiered per minute)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Jan-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 6,
+        "POB Name": "Voice (US) - PAYG Overage (Tiered per minute)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Feb-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 6,
+        "POB Name": "Voice (US) - PAYG Overage (Tiered per minute)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Mar-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 6,
+        "POB Name": "Voice (US) - PAYG Overage (Tiered per minute)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Apr-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 6,
+        "POB Name": "Voice (US) - PAYG Overage (Tiered per minute)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "May-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 6,
+        "POB Name": "Voice (US) - PAYG Overage (Tiered per minute)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Jun-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 6,
+        "POB Name": "Voice (US) - PAYG Overage (Tiered per minute)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Jul-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 6,
+        "POB Name": "Voice (US) - PAYG Overage (Tiered per minute)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Aug-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 6,
+        "POB Name": "Voice (US) - PAYG Overage (Tiered per minute)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Sep-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 6,
+        "POB Name": "Voice (US) - PAYG Overage (Tiered per minute)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Oct-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 6,
+        "POB Name": "Voice (US) - PAYG Overage (Tiered per minute)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Nov-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 6,
+        "POB Name": "Voice (US) - PAYG Overage (Tiered per minute)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Dec-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 7,
+        "POB Name": "Email API (Premier) - Committed Drawdown @ $0.0006/email",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Jan-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 7,
+        "POB Name": "Email API (Premier) - Committed Drawdown @ $0.0006/email",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Feb-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 7,
+        "POB Name": "Email API (Premier) - Committed Drawdown @ $0.0006/email",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Mar-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 7,
+        "POB Name": "Email API (Premier) - Committed Drawdown @ $0.0006/email",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Apr-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 7,
+        "POB Name": "Email API (Premier) - Committed Drawdown @ $0.0006/email",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "May-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 7,
+        "POB Name": "Email API (Premier) - Committed Drawdown @ $0.0006/email",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Jun-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 7,
+        "POB Name": "Email API (Premier) - Committed Drawdown @ $0.0006/email",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Jul-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 7,
+        "POB Name": "Email API (Premier) - Committed Drawdown @ $0.0006/email",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Aug-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 7,
+        "POB Name": "Email API (Premier) - Committed Drawdown @ $0.0006/email",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Sep-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 7,
+        "POB Name": "Email API (Premier) - Committed Drawdown @ $0.0006/email",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Oct-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 7,
+        "POB Name": "Email API (Premier) - Committed Drawdown @ $0.0006/email",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Nov-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 7,
+        "POB Name": "Email API (Premier) - Committed Drawdown @ $0.0006/email",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Dec-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 8,
+        "POB Name": "Email API (Premier) - PAYG Overage (Tiered credits)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Jan-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 8,
+        "POB Name": "Email API (Premier) - PAYG Overage (Tiered credits)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Feb-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 8,
+        "POB Name": "Email API (Premier) - PAYG Overage (Tiered credits)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Mar-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 8,
+        "POB Name": "Email API (Premier) - PAYG Overage (Tiered credits)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Apr-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 8,
+        "POB Name": "Email API (Premier) - PAYG Overage (Tiered credits)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "May-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 8,
+        "POB Name": "Email API (Premier) - PAYG Overage (Tiered credits)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Jun-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 8,
+        "POB Name": "Email API (Premier) - PAYG Overage (Tiered credits)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Jul-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 8,
+        "POB Name": "Email API (Premier) - PAYG Overage (Tiered credits)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Aug-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 8,
+        "POB Name": "Email API (Premier) - PAYG Overage (Tiered credits)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Sep-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 8,
+        "POB Name": "Email API (Premier) - PAYG Overage (Tiered credits)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Oct-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 8,
+        "POB Name": "Email API (Premier) - PAYG Overage (Tiered credits)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Nov-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 8,
+        "POB Name": "Email API (Premier) - PAYG Overage (Tiered credits)",
+        "Event Name": "Upon Consumption",
+        "Revenue Start Date": "2026-01-01",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Dec-26",
+        "Amount": 0
+      },
+      {
+        "Line Item Num": 9,
+        "POB Name": "Commitment Shortfall True-Up / Breakage Settlement",
+        "Event Name": "Upon Billing",
+        "Revenue Start Date": "2026-12-31",
+        "Revenue End Date": "2026-12-31",
+        "Ext Allocated Price": 0,
+        "Period": "Dec-26",
+        "Amount": 0
+      }
+    ],
+    "assumptions": [
+      "Monthly reporting periods are Jan-26 through Dec-26 (calendar months in 2026).",
+      "No BY_AMOUNT events, usage/consumption events, or billing events were provided; therefore all EVT-PIT-* rows are shown as $0 in every month per template instructions.",
+      "Ext Allocated Price is $0.00 for all line items as provided; therefore the total recognized revenue per line sums to $0.00."
+    ],
+    "open_questions": [
+      "Annual Committed-Use Deposit (USD Pool): Please provide the BY_AMOUNT event data (event month/date and amount to release per event) for 2026 so revenue can be recognized in the event months.",
+      "SMS (US) - Committed Drawdown @ $0.0069/segment: Please provide consumption/usage by month (segments consumed) for 2026; revenue will be recognized as (segments × $0.0069) in the corresponding months.",
+      "SMS (US) - PAYG Overage (Tiered per segment): Please provide monthly overage segments AND the tiered rate table (or effective rate per month) for 2026.",
+      "Voice Outbound (US) - Committed Drawdown @ $0.0098/min: Please provide monthly consumed minutes for 2026; revenue will be recognized as (minutes × $0.0098) in the corresponding months.",
+      "Voice Inbound Local (US) - Committed Drawdown @ $0.0028/min: Please provide monthly consumed minutes for 2026; revenue will be recognized as (minutes × $0.0028) in the corresponding months.",
+      "Voice (US) - PAYG Overage (Tiered per minute): Please provide monthly overage minutes AND the tiered rate table (or effective rate per month) for 2026.",
+      "Email API (Premier) - Committed Drawdown @ $0.0006/email: Please provide monthly consumed email units for 2026; revenue will be recognized as (emails × $0.0006) in the corresponding months.",
+      "Email API (Premier) - PAYG Overage (Tiered credits): Please provide monthly overage credits/units AND the tiered rate table (or effective rate per month) for 2026.",
+      "Commitment Shortfall True-Up / Breakage Settlement: Please confirm whether/when a true-up invoice is expected (billing date and billed amount). Per the template, revenue is recognized 100% in the open period when billed (likely in Dec-26 or when the invoice is issued)."
+    ]
+  },
+  "summary": {
+    "assumptions": [
+      "Contract term is 12 months with service from 2026-01-01 through 2026-12-31 (inclusive), and subscription end boundary at 2027-01-01 (exclusive).",
+      "Go-live/contract effective date aligns to subscription start (2026-01-01); usage eligibility begins 2026-01-01.",
+      "Billing is monthly in arrears with usage service periods aligned to calendar months (e.g., 2026-01-01 to 2026-01-31).",
+      "Default assumption for invoice dating is month-end (e.g., 2026-01-31) unless a next-day/next-month convention is specified.",
+      "Commercial model is committed-use with a prepaid commitment deposit/balance that draws down as usage occurs, plus PAYG overage when the commitment is exhausted.",
+      "Commitment is assumed to be a single shared USD pool across SMS, Voice, and Email; if commitments are separate by product or usage dimension, the deposit and drawdown charges/pools must be split accordingly.",
+      "Committed drawdown is valued and rated at the contracted discounted unit rates: SMS $0.0069/segment; Voice outbound $0.0098/min; Voice inbound local $0.0028/min; Email $0.0006/email.",
+      "PAYG overage reverts to standard PAYG tiered pricing, with tier ladders maintained in the Zuora product catalog/rating configuration (tier details not included in the inputs).",
+      "Operational rating must be able to split usage between committed drawdown and PAYG overage based on remaining balance, including mid-month exhaustion.",
+      "At inception, usage charges have $0 ordered quantity and $0 extended amount; actual quantities/amounts are expected to be produced by usage ingestion/rating and then flow to billing and/or revenue.",
+      "Annual commitment (prepaid deposit) amount was not provided; deposit (and any modeled true-up/breakage settlement) is shown as a $0 placeholder pending the contracted commitment value and settlement policy.",
+      "An end-of-term settlement mechanism (true-up invoice and/or breakage) is assumed to exist as an optional placeholder; actual inclusion and method depend on policy.",
+      "Revenue recognition policy assumption is “recognize on consumption” for both committed drawdown and PAYG overage (not ratable).",
+      "To support consumption-based recognition for the prepaid deposit as a deferred pool, the deposit is mapped to an event-driven amount-release template (EVT-PIT-AMOUNT), requiring an event feed/process that posts BY_AMOUNT releases derived from consumption/rating.",
+      "Usage charges (committed drawdown and PAYG overage) are mapped to consumption templates so revenue can be recognized when usage occurs, independent of monthly invoicing timing.",
+      "Fallback assumption: if Zuora Revenue cannot recognize from usage/consumption events and only recognizes from invoices, revenue mappings would shift to billing-driven recognition for PAYG (and possibly committed usage).",
+      "No revenue allocation is performed; extended allocated price equals extended sell price for each line (SSP% treated as not applicable).",
+      "Revenue reporting periods are assumed to be calendar months Jan-2026 through Dec-2026; without actual events/usage/invoices provided, all modeled revenue schedules show $0 across periods."
+    ],
+    "open_questions": [
+      "[BLOCKING] What is the contracted annual commitment amount (USD) for the prepaid committed-use deposit, and how is it billed (fully upfront on 2026-01-01 vs installments/minimums)? (Directly drives billing, prepaid balance funding, and total contract consideration.)",
+      "[BLOCKING] Is the commitment a single shared USD pool across SMS/Voice/Email, or are there separate commitments/pools by product and/or usage dimension (e.g., Voice outbound vs inbound)? (Affects drawdown prioritization, pool accounting, and overage start.)",
+      "[BLOCKING] At contract end, what is the settlement policy for unused commitment/shortfall: (1) true-up invoice, (2) breakage recognition without billing, or (3) combination? If breakage, what methodology/constraints apply? (Affects billing artifacts and revenue timing/amounts.)",
+      "[HIGH] For months where the commitment is exhausted mid-month, do PAYG tiers apply based on (a) total monthly usage (including the portion covered by commitment) or (b) only the overage quantity after exhaustion? (Affects rating and customer invoice amounts.)",
+      "[HIGH] How should committed drawdown appear on invoices and in the billing-to-revenue feed: billed at discounted rates with prepaid balance application vs billed at $0 with only balance drawdown events? (Affects invoice presentation, taxation, and Zuora Revenue ingestion approach.)",
+      "[HIGH] Confirm whether Zuora Revenue will recognize from usage/consumption events (preferred for consumption timing) or from invoices only (billing-driven fallback). (Determines required event feeds and template mappings.)",
+      "[HIGH] Provide the full PAYG tier schedules and rules (tier boundaries, prices, and whether tiers reset monthly and are per-charge): (a) SMS per segment, (b) Voice per minute, (c) Email credits. (Required to rate overage accurately and/or represent pricing consistently.)",
+      "[MEDIUM] Confirm the monthly arrears invoice dating convention: invoice dated month-end (e.g., 2026-01-31) vs issued the next day/month (e.g., 2026-02-01) while covering prior month usage. (Affects accounting period cutoffs and operational billing runs.)",
+      "[MEDIUM] What is the exact date for the end-of-term settlement transaction (if any): 2026-12-31 (last service day) vs 2027-01-01 (subscription end boundary) vs later invoicing date? (Affects which accounting period captures true-up/breakage.)",
+      "[MEDIUM] If a true-up invoice is issued: is it taxable, and does it need to be allocated/attributed by product (SMS/Voice/Email) or can it remain as a single settlement line? (Affects tax and revenue product attribution.)",
+      "[NICE-TO-KNOW / DATA] For producing a 2026 revenue schedule: provide monthly usage volumes for committed drawdown (segments/minutes/emails) and monthly overage volumes plus effective tiered rates (or rated amounts) for PAYG overage. (Needed to populate monthly recognized revenue under consumption-based recognition.)",
+      "[NICE-TO-KNOW / DATA] For EVT-PIT-AMOUNT deposit release: will you provide BY_AMOUNT event data (release amounts/dates) derived from rated usage, or should releases be inferred from committed usage charges/invoices? (Determines the operational event-feed design.)"
+    ]
+  }
+}
