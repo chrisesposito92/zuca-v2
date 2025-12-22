@@ -6,13 +6,13 @@
  * extracts both contract parameters AND capability classifications together.
  */
 
-import { complete, getZuoraMcpTools, ReasoningEffort } from '../../llm/client.js';
-import { loadPrompt, PROMPTS } from '../../llm/prompts/index.js';
-import { ContractIntel, ContractIntelSchema, DetectedCapabilities, DetectedCapabilitiesSchema } from '../../types/output.js';
-import { ZucaInput } from '../../types/input.js';
-import { GoldenUseCaseCapability, KeyTerm } from '../../types/golden-use-cases.js';
-import { formatCapabilitiesForContext, formatKeyTermsForContext } from '../../data/loader.js';
-import { debugLog } from '../../config.js';
+import { complete, getZuoraMcpTools, ReasoningEffort } from '../../llm/client';
+import { loadPrompt, PROMPTS } from '../../llm/prompts/index';
+import { ContractIntel, ContractIntelSchema, DetectedCapabilities, DetectedCapabilitiesSchema } from '../../types/output';
+import { ZucaInput } from '../../types/input';
+import { GoldenUseCaseCapability, KeyTerm } from '../../types/golden-use-cases';
+import { formatCapabilitiesForContext, formatKeyTermsForContext } from '../../data/loader';
+import { debugLog } from '../../config';
 
 /**
  * Combined output from contract analysis
