@@ -10,6 +10,13 @@ const nextConfig = {
   turbopack: {
     // Empty config silences the warning
   },
+  // Include prompt files and golden use case data in serverless bundles
+  outputFileTracingIncludes: {
+    '/api/**/*': [
+      '../../src/llm/prompts/**/*.md',
+      '../../docs/Golden Use Cases/**/*.json',
+    ],
+  },
 };
 
 export default nextConfig;
