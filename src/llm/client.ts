@@ -2,18 +2,27 @@ import OpenAI from 'openai';
 import { z } from 'zod';
 
 import { config, debugLog } from '../config';
+import { getMcpClient } from './mcp-client';
 
 /**
- * OpenAI client instance
+ * OpenAI client instance (lazy)
  */
-const openai = new OpenAI({
-  apiKey: config.openai.apiKey,
-});
+let openaiClient: OpenAI | null = null;
+
+function getOpenAIClient(): OpenAI {
+  if (!openaiClient) {
+    if (!config.openai.apiKey) {
+      throw new Error('OPENAI_API_KEY is required to use OpenAI models');
+    }
+    openaiClient = new OpenAI({ apiKey: config.openai.apiKey });
+  }
+  return openaiClient;
+}
 
 /**
  * Available built-in tools for the Responses API
  */
-export type BuiltInTool = 'web_search' | 'code_interpreter';
+export type BuiltInTool = 'web_search' | 'code_interpreter' | 'url_context';
 
 /**
  * Reasoning effort levels for gpt-5.2 and reasoning models
@@ -152,6 +161,7 @@ function buildTools(
   if (builtInTools?.includes('code_interpreter')) {
     tools.push({ type: 'code_interpreter', container: { type: 'auto' } });
   }
+  // url_context is a Gemini-native tool; OpenAI does not support it
 
   // Add MCP server tools
   if (mcpTools) {
@@ -233,11 +243,243 @@ function extractTextContent(output: OpenAI.Responses.ResponseOutputItem[]): stri
   return textParts.join('\n');
 }
 
-/**
- * Execute a completion with the OpenAI Responses API
- */
-export async function complete<T = unknown>(
-  options: CompletionOptions
+type LlmProvider = 'openai' | 'gemini';
+
+function getProviderForModel(model: string): LlmProvider {
+  return model.startsWith('gemini-') ? 'gemini' : 'openai';
+}
+
+type GeminiThinkingLevel = 'minimal' | 'low' | 'medium' | 'high';
+
+function mapReasoningToGemini(
+  model: string,
+  reasoningEffort: ReasoningEffort
+): GeminiThinkingLevel {
+  if (model.startsWith('gemini-3-pro')) {
+    return reasoningEffort === 'low' ? 'low' : 'high';
+  }
+  // Gemini 3 Flash supports minimal/low/medium/high, map directly
+  return reasoningEffort as GeminiThinkingLevel;
+}
+
+interface GeminiFunctionDeclaration {
+  name: string;
+  description?: string;
+  parameters?: Record<string, unknown>;
+}
+
+type GeminiTool =
+  | { googleSearch: Record<string, never> }
+  | { urlContext: Record<string, never> }
+  | { codeExecution: Record<string, never> }
+  | { functionDeclarations: GeminiFunctionDeclaration[] };
+
+interface GeminiPart {
+  text?: string;
+  functionCall?: {
+    name: string;
+    args?: Record<string, unknown>;
+  };
+  functionResponse?: {
+    name: string;
+    response: Record<string, unknown>;
+  };
+}
+
+interface GeminiContent {
+  role: 'user' | 'model';
+  parts: GeminiPart[];
+}
+
+function buildGeminiContents(
+  systemPrompt: string | undefined,
+  userMessage: string,
+  previousMessages?: Message[]
+): { systemInstruction?: { parts: Array<{ text: string }> }; contents: GeminiContent[] } {
+  const contents: GeminiContent[] = [];
+
+  if (previousMessages) {
+    for (const msg of previousMessages) {
+      const role = msg.role === 'assistant' ? 'model' : 'user';
+      contents.push({ role, parts: [{ text: msg.content }] });
+    }
+  }
+
+  contents.push({ role: 'user', parts: [{ text: userMessage }] });
+
+  const systemInstruction = systemPrompt
+    ? { parts: [{ text: systemPrompt }] }
+    : undefined;
+
+  return { systemInstruction, contents };
+}
+
+function getAskZuoraFunction(mcpTools?: McpTool[]): GeminiFunctionDeclaration | null {
+  if (!mcpTools || mcpTools.length === 0) return null;
+
+  const hasAskZuora = mcpTools.some((tool) =>
+    !tool.allowed_tools || tool.allowed_tools.includes('ask_zuora')
+  );
+
+  if (!hasAskZuora) return null;
+
+  return {
+    name: 'ask_zuora',
+    description: 'Query Zuora knowledge base via MCP for product guidance.',
+    parameters: {
+      type: 'object',
+      properties: {
+        prompt: { type: 'string', description: 'User question about Zuora' },
+        session: { type: 'string', description: 'Session identifier for continuity' },
+      },
+      required: ['prompt', 'session'],
+      additionalProperties: false,
+    },
+  };
+}
+
+function buildGeminiTools(
+  builtInTools?: BuiltInTool[],
+  customTools?: CustomTool[],
+  mcpTools?: McpTool[],
+  options: { includeNative: boolean; includeFunctions: boolean } = {
+    includeNative: true,
+    includeFunctions: true,
+  }
+): GeminiTool[] | undefined {
+  const tools: GeminiTool[] = [];
+
+  if (options.includeNative) {
+    if (builtInTools?.includes('web_search')) {
+      tools.push({ googleSearch: {} });
+    }
+    if (builtInTools?.includes('code_interpreter')) {
+      tools.push({ codeExecution: {} });
+    }
+    // Enable url_context everywhere for Gemini (per requirement)
+    tools.push({ urlContext: {} });
+  }
+
+  if (options.includeFunctions) {
+    const declarations: GeminiFunctionDeclaration[] = [];
+
+    if (customTools) {
+      for (const tool of customTools) {
+        declarations.push({
+          name: tool.function.name,
+          description: tool.function.description,
+          parameters: tool.function.parameters,
+        });
+      }
+    }
+
+    const askZuora = getAskZuoraFunction(mcpTools);
+    if (askZuora) {
+      declarations.push(askZuora);
+    }
+
+    if (declarations.length > 0) {
+      tools.push({ functionDeclarations: declarations });
+    }
+  }
+
+  return tools.length > 0 ? tools : undefined;
+}
+
+function extractGeminiText(parts: GeminiPart[] | undefined): string {
+  if (!parts) return '';
+  return parts
+    .map((part) => part.text)
+    .filter((text): text is string => Boolean(text))
+    .join('\n');
+}
+
+function extractGeminiFunctionCalls(
+  parts: GeminiPart[] | undefined
+): Array<{ name: string; arguments: Record<string, unknown> }> {
+  if (!parts) return [];
+  return parts
+    .filter((part) => part.functionCall)
+    .map((part) => ({
+      name: part.functionCall?.name || 'unknown',
+      arguments: part.functionCall?.args || {},
+    }));
+}
+
+async function callGeminiTool(
+  call: { name: string; arguments: Record<string, unknown> },
+  mcpTools?: McpTool[]
+): Promise<Record<string, unknown>> {
+  if (call.name === 'ask_zuora') {
+    const mcp = mcpTools?.find((tool) =>
+      !tool.allowed_tools || tool.allowed_tools.includes('ask_zuora')
+    );
+    if (!mcp) {
+      throw new Error('ask_zuora requested but MCP tool is not configured');
+    }
+
+    const session = typeof call.arguments.session === 'string' && call.arguments.session
+      ? call.arguments.session
+      : 'zuca';
+
+    const args = {
+      ...call.arguments,
+      session,
+    };
+
+    const client = getMcpClient(mcp.server_url);
+    const result = await client.callTool('ask_zuora', args);
+
+    return typeof result === 'object' && result !== null
+      ? (result as Record<string, unknown>)
+      : { result };
+  }
+
+  debugLog('Unhandled Gemini function call', call.name);
+  return { error: `Unhandled tool: ${call.name}` };
+}
+
+interface GeminiResponse {
+  candidates?: Array<{
+    content?: {
+      parts?: GeminiPart[];
+    };
+  }>;
+  usageMetadata?: {
+    promptTokenCount?: number;
+    candidatesTokenCount?: number;
+    totalTokenCount?: number;
+  };
+}
+
+async function runGeminiRequest(
+  requestBody: Record<string, unknown>,
+  model: string
+): Promise<GeminiResponse> {
+  if (!config.gemini.apiKey) {
+    throw new Error('GEMINI_API_KEY is required to use Gemini models');
+  }
+
+  const url = `${config.gemini.baseUrl}/models/${model}:generateContent?key=${config.gemini.apiKey}`;
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(requestBody),
+  });
+
+  const data = (await response.json()) as GeminiResponse & {
+    error?: { message?: string };
+  };
+
+  if (!response.ok) {
+    throw new Error(data.error?.message || `Gemini request failed (${response.status})`);
+  }
+
+  return data;
+}
+
+async function completeOpenAI<T = unknown>(
+  options: CompletionOptions & { model: string; reasoningEffort: ReasoningEffort }
 ): Promise<CompletionResult<T>> {
   const {
     systemPrompt,
@@ -249,11 +491,11 @@ export async function complete<T = unknown>(
     responseSchema,
     temperature = 0.7,
     maxTokens,
-    model = config.openai.model,
-    reasoningEffort = config.openai.reasoningEffort, // Use config default for gpt-5.2
+    model,
+    reasoningEffort,
   } = options;
 
-  debugLog('LLM Request:', {
+  debugLog('OpenAI Request:', {
     model,
     reasoningEffort,
     builtInTools: tools,
@@ -306,7 +548,7 @@ export async function complete<T = unknown>(
   let lastError: Error | null = null;
   for (let attempt = 1; attempt <= config.openai.maxRetries; attempt++) {
     try {
-      const response = await openai.responses.create(requestParams);
+      const response = await getOpenAIClient().responses.create(requestParams);
 
       // Extract text content
       const text = extractTextContent(response.output);
@@ -365,7 +607,7 @@ export async function complete<T = unknown>(
           : undefined,
       };
 
-      debugLog('LLM Response:', {
+      debugLog('OpenAI Response:', {
         textLength: text.length,
         hasStructured: !!structured,
         toolCallCount: toolCalls.length,
@@ -376,7 +618,7 @@ export async function complete<T = unknown>(
       return result;
     } catch (error) {
       lastError = error instanceof Error ? error : new Error(String(error));
-      debugLog(`LLM request failed (attempt ${attempt}/${config.openai.maxRetries}):`, lastError.message);
+      debugLog(`OpenAI request failed (attempt ${attempt}/${config.openai.maxRetries}):`, lastError.message);
 
       if (attempt < config.openai.maxRetries) {
         // Exponential backoff
@@ -386,7 +628,214 @@ export async function complete<T = unknown>(
     }
   }
 
-  throw lastError || new Error('LLM request failed after all retries');
+  throw lastError || new Error('OpenAI request failed after all retries');
+}
+
+async function completeGemini<T = unknown>(
+  options: CompletionOptions & { model: string; reasoningEffort: ReasoningEffort }
+): Promise<CompletionResult<T>> {
+  const {
+    systemPrompt,
+    userMessage,
+    previousMessages,
+    tools,
+    customTools,
+    mcpTools,
+    responseSchema,
+    temperature = 0.7,
+    maxTokens,
+    model,
+    reasoningEffort,
+  } = options;
+
+  debugLog('Gemini Request:', {
+    model,
+    reasoningEffort,
+    builtInTools: tools,
+    customToolCount: customTools?.length || 0,
+    mcpToolCount: mcpTools?.length || 0,
+    hasSchema: !!responseSchema,
+    messageLength: userMessage.length,
+  });
+
+  const { systemInstruction, contents } = buildGeminiContents(
+    systemPrompt,
+    userMessage,
+    previousMessages
+  );
+
+  const generationConfig: Record<string, unknown> = {
+    temperature,
+    thinkingConfig: {
+      thinkingLevel: mapReasoningToGemini(model, reasoningEffort),
+    },
+  };
+
+  if (maxTokens) {
+    generationConfig.maxOutputTokens = maxTokens;
+  }
+
+  if (responseSchema) {
+    generationConfig.responseMimeType = 'application/json';
+    generationConfig.responseSchema = responseSchema;
+  }
+
+  const baseRequest = {
+    systemInstruction,
+    contents,
+    generationConfig,
+  } as Record<string, unknown>;
+
+  const runWithTools = async (toolConfig?: GeminiTool[]): Promise<CompletionResult<T>> => {
+    let lastError: Error | null = null;
+    for (let attempt = 1; attempt <= config.openai.maxRetries; attempt++) {
+      try {
+        const toolCalls: CompletionResult['toolCalls'] = [];
+        let workingContents = [...contents];
+
+        for (let step = 0; step < 5; step++) {
+          const requestBody = {
+            ...baseRequest,
+            contents: workingContents,
+            ...(toolConfig ? { tools: toolConfig } : {}),
+          };
+
+          const response = await runGeminiRequest(requestBody, model);
+          const candidate = response.candidates?.[0];
+          const parts = candidate?.content?.parts || [];
+
+          const functionCalls = extractGeminiFunctionCalls(parts);
+          if (functionCalls.length === 0) {
+            const text = extractGeminiText(parts);
+
+            let structured: T | undefined;
+            if (responseSchema && text) {
+              try {
+                structured = JSON.parse(text) as T;
+              } catch (parseError) {
+                debugLog('Failed to parse Gemini structured output:', parseError);
+              }
+            }
+
+            const usage = response.usageMetadata
+              ? {
+                  promptTokens: response.usageMetadata.promptTokenCount || 0,
+                  completionTokens: response.usageMetadata.candidatesTokenCount || 0,
+                  totalTokens: response.usageMetadata.totalTokenCount || 0,
+                }
+              : undefined;
+
+            return {
+              text,
+              structured,
+              toolCalls: toolCalls.length > 0 ? toolCalls : undefined,
+              usage,
+            };
+          }
+
+          // Add tool call parts for context
+          workingContents = [
+            ...workingContents,
+            {
+              role: 'model',
+              parts: functionCalls.map((call) => ({
+                functionCall: {
+                  name: call.name,
+                  args: call.arguments,
+                },
+              })),
+            },
+          ];
+
+          // Execute tool calls and append responses
+          const responseParts: GeminiPart[] = [];
+          for (const call of functionCalls) {
+            const result = await callGeminiTool(call, mcpTools);
+            toolCalls.push({
+              name: call.name,
+              arguments: call.arguments,
+              result,
+            });
+
+            responseParts.push({
+              functionResponse: {
+                name: call.name,
+                response: result,
+              },
+            });
+          }
+
+          workingContents = [
+            ...workingContents,
+            {
+              role: 'user',
+              parts: responseParts,
+            },
+          ];
+        }
+
+        throw new Error('Gemini tool loop exceeded max steps');
+      } catch (error) {
+        lastError = error instanceof Error ? error : new Error(String(error));
+        debugLog(`Gemini request failed (attempt ${attempt}/${config.openai.maxRetries}):`, lastError.message);
+
+        if (attempt < config.openai.maxRetries) {
+          const delay = Math.pow(2, attempt) * 1000;
+          await new Promise((resolve) => setTimeout(resolve, delay));
+        }
+      }
+    }
+
+    throw lastError || new Error('Gemini request failed after all retries');
+  };
+
+  const initialTools = buildGeminiTools(tools, customTools, mcpTools, {
+    includeNative: true,
+    includeFunctions: true,
+  });
+
+  try {
+    return await runWithTools(initialTools);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    const isToolConflict =
+      /multi-tool|function calling.*tools|tools.*function calling|live api|response schema|response schema/i.test(
+        message.toLowerCase()
+      );
+
+    if (isToolConflict) {
+      debugLog('Gemini tool conflict detected, retrying with function tools only', message);
+      const fallbackTools = buildGeminiTools(tools, customTools, mcpTools, {
+        includeNative: false,
+        includeFunctions: true,
+      });
+      return runWithTools(fallbackTools);
+    }
+
+    throw error;
+  }
+}
+
+/**
+ * Execute a completion with the configured LLM provider
+ */
+export async function complete<T = unknown>(
+  options: CompletionOptions
+): Promise<CompletionResult<T>> {
+  const resolvedModel = options.model || config.openai.model;
+  const reasoningEffort = options.reasoningEffort || config.openai.reasoningEffort;
+  const provider = getProviderForModel(resolvedModel);
+
+  debugLog('LLM Request:', {
+    provider,
+    model: resolvedModel,
+  });
+
+  if (provider === 'gemini') {
+    return completeGemini<T>({ ...options, model: resolvedModel, reasoningEffort });
+  }
+
+  return completeOpenAI<T>({ ...options, model: resolvedModel, reasoningEffort });
 }
 
 /**

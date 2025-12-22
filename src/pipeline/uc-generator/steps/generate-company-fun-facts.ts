@@ -6,6 +6,7 @@
  */
 
 import { complete, ReasoningEffort } from '../../../llm/client';
+import type { LlmModel } from '../../../types/llm';
 import { loadPrompt, PROMPTS } from '../../../llm/prompts/index';
 import { debugLog } from '../../../config';
 
@@ -90,7 +91,8 @@ function buildUserMessage(input: CompanyFunFactsInput): string {
  */
 export async function generateCompanyFunFacts(
   input: CompanyFunFactsInput,
-  reasoningEffort: ReasoningEffort = 'low' // Keep it fast
+  reasoningEffort: ReasoningEffort = 'low', // Keep it fast
+  model?: LlmModel
 ): Promise<CompanyFunFactsOutput> {
   debugLog('Generating fun facts for:', input.customer_name);
 
@@ -103,6 +105,7 @@ export async function generateCompanyFunFacts(
     responseSchema: companyFunFactsJsonSchema,
     tools: ['web_search'], // Essential for finding facts
     reasoningEffort,
+    model,
   });
 
   if (!result.structured) {

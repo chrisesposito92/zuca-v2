@@ -18,11 +18,16 @@ interface AnalyzeError {
   step?: string;
 }
 
-async function runAnalysis(input: ZucaInput): Promise<AnalyzeResponse> {
+interface AnalyzeRequest {
+  input: ZucaInput;
+  model?: string;
+}
+
+async function runAnalysis(payload: AnalyzeRequest): Promise<AnalyzeResponse> {
   const response = await fetch("/api/analyze", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(input),
+    body: JSON.stringify(payload),
   });
 
   const data = await response.json();

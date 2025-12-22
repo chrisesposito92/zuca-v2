@@ -350,6 +350,15 @@ export default function HistoryPage() {
                       >
                         {session.session_type === "analyze" ? "Analyze" : "Generate"}
                       </Chip>
+                      {session.llm_model && (
+                        <Chip
+                          size="sm"
+                          variant="flat"
+                          className="bg-default-200/70 text-default-600"
+                        >
+                          {session.llm_model}
+                        </Chip>
+                      )}
                     </div>
                     <div className="flex items-center gap-4 mt-1.5 text-sm text-default-500">
                       <span className="flex items-center gap-1.5">

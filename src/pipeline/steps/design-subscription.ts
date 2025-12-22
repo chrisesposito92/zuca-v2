@@ -7,6 +7,7 @@
  */
 
 import { complete, getZuoraMcpTools, ReasoningEffort } from '../../llm/client';
+import type { LlmModel } from '../../types/llm';
 import { loadPrompt, PROMPTS } from '../../llm/prompts/index';
 import {
   SubscriptionSpec,
@@ -324,7 +325,8 @@ export async function designSubscription(
   contextRpcs: GoldenRatePlanChargesDoc[],
   pobTemplates: PobTemplate[],
   previousDesign?: SubscriptionDesignOutput,
-  reasoningEffort: ReasoningEffort = 'high' // Complex design task needs thorough reasoning
+  reasoningEffort: ReasoningEffort = 'high', // Complex design task needs thorough reasoning
+  model?: LlmModel
 ): Promise<SubscriptionDesignOutput> {
   debugLog('Designing subscription (combined subscription spec + POB mapping)');
 
@@ -362,6 +364,7 @@ export async function designSubscription(
     tools: ['web_search', 'code_interpreter'],
     mcpTools: getZuoraMcpTools(),
     reasoningEffort,
+    model,
   });
 
   if (!result.structured) {

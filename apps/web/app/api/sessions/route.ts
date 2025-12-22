@@ -27,6 +27,7 @@ export async function GET(request: NextRequest) {
       status: s.status,
       created_at: s.created_at,
       updated_at: s.updated_at,
+      llm_model: s.llm_model,
     }));
 
     return NextResponse.json({

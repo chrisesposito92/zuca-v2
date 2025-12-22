@@ -56,6 +56,12 @@ const allocationMethods = [
   { key: "N/A", label: "N/A" },
 ];
 
+const modelOptions = [
+  { key: "gpt-5.2", label: "GPT-5.2 (default)", description: "Best overall reasoning and accuracy" },
+  { key: "gemini-3-pro-preview", label: "Gemini 3 Pro (preview)", description: "Higher reasoning depth, slower" },
+  { key: "gemini-3-flash-preview", label: "Gemini 3 Flash (preview)", description: "Faster, lighter reasoning" },
+];
+
 // Section icon component
 const SectionIcon = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
   <div className={`w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary ${className}`}>
@@ -66,6 +72,7 @@ const SectionIcon = ({ children, className = "" }: { children: React.ReactNode; 
 export default function AnalyzePage() {
   const [isAllocations, setIsAllocations] = useState(false);
   const [allocationMethod, setAllocationMethod] = useState<string>("");
+  const [selectedModel, setSelectedModel] = useState<string>("gpt-5.2");
   const formRef = useRef<HTMLFormElement>(null);
 
   // UC Generator modal state
@@ -78,6 +85,7 @@ export default function AnalyzePage() {
   const [generatedUseCases, setGeneratedUseCases] = useState<GeneratedUseCase[]>([]);
   const [generatedFormatted, setGeneratedFormatted] = useState<string | null>(null);
   const [selectedUseCaseIndex, setSelectedUseCaseIndex] = useState<number | null>(null);
+  const [ucModel, setUcModel] = useState<string>("gpt-5.2");
 
   // Mutations
   const analyzeMutation = useAnalyze();
@@ -102,7 +110,7 @@ export default function AnalyzePage() {
 
     try {
       const input = formDataToZucaInput(formData);
-      await analyzeMutation.mutateAsync(input);
+      await analyzeMutation.mutateAsync({ input, model: selectedModel });
     } catch (error) {
       const err = error as { error?: string; details?: string };
       addToast({
@@ -136,7 +144,10 @@ export default function AnalyzePage() {
         fetchCompanyFacts(ucInput.customer_name, ucInput.customer_website);
       }
 
-      const result = await ucGeneratorMutation.mutateAsync(ucInput);
+      const result = await ucGeneratorMutation.mutateAsync({
+        input: ucInput,
+        model: ucModel,
+      });
       setGeneratedUseCases(result.use_cases);
       setGeneratedFormatted(result.formatted || null);
       setSelectedUseCaseIndex(null);
@@ -636,6 +647,47 @@ export default function AnalyzePage() {
             </CardBody>
           </Card>
 
+          {/* Model Selection */}
+          <Card className="glass-card overflow-hidden animate-fade-in-up stagger-4">
+            <CardHeader className="flex gap-3 p-6 pb-0">
+              <SectionIcon>
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </SectionIcon>
+              <div>
+                <h2 className="text-lg font-semibold">Model Selection</h2>
+                <p className="text-sm text-default-500">Choose the model used for every pipeline step</p>
+              </div>
+            </CardHeader>
+            <CardBody className="p-6 space-y-4">
+              <Select
+                label="Execution Model"
+                selectedKeys={[selectedModel]}
+                onSelectionChange={(keys) => setSelectedModel(Array.from(keys)[0] as string)}
+                labelPlacement="outside"
+                variant="bordered"
+                size="lg"
+                isDisabled={analyzeMutation.isPending}
+                classNames={{
+                  trigger: "border-default-200 hover:border-primary/50 data-[focus=true]:border-primary",
+                }}
+              >
+                {modelOptions.map((model) => (
+                  <SelectItem key={model.key} textValue={model.label}>
+                    <div className="flex flex-col">
+                      <span>{model.label}</span>
+                      <span className="text-xs text-default-400">{model.description}</span>
+                    </div>
+                  </SelectItem>
+                ))}
+              </Select>
+              <p className="text-xs text-default-500">
+                Model changes apply to the entire run. Switching is disabled while a run is in progress.
+              </p>
+            </CardBody>
+          </Card>
+
           {/* Submit */}
           <div className="flex justify-end gap-4 animate-fade-in-up stagger-4">
             <Button
@@ -753,6 +805,28 @@ export default function AnalyzePage() {
                   <SelectItem key="3">3 Use Cases</SelectItem>
                 </Select>
                 </div>
+
+                <Select
+                  label="Execution Model"
+                  selectedKeys={[ucModel]}
+                  onSelectionChange={(keys) => setUcModel(Array.from(keys)[0] as string)}
+                  labelPlacement="outside"
+                  variant="bordered"
+                  size="lg"
+                  isDisabled={ucGeneratorMutation.isPending}
+                  classNames={{
+                    trigger: "border-default-200 hover:border-primary/50 data-[focus=true]:border-primary",
+                  }}
+                >
+                  {modelOptions.map((model) => (
+                    <SelectItem key={model.key} textValue={model.label}>
+                      <div className="flex flex-col">
+                        <span>{model.label}</span>
+                        <span className="text-xs text-default-400">{model.description}</span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </Select>
 
                 <Textarea
                   label="Additional Notes (Optional)"

@@ -6,6 +6,7 @@
  */
 
 import { complete, getZuoraMcpTools, ReasoningEffort } from '../../../llm/client';
+import type { LlmModel } from '../../../types/llm';
 import { loadPrompt, PROMPTS } from '../../../llm/prompts/index';
 import {
   UCGeneratorInput,
@@ -45,7 +46,8 @@ function buildUserMessage(input: UCGeneratorInput, research: CustomerResearch): 
 export async function generateUseCases(
   input: UCGeneratorInput,
   research: CustomerResearch,
-  reasoningEffort: ReasoningEffort = 'high' // Complex Zuora reasoning
+  reasoningEffort: ReasoningEffort = 'high', // Complex Zuora reasoning
+  model?: LlmModel
 ): Promise<GeneratedUseCases> {
   debugLog('Generating use cases for:', input.customer_name);
 
@@ -59,6 +61,7 @@ export async function generateUseCases(
     tools: ['code_interpreter'], // May need for calculations
     mcpTools: getZuoraMcpTools(), // Zuora-specific guidance
     reasoningEffort,
+    model,
   });
 
   if (!result.structured) {

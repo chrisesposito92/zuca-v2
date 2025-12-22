@@ -44,7 +44,8 @@ src/
 │           ├── generate-use-cases.ts
 │           └── format-output.ts
 ├── llm/
-│   ├── client.ts         # OpenAI Responses API client
+│   ├── client.ts         # LLM client (OpenAI + Gemini)
+│   ├── mcp-client.ts     # MCP JSON-RPC client (Gemini function calls)
 │   └── prompts/          # System prompts (markdown)
 │       ├── *.md          # Main ZUCA prompts
 │       └── uc-*.md       # UC Generator prompts
@@ -174,6 +175,9 @@ POSTGRES_URL=              # Vercel Postgres connection string
 JWT_SECRET=                # Min 32 chars for production
 ZUCA_PASSWORD=             # Shared password for simple auth
 OPENAI_API_KEY=            # For pipeline processing
+GEMINI_API_KEY=            # For Gemini models
+LLM_MODEL=                 # Default model (gpt-5.2 | gemini-3-pro-preview | gemini-3-flash-preview)
+OPENAI_MODEL=              # Optional OpenAI model override
 GITHUB_TOKEN=              # For bug reporting (optional)
 GITHUB_OWNER=              # Repository owner (optional)
 GITHUB_REPO=               # Repository name (optional)

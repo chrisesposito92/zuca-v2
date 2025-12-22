@@ -37,6 +37,7 @@ export async function GET(_request: NextRequest, { params }: RouteParams) {
         error_message: session.error_message,
         created_at: session.created_at,
         updated_at: session.updated_at,
+        llm_model: session.llm_model,
         input: session.input,
         result: session.result,
         conversation_history: messages.map((m) => ({

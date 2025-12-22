@@ -26,7 +26,7 @@ npm install
 
 # Copy environment file and configure
 cp .env.example .env
-# Edit .env with your OpenAI API key
+# Edit .env with your OpenAI or Gemini API key
 ```
 
 ### Configuration
@@ -34,15 +34,20 @@ cp .env.example .env
 Edit `.env` with your settings:
 
 ```env
-# Required
+# Required (choose at least one provider)
 OPENAI_API_KEY=your-openai-api-key
+GEMINI_API_KEY=your-gemini-api-key
 
 # Optional
+LLM_MODEL=gpt-5.2  # gpt-5.2 | gemini-3-pro-preview | gemini-3-flash-preview
 OPENAI_MODEL=gpt-5.2
 OPENAI_REASONING_EFFORT=medium  # low, medium, high - controls gpt-5.2 reasoning depth
+GEMINI_BASE_URL=https://generativelanguage.googleapis.com/v1beta
 PORT=3000
 NODE_ENV=development
 DEBUG=true  # Set to 'true' for verbose logging
+
+# Model selection applies to all steps within a run (no mix-and-match).
 
 # Zuora MCP (optional - enables direct Zuora API integration)
 ZUORA_MCP_SERVER_URL=http://localhost:8080/mcp  # Your MCP server endpoint
@@ -58,6 +63,9 @@ npm run cli analyze examples/sample-use-case.json
 
 # With output file
 npm run cli analyze examples/sample-use-case.json -o results.json
+
+# With model selection
+npm run cli analyze examples/sample-use-case.json -m gemini-3-pro-preview
 
 # Interactive mode
 npm run cli interactive
@@ -91,6 +99,25 @@ Example API call:
 curl -X POST http://localhost:3000/api/analyze \
   -H "Content-Type: application/json" \
   -d @examples/sample-use-case.json
+```
+
+With explicit model:
+
+```bash
+curl -X POST http://localhost:3000/api/analyze \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "gemini-3-flash-preview",
+    "input": {
+      "customer_name": "Acme Corp",
+      "contract_start_date": "01/01/2025",
+      "terms_months": 12,
+      "transaction_currency": "USD",
+      "billing_period": "Monthly",
+      "is_allocations": false,
+      "use_case_description": "..."
+    }
+  }'
 ```
 
 #### WebSocket
@@ -158,7 +185,7 @@ zuca-v2/
 │   ├── config.ts             # Configuration
 │   ├── types/                # Type definitions
 │   ├── data/                 # Golden Use Case data loader
-│   ├── llm/                  # OpenAI Responses API client
+│   ├── llm/                  # LLM client (OpenAI + Gemini)
 │   │   └── prompts/          # System prompts
 │   ├── pipeline/             # Pipeline orchestration
 │   │   ├── orchestrator.ts   # Main orchestrator
@@ -204,17 +231,19 @@ ZUCA uses a 10-step pipeline:
 9. **Build Rev Rec Waterfall** - Generate recognition schedule
 10. **Summarize** - Consolidate assumptions/questions
 
-The pipeline uses OpenAI's Responses API with built-in tools:
-- `web_search_preview` - Zuora documentation and web lookup
-- `code_interpreter` - Date/amount calculations for billing schedules and waterfalls
-- **Zuora MCP** (optional) - Direct Zuora API access via Model Context Protocol (SSE)
-- `ask_zuora` - Custom function tool fallback when MCP unavailable
+The pipeline uses OpenAI's Responses API and the Gemini 3 API with structured outputs and tools:
+- `web_search` (OpenAI) / `google_search` (Gemini) - Zuora documentation and web lookup
+- `code_interpreter` (OpenAI) / `code_execution` (Gemini) - Date/amount calculations
+- `url_context` (Gemini) - URL context retrieval
+- **Zuora MCP** (optional) - Direct Zuora API access via Model Context Protocol
+- `ask_zuora` - MCP tool for Zuora product guidance (function calling for Gemini)
 
 ### Tool Usage
 
 Tools are provided to the LLM but used at the model's discretion:
-- `web_search` - For up-to-date Zuora documentation lookups
-- `code_interpreter` - For complex date calculations in billing/revenue schedules
+- `web_search` / `google_search` - For up-to-date Zuora documentation lookups
+- `code_interpreter` / `code_execution` - For complex date calculations in billing/revenue schedules
+- `url_context` - Enabled on Gemini requests (no-op if unused)
 - **Zuora MCP** - When configured, provides `ask_zuora`, `query_objects`, `zuora_codegen` tools
 
 ### MCP Configuration
@@ -225,7 +254,7 @@ To enable Zuora MCP integration, set the server URL in your `.env`:
 ZUORA_MCP_SERVER_URL=https://your-mcp-server.onrender.com/sse
 ```
 
-The MCP server must support SSE (Server-Sent Events) for the OpenAI Responses API. When MCP is configured:
+The MCP server must support Streamable HTTP or SSE for OpenAI. For Gemini, the MCP server is called directly via JSON-RPC (HTTP endpoint required). When MCP is configured:
 - The LLM can query Zuora knowledge base in real-time
 - Tool calls show as `mcp_list_tools` and `mcp_call` in debug output
 - Falls back to custom function tools if MCP is unavailable

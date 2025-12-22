@@ -10,10 +10,16 @@ dotenvConfig();
 const ConfigSchema = z.object({
   // OpenAI Configuration
   openai: z.object({
-    apiKey: z.string().min(1, 'OPENAI_API_KEY is required'),
+    apiKey: z.string().optional(),
     model: z.string().default('gpt-5.2'),
     maxRetries: z.number().int().positive().default(3),
     reasoningEffort: z.enum(['low', 'medium', 'high']).default('medium'),
+  }),
+
+  // Gemini Configuration
+  gemini: z.object({
+    apiKey: z.string().optional(),
+    baseUrl: z.string().url().default('https://generativelanguage.googleapis.com/v1beta'),
   }),
 
   // Server Configuration
@@ -45,10 +51,14 @@ export type Config = z.infer<typeof ConfigSchema>;
 export function loadConfig(): Config {
   const rawConfig = {
     openai: {
-      apiKey: process.env.OPENAI_API_KEY || '',
-      model: process.env.OPENAI_MODEL || 'gpt-5.2',
+      apiKey: process.env.OPENAI_API_KEY || undefined,
+      model: process.env.LLM_MODEL || process.env.OPENAI_MODEL || 'gpt-5.2',
       maxRetries: parseInt(process.env.MAX_RETRIES || '3', 10),
       reasoningEffort: (process.env.OPENAI_REASONING_EFFORT || 'medium') as 'low' | 'medium' | 'high',
+    },
+    gemini: {
+      apiKey: process.env.GEMINI_API_KEY || undefined,
+      baseUrl: process.env.GEMINI_BASE_URL || 'https://generativelanguage.googleapis.com/v1beta',
     },
     server: {
       port: parseInt(process.env.PORT || '3000', 10),

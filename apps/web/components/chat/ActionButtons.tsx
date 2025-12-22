@@ -18,13 +18,14 @@ import {
   useDisclosure,
   addToast,
 } from "@heroui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useEditField, useRegenerate } from "@/hooks/useSessions";
 
 interface ActionButtonsProps {
   sessionId: string;
   currentInput: Record<string, unknown>;
   onActionComplete?: () => void;
+  currentModel?: string | null;
 }
 
 // Fields that can be edited
@@ -38,12 +39,25 @@ const EDITABLE_FIELDS = [
   { key: "is_allocations", label: "Enable Allocations", type: "boolean" },
 ] as const;
 
-export function ActionButtons({ sessionId, currentInput, onActionComplete }: ActionButtonsProps) {
+const MODEL_OPTIONS = [
+  { key: "gpt-5.2", label: "GPT-5.2" },
+  { key: "gemini-3-pro-preview", label: "Gemini 3 Pro (preview)" },
+  { key: "gemini-3-flash-preview", label: "Gemini 3 Flash (preview)" },
+];
+
+export function ActionButtons({ sessionId, currentInput, onActionComplete, currentModel }: ActionButtonsProps) {
   const editModal = useDisclosure();
   const regenerateModal = useDisclosure();
 
   const [selectedField, setSelectedField] = useState<string>("");
   const [fieldValue, setFieldValue] = useState<string>("");
+  const [regenerateModel, setRegenerateModel] = useState<string>(currentModel || "gpt-5.2");
+
+  useEffect(() => {
+    if (currentModel) {
+      setRegenerateModel(currentModel);
+    }
+  }, [currentModel]);
 
   const editMutation = useEditField(sessionId);
   const regenerateMutation = useRegenerate(sessionId);
@@ -85,7 +99,7 @@ export function ActionButtons({ sessionId, currentInput, onActionComplete }: Act
 
   const handleRegenerate = async () => {
     try {
-      await regenerateMutation.mutateAsync(undefined);
+      await regenerateMutation.mutateAsync({ model: regenerateModel });
 
       addToast({
         title: "Regenerating",
@@ -304,12 +318,25 @@ export function ActionButtons({ sessionId, currentInput, onActionComplete }: Act
             </div>
             <span>Regenerate Analysis</span>
           </ModalHeader>
-          <ModalBody>
-            <p className="text-default-600">
-              This will run the full analysis pipeline from scratch. Use this when you need a completely fresh analysis.
-            </p>
-            <div className="bg-default-100/50 rounded-lg p-3 mt-3 border border-default-200/50">
-              <p className="text-sm text-default-500 flex items-start gap-2">
+      <ModalBody>
+        <p className="text-default-600">
+          This will run the full analysis pipeline from scratch. Use this when you need a completely fresh analysis.
+        </p>
+        <Select
+          label="Execution Model"
+          selectedKeys={[regenerateModel]}
+          onSelectionChange={(keys) => setRegenerateModel(Array.from(keys)[0] as string)}
+          variant="bordered"
+          classNames={{
+            trigger: "border-default-200 hover:border-primary/50 data-[focus=true]:border-primary",
+          }}
+        >
+          {MODEL_OPTIONS.map((model) => (
+            <SelectItem key={model.key}>{model.label}</SelectItem>
+          ))}
+        </Select>
+        <div className="bg-default-100/50 rounded-lg p-3 mt-3 border border-default-200/50">
+          <p className="text-sm text-default-500 flex items-start gap-2">
                 <svg className="w-4 h-4 mt-0.5 text-primary flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                 </svg>

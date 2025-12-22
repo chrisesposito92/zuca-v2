@@ -14,7 +14,8 @@ import {
   validateUCGeneratorInput,
 } from '../../types/uc-generator';
 import { ZucaInput, BillingPeriod, Currency, AllocationMethod } from '../../types/input';
-import { debugLog } from '../../config';
+import { config, debugLog } from '../../config';
+import type { LlmModel } from '../../types/llm';
 
 // Import all pipeline steps
 import { researchCustomer, generateUseCases, formatOutput, formatOutputLocally } from './steps/index';
@@ -29,6 +30,8 @@ export interface UCGeneratorOptions {
   preResearch?: CustomerResearch;
   /** Session ID for tracking */
   sessionId?: string;
+  /** LLM model override */
+  model?: LlmModel;
 }
 
 /**
@@ -69,6 +72,7 @@ export async function runUCGenerator(
   options: UCGeneratorOptions = {}
 ): Promise<UCGeneratorOutput> {
   const sessionId = options.sessionId || uuidv4();
+  const selectedModel = options.model || (config.openai.model as LlmModel);
 
   debugLog('[UC Generator] Starting pipeline', {
     sessionId,
@@ -88,14 +92,16 @@ export async function runUCGenerator(
       research = options.preResearch;
       debugLog('[UC Generator] Using pre-provided research');
     } else {
-      const researchStep = await executeStep('research_customer', () => researchCustomer(validatedInput));
+      const researchStep = await executeStep('research_customer', () =>
+        researchCustomer(validatedInput, undefined, selectedModel)
+      );
       research = researchStep.data;
       stepTimings.research_customer = researchStep.durationMs;
     }
 
     // Step 2: Generate Use Cases
     const generateStep = await executeStep('generate_use_cases', () =>
-      generateUseCases(validatedInput, research)
+      generateUseCases(validatedInput, research, undefined, selectedModel)
     );
     const generated = generateStep.data;
     stepTimings.generate_use_cases = generateStep.durationMs;
@@ -106,7 +112,9 @@ export async function runUCGenerator(
       formatted = formatOutputLocally(generated);
       debugLog('[UC Generator] Used local formatting');
     } else {
-      const formatStep = await executeStep('format_output', () => formatOutput(generated));
+      const formatStep = await executeStep('format_output', () =>
+        formatOutput(generated, undefined, selectedModel)
+      );
       formatted = formatStep.data;
       stepTimings.format_output = formatStep.durationMs;
     }

@@ -1,4 +1,5 @@
 import { complete, getZuoraMcpTools, ReasoningEffort } from '../../llm/client';
+import type { LlmModel } from '../../types/llm';
 import { loadPrompt, PROMPTS } from '../../llm/prompts/index';
 import { SubscriptionSpec, SubscriptionSpecSchema, ContractIntel } from '../../types/output';
 import { MatchGoldenUseCasesOutput } from '../../types/output';
@@ -208,7 +209,8 @@ export async function generateSubscriptionSpec(
   contextSubs: GoldenSubscription[],
   contextRpcs: GoldenRatePlanChargesDoc[],
   previousSpec?: SubscriptionSpec,
-  reasoningEffort: ReasoningEffort = 'high' // Complex subscription design needs thorough reasoning
+  reasoningEffort: ReasoningEffort = 'high', // Complex subscription design needs thorough reasoning
+  model?: LlmModel
 ): Promise<SubscriptionSpec> {
   debugLog('Generating subscription spec');
 
@@ -233,6 +235,7 @@ export async function generateSubscriptionSpec(
     tools: ['web_search', 'code_interpreter'],
     mcpTools: getZuoraMcpTools(),
     reasoningEffort,
+    model,
   });
 
   if (!result.structured) {

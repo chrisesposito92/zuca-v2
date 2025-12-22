@@ -18,6 +18,7 @@ import express, { Request, Response, NextFunction } from 'express';
 import { WebSocketServer, WebSocket } from 'ws';
 import { createServer } from 'http';
 import { ZucaInput, validateZucaInput } from '../types/input';
+import { LlmModelSchema } from '../types/llm';
 import { UCGeneratorInput, validateUCGeneratorInput } from '../types/uc-generator';
 import {
   runPipeline,
@@ -70,7 +71,18 @@ const asyncHandler = (fn: (req: Request, res: Response) => Promise<void>) =>
  * Analyze a new use case
  */
 app.post('/api/analyze', asyncHandler(async (req: Request, res: Response) => {
-  const input = req.body as ZucaInput;
+  const body = req.body as { input?: ZucaInput; model?: string } & ZucaInput;
+  const input = (body.input ?? body) as ZucaInput;
+  const model = body.model;
+  const modelResult = model ? LlmModelSchema.safeParse(model) : null;
+
+  if (modelResult && !modelResult.success) {
+    res.status(400).json({
+      error: 'Invalid model',
+      details: `Model must be one of: ${LlmModelSchema.options.join(', ')}`,
+    });
+    return;
+  }
 
   // Validate input
   try {
@@ -86,7 +98,7 @@ app.post('/api/analyze', asyncHandler(async (req: Request, res: Response) => {
   debugLog('Starting analysis', { customer: input.customer_name });
 
   try {
-    const result = await runPipeline(input);
+    const result = await runPipeline(input, { model: modelResult?.data });
     res.json({
       success: true,
       session_id: result.session_id,
@@ -107,7 +119,7 @@ app.post('/api/analyze', asyncHandler(async (req: Request, res: Response) => {
  */
 app.post('/api/sessions/:id/follow-up', asyncHandler(async (req: Request, res: Response) => {
   const { id } = req.params;
-  const { query } = req.body;
+  const { query, model } = req.body as { query?: string; model?: string };
 
   if (!query || typeof query !== 'string') {
     res.status(400).json({
@@ -118,7 +130,16 @@ app.post('/api/sessions/:id/follow-up', asyncHandler(async (req: Request, res: R
   }
 
   try {
-    const response = await handleFollowUp(id, query);
+    const modelResult = model ? LlmModelSchema.safeParse(model) : null;
+    if (modelResult && !modelResult.success) {
+      res.status(400).json({
+        error: 'Invalid model',
+        details: `Model must be one of: ${LlmModelSchema.options.join(', ')}`,
+      });
+      return;
+    }
+
+    const response = await handleFollowUp(id, query, modelResult?.data);
     res.json({
       success: true,
       type: response.type,
@@ -212,7 +233,7 @@ app.delete('/api/sessions/:id', asyncHandler(async (req: Request, res: Response)
  * Quick capability detection without full pipeline
  */
 app.post('/api/quick', asyncHandler(async (req: Request, res: Response) => {
-  const { description } = req.body;
+  const { description, model } = req.body as { description?: string; model?: string };
 
   if (!description || typeof description !== 'string') {
     res.status(400).json({
@@ -223,7 +244,16 @@ app.post('/api/quick', asyncHandler(async (req: Request, res: Response) => {
   }
 
   try {
-    const result = await quickAnalysis(description);
+    const modelResult = model ? LlmModelSchema.safeParse(model) : null;
+    if (modelResult && !modelResult.success) {
+      res.status(400).json({
+        error: 'Invalid model',
+        details: `Model must be one of: ${LlmModelSchema.options.join(', ')}`,
+      });
+      return;
+    }
+
+    const result = await quickAnalysis(description, modelResult?.data);
     res.json({
       success: true,
       detected_capabilities: result.detected,
@@ -242,7 +272,18 @@ app.post('/api/quick', asyncHandler(async (req: Request, res: Response) => {
  * Generate use cases for a customer based on web research
  */
 app.post('/api/uc-generate', asyncHandler(async (req: Request, res: Response) => {
-  const input = req.body as UCGeneratorInput;
+  const body = req.body as { input?: UCGeneratorInput; model?: string } & UCGeneratorInput;
+  const input = (body.input ?? body) as UCGeneratorInput;
+  const model = body.model;
+  const modelResult = model ? LlmModelSchema.safeParse(model) : null;
+
+  if (modelResult && !modelResult.success) {
+    res.status(400).json({
+      error: 'Invalid model',
+      details: `Model must be one of: ${LlmModelSchema.options.join(', ')}`,
+    });
+    return;
+  }
 
   // Validate input
   try {
@@ -260,6 +301,7 @@ app.post('/api/uc-generate', asyncHandler(async (req: Request, res: Response) =>
   try {
     const result = await runUCGenerator(input, {
       useLocalFormatting: req.query.local === 'true',
+      model: modelResult?.data,
     });
 
     res.json({
@@ -315,10 +357,18 @@ wss.on('connection', (ws: WebSocket) => {
       switch (data.type) {
         case 'analyze':
           try {
+            const modelResult = data.model ? LlmModelSchema.safeParse(data.model) : null;
+            if (modelResult && !modelResult.success) {
+              ws.send(JSON.stringify({
+                type: 'error',
+                message: `Invalid model. Allowed: ${LlmModelSchema.options.join(', ')}`,
+              }));
+              break;
+            }
             validateZucaInput(data.input);
             ws.send(JSON.stringify({ type: 'status', message: 'Starting analysis...' }));
 
-            const result = await runPipeline(data.input);
+            const result = await runPipeline(data.input, { model: modelResult?.data });
 
             ws.send(JSON.stringify({
               type: 'result',
@@ -335,7 +385,15 @@ wss.on('connection', (ws: WebSocket) => {
 
         case 'follow-up':
           try {
-            const response = await handleFollowUp(data.session_id, data.query);
+            const modelResult = data.model ? LlmModelSchema.safeParse(data.model) : null;
+            if (modelResult && !modelResult.success) {
+              ws.send(JSON.stringify({
+                type: 'error',
+                message: `Invalid model. Allowed: ${LlmModelSchema.options.join(', ')}`,
+              }));
+              break;
+            }
+            const response = await handleFollowUp(data.session_id, data.query, modelResult?.data);
             ws.send(JSON.stringify({
               type: 'follow-up-result',
               response_type: response.type,

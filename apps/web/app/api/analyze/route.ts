@@ -6,7 +6,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { validateZucaInput } from '@zuca/types';
+import { validateZucaInput, LlmModelSchema } from '@zuca/types';
 import { runPipeline } from '@zuca/pipeline';
 import { createSession, updateSessionResult, updateSessionStatus, addMessage } from '@/lib/db';
 import { getCurrentUser } from '@/lib/auth';
@@ -17,7 +17,17 @@ export async function POST(request: NextRequest) {
     const user = await getCurrentUser();
 
     // Parse and validate input
-    const input = await request.json();
+    const body = await request.json();
+    const input = (body?.input ?? body) as unknown;
+    const model = body?.model as string | undefined;
+    const modelResult = model ? LlmModelSchema.safeParse(model) : null;
+
+    if (modelResult && !modelResult.success) {
+      return NextResponse.json(
+        { error: 'Invalid model', details: `Model must be one of: ${LlmModelSchema.options.join(', ')}` },
+        { status: 400 }
+      );
+    }
 
     try {
       validateZucaInput(input);
@@ -30,14 +40,17 @@ export async function POST(request: NextRequest) {
     }
 
     // Create session in database
-    const session = await createSession('analyze', input, user?.userId);
+    const defaultModel = process.env.LLM_MODEL || process.env.OPENAI_MODEL || 'gpt-5.2';
+    const selectedModel = modelResult?.data || defaultModel;
+
+    const session = await createSession('analyze', input, user?.userId, selectedModel);
 
     // Update status to running
     await updateSessionStatus(session.id, 'running', 0);
 
     try {
       // Run the pipeline
-      const result = await runPipeline(input);
+      const result = await runPipeline(input, { model: modelResult?.data });
 
       // Store the result
       await updateSessionResult(session.id, result);

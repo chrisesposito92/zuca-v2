@@ -7,6 +7,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { validateUCGeneratorInput } from '@zuca/types/uc-generator';
+import { LlmModelSchema } from '@zuca/types';
 import { runUCGenerator } from '@zuca/pipeline/uc-generator';
 import { createSession, updateSessionResult, updateSessionStatus } from '@/lib/db';
 import { getCurrentUser } from '@/lib/auth';
@@ -17,7 +18,17 @@ export async function POST(request: NextRequest) {
     const user = await getCurrentUser();
 
     // Parse and validate input
-    const input = await request.json();
+    const body = await request.json();
+    const input = (body?.input ?? body) as unknown;
+    const model = body?.model as string | undefined;
+    const modelResult = model ? LlmModelSchema.safeParse(model) : null;
+
+    if (modelResult && !modelResult.success) {
+      return NextResponse.json(
+        { error: 'Invalid model', details: `Model must be one of: ${LlmModelSchema.options.join(', ')}` },
+        { status: 400 }
+      );
+    }
 
     try {
       validateUCGeneratorInput(input);
@@ -30,7 +41,10 @@ export async function POST(request: NextRequest) {
     }
 
     // Create session in database
-    const session = await createSession('uc-generate', input, user?.userId);
+    const defaultModel = process.env.LLM_MODEL || process.env.OPENAI_MODEL || 'gpt-5.2';
+    const selectedModel = modelResult?.data || defaultModel;
+
+    const session = await createSession('uc-generate', input, user?.userId, selectedModel);
 
     // Update status to running
     await updateSessionStatus(session.id, 'running', 0);
@@ -40,7 +54,7 @@ export async function POST(request: NextRequest) {
       const useLocalFormatting = request.nextUrl.searchParams.get('local') === 'true';
 
       // Run the UC Generator pipeline
-      const result = await runUCGenerator(input, { useLocalFormatting });
+      const result = await runUCGenerator(input, { useLocalFormatting, model: modelResult?.data });
 
       // Store the result
       await updateSessionResult(session.id, result);

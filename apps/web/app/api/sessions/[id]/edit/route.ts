@@ -152,10 +152,14 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     await updateSessionStatus(id, 'running', 0);
 
     try {
+      const defaultModel = process.env.LLM_MODEL || process.env.OPENAI_MODEL || 'gpt-5.2';
+      const selectedModel = session.llm_model || defaultModel;
+
       // Re-run pipeline with previous partial result
       const result = await runPipeline(updatedInput, {
         sessionId: id,
         previousResult,
+        model: selectedModel,
       });
 
       // Persist updated result

@@ -19,11 +19,16 @@ interface UCGeneratorError {
   details?: string;
 }
 
-async function runUCGenerator(input: UCGeneratorInput): Promise<UCGeneratorResponse> {
+interface UCGeneratorRequest {
+  input: UCGeneratorInput;
+  model?: string;
+}
+
+async function runUCGenerator(payload: UCGeneratorRequest): Promise<UCGeneratorResponse> {
   const response = await fetch("/api/uc-generate", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(input),
+    body: JSON.stringify(payload),
   });
 
   const data = await response.json();

@@ -7,6 +7,7 @@
  */
 
 import { complete, getZuoraMcpTools, ReasoningEffort } from '../../llm/client';
+import type { LlmModel } from '../../types/llm';
 import { loadPrompt, PROMPTS } from '../../llm/prompts/index';
 import { ContractIntel, ContractIntelSchema, DetectedCapabilities, DetectedCapabilitiesSchema } from '../../types/output';
 import { ZucaInput } from '../../types/input';
@@ -135,7 +136,8 @@ export async function analyzeContract(
   capabilities: GoldenUseCaseCapability[],
   keyTerms: KeyTerm[],
   previousAnalysis?: ContractAnalysisOutput,
-  reasoningEffort: ReasoningEffort = 'medium' // Combined task needs solid reasoning
+  reasoningEffort: ReasoningEffort = 'medium', // Combined task needs solid reasoning
+  model?: LlmModel
 ): Promise<ContractAnalysisOutput> {
   debugLog('Analyzing contract (combined contract intel + capability detection)');
 
@@ -174,6 +176,7 @@ export async function analyzeContract(
     tools: ['web_search', 'code_interpreter'],
     mcpTools: getZuoraMcpTools(),
     reasoningEffort,
+    model,
   });
 
   if (!result.structured) {

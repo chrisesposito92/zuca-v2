@@ -6,6 +6,7 @@
  */
 
 import { complete, ReasoningEffort } from '../../../llm/client';
+import type { LlmModel } from '../../../types/llm';
 import { loadPrompt, PROMPTS } from '../../../llm/prompts/index';
 import { GeneratedUseCases, GeneratedUseCase } from '../../../types/uc-generator';
 import { debugLog } from '../../../config';
@@ -19,7 +20,8 @@ import { formatUseCasesForOutput } from './generate-use-cases';
  */
 export async function formatOutput(
   useCases: GeneratedUseCases,
-  reasoningEffort: ReasoningEffort = 'low' // Simple formatting task
+  reasoningEffort: ReasoningEffort = 'low', // Simple formatting task
+  model?: LlmModel
 ): Promise<string> {
   debugLog('Formatting use cases output');
 
@@ -31,6 +33,7 @@ export async function formatOutput(
     userMessage,
     // No structured output - we want markdown text
     reasoningEffort,
+    model,
   });
 
   if (!result.text) {

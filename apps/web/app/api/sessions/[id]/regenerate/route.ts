@@ -12,11 +12,13 @@ import {
   updateSessionResult,
   updateSessionStatus,
   addMessage,
+  updateSessionModel,
 } from '@/lib/db';
 import { runPipeline } from '@zuca/pipeline';
 import { runUCGenerator } from '@zuca/pipeline/uc-generator';
 import type { ZucaInput } from '@zuca/types';
 import type { UCGeneratorInput } from '@zuca/types/uc-generator';
+import { LlmModelSchema } from '@zuca/types';
 
 interface RouteParams {
   params: Promise<{ id: string }>;
@@ -29,6 +31,15 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
 
     // Optional: allow updating input fields before regeneration
     const inputUpdates = body.input_updates || {};
+    const model = body.model as string | undefined;
+    const modelResult = model ? LlmModelSchema.safeParse(model) : null;
+
+    if (modelResult && !modelResult.success) {
+      return NextResponse.json(
+        { error: 'Invalid model', details: `Model must be one of: ${LlmModelSchema.options.join(', ')}` },
+        { status: 400 }
+      );
+    }
 
     // Get existing session
     const session = await getSession(id);
@@ -44,6 +55,15 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
 
     try {
       if (session.session_type === 'analyze') {
+        const defaultModel = process.env.LLM_MODEL || process.env.OPENAI_MODEL || 'gpt-5.2';
+        const selectedModel = modelResult?.data || session.llm_model || defaultModel;
+
+        if (modelResult?.data) {
+          await updateSessionModel(id, selectedModel);
+        } else if (!session.llm_model) {
+          await updateSessionModel(id, selectedModel);
+        }
+
         // Merge any input updates
         const updatedInput: ZucaInput = {
           ...(session.input as ZucaInput),
@@ -58,6 +78,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
         // Run full pipeline (no previousResult = fresh run)
         const result = await runPipeline(updatedInput, {
           sessionId: id,
+          model: selectedModel,
         });
 
         // Persist result
@@ -73,6 +94,15 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
           result,
         });
       } else if (session.session_type === 'uc-generate') {
+        const defaultModel = process.env.LLM_MODEL || process.env.OPENAI_MODEL || 'gpt-5.2';
+        const selectedModel = modelResult?.data || session.llm_model || defaultModel;
+
+        if (modelResult?.data) {
+          await updateSessionModel(id, selectedModel);
+        } else if (!session.llm_model) {
+          await updateSessionModel(id, selectedModel);
+        }
+
         // Merge any input updates
         const updatedInput: UCGeneratorInput = {
           ...(session.input as UCGeneratorInput),
@@ -85,7 +115,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
         }
 
         // Run UC Generator pipeline
-        const result = await runUCGenerator(updatedInput);
+        const result = await runUCGenerator(updatedInput, { model: selectedModel });
 
         // Persist result
         await updateSessionResult(id, result);

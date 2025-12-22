@@ -25,6 +25,7 @@ interface ConversationPanelProps {
   sessionId: string;
   messages: Message[];
   currentInput: Record<string, unknown>;
+  currentModel?: string | null;
   onRefresh?: () => void;
 }
 
@@ -32,6 +33,7 @@ export function ConversationPanel({
   sessionId,
   messages,
   currentInput,
+  currentModel,
   onRefresh,
 }: ConversationPanelProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -139,6 +141,7 @@ export function ConversationPanel({
         <ActionButtons
           sessionId={sessionId}
           currentInput={currentInput}
+          currentModel={currentModel}
           onActionComplete={onRefresh}
         />
       </CardHeader>

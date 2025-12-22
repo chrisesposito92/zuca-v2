@@ -7,6 +7,7 @@
  */
 
 import { complete, type Message } from '../llm/client';
+import type { LlmModel } from '../types/llm';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import type { ZucaInput } from '../types/input';
@@ -262,7 +263,8 @@ const followUpResponseSchema = {
 
 export async function processFollowUp(
   query: string,
-  context: FollowUpContext
+  context: FollowUpContext,
+  model?: LlmModel
 ): Promise<FollowUpResponse> {
   debugLog('Processing follow-up query', {
     queryLength: query.length,
@@ -297,6 +299,7 @@ ${query}
       previousMessages,
       responseSchema: followUpResponseSchema,
       temperature: 0.7,
+      model,
     });
 
     if (result.structured) {

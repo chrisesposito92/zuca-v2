@@ -13,6 +13,7 @@ import chalk from 'chalk';
 import { readFile, writeFile } from 'fs/promises';
 import { createInterface } from 'readline';
 import { ZucaInput } from '../types/input';
+import { LlmModelSchema, type LlmModel } from '../types/llm';
 import { UCGeneratorInput, NumUseCases } from '../types/uc-generator';
 import {
   runPipeline,
@@ -31,6 +32,18 @@ import {
 import { formatSummaryForDisplay } from '../pipeline/steps/summarize';
 
 const program = new Command();
+
+function parseModelOption(model?: string): LlmModel | undefined {
+  if (!model) return undefined;
+  const parsed = LlmModelSchema.safeParse(model);
+  if (!parsed.success) {
+    console.error(
+      chalk.red(`Invalid model: "${model}". Allowed: ${LlmModelSchema.options.join(', ')}`)
+    );
+    process.exit(1);
+  }
+  return parsed.data;
+}
 
 /**
  * Print a section header
@@ -123,7 +136,10 @@ function printResult(result: any): void {
 /**
  * Analyze command - process a use case from JSON file
  */
-async function analyzeCommand(inputFile: string, options: { output?: string }): Promise<void> {
+async function analyzeCommand(
+  inputFile: string,
+  options: { output?: string; model?: string }
+): Promise<void> {
   try {
     console.log(chalk.blue(`Reading input from ${inputFile}...`));
     const inputJson = await readFile(inputFile, 'utf-8');
@@ -132,7 +148,8 @@ async function analyzeCommand(inputFile: string, options: { output?: string }): 
     console.log(chalk.blue(`Analyzing use case for ${input.customer_name}...`));
     console.log('');
 
-    const result = await runPipeline(input);
+    const model = parseModelOption(options.model);
+    const result = await runPipeline(input, { model });
 
     printResult(result);
 
@@ -150,7 +167,7 @@ async function analyzeCommand(inputFile: string, options: { output?: string }): 
 /**
  * Interactive command - multi-turn conversation mode
  */
-async function interactiveCommand(): Promise<void> {
+async function interactiveCommand(options: { model?: string } = {}): Promise<void> {
   const rl = createInterface({
     input: process.stdin,
     output: process.stdout,
@@ -165,6 +182,7 @@ async function interactiveCommand(): Promise<void> {
   console.log(chalk.cyan.bold('╚════════════════════════════════════════════════════════════╝\n'));
 
   let sessionId: string | null = null;
+  const selectedModel = parseModelOption(options.model);
 
   try {
     // Collect initial use case information
@@ -210,7 +228,7 @@ async function interactiveCommand(): Promise<void> {
     console.log(chalk.blue('Processing use case...'));
     console.log('');
 
-    const result = await runPipeline(input);
+    const result = await runPipeline(input, { model: selectedModel });
     sessionId = result.session_id;
 
     printResult(result);
@@ -240,7 +258,7 @@ async function interactiveCommand(): Promise<void> {
       }
 
       try {
-        const response = await handleFollowUp(sessionId!, query);
+        const response = await handleFollowUp(sessionId!, query, selectedModel);
 
         if (response.type === 'answer') {
           console.log('');
@@ -263,12 +281,13 @@ async function interactiveCommand(): Promise<void> {
 /**
  * Quick command - fast capability detection
  */
-async function quickCommand(description: string): Promise<void> {
+async function quickCommand(description: string, options: { model?: string }): Promise<void> {
   try {
     console.log(chalk.blue('Running quick analysis...'));
     console.log('');
 
-    const result = await quickAnalysis(description);
+    const model = parseModelOption(options.model);
+    const result = await quickAnalysis(description, model);
 
     printHeader('Detected Capabilities');
     console.log(chalk.green('Billing:'));
@@ -301,17 +320,20 @@ program
   .command('analyze <input>')
   .description('Analyze a use case from a JSON file')
   .option('-o, --output <file>', 'Save results to a JSON file')
+  .option('-m, --model <model>', 'LLM model (gpt-5.2 | gemini-3-pro-preview | gemini-3-flash-preview)')
   .action(analyzeCommand);
 
 program
   .command('interactive')
   .alias('i')
   .description('Start interactive mode for multi-turn conversation')
+  .option('-m, --model <model>', 'LLM model (gpt-5.2 | gemini-3-pro-preview | gemini-3-flash-preview)')
   .action(interactiveCommand);
 
 program
   .command('quick <description>')
   .description('Quick capability detection and matching')
+  .option('-m, --model <model>', 'LLM model (gpt-5.2 | gemini-3-pro-preview | gemini-3-flash-preview)')
   .action(quickCommand);
 
 /**
@@ -319,7 +341,14 @@ program
  */
 async function generateCommand(
   customerName: string,
-  options: { website: string; count?: string; notes?: string; output?: string; local?: boolean }
+  options: {
+    website: string;
+    count?: string;
+    notes?: string;
+    output?: string;
+    local?: boolean;
+    model?: string;
+  }
 ): Promise<void> {
   try {
     const numUseCases = (options.count ? parseInt(options.count, 10) : 1) as NumUseCases;
@@ -339,8 +368,10 @@ async function generateCommand(
     console.log(chalk.gray(`Researching ${options.website}...`));
     console.log('');
 
+    const model = parseModelOption(options.model);
     const result = await runUCGenerator(input, {
       useLocalFormatting: options.local,
+      model,
     });
 
     // Print formatted output
@@ -372,7 +403,7 @@ async function generateCommand(
 /**
  * Generate interactive command - interactive use case generation
  */
-async function generateInteractiveCommand(): Promise<void> {
+async function generateInteractiveCommand(options: { model?: string } = {}): Promise<void> {
   const rl = createInterface({
     input: process.stdin,
     output: process.stdout,
@@ -385,6 +416,8 @@ async function generateInteractiveCommand(): Promise<void> {
   console.log(chalk.cyan.bold('║         ZUCA - Use Case Generator                          ║'));
   console.log(chalk.cyan.bold('║         Interactive Mode                                   ║'));
   console.log(chalk.cyan.bold('╚════════════════════════════════════════════════════════════╝\n'));
+
+  const selectedModel = parseModelOption(options.model);
 
   try {
     console.log(chalk.yellow('Enter customer details:'));
@@ -414,7 +447,7 @@ async function generateInteractiveCommand(): Promise<void> {
     console.log(chalk.gray(`Researching ${customerWebsite}...`));
     console.log('');
 
-    const result = await runUCGenerator(input);
+    const result = await runUCGenerator(input, { model: selectedModel });
 
     // Print formatted output
     console.log(result.formatted);
@@ -437,7 +470,7 @@ async function generateInteractiveCommand(): Promise<void> {
         console.log(chalk.blue(`Running ${selectedUseCase.label} through ZUCA pipeline...`));
         console.log('');
 
-        const pipelineResult = await runPipeline(zucaInput);
+        const pipelineResult = await runPipeline(zucaInput, { model: selectedModel });
         printResult(pipelineResult);
 
         const saveAnswer = await prompt(chalk.white('Save results? (filename or press Enter to skip): '));
@@ -468,12 +501,14 @@ program
   .option('-n, --notes <text>', 'Additional notes to guide generation')
   .option('-o, --output <file>', 'Save results to a JSON file')
   .option('-l, --local', 'Use local formatting (faster, no LLM for formatting)')
+  .option('-m, --model <model>', 'LLM model (gpt-5.2 | gemini-3-pro-preview | gemini-3-flash-preview)')
   .action(generateCommand);
 
 program
   .command('generate-interactive')
   .alias('gi')
   .description('Interactive mode for use case generation')
+  .option('-m, --model <model>', 'LLM model (gpt-5.2 | gemini-3-pro-preview | gemini-3-flash-preview)')
   .action(generateInteractiveCommand);
 
 // Parse and execute

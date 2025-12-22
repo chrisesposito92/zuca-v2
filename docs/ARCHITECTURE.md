@@ -2,7 +2,7 @@
 
 ## Executive Summary
 
-Rebuild the ZUCA (Zuora Use Case Architect) Dify chatflow as a TypeScript application using the OpenAI Responses API with tools (web_search, code_interpreter, Zuora MCP).
+Rebuild the ZUCA (Zuora Use Case Architect) Dify chatflow as a TypeScript application using multi-provider LLMs (OpenAI Responses API + Gemini 3) with tools (web_search, code_interpreter, google_search, url_context, Zuora MCP).
 
 ---
 
@@ -54,11 +54,15 @@ Located in `/docs/Golden Use Cases/`:
 
 ### Technology Stack
 - **Language**: TypeScript (Node.js)
-- **LLM API**: OpenAI Responses API (gpt-5.2 reasoning model)
+- **LLM API**: OpenAI Responses API (gpt-5.2) + Gemini 3 API (gemini-3-pro-preview, gemini-3-flash-preview)
 - **Tools**:
   - `web_search` - Research Zuora documentation
   - `code_interpreter` - Execute calculations for billings/waterfall
+  - `google_search` - Gemini native web search
+  - `url_context` - Gemini native URL context retrieval
+  - `code_execution` - Gemini native code execution
   - Zuora MCP `ask_zuora` - Query Zuora knowledge base
+- **Gemini mapping**: `web_search` → `google_search`, `code_interpreter` → `code_execution`, and `url_context` is enabled on all Gemini requests; `ask_zuora` is exposed via function calling when MCP is configured.
 - **Framework**: Minimal - direct API calls with structured outputs
 
 ### Project Structure
@@ -85,7 +89,8 @@ zuca-v2/
 │   │       ├── build-revrec-waterfall.ts
 │   │       └── summarize.ts
 │   ├── llm/
-│   │   ├── client.ts            # OpenAI Responses API client
+│   │   ├── client.ts            # LLM client (OpenAI + Gemini)
+│   │   ├── mcp-client.ts        # MCP JSON-RPC client (Gemini function calls)
 │   │   └── prompts/             # System prompts for each step
 │   ├── tools/
 │   │   ├── web-search.ts        # Web search tool config
@@ -128,7 +133,7 @@ zuca-v2/
 
 | Step | LLM? | Tools | Description |
 |------|------|-------|-------------|
-| Router | Yes | None | Classify: use case vs general question |
+| Router | Yes | web_search / code_interpreter | Classify: use case vs general question |
 | Contract Intel | Yes | None | Extract dates/terms from use case text |
 | Detect Capabilities | Yes | web_search | Classify into ZB/ZR capabilities |
 | Match Golden Use Cases | **No** | None | Pure code: Jaccard similarity |
@@ -171,7 +176,7 @@ zuca-v2/
 
 ## Future Enhancements
 
-1. **Multi-Model Support**: Add Gemini 3 Pro as alternative to gpt-5.2
+1. **Multi-Model Support**: GPT-5.2 + Gemini 3 Pro/Flash (implemented)
 2. **Zuora Write Operations**: Create products, rate plans, subscriptions via API
    - See [ROADMAP-ZB-API-INTEGRATION.md](./ROADMAP-ZB-API-INTEGRATION.md) for detailed plan
 3. **Streaming Output**: Real-time streaming for long responses

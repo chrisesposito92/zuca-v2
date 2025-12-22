@@ -1,4 +1,5 @@
 import { complete, getZuoraMcpTools, ReasoningEffort } from '../../llm/client';
+import type { LlmModel } from '../../types/llm';
 import { loadPrompt, PROMPTS } from '../../llm/prompts/index';
 import {
   SummaryOutput,
@@ -127,7 +128,8 @@ export async function summarizeResults(
   contractsOrders?: ContractsOrdersOutput,
   billings?: BillingsOutput,
   revRecWaterfall?: RevRecWaterfallOutput,
-  reasoningEffort: ReasoningEffort = 'low' // Simple consolidation task
+  reasoningEffort: ReasoningEffort = 'low', // Simple consolidation task
+  model?: LlmModel
 ): Promise<SummaryOutput> {
   debugLog('Summarizing assumptions and open questions');
 
@@ -165,6 +167,7 @@ export async function summarizeResults(
     tools: ['web_search', 'code_interpreter'],
     mcpTools: getZuoraMcpTools(),
     reasoningEffort,
+    model,
   });
 
   if (!result.structured) {

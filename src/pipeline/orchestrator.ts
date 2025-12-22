@@ -17,7 +17,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { ZucaInput, validateZucaInput } from '../types/input';
 import { ZucaOutput, DetectedCapabilities, MatchGoldenUseCasesOutput } from '../types/output';
 import { loadGoldenUseCasesData, GoldenSubscription, GoldenRatePlanCharge } from '../data/loader';
-import { debugLog } from '../config';
+import { config, debugLog } from '../config';
+import type { LlmModel } from '../types/llm';
 
 // Import all pipeline steps (including new combined steps)
 import {
@@ -50,6 +51,8 @@ export interface PipelineOptions {
   previousResult?: Partial<ZucaOutput>;
   /** Session ID for multi-turn tracking */
   sessionId?: string;
+  /** LLM model override */
+  model?: LlmModel;
 }
 
 /**
@@ -70,6 +73,7 @@ export interface PipelineSession {
   lastUpdatedAt: Date;
   input: ZucaInput;
   result: Partial<ZucaOutput>;
+  model: LlmModel;
   conversationHistory: Array<{
     role: 'user' | 'assistant';
     content: string;
@@ -113,6 +117,7 @@ export async function runPipeline(
 ): Promise<ZucaOutput> {
   const sessionId = options.sessionId || uuidv4();
   const skipSteps = new Set(options.skipSteps || []);
+  const selectedModel = options.model || (config.openai.model as LlmModel);
 
   debugLog('Starting pipeline', { sessionId, customerName: input.customer_name });
 
@@ -144,7 +149,10 @@ export async function runPipeline(
         analyzeContract(
           validatedInput,
           goldenData.capabilities,
-          goldenData.keyTerms
+          goldenData.keyTerms,
+          undefined,
+          undefined,
+          selectedModel
         )
       );
       result.contract_intel = step.data.contractIntel;
@@ -180,7 +188,10 @@ export async function runPipeline(
           result.matched_golden_use_cases!,
           contextSubs,
           contextRpcs,
-          goldenData.pobTemplates
+          goldenData.pobTemplates,
+          undefined,
+          undefined,
+          selectedModel
         )
       );
       result.subscription_spec = step.data.subscriptionSpec;
@@ -199,7 +210,10 @@ export async function runPipeline(
             validatedInput,
             result.subscription_spec!,
             result.pob_mapping!,
-            result.contract_intel!
+            result.contract_intel!,
+            undefined,
+            undefined,
+            selectedModel
           )
         ).then((step) => {
           result.contracts_orders = step.data;
@@ -211,7 +225,14 @@ export async function runPipeline(
     if (!skipSteps.has('billings') && !result.billings) {
       parallelSteps.push(
         executeStep('billings', () =>
-          buildBillings(validatedInput, result.subscription_spec!, result.contract_intel!)
+          buildBillings(
+            validatedInput,
+            result.subscription_spec!,
+            result.contract_intel!,
+            undefined,
+            undefined,
+            selectedModel
+          )
         ).then((step) => {
           result.billings = step.data;
           stepTimings.billings = step.durationMs;
@@ -232,7 +253,10 @@ export async function runPipeline(
           result.contracts_orders!,
           result.pob_mapping!,
           result.contract_intel!,
-          goldenData.pobTemplates
+          goldenData.pobTemplates,
+          undefined,
+          undefined,
+          selectedModel
         )
       );
       result.revrec_waterfall = step.data;
@@ -248,7 +272,9 @@ export async function runPipeline(
           result.pob_mapping,
           result.contracts_orders,
           result.billings,
-          result.revrec_waterfall
+          result.revrec_waterfall,
+          undefined,
+          selectedModel
         )
       );
       result.summary = step.data;
@@ -268,6 +294,7 @@ export async function runPipeline(
       lastUpdatedAt: new Date(),
       input: validatedInput,
       result: result as Partial<ZucaOutput>,
+      model: selectedModel,
       conversationHistory: [],
     });
 
@@ -283,17 +310,20 @@ export async function runPipeline(
  */
 export async function handleFollowUp(
   sessionId: string,
-  query: string
+  query: string,
+  modelOverride?: LlmModel
 ): Promise<{ type: 'answer' | 'updated_result'; data: ExpertResponse | ZucaOutput }> {
   const session = sessions.get(sessionId);
   if (!session) {
     throw new Error(`Session not found: ${sessionId}`);
   }
 
+  const selectedModel = modelOverride || session.model;
+
   debugLog('Handling follow-up', { sessionId, queryLength: query.length });
 
   // Route the query
-  const routeResult = await smartRoute(query, true);
+  const routeResult = await smartRoute(query, true, selectedModel);
 
   // Add to conversation history
   session.conversationHistory.push({
@@ -304,7 +334,7 @@ export async function handleFollowUp(
 
   if (routeResult.classification === 'general_question') {
     // Use expert assistant for questions
-    const response = await expertAssistant(query, session.result);
+    const response = await expertAssistant(query, session.result, undefined, selectedModel);
 
     session.conversationHistory.push({
       role: 'assistant',
@@ -325,6 +355,7 @@ export async function handleFollowUp(
     const updatedResult = await runPipeline(updatedInput, {
       sessionId,
       previousResult: session.result,
+      model: selectedModel,
     });
 
     session.result = updatedResult;
@@ -359,7 +390,8 @@ export function deleteSession(sessionId: string): boolean {
  * Quick analysis without full pipeline (for previewing)
  */
 export async function quickAnalysis(
-  useCaseDescription: string
+  useCaseDescription: string,
+  model?: LlmModel
 ): Promise<{
   detected: DetectedCapabilities;
   matched: MatchGoldenUseCasesOutput;
@@ -370,7 +402,10 @@ export async function quickAnalysis(
     useCaseDescription,
     undefined,
     goldenData.capabilities,
-    goldenData.keyTerms
+    goldenData.keyTerms,
+    undefined,
+    undefined,
+    model || (config.openai.model as LlmModel)
   );
 
   const matched = matchGoldenUseCases(detected, goldenData.capabilities);

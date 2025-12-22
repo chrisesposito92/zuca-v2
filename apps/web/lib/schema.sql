@@ -30,6 +30,7 @@ CREATE TABLE IF NOT EXISTS sessions (
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     session_type VARCHAR(20) NOT NULL, -- 'analyze' | 'uc-generate'
+    llm_model VARCHAR(50),             -- 'gpt-5.2' | 'gemini-3-pro-preview' | 'gemini-3-flash-preview'
     input JSONB NOT NULL,              -- ZucaInput or UCGeneratorInput
     result JSONB,                      -- ZucaOutput or UCGeneratorOutput
     status VARCHAR(20) DEFAULT 'pending', -- pending | running | completed | failed

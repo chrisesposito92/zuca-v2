@@ -1,4 +1,5 @@
 import { complete, getZuoraMcpTools, ReasoningEffort } from '../../llm/client';
+import type { LlmModel } from '../../types/llm';
 import { loadPrompt, PROMPTS } from '../../llm/prompts/index';
 import { ContractIntel, ContractIntelSchema } from '../../types/output';
 import { ZucaInput } from '../../types/input';
@@ -68,7 +69,8 @@ function buildUserMessage(input: ZucaInput): string {
 export async function extractContractIntel(
   input: ZucaInput,
   previousContractIntel?: ContractIntel,
-  reasoningEffort: ReasoningEffort = 'low' // Simple extraction task
+  reasoningEffort: ReasoningEffort = 'low', // Simple extraction task
+  model?: LlmModel
 ): Promise<ContractIntel> {
   debugLog('Extracting contract intel from use case');
 
@@ -87,6 +89,7 @@ export async function extractContractIntel(
     tools: ['web_search', 'code_interpreter'],
     mcpTools: getZuoraMcpTools(),
     reasoningEffort,
+    model,
   });
 
   if (!result.structured) {

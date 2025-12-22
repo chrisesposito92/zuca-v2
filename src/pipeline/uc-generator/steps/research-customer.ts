@@ -6,6 +6,7 @@
  */
 
 import { complete, getZuoraMcpTools, ReasoningEffort } from '../../../llm/client';
+import type { LlmModel } from '../../../types/llm';
 import { loadPrompt, PROMPTS } from '../../../llm/prompts/index';
 import {
   UCGeneratorInput,
@@ -40,7 +41,8 @@ function buildUserMessage(input: UCGeneratorInput): string {
  */
 export async function researchCustomer(
   input: UCGeneratorInput,
-  reasoningEffort: ReasoningEffort = 'medium' // Web research requires synthesis
+  reasoningEffort: ReasoningEffort = 'medium', // Web research requires synthesis
+  model?: LlmModel
 ): Promise<CustomerResearch> {
   debugLog('Researching customer offering:', input.customer_name);
 
@@ -54,6 +56,7 @@ export async function researchCustomer(
     tools: ['web_search', 'code_interpreter'], // web_search is CRUCIAL here
     mcpTools: getZuoraMcpTools(),
     reasoningEffort,
+    model,
   });
 
   if (!result.structured) {

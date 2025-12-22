@@ -1,4 +1,5 @@
 import { complete, getZuoraMcpTools, ReasoningEffort } from '../../llm/client';
+import type { LlmModel } from '../../types/llm';
 import { loadPrompt, PROMPTS } from '../../llm/prompts/index';
 import {
   ContractsOrdersOutput,
@@ -148,7 +149,8 @@ export async function buildContractsOrders(
   pobMapping: PobMappingOutput,
   contractIntel: ContractIntel,
   previousOutput?: ContractsOrdersOutput,
-  reasoningEffort: ReasoningEffort = 'high' // Complex allocation calculations need thorough reasoning
+  reasoningEffort: ReasoningEffort = 'high', // Complex allocation calculations need thorough reasoning
+  model?: LlmModel
 ): Promise<ContractsOrdersOutput> {
   debugLog('Building Contracts/Orders table');
 
@@ -167,6 +169,7 @@ export async function buildContractsOrders(
     tools: ['web_search', 'code_interpreter'],
     mcpTools: getZuoraMcpTools(),
     reasoningEffort,
+    model,
   });
 
   if (!result.structured) {

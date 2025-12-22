@@ -1,4 +1,5 @@
 import { complete, getZuoraMcpTools, ReasoningEffort } from '../../llm/client';
+import type { LlmModel } from '../../types/llm';
 import { loadPrompt, PROMPTS } from '../../llm/prompts/index';
 import {
   BillingsOutput,
@@ -93,7 +94,8 @@ export async function buildBillings(
   subscriptionSpec: SubscriptionSpec,
   contractIntel: ContractIntel,
   previousOutput?: BillingsOutput,
-  reasoningEffort: ReasoningEffort = 'medium' // Date calculations need solid reasoning
+  reasoningEffort: ReasoningEffort = 'medium', // Date calculations need solid reasoning
+  model?: LlmModel
 ): Promise<BillingsOutput> {
   debugLog('Building Billings table');
 
@@ -112,6 +114,7 @@ export async function buildBillings(
     tools: ['web_search', 'code_interpreter'],
     mcpTools: getZuoraMcpTools(),
     reasoningEffort,
+    model,
   });
 
   if (!result.structured) {

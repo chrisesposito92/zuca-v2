@@ -8,6 +8,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getSession, addMessage, getMessages } from '@/lib/db';
 import { processFollowUp, type FollowUpContext } from '@zuca/pipeline/follow-up';
+import { LlmModelSchema } from '@zuca/types';
 import type { ZucaInput, ZucaOutput } from '@zuca/types';
 
 interface RouteParams {
@@ -18,7 +19,15 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
   try {
     const { id } = await params;
     const body = await request.json();
-    const { query } = body;
+    const { query, model } = body as { query?: string; model?: string };
+
+    const modelResult = model ? LlmModelSchema.safeParse(model) : null;
+    if (modelResult && !modelResult.success) {
+      return NextResponse.json(
+        { error: 'Invalid model', details: `Model must be one of: ${LlmModelSchema.options.join(', ')}` },
+        { status: 400 }
+      );
+    }
 
     if (!query || typeof query !== 'string') {
       return NextResponse.json(
@@ -61,7 +70,9 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       conversationHistory,
     };
 
-    const response = await processFollowUp(query, context);
+    const defaultModel = process.env.LLM_MODEL || process.env.OPENAI_MODEL || 'gpt-5.2';
+    const selectedModel = modelResult?.data || session.llm_model || defaultModel;
+    const response = await processFollowUp(query, context, selectedModel);
 
     // 5. Save assistant response to database
     await addMessage(id, 'assistant', response.content);

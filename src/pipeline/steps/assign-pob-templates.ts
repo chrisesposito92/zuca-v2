@@ -1,4 +1,5 @@
 import { complete, ReasoningEffort } from '../../llm/client';
+import type { LlmModel } from '../../types/llm';
 import { loadPrompt, PROMPTS } from '../../llm/prompts/index';
 import {
   PobMappingOutput,
@@ -185,7 +186,8 @@ export async function assignPobTemplates(
   subscriptionSpec: SubscriptionSpec,
   pobTemplates: PobTemplate[],
   previousMapping?: PobMappingOutput,
-  reasoningEffort: ReasoningEffort = 'high' // POB assignment requires careful ASC 606 reasoning
+  reasoningEffort: ReasoningEffort = 'high', // POB assignment requires careful ASC 606 reasoning
+  model?: LlmModel
 ): Promise<PobMappingOutput> {
   debugLog('Assigning POB templates to charges');
 
@@ -215,6 +217,7 @@ export async function assignPobTemplates(
     responseSchema: pobMappingJsonSchema,
     tools: ['web_search', 'code_interpreter'],
     reasoningEffort,
+    model,
   });
 
   if (!result.structured) {

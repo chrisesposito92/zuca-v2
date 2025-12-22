@@ -22,6 +22,7 @@ This document tracks the implementation of the ZUCA v2 web frontend.
 | 6. Conversation | ✅ Complete | Follow-up chat panel with Edit Field/Regenerate actions |
 | 7. History & Polish | ✅ Complete | Session list with search/delete |
 | 8. Deployment | ⏳ Pending | |
+| 9. Model Selection | ✅ Complete | Multi-provider (GPT/Gemini) selection + persistence |
 
 ---
 
@@ -208,6 +209,20 @@ apps/web/
 - Contracts/Orders (POB Name, Template, Sell Price, Allocated Price)
 - Billings (Invoice Date, Charge, Rate Plan, Amount)
 - Rev Rec Waterfall (POB, Period, Event, Amount)
+
+---
+
+## Phase 9: Model Selection ✅
+
+### Completed
+- [x] Model selector (GPT-5.2 / Gemini 3 Pro / Gemini 3 Flash) in Analyze + UC Generator flows
+- [x] Disable switching while a run is in progress
+- [x] Persist model choice per session (DB + history/solution views)
+- [x] Regenerate can choose a different model
+- [x] Backend + CLI support for model selection
+
+### Related Plan
+- See `docs/PLAN-GEMINI-MODEL-SUPPORT.md`
 
 ---
 

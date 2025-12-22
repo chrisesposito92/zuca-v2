@@ -29,6 +29,7 @@ interface UCGenerateViewProps {
   customerName: string;
   status: string;
   createdAt: string;
+  model?: string | null;
 }
 
 export function UCGenerateView({
@@ -37,6 +38,7 @@ export function UCGenerateView({
   customerName,
   status,
   createdAt,
+  model,
 }: UCGenerateViewProps) {
   const handleExportJSON = () => {
     const blob = new Blob([JSON.stringify(result, null, 2)], {
@@ -309,6 +311,11 @@ export function UCGenerateView({
                 <Chip size="sm" variant="flat" className="bg-secondary/20 text-secondary">
                   UC Generate
                 </Chip>
+                {model && (
+                  <Chip size="sm" variant="flat" className="bg-default-200/70 text-default-600">
+                    {model}
+                  </Chip>
+                )}
                 <span className="text-default-500 text-sm flex items-center gap-1.5">
                   <svg
                     className="w-4 h-4"
@@ -862,6 +869,12 @@ export function UCGenerateView({
               <Chip size="sm" variant="flat" className="bg-secondary/20 text-secondary">
                 UC Generate
               </Chip>
+            </div>
+            <div className="space-y-1">
+              <p className="text-xs font-medium text-default-500 uppercase tracking-wide">
+                Model
+              </p>
+              <p className="font-medium text-foreground">{model || "-"}</p>
             </div>
             <div className="space-y-1">
               <p className="text-xs font-medium text-default-500 uppercase tracking-wide">

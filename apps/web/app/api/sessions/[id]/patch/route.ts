@@ -88,11 +88,19 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     await addMessage(id, 'user', `[Applied change: ${changeDescription}]`);
 
     // Apply the patch
-    const patchResult = await applyPatch(currentInput, currentResult, {
-      path,
-      value,
-      previousValue: currentValue,
-    });
+    const defaultModel = process.env.LLM_MODEL || process.env.OPENAI_MODEL || 'gpt-5.2';
+    const selectedModel = session.llm_model || defaultModel;
+
+    const patchResult = await applyPatch(
+      currentInput,
+      currentResult,
+      {
+        path,
+        value,
+        previousValue: currentValue,
+      },
+      selectedModel
+    );
 
     if (!patchResult.success) {
       await addMessage(id, 'assistant', 'Failed to apply change. Please try regenerating.');

@@ -1,4 +1,5 @@
 import { complete, getZuoraMcpTools, ReasoningEffort } from '../../llm/client';
+import type { LlmModel } from '../../types/llm';
 import { loadPrompt, PROMPTS } from '../../llm/prompts/index';
 import {
   RevRecWaterfallOutput,
@@ -129,7 +130,8 @@ export async function buildRevRecWaterfall(
   contractIntel: ContractIntel,
   pobTemplates: PobTemplate[],
   previousOutput?: RevRecWaterfallOutput,
-  reasoningEffort: ReasoningEffort = 'high' // Complex rev rec calculations need thorough reasoning
+  reasoningEffort: ReasoningEffort = 'high', // Complex rev rec calculations need thorough reasoning
+  model?: LlmModel
 ): Promise<RevRecWaterfallOutput> {
   debugLog('Building Rev Rec Waterfall');
 
@@ -148,6 +150,7 @@ export async function buildRevRecWaterfall(
     tools: ['web_search', 'code_interpreter'],
     mcpTools: getZuoraMcpTools(),
     reasoningEffort,
+    model,
   });
 
   if (!result.structured) {

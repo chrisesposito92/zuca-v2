@@ -11,6 +11,7 @@
 import { complete } from '../llm/client';
 import { debugLog } from '../config';
 import type { ZucaInput } from '../types/input';
+import type { LlmModel } from '../types/llm';
 import type {
   ZucaOutput,
   BillingsOutput,
@@ -44,6 +45,7 @@ export interface IncrementalContext {
   input: ZucaInput;
   currentResult: ZucaOutput;
   patch: PatchOperation;
+  model?: LlmModel;
 }
 
 // ============================================================================
@@ -369,6 +371,7 @@ Please update the billing schedule to reflect the change.`;
     userMessage,
     responseSchema: INCREMENTAL_BILLINGS_SCHEMA,
     temperature: 0.3, // Lower temperature for more consistent updates
+    model: context.model,
   });
 
   return result.structured || currentResult.billings;
@@ -416,6 +419,7 @@ Please update the revenue waterfall to reflect the change.`;
     userMessage,
     responseSchema: INCREMENTAL_REVREC_SCHEMA,
     temperature: 0.3,
+    model: context.model,
   });
 
   return result.structured || currentResult.revrec_waterfall;
@@ -462,6 +466,7 @@ Please update the assumptions and open questions.`;
       additionalProperties: false,
     },
     temperature: 0.5,
+    model: context.model,
   });
 
   return result.structured || currentResult.summary;
@@ -477,7 +482,8 @@ Please update the assumptions and open questions.`;
 export async function applyPatch(
   input: ZucaInput,
   currentResult: ZucaOutput,
-  patch: PatchOperation
+  patch: PatchOperation,
+  model?: LlmModel
 ): Promise<PatchResult> {
   debugLog('Applying patch', { path: patch.path, value: patch.value });
 
@@ -496,6 +502,7 @@ export async function applyPatch(
     input,
     currentResult: updatedResult,
     patch,
+    model,
   };
 
   // 4. Run incremental updates for each affected step

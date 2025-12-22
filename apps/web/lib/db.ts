@@ -28,6 +28,7 @@ export interface DbSession {
   current_step: number;
   error_message: string | null;
   user_id: string | null;
+  llm_model: string | null;
 }
 
 export interface DbMessage {
@@ -65,11 +66,12 @@ export interface DbInviteCode {
 export async function createSession(
   sessionType: SessionType,
   input: ZucaInput | UCGeneratorInput,
-  userId?: string | null
+  userId?: string | null,
+  llmModel?: string | null
 ): Promise<DbSession> {
   const result = await sql<DbSession>`
-    INSERT INTO sessions (session_type, input, user_id, status)
-    VALUES (${sessionType}, ${JSON.stringify(input)}, ${userId ?? null}, 'pending')
+    INSERT INTO sessions (session_type, input, user_id, status, llm_model)
+    VALUES (${sessionType}, ${JSON.stringify(input)}, ${userId ?? null}, 'pending', ${llmModel ?? null})
     RETURNING *
   `;
   return result.rows[0];
@@ -156,6 +158,14 @@ export async function updateSessionInput(
   await sql`
     UPDATE sessions
     SET input = ${JSON.stringify(input)}
+    WHERE id = ${id}
+  `;
+}
+
+export async function updateSessionModel(id: string, model: string | null): Promise<void> {
+  await sql`
+    UPDATE sessions
+    SET llm_model = ${model}
     WHERE id = ${id}
   `;
 }

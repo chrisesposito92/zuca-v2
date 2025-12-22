@@ -14,6 +14,7 @@ interface Session {
   status: "pending" | "running" | "completed" | "failed";
   created_at: string;
   updated_at: string;
+  llm_model?: string | null;
 }
 
 interface SessionDetail extends Session {
@@ -110,12 +111,13 @@ async function editField(
 // Regenerate (full rerun)
 async function regenerateSession(
   sessionId: string,
-  inputUpdates?: Record<string, unknown>
+  inputUpdates?: Record<string, unknown>,
+  model?: string
 ): Promise<{ success: boolean; result: ZucaOutput }> {
   const response = await fetch(`/api/sessions/${sessionId}/regenerate`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ input_updates: inputUpdates }),
+    body: JSON.stringify({ input_updates: inputUpdates, model }),
   });
   const data = await response.json();
   if (!response.ok) throw data;
@@ -214,8 +216,8 @@ export function useRegenerate(sessionId: string) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (inputUpdates?: Record<string, unknown>) =>
-      regenerateSession(sessionId, inputUpdates),
+    mutationFn: (params?: { inputUpdates?: Record<string, unknown>; model?: string }) =>
+      regenerateSession(sessionId, params?.inputUpdates, params?.model),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["session", sessionId] });
     },

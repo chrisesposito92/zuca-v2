@@ -1,4 +1,5 @@
 import { complete, getZuoraMcpTools, ReasoningEffort } from '../../llm/client';
+import type { LlmModel } from '../../types/llm';
 import { loadPrompt, PROMPTS } from '../../llm/prompts/index';
 import { debugLog } from '../../config';
 
@@ -44,7 +45,8 @@ const routerJsonSchema = {
 export async function routeQuery(
   userInput: string,
   hasExistingSolution: boolean = false,
-  reasoningEffort: ReasoningEffort = 'low' // Simple classification task
+  reasoningEffort: ReasoningEffort = 'low', // Simple classification task
+  model?: LlmModel
 ): Promise<RouterResult> {
   debugLog('Routing user query', { inputLength: userInput.length, hasExistingSolution });
 
@@ -61,6 +63,7 @@ export async function routeQuery(
     tools: ['web_search', 'code_interpreter'],
     mcpTools: getZuoraMcpTools(),
     reasoningEffort,
+    model,
   });
 
   if (!result.structured) {
@@ -142,7 +145,8 @@ export function quickRouteCheck(userInput: string): RouterResult | null {
  */
 export async function smartRoute(
   userInput: string,
-  hasExistingSolution: boolean = false
+  hasExistingSolution: boolean = false,
+  model?: LlmModel
 ): Promise<RouterResult> {
   // Try quick heuristic first
   const quickResult = quickRouteCheck(userInput);
@@ -152,5 +156,5 @@ export async function smartRoute(
   }
 
   // Fall back to LLM for ambiguous cases
-  return routeQuery(userInput, hasExistingSolution);
+  return routeQuery(userInput, hasExistingSolution, undefined, model);
 }
