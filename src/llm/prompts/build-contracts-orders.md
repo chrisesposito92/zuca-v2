@@ -54,10 +54,14 @@ Each row object contains:
 
 ## Instructions
 1. Create one row per charge/POB combination
-2. Calculate extended prices based on quantity and pricing
-3. For allocations: distribute transaction price across POBs based on SSP
-4. Set Unreleased Revenue = Ext Allocated Price initially; Released Revenue = 0
-5. Use code_interpreter tool for complex calculations if needed
+2. **Strictly follow the provided POB mapping for each charge**:
+   - POB Template, POB IDENTIFIER, and Release Event must match the mapped values
+   - Do not substitute or infer a different template
+   - If a charge is missing from the mapping, note it in assumptions and use a best-fit placeholder with a clear warning
+3. Calculate extended prices based on quantity and pricing
+4. For allocations: distribute transaction price across POBs based on SSP
+5. Set Unreleased Revenue = Ext Allocated Price initially; Released Revenue = 0
+6. Use code_interpreter tool for complex calculations if needed
 
 ## Allocation Methods
 

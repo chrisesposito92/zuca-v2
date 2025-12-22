@@ -134,7 +134,7 @@ zuca-v2/
 | Match Golden Use Cases | **No** | None | Pure code: Jaccard similarity |
 | Generate Subscription | Yes | ask_zuora | Create subscription spec |
 | Assign POB Templates | Yes | None | Map charges to POB templates |
-| Build Contracts/Orders | Yes | code_interpreter | Generate table with calculations |
+| Build Contracts/Orders | Yes | code_interpreter | Generate table with calculations; POB template + release event must follow the POB mapping |
 | Build Billings | Yes | code_interpreter | Generate billing schedule |
 | Build Rev Rec Waterfall | Yes | code_interpreter | Generate rev rec schedule |
 | Summarize | Yes | None | Consolidate assumptions/questions |

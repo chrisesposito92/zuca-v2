@@ -45,7 +45,9 @@ Use when revenue should be recognized evenly over the service period regardless 
 
 **Option B: CONSUMPTION Recognition (as incurred)**
 Use when revenue should follow actual usage/drawdown patterns.
-- **Prepayment Charge POB**: `EVT-OT-CONSUMP-USAGE`
+- **Prepayment Charge POB**: `EVT-PIT-CONSUMP-USAGE` (preferred)  
+  - Use the consumption-event template that ties release directly to usage/drawdown events.
+  - **Do NOT** use `EVT-PIT-AMOUNT` for committed credits unless the use case explicitly specifies amount-based release events that are *not* tied to usage (e.g., manual credit/event postings).
 - Release event: "Upon Consumption"
 - Revenue releases AS CREDITS ARE CONSUMED (drawdown events)
 - Best for: Variable consumption, pay-as-you-go models, or when consumption directly drives value delivery
