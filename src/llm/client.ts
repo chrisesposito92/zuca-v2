@@ -333,7 +333,6 @@ function getAskZuoraFunction(mcpTools?: McpTool[]): GeminiFunctionDeclaration | 
         session: { type: 'string', description: 'Session identifier for continuity' },
       },
       required: ['prompt', 'session'],
-      additionalProperties: false,
     },
   };
 }
@@ -368,7 +367,9 @@ function buildGeminiTools(
         declarations.push({
           name: tool.function.name,
           description: tool.function.description,
-          parameters: tool.function.parameters,
+          parameters: tool.function.parameters
+            ? sanitizeSchemaForGemini(tool.function.parameters)
+            : undefined,
         });
       }
     }
@@ -384,6 +385,57 @@ function buildGeminiTools(
   }
 
   return tools.length > 0 ? tools : undefined;
+}
+
+/**
+ * Recursively sanitize a JSON schema for Gemini API compatibility.
+ * - Removes `additionalProperties` (not supported)
+ * - Converts `type: ["string", "null"]` to `type: "string"` + `nullable: true`
+ * - Removes `null` from enum arrays
+ */
+function sanitizeSchemaForGemini(schema: Record<string, unknown>): Record<string, unknown> {
+  const result: Record<string, unknown> = {};
+
+  for (const [key, value] of Object.entries(schema)) {
+    // Skip additionalProperties entirely
+    if (key === 'additionalProperties') {
+      continue;
+    }
+
+    // Handle type arrays like ["string", "null"] -> "string" + nullable: true
+    if (key === 'type' && Array.isArray(value)) {
+      const types = value.filter((t) => t !== 'null');
+      if (value.includes('null')) {
+        result.nullable = true;
+      }
+      result.type = types.length === 1 ? types[0] : types;
+      continue;
+    }
+
+    // Handle enum arrays containing null
+    if (key === 'enum' && Array.isArray(value) && value.includes(null)) {
+      result.enum = value.filter((v) => v !== null);
+      if (!result.nullable) {
+        result.nullable = true;
+      }
+      continue;
+    }
+
+    // Recursively process nested objects
+    if (value && typeof value === 'object' && !Array.isArray(value)) {
+      result[key] = sanitizeSchemaForGemini(value as Record<string, unknown>);
+    } else if (Array.isArray(value)) {
+      result[key] = value.map((item) =>
+        item && typeof item === 'object'
+          ? sanitizeSchemaForGemini(item as Record<string, unknown>)
+          : item
+      );
+    } else {
+      result[key] = value;
+    }
+  }
+
+  return result;
 }
 
 function extractGeminiText(parts: GeminiPart[] | undefined): string {
@@ -677,7 +729,7 @@ async function completeGemini<T = unknown>(
 
   if (responseSchema) {
     generationConfig.responseMimeType = 'application/json';
-    generationConfig.responseSchema = responseSchema;
+    generationConfig.responseSchema = sanitizeSchemaForGemini(responseSchema);
   }
 
   const baseRequest = {
@@ -799,8 +851,8 @@ async function completeGemini<T = unknown>(
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     const isToolConflict =
-      /multi-tool|function calling.*tools|tools.*function calling|live api|response schema|response schema/i.test(
-        message.toLowerCase()
+      /multi-tool|function calling.*tools|tools.*function calling|tool use.*function calling|function calling.*unsupported|live api|response schema/i.test(
+        message
       );
 
     if (isToolConflict) {
