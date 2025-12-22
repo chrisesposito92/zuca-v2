@@ -74,6 +74,7 @@ export const PobTemplateSchema = z.object({
   'POB Satisfied': z.string(),
   'Accounting Method': z.string(),
   'VC Enabled': z.string(),
+  'Recognition Notes': z.string().optional(),
 });
 
 export type PobTemplate = z.infer<typeof PobTemplateSchema>;
@@ -90,6 +91,7 @@ export interface NormalizedPobTemplate {
   pobSatisfied: string;
   accountingMethod: string;
   vcEnabled: boolean;
+  recognitionNotes?: string;
 }
 
 // ============================================================================

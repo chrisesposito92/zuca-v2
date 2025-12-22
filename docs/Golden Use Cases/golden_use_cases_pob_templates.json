@@ -7,7 +7,8 @@
     "Ratable Method": "Ratable",
     "POB Satisfied": "Over Time",
     "Accounting Method": "Daily",
-    "VC Enabled": "N"
+    "VC Enabled": "N",
+    "Recognition Notes": "WATERFALL: Stand-ready obligation with straightline daily rev rec. Spread allocated amount evenly from Rev Start to Rev End using daily proration. Revenue starts at booking regardless of consumption. This is NOT event-driven. Event Name = 'Upon Booking'."
   },
   {
     "POB Identifier": "BK-OT-CONSUMP-RATABLE-VC",
@@ -17,7 +18,8 @@
     "Ratable Method": "Ratable",
     "POB Satisfied": "Over Time",
     "Accounting Method": "Daily",
-    "VC Enabled": "Y"
+    "VC Enabled": "Y",
+    "Recognition Notes": "WATERFALL: Stand-ready obligation with straightline daily rev rec and VC enabled. Same as BK-OT-CONSUMP-RATABLE but with variable consideration and Rip/Replace functionality. Spread constrained estimate ratably, adjust when VC resolves. Event Name = 'Upon Booking'."
   },
   {
     "POB Identifier": "BK-OT-RATABLE",
@@ -27,7 +29,8 @@
     "Ratable Method": "Ratable",
     "POB Satisfied": "Over Time",
     "Accounting Method": "Daily",
-    "VC Enabled": "N"
+    "VC Enabled": "N",
+    "Recognition Notes": "WATERFALL: Standard straightline daily rev rec. Spread allocated amount evenly from Rev Start to Rev End. Daily rate = Allocated / Total Days, sum days per month. Event Name = 'Upon Booking'. Most common template for SaaS subscriptions."
   },
   {
     "POB Identifier": "BK-OT-RATABLE-PM",
@@ -37,7 +40,8 @@
     "Ratable Method": "Ratable",
     "POB Satisfied": "Over Time",
     "Accounting Method": "Partial Monthly",
-    "VC Enabled": "N"
+    "VC Enabled": "N",
+    "Recognition Notes": "WATERFALL: Straightline partial monthly rev rec. First and last months prorated based on actual days. Middle months get equal monthly amounts. Event Name = 'Upon Booking'."
   },
   {
     "POB Identifier": "BK-PIT-CURRENT_PERIOD",
@@ -47,7 +51,8 @@
     "Ratable Method": "Immediate Using Open Period",
     "POB Satisfied": "Point In Time",
     "Accounting Method": "Daily",
-    "VC Enabled": "N"
+    "VC Enabled": "N",
+    "Recognition Notes": "WATERFALL: Recognize 100% in the CURRENT OPEN PERIOD (booking month). Only ONE row with full amount. Event Name = 'Upon Booking'. Period = booking month."
   },
   {
     "POB Identifier": "BK-PIT-STARTDATE",
@@ -57,7 +62,8 @@
     "Ratable Method": "Immediate Using Start Date",
     "POB Satisfied": "Point In Time",
     "Accounting Method": "Daily",
-    "VC Enabled": "N"
+    "VC Enabled": "N",
+    "Recognition Notes": "WATERFALL: Recognize 100% in the month of Rev Start Date. Only ONE row with full amount. Event Name = 'Upon Booking'. Period = month containing Revenue Start Date."
   },
   {
     "POB Identifier": "BL-OT-INVRAT-PM",
@@ -67,7 +73,8 @@
     "Ratable Method": "Invoice Ratable",
     "POB Satisfied": "Over Time",
     "Accounting Method": "Partial Monthly",
-    "VC Enabled": "N"
+    "VC Enabled": "N",
+    "Recognition Notes": "WATERFALL: Billing-based release, then straightline partial monthly rev rec. No recognition before billing. After billing, spread through period end with partial month proration. Event Name = 'Upon Billing'."
   },
   {
     "POB Identifier": "BL-OT-INVRATABLE",
@@ -77,7 +84,8 @@
     "Ratable Method": "Invoice Ratable",
     "POB Satisfied": "Over Time",
     "Accounting Method": "Daily",
-    "VC Enabled": "N"
+    "VC Enabled": "N",
+    "Recognition Notes": "WATERFALL: Billing-based release, then straightline daily rev rec. No recognition before billing. After billing, spread through period end using daily method. Event Name = 'Upon Billing'."
   },
   {
     "POB Identifier": "BL-PIT-CONSUMP-PAYGO",
@@ -87,7 +95,8 @@
     "Ratable Method": "Immediate Using Open Period",
     "POB Satisfied": "Point In Time",
     "Accounting Method": "Daily",
-    "VC Enabled": "N"
+    "VC Enabled": "N",
+    "Recognition Notes": "WATERFALL: Event-driven usage recognition. Revenue recognized upon billing events. Each billing = one row with billed amount in that month. Event Name = 'Upon Billing'. Typically used for standalone usage charges (not prepaid). If no billing data, show $0 for all periods and add open question."
   },
   {
     "POB Identifier": "BL-PIT-CURRENT_PERIOD",
@@ -97,7 +106,8 @@
     "Ratable Method": "Immediate Using Open Period",
     "POB Satisfied": "Point In Time",
     "Accounting Method": "Daily",
-    "VC Enabled": "N"
+    "VC Enabled": "N",
+    "Recognition Notes": "WATERFALL: Recognize 100% in current open period when billed. No revenue before billing. One row per billing with full amount. Event Name = 'Upon Billing'."
   },
   {
     "POB Identifier": "BL-PIT-STARTDATE",
@@ -107,7 +117,8 @@
     "Ratable Method": "Immediate Using Start Date",
     "POB Satisfied": "Point In Time",
     "Accounting Method": "Daily",
-    "VC Enabled": "N"
+    "VC Enabled": "N",
+    "Recognition Notes": "WATERFALL: Recognize 100% in the month of service start date, but only after billing. No revenue before billing. Event Name = 'Upon Billing'."
   },
   {
     "POB Identifier": "EVT-OT-RATABLE",
@@ -117,7 +128,8 @@
     "Ratable Method": "Ratable",
     "POB Satisfied": "Over Time",
     "Accounting Method": "Daily",
-    "VC Enabled": "N"
+    "VC Enabled": "N",
+    "Recognition Notes": "WATERFALL: Event-triggered, then straightline daily rev rec. No revenue until acceptance event. After acceptance, spread ratably through Rev End. Event Name = 'Acceptance'."
   },
   {
     "POB Identifier": "EVT-OT-RATABLE-GOLIVE",
@@ -127,7 +139,8 @@
     "Ratable Method": "Ratable",
     "POB Satisfied": "Over Time",
     "Accounting Method": "Daily",
-    "VC Enabled": "N"
+    "VC Enabled": "N",
+    "Recognition Notes": "WATERFALL: Event-triggered, then straightline daily rev rec. No revenue until go-live event. After go-live, spread ratably through Rev End. Event Name = 'Go-Live Event'."
   },
   {
     "POB Identifier": "EVT-PIT-ACCEPTAN",
@@ -137,7 +150,8 @@
     "Ratable Method": "Immediate Using Start Date",
     "POB Satisfied": "Point In Time",
     "Accounting Method": "Daily",
-    "VC Enabled": "N"
+    "VC Enabled": "N",
+    "Recognition Notes": "WATERFALL: Recognize 100% in the month of customer acceptance. Only ONE row with full allocated amount. No revenue before acceptance. Event Name = 'Acceptance'. Use for implementation/PS delivered upon sign-off."
   },
   {
     "POB Identifier": "EVT-PIT-AMOUNT",
@@ -147,7 +161,8 @@
     "Ratable Method": "Immediate Using Open Period",
     "POB Satisfied": "Point In Time",
     "Accounting Method": "Daily",
-    "VC Enabled": "N"
+    "VC Enabled": "N",
+    "Recognition Notes": "WATERFALL: Release by amount event. Each event = one row with that amount in that month. Event Name = 'BY_AMOUNT'. If no events provided, Amount = 0 for all periods and add open question."
   },
   {
     "POB Identifier": "EVT-PIT-COMPLETION",
@@ -157,7 +172,8 @@
     "Ratable Method": "Immediate Using Open Period",
     "POB Satisfied": "Point In Time",
     "Accounting Method": "Daily",
-    "VC Enabled": "N"
+    "VC Enabled": "N",
+    "Recognition Notes": "WATERFALL: Recognize 100% in the month of completion event. Only ONE row with full allocated amount. No revenue before completion. Event Name = 'Completion'. Use for milestone-based PS or deliverables."
   },
   {
     "POB Identifier": "EVT-PIT-CONSUMP-DELIVERY",
@@ -167,7 +183,8 @@
     "Ratable Method": "Immediate Using Open Period",
     "POB Satisfied": "Point In Time",
     "Accounting Method": "Daily",
-    "VC Enabled": "N"
+    "VC Enabled": "N",
+    "Recognition Notes": "WATERFALL: Usage recognition by delivery event. Revenue recognized ONLY when delivery events occur. Amount = (units delivered × unit rate). Event Name = 'Upon Consumption'. If no delivery data, show $0 for all periods and add open question asking for delivery schedule."
   },
   {
     "POB Identifier": "EVT-PIT-CONSUMP-PAYGO",
@@ -177,7 +194,8 @@
     "Ratable Method": "Immediate Using Open Period",
     "POB Satisfied": "Point In Time",
     "Accounting Method": "Daily",
-    "VC Enabled": "N"
+    "VC Enabled": "N",
+    "Recognition Notes": "WATERFALL: Event-driven usage recognition - allows unbilled usage PRIOR to billing. Revenue recognized ONLY when consumption events occur. Amount = (units consumed × unit rate). Event Name = 'Upon Consumption'. Typically used for standalone usage charges (not prepaid). If no usage data, show $0 for all periods and add open question."
   },
   {
     "POB Identifier": "EVT-PIT-CONSUMP-USAGE",
@@ -187,7 +205,8 @@
     "Ratable Method": "Immediate Using Open Period",
     "POB Satisfied": "Point In Time",
     "Accounting Method": "Daily",
-    "VC Enabled": "N"
+    "VC Enabled": "N",
+    "Recognition Notes": "WATERFALL: Event-driven usage recognition - allows unbilled usage PRIOR to billing. Revenue recognized ONLY when consumption events occur. DO NOT spread ratably - this is event-driven. Amount = (units consumed × unit rate from prepaid pool). Event Name = 'Upon Consumption'. Typically used for prepaid charges on PPDD or minimum commits. CRITICAL: If no usage data provided, show $0 for ALL periods and add open question asking for usage/consumption data."
   },
   {
     "POB Identifier": "EVT-PIT-CUMPERCENT",
@@ -197,7 +216,8 @@
     "Ratable Method": "Immediate Using Open Period",
     "POB Satisfied": "Point In Time",
     "Accounting Method": "Daily",
-    "VC Enabled": "N"
+    "VC Enabled": "N",
+    "Recognition Notes": "WATERFALL: Release by cumulative percentage. Each event = Amount based on incremental % × allocated price. Event Name = 'CUM_PCT_EVNT'. Sum of all % should reach 100% by project end. If no % data, show $0 and add open question."
   },
   {
     "POB Identifier": "EVT-PIT-HOURS",
@@ -207,7 +227,8 @@
     "Ratable Method": "Immediate Using Open Period",
     "POB Satisfied": "Point In Time",
     "Accounting Method": "Daily",
-    "VC Enabled": "N"
+    "VC Enabled": "N",
+    "Recognition Notes": "WATERFALL: Release by hours logged. Each month's Amount = (hours logged × hourly rate). Event Name = 'Hour Input'. If no hours data, show $0 for all periods and add open question."
   },
   {
     "POB Identifier": "EVT-PIT-POC",
@@ -217,7 +238,8 @@
     "Ratable Method": "Immediate Using Open Period",
     "POB Satisfied": "Point In Time",
     "Accounting Method": "Daily",
-    "VC Enabled": "N"
+    "VC Enabled": "N",
+    "Recognition Notes": "WATERFALL: Release by percentage-of-completion. Each event = Amount based on POC % × allocated price. Event Name = 'POC'. Incremental recognition as milestones hit. If no POC data, show $0 and add open question."
   },
   {
     "POB Identifier": "EVT-PIT-QTY",
@@ -227,7 +249,8 @@
     "Ratable Method": "Immediate Using Open Period",
     "POB Satisfied": "Point In Time",
     "Accounting Method": "Daily",
-    "VC Enabled": "N"
+    "VC Enabled": "N",
+    "Recognition Notes": "WATERFALL: Release by quantity event. Each event = Amount based on qty × unit rate. Event Name = 'BY_QTY'. If no qty data, show $0 and add open question."
   },
   {
     "POB Identifier": "EVT-PIT-USAGE",
@@ -237,6 +260,7 @@
     "Ratable Method": "Immediate Using Open Period",
     "POB Satisfied": "Point In Time",
     "Accounting Method": "Daily",
-    "VC Enabled": "N"
+    "VC Enabled": "N",
+    "Recognition Notes": "WATERFALL: Release by usage quantity event (called usage, but release by qty event). Each month's Amount = (usage qty × unit rate). Event Name = 'USAGE_QTY'. If no usage data, show $0 for all periods and add open question."
   }
 ]

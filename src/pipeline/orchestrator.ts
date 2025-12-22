@@ -3,6 +3,14 @@
  *
  * Manages the execution of the ZUCA pipeline, coordinating all steps
  * and maintaining state for multi-turn conversations.
+ *
+ * OPTIMIZED PIPELINE (v2):
+ * 1. Analyze Contract (COMBINED) - Extract contract intel + detect capabilities in one call
+ * 2. Match Golden Use Cases - Find similar reference implementations (pure code)
+ * 3. Design Subscription (COMBINED) - Create subscription + assign POB templates in one call
+ * 4. Build Contracts/Orders + Build Billings (PARALLEL) - Run both simultaneously
+ * 5. Build Rev Rec Waterfall
+ * 6. Summarize
  */
 
 import { v4 as uuidv4 } from 'uuid';
@@ -11,15 +19,20 @@ import { ZucaOutput, DetectedCapabilities, MatchGoldenUseCasesOutput } from '../
 import { loadGoldenUseCasesData } from '../data/loader';
 import { debugLog } from '../config';
 
-// Import all pipeline steps
+// Import all pipeline steps (including new combined steps)
 import {
   smartRoute,
+  // Combined steps (v2)
+  analyzeContract,
+  designSubscription,
+  // Legacy individual steps (kept for backwards compatibility)
   extractContractIntel,
   detectCapabilities,
-  matchGoldenUseCases,
-  getMatchedUseCaseIds,
   generateSubscriptionSpec,
   assignPobTemplates,
+  // Shared steps
+  matchGoldenUseCases,
+  getMatchedUseCaseIds,
   buildContractsOrders,
   buildBillings,
   buildRevRecWaterfall,
@@ -121,30 +134,26 @@ export async function runPipeline(
   const stepTimings: Record<string, number> = {};
 
   try {
-    // Step 1: Contract Intel
-    if (!skipSteps.has('contract_intel') && !result.contract_intel) {
-      const step = await executeStep('contract_intel', () =>
-        extractContractIntel(validatedInput)
-      );
-      result.contract_intel = step.data;
-      stepTimings.contract_intel = step.durationMs;
-    }
+    // ============================================
+    // OPTIMIZED PIPELINE v2 - Combined Steps + Parallel Execution
+    // ============================================
 
-    // Step 2: Detect Capabilities
-    if (!skipSteps.has('detect_capabilities') && !result.detected_capabilities) {
-      const step = await executeStep('detect_capabilities', () =>
-        detectCapabilities(
-          validatedInput.use_case_description,
-          validatedInput.rev_rec_notes,
+    // Step 1: Analyze Contract (COMBINED - replaces contract_intel + detect_capabilities)
+    // Single LLM call extracts contract parameters AND detects capabilities together
+    if (!skipSteps.has('analyze_contract') && (!result.contract_intel || !result.detected_capabilities)) {
+      const step = await executeStep('analyze_contract', () =>
+        analyzeContract(
+          validatedInput,
           goldenData.capabilities,
           goldenData.keyTerms
         )
       );
-      result.detected_capabilities = step.data;
-      stepTimings.detect_capabilities = step.durationMs;
+      result.contract_intel = step.data.contractIntel;
+      result.detected_capabilities = step.data.detectedCapabilities;
+      stepTimings.analyze_contract = step.durationMs;
     }
 
-    // Step 3: Match Golden Use Cases (Pure Code - No LLM)
+    // Step 2: Match Golden Use Cases (Pure Code - No LLM)
     if (!skipSteps.has('match_golden_use_cases') && !result.matched_golden_use_cases) {
       const step = await executeStep('match_golden_use_cases', async () =>
         matchGoldenUseCases(result.detected_capabilities!, goldenData.capabilities)
@@ -162,74 +171,76 @@ export async function runPipeline(
       matchedIds.includes(r['Use Case Id'])
     );
 
-    // Step 4: Generate Subscription Spec
-    if (!skipSteps.has('subscription_spec') && !result.subscription_spec) {
-      const step = await executeStep('subscription_spec', () =>
-        generateSubscriptionSpec(
+    // Step 3: Design Subscription (COMBINED - replaces subscription_spec + pob_mapping)
+    // Single LLM call creates subscription AND assigns POB templates together
+    if (!skipSteps.has('design_subscription') && (!result.subscription_spec || !result.pob_mapping)) {
+      const step = await executeStep('design_subscription', () =>
+        designSubscription(
           validatedInput,
           result.contract_intel!,
           result.matched_golden_use_cases!,
           contextSubs,
-          contextRpcs
-        )
-      );
-      result.subscription_spec = step.data;
-      stepTimings.subscription_spec = step.durationMs;
-    }
-
-    // Step 5: Assign POB Templates
-    if (!skipSteps.has('pob_mapping') && !result.pob_mapping) {
-      const step = await executeStep('pob_mapping', () =>
-        assignPobTemplates(
-          validatedInput.use_case_description,
-          validatedInput.rev_rec_notes,
-          result.matched_golden_use_cases!,
-          result.contract_intel!,
-          result.subscription_spec!,
+          contextRpcs,
           goldenData.pobTemplates
         )
       );
-      result.pob_mapping = step.data;
-      stepTimings.pob_mapping = step.durationMs;
+      result.subscription_spec = step.data.subscriptionSpec;
+      result.pob_mapping = step.data.pobMapping;
+      stepTimings.design_subscription = step.durationMs;
     }
 
-    // Step 6: Build Contracts/Orders Table
+    // Step 4: Build Contracts/Orders AND Billings (PARALLEL)
+    // These steps don't depend on each other, so run them simultaneously
+    const parallelSteps: Promise<void>[] = [];
+
     if (!skipSteps.has('contracts_orders') && !result.contracts_orders) {
-      const step = await executeStep('contracts_orders', () =>
-        buildContractsOrders(
-          validatedInput,
-          result.subscription_spec!,
-          result.pob_mapping!,
-          result.contract_intel!
-        )
+      parallelSteps.push(
+        executeStep('contracts_orders', () =>
+          buildContractsOrders(
+            validatedInput,
+            result.subscription_spec!,
+            result.pob_mapping!,
+            result.contract_intel!
+          )
+        ).then((step) => {
+          result.contracts_orders = step.data;
+          stepTimings.contracts_orders = step.durationMs;
+        })
       );
-      result.contracts_orders = step.data;
-      stepTimings.contracts_orders = step.durationMs;
     }
 
-    // Step 7: Build Billings Table
     if (!skipSteps.has('billings') && !result.billings) {
-      const step = await executeStep('billings', () =>
-        buildBillings(validatedInput, result.subscription_spec!, result.contract_intel!)
+      parallelSteps.push(
+        executeStep('billings', () =>
+          buildBillings(validatedInput, result.subscription_spec!, result.contract_intel!)
+        ).then((step) => {
+          result.billings = step.data;
+          stepTimings.billings = step.durationMs;
+        })
       );
-      result.billings = step.data;
-      stepTimings.billings = step.durationMs;
     }
 
-    // Step 8: Build Rev Rec Waterfall
+    // Wait for parallel steps to complete
+    if (parallelSteps.length > 0) {
+      debugLog('Running contracts_orders and billings in PARALLEL');
+      await Promise.all(parallelSteps);
+    }
+
+    // Step 5: Build Rev Rec Waterfall (depends on contracts_orders)
     if (!skipSteps.has('revrec_waterfall') && !result.revrec_waterfall) {
       const step = await executeStep('revrec_waterfall', () =>
         buildRevRecWaterfall(
           result.contracts_orders!,
           result.pob_mapping!,
-          result.contract_intel!
+          result.contract_intel!,
+          goldenData.pobTemplates
         )
       );
       result.revrec_waterfall = step.data;
       stepTimings.revrec_waterfall = step.durationMs;
     }
 
-    // Step 9: Summarize
+    // Step 6: Summarize
     if (!skipSteps.has('summary') && !result.summary) {
       const step = await executeStep('summary', () =>
         summarizeResults(

@@ -1,16 +1,17 @@
-import { complete, getZuoraMcpTools, ReasoningEffort } from '../../llm/client';
-import { loadPrompt, PROMPTS } from '../../llm/prompts/index';
+import { complete, getZuoraMcpTools, ReasoningEffort } from '../../llm/client.js';
+import { loadPrompt, PROMPTS } from '../../llm/prompts/index.js';
 import {
   RevRecWaterfallOutput,
   RevRecWaterfallOutputSchema,
   ContractsOrdersOutput,
   PobMappingOutput,
   ContractIntel,
-} from '../../types/output';
-import { formatContractsOrdersForContext } from './build-contracts-orders';
-import { formatPobMappingForContext } from './assign-pob-templates';
-import { formatContractIntelForContext } from './contract-intel';
-import { debugLog } from '../../config';
+} from '../../types/output.js';
+import { PobTemplate } from '../../types/golden-use-cases.js';
+import { formatContractsOrdersForContext } from './build-contracts-orders.js';
+import { formatPobMappingForContext } from './assign-pob-templates.js';
+import { formatContractIntelForContext } from './contract-intel.js';
+import { debugLog } from '../../config.js';
 
 /**
  * JSON schema for Rev Rec Waterfall structured output
@@ -53,29 +54,65 @@ const revRecWaterfallJsonSchema = {
 };
 
 /**
+ * Format POB mapping with Recognition Notes from templates
+ * This enriches the POB mapping with waterfall-specific instructions
+ */
+function formatPobMappingWithRecognitionNotes(
+  pobMapping: PobMappingOutput,
+  pobTemplates: PobTemplate[]
+): string {
+  // Create lookup map for quick access to Recognition Notes
+  const templateMap = new Map<string, string>();
+  for (const template of pobTemplates) {
+    if (template['Recognition Notes']) {
+      templateMap.set(template['POB Identifier'], template['Recognition Notes']);
+    }
+  }
+
+  const lines = pobMapping.charge_pob_map.map((m) => {
+    const recognitionNotes = templateMap.get(m.pob_identifier) || 'No specific notes';
+    return (
+      `\n### ${m.chargeName}\n` +
+      `- POB Template: ${m.pob_name} (${m.pob_identifier})\n` +
+      `- Ratable Method: ${m.ratable_method}\n` +
+      `- Release Event: ${m.release_event}\n` +
+      `- Recognition Window: ${m.recognition_window.start} to ${m.recognition_window.end || 'ongoing'}\n` +
+      `- **WATERFALL INSTRUCTIONS**: ${recognitionNotes}`
+    );
+  });
+
+  return lines.join('\n');
+}
+
+/**
  * Build the user message for Rev Rec Waterfall generation
  */
 function buildUserMessage(
   contractsOrders: ContractsOrdersOutput,
   pobMapping: PobMappingOutput,
-  contractIntel: ContractIntel
+  contractIntel: ContractIntel,
+  pobTemplates: PobTemplate[]
 ): string {
   const parts = [
     'Generate the revenue recognition waterfall based on the following:',
     '',
-    'Contract Intel:',
+    '## Contract Intel',
     formatContractIntelForContext(contractIntel),
     '',
-    'POB Mapping (with ratable methods and release events):',
-    formatPobMappingForContext(pobMapping),
+    '## POB Mapping with Recognition Instructions',
     '',
-    'Contracts/Orders Table:',
+    'CRITICAL: Follow the WATERFALL INSTRUCTIONS for each POB exactly. These instructions are authoritative and must be followed precisely.',
+    formatPobMappingWithRecognitionNotes(pobMapping, pobTemplates),
+    '',
+    '## Contracts/Orders Table',
     formatContractsOrdersForContext(contractsOrders),
     '',
-    'Calculate monthly recognition amounts based on:',
-    '- Ratable method (spread over time vs immediate)',
-    '- Release event (when revenue is released)',
-    '- Revenue start/end dates from contracts/orders',
+    '## Instructions',
+    '1. For each charge, follow the WATERFALL INSTRUCTIONS from its POB template exactly',
+    '2. Event-driven templates (EVT-PIT-*) should show $0 in months without events',
+    '3. Ratable templates (BK-OT-*, BL-OT-*) spread amounts evenly over the period',
+    '4. Point-in-time templates recognize 100% in a single month',
+    '5. If usage/consumption data is not provided for event-driven templates, show $0 amounts and add an open question',
     '',
     'Return one row per Line Item per Period with the recognition amount.',
   ];
@@ -91,13 +128,14 @@ export async function buildRevRecWaterfall(
   contractsOrders: ContractsOrdersOutput,
   pobMapping: PobMappingOutput,
   contractIntel: ContractIntel,
+  pobTemplates: PobTemplate[],
   previousOutput?: RevRecWaterfallOutput,
   reasoningEffort: ReasoningEffort = 'high' // Complex rev rec calculations need thorough reasoning
 ): Promise<RevRecWaterfallOutput> {
   debugLog('Building Rev Rec Waterfall');
 
   const systemPrompt = await loadPrompt(PROMPTS.BUILD_REVREC_WATERFALL);
-  let userMessage = buildUserMessage(contractsOrders, pobMapping, contractIntel);
+  let userMessage = buildUserMessage(contractsOrders, pobMapping, contractIntel, pobTemplates);
 
   // Include previous results for multi-turn support
   if (previousOutput) {

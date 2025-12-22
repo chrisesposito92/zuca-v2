@@ -37,8 +37,10 @@ export async function loadPrompt(name: string): Promise<string> {
 export const PROMPTS = {
   CONTRACT_INTEL: 'contract-intel',
   DETECT_CAPABILITIES: 'detect-capabilities',
+  ANALYZE_CONTRACT: 'analyze-contract', // Combined contract intel + detect capabilities
   GENERATE_SUBSCRIPTION: 'generate-subscription',
   ASSIGN_POB_TEMPLATES: 'assign-pob-templates',
+  DESIGN_SUBSCRIPTION: 'design-subscription', // Combined subscription spec + POB mapping
   BUILD_CONTRACTS_ORDERS: 'build-contracts-orders',
   BUILD_BILLINGS: 'build-billings',
   BUILD_REVREC_WATERFALL: 'build-revrec-waterfall',

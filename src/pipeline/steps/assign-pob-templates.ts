@@ -13,88 +13,104 @@ import { formatMatchResultsForContext } from './match-golden-use-cases';
 import { debugLog } from '../../config';
 
 /**
- * JSON schema for POB mapping structured output
+ * Build JSON schema for POB mapping with dynamic enum of valid POB identifiers
+ * This ensures the LLM can ONLY return POB identifiers from our golden use cases
  */
-const pobMappingJsonSchema = {
-  type: 'object',
-  properties: {
-    charge_pob_map: {
-      type: 'array',
-      items: {
-        type: 'object',
-        properties: {
-          chargeName: { type: 'string' },
-          productName: { type: ['string', 'null'] },
-          ratePlanName: { type: ['string', 'null'] },
-          pob_identifier: { type: 'string' },
-          pob_name: { type: 'string' },
-          ratable_method: {
-            type: 'string',
-            enum: ['Ratable', 'Immediate Using Open Period', 'Immediate Using Start Date', 'Invoice Ratable'],
-          },
-          release_event: {
-            type: 'string',
-            enum: [
-              'Upon Booking (Full Booking Release)',
-              'Upon Billing (Billed Release)',
-              'Acceptance',
-              'Go-Live Event',
-              'BY_AMOUNT',
-              'Completion',
-              'Upon Consumption',
-              'CUM_PCT_EVNT',
-              'Hour Input',
-              'POC',
-              'USAGE_QTY',
-              'BY_QTY',
-            ],
-          },
-          recognition_window: {
-            type: 'object',
-            properties: {
-              start: { type: 'string' },
-              end: { type: ['string', 'null'] },
+function buildPobMappingJsonSchema(pobTemplates: PobTemplate[]) {
+  // Extract valid POB identifiers from the golden use cases
+  const validPobIdentifiers = pobTemplates.map(p => p['POB Identifier']);
+
+  debugLog('Building POB mapping schema with valid identifiers:', validPobIdentifiers);
+
+  return {
+    type: 'object',
+    properties: {
+      charge_pob_map: {
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            chargeName: { type: 'string' },
+            productName: { type: ['string', 'null'] },
+            ratePlanName: { type: ['string', 'null'] },
+            // CRITICAL: Constrain to ONLY valid POB identifiers from golden use cases
+            pob_identifier: {
+              type: 'string',
+              enum: validPobIdentifiers,
             },
-            required: ['start', 'end'],
-            additionalProperties: false,
-          },
-          rationale: { type: 'string' },
-          confidence: { type: 'number' },
-          alternatives: {
-            type: 'array',
-            items: {
+            pob_name: { type: 'string' },
+            ratable_method: {
+              type: 'string',
+              enum: ['Ratable', 'Immediate Using Open Period', 'Immediate Using Start Date', 'Invoice Ratable'],
+            },
+            release_event: {
+              type: 'string',
+              enum: [
+                'Upon Booking (Full Booking Release)',
+                'Upon Billing (Billed Release)',
+                'Acceptance',
+                'Go-Live Event',
+                'BY_AMOUNT',
+                'Completion',
+                'Upon Consumption',
+                'CUM_PCT_EVNT',
+                'Hour Input',
+                'POC',
+                'USAGE_QTY',
+                'BY_QTY',
+              ],
+            },
+            recognition_window: {
               type: 'object',
               properties: {
-                pob_identifier: { type: 'string' },
-                pob_name: { type: 'string' },
-                why_not: { type: 'string' },
+                start: { type: 'string' },
+                end: { type: ['string', 'null'] },
               },
-              required: ['pob_identifier', 'pob_name', 'why_not'],
+              required: ['start', 'end'],
               additionalProperties: false,
             },
+            rationale: { type: 'string' },
+            confidence: { type: 'number' },
+            alternatives: {
+              type: 'array',
+              items: {
+                type: 'object',
+                properties: {
+                  // Also constrain alternatives to valid identifiers
+                  pob_identifier: {
+                    type: 'string',
+                    enum: validPobIdentifiers,
+                  },
+                  pob_name: { type: 'string' },
+                  why_not: { type: 'string' },
+                },
+                required: ['pob_identifier', 'pob_name', 'why_not'],
+                additionalProperties: false,
+              },
+            },
           },
+          required: [
+            'chargeName',
+            'productName',
+            'ratePlanName',
+            'pob_identifier',
+            'pob_name',
+            'ratable_method',
+            'release_event',
+            'recognition_window',
+            'rationale',
+            'confidence',
+            'alternatives',
+          ],
+          additionalProperties: false,
         },
-        required: [
-          'chargeName',
-          'productName',
-          'ratePlanName',
-          'pob_identifier',
-          'pob_name',
-          'ratable_method',
-          'release_event',
-          'recognition_window',
-          'rationale',
-          'confidence',
-          'alternatives',
-        ],
-        additionalProperties: false,
       },
+      mapping_notes: { type: 'array', items: { type: 'string' } },
     },
-    mapping_notes: { type: 'array', items: { type: 'string' } },
-  },
-  required: ['charge_pob_map', 'mapping_notes'],
-  additionalProperties: false,
-};
+    required: ['charge_pob_map', 'mapping_notes'],
+    additionalProperties: false,
+  };
+}
 
 /**
  * Format rate plans/charges for POB mapping prompt
@@ -187,6 +203,9 @@ export async function assignPobTemplates(
   if (previousMapping) {
     userMessage = `Previous Results:\n${JSON.stringify(previousMapping, null, 2)}\n\nUser Query:\n${userMessage}`;
   }
+
+  // Build schema dynamically with valid POB identifiers to enforce strict enumeration
+  const pobMappingJsonSchema = buildPobMappingJsonSchema(pobTemplates);
 
   // Note: Zuora MCP is intentionally NOT included here because POB templates
   // must come from our golden use case templates, not from Zuora's generic docs
