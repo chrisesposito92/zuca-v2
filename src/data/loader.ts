@@ -20,8 +20,8 @@ import {
   GoldenUseCasesData,
 } from '../types/golden-use-cases';
 
-// Re-export the type for convenience
-export type { GoldenUseCasesData };
+// Re-export types for convenience
+export type { GoldenUseCasesData, GoldenSubscription, GoldenRatePlanChargesDoc as GoldenRatePlanCharge };
 
 /**
  * File names for Golden Use Case data

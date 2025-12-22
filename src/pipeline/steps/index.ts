@@ -19,16 +19,16 @@
  */
 
 // Step 1: Router
-export { routeQuery, quickRouteCheck, smartRoute, type RouterResult } from './router.js';
+export { routeQuery, quickRouteCheck, smartRoute, type RouterResult } from './router';
 
 // Step 2: Analyze Contract (COMBINED - replaces contract-intel + detect-capabilities)
-export { analyzeContract, type ContractAnalysisOutput } from './analyze-contract.js';
+export { analyzeContract, type ContractAnalysisOutput } from './analyze-contract';
 
 // Step 2 Legacy: Contract Intel (individual step)
-export { extractContractIntel, formatContractIntelForContext } from './contract-intel.js';
+export { extractContractIntel, formatContractIntelForContext } from './contract-intel';
 
 // Step 2 Legacy: Detect Capabilities (individual step)
-export { detectCapabilities, formatCapabilitiesForPrompt } from './detect-capabilities.js';
+export { detectCapabilities, formatCapabilitiesForPrompt } from './detect-capabilities';
 
 // Step 3: Match Golden Use Cases (Pure Code)
 export {
@@ -37,32 +37,32 @@ export {
   formatMatchResultsForContext,
   hasGoodMatches,
   type MatchOptions,
-} from './match-golden-use-cases.js';
+} from './match-golden-use-cases';
 
 // Step 4: Design Subscription (COMBINED - replaces generate-subscription + assign-pob-templates)
-export { designSubscription, type SubscriptionDesignOutput } from './design-subscription.js';
+export { designSubscription, type SubscriptionDesignOutput } from './design-subscription';
 
 // Step 4 Legacy: Generate Subscription (individual step)
-export { generateSubscriptionSpec, formatSubscriptionSpecForContext } from './generate-subscription.js';
+export { generateSubscriptionSpec, formatSubscriptionSpecForContext } from './generate-subscription';
 
 // Step 4 Legacy: Assign POB Templates (individual step)
-export { assignPobTemplates, formatPobMappingForContext } from './assign-pob-templates.js';
+export { assignPobTemplates, formatPobMappingForContext } from './assign-pob-templates';
 
 // Step 5a: Build Contracts/Orders (runs in PARALLEL with billings)
-export { buildContractsOrders, formatContractsOrdersForContext } from './build-contracts-orders.js';
+export { buildContractsOrders, formatContractsOrdersForContext } from './build-contracts-orders';
 
 // Step 5b: Build Billings (runs in PARALLEL with contracts/orders)
-export { buildBillings, formatBillingsForContext } from './build-billings.js';
+export { buildBillings, formatBillingsForContext } from './build-billings';
 
 // Step 6: Build Rev Rec Waterfall
 export {
   buildRevRecWaterfall,
   formatRevRecWaterfallForContext,
   pivotWaterfallForDisplay,
-} from './build-revrec-waterfall.js';
+} from './build-revrec-waterfall';
 
 // Step 7: Summarize
-export { summarizeResults, formatSummaryForDisplay } from './summarize.js';
+export { summarizeResults, formatSummaryForDisplay } from './summarize';
 
 // Expert Assistant (alternative path for general questions)
-export { expertAssistant, formatExpertResponse, type ExpertResponse } from './expert-assistant.js';
+export { expertAssistant, formatExpertResponse, type ExpertResponse } from './expert-assistant';

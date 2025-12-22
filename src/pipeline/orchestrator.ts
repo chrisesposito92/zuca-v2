@@ -16,7 +16,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import { ZucaInput, validateZucaInput } from '../types/input';
 import { ZucaOutput, DetectedCapabilities, MatchGoldenUseCasesOutput } from '../types/output';
-import { loadGoldenUseCasesData } from '../data/loader';
+import { loadGoldenUseCasesData, GoldenSubscription, GoldenRatePlanCharge } from '../data/loader';
 import { debugLog } from '../config';
 
 // Import all pipeline steps (including new combined steps)
@@ -25,11 +25,10 @@ import {
   // Combined steps (v2)
   analyzeContract,
   designSubscription,
+  type ContractAnalysisOutput,
+  type SubscriptionDesignOutput,
   // Legacy individual steps (kept for backwards compatibility)
-  extractContractIntel,
   detectCapabilities,
-  generateSubscriptionSpec,
-  assignPobTemplates,
   // Shared steps
   matchGoldenUseCases,
   getMatchedUseCaseIds,
@@ -141,7 +140,7 @@ export async function runPipeline(
     // Step 1: Analyze Contract (COMBINED - replaces contract_intel + detect_capabilities)
     // Single LLM call extracts contract parameters AND detects capabilities together
     if (!skipSteps.has('analyze_contract') && (!result.contract_intel || !result.detected_capabilities)) {
-      const step = await executeStep('analyze_contract', () =>
+      const step = await executeStep<ContractAnalysisOutput>('analyze_contract', () =>
         analyzeContract(
           validatedInput,
           goldenData.capabilities,
@@ -164,17 +163,17 @@ export async function runPipeline(
 
     // Get context slices for matched use cases
     const matchedIds = getMatchedUseCaseIds(result.matched_golden_use_cases!);
-    const contextSubs = goldenData.subscriptions.filter((s) =>
+    const contextSubs = goldenData.subscriptions.filter((s: GoldenSubscription) =>
       matchedIds.includes(s['Use Case Id'])
     );
-    const contextRpcs = goldenData.ratePlansCharges.filter((r) =>
+    const contextRpcs = goldenData.ratePlansCharges.filter((r: GoldenRatePlanCharge) =>
       matchedIds.includes(r['Use Case Id'])
     );
 
     // Step 3: Design Subscription (COMBINED - replaces subscription_spec + pob_mapping)
     // Single LLM call creates subscription AND assigns POB templates together
     if (!skipSteps.has('design_subscription') && (!result.subscription_spec || !result.pob_mapping)) {
-      const step = await executeStep('design_subscription', () =>
+      const step = await executeStep<SubscriptionDesignOutput>('design_subscription', () =>
         designSubscription(
           validatedInput,
           result.contract_intel!,

@@ -1,17 +1,16 @@
-import { complete, getZuoraMcpTools, ReasoningEffort } from '../../llm/client.js';
-import { loadPrompt, PROMPTS } from '../../llm/prompts/index.js';
+import { complete, getZuoraMcpTools, ReasoningEffort } from '../../llm/client';
+import { loadPrompt, PROMPTS } from '../../llm/prompts/index';
 import {
   RevRecWaterfallOutput,
   RevRecWaterfallOutputSchema,
   ContractsOrdersOutput,
   PobMappingOutput,
   ContractIntel,
-} from '../../types/output.js';
-import { PobTemplate } from '../../types/golden-use-cases.js';
-import { formatContractsOrdersForContext } from './build-contracts-orders.js';
-import { formatPobMappingForContext } from './assign-pob-templates.js';
-import { formatContractIntelForContext } from './contract-intel.js';
-import { debugLog } from '../../config.js';
+} from '../../types/output';
+import { PobTemplate } from '../../types/golden-use-cases';
+import { formatContractsOrdersForContext } from './build-contracts-orders';
+import { formatContractIntelForContext } from './contract-intel';
+import { debugLog } from '../../config';
 
 /**
  * JSON schema for Rev Rec Waterfall structured output

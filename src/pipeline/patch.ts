@@ -13,9 +13,6 @@ import { debugLog } from '../config';
 import type { ZucaInput } from '../types/input';
 import type {
   ZucaOutput,
-  SubscriptionSpec,
-  PobMappingOutput,
-  ContractsOrdersOutput,
   BillingsOutput,
   RevRecWaterfallOutput,
 } from '../types/output';
