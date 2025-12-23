@@ -782,7 +782,7 @@ export default function AnalyzePage() {
                   />
                 </div>
 
-                <div className="pt-4">
+                <div>
                 <Select
                   label="Number of Use Cases"
                   selectedKeys={[String(ucInput.num_use_cases)]}
@@ -806,6 +806,7 @@ export default function AnalyzePage() {
                 </Select>
                 </div>
 
+                <div>
                 <Select
                   label="Execution Model"
                   selectedKeys={[ucModel]}
@@ -827,6 +828,7 @@ export default function AnalyzePage() {
                     </SelectItem>
                   ))}
                 </Select>
+                </div>
 
                 <Textarea
                   label="Additional Notes (Optional)"
