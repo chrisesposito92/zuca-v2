@@ -782,52 +782,52 @@ export default function AnalyzePage() {
                   />
                 </div>
 
-                <div>
-                <Select
-                  label="Number of Use Cases"
-                  selectedKeys={[String(ucInput.num_use_cases)]}
-                  onSelectionChange={(keys) =>
-                    setUcInput((prev) => ({
-                      ...prev,
-                      num_use_cases: parseInt(Array.from(keys)[0] as string, 10) as 1 | 2 | 3,
-                    }))
-                  }
-                  labelPlacement="outside"
-                  variant="bordered"
-                  size="lg"
-                  isDisabled={ucGeneratorMutation.isPending}
-                  classNames={{
-                    trigger: "border-default-200 hover:border-primary/50 data-[focus=true]:border-primary",
-                  }}
-                >
-                  <SelectItem key="1">1 Use Case</SelectItem>
-                  <SelectItem key="2">2 Use Cases</SelectItem>
-                  <SelectItem key="3">3 Use Cases</SelectItem>
-                </Select>
+                <div className="pt-4">
+                  <Select
+                    label="Number of Use Cases"
+                    selectedKeys={[String(ucInput.num_use_cases)]}
+                    onSelectionChange={(keys) =>
+                      setUcInput((prev) => ({
+                        ...prev,
+                        num_use_cases: parseInt(Array.from(keys)[0] as string, 10) as 1 | 2 | 3,
+                      }))
+                    }
+                    labelPlacement="outside"
+                    variant="bordered"
+                    size="lg"
+                    isDisabled={ucGeneratorMutation.isPending}
+                    classNames={{
+                      trigger: "border-default-200 hover:border-primary/50 data-[focus=true]:border-primary",
+                    }}
+                  >
+                    <SelectItem key="1">1 Use Case</SelectItem>
+                    <SelectItem key="2">2 Use Cases</SelectItem>
+                    <SelectItem key="3">3 Use Cases</SelectItem>
+                  </Select>
                 </div>
 
-                <div>
-                <Select
-                  label="Execution Model"
-                  selectedKeys={[ucModel]}
-                  onSelectionChange={(keys) => setUcModel(Array.from(keys)[0] as string)}
-                  labelPlacement="outside"
-                  variant="bordered"
-                  size="lg"
-                  isDisabled={ucGeneratorMutation.isPending}
-                  classNames={{
-                    trigger: "border-default-200 hover:border-primary/50 data-[focus=true]:border-primary",
-                  }}
-                >
-                  {modelOptions.map((model) => (
-                    <SelectItem key={model.key} textValue={model.label}>
-                      <div className="flex flex-col">
-                        <span>{model.label}</span>
-                        <span className="text-xs text-default-400">{model.description}</span>
-                      </div>
-                    </SelectItem>
-                  ))}
-                </Select>
+                <div className="pt-4">
+                  <Select
+                    label="Execution Model"
+                    selectedKeys={[ucModel]}
+                    onSelectionChange={(keys) => setUcModel(Array.from(keys)[0] as string)}
+                    labelPlacement="outside"
+                    variant="bordered"
+                    size="lg"
+                    isDisabled={ucGeneratorMutation.isPending}
+                    classNames={{
+                      trigger: "border-default-200 hover:border-primary/50 data-[focus=true]:border-primary",
+                    }}
+                  >
+                    {modelOptions.map((model) => (
+                      <SelectItem key={model.key} textValue={model.label}>
+                        <div className="flex flex-col">
+                          <span>{model.label}</span>
+                          <span className="text-xs text-default-400">{model.description}</span>
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </Select>
                 </div>
 
                 <Textarea
