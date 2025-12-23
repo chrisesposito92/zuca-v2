@@ -88,8 +88,9 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     await addMessage(id, 'user', `[Applied change: ${changeDescription}]`);
 
     // Apply the patch
-    const defaultModel = process.env.LLM_MODEL || process.env.OPENAI_MODEL || 'gpt-5.2';
-    const selectedModel = session.llm_model || defaultModel;
+    type LlmModel = 'gpt-5.2' | 'gemini-3-pro-preview' | 'gemini-3-flash-preview';
+    const defaultModel: LlmModel = (process.env.LLM_MODEL || process.env.OPENAI_MODEL || 'gpt-5.2') as LlmModel;
+    const selectedModel: LlmModel = (session.llm_model as LlmModel) || defaultModel;
 
     const patchResult = await applyPatch(
       currentInput,

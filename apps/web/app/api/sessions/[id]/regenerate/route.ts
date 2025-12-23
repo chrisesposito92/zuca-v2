@@ -53,10 +53,12 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     // Add regeneration message to conversation history
     await addMessage(id, 'user', '[Requested full regeneration]');
 
+    type LlmModel = 'gpt-5.2' | 'gemini-3-pro-preview' | 'gemini-3-flash-preview';
+
     try {
       if (session.session_type === 'analyze') {
-        const defaultModel = process.env.LLM_MODEL || process.env.OPENAI_MODEL || 'gpt-5.2';
-        const selectedModel = modelResult?.data || session.llm_model || defaultModel;
+        const defaultModel: LlmModel = (process.env.LLM_MODEL || process.env.OPENAI_MODEL || 'gpt-5.2') as LlmModel;
+        const selectedModel: LlmModel = modelResult?.data || (session.llm_model as LlmModel) || defaultModel;
 
         if (modelResult?.data) {
           await updateSessionModel(id, selectedModel);
@@ -94,8 +96,8 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
           result,
         });
       } else if (session.session_type === 'uc-generate') {
-        const defaultModel = process.env.LLM_MODEL || process.env.OPENAI_MODEL || 'gpt-5.2';
-        const selectedModel = modelResult?.data || session.llm_model || defaultModel;
+        const defaultModel: LlmModel = (process.env.LLM_MODEL || process.env.OPENAI_MODEL || 'gpt-5.2') as LlmModel;
+        const selectedModel: LlmModel = modelResult?.data || (session.llm_model as LlmModel) || defaultModel;
 
         if (modelResult?.data) {
           await updateSessionModel(id, selectedModel);

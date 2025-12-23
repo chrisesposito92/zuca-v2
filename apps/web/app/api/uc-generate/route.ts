@@ -30,8 +30,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    let validatedInput;
     try {
-      validateUCGeneratorInput(input);
+      validatedInput = validateUCGeneratorInput(input);
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : 'Invalid input';
       return NextResponse.json(
@@ -44,7 +45,7 @@ export async function POST(request: NextRequest) {
     const defaultModel = process.env.LLM_MODEL || process.env.OPENAI_MODEL || 'gpt-5.2';
     const selectedModel = modelResult?.data || defaultModel;
 
-    const session = await createSession('uc-generate', input, user?.userId, selectedModel);
+    const session = await createSession('uc-generate', validatedInput, user?.userId, selectedModel);
 
     // Update status to running
     await updateSessionStatus(session.id, 'running', 0);
@@ -54,7 +55,7 @@ export async function POST(request: NextRequest) {
       const useLocalFormatting = request.nextUrl.searchParams.get('local') === 'true';
 
       // Run the UC Generator pipeline
-      const result = await runUCGenerator(input, { useLocalFormatting, model: modelResult?.data });
+      const result = await runUCGenerator(validatedInput, { useLocalFormatting, model: modelResult?.data });
 
       // Store the result
       await updateSessionResult(session.id, result);

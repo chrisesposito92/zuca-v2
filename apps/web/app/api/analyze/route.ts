@@ -29,8 +29,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    let validatedInput;
     try {
-      validateZucaInput(input);
+      validatedInput = validateZucaInput(input);
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : 'Invalid input';
       return NextResponse.json(
@@ -43,14 +44,14 @@ export async function POST(request: NextRequest) {
     const defaultModel = process.env.LLM_MODEL || process.env.OPENAI_MODEL || 'gpt-5.2';
     const selectedModel = modelResult?.data || defaultModel;
 
-    const session = await createSession('analyze', input, user?.userId, selectedModel);
+    const session = await createSession('analyze', validatedInput, user?.userId, selectedModel);
 
     // Update status to running
     await updateSessionStatus(session.id, 'running', 0);
 
     try {
       // Run the pipeline
-      const result = await runPipeline(input, { model: modelResult?.data });
+      const result = await runPipeline(validatedInput, { model: modelResult?.data });
 
       // Store the result
       await updateSessionResult(session.id, result);

@@ -152,8 +152,8 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     await updateSessionStatus(id, 'running', 0);
 
     try {
-      const defaultModel = process.env.LLM_MODEL || process.env.OPENAI_MODEL || 'gpt-5.2';
-      const selectedModel = session.llm_model || defaultModel;
+      const defaultModel = (process.env.LLM_MODEL || process.env.OPENAI_MODEL || 'gpt-5.2') as 'gpt-5.2' | 'gemini-3-pro-preview' | 'gemini-3-flash-preview';
+      const selectedModel = (session.llm_model as typeof defaultModel) || defaultModel;
 
       // Re-run pipeline with previous partial result
       const result = await runPipeline(updatedInput, {
