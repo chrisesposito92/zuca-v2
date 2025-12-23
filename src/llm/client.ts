@@ -412,10 +412,16 @@ function sanitizeSchemaForGemini(schema: Record<string, unknown>): Record<string
       continue;
     }
 
-    // Handle enum arrays containing null
-    if (key === 'enum' && Array.isArray(value) && value.includes(null)) {
-      result.enum = value.filter((v) => v !== null);
-      if (!result.nullable) {
+    // Handle enum arrays containing null or empty strings
+    if (key === 'enum' && Array.isArray(value)) {
+      const hasNull = value.includes(null);
+      const hasEmptyString = value.includes('');
+      // Filter out null and empty strings (Gemini doesn't support them)
+      const filteredEnum = value.filter((v) => v !== null && v !== '');
+      if (filteredEnum.length > 0) {
+        result.enum = filteredEnum;
+      }
+      if (hasNull || hasEmptyString) {
         result.nullable = true;
       }
       continue;
