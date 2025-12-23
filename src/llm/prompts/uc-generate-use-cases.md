@@ -154,3 +154,11 @@ Return ONLY one valid JSON object, no commentary, with this exact structure:
 - Do not contradict explicit prices given in catalog_summary.
 - Do not use Markdown. Plain JSON only.
 - All discovery items, clarifications, and open questions must go ONLY into "risks_or_open_questions"
+
+## Reference Documentation
+
+For Zuora-specific concepts, refer to these documentation pages:
+- Subscriptions and Rate Plans: https://knowledgecenter.zuora.com/Zuora_Billing/Subscriptions
+- Charge Models: https://knowledgecenter.zuora.com/Zuora_Billing/Product_Catalog/Charge_Models
+- Revenue Recognition Overview: https://knowledgecenter.zuora.com/Zuora_Revenue/Zuora_Revenue_Basics
+- Billing Timing (In Advance vs In Arrears): https://knowledgecenter.zuora.com/Zuora_Billing/Product_Catalog/Product_Catalog_Concepts

@@ -48,3 +48,12 @@ Each billing row contains:
 For a 12-month contract starting 01/01/2025, billed semi-annually in advance:
 - 01/01/2025: Bill for Jan-Jun 2025
 - 07/01/2025: Bill for Jul-Dec 2025
+
+## Reference Documentation
+
+For Zuora-specific concepts, refer to these documentation pages:
+- Billing Overview: https://knowledgecenter.zuora.com/Zuora_Billing/Billing_and_Payments
+- Billing Periods: https://knowledgecenter.zuora.com/Zuora_Billing/Product_Catalog/Product_Catalog_Concepts
+- Proration: https://knowledgecenter.zuora.com/Zuora_Billing/Subscriptions/Proration
+- Usage Billing: https://knowledgecenter.zuora.com/Zuora_Billing/Product_Catalog/Charge_Models/Usage_Charges
+- Invoice Generation: https://knowledgecenter.zuora.com/Zuora_Billing/Billing_and_Payments/Invoices

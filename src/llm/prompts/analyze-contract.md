@@ -111,3 +111,14 @@ By analyzing contract parameters and capabilities together, you can:
 1. Cross-validate findings (e.g., billing period affects capability inference)
 2. Maintain consistent interpretation of terms
 3. Identify relationships between commercial terms and technical capabilities
+
+## Reference Documentation
+
+For Zuora-specific concepts, refer to these documentation pages:
+- Billing Timing (In Advance vs In Arrears): https://knowledgecenter.zuora.com/Zuora_Billing/Product_Catalog/Product_Catalog_Concepts
+- Charge Models Overview: https://knowledgecenter.zuora.com/Zuora_Billing/Product_Catalog/Charge_Models
+- Usage Charges: https://knowledgecenter.zuora.com/Zuora_Billing/Product_Catalog/Charge_Models/Usage_Charges
+- Orders and Amendments: https://knowledgecenter.zuora.com/Zuora_Billing/Orders
+- Revenue Recognition Overview: https://knowledgecenter.zuora.com/Zuora_Revenue/Zuora_Revenue_Basics
+- Variable Consideration: https://docs.zuora.com/en/zuora-revenue/day-to-day-operation/variable-consideration-processing
+- Ramp Deals: https://docs.zuora.com/en/zuora-revenue/day-to-day-operation/ramp-deals

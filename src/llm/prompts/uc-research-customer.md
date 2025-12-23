@@ -111,3 +111,11 @@ Return ONLY a single valid JSON object, no commentary, with this structure:
 - Do not include any Markdown.
 - Do not include any text outside the JSON.
 - Keep all string values concise and free of unnecessary line breaks.
+
+## Reference Documentation
+
+For Zuora billing concept reference when mapping customer offerings:
+- Charge Models: https://knowledgecenter.zuora.com/Zuora_Billing/Product_Catalog/Charge_Models
+- Usage Charges: https://knowledgecenter.zuora.com/Zuora_Billing/Product_Catalog/Charge_Models/Usage_Charges
+- Tiered and Volume Pricing: https://knowledgecenter.zuora.com/Zuora_Billing/Product_Catalog/Charge_Models/Tiered_and_Volume_Pricing
+- Revenue Recognition Basics: https://knowledgecenter.zuora.com/Zuora_Revenue/Zuora_Revenue_Basics

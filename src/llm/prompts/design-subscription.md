@@ -165,3 +165,15 @@ By designing subscription AND POB mappings together, you can:
 2. Design charges knowing exactly how they will be recognized
 3. Avoid disconnects between billing and revenue treatment
 4. Identify issues early (e.g., a charge type that doesn't have a suitable POB)
+
+## Reference Documentation
+
+For Zuora-specific concepts, refer to these documentation pages:
+- Subscriptions Overview: https://knowledgecenter.zuora.com/Zuora_Billing/Subscriptions
+- Rate Plans and Charges: https://knowledgecenter.zuora.com/Zuora_Billing/Product_Catalog/Rate_Plans_and_Charges
+- Charge Models: https://knowledgecenter.zuora.com/Zuora_Billing/Product_Catalog/Charge_Models
+- Tiered and Volume Pricing: https://knowledgecenter.zuora.com/Zuora_Billing/Product_Catalog/Charge_Models/Tiered_and_Volume_Pricing
+- Prepaid with Drawdown: https://docs.zuora.com/en/zuora-billing/manage-subscriptions/prepaid-with-drawdown
+- Contract Amendments: https://docs.zuora.com/en/zuora-revenue/advanced-revenue-operations/contract-modifications
+- Bundle Explosion: https://docs.zuora.com/en/zuora-revenue/advanced-revenue-operations/bundle-explosion
+- POB Templates: https://docs.zuora.com/en/zuora-revenue/zuora-revenue-configuration/rc-pob-templates
