@@ -35,11 +35,8 @@ export async function loadPrompt(name: string): Promise<string> {
  * Get all available prompt names
  */
 export const PROMPTS = {
-  CONTRACT_INTEL: 'contract-intel',
-  DETECT_CAPABILITIES: 'detect-capabilities',
-  ANALYZE_CONTRACT: 'analyze-contract', // Combined contract intel + detect capabilities
-  GENERATE_SUBSCRIPTION: 'generate-subscription',
-  ASSIGN_POB_TEMPLATES: 'assign-pob-templates',
+  // Active pipeline steps
+  ANALYZE_CONTRACT: 'analyze-contract', // Combined contract intel + capability detection
   DESIGN_SUBSCRIPTION: 'design-subscription', // Combined subscription spec + POB mapping
   BUILD_CONTRACTS_ORDERS: 'build-contracts-orders',
   BUILD_BILLINGS: 'build-billings',
@@ -47,6 +44,8 @@ export const PROMPTS = {
   SUMMARIZE: 'summarize',
   EXPERT_ASSISTANT: 'expert-assistant',
   ROUTER: 'router',
+  // Still used by quickAnalysis
+  DETECT_CAPABILITIES: 'detect-capabilities',
   // UC Generator prompts
   UC_RESEARCH_CUSTOMER: 'uc-research-customer',
   UC_GENERATE_USE_CASES: 'uc-generate-use-cases',
