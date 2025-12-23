@@ -17,9 +17,17 @@ interface JsonRpcResponse<T = unknown> {
 
 const MCP_PROTOCOL_VERSION = '2024-11-05';
 
+/**
+ * MCP client that supports SSE transport.
+ * SSE transport works by:
+ * 1. Connecting to /sse endpoint via GET to receive events
+ * 2. Server sends an "endpoint" event with a session-specific POST URL
+ * 3. Client POSTs JSON-RPC messages to that session URL
+ */
 class McpHttpClient {
   private initialized = false;
   private initializing?: Promise<void>;
+  private sessionEndpoint?: string;
 
   constructor(private readonly serverUrl: string) {}
 
@@ -39,8 +47,85 @@ class McpHttpClient {
     await this.initializing;
   }
 
+  /**
+   * Connect to SSE endpoint to get the session-specific POST URL
+   */
+  private async getSessionEndpoint(): Promise<string> {
+    // Check if this is an SSE URL (ends with /sse)
+    if (!this.serverUrl.endsWith('/sse')) {
+      // Not SSE transport, use URL directly
+      return this.serverUrl;
+    }
+
+    // For SSE transport, connect and get the endpoint event
+    const baseUrl = this.serverUrl.replace(/\/sse$/, '');
+
+    return new Promise<string>((resolve, reject) => {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => {
+        controller.abort();
+        reject(new Error('SSE connection timeout'));
+      }, 15000);
+
+      fetch(this.serverUrl, {
+        method: 'GET',
+        headers: { 'Accept': 'text/event-stream' },
+        signal: controller.signal,
+      })
+        .then(async (response) => {
+          if (!response.ok || !response.body) {
+            throw new Error(`SSE connection failed: ${response.status}`);
+          }
+
+          const reader = response.body.getReader();
+          const decoder = new TextDecoder();
+          let buffer = '';
+
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+
+            buffer += decoder.decode(value, { stream: true });
+            const lines = buffer.split('\n');
+            buffer = lines.pop() || '';
+
+            for (let i = 0; i < lines.length; i++) {
+              const line = lines[i].trim();
+              if (line.startsWith('event: endpoint')) {
+                // Next line should be the data
+                const nextLine = lines[i + 1]?.trim();
+                if (nextLine?.startsWith('data: ')) {
+                  const endpoint = nextLine.slice(6).trim();
+                  clearTimeout(timeout);
+                  reader.cancel();
+                  debugLog('SSE session endpoint obtained:', endpoint);
+                  resolve(endpoint);
+                  return;
+                }
+              }
+            }
+          }
+
+          // If we get here without finding endpoint, use fallback
+          clearTimeout(timeout);
+          debugLog('SSE endpoint event not found, using fallback');
+          resolve(baseUrl);
+        })
+        .catch((error) => {
+          clearTimeout(timeout);
+          debugLog('SSE connection error:', error);
+          // Fallback to base URL
+          resolve(baseUrl);
+        });
+    });
+  }
+
   private async initialize(): Promise<void> {
     try {
+      // Get the session endpoint first (for SSE transport)
+      this.sessionEndpoint = await this.getSessionEndpoint();
+      debugLog('MCP session endpoint:', this.sessionEndpoint);
+
       await this.request('initialize', {
         protocolVersion: MCP_PROTOCOL_VERSION,
         capabilities: {},
@@ -53,7 +138,7 @@ class McpHttpClient {
       await this.notify('initialized', {});
 
       this.initialized = true;
-      debugLog('MCP initialized', { serverUrl: this.serverUrl });
+      debugLog('MCP initialized', { serverUrl: this.serverUrl, sessionEndpoint: this.sessionEndpoint });
     } catch (error) {
       debugLog('MCP initialize failed, proceeding without handshake', error);
       // Mark as initialized to avoid repeated attempts
@@ -68,8 +153,10 @@ class McpHttpClient {
       params,
     };
 
+    const endpoint = this.sessionEndpoint || this.serverUrl;
+
     try {
-      await fetch(this.serverUrl, {
+      await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
@@ -90,7 +177,9 @@ class McpHttpClient {
       params,
     };
 
-    const response = await fetch(this.serverUrl, {
+    const endpoint = this.sessionEndpoint || this.serverUrl;
+
+    const response = await fetch(endpoint, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),

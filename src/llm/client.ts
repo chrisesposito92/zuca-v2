@@ -706,12 +706,20 @@ async function completeGemini<T = unknown>(
     reasoningEffort,
   } = options;
 
+  // OPTIMIZATION: Skip MCP tools for Gemini to avoid two-phase overhead
+  // Analysis shows GPT never actually calls ask_zuora (toolCallCount: 0 in traces)
+  // The two-phase approach adds ~10-15s per step for unused functionality
+  const effectiveMcpTools: McpTool[] | undefined = undefined; // Skip MCP for Gemini
+  if (mcpTools && mcpTools.length > 0) {
+    debugLog('Gemini: Skipping MCP tools (unused functionality, avoids two-phase overhead)');
+  }
+
   debugLog('Gemini Request:', {
     model,
     reasoningEffort,
     builtInTools: tools,
     customToolCount: customTools?.length || 0,
-    mcpToolCount: mcpTools?.length || 0,
+    mcpToolCount: 0, // Always 0 now for Gemini
     hasSchema: !!responseSchema,
     messageLength: userMessage.length,
   });
@@ -738,22 +746,17 @@ async function completeGemini<T = unknown>(
     generationConfig.responseSchema = sanitizeSchemaForGemini(responseSchema);
   }
 
-  const baseRequest = {
-    systemInstruction,
-    contents,
-    generationConfig,
-  } as Record<string, unknown>;
-
-  const runWithTools = async (toolConfig?: GeminiTool[]): Promise<CompletionResult<T>> => {
+  const runWithTools = async (toolConfig?: GeminiTool[], overrideContents?: GeminiContent[]): Promise<CompletionResult<T>> => {
     let lastError: Error | null = null;
     for (let attempt = 1; attempt <= config.openai.maxRetries; attempt++) {
       try {
         const toolCalls: CompletionResult['toolCalls'] = [];
-        let workingContents = [...contents];
+        let workingContents = [...(overrideContents || contents)];
 
         for (let step = 0; step < 5; step++) {
           const requestBody = {
-            ...baseRequest,
+            systemInstruction,
+            generationConfig,
             contents: workingContents,
             ...(toolConfig ? { tools: toolConfig } : {}),
           };
@@ -808,7 +811,7 @@ async function completeGemini<T = unknown>(
           // Execute tool calls and append responses
           const responseParts: GeminiPart[] = [];
           for (const call of functionCalls) {
-            const result = await callGeminiTool(call, mcpTools);
+            const result = await callGeminiTool(call, effectiveMcpTools);
             toolCalls.push({
               name: call.name,
               arguments: call.arguments,
@@ -847,7 +850,117 @@ async function completeGemini<T = unknown>(
     throw lastError || new Error('Gemini request failed after all retries');
   };
 
-  const initialTools = buildGeminiTools(tools, customTools, mcpTools, {
+  // Check if we need both native tools AND function declarations
+  // Note: With MCP disabled for Gemini (effectiveMcpTools = undefined),
+  // hasFunctionTools is only true for customTools
+  const hasNativeTools = tools?.includes('web_search') || tools?.includes('code_interpreter');
+  const hasFunctionTools = (customTools && customTools.length > 0);
+  const needsTwoPhase = hasNativeTools && hasFunctionTools;
+
+  if (needsTwoPhase) {
+    // TWO-PHASE APPROACH: Gemini REST API can't combine native tools with function declarations
+    // Phase 1: MCP function calls (get Zuora expertise) - lightweight
+    // Phase 2: Native tools (web search) + responseSchema
+    debugLog('Using two-phase approach: MCP first, then web search + structured output');
+
+    // Phase 1: Run with function tools only (MCP) to get Zuora expertise
+    debugLog('Phase 1: Running MCP function calls (Zuora expertise)');
+    const phase1Tools = buildGeminiTools(tools, customTools, effectiveMcpTools, {
+      includeNative: false,
+      includeFunctions: true,
+    });
+
+    // Use a lightweight prompt for Phase 1 - just gather Zuora guidance
+    const phase1Prompt = `You are a Zuora billing expert. Use the ask_zuora tool to gather relevant Zuora-specific guidance for the following task. Focus on:
+- Relevant Zuora billing patterns and best practices
+- Charge models and pricing structures that apply
+- Revenue recognition considerations
+
+Task context:
+${userMessage}`;
+
+    const phase1Contents: GeminiContent[] = [{ role: 'user', parts: [{ text: phase1Prompt }] }];
+
+    // Phase 1 config: no responseSchema, reduced thinking
+    const phase1Config: Record<string, unknown> = {
+      temperature,
+      thinkingConfig: {
+        thinkingLevel: 'low', // Minimal thinking for research phase
+      },
+    };
+
+    const phase1Request = {
+      systemInstruction,
+      contents: phase1Contents,
+      generationConfig: phase1Config,
+      tools: phase1Tools,
+    } as Record<string, unknown>;
+
+    let phase1Text = '';
+    const phase1ToolCalls: CompletionResult['toolCalls'] = [];
+
+    try {
+      // Run Phase 1 with function tools
+      let workingContents = [...phase1Contents];
+      for (let step = 0; step < 3; step++) {
+        const response = await runGeminiRequest({ ...phase1Request, contents: workingContents }, model);
+        const candidate = response.candidates?.[0];
+        const parts = candidate?.content?.parts || [];
+
+        const functionCalls = extractGeminiFunctionCalls(parts);
+        if (functionCalls.length === 0) {
+          phase1Text = extractGeminiText(parts);
+          debugLog('Phase 1 complete, MCP guidance length:', phase1Text.length);
+          break;
+        }
+
+        // Execute function calls
+        workingContents = [
+          ...workingContents,
+          { role: 'model', parts: functionCalls.map((call) => ({ functionCall: { name: call.name, args: call.arguments } })) },
+        ];
+
+        const responseParts: GeminiPart[] = [];
+        for (const call of functionCalls) {
+          const result = await callGeminiTool(call, effectiveMcpTools);
+          phase1ToolCalls.push({ name: call.name, arguments: call.arguments, result });
+          responseParts.push({ functionResponse: { name: call.name, response: result } });
+        }
+
+        workingContents = [...workingContents, { role: 'user', parts: responseParts }];
+      }
+    } catch (phase1Error) {
+      debugLog('Phase 1 MCP failed, continuing without Zuora guidance:', phase1Error);
+      // Continue to Phase 2 without MCP context
+    }
+
+    // Phase 2: Run with native tools (web search) + responseSchema
+    debugLog('Phase 2: Running web search + structured output');
+    const phase2Tools = buildGeminiTools(tools, customTools, effectiveMcpTools, {
+      includeNative: true,
+      includeFunctions: false,
+    });
+
+    // Inject Phase 1 results as context
+    const enhancedContents: GeminiContent[] = phase1Text
+      ? [
+          ...contents,
+          { role: 'model', parts: [{ text: `Zuora domain expertise:\n\n${phase1Text}` }] },
+          { role: 'user', parts: [{ text: 'Now use web search to gather additional research, then provide the structured response combining the Zuora expertise with your research.' }] },
+        ]
+      : contents;
+
+    const phase2Result = await runWithTools(phase2Tools, enhancedContents);
+
+    // Combine tool calls from both phases
+    return {
+      ...phase2Result,
+      toolCalls: [...phase1ToolCalls, ...(phase2Result.toolCalls || [])],
+    };
+  }
+
+  // Single-phase: Only one type of tool needed, or no tools at all
+  const initialTools = buildGeminiTools(tools, customTools, effectiveMcpTools, {
     includeNative: true,
     includeFunctions: true,
   });
@@ -863,7 +976,7 @@ async function completeGemini<T = unknown>(
 
     if (isToolConflict) {
       debugLog('Gemini tool conflict detected, retrying with function tools only', message);
-      const fallbackTools = buildGeminiTools(tools, customTools, mcpTools, {
+      const fallbackTools = buildGeminiTools(tools, customTools, effectiveMcpTools, {
         includeNative: false,
         includeFunctions: true,
       });
