@@ -8,7 +8,7 @@
   ],
   "type": "module",
   "scripts": {
-    "dev": "tsx watch src/index.ts",
+    "dev": "tsx watch src/api/server.ts",
     "dev:web": "npm run dev -w apps/web",
     "build": "tsc",
     "build:web": "npm run build -w apps/web",

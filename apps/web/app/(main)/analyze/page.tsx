@@ -59,10 +59,17 @@ const allocationMethods = [
 // Default model from environment variable (falls back to gpt-5.2)
 const DEFAULT_MODEL = process.env.NEXT_PUBLIC_DEFAULT_MODEL || "gpt-5.2";
 
-const modelOptions = [
-  { key: "gpt-5.2", label: "GPT-5.2", description: "Best overall reasoning and accuracy" },
-  { key: "gemini-3-pro-preview", label: "Gemini 3 Pro (preview)", description: "Higher reasoning depth, slower" },
-  { key: "gemini-3-flash-preview", label: "Gemini 3 Flash (preview)", description: "Faster, lighter reasoning" },
+// Model options with estimated times from benchmarks
+const analyzeModelOptions = [
+  { key: "gpt-5.2", label: "GPT-5.2", time: "~7-9 min", description: "Best overall reasoning and accuracy" },
+  { key: "gemini-3-pro-preview", label: "Gemini 3 Pro", time: "~4-5 min", description: "Balanced quality and speed" },
+  { key: "gemini-3-flash-preview", label: "Gemini 3 Flash", time: "~1.5-2 min", description: "Fastest, good for interactive use" },
+];
+
+const ucGeneratorModelOptions = [
+  { key: "gpt-5.2", label: "GPT-5.2", time: "~3 min", description: "Most detailed research" },
+  { key: "gemini-3-pro-preview", label: "Gemini 3 Pro", time: "~1 min", description: "Balanced quality and speed" },
+  { key: "gemini-3-flash-preview", label: "Gemini 3 Flash", time: "~30 sec", description: "Fastest generation" },
 ];
 
 // Section icon component
@@ -410,7 +417,7 @@ export default function AnalyzePage() {
               </p>
             </div>
             <p className="text-xs text-default-400 mt-3">
-              This typically takes 8-10 minutes. You&apos;ll be redirected when complete.
+              You&apos;ll be redirected when complete.
             </p>
           </CardBody>
         </Card>
@@ -676,10 +683,13 @@ export default function AnalyzePage() {
                   trigger: "border-default-200 hover:border-primary/50 data-[focus=true]:border-primary",
                 }}
               >
-                {modelOptions.map((model) => (
+                {analyzeModelOptions.map((model) => (
                   <SelectItem key={model.key} textValue={model.label}>
                     <div className="flex flex-col">
-                      <span>{model.label}</span>
+                      <div className="flex items-center gap-2">
+                        <span>{model.label}</span>
+                        <span className="text-xs text-default-400">({model.time})</span>
+                      </div>
                       <span className="text-xs text-default-400">{model.description}</span>
                     </div>
                   </SelectItem>
@@ -822,10 +832,13 @@ export default function AnalyzePage() {
                       trigger: "border-default-200 hover:border-primary/50 data-[focus=true]:border-primary",
                     }}
                   >
-                    {modelOptions.map((model) => (
+                    {ucGeneratorModelOptions.map((model) => (
                       <SelectItem key={model.key} textValue={model.label}>
                         <div className="flex flex-col">
-                          <span>{model.label}</span>
+                          <div className="flex items-center gap-2">
+                            <span>{model.label}</span>
+                            <span className="text-xs text-default-400">({model.time})</span>
+                          </div>
                           <span className="text-xs text-default-400">{model.description}</span>
                         </div>
                       </SelectItem>
@@ -891,7 +904,7 @@ export default function AnalyzePage() {
                       )}
 
                       <p className="text-xs text-default-400 mt-3">
-                        This may take 3-5 minutes while we research the customer&apos;s website and generate detailed use cases.
+                        Researching the customer&apos;s website and generating detailed use cases...
                       </p>
                     </CardBody>
                   </Card>
