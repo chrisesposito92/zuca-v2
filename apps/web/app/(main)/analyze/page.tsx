@@ -56,8 +56,11 @@ const allocationMethods = [
   { key: "N/A", label: "N/A" },
 ];
 
+// Default model from environment variable (falls back to gpt-5.2)
+const DEFAULT_MODEL = process.env.NEXT_PUBLIC_DEFAULT_MODEL || "gpt-5.2";
+
 const modelOptions = [
-  { key: "gpt-5.2", label: "GPT-5.2 (default)", description: "Best overall reasoning and accuracy" },
+  { key: "gpt-5.2", label: "GPT-5.2", description: "Best overall reasoning and accuracy" },
   { key: "gemini-3-pro-preview", label: "Gemini 3 Pro (preview)", description: "Higher reasoning depth, slower" },
   { key: "gemini-3-flash-preview", label: "Gemini 3 Flash (preview)", description: "Faster, lighter reasoning" },
 ];
@@ -72,7 +75,7 @@ const SectionIcon = ({ children, className = "" }: { children: React.ReactNode; 
 export default function AnalyzePage() {
   const [isAllocations, setIsAllocations] = useState(false);
   const [allocationMethod, setAllocationMethod] = useState<string>("");
-  const [selectedModel, setSelectedModel] = useState<string>("gpt-5.2");
+  const [selectedModel, setSelectedModel] = useState<string>(DEFAULT_MODEL);
   const formRef = useRef<HTMLFormElement>(null);
 
   // UC Generator modal state
@@ -85,7 +88,7 @@ export default function AnalyzePage() {
   const [generatedUseCases, setGeneratedUseCases] = useState<GeneratedUseCase[]>([]);
   const [generatedFormatted, setGeneratedFormatted] = useState<string | null>(null);
   const [selectedUseCaseIndex, setSelectedUseCaseIndex] = useState<number | null>(null);
-  const [ucModel, setUcModel] = useState<string>("gpt-5.2");
+  const [ucModel, setUcModel] = useState<string>(DEFAULT_MODEL);
 
   // Mutations
   const analyzeMutation = useAnalyze();
