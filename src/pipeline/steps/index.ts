@@ -24,10 +24,10 @@ export { routeQuery, quickRouteCheck, smartRoute, type RouterResult } from './ro
 // Step 2: Analyze Contract (COMBINED - replaces contract-intel + detect-capabilities)
 export { analyzeContract, type ContractAnalysisOutput } from './analyze-contract';
 
-// Step 2 Legacy: Contract Intel (individual step)
-export { extractContractIntel, formatContractIntelForContext } from './contract-intel';
+// Step 2 Legacy: Contract Intel (helper function only - LLM step deprecated)
+export { formatContractIntelForContext } from './contract-intel';
 
-// Step 2 Legacy: Detect Capabilities (individual step)
+// Step 2 Legacy: Detect Capabilities (still used by quickAnalysis)
 export { detectCapabilities, formatCapabilitiesForPrompt } from './detect-capabilities';
 
 // Step 3: Match Golden Use Cases (Pure Code)
@@ -42,11 +42,11 @@ export {
 // Step 4: Design Subscription (COMBINED - replaces generate-subscription + assign-pob-templates)
 export { designSubscription, type SubscriptionDesignOutput } from './design-subscription';
 
-// Step 4 Legacy: Generate Subscription (individual step)
-export { generateSubscriptionSpec, formatSubscriptionSpecForContext } from './generate-subscription';
+// Step 4 Legacy: Generate Subscription (helper function only - LLM step deprecated)
+export { formatSubscriptionSpecForContext } from './generate-subscription';
 
-// Step 4 Legacy: Assign POB Templates (individual step)
-export { assignPobTemplates, formatPobMappingForContext } from './assign-pob-templates';
+// Step 4 Legacy: Assign POB Templates (helper function only - LLM step deprecated)
+export { formatPobMappingForContext } from './assign-pob-templates';
 
 // Step 5a: Build Contracts/Orders (runs in PARALLEL with billings)
 export { buildContractsOrders, formatContractsOrdersForContext } from './build-contracts-orders';

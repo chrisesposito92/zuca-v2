@@ -255,10 +255,12 @@ function mapReasoningToGemini(
   model: string,
   reasoningEffort: ReasoningEffort
 ): GeminiThinkingLevel {
-  if (model.startsWith('gemini-3-pro')) {
+  // Both Pro and Flash: anything not 'low' becomes 'high' for maximum quality
+  // Flash is fast enough to afford high reasoning across all steps
+  if (model.startsWith('gemini-3')) {
     return reasoningEffort === 'low' ? 'low' : 'high';
   }
-  // Gemini 3 Flash supports minimal/low/medium/high, map directly
+  // Fallback for other Gemini models
   return reasoningEffort as GeminiThinkingLevel;
 }
 
@@ -722,10 +724,13 @@ async function completeGemini<T = unknown>(
     previousMessages
   );
 
+  const mappedThinkingLevel = mapReasoningToGemini(model, reasoningEffort);
+  debugLog(`Gemini thinking level: ${reasoningEffort} → ${mappedThinkingLevel}`);
+
   const generationConfig: Record<string, unknown> = {
     temperature,
     thinkingConfig: {
-      thinkingLevel: mapReasoningToGemini(model, reasoningEffort),
+      thinkingLevel: mappedThinkingLevel,
     },
   };
 
@@ -847,6 +852,14 @@ async function completeGemini<T = unknown>(
     includeNative: true,
     includeFunctions: true,
   });
+
+  // Log the actual Gemini tools being used
+  if (initialTools) {
+    const nativeTools = initialTools
+      .filter((t) => 'googleSearch' in t || 'codeExecution' in t || 'urlContext' in t)
+      .map((t) => Object.keys(t)[0]);
+    debugLog('Gemini native tools enabled:', nativeTools);
+  }
 
   try {
     return await runWithTools(initialTools);
