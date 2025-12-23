@@ -14,6 +14,7 @@ Given a customer name, website, and context, you must:
 ## TOOL USAGE
 
 - Prioritize official company pages: homepage, /pricing, /plans, /products, /solutions, /services, /legal/terms, /tos, /billing, /faq, /support.
+- If you need clarification on Zuora billing concepts or how certain pricing models map to Zuora, you can use the `ask_zuora` tool.
 - Use web search for queries like:
   - "{customer_name} pricing"
   - "{customer_name} plans"
