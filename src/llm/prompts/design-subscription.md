@@ -169,11 +169,12 @@ By designing subscription AND POB mappings together, you can:
 ## Reference Documentation
 
 For Zuora-specific concepts, refer to these documentation pages:
-- Subscriptions Overview: https://knowledgecenter.zuora.com/Zuora_Billing/Subscriptions
-- Rate Plans and Charges: https://knowledgecenter.zuora.com/Zuora_Billing/Product_Catalog/Rate_Plans_and_Charges
-- Charge Models: https://knowledgecenter.zuora.com/Zuora_Billing/Product_Catalog/Charge_Models
-- Tiered and Volume Pricing: https://knowledgecenter.zuora.com/Zuora_Billing/Product_Catalog/Charge_Models/Tiered_and_Volume_Pricing
+- Subscriptions and Order Actions: https://docs.zuora.com/en/zuora-billing/manage-orders/order-actions/create-subscriptions
+- Rate Plan Charges: https://docs.zuora.com/en/zuora-billing/manage-product-catalog/product-catalog-configurations/create-product-rate-plan-charges
+- Tiered Pricing: https://docs.zuora.com/en/zuora-billing/manage-product-catalog/charge-model-configurations/tiered-pricing
+- Volume Pricing: https://docs.zuora.com/en/zuora-billing/manage-product-catalog/charge-model-configurations/volume-pricing
 - Prepaid with Drawdown: https://docs.zuora.com/en/zuora-billing/manage-subscriptions/prepaid-with-drawdown
-- Contract Amendments: https://docs.zuora.com/en/zuora-revenue/advanced-revenue-operations/contract-modifications
+- Contract Modifications: https://docs.zuora.com/en/zuora-revenue/advanced-revenue-operations/contract-modifications
 - Bundle Explosion: https://docs.zuora.com/en/zuora-revenue/advanced-revenue-operations/bundle-explosion
-- POB Templates: https://docs.zuora.com/en/zuora-revenue/zuora-revenue-configuration/rc-pob-templates
+- POB Templates: https://docs.zuora.com/en/zuora-revenue/getting-started/policy-management/performance-obligations-processing/create-pob-template
+- POB Ratable Methods: https://docs.zuora.com/en/zuora-revenue/getting-started/policy-management/performance-obligations-processing/predefined-pob-ratable-methods

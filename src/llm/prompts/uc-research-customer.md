@@ -115,7 +115,8 @@ Return ONLY a single valid JSON object, no commentary, with this structure:
 ## Reference Documentation
 
 For Zuora billing concept reference when mapping customer offerings:
-- Charge Models: https://knowledgecenter.zuora.com/Zuora_Billing/Product_Catalog/Charge_Models
-- Usage Charges: https://knowledgecenter.zuora.com/Zuora_Billing/Product_Catalog/Charge_Models/Usage_Charges
-- Tiered and Volume Pricing: https://knowledgecenter.zuora.com/Zuora_Billing/Product_Catalog/Charge_Models/Tiered_and_Volume_Pricing
-- Revenue Recognition Basics: https://knowledgecenter.zuora.com/Zuora_Revenue/Zuora_Revenue_Basics
+- Rate Plan Charges: https://docs.zuora.com/en/zuora-billing/manage-product-catalog/product-catalog-configurations/create-product-rate-plan-charges
+- Tiered Pricing: https://docs.zuora.com/en/zuora-billing/manage-product-catalog/charge-model-configurations/tiered-pricing
+- Volume Pricing: https://docs.zuora.com/en/zuora-billing/manage-product-catalog/charge-model-configurations/volume-pricing
+- Usage Charges (Tiered with Overage): https://docs.zuora.com/en/zuora-billing/manage-product-catalog/charge-model-configurations/tiered-with-overage-charges
+- Prepaid with Drawdown: https://docs.zuora.com/en/zuora-billing/manage-subscriptions/prepaid-with-drawdown

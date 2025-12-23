@@ -115,10 +115,10 @@ By analyzing contract parameters and capabilities together, you can:
 ## Reference Documentation
 
 For Zuora-specific concepts, refer to these documentation pages:
-- Billing Timing (In Advance vs In Arrears): https://knowledgecenter.zuora.com/Zuora_Billing/Product_Catalog/Product_Catalog_Concepts
-- Charge Models Overview: https://knowledgecenter.zuora.com/Zuora_Billing/Product_Catalog/Charge_Models
-- Usage Charges: https://knowledgecenter.zuora.com/Zuora_Billing/Product_Catalog/Charge_Models/Usage_Charges
-- Orders and Amendments: https://knowledgecenter.zuora.com/Zuora_Billing/Orders
-- Revenue Recognition Overview: https://knowledgecenter.zuora.com/Zuora_Revenue/Zuora_Revenue_Basics
+- Billing Timing: https://docs.zuora.com/en/zuora-billing/manage-bill-runs/billing-timing
+- Charge Models (Flat Fee, Per-Unit, Tiered, Volume): https://docs.zuora.com/en/zuora-billing/manage-product-catalog/product-catalog-configurations/create-product-rate-plan-charges
+- Usage Charges: https://docs.zuora.com/en/zuora-billing/manage-product-catalog/charge-model-configurations/tiered-with-overage-charges
+- Orders and Order Actions: https://docs.zuora.com/en/zuora-billing/manage-orders/orders-overview
 - Variable Consideration: https://docs.zuora.com/en/zuora-revenue/day-to-day-operation/variable-consideration-processing
 - Ramp Deals: https://docs.zuora.com/en/zuora-revenue/day-to-day-operation/ramp-deals
+- Contract Modifications: https://docs.zuora.com/en/zuora-revenue/advanced-revenue-operations/contract-modifications

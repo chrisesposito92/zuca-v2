@@ -158,7 +158,8 @@ Return ONLY one valid JSON object, no commentary, with this exact structure:
 ## Reference Documentation
 
 For Zuora-specific concepts, refer to these documentation pages:
-- Subscriptions and Rate Plans: https://knowledgecenter.zuora.com/Zuora_Billing/Subscriptions
-- Charge Models: https://knowledgecenter.zuora.com/Zuora_Billing/Product_Catalog/Charge_Models
-- Revenue Recognition Overview: https://knowledgecenter.zuora.com/Zuora_Revenue/Zuora_Revenue_Basics
-- Billing Timing (In Advance vs In Arrears): https://knowledgecenter.zuora.com/Zuora_Billing/Product_Catalog/Product_Catalog_Concepts
+- Subscriptions and Order Actions: https://docs.zuora.com/en/zuora-billing/manage-orders/order-actions/create-subscriptions
+- Rate Plan Charges: https://docs.zuora.com/en/zuora-billing/manage-product-catalog/product-catalog-configurations/create-product-rate-plan-charges
+- Tiered Pricing: https://docs.zuora.com/en/zuora-billing/manage-product-catalog/charge-model-configurations/tiered-pricing
+- Billing Timing: https://docs.zuora.com/en/zuora-billing/manage-bill-runs/billing-timing
+- POB Templates and Recognition: https://docs.zuora.com/en/zuora-revenue/getting-started/policy-management/performance-obligations-processing/create-pob-template

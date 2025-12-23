@@ -52,8 +52,9 @@ For a 12-month contract starting 01/01/2025, billed semi-annually in advance:
 ## Reference Documentation
 
 For Zuora-specific concepts, refer to these documentation pages:
-- Billing Overview: https://knowledgecenter.zuora.com/Zuora_Billing/Billing_and_Payments
-- Billing Periods: https://knowledgecenter.zuora.com/Zuora_Billing/Product_Catalog/Product_Catalog_Concepts
-- Proration: https://knowledgecenter.zuora.com/Zuora_Billing/Subscriptions/Proration
-- Usage Billing: https://knowledgecenter.zuora.com/Zuora_Billing/Product_Catalog/Charge_Models/Usage_Charges
-- Invoice Generation: https://knowledgecenter.zuora.com/Zuora_Billing/Billing_and_Payments/Invoices
+- Billing Timing: https://docs.zuora.com/en/zuora-billing/manage-bill-runs/billing-timing
+- Proration Overview: https://docs.zuora.com/en/zuora-billing/manage-subscriptions/proration/proration-overview
+- Partial Period Proration: https://docs.zuora.com/en/zuora-billing/manage-subscriptions/proration/calculate-total-with-partial-period-proration
+- Usage Charges (Tiered with Overage): https://docs.zuora.com/en/zuora-billing/manage-product-catalog/charge-model-configurations/tiered-with-overage-charges
+- Invoice Management: https://docs.zuora.com/en/zuora-billing/manage-billing-documents/manage-invoices/invoice-management-overview
+- Bill Run Target Date: https://docs.zuora.com/en/zuora-billing/manage-bill-runs/bill-run-target-date
