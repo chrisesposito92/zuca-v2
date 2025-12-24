@@ -18,7 +18,12 @@
     "test": "vitest",
     "test:run": "vitest run",
     "lint": "eslint src --ext .ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "rag:build": "tsx src/rag/cli.ts build",
+    "rag:build:resume": "tsx src/rag/cli.ts build --resume",
+    "rag:repair": "tsx src/rag/cli.ts repair",
+    "rag:test": "tsx src/rag/cli.ts test",
+    "rag:stats": "tsx src/rag/cli.ts stats"
   },
   "keywords": [
     "zuora",

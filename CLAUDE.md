@@ -13,6 +13,7 @@ WHEN PLANNING NEW FEATURES OUT YOU SHOULD BE DOCUMENTING THEM IN NEW MD FILES AN
 | `docs/ROADMAP-FRONTEND.md` | Web frontend implementation roadmap and status |
 | `docs/ROADMAP-ZB-API-INTEGRATION.md` | Future plan for direct Zuora Billing API integration |
 | `docs/ZUORA-MCP-README.md` | Zuora MCP tool documentation |
+| `docs/ROADMAP-ZUORA-DOCS-RAG.md` | RAG system and Q&A dataset generation |
 | `src/llm/prompts/*.md` | System prompts for each pipeline step |
 
 ## Project Structure
@@ -53,8 +54,25 @@ src/
 │   └── index.ts          # CLI commands (analyze, generate, etc.)
 ├── api/
 │   └── server.ts         # REST API endpoints
+├── rag/                  # Retrieval-Augmented Generation
+│   ├── index.ts          # Main RAG interface
+│   ├── chunker.ts        # Document chunking logic
+│   ├── embeddings.ts     # OpenAI embeddings generation
+│   ├── search.ts         # Vector similarity search
+│   ├── cli.ts            # RAG CLI commands
+│   └── types.ts          # Type definitions
 └── data/
     └── loader.ts         # Golden Use Case loader
+
+zuora-docs-scrapper/       # Separate scraper project
+├── output/                # Scraped markdown files (4,482 total)
+│   ├── zuora-billing/     # 1,949 pages
+│   ├── zuora-platform/    # 1,999 pages
+│   └── zuora-revenue/     # 534 pages
+├── qa-dataset/            # Generated Q&A pairs for fine-tuning
+└── src/
+    ├── qa-generator.ts    # Q&A pair generator
+    └── ...                # Scraper modules
 ```
 
 ## Schema Architecture
@@ -86,6 +104,69 @@ The prompts handle these advanced scenarios:
 ## MCP Tools
 
 Use `ask_zuora` MCP tool when you need Zuora-specific guidance while working on prompts.
+
+## RAG Module
+
+The RAG (Retrieval-Augmented Generation) module provides semantic search over 4,482 scraped Zuora documentation pages.
+
+### Building the Index
+
+```bash
+# Build the full embedding index (~4,500 chunks, ~30 min)
+npm run rag:build
+
+# Resume if interrupted
+npm run rag:build:resume
+
+# Test with a sample query
+npm run rag:test "contract modification"
+
+# View index statistics
+npm run rag:stats
+```
+
+### Usage in Code
+
+```typescript
+import { searchDocs, getDocContext } from './rag';
+
+// Search for relevant documentation
+const results = await searchDocs('proration settings', {
+  product: 'zuora-billing',  // optional filter
+  limit: 5,
+  minScore: 0.7,
+});
+
+// Get formatted context for prompt injection
+const context = await getDocContext('how do ramp deals work?');
+// Returns markdown-formatted docs ready to inject into prompts
+```
+
+### Architecture
+
+Due to Gemini's limitation (can't use custom function calling with native tools), retrieval happens in the TypeScript orchestration layer **before** the LLM call, not as a tool:
+
+```
+User Query → Vector Search → Inject Docs into Prompt → LLM Call
+```
+
+### Q&A Dataset Generation
+
+For future fine-tuning, generate instruction/response pairs from the docs:
+
+```bash
+cd zuora-docs-scrapper
+
+# Test with 5 docs
+npm run qa:test
+
+# Generate full dataset (~18,000 pairs, ~$10, ~1-2 hours)
+npm run qa:generate
+```
+
+Output: `zuora-docs-scrapper/qa-dataset/*.jsonl`
+
+See `docs/ROADMAP-ZUORA-DOCS-RAG.md` for full architecture details.
 
 ## UC Generator Module
 
