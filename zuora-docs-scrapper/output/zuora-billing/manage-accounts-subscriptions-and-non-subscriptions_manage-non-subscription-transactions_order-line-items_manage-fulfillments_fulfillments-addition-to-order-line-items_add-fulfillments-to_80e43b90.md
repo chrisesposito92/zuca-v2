@@ -1,0 +1,40 @@
+---
+title: "Add fulfillments to return order line items through Zuora UI"
+url: "https://docs.zuora.com/en/zuora-billing/manage-accounts-subscriptions-and-non-subscriptions/manage-non-subscription-transactions/order-line-items/manage-fulfillments/fulfillments-addition-to-order-line-items/add-fulfillments-to-return-order-line-items-through-zuora-ui"
+product: "zuora-billing"
+scraped_at: "2025-12-24T05:38:51.809Z"
+---
+
+# Add fulfillments to return order line items through Zuora UI
+
+This topic explains how to add fulfillments to return order line items using the Zuora UI, including editing fulfillment details and generating billing documents.
+
+1.  On the return orders details page, click the item name in blue in the ITEM NAME column in the Return Order Line Items area. The order line item details page opens.
+2.  Click Create Fulfillment at the top right. The fulfillment details page opens.
+3.  On the fulfillment details page, edit the following fields in the Overview and Fulfillment Integration areas:
+
+    | Field name | Description |
+    | --- | --- |
+    | Fulfillment Quantity | Required field. The quantity of the fulfillment items to be returned. The value must be less than or equal to the value shown in the Quantity Remaining for Delivery field. |
+    | Fulfillment Date | Required field. The date of the fulfillment. |
+    | Carrier | The express company. |
+    | Tracking Number | The express number from the express company. |
+    | State | The state of the fulfillment. Valid values are Executing, Booked, Sent To Billing, Complete, and Canceled. The default value is Executing.If the fulfillment is in the Executing state, you can edit the fields in this table.If the fulfillment is specified to other states, you can add fulfillment items to the fulfillment. To generate billing documents, you need to specify the fulfillment to the Sent To Billing state and set the Billing Target Date field. |
+    | Billing Target Date | Specify the date when the fulfillment will be invoiced.After setting this field to the Sent To Billing state and specifying a value for this field, you can create a bill run. For instructions, see Create Bill Runs. |
+    | Description | The description of the fulfillment for reference purposes. |
+    | Fulfillment System | The value that maps an external value from the ERP system, for example, the value can be NetSuite, SAP, or other specific fulfillment partners. |
+    | Fulfillment Location | The occurring location of the fulfillment. |
+    | External ID | Specify the ID of the fulfillment. The ID is generated based on the external system. |
+
+4.  (Optional) Change the State to a state except Executing to add fulfillment items, click Add Item to add a fulfillment item, and then edit the following fields in the Fulfillment Items area.
+
+    | Field name | Description |
+    | --- | --- |
+    | Item Identifier | Specify the ID of the fulfillment item. The ID is provided by customers. |
+    | Description | The description of the fulfillment item for reference purposes. |
+
+    After editing, click the save icon ![icon-save](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/fc48d836-4b9f-4fa1-bf03-52198dd7959f?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImZjNDhkODM2LTRiOWYtNGZhMS1iZjAzLTUyMTk4ZGQ3OTU5ZiIsImV4cCI6MTc2NjY0MTEzMCwianRpIjoiZjhhMDdiOTIyMTkyNGRjZWJkZmNhNDYxZDExZGU4MjQiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.yo171By9mfMfJ5jMPsSvFkKhm-IV1LKnAffOyozdneM) to finish adding the fulfillment item. You can create multiple fulfillment items, but the number of fulfillment items should not be greater than the value of the Fulfillment Quantity field.
+
+5.  Click Save at the top right on the fulfillment details page to finish the fulfillment creation. If you return to the order line item details page, you can view the created fulfillments in the Fulfillment Details section.
+6.  (Optional) To generate billing documents for the fulfillment in the Sent To Billing state, create a bill run. For instructions, see Create Bill Runs.
+7.  (Optional) To generate billing documents for the fulfillment in the Sent To Billing state, create a bill run. For instructions, see Creating Bill Runs.

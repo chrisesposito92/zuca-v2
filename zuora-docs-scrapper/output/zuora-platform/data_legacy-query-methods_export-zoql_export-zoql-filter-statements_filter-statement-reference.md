@@ -1,0 +1,18 @@
+---
+title: "Filter Statement reference"
+url: "https://docs.zuora.com/en/zuora-platform/data/legacy-query-methods/export-zoql/export-zoql-filter-statements/filter-statement-reference"
+product: "zuora-platform"
+scraped_at: "2025-12-24T18:52:45.732Z"
+---
+
+# Filter Statement reference
+
+This reference provides details on filter statements, including data types, supported operators, examples, and notes for boolean, dateTime, number, and string data types.
+
+| Data Type | Supported Operators | Example | Notes |
+| --- | --- | --- | --- |
+| boolean | =, !=, is null, is not null | select AccountNumber from account where AutoPay != true | Use true or false . |
+| dateTime | =, !=, <, >, <=, >=, is null, is not null | Datetime with default time zone:select AccountNumber from account where CreatedDate <= '2008-09-12T05:07:32'Date with default time zone:select AccountNumber from account where CreatedDate <= '2008-09-12'Datetime with Eastern Standard Time:select AccountNumber from account where CreatedDate <= '2008-09-12T05:07:32-05:00'Date with GMT:select AccountNumber from account where CreatedDate <= '2008-09-12Z' | Use the following format for dateTime values (ISO 8601):YYYY-MM-DDThh:mm:ssZIf a date or time is a single-digit number, supply a leading zero (0) as shown in the example.The second (ss) field is optional. As you can see, none of the examples includes milliseconds.The time zone (Z) is also optional. If you leave it out, the default time zone will be used. Use the letter Z to specify GMT. To specify any other time zone, use an offset from GMT in the form:+/-hh:mmTo specify only a date, omit the time:YYYY-MM-DDTime zones are still treated the same way. If you want to use a time zone other than the default time zone, specify it in the statement.See Simplified Dates for more information about using dates with Export ZOQL.Note: If you are using WSDL 69 or later, the default time zone is the time zone of your tenant. If you are using earlier WSDL versions, the default time zone is the Pacific time zone. |
+| number | =, !=, >, <, >=, <=, is null, is not null | select AccountNumber from account where BillCycleDay >= 15 | Quotes are optional around this value. |
+| string | =, !=, >, <, >=, <=, is null, is not null | select AccountNumber from account where Status = 'Draft' | Strings are enclosed in single quotes: 'like this'Strings are compared lexicographically.If you compare a null value field with a non-null string using the != operator, the comparison does not return true. For example, the result of the following query does not include the records where discountlevel is null :SELECT id, discountlevel FROM productrateplancharge WHERE discountlevel != `rateplan` |
+| string | like, is null, is not null | Account name that starts with Z :select AccountNumber from account where Name like 'Z%'Account name that contains four characters and ends with abc :select AccountNumber from account where Name like '_abc' | The string matches the specified query. This can be used to find strings using one of two wildcard characters: the percent character, % , which selects everything, or the underscore character, _ , which selects a single character.The percent character can be used only once in each query, either at the beginning or end of the pattern.The query in the first example returns account numbers for all accounts where the value in the Name field starts with the letter Z followed by any characters. For example, Zuora or Zu .The query in the second example returns account numbers for all accounts where the value in the Name field is composed of four characters and ends with the string abc . For example, aabc or Sabc , but not abcd or SEabc . |

@@ -1,0 +1,42 @@
+---
+title: "Invoice Settlement object model"
+url: "https://docs.zuora.com/en/zuora-billing/bill-your-customer/invoice-settlement/get-started-with-invoice-settlement/invoice-settlement-object-model"
+product: "zuora-billing"
+scraped_at: "2025-12-24T08:33:35.414Z"
+---
+
+# Invoice Settlement object model
+
+This article describes the key objects that are available with the Invoice Settlement feature and summarizes the relationships between the objects.
+
+For information about objects that are not part of the Invoice Settlement feature, see [Zuora Business Object Model](/basics/about-zuora/zuora-business-object-model).
+
+## Object relationships
+
+The following diagrams illustrate the object model of the Invoice Settlement feature.
+
+## Credit memos applied to invoices
+
+![Zuora ERD Credit Memo on Invoice](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/46c93f8b-17e1-410a-9f59-e8ed6e973d5f?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjQ2YzkzZjhiLTE3ZTEtNDEwYS05ZjU5LWU4ZWQ2ZTk3M2Q1ZiIsImV4cCI6MTc2NjY1MTYxMywianRpIjoiOWNjMDljYTI4NjE1NDlhZTgxNWY4MzMyZTgyMTE2MGMiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.HzHRGmeMXd3Z93DTWm5HyMTHKg2qiMVzcfbdhQNFz40)
+
+## Credit memos applied to debit memos
+
+![Zuora ERD Credit Memo on Debit Memo](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/d781e941-7c60-48cb-9ad0-b204c039f4d2?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImQ3ODFlOTQxLTdjNjAtNDhjYi05YWQwLWIyMDRjMDM5ZjRkMiIsImV4cCI6MTc2NjY1MTYxMywianRpIjoiMjAyZjQxNzc1NjEzNDg4OTgxNWE2ZmIyMmJmZGJkNGYiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.Bx8QSm3_IKfT6GSyYpSBlecF1fA4_qnCJIjhxLL1eHk)
+
+## Payments applied to invoices
+
+![Zuora ERD Payment on Invoice](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/2dfc02d2-053a-4a01-9e05-2aa5469cbf26?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjJkZmMwMmQyLTA1M2EtNGEwMS05ZTA1LTJhYTU0NjljYmYyNiIsImV4cCI6MTc2NjY1MTYxMywianRpIjoiNGZkN2ZlMjczNWU1NDYyMThlNmYwZDNkYzRlMWI0MWEiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.eTbnURoLH4meXodVW0UtmXgw29dnYJHKK819VTqjvkc)
+
+## Payments applied to debit memo
+
+![Zuora ERD Payment on Debit Memo](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/b781029e-ddfd-4625-a4cc-fe3117727653?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImI3ODEwMjllLWRkZmQtNDYyNS1hNGNjLWZlMzExNzcyNzY1MyIsImV4cCI6MTc2NjY1MTYxMywianRpIjoiNmE4MzE3YzRjYzc1NGIxZmE3ZTZjYWMxMDQyMTY0YjIiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.7WH8Fih8M80bqo7zFrhPwkA_A4834DYhExdzQ5U9bkc)
+
+## Refunds applied to credit memos
+
+![Zuora ERD Refund on Credit Memo](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/69b03e47-bfee-40a3-8b10-644c5a914df6?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjY5YjAzZTQ3LWJmZWUtNDBhMy04YjEwLTY0NGM1YTkxNGRmNiIsImV4cCI6MTc2NjY1MTYxMywianRpIjoiYjk1ZTRhZTcxYmJlNGNkZWE4MmIwMjFhZTkwZjZjZTIiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.44wMg44JvgrAsVkLVnFQ_jyYmL4_LJ9wGupWyIs6mxU)
+
+## Refund applied to payments
+
+![Zuora ERD Refund on Payment](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/9baafb88-dc69-45b5-be8c-ebbca40aced2?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjliYWFmYjg4LWRjNjktNDViNS1iZThjLWViYmNhNDBhY2VkMiIsImV4cCI6MTc2NjY1MTYxMywianRpIjoiMTlhMjk5YWEwNjE4NDI1MzhlZTc2YjQxYzUwYzQ3NjYiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.ivXyWk4I5eks2B1AIotwUnnjqS3JN3XKAa7O3Fg06t8)
+
+For the list of the objects in the object model of the Invoice Settlement feature and their descriptions, see [here](/zuora-billing/bill-your-customer/invoice-settlement/get-started-with-invoice-settlement/invoice-settlement-object-model/object-descriptions).

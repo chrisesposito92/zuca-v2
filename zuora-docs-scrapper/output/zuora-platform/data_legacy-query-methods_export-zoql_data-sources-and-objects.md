@@ -1,0 +1,133 @@
+---
+title: "Data Sources and Objects"
+url: "https://docs.zuora.com/en/zuora-platform/data/legacy-query-methods/export-zoql/data-sources-and-objects"
+product: "zuora-platform"
+scraped_at: "2025-12-24T18:52:25.041Z"
+---
+
+# Data Sources and Objects
+
+A comprehensive list of objects available in each data source, highlighting dependencies on Zuora features and offering guidance on data source object availability.
+
+Objects marked with \* depend on Zuora features.
+
+| Data Source | Objects |
+| --- | --- |
+| Account | Base object: AccountJoined objects:BillToContactDefaultPaymentMethodEntity *ParentAccount *SoldToContact |
+| Accounting Code | Base object: AccountingCodeJoined objects:Entity * |
+| Application GroupPart of the Invoice Settlement feature. | Base object: ApplicationGroupJoined objects:Entity *PaymentPaymentMethodPaymentMethodSnapshotRefund |
+| AR Transaction | Base object: AR TransactionJoined objects:Account>Credit Accounting Code>Credit Memo>Credit Memo Item>Credit Taxation Item>Debit Accounting Code>Debit Memo>Debit Memo Item>Debit Taxation Item>Default Payment Method>Invoice>Invoice Item>Payment>Payment Method>Product>Product Rate Plan Charge>Rate Plan>Rate Plan Charge>Refund>Taxation Item |
+| Billing Run | Base object: BillingRunNote: The BillingRun object is different from the BillRun object.Joined objects:Entity * |
+| Billing Transaction | Base object: Billing TransactionJoined objects:AmendmentBill ToDefault Payment MethodDiscount Applied To Rate Plan ChargeEntityParent AccountProductProduct Rate PlanProduct Rate Plan ChargeRate PlanRate Plan ChargeSold ToSubscriptionSubscription OwnerSubscription Rate Plan |
+| Booking Transaction | Base object: Booking TransactionJoined objects:AmendmentBill ToDefault Payment MethodDiscount Applied To Rate Plan ChargeDiscount Applied To Subscription Rate PlanEntityInvoice OwnerInvoice ScheduleOrderOrder Line ItemParent AccountProductProduct Rate PlanProduct Rate Plan ChargeRate PlanRate Plan ChargeSold ToSubscriptionSubscription OwnerSubscription Rate Plan |
+| Contact | Base object: ContactJoined objects:Entity * |
+| Credit Balance AdjustmentPart of the Credit Balance feature. Deprecated if the Invoice Settlement feature is enabled. | Base object: CreditBalanceAdjustmentJoined objects:AccountAccountReceivableAccountingCodeAccountingPeriod *BillToContactCashAccountingCodeCustomerCashOnAccountAccountingCodeDefaultPaymentMethodEntity *InvoiceJournalEntry *JournalRun *ParentAccount *PaymentPaymentMethodPaymentMethodSnapshotRefundSoldToContact |
+| Credit MemoPart of the Invoice Settlement feature. | Base object: CreditMemoJoined objects:AccountBillToContactDefaultPaymentMethodEntity *InvoiceParentAccount *SoldToContact |
+| Credit Memo ApplicationPart of the Invoice Settlement feature. | Base object: CreditMemoApplicationJoined objects:AccountApplicationGroupBillToContactCreditMemoDebitMemoDefaultPaymentMethodEntity *InvoiceParentAccount *SoldToContact |
+| Credit Memo Application ItemPart of the Invoice Settlement feature. | Base object: CreditMemoApplicationItemJoined objects:AccountAccountingPeriod *ApplicationGroupBillToContactCreditMemoCreditMemoApplicationCreditMemoItemCreditTaxationItemDebitMemoDebitMemoItemDebitTaxationItemDefaultPaymentMethodEntity *InvoiceInvoiceItemJournalEntry *JournalRun *ParentAccount *SoldToContactTaxationItem |
+| Credit Memo ItemPart of the Invoice Settlement feature. | Base object: CreditMemoItemJoined objects:AccountAccountReceivableAccountingCodeAccountingPeriod *AmendmentBillToContactCreditMemoDefaultPaymentMethodDeferredRevenueAccountingCodeEntity *InvoiceInvoiceItemJournalEntry *JournalRun *OnAccountAccountingCodeParentAccount *ProductProductRatePlanProductRatePlanChargeRatePlanRatePlanChargeRecognizedRevenueAccountingCodeSoldToContactSubscription |
+| Credit Memo PartPart of the Invoice Settlement feature. | Base object: CreditMemoPartJoined objects:AccountBillToContactCreditMemoDebitMemoDefaultPaymentMethodEntity *InvoiceParentAccount *SoldToContact |
+| Credit Memo Part ItemPart of the Invoice Settlement feature. | Base object: CreditMemoPartItemJoined objects:AccountBillToContactCreditMemoCreditMemoItemCreditMemoPartCreditTaxationItemDebitMemoDebitMemoItemDebitTaxationItemDefaultPaymentMethodEntity *InvoiceInvoiceItemParentAccount *SoldToContactTaxationItem |
+| Credit Taxation ItemPart of the Invoice Settlement feature. | Base object: CreditTaxationItemJoined objects:AccountAccountReceivableAccountingCodeAccountingPeriod *AmendmentBillToContactCreditMemoCreditMemoItemDefaultPaymentMethodEntity *InvoiceJournalEntry *JournalRun *OnAccountAccountingCodeParentAccount *ProductProductRatePlanProductRatePlanChargeRatePlanRatePlanChargeSalesTaxPayableAccountingCodeSoldToContactSubscriptionTaxationItem |
+| Custom Exchange RatePart of the Custom Foreign Currency Exchange Rates feature. | Base object: FXCustomRateJoined objects:Entity * |
+| Daily Consumption SummaryPart of the Prepaid with Drawdown feature. | Base object: DailyConsumptionSummaryJoined objects:PrepaidBalanceFundProductProductRatePlanProductRatePlanChargeRatePlanRatePlanCharge |
+| Debit MemoPart of the Invoice Settlement feature. | Base object: DebitMemoJoined objects:AccountBillToContactDefaultPaymentMethodEntity *InvoiceParentAccount *SoldToContact |
+| Debit Memo ItemPart of the Invoice Settlement feature. | Base object: DebitMemoItemJoined objects:AccountAccountReceivableAccountingCodeAccountingPeriod *AmendmentBillToContactDebitMemoDefaultPaymentMethodDeferredRevenueAccountingCodeEntity *InvoiceInvoiceItemJournalEntry *JournalRun *ParentAccount *ProductProductRatePlanProductRatePlanChargeRatePlanRatePlanChargeRecognizedRevenueAccountingCodeSoldToContactSubscription |
+| Debit Taxation ItemPart of the Invoice Settlement feature. | Base object: DebitTaxationItemJoined objects:AccountAccountReceivableAccountingCodeAccountingPeriod *AmendmentBillToContactDebitMemoDebitMemoItemDefaultPaymentMethodEntity *InvoiceJournalEntry *JournalRun *ParentAccount *ProductProductRatePlanProductRatePlanChargeRatePlanRatePlanChargeSalesTaxPayableAccountingCodeSoldToContactSubscriptionTaxationItem |
+| Discount Applied MetricsLimited Availability feature. | Base object:DiscountAppliedMetricsJoined objects:AccountAmendmentBillToContactDefaultPaymentMethodEntity *ParentAccount *ProductProductRatePlanProductRatePlanChargeRatePlanRatePlanChargeSoldToContactSubscription |
+| Gateway Reconciliation Event | Base object: PaymentGatewayReconciliationEventLogJoined objects:Entity *PaymentReconciliationJob |
+| Gateway Reconciliation Log | Base object: PaymentReconciliationLogJoined objects:Entity *PaymentGatewayReconciliationEventLogPaymentReconciliationJob |
+| Guided UsagePart of the Unbilled Usage feature. | Base object: GuidedUsageJoined objects:AccountBillToDefaultPaymentMethodParentAccountProductProductRatePlanProductRatePlanChargeRatePlanRatePlanChargeSoldToSubscriptionUsage |
+| Invoice | Base object: InvoiceJoined objects:AccountBillToContactBillToContactSnapshot *DefaultPaymentMethodEntity *ParentAccount *SoldToContactSoldToContactSnapshot * |
+| Invoice AdjustmentDeprecated if the Invoice Settlement feature is enabled. | Base object: InvoiceAdjustmentJoined objects:AccountAccountReceivableAccountingCodeAccountingPeriod *BillToContactDefaultPaymentMethodDeferredRevenueAccountingCodeEntity *InvoiceJournalEntry *JournalRun *ParentAccount *SoldToContact |
+| Invoice Item | Base object: InvoiceItemJoined objects:AccountAccountReceivableAccountingCodeAccountingPeriod *AmendmentBillToContactBillToContactSnapshot *DefaultPaymentMethodDeferredRevenueAccountingCodeEntity *InvoiceJournalEntry *JournalRun *ParentAccount *ProductProductRatePlanProductRatePlanChargeRatePlanRatePlanChargeRecognizedRevenueAccountingCodeSoldToContactSoldToContactSnapshot *Subscription |
+| Invoice Item AdjustmentDeprecated if the Invoice Settlement feature is enabled. | Base object: InvoiceItemAdjustmentJoined objects:AccountAccountReceivableAccountingCodeAccountingPeriod *AmendmentBillToContactDefaultPaymentMethodDeferredRevenueAccountingCodeEntity *InvoiceInvoiceItemJournalEntry *JournalRun *ParentAccount *ProductProductRatePlanProductRatePlanChargeRatePlanRatePlanChargeRecognizedRevenueAccountingCodeSalesTaxPayableAccountingCodeSoldToContactSubscriptionTaxationItem |
+| Invoice PaymentDeprecated if the Invoice Settlement feature is enabled. | Base object: InvoicePaymentJoined objects:AccountAccountReceivableAccountingCodeAccountingPeriod *BillToContactCashAccountingCodeDefaultPaymentMethodEntity *InvoiceJournalEntry *JournalRun *ParentAccount *PaymentPaymentMethodPaymentMethodSnapshotSoldToContact |
+| Journal Entry ItemRequires Zuora Finance. | Base object: JournalEntryItemJoined objects:AccountingCodeAccountingPeriod *Entity *JournalEntry *JournalRun * |
+| Notification History - Email | Base object: EmailHistoryJoined objects:AccountBillToContactDefaultPaymentMethodParentAccount *SoldToAccount |
+| Notification History - Callout | Base object: CalloutHistoryJoined objects:AccountBillToContactDefaultPaymentMethodParentAccount *SoldToAccount |
+| OrderPart of the Order Metrics feature. | Base object: OrderJoined objects:AccountBillToContactDefaultPaymentMethodParentAccount *SoldToAccount |
+| Order ActionPart of the Order Metrics feature. | Base object: OrderActionJoined objects:AccountAdd Rate PlanBillToContactDefaultPaymentMethodOrderParentAccount *Remove Rate PlanSoldToContactSubscriptionSubscriptionVersionAmendmentUpdate Rate Plan |
+| Order ContactPart of the Order Metrics feature. | Base object: OrderContactJoined objects: None |
+| Order ElpPart of the Order Metrics feature. | Base object: OrderElpJoined objects:AccountAmendmentBillToContactDefaultPaymentMethodEntity *OrderOrderActionParentAccount *ProductProductRatePlanProductRatePlanChargeRatePlanRatePlanChargeSoldToContactSubscriptionSubscriptionVersionAmendment |
+| Order ItemPart of the Order Metrics feature. | Base object: OrderItemJoined objects:AmendmentEntity *OrderOrderActionProductProductRatePlanProductRatePlanChargeRatePlanRatePlanChargeSubscription |
+| Order Line ItemPart of the Order Metrics feature. | Base object: OrderLineItemJoined objects:AccountBillToContactDefaultPaymentMethodOrderOrderContactSoldToContactParentAccount * |
+| Order MrrPart of the Order Metrics feature. | Base object: OrderMrrJoined objects:AccountAmendmentBillToContactDefaultPaymentMethodOrderOrderActionParentAccount *ProductProductRatePlanProductRatePlanChargeRatePlanRatePlanChargeSoldToContactSubscriptionSubscriptionVersionAmendment |
+| Order QuantityPart of the Order Metrics feature. | Base object: OrderQuantityJoined objects:AccountAmendmentBillToContactDefaultPaymentMethodOrderOrderActionParentAccount *ProductProductRatePlanProductRatePlanChargeRatePlanRatePlanChargeSoldToContactSubscriptionSubscriptionVersionAmendment |
+| Order TcbPart of the Order Metrics feature. | Base object: OrderTcbJoined objects:AccountAmendmentBillToContactDefaultPaymentMethodOrderOrderActionParentAccount *ProductProductRatePlanProductRatePlanChargeRatePlanRatePlanChargeSoldToContactSubscriptionSubscriptionVersionAmendment |
+| Order TcvPart of the Order Metrics feature. | Base object: OrderTcvJoined objects:AccountAmendmentBillToContactDefaultPaymentMethodOrderOrderActionParentAccount *ProductProductRatePlanProductRatePlanChargeRatePlanRatePlanChargeSoldToContactSubscriptionSubscriptionVersionAmendment |
+| Payment | Base object: PaymentJoined objects:AccountBillToContactDefaultPaymentMethodEntity *ParentAccount *PaymentMethodPaymentMethodSnapshotSoldToContact |
+| Payment ApplicationPart of the Invoice Settlement feature. | Base object: PaymentApplicationJoined objects:AccountAccountReceivableAccountingCodeAccountingPeriod *ApplicationGroupBillToContactCashAccountingCodeDebitMemoDefaultPaymentMethodEntity *InvoiceJournalEntry *JournalRun *ParentAccount *PaymentPaymentMethodPaymentMethodSnapshotSoldToContactUnappliedPaymentAccountingCode |
+| Payment Application ItemPart of the Invoice Item Settlement feature. | Base object: PaymentApplicationItemJoined objects:AccountAccountReceivableAccountingCodeAccountingPeriod *ApplicationGroupBillToContactCashAccountingCodeDebitMemoDebitMemoItemDebitTaxationItemDefaultPaymentMethodEntity *InvoiceInvoiceItemJournalEntry *JournalRun *ParentAccount *PaymentPaymentApplicationPaymentMethodPaymentMethodSnapshotSoldToContactTaxationItemUnappliedPaymentAccountingCode |
+| Payment Method | Base object: PaymentMethodJoined objects:Entity *StoredCredentialProfileIf you want to query data by joining Payment Method and Stored Credential Profile, use StoredCredentialProfile as the base object to achieve better query performance. |
+| Payment Method Transaction Log | Base object: PaymentMethodTransactionLogJoined objects:AccountBillToContactDefaultPaymentMethodEntity *ParentAccount *PaymentMethodSoldToContact |
+| Payment Method Update | Base object: UpdaterDetailJoined objects:Entity *NewPaymentMethodPaymentMethodUpdaterBatch |
+| Payment PartPart of the Invoice Settlement feature. | Base object: PaymentPartJoined objects:AccountBillToContactDebitMemoDefaultPaymentMethodEntity *InvoiceParentAccount *PaymentPaymentMethodPaymentMethodSnapshotSoldToContact |
+| Payment Part ItemPart of the Invoice Item Settlement feature. | Base object: PaymentPartItemJoined objects:AccountBillToContactDebitMemoDebitMemoItemDebitTaxationItemDefaultPaymentMethodEntity *InvoiceInvoiceItemParentAccount *PaymentPaymentMethodPaymentMethodSnapshotPaymentPartSoldToContactTaxationItem |
+| Payment Run | Base object:PaymentRunJoined objects:Entity * |
+| Payment Schedule | Base object: PaymentScheduleJoined objects:AccountBill ToDebit MemoDefault Payment MethodInvoiceParent AccountPayment ScheduleSold To |
+| Payment Schedule Item | Base object: PaymentScheduleItemJoined objects:AccountBill ToDebit MemoDefault Payment MethodInvoiceParent AccountPaymentPayment MethodPayment Method SnapshotPayment SchedulePayment Schedule ItemSold To |
+| Payment Schedule Item Payment | Base object: PaymentScheduleItemPartJoined objects:Payment Schedule Item PaymentEntityPaymentPayment MethodPayment Method SnapshotPayment Schedule Item |
+| Payment Transaction Log | Base object: PaymentTransactionLogJoined objects:AccountBillToContactDefaultPaymentMethodEntity *ParentAccount *PaymentPaymentMethodPaymentMethodSnapshotSoldToContact |
+| Prepaid Balance FundPart of the Prepaid with Drawdown feature. | Base object: FundJoined objects:ProductProductRatePlanProductRatePlanChargeRatePlanRatePlanCharge |
+| Prepaid Validity Period SummaryPart of the Prepaid with Drawdown feature. | Base object: PrepaidValidityPeriodSummary |
+| Processed Usage | Base object: ProcessedUsageJoined objects:AccountAmendmentBillToContactDefaultPaymentMethodEntity *InvoiceInvoiceItemParentAccount *ProductProductRatePlanProductRatePlanChargeRatePlanRatePlanChargeSoldToContactSubscriptionUsage |
+| Product | Base object: ProductJoined objects:Entity * |
+| Product Rate Plan Charge | Base object: ProductRatePlanChargeJoined objects:AccountReceivableAccountingCodeAdjustmentLiabilityAccountingCodeAdjustmentRevenueAccountingCodeContractAssetAccountingCodeContractLiabilityAccountingCodeContractRecognizedRevenueAccountingCodeDeferredRevenueAccountingCodeEntity *ProductProductRatePlanRecognizedRevenueAccountingCodeUnbilledReceivablesAccountingCode |
+| Product Rate Plan Charge Tier | Base object: ProductRatePlanChargeTierJoined objects:Entity *ProductProductRatePlanProductRatePlanCharge |
+| Rate Plan | Base object: RatePlanJoined objects:AccountAmendmentBillToContactDefaultPaymentMethodEntity *ParentAccount *ProductProductRatePlanSoldToContactSubscriptionSubscriptionVersionAmendment |
+| Rate Plan Charge | Base object: RatePlanChargeJoined objects:AccountAccountReceivableAccountingCodeAmendmentBillToContactDefaultPaymentMethodDeferredRevenueAccountingCodeEntity *ParentAccount *ProductProductRatePlanProductRatePlanChargeRatePlanRecognizedRevenueAccountingCodeSoldToContactSubscription |
+| Rate Plan Charge Tier | Base object: RatePlanChargeTierJoined objects:AmendmentEntity *ProductProductRatePlanProductRatePlanChargeRatePlanRatePlanChargeSubscription |
+| Rating ResultPart of the Unbilled Usage feature. | Base object: RatingResultJoined objects:AccountBillToDefaultPaymentMethodInvoiceInvoiceItemParentAccountProductProductRatePlanProductRatePlanChargeRatePlanRatePlanChargeSoldToSubscription |
+| Refund | Base object: RefundJoined objects:AccountBillToContactDefaultPaymentMethodEntity *ParentAccount *PaymentMethodSnapshotSoldToContact |
+| Refund ApplicationPart of the Invoice Settlement feature. | Base object: RefundApplicationJoined objects:AccountAccountReceivableAccountingCodeAccountingPeriod *ApplicationGroupBillToContactCashAccountingCodeCreditMemoDefaultPaymentMethodEntity *JournalEntry *JournalRun *OnAccountAccountingCodeParentAccount *PaymentPaymentMethodPaymentMethodSnapshotRefundSoldToContactUnappliedPaymentAccountingCode |
+| Refund Application ItemPart of the Invoice Item Settlement feature. | Base object: RefundApplicationItemJoined objects:AccountAccountReceivableAccountingCodeAccountingPeriod *ApplicationGroupBillToContactCashAccountingCodeCreditMemoCreditMemoItemCreditTaxationItemDefaultPaymentMethodEntity *JournalEntry *JournalRun *OnAccountAccountingCodeParentAccount *PaymentPaymentMethodPaymentMethodSnapshotRefundRefundApplicationSoldToContactUnappliedPaymentAccountingCode |
+| Refund Invoice PaymentDeprecated if the Invoice Settlement feature is enabled. | Base object: RefundInvoicePaymentJoined objects:AccountAccountReceivableAccountingCodeAccountingPeriod *BillToContactCashAccountingCodeDefaultPaymentMethodEntity *InvoiceInvoicePaymentJournalEntry *JournalRun *ParentAccount *PaymentPaymentMethodPaymentMethodSnapshotRefundSoldToContact |
+| Refund PartPart of the Invoice Settlement feature. | Base object: RefundPartJoined objects:AccountBillToContactCreditMemoDefaultPaymentMethodEntity *ParentAccount *PaymentPaymentMethodPaymentMethodSnapshotRefundSoldToContact |
+| Refund Part ItemPart of the Invoice Item Settlement feature. | Base object: RefundPartItemJoined objects:AccountBillToContactCreditMemoCreditMemoItemDefaultPaymentMethodEntity *ParentAccount *PaymentPaymentMethodPaymentMethodSnapshotRefundRefundPartSoldToContact |
+| Revenue Recognition Events Transaction | Base object: Revenue Recognition Events TransactionJoined objects: Entity |
+| Refund Transaction Log | Base object: RefundTransactionLogJoined objects:Entity *PaymentMethodSnapshotRefund |
+| Revenue Charge Summary ItemRequires the Zuora Finance - Revenue feature. | Base object: RevenueChargeSummaryItemJoined objects:AccountAccountingPeriod *AmendmentBillToContactDefaultPaymentMethodEntity *ParentAccount *ProductProductRatePlanProductRatePlanChargeRatePlanRatePlanChargeRevenueChargeSummarySoldToContactSubscription |
+| Revenue Event ItemRequires the Zuora Finance - Revenue feature. | Base object: RevenueEventItemJoined objects:AccountAccountingPeriod *AmendmentBillToContactDefaultPaymentMethodDeferredRevenueAccountingCodeEntity *JournalEntry *JournalRun *ParentAccount *ProductProductRatePlanProductRatePlanChargeRatePlanRatePlanChargeRecognizedRevenueAccountingCodeRevenueChargeSummaryRevenueEventRevenueEventTypeRevenueScheduleSoldToContactSubscription |
+| Revenue Event Item Credit Memo ItemRequires the Zuora Finance - Revenue feature. Zuora strongly recommends that you only use this data source if the Invoice Settlement feature is enabled. | Base object: RevenueEventItemCreditMemoItemJoined objects:AccountAccountingPeriod *AmendmentBillToContactCreditMemoCreditMemoItemDefaultPaymentMethodDeferredRevenueAccountingCodeEntity *JournalEntry *JournalRun *ParentAccount *ProductProductRatePlanProductRatePlanChargeRatePlanRatePlanChargeRecognizedRevenueAccountingCodeRevenueChargeSummaryRevenueEventCreditMemoItemRevenueEventTypeRevenueScheduleCreditMemoItemSoldToContactSubscription |
+| Revenue Event Item Debit Memo ItemRequires the Zuora Finance - Revenue feature. Zuora strongly recommends that you only use this data source if the Invoice Settlement feature is enabled. | Base object: RevenueEventItemDebitMemoItemJoined objects:AccountAccountingPeriod *AmendmentBillToContactDebitMemoDebitMemoItemDefaultPaymentMethodDeferredRevenueAccountingCodeEntity *JournalEntry *JournalRun *ParentAccount *ProductProductRatePlanProductRatePlanChargeRatePlanRatePlanChargeRecognizedRevenueAccountingCodeRevenueChargeSummaryRevenueEventDebitMemoItemRevenueEventTypeRevenueScheduleDebitMemoItemSoldToContactSubscription |
+| Revenue Event Item Invoice ItemRequires the Zuora Finance - Revenue feature. | Base object: RevenueEventItemInvoiceItemJoined objects:AccountAccountingPeriod *AmendmentBillToContactDefaultPaymentMethodDeferredRevenueAccountingCodeEntity *InvoiceInvoiceItemJournalEntry *JournalRun *ParentAccount *ProductProductRatePlanProductRatePlanChargeRatePlanRatePlanChargeRecognizedRevenueAccountingCodeRevenueChargeSummaryRevenueEventInvoiceItemRevenueEventTypeRevenueScheduleInvoiceItemSoldToContactSubscription |
+| Revenue Event Item Invoice Item AdjustmentRequires the Zuora Finance - Revenue feature. | Base object: RevenueEventItemInvoiceItemAdjustmentJoined objects:AccountAccountingPeriod *AmendmentBillToContactDefaultPaymentMethodDeferredRevenueAccountingCodeEntity *InvoiceInvoiceItemInvoiceItemAdjustmentJournalEntry *JournalRun *ParentAccount *ProductProductRatePlanProductRatePlanChargeRatePlanRatePlanChargeRecognizedRevenueAccountingCodeRevenueChargeSummaryRevenueEventInvoiceItemAdjustmentRevenueEventTypeRevenueScheduleInvoiceItemAdjustmentSoldToContactSubscription |
+| Revenue Schedule ItemRequires the Zuora Finance - Revenue feature. | Base object: RevenueScheduleItemJoined objects:AccountAccountingPeriod *AmendmentBillToContactDefaultPaymentMethodDeferredRevenueAccountingCodeEntity *ParentAccount *ProductProductRatePlanProductRatePlanChargeRatePlanRatePlanChargeRecognizedRevenueAccountingCodeRevenueChargeSummaryRevenueScheduleSoldToContactSubscription |
+| Revenue Schedule Item Credit Memo ItemRequires the Zuora Finance - Revenue feature. Zuora strongly recommends that you only use this data source if the Invoice Settlement feature is enabled. | Base object: RevenueScheduleItemCreditMemoItemJoined objects:AccountAccountingPeriod *AmendmentBillToContactCreditMemoCreditMemoItemDefaultPaymentMethodDeferredRevenueAccountingCodeEntity *ParentAccount *ProductProductRatePlanProductRatePlanChargeRatePlanRatePlanChargeRecognizedRevenueAccountingCodeRevenueChargeSummaryRevenueScheduleCreditMemoItemSoldToContactSubscription |
+| Revenue Schedule Item Debit Memo ItemRequires the Zuora Finance - Revenue feature. Zuora strongly recommends that you only use this data source if the Invoice Settlement feature is enabled. | Base object: RevenueScheduleItemDebitMemoItemJoined objects:AccountAccountingPeriod *AmendmentBillToContactDebitMemoDebitMemoItemDefaultPaymentMethodDeferredRevenueAccountingCodeEntity *ParentAccount *ProductProductRatePlanProductRatePlanChargeRatePlanRatePlanChargeRecognizedRevenueAccountingCodeRevenueChargeSummaryRevenueScheduleDebitMemoItemSoldToContactSubscription |
+| Revenue Schedule Item Invoice ItemRequires the Zuora Finance - Revenue feature. | Base object: RevenueScheduleItemInvoiceItemJoined objects:AccountAccountingPeriod *AmendmentBillToContactDefaultPaymentMethodDeferredRevenueAccountingCodeEntity *InvoiceInvoiceItemParentAccount *ProductProductRatePlanProductRatePlanChargeRatePlanRatePlanChargeRecognizedRevenueAccountingCodeRevenueChargeSummaryRevenueScheduleInvoiceItemSoldToContactSubscription |
+| Revenue Schedule Item Invoice Item AdjustmentRequires the Zuora Finance - Revenue feature. | Base object: RevenueScheduleItemInvoiceItemAdjustmentJoined objects:AccountAccountingPeriod *AmendmentBillToContactDefaultPaymentMethodDeferredRevenueAccountingCodeEntity *InvoiceInvoiceItemInvoiceItemAdjustmentParentAccount *ProductProductRatePlanProductRatePlanChargeRatePlanRatePlanChargeRecognizedRevenueAccountingCodeRevenueChargeSummaryRevenueScheduleInvoiceItemAdjustmentSoldToContactSubscription |
+| Stored Credential Profile | Base object: StoredCredentialProfileJoined object:PaymentMethodIf you want to query data by joining Payment Method and Stored Credential Profile, use StoredCredentialProfile as the base object to achieve better query performance. |
+| Subscription | Base object: SubscriptionJoined objects:AccountBillToContactDefaultPaymentMethodEntity *ParentAccount *SoldToContactSubscriptionVersionAmendment |
+| Taxation Item | Base object: TaxationItemJoined objects:AccountAccountReceivableAccountingCodeAccountingPeriod *AmendmentBillToContactDefaultPaymentMethodEntity *InvoiceInvoiceItemJournalEntry *JournalRun *ParentAccount *ProductProductRatePlanProductRatePlanChargeRatePlanRatePlanChargeSalesTaxPayableAccountingCodeSoldToContactSubscriptionTaxableItemSnapshot * |
+| Usage | Base object: UsageJoined objects:AccountAmendmentBillToContactDefaultPaymentMethodEntity *ParentAccount *ProductProductRatePlanProductRatePlanChargeRatePlanRatePlanChargeSoldToContactSubscription |
+
+## Availability of Data Source Objects
+
+Depending on the features that are enabled in your Zuora tenant, some joined objects may not be available or may not contain any data. The following joined objects depend on Zuora features:
+
+-   AccountingPeriod - Requires Zuora Finance
+
+-   BillToContactSnapshot - Requires the Preserve snapshot of bill-to and sold-to contacts when billing documents are posted? billing rule to be enabled
+
+-   Entity - Part of the Multi-entity feature
+
+-   JournalEntry - Requires Zuora Finance
+
+-   JournalRun - Requires Zuora Finance
+
+-   ParentAccount - Part of the Customer Hierarchy feature
+
+-   SoldToContactSnapshot - Requires the Preserve snapshot of bill-to and sold-to contacts when billing documents are posted? billing rule to be enabled
+
+-   TaxableItemSnapshot - Part of the Taxable Item Snapshot feature
+
+
+Additionally, any existing Subscribe and Amend customers who are on Orders (not on Orders Harmonization) will not have access to the objects related to Amendments.
+
+## Additional Data Source Fields
+
+-   If you have defined custom fields for an object, your custom fields are available in every data source that provides the object. To specify a custom field in an Export ZOQL query, use the API name that you defined for the custom field.
+
+-   If you have enabled foreign currency conversion in Zuora, you can include currency conversion data in data source exports. Currency conversion data is available through additional fields in some objects.

@@ -1,0 +1,3 @@
+https://docs.zuora.com/en/zuora-billing/sitemap.xml
+https://docs.zuora.com/en/zuora-platform/sitemap.xml
+https://docs.zuora.com/en/zuora-revenue/sitemap.xml

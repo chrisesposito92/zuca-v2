@@ -1,0 +1,20 @@
+---
+title: "VC accounting examples"
+url: "https://docs.zuora.com/en/zuora-revenue/day-to-day-operation/variable-consideration-processing/vc-accounting-examples"
+product: "zuora-revenue"
+scraped_at: "2025-12-24T04:32:09.204Z"
+---
+
+# VC accounting examples
+
+This document provides scenarios for VC accounting impacts when sales order lines are fully invoiced, with downloadable spreadsheets for detailed analysis.
+
+Different scenarios are provided for the VC decrease case where the sales order line is fully invoiced to explain the VC impact on accounting entries. Download the following spreadsheets to get the details about each scenario.
+
+-   [Estimate VC Accounting Estimates Scenarios.xlsx](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/59028835-a3a8-4376-a801-42c58b768544?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjU5MDI4ODM1LWEzYTgtNDM3Ni1hODAxLTQyYzU4Yjc2ODU0NCIsImV4cCI6MTc2NjYzNzEyNywianRpIjoiYzhiN2JmMmJlMjk3NGM4NDg5YTdmODVjZjY5OWEzMmQiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.2KCmg4d_JDroThBYJXlKSCQxFhoD9SCeglPM2AaR4NA&response-content-disposition=attachment%3B+filename%3D%22VC_Accounting_Estimates_Scenarios.xlsx%22).
+
+-   [Clearing Estimate VC Accounting Actual Scenarios.xlsx](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/cb77b383-9563-405d-887b-1c46e6a9241d?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImNiNzdiMzgzLTk1NjMtNDA1ZC04ODdiLTFjNDZlNmE5MjQxZCIsImV4cCI6MTc2NjYzNzEyNywianRpIjoiNGQ5YWUyNzNjNDU2NDk3ZDlkZWI3ZWNmNTEyZDE2YzUiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.W-vHHnChrdkdWawOgx2eg81x2S5z2nbjLkjWkd3FL-E&response-content-disposition=attachment%3B+filename%3D%22VC_Accounting_Actual_Final_Scenarios.xlsx%22) .
+
+-   [Clearing Estimate (Final) VC Accounting Actual Final Scenarios.xlsx](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/cb77b383-9563-405d-887b-1c46e6a9241d?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImNiNzdiMzgzLTk1NjMtNDA1ZC04ODdiLTFjNDZlNmE5MjQxZCIsImV4cCI6MTc2NjYzNzEyNywianRpIjoiNWEyNDNmNjk5YWE1NGRiMDg5NGY4MGY2ZDNlZTU5NTciLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.srTVQVGTWC1DIeZfMpbJOajwxZIK2Xv0x-3RMVnwJm4&response-content-disposition=attachment%3B+filename%3D%22VC_Accounting_Actual_Final_Scenarios.xlsx%22).
+
+-   [Cancel Actuals VC Accounting Cancel Actual Scenarios.xlsx](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/58376b15-3e1f-48fa-a5cd-9bbe4da3fa6d?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjU4Mzc2YjE1LTNlMWYtNDhmYS1hNWNkLTliYmU0ZGEzZmE2ZCIsImV4cCI6MTc2NjYzNzEyNywianRpIjoiZWVmMWU2NGQ2NjBjNGFhYzhjYjkyZGVmNGJkYjViYTAiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.qX_p8QnOc6pcGWKW3DrG8KPN4Fvr8gRKTcCACaK1SOw&response-content-disposition=attachment%3B+filename%3D%22VC_Accounting_Cancel_Actual_Scenarios.xlsx%22).

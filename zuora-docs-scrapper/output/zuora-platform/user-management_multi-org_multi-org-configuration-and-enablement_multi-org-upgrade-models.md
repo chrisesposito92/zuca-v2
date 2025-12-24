@@ -1,0 +1,18 @@
+---
+title: "Multi-Org upgrade models"
+url: "https://docs.zuora.com/en/zuora-platform/user-management/multi-org/multi-org-configuration-and-enablement/multi-org-upgrade-models"
+product: "zuora-platform"
+scraped_at: "2025-12-24T05:18:38.195Z"
+---
+
+# Multi-Org upgrade models
+
+The article provides options to upgrade Multi-Org
+
+The upgrade to Zuora Multi-Org can be done in three ways, depending on your requirements:"
+
+-   Single tenant
+
+-   DAC tenant
+
+-   Co-existence of Zuora Multi-Org as a leaf entity within the Zuora Multi-Entity environment

@@ -1,0 +1,15 @@
+---
+title: "Approve or reject approval tasks from Zuora inbox"
+url: "https://docs.zuora.com/en/zuora-platform/extensibility/workflow/create-and-manage-workflow-definitions/advanced-tutorials/approve-or-reject-approval-tasks-in-workflow/approve-or-reject-approval-tasks-from-zuora-inbox"
+product: "zuora-platform"
+scraped_at: "2025-12-24T05:31:50.674Z"
+---
+
+# Approve or reject approval tasks from Zuora inbox
+
+Learn how to approve or reject approval tasks in the Zuora inbox.
+
+If you have selected Also Send to Zuora Inbox in the delivery options, you can also approve or reject approval tasks form Zuora inbox.
+
+1.  Click the Zuora Inbox icon ![Zuora inbox icon](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/d80d216d-1631-4de2-9d05-b8a8f0e7a2d8?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImQ4MGQyMTZkLTE2MzEtNGRlMi05ZDA1LWI4YThmMGU3YTJkOCIsImV4cCI6MTc2NjY0MDcwOSwianRpIjoiMjQ5ZDdhNDdkMmIzNGFmMmI4ZGI0YTU3OTFjNTg4ZGMiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.2ROhuLLvjl19DUmPHtotpFf14Cx8_jldIvM_OyyLpbU) on the Zuora homepage.
+2.  Click the approve icon ![Approve icon](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/42ff0d81-7972-4abf-b43a-ddc7a89fae20?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjQyZmYwZDgxLTc5NzItNGFiZi1iNDNhLWRkYzdhODlmYWUyMCIsImV4cCI6MTc2NjY0MDcwOSwianRpIjoiZGQ4MzI4MWMzNjEzNGUzYmE4MTczMjBlOTBkYzQ2OTYiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.qbr_7aqcE0W93Z4ZmffsmBQ3-cVJNfYDmFSJXlqg8g8) or reject icon ![Reject icon](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/dcecdc04-4b3c-47d0-a386-761d2e388bd3?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImRjZWNkYzA0LTRiM2MtNDdkMC1hMzg2LTc2MWQyZTM4OGJkMyIsImV4cCI6MTc2NjY0MDcwOSwianRpIjoiYmM0ZDgyYzliZDE3NDM5NDljMjQwOTc2MjY1MTU5M2QiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.4e3y-vAObRyQ_G0qOvTOx39_JzVKUYXxf17jTPjA1bQ) to complete the approval or rejection task. For more information on delivery options, see [Manual: Approval](/zuora-platform/extensibility/workflow/create-and-manage-workflow-definitions/workflow-reference/workflow-task-reference/manual-approval). ![Sample Zuora inbox UI](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/76476666-517d-4bd8-aa80-b66760f052c0?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6Ijc2NDc2NjY2LTUxN2QtNGJkOC1hYTgwLWI2Njc2MGYwNTJjMCIsImV4cCI6MTc2NjY0MDcwOSwianRpIjoiZjMwNjczODFhNjBkNDc0ZTkxM2RkN2EwZmRjY2QzNWMiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.DKO_qiK5QuHGxy7j6JqLYnsYkIw9nvrDM-mSoSeVlnE)

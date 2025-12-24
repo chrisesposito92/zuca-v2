@@ -1,0 +1,27 @@
+{
+  "name": "zuora-docs-scrapper",
+  "version": "1.0.0",
+  "description": "Scraper for docs.zuora.com documentation pages",
+  "type": "module",
+  "scripts": {
+    "scrape": "npx tsx src/index.ts",
+    "scrape:force": "npx tsx src/index.ts --force",
+    "scrape:billing": "npx tsx src/index.ts --product billing",
+    "scrape:platform": "npx tsx src/index.ts --product platform",
+    "scrape:revenue": "npx tsx src/index.ts --product revenue",
+    "test": "npx tsx src/index.ts --test"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0",
+    "puppeteer": "^23.0.0",
+    "turndown": "^7.2.0",
+    "xml2js": "^0.6.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/turndown": "^5.0.5",
+    "@types/xml2js": "^0.4.14",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0"
+  }
+}

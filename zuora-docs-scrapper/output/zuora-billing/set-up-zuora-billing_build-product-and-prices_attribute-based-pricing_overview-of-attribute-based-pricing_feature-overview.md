@@ -1,0 +1,22 @@
+---
+title: "Feature overview"
+url: "https://docs.zuora.com/en/zuora-billing/set-up-zuora-billing/build-product-and-prices/attribute-based-pricing/overview-of-attribute-based-pricing/feature-overview"
+product: "zuora-billing"
+scraped_at: "2025-12-24T05:00:06.828Z"
+---
+
+# Feature overview
+
+The Attribute-based Pricing feature allows for flexible product catalog management by decoupling product objects, enabling regional and currency variations without duplication, and introducing new objects for detailed charge definitions.
+
+With the Attribute-based Pricing feature enabled, the current product catalog objects are loosely coupled to avoid unnecessary proliferation in the catalog. For example, to sell the same product in different regions or currencies, you no longer need to create regional products and then duplicate each rate plan for multiple products.
+
+In the new product catalog design, you can define permutations of not only price but also billing attributes such as charge model, billing frequency, or list price base. The following table explains the differences in product catalog objects before and after enabling the Attribute-based Pricing feature.
+
+| Product catalog object | Disable Attribute-based Pricing | Enable Attribute-based Pricing |
+| --- | --- | --- |
+| Product | The starting point of building Zuora product catalog. A product is usually used to group similar or regional product rate plans. | Remains the same. |
+| Product Rate Plan | A basic building block in the Zuora product catalog. A product rate plan represents a marketable plan that groups rate plan charges. Your customer always subscribes to a product rate plan.A product rate plan can have multiple rate plan charges. A product rate plan must be created before its grouped rate plan charges. | A basic building block in the Zuora product catalog. A product rate plan represents a marketable plan that groups rate plan charges. Your customer always subscribes to a product rate plan. A product rate plan can have multiple rate plan charges.Moreover, if the Charge Reuse feature is enabled, a product rate plan does not necessarily need to be created before the rate plan charge. An existing rate plan charge can be added to a new product rate plan.Note:The Charge Reuse feature is planned for deprecation and is no longer recommended for new implementations. We do not recommend adopting this approach going forward. For guidance on supported alternatives, please reach out to your Zuora representative. |
+| Product Rate Plan Charge | The fundamental building block in the Zuora product catalog. A product rate plan charge holds all types of information, including billing, taxation, accounting, and pricing. This object represents a charge model or a set of fees associated with a product rate plan.A product rate plan charge can be created only after its container product rate plan already exists. | The fundamental building block in the Zuora product catalog. A product rate plan charge holds only some basic information about the charge, including charge name and charge type. The charge behavior is no longer defined by this object but by the Product Charge Definition object. Multiple charge definitions can be associated with a product rate plan charge.Moreover, if the Charge Reuse feature is enabled, one product rate plan charge can be added to multiple product rate plans. |
+| Product Rate Plan Definition | N/A | A new object introduced to associate a product rate plan with a product rate plan charge.With this object, a single product rate plan can have multiple rate plan definitions. Each product rate plan definition associates the product rate plan with one product rate plan charge. One product rate plan charge can also be associated with more than one product rate plan.Note:The Charge Reuse feature must be enabled for this object to be available. |
+| Product Charge Definition | N/A | A new object introduced by the Attribute-based Pricing feature. The product charge definition includes the context, which are the attributes that can determine the charge behavior. A product charge definition has billing, pricing, taxation, and accounting attributes.One product rate plan charge can have different behaviors defined by different product charge definitions. Each charge definition carries a context defined by attributes such as Region, Customer Type, Payment Method, Term, etc. Some of these attributes are already included in the object. You can also add business-specific attributes as custom fields. |

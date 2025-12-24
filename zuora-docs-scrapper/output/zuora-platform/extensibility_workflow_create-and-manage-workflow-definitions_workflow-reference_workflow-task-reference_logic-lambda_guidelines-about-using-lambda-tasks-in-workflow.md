@@ -1,0 +1,42 @@
+---
+title: "Guidelines about using Lambda tasks in Workflow"
+url: "https://docs.zuora.com/en/zuora-platform/extensibility/workflow/create-and-manage-workflow-definitions/workflow-reference/workflow-task-reference/logic-lambda/guidelines-about-using-lambda-tasks-in-workflow"
+product: "zuora-platform"
+scraped_at: "2025-12-24T05:34:25.166Z"
+---
+
+# Guidelines about using Lambda tasks in Workflow
+
+Guidelines and examples for using Lambda tasks in Workflow.
+
+## General guidelines
+
+-   Do not include a Zuora API call in a Lambda task in Workflow. Instead, use existing Workflow tasks to fetch the Zuora data you need prior to the Lambda task. When using Workflow APIs in Lambda, you need to implement the logic to handle special scenarios like API rate limiting, temporary outages, and concurrent locking. Workflow has safeguards built-in to handle these scenarios, but Lambda does not. A Lambda developer would need to implement a series of safeguards on their own, like automatic scale backs, retries, and temporary processing pauses. It’s much easier to use existing Workflow tasks for fetching data from Zuora.
+
+-   Do not implement a Workflow Lambda task that requires pooling from Zuora or an external system. Lambda has a 3-5 minute timeout. A slight delay in the external system can cause problems. These types of operations are best implemented in other ways. This is why the Export, Data Query, Bill Run, Payment Run, and Report Run are all implemented as dedicated Workflow tasks. They have sophisticated polling features built-in.
+
+-   Do not implement a Workflow Lambda function if it is dependent on a stateful API that is not idempotent. If the API operation fails, the state might be lost inside the Workflow Lambda task. When possible, consider using the AQuA Query task instead. If the AQuA Query task is used, stateful operations are less likely to be lost. This is because Zuora's AQuA API supports retrieving raw data change between the last API call and each subsequent API call.
+
+
+## A good example of using Lambda in Workflow
+
+Upon the completion of payment runs, a user needs to send the ACH account numbers and routing numbers of their customers to payment gateways for payment processing. By default, the data payload in Workflow is not encrypted. To prevent sensitive data from being exposed, the user leverages the encryption option in the Export task. After the Export task, the user adds a Lambda task to decrypt the data and send the data to a specific SFTP destination.
+
+The encrypted export is an asynchronous process that normally takes a relatively long time to complete. If it is implemented in a Lambda task, the Lambda may time out before the complete set of data is retrieved.
+
+Note:
+
+When you upload/delete a custom code executable function in a lower environment like the Sandbox, the same change is reflected in the Production environment also since a function uploaded will be shared across all environments and tenants within that organization.
+
+## Examples that Lambda is not a good fit
+
+-   Lambda is used for advanced math calculations - not recommended - A customer needs to use power functions to calculate the present value (PV) and the future market value (FMV) of a charge. The liquid template language does not help much in this regard. The user considers using Lambda to perform the calculations. Although this is achievable using Lambda, it would involve a lot of extra calculations and configurations. A more efficient approach is to use the Data Query task. With Data Query, the math operations could be used with the original charge amount and quantity to produce a CSV with the calculations already done. See below for the query being used in the Data Query task (with expressions calculating PV and FMV highlighted in blue). ![Bad example - for advanced math calculations](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/acbdd0d8-4b6f-491a-b394-4f9cc04b4edc?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImFjYmRkMGQ4LTRiNmYtNDkxYS1iMzk0LTRmOWNjMDRiNGVkYyIsImV4cCI6MTc2NjY0MDg2MiwianRpIjoiM2RiZTA3Y2QxNmE3NDc1NDk0Y2YxMzUzNjM2YTk0NjciLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.vyJTn9OX2G6x07pmhsT3bN3aO1bbakFuv7N4mceYjTU)
+
+-   Lambda is used for advanced lookup relations - not recommended - A customer uses Lambda after an Export task to compare the data with an external lookup table to derive a value. This is not an efficient use of the Lambda task. Instead of using the Lambda task, the customer can add the lookup table as a global constant and insert it into a Data Query task via SQL. To learn about how to insert a global constant in a query, see the code section in the upper red rectangle. To learn about how data is fetched and joined with Zuora data, see the code lines in the lower red rectangle. ![Bad example - for advanced lookup relations](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/25bd1a2b-f087-4964-b921-33e8268558eb?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjI1YmQxYTJiLWYwODctNDk2NC1iOTIxLTMzZTgyNjg1NThlYiIsImV4cCI6MTc2NjY0MDg2MiwianRpIjoiZmFiNzYxNzJmYzY4NDg2MzgxNmQ5NGQxMTEyNTkwMTIiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.75T5Z6l4-b1C2bO7-jZ6sP4D7n5qYDZElX3FKlxYIOM)
+
+
+-   Lambda is used for creating a custom file - not recommended - A customer needs to create a fixed-width file that contains payment data. They consider using the Lambda task to create such a file and plan to use the first row of data in the file as the character string identifier. The character string identifier will be used for the destination system to identify the contents in the file. This is not an efficient use of Lambda. Alternatively, the customer can use the Data Query task, where the different rows could be concatenated and the overall row name could be expressed as the character string identifier. See below for an example query used in the task and the resulted CSV file. ![Bad example - for creating custom file 1](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/a5743f83-a663-409e-867c-02d23778e970?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImE1NzQzZjgzLWE2NjMtNDA5ZS04NjdjLTAyZDIzNzc4ZTk3MCIsImV4cCI6MTc2NjY0MDg2MiwianRpIjoiNzRlMDg2MjViMDVjNDQxYjk0NTYxMzQ2YzNlN2YyNTAiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.FA_vKqsqbVmC-9wGoYnmEqTPD5llg-WzYcYpuwlmt1o) The CSV file can then be uploaded with the SFTP Upload task. Because the CSV contains only 1 column of data, when the CSV was uploaded, the filename will be changed to XYZ.txt.
+
+-   Lambda is used for creating a custom file - not recommended - A customer needs to create a custom CSV file with a specific column delimiter. They consider using the Lambda task so they could manipulate the exported data before sending it to the integrating system. This is not an efficient use of Lambda. Alternatively, the customer can consider using the new DSV option for File Delimiter in the Data Query task. After DSV is selected, the customer can specify the delimiter they want to separate the columns of the CSV. ![Bad example - for creating custom file 2](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/0a91d0a1-7a92-4a46-ae81-8afaea0da691?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjBhOTFkMGExLTdhOTItNGE0Ni1hZTgxLThhZmFlYTBkYTY5MSIsImV4cCI6MTc2NjY0MDg2MiwianRpIjoiNWQ3ZThlOTc2ODBmNGJhZGI3NjRiZTFmOGVlYjY0ZGUiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.nGuy-T1RaGTf32eZavFYm6XBgSHSryXgDknJC2WOm5I)
+
+-   Lambda is used for performing AQuA calls - not recommended - A customer tries to use Lambda to perform AQuA API calls. An AQuA call is an asynchronous process that could take longer than 3 minutes and is stateful. The state can be lost during the execution of the Lambda task, or the task may timeout during the polling operation for the file. Alternatively, the customer can use the native AQuA Query task.
