@@ -4,6 +4,12 @@
  * Retrieval-Augmented Generation for Zuora documentation.
  * Provides semantic search over scraped docs to enhance LLM prompts.
  *
+ * Supports two backends:
+ * - Local JSON file (for CLI/development)
+ * - Postgres pgvector (for production/Vercel)
+ *
+ * The backend is auto-detected based on POSTGRES_URL environment variable.
+ *
  * Usage:
  *   // Build the index first (one-time)
  *   npm run rag:build
@@ -20,6 +26,7 @@ import { ZuoraDocsSearch, createSearchInstance } from './search';
 import { buildIndex, loadEmbeddingIndex, embedQuery } from './embeddings';
 import { chunkAllDocs, chunkDocument, loadAllDocs } from './chunker';
 import type { DocChunk, EmbeddingIndex, SearchOptions, SearchResult, ZuoraProduct } from './types';
+import { searchWithPostgres, isPostgresReady, formatPostgresContext } from './postgres-backend';
 
 // Re-export types
 export type { DocChunk, EmbeddingIndex, SearchOptions, SearchResult, ZuoraProduct };
@@ -32,11 +39,18 @@ const DEFAULT_DOCS_DIR = path.join(process.cwd(), 'zuora-docs-scrapper', 'output
 const DEFAULT_INDEX_PATH = path.join(process.cwd(), 'data', 'zuora-docs-index.json');
 const DEFAULT_PROGRESS_PATH = path.join(process.cwd(), 'data', 'rag-progress.json');
 
-// Singleton search instance
+// Singleton search instance (for local backend)
 let searchInstance: ZuoraDocsSearch | null = null;
 
 /**
- * Get or create the search instance
+ * Check if Postgres backend should be used
+ */
+function usePostgres(): boolean {
+  return !!process.env.POSTGRES_URL;
+}
+
+/**
+ * Get or create the local search instance
  */
 function getSearchInstance(): ZuoraDocsSearch {
   if (!searchInstance) {
@@ -56,6 +70,9 @@ export async function searchDocs(
   query: string,
   options: SearchOptions = {}
 ): Promise<SearchResult[]> {
+  if (usePostgres()) {
+    return searchWithPostgres(query, options);
+  }
   return getSearchInstance().search(query, options);
 }
 
@@ -70,6 +87,9 @@ export async function getDocContext(
   query: string,
   options: SearchOptions = {}
 ): Promise<string> {
+  if (usePostgres()) {
+    return formatPostgresContext(query, options);
+  }
   return getSearchInstance().getContext(query, options);
 }
 
@@ -154,9 +174,12 @@ export async function buildRagIndex(options: {
 }
 
 /**
- * Check if the RAG index exists
+ * Check if the RAG index exists (local or Postgres)
  */
-export function isIndexReady(): boolean {
+export async function isIndexReady(): Promise<boolean> {
+  if (usePostgres()) {
+    return isPostgresReady();
+  }
   const index = loadEmbeddingIndex(DEFAULT_INDEX_PATH);
   return index !== null;
 }

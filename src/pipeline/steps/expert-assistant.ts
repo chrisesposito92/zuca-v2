@@ -3,6 +3,7 @@ import type { LlmModel } from '../../types/llm';
 import { loadPrompt, PROMPTS } from '../../llm/prompts/index';
 import { ZucaOutput } from '../../types/output';
 import { debugLog } from '../../config';
+import { getDocContext, isIndexReady } from '../../rag';
 
 /**
  * Expert assistant response
@@ -140,15 +141,24 @@ function formatSolutionContext(solution?: Partial<ZucaOutput>): string {
  */
 function buildUserMessage(
   question: string,
-  solution?: Partial<ZucaOutput>
+  solution?: Partial<ZucaOutput>,
+  docContext?: string
 ): string {
   const parts = [
     'Current Solution Context:',
     formatSolutionContext(solution),
     '',
-    'User Question:',
-    question,
   ];
+
+  // Include retrieved documentation if available
+  if (docContext) {
+    parts.push('Relevant Zuora Documentation:');
+    parts.push(docContext);
+    parts.push('');
+  }
+
+  parts.push('User Question:');
+  parts.push(question);
 
   return parts.join('\n');
 }
@@ -165,8 +175,18 @@ export async function expertAssistant(
 ): Promise<ExpertResponse> {
   debugLog('Expert Assistant handling question', { questionLength: question.length });
 
+  // Retrieve relevant documentation if RAG index is available
+  let docContext: string | undefined;
+  if (await isIndexReady()) {
+    debugLog('RAG index available, retrieving relevant docs...');
+    docContext = await getDocContext(question, { limit: 3, minScore: 0.3 });
+    debugLog('Retrieved doc context', { length: docContext?.length || 0 });
+  } else {
+    debugLog('RAG index not available, skipping doc retrieval');
+  }
+
   const systemPrompt = await loadPrompt(PROMPTS.EXPERT_ASSISTANT);
-  const userMessage = buildUserMessage(question, solution);
+  const userMessage = buildUserMessage(question, solution, docContext);
 
   const result = await complete<ExpertResponse>({
     systemPrompt,

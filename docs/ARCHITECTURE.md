@@ -92,6 +92,12 @@ zuca-v2/
 │   │   ├── client.ts            # LLM client (OpenAI + Gemini)
 │   │   ├── mcp-client.ts        # MCP JSON-RPC client (Gemini function calls)
 │   │   └── prompts/             # System prompts for each step
+│   ├── rag/                     # RAG (Retrieval-Augmented Generation)
+│   │   ├── index.ts             # Main interface (auto-detects backend)
+│   │   ├── postgres-backend.ts  # pgvector search implementation
+│   │   ├── search.ts            # Local JSON search implementation
+│   │   ├── chunker.ts           # Document chunking logic
+│   │   └── cli.ts               # RAG CLI commands
 │   ├── tools/
 │   │   ├── web-search.ts        # Web search tool config
 │   │   ├── code-interpreter.ts  # Code interpreter tool config
@@ -106,6 +112,8 @@ zuca-v2/
 │       ├── markdown-tables.ts   # Format output tables
 │       ├── jaccard.ts           # Jaccard similarity matching
 │       └── date-utils.ts        # Date formatting helpers
+├── apps/
+│   └── web/                     # Next.js 16 frontend (HeroUI + Vercel Postgres)
 ├── docs/
 │   └── Golden Use Cases/        # Existing reference data
 ├── tests/
@@ -171,6 +179,37 @@ zuca-v2/
 3. **Multi-turn**: Handle follow-up queries that refine the solution
 4. **Both Interfaces**: CLI and HTTP API working
 5. **Test Coverage**: Core pipeline steps have tests
+
+---
+
+## RAG System
+
+ZUCA uses a RAG (Retrieval-Augmented Generation) system to inject relevant Zuora documentation into pipeline steps.
+
+### Architecture
+
+Due to Gemini's limitation (can't use custom function calling with native tools), retrieval happens in TypeScript **before** the LLM call:
+
+```
+User Query → Vector Search (pgvector) → Inject Docs into Prompt → LLM Call
+```
+
+### Dual Backend
+
+| Backend | Use Case | Detection |
+|---------|----------|-----------|
+| **Postgres (pgvector)** | Production, web app | `POSTGRES_URL` env var |
+| **Local JSON** | CLI dev, offline | No `POSTGRES_URL` |
+
+### RAG-Enhanced Steps
+
+| Step | Query Source | Docs Retrieved |
+|------|--------------|----------------|
+| `expert-assistant` | User's question | 3 chunks |
+| `analyze-contract` | Use case description | 3 chunks |
+| `design-subscription` | Use case + rev rec notes | 3 chunks |
+
+See [ROADMAP-ZUORA-DOCS-RAG.md](./ROADMAP-ZUORA-DOCS-RAG.md) for full details.
 
 ---
 

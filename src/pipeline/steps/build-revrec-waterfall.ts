@@ -12,6 +12,7 @@ import { PobTemplate } from '../../types/golden-use-cases';
 import { formatContractsOrdersForContext } from './build-contracts-orders';
 import { formatContractIntelForContext } from './contract-intel';
 import { debugLog } from '../../config';
+import { getDocContext, isIndexReady } from '../../rag';
 
 /**
  * JSON schema for Rev Rec Waterfall structured output
@@ -91,11 +92,20 @@ function buildUserMessage(
   contractsOrders: ContractsOrdersOutput,
   pobMapping: PobMappingOutput,
   contractIntel: ContractIntel,
-  pobTemplates: PobTemplate[]
+  pobTemplates: PobTemplate[],
+  docContext?: string
 ): string {
   const parts = [
     'Generate the revenue recognition waterfall based on the following:',
     '',
+  ];
+
+  // Include retrieved documentation if available
+  if (docContext) {
+    parts.push('## Relevant Documentation', docContext, '');
+  }
+
+  parts.push(
     '## Contract Intel',
     formatContractIntelForContext(contractIntel),
     '',
@@ -114,8 +124,8 @@ function buildUserMessage(
     '4. Point-in-time templates recognize 100% in a single month',
     '5. If usage/consumption data is not provided for event-driven templates, show $0 amounts and add an open question',
     '',
-    'Return one row per Line Item per Period with the recognition amount.',
-  ];
+    'Return one row per Line Item per Period with the recognition amount.'
+  );
 
   return parts.join('\n');
 }
@@ -135,8 +145,18 @@ export async function buildRevRecWaterfall(
 ): Promise<RevRecWaterfallOutput> {
   debugLog('Building Rev Rec Waterfall');
 
+  // Retrieve relevant documentation if RAG index is available
+  // Query focuses on revenue recognition, POB, SSP, and ratable methods
+  let docContext: string | undefined;
+  if (await isIndexReady()) {
+    debugLog('RAG index available, retrieving docs for rev rec waterfall...');
+    const query = 'Zuora Revenue recognition waterfall POB SSP allocation ratable method release event';
+    docContext = await getDocContext(query, { limit: 3, minScore: 0.3 });
+    debugLog('Retrieved doc context', { length: docContext?.length || 0 });
+  }
+
   const systemPrompt = await loadPrompt(PROMPTS.BUILD_REVREC_WATERFALL);
-  let userMessage = buildUserMessage(contractsOrders, pobMapping, contractIntel, pobTemplates);
+  let userMessage = buildUserMessage(contractsOrders, pobMapping, contractIntel, pobTemplates, docContext);
 
   // Include previous results for multi-turn support
   if (previousOutput) {

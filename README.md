@@ -190,15 +190,54 @@ zuca-v2/
 │   ├── pipeline/             # Pipeline orchestration
 │   │   ├── orchestrator.ts   # Main orchestrator
 │   │   └── steps/            # Pipeline steps
+│   ├── rag/                  # RAG (Retrieval-Augmented Generation)
+│   │   ├── index.ts          # Main interface (auto-detects backend)
+│   │   ├── postgres-backend.ts  # pgvector search
+│   │   └── cli.ts            # RAG CLI commands
 │   ├── utils/                # Utilities
 │   ├── cli/                  # CLI interface
 │   └── api/                  # HTTP API server
+├── apps/
+│   └── web/                  # Next.js 16 frontend
 ├── docs/
 │   └── Golden Use Cases/     # Reference data
 ├── examples/                 # Example inputs
 ├── tests/                    # Test files
 └── README.md
 ```
+
+## RAG System
+
+ZUCA includes a RAG (Retrieval-Augmented Generation) system that injects relevant Zuora documentation into pipeline steps.
+
+### Dual Backend Architecture
+
+The RAG system auto-detects which backend to use:
+
+| Backend | Use Case | Detection |
+|---------|----------|-----------|
+| **Postgres (pgvector)** | Production, web app | `POSTGRES_URL` env var present |
+| **Local JSON** | CLI dev, offline | No `POSTGRES_URL` |
+
+### Setup
+
+```bash
+# Build the local index (one-time, ~30 min)
+npm run rag:build
+
+# For production, migrate to Postgres
+npm run rag:migrate
+
+# Test the RAG search
+npm run rag:test "contract modification"
+```
+
+### RAG-Enhanced Steps
+
+The following pipeline steps retrieve relevant documentation before LLM calls:
+- `expert-assistant` - Answers Zuora questions using retrieved docs
+- `analyze-contract` - Enriched with billing/revenue concepts
+- `design-subscription` - Enriched with charge model and POB info
 
 ## Development
 

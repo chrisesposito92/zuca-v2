@@ -107,39 +107,54 @@ Use `ask_zuora` MCP tool when you need Zuora-specific guidance while working on 
 
 ## RAG Module
 
-The RAG (Retrieval-Augmented Generation) module provides semantic search over 4,482 scraped Zuora documentation pages.
+The RAG (Retrieval-Augmented Generation) module provides semantic search over 4,482 scraped Zuora documentation pages (13,467 chunks).
 
-### Building the Index
+### Dual Backend Architecture
+
+The RAG system auto-detects which backend to use:
+
+| Backend | Use Case | Detection |
+|---------|----------|-----------|
+| **Postgres (pgvector)** | Production, web app | `POSTGRES_URL` env var present |
+| **Local JSON** | CLI dev, offline | No `POSTGRES_URL` |
+
+### CLI Commands
 
 ```bash
-# Build the full embedding index (~4,500 chunks, ~30 min)
+# Build the full embedding index (~13,500 chunks, ~30 min)
 npm run rag:build
 
 # Resume if interrupted
 npm run rag:build:resume
 
-# Test with a sample query
+# Test with a sample query (uses Postgres if POSTGRES_URL set)
 npm run rag:test "contract modification"
 
 # View index statistics
 npm run rag:stats
+
+# Migrate local index to Postgres (requires POSTGRES_URL)
+npm run rag:migrate
 ```
 
 ### Usage in Code
 
 ```typescript
-import { searchDocs, getDocContext } from './rag';
+import { searchDocs, getDocContext, isIndexReady } from './rag';
 
-// Search for relevant documentation
-const results = await searchDocs('proration settings', {
-  product: 'zuora-billing',  // optional filter
-  limit: 5,
-  minScore: 0.7,
-});
+// Check if RAG is available (async for Postgres check)
+if (await isIndexReady()) {
+  // Search for relevant documentation
+  const results = await searchDocs('proration settings', {
+    product: 'zuora-billing',  // optional filter
+    limit: 5,
+    minScore: 0.7,
+  });
 
-// Get formatted context for prompt injection
-const context = await getDocContext('how do ramp deals work?');
-// Returns markdown-formatted docs ready to inject into prompts
+  // Get formatted context for prompt injection
+  const context = await getDocContext('how do ramp deals work?');
+  // Returns markdown-formatted docs ready to inject into prompts
+}
 ```
 
 ### Architecture
@@ -147,8 +162,19 @@ const context = await getDocContext('how do ramp deals work?');
 Due to Gemini's limitation (can't use custom function calling with native tools), retrieval happens in the TypeScript orchestration layer **before** the LLM call, not as a tool:
 
 ```
-User Query → Vector Search → Inject Docs into Prompt → LLM Call
+User Query → Vector Search (pgvector) → Inject Docs into Prompt → LLM Call
 ```
+
+### RAG-Enriched Pipeline Steps
+
+| Step | Query Source | Docs Retrieved |
+|------|--------------|----------------|
+| `expert-assistant` | User's question | 3 chunks |
+| `analyze-contract` | Use case description | 3 chunks |
+| `design-subscription` | Use case + rev rec notes | 3 chunks |
+| `build-contracts-orders` | Order actions, allocations, SSP, POB | 3 chunks |
+| `build-billings` | Invoice items, proration, billing | 3 chunks |
+| `build-revrec-waterfall` | Revenue recognition, POB, ratable methods | 3 chunks |
 
 ### Q&A Dataset Generation
 

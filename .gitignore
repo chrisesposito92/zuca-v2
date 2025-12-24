@@ -142,3 +142,7 @@ vite.config.ts.timestamp-*
 .env.local
 
 /tmp
+
+# RAG index files (too large for git, rebuild with `npm run rag:build`)
+data/zuora-docs-index.json
+data/rag-progress.json

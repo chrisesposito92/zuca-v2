@@ -476,3 +476,187 @@ export async function listBugReports(
   `;
   return result.rows;
 }
+
+// ============================================================================
+// RAG Vector Operations (pgvector)
+// ============================================================================
+
+export type ZuoraProduct = 'zuora-billing' | 'zuora-platform' | 'zuora-revenue';
+
+export interface DbDocChunk {
+  id: string;
+  content: string;
+  embedding: number[];
+  title: string;
+  url: string;
+  product: ZuoraProduct;
+  section: string | null;
+  filename: string;
+  created_at: Date;
+}
+
+export interface VectorSearchResult {
+  chunk: Omit<DbDocChunk, 'embedding'>;
+  score: number;
+}
+
+/**
+ * Search for similar document chunks using cosine similarity
+ */
+export async function searchDocChunks(
+  queryEmbedding: number[],
+  options: {
+    product?: ZuoraProduct;
+    limit?: number;
+    minScore?: number;
+  } = {}
+): Promise<VectorSearchResult[]> {
+  const { product, limit = 5, minScore = 0.3 } = options;
+
+  // Format embedding as pgvector string: '[0.1,0.2,...]'
+  const embeddingStr = `[${queryEmbedding.join(',')}]`;
+
+  // Use cosine distance (1 - similarity), so we subtract from 1 for score
+  if (product) {
+    const result = await sql<{
+      id: string;
+      content: string;
+      title: string;
+      url: string;
+      product: string;
+      section: string | null;
+      filename: string;
+      created_at: Date;
+      score: number;
+    }>`
+      SELECT
+        id, content, title, url, product, section, filename, created_at,
+        1 - (embedding <=> ${embeddingStr}::vector) as score
+      FROM doc_chunks
+      WHERE product = ${product}
+        AND 1 - (embedding <=> ${embeddingStr}::vector) >= ${minScore}
+      ORDER BY embedding <=> ${embeddingStr}::vector
+      LIMIT ${limit}
+    `;
+    return result.rows.map(row => ({
+      chunk: {
+        id: row.id,
+        content: row.content,
+        title: row.title,
+        url: row.url,
+        product: row.product as ZuoraProduct,
+        section: row.section,
+        filename: row.filename,
+        created_at: row.created_at,
+      },
+      score: row.score,
+    }));
+  }
+
+  const result = await sql<{
+    id: string;
+    content: string;
+    title: string;
+    url: string;
+    product: string;
+    section: string | null;
+    filename: string;
+    created_at: Date;
+    score: number;
+  }>`
+    SELECT
+      id, content, title, url, product, section, filename, created_at,
+      1 - (embedding <=> ${embeddingStr}::vector) as score
+    FROM doc_chunks
+    WHERE 1 - (embedding <=> ${embeddingStr}::vector) >= ${minScore}
+    ORDER BY embedding <=> ${embeddingStr}::vector
+    LIMIT ${limit}
+  `;
+  return result.rows.map(row => ({
+    chunk: {
+      id: row.id,
+      content: row.content,
+      title: row.title,
+      url: row.url,
+      product: row.product as ZuoraProduct,
+      section: row.section,
+      filename: row.filename,
+      created_at: row.created_at,
+    },
+    score: row.score,
+  }));
+}
+
+/**
+ * Insert a document chunk (for migration)
+ */
+export async function insertDocChunk(chunk: {
+  id: string;
+  content: string;
+  embedding: number[];
+  title: string;
+  url: string;
+  product: ZuoraProduct;
+  section?: string | null;
+  filename: string;
+}): Promise<void> {
+  const embeddingStr = `[${chunk.embedding.join(',')}]`;
+  await sql`
+    INSERT INTO doc_chunks (id, content, embedding, title, url, product, section, filename)
+    VALUES (
+      ${chunk.id},
+      ${chunk.content},
+      ${embeddingStr}::vector,
+      ${chunk.title},
+      ${chunk.url},
+      ${chunk.product},
+      ${chunk.section ?? null},
+      ${chunk.filename}
+    )
+    ON CONFLICT (id) DO UPDATE SET
+      content = EXCLUDED.content,
+      embedding = EXCLUDED.embedding,
+      title = EXCLUDED.title,
+      url = EXCLUDED.url,
+      product = EXCLUDED.product,
+      section = EXCLUDED.section,
+      filename = EXCLUDED.filename
+  `;
+}
+
+/**
+ * Batch insert document chunks (for migration)
+ */
+export async function insertDocChunksBatch(chunks: Array<{
+  id: string;
+  content: string;
+  embedding: number[];
+  title: string;
+  url: string;
+  product: ZuoraProduct;
+  section?: string | null;
+  filename: string;
+}>): Promise<void> {
+  // Insert in batches to avoid hitting query size limits
+  for (const chunk of chunks) {
+    await insertDocChunk(chunk);
+  }
+}
+
+/**
+ * Get count of document chunks
+ */
+export async function getDocChunkCount(): Promise<number> {
+  const result = await sql<{ count: string }>`
+    SELECT COUNT(*) as count FROM doc_chunks
+  `;
+  return parseInt(result.rows[0]?.count ?? '0', 10);
+}
+
+/**
+ * Check if RAG index exists in database
+ */
+export async function isRagIndexReady(): Promise<boolean> {
+  const count = await getDocChunkCount();
+  return count > 0;
+}

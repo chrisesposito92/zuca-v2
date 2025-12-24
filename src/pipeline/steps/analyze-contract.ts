@@ -14,6 +14,7 @@ import { ZucaInput } from '../../types/input';
 import { GoldenUseCaseCapability, KeyTerm } from '../../types/golden-use-cases';
 import { formatCapabilitiesForContext, formatKeyTermsForContext } from '../../data/loader';
 import { debugLog } from '../../config';
+import { getDocContext, isIndexReady } from '../../rag';
 
 /**
  * Combined output from contract analysis
@@ -94,7 +95,8 @@ const contractAnalysisJsonSchema = {
 function buildUserMessage(
   input: ZucaInput,
   capabilities: GoldenUseCaseCapability[],
-  keyTerms: KeyTerm[]
+  keyTerms: KeyTerm[],
+  docContext?: string
 ): string {
   const parts = [
     `Customer: ${input.customer_name}`,
@@ -108,6 +110,11 @@ function buildUserMessage(
 
   if (input.rev_rec_notes) {
     parts.push('', 'Revenue Recognition Notes:', input.rev_rec_notes);
+  }
+
+  // Include retrieved documentation if available
+  if (docContext) {
+    parts.push('', docContext);
   }
 
   // Add capability dictionaries for classification
@@ -141,8 +148,17 @@ export async function analyzeContract(
 ): Promise<ContractAnalysisOutput> {
   debugLog('Analyzing contract (combined contract intel + capability detection)');
 
+  // Retrieve relevant documentation if RAG index is available
+  let docContext: string | undefined;
+  if (await isIndexReady()) {
+    debugLog('RAG index available, retrieving docs for contract analysis...');
+    // Query using the use case description to find relevant billing/revenue concepts
+    docContext = await getDocContext(input.use_case_description, { limit: 3, minScore: 0.3 });
+    debugLog('Retrieved doc context', { length: docContext?.length || 0 });
+  }
+
   const systemPrompt = await loadPrompt(PROMPTS.ANALYZE_CONTRACT);
-  let userMessage = buildUserMessage(input, capabilities, keyTerms);
+  let userMessage = buildUserMessage(input, capabilities, keyTerms, docContext);
 
   // Include previous results for multi-turn support
   if (previousAnalysis) {

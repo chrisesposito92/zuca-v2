@@ -22,6 +22,7 @@ import { GoldenSubscription, GoldenRatePlanChargesDoc, PobTemplate } from '../..
 import { formatMatchResultsForContext } from './match-golden-use-cases';
 import { formatPobTemplatesForContext } from '../../data/loader';
 import { debugLog } from '../../config';
+import { getDocContext, isIndexReady } from '../../rag';
 
 /**
  * Combined output from subscription design
@@ -261,7 +262,8 @@ function buildUserMessage(
   matchResults: MatchGoldenUseCasesOutput,
   contextSubs: GoldenSubscription[],
   contextRpcs: GoldenRatePlanChargesDoc[],
-  pobTemplates: PobTemplate[]
+  pobTemplates: PobTemplate[],
+  docContext?: string
 ): string {
   const parts = [
     `Customer: ${input.customer_name}`,
@@ -283,6 +285,14 @@ function buildUserMessage(
     `Billing Timing: ${contractIntel.billing_timing || 'InAdvance'}`,
     `Trigger Event: ${contractIntel.trigger_event}`,
     '',
+  ];
+
+  // Include retrieved documentation if available
+  if (docContext) {
+    parts.push(docContext, '');
+  }
+
+  parts.push(
     'Matched golden UCs (string summary):',
     formatMatchResultsForContext(matchResults),
     '',
@@ -294,8 +304,8 @@ function buildUserMessage(
     formatContextRatePlansCharges(contextRpcs),
     '',
     'Available ZR POB templates (YOU MUST USE IDENTIFIERS FROM THIS LIST):',
-    formatPobTemplatesForContext(pobTemplates),
-  ];
+    formatPobTemplatesForContext(pobTemplates)
+  );
 
   return parts.filter(Boolean).join('\n');
 }
@@ -330,6 +340,18 @@ export async function designSubscription(
 ): Promise<SubscriptionDesignOutput> {
   debugLog('Designing subscription (combined subscription spec + POB mapping)');
 
+  // Retrieve relevant documentation if RAG index is available
+  // Query using use case + rev rec notes to find charge models and POB info
+  let docContext: string | undefined;
+  if (await isIndexReady()) {
+    debugLog('RAG index available, retrieving docs for subscription design...');
+    const query = input.rev_rec_notes
+      ? `${input.use_case_description} ${input.rev_rec_notes}`
+      : input.use_case_description;
+    docContext = await getDocContext(query, { limit: 3, minScore: 0.3 });
+    debugLog('Retrieved doc context', { length: docContext?.length || 0 });
+  }
+
   const systemPrompt = await loadPrompt(PROMPTS.DESIGN_SUBSCRIPTION);
   let userMessage = buildUserMessage(
     input,
@@ -337,7 +359,8 @@ export async function designSubscription(
     matchResults,
     contextSubs,
     contextRpcs,
-    pobTemplates
+    pobTemplates,
+    docContext
   );
 
   // Include previous results for multi-turn support

@@ -13,6 +13,7 @@ import { formatSubscriptionSpecForContext } from './generate-subscription';
 import { formatPobMappingForContext } from './assign-pob-templates';
 import { formatContractIntelForContext } from './contract-intel';
 import { debugLog } from '../../config';
+import { getDocContext, isIndexReady } from '../../rag';
 
 /**
  * JSON schema for Contracts/Orders structured output
@@ -113,7 +114,8 @@ function buildUserMessage(
   input: ZucaInput,
   subscriptionSpec: SubscriptionSpec,
   pobMapping: PobMappingOutput,
-  contractIntel: ContractIntel
+  contractIntel: ContractIntel,
+  docContext?: string
 ): string {
   const parts = [
     `Customer: ${input.customer_name}`,
@@ -124,6 +126,14 @@ function buildUserMessage(
     `Allocations: ${input.is_allocations ? 'Yes' : 'No'}`,
     input.is_allocations ? `Allocation Method: ${input.allocation_method || 'Use List Price'}` : '',
     '',
+  ];
+
+  // Include retrieved documentation if available
+  if (docContext) {
+    parts.push(docContext, '');
+  }
+
+  parts.push(
     'Contract Intel:',
     formatContractIntelForContext(contractIntel),
     '',
@@ -133,8 +143,8 @@ function buildUserMessage(
     'POB Mapping:',
     formatPobMappingForContext(pobMapping),
     '',
-    'Generate the ZR Contracts/Orders table with proper pricing and allocations.',
-  ];
+    'Generate the ZR Contracts/Orders table with proper pricing and allocations.'
+  );
 
   return parts.filter(Boolean).join('\n');
 }
@@ -154,8 +164,18 @@ export async function buildContractsOrders(
 ): Promise<ContractsOrdersOutput> {
   debugLog('Building Contracts/Orders table');
 
+  // Retrieve relevant documentation if RAG index is available
+  // Query focuses on order actions, allocations, and POB concepts
+  let docContext: string | undefined;
+  if (await isIndexReady()) {
+    debugLog('RAG index available, retrieving docs for contracts/orders...');
+    const query = `Zuora Revenue order actions allocations SSP POB ${input.is_allocations ? 'revenue allocation' : ''}`;
+    docContext = await getDocContext(query, { limit: 3, minScore: 0.3 });
+    debugLog('Retrieved doc context', { length: docContext?.length || 0 });
+  }
+
   const systemPrompt = await loadPrompt(PROMPTS.BUILD_CONTRACTS_ORDERS);
-  let userMessage = buildUserMessage(input, subscriptionSpec, pobMapping, contractIntel);
+  let userMessage = buildUserMessage(input, subscriptionSpec, pobMapping, contractIntel, docContext);
 
   // Include previous results for multi-turn support
   if (previousOutput) {

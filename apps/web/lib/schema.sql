@@ -4,6 +4,9 @@
 -- Enable UUID extension
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
+-- Enable pgvector extension for RAG embeddings
+CREATE EXTENSION IF NOT EXISTS "vector";
+
 -- Auth Users table
 CREATE TABLE IF NOT EXISTS auth_users (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -76,6 +79,19 @@ CREATE TABLE IF NOT EXISTS bug_reports (
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+-- RAG Document Chunks table (for vector search)
+CREATE TABLE IF NOT EXISTS doc_chunks (
+    id TEXT PRIMARY KEY,                    -- e.g., "zuora-billing/bill-runs.md#0"
+    content TEXT NOT NULL,                  -- The chunk text
+    embedding vector(1536) NOT NULL,        -- OpenAI text-embedding-3-small dimension
+    title TEXT NOT NULL,
+    url TEXT NOT NULL,
+    product TEXT NOT NULL,                  -- 'zuora-billing' | 'zuora-platform' | 'zuora-revenue'
+    section TEXT,                           -- Optional H2/H3 section header
+    filename TEXT NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
 -- Indexes for common queries
 CREATE INDEX IF NOT EXISTS idx_sessions_user_id ON sessions(user_id);
 CREATE INDEX IF NOT EXISTS idx_sessions_created_at ON sessions(created_at DESC);
@@ -86,6 +102,11 @@ CREATE INDEX IF NOT EXISTS idx_feedback_session_id ON feedback(session_id);
 CREATE INDEX IF NOT EXISTS idx_feedback_rating ON feedback(rating);
 CREATE INDEX IF NOT EXISTS idx_bug_reports_session_id ON bug_reports(session_id);
 CREATE INDEX IF NOT EXISTS idx_bug_reports_status ON bug_reports(status);
+
+-- Vector similarity index for RAG (HNSW is faster for our dataset size)
+CREATE INDEX IF NOT EXISTS idx_doc_chunks_embedding ON doc_chunks
+    USING hnsw (embedding vector_cosine_ops);
+CREATE INDEX IF NOT EXISTS idx_doc_chunks_product ON doc_chunks(product);
 
 -- Function to auto-update updated_at
 CREATE OR REPLACE FUNCTION update_updated_at_column()

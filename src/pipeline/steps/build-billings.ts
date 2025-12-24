@@ -11,6 +11,7 @@ import { ZucaInput } from '../../types/input';
 import { formatSubscriptionSpecForContext } from './generate-subscription';
 import { formatContractIntelForContext } from './contract-intel';
 import { debugLog } from '../../config';
+import { getDocContext, isIndexReady } from '../../rag';
 
 /**
  * JSON schema for Billings structured output
@@ -64,7 +65,8 @@ const billingsJsonSchema = {
 function buildUserMessage(
   input: ZucaInput,
   subscriptionSpec: SubscriptionSpec,
-  contractIntel: ContractIntel
+  contractIntel: ContractIntel,
+  docContext?: string
 ): string {
   const parts = [
     `Customer: ${input.customer_name}`,
@@ -72,6 +74,14 @@ function buildUserMessage(
     'Use case & notes:',
     input.use_case_description,
     '',
+  ];
+
+  // Include retrieved documentation if available
+  if (docContext) {
+    parts.push(docContext, '');
+  }
+
+  parts.push(
     'Contract Intel:',
     formatContractIntelForContext(contractIntel),
     '',
@@ -79,8 +89,8 @@ function buildUserMessage(
     formatSubscriptionSpecForContext(subscriptionSpec),
     '',
     'Generate the complete billing schedule for this subscription.',
-    'Include all billing events from contract start through contract end.',
-  ];
+    'Include all billing events from contract start through contract end.'
+  );
 
   return parts.join('\n');
 }
@@ -99,8 +109,18 @@ export async function buildBillings(
 ): Promise<BillingsOutput> {
   debugLog('Building Billings table');
 
+  // Retrieve relevant documentation if RAG index is available
+  // Query focuses on invoice items, proration, and billing patterns
+  let docContext: string | undefined;
+  if (await isIndexReady()) {
+    debugLog('RAG index available, retrieving docs for billings...');
+    const query = `Zuora Billing invoice items proration bill run ${input.billing_period} billing`;
+    docContext = await getDocContext(query, { limit: 3, minScore: 0.3 });
+    debugLog('Retrieved doc context', { length: docContext?.length || 0 });
+  }
+
   const systemPrompt = await loadPrompt(PROMPTS.BUILD_BILLINGS);
-  let userMessage = buildUserMessage(input, subscriptionSpec, contractIntel);
+  let userMessage = buildUserMessage(input, subscriptionSpec, contractIntel, docContext);
 
   // Include previous results for multi-turn support
   if (previousOutput) {

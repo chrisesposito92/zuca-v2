@@ -17,14 +17,25 @@ Leverage 4,482 scraped Zuora documentation pages to enhance ZUCA through:
 │                     ORCHESTRATION LAYER                         │
 │  ┌──────────────┐    ┌──────────────┐    ┌──────────────────┐  │
 │  │ User Query   │───▶│ Vector Search│───▶│ Prompt + Context │  │
-│  └──────────────┘    └──────────────┘    └────────┬─────────┘  │
-│                                                    │            │
+│  └──────────────┘    │  (pgvector)  │    └────────┬─────────┘  │
+│                      └──────────────┘             │            │
 │                                          ┌────────▼─────────┐  │
 │                                          │   LLM Call       │  │
 │                                          │ (Gemini/OpenAI)  │  │
 │                                          └──────────────────┘  │
 └─────────────────────────────────────────────────────────────────┘
 ```
+
+## Dual Backend Architecture
+
+The RAG system supports two backends:
+
+| Backend | Use Case | Detection |
+|---------|----------|-----------|
+| **Postgres (pgvector)** | Production, web app | `POSTGRES_URL` env var present |
+| **Local JSON** | CLI dev, offline | No `POSTGRES_URL` |
+
+The system auto-detects which backend to use based on environment.
 
 ## Data Sources
 
@@ -116,14 +127,18 @@ Output as JSON array.`
 
 ### Embedding Strategy
 
-| Option | Pros | Cons |
-|--------|------|------|
-| **OpenAI Embeddings + Local JSON** | Simple, no infra | Slow search at scale |
-| **Supabase pgvector** | Already use Vercel Postgres | Need migration |
-| **Pinecone** | Fast, managed | Another service |
-| **Local SQLite + sqlite-vss** | Zero dependencies | Less mature |
+**Current Implementation**: OpenAI `text-embedding-3-small` with pgvector for production.
 
-**Recommendation**: Start with **OpenAI embeddings + local JSON** for dev, migrate to **pgvector** for production (reuse Vercel Postgres).
+| Backend | Storage | Search Method |
+|---------|---------|---------------|
+| **Postgres (pgvector)** | Neon (via Vercel Postgres) | HNSW index, cosine similarity |
+| **Local JSON** | `data/zuora-docs-index.json` | Brute-force cosine similarity |
+
+The pgvector backend uses an HNSW index for fast approximate nearest neighbor search:
+```sql
+CREATE INDEX idx_doc_chunks_embedding ON doc_chunks
+    USING hnsw (embedding vector_cosine_ops);
+```
 
 ### Chunking Strategy
 
@@ -235,17 +250,54 @@ const docs = await Promise.all(
 
 ---
 
-## Implementation Order
+## Implementation Status
 
-| Phase | Task | Effort | Priority |
-|-------|------|--------|----------|
-| 1a | Q&A generator script | 1 day | **Start Now** |
-| 1b | Generate full Q&A dataset | 2-3 hours (compute) | After 1a |
-| 2a | Embedding generation script | 0.5 day | High |
-| 2b | Local vector search | 0.5 day | High |
-| 3a | Expert assistant integration | 0.5 day | High |
-| 3b | Pipeline step enrichment | 1 day | Medium |
-| 4 | pgvector migration (production) | 1 day | Later |
+| Phase | Task | Status |
+|-------|------|--------|
+| 1a | Q&A generator script | ✅ Complete |
+| 1b | Generate full Q&A dataset | 🔄 Ready (run `npm run qa:generate` in zuora-docs-scrapper) |
+| 2a | Embedding generation script | ✅ Complete (13,467 chunks indexed) |
+| 2b | Local vector search | ✅ Complete (cosine similarity with minScore 0.3) |
+| 3a | Expert assistant integration | ✅ Complete |
+| 3b | Pipeline step enrichment | ✅ Complete (analyze-contract, design-subscription) |
+| 4a | pgvector schema + migration CLI | ✅ Complete |
+| 4b | Postgres backend implementation | ✅ Complete |
+| 4c | Production migration | ✅ Complete (13,467 chunks in Neon) |
+
+### RAG CLI Commands
+
+```bash
+npm run rag:build          # Build local JSON index
+npm run rag:build:resume   # Resume interrupted build
+npm run rag:test "query"   # Test search (uses Postgres if POSTGRES_URL set)
+npm run rag:stats          # Show index statistics
+npm run rag:migrate        # Migrate local index to Postgres
+```
+
+### RAG-Enriched Steps
+
+The following pipeline steps now retrieve relevant Zuora documentation before LLM calls:
+
+| Step | Query Source | Docs Retrieved |
+|------|--------------|----------------|
+| `expert-assistant` | User's question | 3 chunks |
+| `analyze-contract` | Use case description | 3 chunks |
+| `design-subscription` | Use case + rev rec notes | 3 chunks |
+| `build-contracts-orders` | Order actions, allocations, SSP, POB | 3 chunks |
+| `build-billings` | Invoice items, proration, billing | 3 chunks |
+| `build-revrec-waterfall` | Revenue recognition, POB, ratable methods | 3 chunks |
+
+The retrieval is **graceful** - if the RAG index isn't available, steps run without doc enrichment.
+
+### Backend Files
+
+| File | Purpose |
+|------|---------|
+| `src/rag/index.ts` | Main interface, auto-detects backend |
+| `src/rag/postgres-backend.ts` | Postgres/pgvector search implementation |
+| `src/rag/search.ts` | Local JSON search implementation |
+| `src/rag/cli.ts` | CLI commands including migration |
+| `apps/web/lib/schema.sql` | pgvector table schema |
 
 ---
 

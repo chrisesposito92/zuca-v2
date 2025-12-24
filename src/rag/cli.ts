@@ -18,6 +18,7 @@ import { config } from 'dotenv';
 config();
 
 import { buildRagIndex, searchDocs, getDocContext, getRagStats, isIndexReady, loadEmbeddingIndex, chunkAllDocs } from './index';
+import { sql } from '@vercel/postgres';
 import * as fs from 'fs';
 import OpenAI from 'openai';
 import { config as appConfig } from '../config';
@@ -59,7 +60,7 @@ async function runBuild(resume: boolean, products?: ZuoraProduct[]) {
 async function runTest(query: string) {
   console.log('\n🔍 Testing RAG Search\n');
 
-  if (!isIndexReady()) {
+  if (!(await isIndexReady())) {
     console.error('❌ Index not found. Run `npm run rag:build` first.');
     process.exit(1);
   }
@@ -101,7 +102,7 @@ async function runTest(query: string) {
 async function runStats() {
   console.log('\n📊 RAG Index Statistics\n');
 
-  if (!isIndexReady()) {
+  if (!(await isIndexReady())) {
     console.error('❌ Index not found. Run `npm run rag:build` first.');
     process.exit(1);
   }
@@ -122,7 +123,7 @@ async function runStats() {
 async function runRepair() {
   console.log('\n🔧 Repairing RAG Index\n');
 
-  if (!isIndexReady()) {
+  if (!(await isIndexReady())) {
     console.error('❌ Index not found. Run `npm run rag:build` first.');
     process.exit(1);
   }
@@ -212,6 +213,97 @@ async function runRepair() {
   console.log(`   Total: ${mergedIndex.chunks.length} chunks`);
 }
 
+async function runMigrate() {
+  console.log('\n🚀 Migrating RAG Index to Postgres\n');
+
+  // Check for POSTGRES_URL
+  if (!process.env.POSTGRES_URL) {
+    console.error('❌ POSTGRES_URL environment variable required.');
+    console.error('   Set it in your .env file or export it.');
+    process.exit(1);
+  }
+
+  // Check for local index
+  if (!fs.existsSync(INDEX_PATH)) {
+    console.error(`❌ Local index not found at ${INDEX_PATH}`);
+    console.error('   Run `npm run rag:build` first.');
+    process.exit(1);
+  }
+
+  // Load the index
+  console.log(`Loading index from ${INDEX_PATH}...`);
+  const indexData = fs.readFileSync(INDEX_PATH, 'utf-8');
+  const index: EmbeddingIndex = JSON.parse(indexData);
+  console.log(`Found ${index.chunks.length} chunks to migrate\n`);
+
+  // Check current count in Postgres
+  const countResult = await sql<{ count: string }>`SELECT COUNT(*) as count FROM doc_chunks`;
+  const existingCount = parseInt(countResult.rows[0]?.count ?? '0', 10);
+  console.log(`Existing chunks in Postgres: ${existingCount}`);
+
+  if (existingCount > 0) {
+    console.log('⚠️  Database already has data. This will upsert (update or insert) all chunks.');
+  }
+
+  // Migrate in batches
+  const BATCH_SIZE = 50;
+  let migrated = 0;
+  let errors = 0;
+  const startTime = Date.now();
+
+  for (let i = 0; i < index.chunks.length; i += BATCH_SIZE) {
+    const batch = index.chunks.slice(i, i + BATCH_SIZE);
+
+    for (const chunk of batch) {
+      try {
+        const embeddingStr = `[${chunk.embedding.join(',')}]`;
+        await sql`
+          INSERT INTO doc_chunks (id, content, embedding, title, url, product, section, filename)
+          VALUES (
+            ${chunk.id},
+            ${chunk.content},
+            ${embeddingStr}::vector,
+            ${chunk.metadata.title},
+            ${chunk.metadata.url},
+            ${chunk.metadata.product},
+            ${chunk.metadata.section ?? null},
+            ${chunk.metadata.filename}
+          )
+          ON CONFLICT (id) DO UPDATE SET
+            content = EXCLUDED.content,
+            embedding = EXCLUDED.embedding,
+            title = EXCLUDED.title,
+            url = EXCLUDED.url,
+            product = EXCLUDED.product,
+            section = EXCLUDED.section,
+            filename = EXCLUDED.filename
+        `;
+        migrated++;
+      } catch (err) {
+        console.error(`Failed to insert chunk ${chunk.id}:`, err instanceof Error ? err.message : err);
+        errors++;
+      }
+    }
+
+    // Log progress
+    const progress = ((i + batch.length) / index.chunks.length * 100).toFixed(1);
+    const elapsed = ((Date.now() - startTime) / 1000).toFixed(0);
+    process.stdout.write(`\r  [${progress}%] ${migrated} migrated, ${errors} errors (${elapsed}s)`);
+  }
+
+  console.log('\n');
+
+  // Get final count
+  const finalResult = await sql<{ count: string }>`SELECT COUNT(*) as count FROM doc_chunks`;
+  const finalCount = parseInt(finalResult.rows[0]?.count ?? '0', 10);
+
+  const totalTime = ((Date.now() - startTime) / 1000 / 60).toFixed(1);
+  console.log(`✅ Migration complete in ${totalTime} minutes`);
+  console.log(`   Migrated: ${migrated}`);
+  console.log(`   Errors: ${errors}`);
+  console.log(`   Total in Postgres: ${finalCount}`);
+}
+
 // Parse CLI arguments
 const args = process.argv.slice(2);
 const command = args[0];
@@ -241,6 +333,10 @@ switch (command) {
     runRepair();
     break;
 
+  case 'migrate':
+    runMigrate();
+    break;
+
   default:
     console.log(`
 RAG CLI - Zuora Documentation Search
@@ -253,5 +349,6 @@ Usage:
   npm run rag:test               Test with default query
   npm run rag:test "your query"  Test with custom query
   npm run rag:stats              Show index statistics
+  npm run rag:migrate            Migrate local index to Postgres (requires POSTGRES_URL)
 `);
 }
