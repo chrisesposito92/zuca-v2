@@ -287,16 +287,19 @@ function saveFailedDocs(failed: string[]): void {
 // Output Writing
 // ============================================================================
 
-function appendToJsonl(pairs: QAPair[], product: string): void {
+function appendToJsonl(pairs: QAPair[], product: string, writeToCombined: boolean = true): void {
   fs.mkdirSync(OUTPUT_DIR, { recursive: true });
 
   const productFile = path.join(OUTPUT_DIR, `${product}.jsonl`);
-  const combinedFile = path.join(OUTPUT_DIR, 'combined.jsonl');
-
   const lines = pairs.map(p => JSON.stringify(p)).join('\n') + '\n';
 
   fs.appendFileSync(productFile, lines);
-  fs.appendFileSync(combinedFile, lines);
+
+  // Only write to combined when processing all products
+  if (writeToCombined) {
+    const combinedFile = path.join(OUTPUT_DIR, 'combined.jsonl');
+    fs.appendFileSync(combinedFile, lines);
+  }
 }
 
 // ============================================================================
@@ -340,13 +343,24 @@ async function runGenerator(options: GeneratorOptions = {}): Promise<void> {
     }
   }
 
-  // Clear output files if starting fresh
+  // Clear output files if starting fresh (only for products being processed)
   if (!options.resume) {
     fs.mkdirSync(OUTPUT_DIR, { recursive: true });
-    for (const product of ['zuora-billing', 'zuora-platform', 'zuora-revenue', 'combined']) {
+
+    // Only clear files for the products we're actually generating
+    const productsToClear = options.products || ['zuora-billing', 'zuora-platform', 'zuora-revenue'];
+    for (const product of productsToClear) {
       const file = path.join(OUTPUT_DIR, `${product}.jsonl`);
       if (fs.existsSync(file)) {
         fs.unlinkSync(file);
+      }
+    }
+
+    // Only clear combined.jsonl if processing ALL products (no filter)
+    if (!options.products) {
+      const combinedFile = path.join(OUTPUT_DIR, 'combined.jsonl');
+      if (fs.existsSync(combinedFile)) {
+        fs.unlinkSync(combinedFile);
       }
     }
   }
@@ -354,6 +368,9 @@ async function runGenerator(options: GeneratorOptions = {}): Promise<void> {
   // Process documents
   let totalPairs = 0;
   const startTime = Date.now();
+
+  // Only write to combined.jsonl when processing all products (no filter)
+  const writeToCombined = !options.products;
 
   for (let i = startIndex; i < docsToProcess.length; i++) {
     const doc = docsToProcess[i];
@@ -369,7 +386,7 @@ async function runGenerator(options: GeneratorOptions = {}): Promise<void> {
         const pairs = await generateQAPairs(client, doc);
 
         if (pairs.length > 0) {
-          appendToJsonl(pairs, doc.metadata.product);
+          appendToJsonl(pairs, doc.metadata.product, writeToCombined);
           totalPairs += pairs.length;
           console.log(`✅ ${pairs.length} pairs`);
         } else {
