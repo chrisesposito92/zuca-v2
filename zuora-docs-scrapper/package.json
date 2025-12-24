@@ -9,10 +9,18 @@
     "scrape:billing": "npx tsx src/index.ts --product billing",
     "scrape:platform": "npx tsx src/index.ts --product platform",
     "scrape:revenue": "npx tsx src/index.ts --product revenue",
-    "test": "npx tsx src/index.ts --test"
+    "test": "npx tsx src/index.ts --test",
+    "qa:generate": "npx tsx src/qa-generator.ts",
+    "qa:generate:billing": "npx tsx src/qa-generator.ts --product billing",
+    "qa:generate:platform": "npx tsx src/qa-generator.ts --product platform",
+    "qa:generate:revenue": "npx tsx src/qa-generator.ts --product revenue",
+    "qa:resume": "npx tsx src/qa-generator.ts --resume",
+    "qa:test": "npx tsx src/qa-generator.ts --test"
   },
   "dependencies": {
     "cheerio": "^1.0.0",
+    "dotenv": "^16.4.5",
+    "openai": "^4.70.0",
     "puppeteer": "^23.0.0",
     "turndown": "^7.2.0",
     "xml2js": "^0.6.2"

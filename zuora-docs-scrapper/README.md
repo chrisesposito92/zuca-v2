@@ -138,6 +138,53 @@ const MAX_RETRIES = 3;      // Retry attempts per page
 const PAGE_TIMEOUT = 30000; // Page load timeout (ms)
 ```
 
+## Q&A Dataset Generation
+
+Generate instruction/response pairs from the scraped documentation for fine-tuning or evaluation.
+
+```bash
+# Test with 5 documents
+npm run qa:test
+
+# Generate Q&A for all products (~4,500 docs, ~1-2 hours)
+npm run qa:generate
+
+# Generate for a specific product
+npm run qa:generate:billing
+npm run qa:generate:platform
+npm run qa:generate:revenue
+
+# Resume interrupted generation
+npm run qa:resume
+```
+
+### Output Format
+
+```
+qa-dataset/
+├── zuora-billing.jsonl     # Billing Q&A pairs
+├── zuora-platform.jsonl    # Platform Q&A pairs
+├── zuora-revenue.jsonl     # Revenue Q&A pairs
+└── combined.jsonl          # All products merged
+```
+
+Each line is a JSON object:
+```json
+{"instruction": "What is a bill run?", "response": "A bill run is...", "source": "zuora-billing/bill-runs.md", "product": "zuora-billing", "category": "definitional"}
+```
+
+### Q&A Categories
+
+- **definitional**: "What is [concept]?"
+- **procedural**: "How do I [task]?"
+- **troubleshooting**: "Why might [issue] occur?"
+- **comparison**: "What's the difference between [A] and [B]?"
+- **example**: "Can you give an example of [scenario]?"
+
+### Cost Estimate
+
+Using GPT-4o-mini: ~$5-15 for full dataset (~18,000 Q&A pairs)
+
 ## Troubleshooting
 
 **Scrape fails with timeout errors:**
