@@ -56,12 +56,16 @@ interface GeneratorProgress {
 
 const OUTPUT_DIR = path.join(process.cwd(), 'qa-dataset');
 const DOCS_DIR = path.join(process.cwd(), 'output');
-const PROGRESS_FILE = path.join(process.cwd(), 'logs', 'qa-progress.json');
-const FAILED_FILE = path.join(process.cwd(), 'logs', 'qa-failed.json');
+const LOGS_DIR = path.join(process.cwd(), 'logs');
+const PROGRESS_FILE = path.join(LOGS_DIR, 'qa-progress.json');
+const FAILED_FILE = path.join(LOGS_DIR, 'qa-failed.json');
+const ERROR_LOG_FILE = path.join(LOGS_DIR, 'qa-errors.log');
 
-const DELAY_MS = 200; // Delay between API calls
+const DELAY_MS = 50; // Reduced delay between batches
 const MAX_RETRIES = 3;
 const MODEL = 'gpt-4o-mini'; // Cost-effective for generation
+const PARALLEL_BATCH_SIZE = 15; // Process 15 docs in parallel (Tier 4 limits: 10K RPM)
+const REQUEST_TIMEOUT_MS = 60000; // 60 second timeout per request
 
 // ============================================================================
 // OpenAI Client
@@ -183,7 +187,7 @@ async function generateQAPairs(
   }
 
   // Truncate very long docs to avoid token limits
-  const maxContentLength = 8000;
+  const maxContentLength = 20000;
   const truncatedContent = doc.content.length > maxContentLength
     ? doc.content.substring(0, maxContentLength) + '\n\n[Content truncated...]'
     : doc.content;
@@ -228,12 +232,19 @@ ${truncatedContent}
   } else if (parsed && typeof parsed === 'object' && 'pairs' in parsed) {
     pairs = (parsed as { pairs: unknown[] }).pairs;
   } else if (parsed && typeof parsed === 'object') {
-    // Try to find any array property
-    const arrayProp = Object.values(parsed).find(v => Array.isArray(v));
-    if (arrayProp) {
-      pairs = arrayProp as unknown[];
+    const obj = parsed as Record<string, unknown>;
+    // Check if it's a single Q&A object (has instruction + response)
+    if (obj.instruction && obj.response) {
+      // Wrap single object in array, default category if missing
+      pairs = [{ ...obj, category: obj.category || 'definitional' }];
     } else {
-      throw new Error(`Unexpected response format: ${JSON.stringify(parsed).substring(0, 200)}`);
+      // Try to find any array property
+      const arrayProp = Object.values(parsed).find(v => Array.isArray(v));
+      if (arrayProp) {
+        pairs = arrayProp as unknown[];
+      } else {
+        throw new Error(`Unexpected response format: ${JSON.stringify(parsed).substring(0, 200)}`);
+      }
     }
   } else {
     throw new Error(`Unexpected response format: ${JSON.stringify(parsed).substring(0, 200)}`);
@@ -283,23 +294,30 @@ function saveFailedDocs(failed: string[]): void {
   fs.writeFileSync(FAILED_FILE, JSON.stringify(failed, null, 2));
 }
 
+function logError(filename: string, error: string): void {
+  fs.mkdirSync(LOGS_DIR, { recursive: true });
+  const timestamp = new Date().toISOString();
+  const line = `[${timestamp}] ${filename}\n  Error: ${error}\n\n`;
+  fs.appendFileSync(ERROR_LOG_FILE, line);
+}
+
+function clearErrorLog(): void {
+  if (fs.existsSync(ERROR_LOG_FILE)) {
+    fs.unlinkSync(ERROR_LOG_FILE);
+  }
+}
+
 // ============================================================================
 // Output Writing
 // ============================================================================
 
-function appendToJsonl(pairs: QAPair[], product: string, writeToCombined: boolean = true): void {
+function appendToJsonl(pairs: QAPair[], product: string): void {
   fs.mkdirSync(OUTPUT_DIR, { recursive: true });
 
   const productFile = path.join(OUTPUT_DIR, `${product}.jsonl`);
   const lines = pairs.map(p => JSON.stringify(p)).join('\n') + '\n';
 
   fs.appendFileSync(productFile, lines);
-
-  // Only write to combined when processing all products
-  if (writeToCombined) {
-    const combinedFile = path.join(OUTPUT_DIR, 'combined.jsonl');
-    fs.appendFileSync(combinedFile, lines);
-  }
 }
 
 // ============================================================================
@@ -310,6 +328,7 @@ interface GeneratorOptions {
   products?: string[];
   testMode?: boolean;
   resume?: boolean;
+  retryFailed?: boolean;
 }
 
 async function runGenerator(options: GeneratorOptions = {}): Promise<void> {
@@ -327,11 +346,23 @@ async function runGenerator(options: GeneratorOptions = {}): Promise<void> {
   }
 
   // Test mode: only process 5 docs
-  const docsToProcess = options.testMode ? docs.slice(0, 5) : docs;
+  let docsToProcess = options.testMode ? docs.slice(0, 5) : docs;
+
+  // Retry failed mode: only process previously failed docs
+  if (options.retryFailed) {
+    const previouslyFailed = loadFailedDocs();
+    if (previouslyFailed.length === 0) {
+      console.log('No failed documents to retry.');
+      return;
+    }
+    const failedSet = new Set(previouslyFailed);
+    docsToProcess = docs.filter(d => failedSet.has(d.filename));
+    console.log(`🔄 Retrying ${docsToProcess.length} previously failed documents\n`);
+  }
 
   // Resume support
   const progress = options.resume ? loadProgress() : { total: docsToProcess.length, completed: 0, failed: 0 };
-  const failedDocs = options.resume ? loadFailedDocs() : [];
+  const failedDocs = options.retryFailed ? [] : (options.resume ? loadFailedDocs() : []);
 
   // Find resume point
   let startIndex = 0;
@@ -344,8 +375,10 @@ async function runGenerator(options: GeneratorOptions = {}): Promise<void> {
   }
 
   // Clear output files if starting fresh (only for products being processed)
-  if (!options.resume) {
+  // Don't clear in retry mode - we're appending to existing files
+  if (!options.resume && !options.retryFailed) {
     fs.mkdirSync(OUTPUT_DIR, { recursive: true });
+    clearErrorLog();
 
     // Only clear files for the products we're actually generating
     const productsToClear = options.products || ['zuora-billing', 'zuora-platform', 'zuora-revenue'];
@@ -355,65 +388,83 @@ async function runGenerator(options: GeneratorOptions = {}): Promise<void> {
         fs.unlinkSync(file);
       }
     }
-
-    // Only clear combined.jsonl if processing ALL products (no filter)
-    if (!options.products) {
-      const combinedFile = path.join(OUTPUT_DIR, 'combined.jsonl');
-      if (fs.existsSync(combinedFile)) {
-        fs.unlinkSync(combinedFile);
-      }
-    }
   }
 
-  // Process documents
+  // Process documents in parallel batches
   let totalPairs = 0;
   const startTime = Date.now();
 
-  // Only write to combined.jsonl when processing all products (no filter)
-  const writeToCombined = !options.products;
-
-  for (let i = startIndex; i < docsToProcess.length; i++) {
-    const doc = docsToProcess[i];
-    const progressPct = ((i + 1) / docsToProcess.length * 100).toFixed(1);
-
-    process.stdout.write(`  [${progressPct}%] Processing: ${doc.filename.substring(0, 60).padEnd(60)} `);
-
+  // Helper to process a single doc with retries and timeout
+  async function processDoc(doc: ParsedDoc): Promise<{ pairs: QAPair[]; failed: boolean; error?: string }> {
     let retries = 0;
-    let success = false;
-
-    while (retries < MAX_RETRIES && !success) {
+    while (retries < MAX_RETRIES) {
       try {
-        const pairs = await generateQAPairs(client, doc);
-
-        if (pairs.length > 0) {
-          appendToJsonl(pairs, doc.metadata.product, writeToCombined);
-          totalPairs += pairs.length;
-          console.log(`✅ ${pairs.length} pairs`);
-        } else {
-          console.log(`⏭️  skipped (too short)`);
-        }
-
-        success = true;
-        progress.completed++;
+        const pairs = await withTimeout(
+          generateQAPairs(client, doc),
+          REQUEST_TIMEOUT_MS,
+          `Request timed out after ${REQUEST_TIMEOUT_MS / 1000}s`
+        );
+        return { pairs, failed: false };
       } catch (error) {
         retries++;
         if (retries < MAX_RETRIES) {
-          console.log(`⚠️  retry ${retries}/${MAX_RETRIES}`);
           await sleep(1000 * retries); // Exponential backoff
         } else {
           const errorMsg = error instanceof Error ? error.message : String(error);
-          console.log(`❌ failed: ${errorMsg.substring(0, 50)}`);
-          failedDocs.push(doc.filename);
-          progress.failed++;
+          return { pairs: [], failed: true, error: errorMsg };
         }
       }
     }
+    return { pairs: [], failed: true, error: 'Unknown error' };
+  }
 
-    progress.lastProcessedFile = doc.filename;
+  // Process in batches
+  for (let batchStart = startIndex; batchStart < docsToProcess.length; batchStart += PARALLEL_BATCH_SIZE) {
+    const batchEnd = Math.min(batchStart + PARALLEL_BATCH_SIZE, docsToProcess.length);
+    const batch = docsToProcess.slice(batchStart, batchEnd);
+    const progressPct = ((batchEnd) / docsToProcess.length * 100).toFixed(1);
+
+    console.log(`\n  [${progressPct}%] Processing batch ${batchStart + 1}-${batchEnd} of ${docsToProcess.length}...`);
+
+    // Process batch in parallel
+    const results = await Promise.all(batch.map(doc => processDoc(doc)));
+
+    // Write results and update progress
+    let batchPairs = 0;
+    let batchSkipped = 0;
+    let batchErrors = 0;
+    for (let i = 0; i < results.length; i++) {
+      const { pairs, failed, error } = results[i];
+      const doc = batch[i];
+
+      if (failed) {
+        failedDocs.push(doc.filename);
+        progress.failed++;
+        batchErrors++;
+        if (error) {
+          logError(doc.filename, error);
+        }
+      } else if (pairs.length > 0) {
+        appendToJsonl(pairs, doc.metadata.product);
+        totalPairs += pairs.length;
+        batchPairs += pairs.length;
+        progress.completed++;
+      } else {
+        batchSkipped++;
+        progress.completed++;
+      }
+    }
+
+    // Compact output: show errors only if there are any
+    const errorSuffix = batchErrors > 0 ? `, ❌ ${batchErrors} errors` : '';
+    console.log(`  ✅ ${batchPairs} pairs, ${batchSkipped} skipped${errorSuffix}`);
+
+    // Update progress after each batch
+    progress.lastProcessedFile = batch[batch.length - 1].filename;
     saveProgress(progress);
     saveFailedDocs(failedDocs);
 
-    // Rate limiting
+    // Brief delay between batches
     await sleep(DELAY_MS);
   }
 
@@ -427,11 +478,23 @@ async function runGenerator(options: GeneratorOptions = {}): Promise<void> {
   console.log(`  📝 Generated: ${totalPairs} Q&A pairs`);
   console.log(`  ⏱️  Elapsed: ${elapsed} minutes`);
   console.log(`  📁 Output: ${OUTPUT_DIR}/`);
+  if (progress.failed > 0) {
+    console.log(`  📋 Error log: ${ERROR_LOG_FILE}`);
+  }
   console.log('='.repeat(60) + '\n');
 }
 
 function sleep(ms: number): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function withTimeout<T>(promise: Promise<T>, ms: number, errorMsg: string): Promise<T> {
+  return Promise.race([
+    promise,
+    new Promise<T>((_, reject) =>
+      setTimeout(() => reject(new Error(errorMsg)), ms)
+    )
+  ]);
 }
 
 // ============================================================================
@@ -444,6 +507,7 @@ async function main() {
   const options: GeneratorOptions = {
     testMode: args.includes('--test'),
     resume: args.includes('--resume'),
+    retryFailed: args.includes('--retry-failed'),
   };
 
   // Parse --product flag
