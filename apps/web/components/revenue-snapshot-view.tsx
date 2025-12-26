@@ -24,19 +24,25 @@ interface RevenueSnapshotViewProps {
   model?: string | null;
 }
 
-function TableView({ rows }: { rows: Array<Record<string, any>> }) {
+function TableView({
+  rows,
+  columns,
+}: {
+  rows: Array<Record<string, any>>;
+  columns?: string[];
+}) {
   if (!rows.length) {
     return <p className="text-default-500 italic">No data available</p>;
   }
 
-  const columns = Object.keys(rows[0]);
+  const visibleColumns = columns?.length ? columns : Object.keys(rows[0]);
 
   return (
     <div className="overflow-x-auto rounded-lg border border-default-200/50">
       <table className="w-full text-sm">
         <thead>
           <tr className="bg-default-100/80">
-            {columns.map((col) => (
+            {visibleColumns.map((col) => (
               <th
                 key={col}
                 className="px-3 py-3 text-left font-semibold text-default-600 whitespace-nowrap text-xs"
@@ -49,7 +55,7 @@ function TableView({ rows }: { rows: Array<Record<string, any>> }) {
         <tbody>
           {rows.map((row, i) => (
             <tr key={i} className="border-t border-default-200/30 hover:bg-default-100/30 transition-colors">
-              {columns.map((col) => {
+              {visibleColumns.map((col) => {
                 const value = row[col];
                 const isNumber = typeof value === "number";
                 const isBool = typeof value === "boolean";
@@ -105,6 +111,218 @@ function normalizeNumber(value: unknown): number {
     if (Number.isFinite(parsed)) return parsed;
   }
   return 0;
+}
+
+const CONTRACTS_BASE_COLUMNS = [
+  "Adjustment Recognized to Date",
+  "Allocatable Ext Price",
+  "Allocation Eligible Flag",
+  "Average Pricing Method",
+  "Billed - Released Revenue",
+  "Billed - Unreleased Revenue",
+  "Billed Amount",
+  "Carves Adjustment",
+  "Contract Mod Rule",
+  "Contract Modification Date",
+  "Contractual Recognized to Date",
+  "Cumulative Allocated",
+  "Cumulative Carves",
+  "Customer Name",
+  "Ext Allocated Price",
+  "Ext List Price",
+  "Ext SSP Price",
+  "Ext Sell Price",
+  "Last CT Mod Period",
+  "Lead Line",
+  "Line Item Num",
+  "Ordered Qty",
+  "POB Dependency",
+  "POB IDENTIFIER",
+  "POB Name",
+  "POB Rule Name",
+  "POB Satisfied",
+  "POB Template",
+  "Posted PCT as on Last CT Mod",
+  "Product Category",
+  "Product Family",
+  "RPC Num",
+  "RPC Segment",
+  "RPC Type",
+  "Ramp Allocated Percent",
+  "Ramp Number",
+  "Release Event",
+  "Released Revenue",
+  "Revenue End Date",
+  "Revenue Start Date",
+  "SSP Group ID",
+  "SSP Percent",
+  "SSP Percentage",
+  "SSP Price",
+  "SSP Type",
+  "Sales Order Date",
+  "Subscription Name",
+  "Subscription Version",
+  "Transaction Currency",
+  "Transaction Price",
+  "Ttl Allocatable",
+  "Unit List Price",
+  "Unit Sell Price",
+  "Unreleased Revenue",
+  "VC Amount",
+  "Within SSP range",
+];
+
+const CONTRACTS_REQUIRED_COLUMNS = [
+  "Unit List Price",
+  "Unit Sell Price",
+  "Ext List Price",
+  "Ext Sell Price",
+  "SSP Price",
+  "Ext SSP Price",
+  "SSP Percent",
+  "Ext Allocated Price",
+  "Allocation Eligible Flag",
+  "Unreleased Revenue",
+  "Released Revenue",
+  "POB Template",
+  "ATR1",
+];
+
+const BILLINGS_BASE_COLUMNS = [
+  "Billing Quantity",
+  "Billing Reference",
+  "Ext List Price",
+  "Functional Currency",
+  "Functional Ex Rate",
+  "Global Ex Rate",
+  "Invoice Amount (F)",
+  "Invoice Amount (T)",
+  "Invoice Date",
+  "Invoice Line ID",
+  "Invoice Line Number",
+  "Invoice Num",
+  "Invoice Owner",
+  "Invoice Qty",
+  "Item Number",
+  "Line Item Num",
+  "Orig Inv Line ID",
+  "Parent Charge Number",
+  "Parent Charge Segment",
+  "RPC Num",
+  "RPC Segment",
+  "RPC Trigger Event",
+  "RPC Type",
+  "Rate Plan Name",
+  "Rc Bill Cancel Flag",
+  "Rc Bill Credit Rule",
+  "Rc Bill Source",
+  "Rc Bill Type",
+  "Rc Bill Unit List Price",
+  "Rc Bill Unit Sell Price",
+  "Released Revenue",
+  "Revenue End Date",
+  "Revenue Start Date",
+  "Sales Order Line ID",
+  "Sales Order Line Num",
+  "Sales Order Num",
+  "Subscription End Date",
+  "Subscription Name",
+  "Subscription Start Date",
+  "Transaction Currency",
+  "Unreleased Revenue",
+  "Void Flag",
+];
+
+function getRowColumnOrder(rows: Array<Record<string, any>>): string[] {
+  const order: string[] = [];
+  const seen = new Set<string>();
+  rows.forEach((row) => {
+    Object.keys(row).forEach((key) => {
+      if (!seen.has(key)) {
+        seen.add(key);
+        order.push(key);
+      }
+    });
+  });
+  return order;
+}
+
+function isRampField(name: string): boolean {
+  const lower = name.toLowerCase();
+  return lower.includes("ramp") || lower === "average pricing method";
+}
+
+function isVcField(name: string): boolean {
+  const lower = name.toLowerCase();
+  return lower.includes("vc") || lower.includes("variable");
+}
+
+function buildVisibleColumns(
+  rows: Array<Record<string, any>>,
+  baseColumns: string[],
+  requiredColumns: string[],
+  showAll: boolean
+): string[] {
+  const order = getRowColumnOrder(rows);
+  const orderSet = new Set(order);
+
+  const hasMeaningfulValue = (col: string) =>
+    rows.some((row) => row[col] !== null && row[col] !== undefined && row[col] !== "");
+
+  const base = baseColumns.filter((col) => orderSet.has(col) && hasMeaningfulValue(col));
+  const baseSet = new Set(base);
+  const required = requiredColumns.filter((col) => !baseSet.has(col));
+  const requiredSet = new Set(required);
+
+  const dynamic = order.filter((col) => {
+    if (baseSet.has(col) || requiredSet.has(col)) return false;
+    if (!hasMeaningfulValue(col)) return false;
+    return isRampField(col) || isVcField(col);
+  });
+
+  const selected = [...base, ...required, ...dynamic];
+  if (showAll) {
+    const selectedSet = new Set(selected);
+    order.forEach((col) => {
+      if (!selectedSet.has(col)) {
+        selected.push(col);
+      }
+    });
+  }
+  return selected;
+}
+
+function normalizeContractsRows(rows: Array<Record<string, any>>): Array<Record<string, any>> {
+  return rows.map((row) => {
+    const next = { ...row };
+    if (next["Ext Allocated Price"] === undefined) {
+      next["Ext Allocated Price"] =
+        next["Ext Allocated"] ??
+        next["Ext Allocated Amount"] ??
+        next["Allocated Price"] ??
+        next["Allocated"];
+    }
+    if (
+      (next["Ext Allocated Price"] === undefined || next["Ext Allocated Price"] === null) &&
+      next["Ext Sell Price"] !== undefined
+    ) {
+      next["Ext Allocated Price"] = next["Ext Sell Price"];
+    }
+    if (next["Ext SSP Price"] === undefined) {
+      next["Ext SSP Price"] = next["Ext SSP"] ?? next["SSP Extended Price"];
+    }
+    if (next["SSP Percent"] === undefined) {
+      next["SSP Percent"] = next["SSP Percentage"];
+    }
+    if (next["Allocation Eligible Flag"] === undefined) {
+      next["Allocation Eligible Flag"] =
+        next["Is Allocation Eligible"] ?? next["IsAllocationEligible"];
+    }
+    if (next["POB Template"] === undefined) {
+      next["POB Template"] = next["POB IDENTIFIER"] ?? next["ATR1"];
+    }
+    return next;
+  });
 }
 
 function isRevRecRow(row: Record<string, any>): boolean {
@@ -381,6 +599,9 @@ function RevRecWaterfallChart({
 export function RevenueSnapshotView({ result, sessionId, status, createdAt, model }: RevenueSnapshotViewProps) {
   const [showRevRecChart, setShowRevRecChart] = useState(true);
   const [revRecChartMode, setRevRecChartMode] = useState<RevRecChartMode>("total");
+  const [showAllContracts, setShowAllContracts] = useState(false);
+  const [showAllBillings, setShowAllBillings] = useState(false);
+  const contractsRows = normalizeContractsRows(result.contracts_orders.rows);
   const handleExportJSON = () => {
     const blob = new Blob([JSON.stringify(result, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
@@ -547,15 +768,67 @@ export function RevenueSnapshotView({ result, sessionId, status, createdAt, mode
       >
         <Tab key="contracts" title="Contracts/Orders">
           <Card className="glass-card mt-4">
+            <CardHeader className="px-6 pt-5 pb-0 flex items-center justify-between">
+              <div>
+                <h4 className="text-base font-semibold">Contracts/Orders</h4>
+                <p className="text-xs text-default-500">
+                  Default fields mirror golden use cases. Toggle to show everything.
+                </p>
+              </div>
+              <Switch
+                size="sm"
+                isSelected={showAllContracts}
+                onValueChange={setShowAllContracts}
+                classNames={{
+                  wrapper: "group-data-[selected=true]:bg-primary",
+                }}
+              >
+                Show all fields
+              </Switch>
+            </CardHeader>
             <CardBody className="p-6">
-              <TableView rows={result.contracts_orders.rows} />
+              <TableView
+                rows={contractsRows}
+                columns={buildVisibleColumns(
+                  contractsRows,
+                  CONTRACTS_BASE_COLUMNS,
+                  CONTRACTS_REQUIRED_COLUMNS,
+                  showAllContracts
+                )}
+              />
             </CardBody>
           </Card>
         </Tab>
         <Tab key="billings" title="Billings">
           <Card className="glass-card mt-4">
+            <CardHeader className="px-6 pt-5 pb-0 flex items-center justify-between">
+              <div>
+                <h4 className="text-base font-semibold">Billings</h4>
+                <p className="text-xs text-default-500">
+                  Default fields mirror golden use cases. Toggle to show everything.
+                </p>
+              </div>
+              <Switch
+                size="sm"
+                isSelected={showAllBillings}
+                onValueChange={setShowAllBillings}
+                classNames={{
+                  wrapper: "group-data-[selected=true]:bg-primary",
+                }}
+              >
+                Show all fields
+              </Switch>
+            </CardHeader>
             <CardBody className="p-6">
-              <TableView rows={result.billings.rows} />
+              <TableView
+                rows={result.billings.rows}
+                columns={buildVisibleColumns(
+                  result.billings.rows,
+                  BILLINGS_BASE_COLUMNS,
+                  [],
+                  showAllBillings
+                )}
+              />
             </CardBody>
           </Card>
         </Tab>

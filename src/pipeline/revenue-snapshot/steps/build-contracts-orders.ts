@@ -73,12 +73,26 @@ function applyDeterministicAllocations(
     const unitList = normalizeNumber(getFirstValue(row, ['Unit List Price', 'List Price', 'UnitListPrice']));
     const unitSell = normalizeNumber(getFirstValue(row, ['Unit Sell Price', 'Unit Sell', 'UnitSellPrice', 'Unit Sale Price']));
     let extList = normalizeNumber(getFirstValue(row, ['Ext List Price', 'Ext List', 'ExtListPrice']));
-    let extSell = normalizeNumber(getFirstValue(row, ['Ext Sell Price', 'Ext Sell', 'ExtSellPrice', 'Revenue Extended Selling Price']));
+    let extSell = normalizeNumber(
+      getFirstValue(row, [
+        'Ext Sell Price',
+        'Ext Sell',
+        'ExtSellPrice',
+        'Revenue Extended Selling Price',
+        'Transaction Price',
+        'Transaction Price (T)',
+        'Transaction Amount',
+      ])
+    );
     if (extList === null && unitList !== null) {
       extList = unitList * orderedQty;
     }
     if (extSell === null && unitSell !== null) {
       extSell = unitSell * orderedQty;
+    }
+    if (extSell === null && extList !== null) {
+      extSell = extList;
+      assumptions.push('Ext Sell Price missing; defaulted to Ext List Price.');
     }
 
     const allocationEligible =
@@ -123,6 +137,25 @@ function applyDeterministicAllocations(
         if (unitSell !== null) row['SSP Price'] = unitSell;
         if (extSell !== null) row['Ext SSP Price'] = round2(extSell);
       }
+    }
+
+    if (row['Ext Allocated Price'] === undefined || row['Ext Allocated Price'] === null) {
+      if (extSell !== null) {
+        row['Ext Allocated Price'] = round2(extSell);
+      } else if (extList !== null) {
+        row['Ext Allocated Price'] = round2(extList);
+        assumptions.push('Ext Allocated Price defaulted to Ext List Price due to missing sell price.');
+      } else {
+        row['Ext Allocated Price'] = 0;
+        assumptions.push('Ext Allocated Price defaulted to 0 due to missing pricing data.');
+      }
+    }
+
+    if (row['Unreleased Revenue'] === undefined && row['Ext Allocated Price'] !== undefined) {
+      row['Unreleased Revenue'] = row['Ext Allocated Price'];
+    }
+    if (row['Released Revenue'] === undefined) {
+      row['Released Revenue'] = 0;
     }
 
     for (const field of requiredFields) {

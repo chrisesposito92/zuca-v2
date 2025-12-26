@@ -52,6 +52,7 @@ Return a JSON object with:
 ## SSP / Allocation Handling
 - If SSP method is provided, apply it **only where allocation is eligible** (IsAllocationEligible = true).
 - If allocation eligibility is unclear, default to **no allocation** and add an assumption.
+- If allocations are not being applied, set **Ext Allocated Price = Ext Sell Price** for every line.
 
 ## Data Augmentation Rules
 - Apply the user-provided augmentation rules **only if they can be done deterministically** with the provided data.

@@ -32,12 +32,18 @@ This feature lets users connect a Zuora Billing tenant, select subscription(s), 
    - Rev Rec Waterfall (LLM, high reasoning)
    - Summary (LLM)
    - Allocation columns are always populated deterministically from SSP method + pricing fields when the LLM leaves them empty.
+   - If allocations are not applied, Ext Allocated Price defaults to Ext Sell Price.
 5. **Execution Model**
    - User-selected model (GPT-5.2, Gemini 3 Pro, Gemini 3 Flash) applied to all snapshot steps
 6. **Exports & Visualization**
    - Export tables to Excel (Contracts/Orders, Billings, Rev Rec raw + pivot, Summary).
    - Rev Rec Waterfall includes an optional chart toggle with modes: Totals, Stacked by line item, or Grouped by line item.
    - Rev Rec Waterfall pivot table always includes a Total column at the far right.
+7. **Column Filtering**
+   - Contracts/Orders + Billings default to the field set found in `golden_use_cases_zr_tables.json`.
+   - Required allocation fields (including ATR1/POB Template) are always included.
+   - Ramp/VC-related fields are auto-included when present.
+   - Users can toggle "Show all fields" to display the full raw dataset.
 
 ## API Routes
 - `POST /api/revenue-snapshot/auth` – save credentials for a named tenant (encrypted)

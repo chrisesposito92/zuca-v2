@@ -23,7 +23,7 @@ This document tracks the implementation of the ZUCA v2 web frontend.
 | 7. History & Polish | ✅ Complete | Session list with search/delete |
 | 8. Deployment | ⏳ Pending | |
 | 9. Model Selection | ✅ Complete | Multi-provider (GPT/Gemini) selection + persistence |
-| 10. Revenue Snapshot | 🧩 In Progress | Zuora Billing → Revenue snapshot UI + API integration (Excel export + Rev Rec chart toggle with total/stacked/grouped modes) |
+| 10. Revenue Snapshot | 🧩 In Progress | Zuora Billing → Revenue snapshot UI + API integration (Excel export + Rev Rec chart toggle + table column filtering) |
 
 ---
 

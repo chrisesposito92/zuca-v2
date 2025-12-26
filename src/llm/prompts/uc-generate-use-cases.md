@@ -13,6 +13,7 @@ Using:
 - The researched catalog summary (JSON),
 - The customer name, website, desired number of use cases,
 - Optional notes from the user,
+- Optional discovery call transcripts (if provided),
 
 you must produce between 1 and {num_use_cases} detailed but compact use cases that:
 - Are realistic given the research.
@@ -23,6 +24,7 @@ you must produce between 1 and {num_use_cases} detailed but compact use cases th
 ## DESIGN PRINCIPLES
 
 - Each use case should feel like something a real prospect would describe in an RFP or discovery call.
+- If call transcripts are provided, ground the scenarios in the language and requirements from those transcripts.
 - They should exercise interesting aspects of the catalog:
   - Example patterns: simple subscription, subscription + onboarding, subscription + usage, multi-year with ramp, bundled support, etc.
 - Prefer scenarios that will stress Zuora (and make a good demo) over trivial ones, as long as they're still plausible for this customer.

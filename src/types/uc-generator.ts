@@ -11,6 +11,15 @@ export const NumUseCasesSchema = z.union([z.literal(1), z.literal(2), z.literal(
 export type NumUseCases = z.infer<typeof NumUseCasesSchema>;
 
 /**
+ * Discovery call transcript input
+ */
+export const CallTranscriptSchema = z.object({
+  filename: z.string().min(1, 'Transcript filename is required'),
+  content: z.string().min(1, 'Transcript content is required'),
+});
+export type CallTranscript = z.infer<typeof CallTranscriptSchema>;
+
+/**
  * Input schema for UC Generator
  */
 export const UCGeneratorInputSchema = z.object({
@@ -25,6 +34,9 @@ export const UCGeneratorInputSchema = z.object({
 
   /** Optional notes from the user to guide generation */
   user_notes: z.string().optional(),
+
+  /** Optional discovery call transcripts to ground generation */
+  call_transcripts: z.array(CallTranscriptSchema).optional(),
 });
 
 export type UCGeneratorInput = z.infer<typeof UCGeneratorInputSchema>;

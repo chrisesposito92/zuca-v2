@@ -34,7 +34,7 @@ import {
   HeadingLevel,
   AlignmentType,
 } from "docx";
-import type { UCGeneratorInput, GeneratedUseCase, UCRevRecNote } from "@zuca/types/uc-generator";
+import type { UCGeneratorInput, GeneratedUseCase, UCRevRecNote, CallTranscript } from "@zuca/types/uc-generator";
 
 const currencies = [
   { key: "USD", label: "USD - US Dollar" },
@@ -72,6 +72,10 @@ const ucGeneratorModelOptions = [
   { key: "gemini-3-flash-preview", label: "Gemini 3 Flash", time: "~30 sec", description: "Fastest generation" },
 ];
 
+const MAX_TRANSCRIPT_FILES = 5;
+const MAX_TRANSCRIPT_CHARS = 50000;
+const MAX_TOTAL_TRANSCRIPT_CHARS = 150000;
+
 // Section icon component
 const SectionIcon = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
   <div className={`w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary ${className}`}>
@@ -79,11 +83,17 @@ const SectionIcon = ({ children, className = "" }: { children: React.ReactNode; 
   </div>
 );
 
+type CallTranscriptUpload = CallTranscript & {
+  size: number;
+  truncated?: boolean;
+};
+
 export default function AnalyzePage() {
   const [isAllocations, setIsAllocations] = useState(false);
   const [allocationMethod, setAllocationMethod] = useState<string>("");
   const [selectedModel, setSelectedModel] = useState<string>(DEFAULT_MODEL);
   const formRef = useRef<HTMLFormElement>(null);
+  const transcriptInputRef = useRef<HTMLInputElement>(null);
 
   // UC Generator modal state
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -96,6 +106,8 @@ export default function AnalyzePage() {
   const [generatedFormatted, setGeneratedFormatted] = useState<string | null>(null);
   const [selectedUseCaseIndex, setSelectedUseCaseIndex] = useState<number | null>(null);
   const [ucModel, setUcModel] = useState<string>(DEFAULT_MODEL);
+  const [callTranscripts, setCallTranscripts] = useState<CallTranscriptUpload[]>([]);
+  const [transcriptsLoading, setTranscriptsLoading] = useState(false);
 
   // Mutations
   const analyzeMutation = useAnalyze();
@@ -144,8 +156,165 @@ export default function AnalyzePage() {
     setGeneratedUseCases([]);
     setGeneratedFormatted(null);
     setSelectedUseCaseIndex(null);
+    setCallTranscripts([]);
+    if (transcriptInputRef.current) {
+      transcriptInputRef.current.value = "";
+    }
     onOpen();
   };
+
+  const handleCloseUCGenerator = () => {
+    onClose();
+    resetFacts();
+    setCallTranscripts([]);
+    if (transcriptInputRef.current) {
+      transcriptInputRef.current.value = "";
+    }
+  };
+
+  const formatFileSize = (bytes: number) => {
+    if (bytes < 1024) return `${bytes} B`;
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+  };
+
+  const parseTranscriptFile = async (file: File): Promise<CallTranscriptUpload | null> => {
+    const extension = file.name.split(".").pop()?.toLowerCase();
+    if (!extension || (extension !== "txt" && extension !== "docx")) {
+      addToast({
+        title: "Unsupported file",
+        description: `${file.name} must be a .txt or .docx transcript`,
+        color: "warning",
+      });
+      return null;
+    }
+
+    let content = "";
+    try {
+      if (extension === "txt") {
+        content = await file.text();
+      } else {
+        const arrayBuffer = await file.arrayBuffer();
+        const mammothModule = await import("mammoth/mammoth.browser");
+        const mammoth = "default" in mammothModule ? mammothModule.default : mammothModule;
+        const result = await mammoth.extractRawText({ arrayBuffer });
+        content = result?.value ?? "";
+      }
+    } catch (error) {
+      addToast({
+        title: "Transcript parse failed",
+        description: `Couldn't read ${file.name}. Please try a .txt file.`,
+        color: "danger",
+      });
+      return null;
+    }
+
+    content = content.replace(/\r/g, "").trim();
+
+    if (!content) {
+      addToast({
+        title: "Empty transcript",
+        description: `${file.name} doesn't contain readable text`,
+        color: "warning",
+      });
+      return null;
+    }
+
+    let truncated = false;
+    if (content.length > MAX_TRANSCRIPT_CHARS) {
+      content = content.slice(0, MAX_TRANSCRIPT_CHARS);
+      truncated = true;
+    }
+
+    return {
+      filename: file.name,
+      content,
+      size: file.size,
+      truncated,
+    };
+  };
+
+  const handleTranscriptUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files ? Array.from(event.target.files) : [];
+    if (!files.length) return;
+
+    setTranscriptsLoading(true);
+    const parsed = await Promise.all(files.map((file) => parseTranscriptFile(file)));
+    setTranscriptsLoading(false);
+
+    const nextTranscripts = parsed.filter(Boolean) as CallTranscriptUpload[];
+    if (!nextTranscripts.length) {
+      if (transcriptInputRef.current) {
+        transcriptInputRef.current.value = "";
+      }
+      return;
+    }
+
+    const warnings: string[] = [];
+
+    setCallTranscripts((prev) => {
+      const existingNames = new Set(prev.map((t) => t.filename));
+      let totalChars = prev.reduce((sum, t) => sum + t.content.length, 0);
+      const updated = [...prev];
+
+      for (const transcript of nextTranscripts) {
+        if (existingNames.has(transcript.filename)) {
+          warnings.push(`${transcript.filename} is already attached.`);
+          continue;
+        }
+
+        if (updated.length >= MAX_TRANSCRIPT_FILES) {
+          warnings.push(`Only ${MAX_TRANSCRIPT_FILES} transcripts are allowed.`);
+          break;
+        }
+
+        let remaining = MAX_TOTAL_TRANSCRIPT_CHARS - totalChars;
+        if (remaining <= 0) {
+          warnings.push("Transcript limit reached. Remove a transcript to add another.");
+          break;
+        }
+
+        let content = transcript.content;
+        let truncated = transcript.truncated;
+
+        if (content.length > remaining) {
+          content = content.slice(0, remaining);
+          truncated = true;
+        }
+
+        updated.push({
+          ...transcript,
+          content,
+          truncated,
+        });
+        totalChars += content.length;
+
+        if (truncated) {
+          warnings.push(`${transcript.filename} was truncated to fit the context limit.`);
+        }
+      }
+
+      return updated;
+    });
+
+    warnings.forEach((message) =>
+      addToast({
+        title: "Transcript upload",
+        description: message,
+        color: "warning",
+      })
+    );
+
+    if (transcriptInputRef.current) {
+      transcriptInputRef.current.value = "";
+    }
+  };
+
+  const handleRemoveTranscript = (filename: string) => {
+    setCallTranscripts((prev) => prev.filter((transcript) => transcript.filename !== filename));
+  };
+
+  const totalTranscriptChars = callTranscripts.reduce((sum, transcript) => sum + transcript.content.length, 0);
 
   const handleGenerateUseCases = async () => {
     try {
@@ -154,8 +323,15 @@ export default function AnalyzePage() {
         fetchCompanyFacts(ucInput.customer_name, ucInput.customer_website);
       }
 
+      const transcriptsPayload = callTranscripts.length
+        ? callTranscripts.map(({ filename, content }) => ({ filename, content }))
+        : undefined;
+
       const result = await ucGeneratorMutation.mutateAsync({
-        input: ucInput,
+        input: {
+          ...ucInput,
+          call_transcripts: transcriptsPayload,
+        },
         model: ucModel,
       });
       setGeneratedUseCases(result.use_cases);
@@ -730,10 +906,7 @@ export default function AnalyzePage() {
       <Modal
         size="3xl"
         isOpen={isOpen}
-        onClose={() => {
-          onClose();
-          resetFacts();
-        }}
+        onClose={handleCloseUCGenerator}
         scrollBehavior="inside"
         classNames={{
           backdrop: "bg-[#050a08]/80 backdrop-blur-sm",
@@ -862,6 +1035,77 @@ export default function AnalyzePage() {
                     inputWrapper: "border-default-200 hover:border-primary/50 focus-within:border-primary",
                   }}
                 />
+
+                <div className="pt-2 space-y-3">
+                  <div>
+                    <p className="text-sm font-medium text-default-600">
+                      Discovery Call Transcripts (Optional)
+                    </p>
+                    <p className="text-xs text-default-500 mt-1">
+                      Attach .txt or .docx transcripts so the generator can pull exact language and requirements.
+                      Formatting is ignored; only text is used.
+                    </p>
+                  </div>
+
+                  <input
+                    ref={transcriptInputRef}
+                    type="file"
+                    accept=".txt,.docx,text/plain,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                    multiple
+                    onChange={handleTranscriptUpload}
+                    disabled={ucGeneratorMutation.isPending || transcriptsLoading}
+                    className="block w-full text-sm text-default-600 file:mr-4 file:rounded-lg file:border-0 file:bg-primary/10 file:px-4 file:py-2 file:text-sm file:font-medium file:text-primary hover:file:bg-primary/20"
+                  />
+
+                  <p className="text-xs text-default-400">
+                    Up to {MAX_TRANSCRIPT_FILES} files. {MAX_TRANSCRIPT_CHARS.toLocaleString()} characters per
+                    file, {MAX_TOTAL_TRANSCRIPT_CHARS.toLocaleString()} total.
+                  </p>
+
+                  {transcriptsLoading && (
+                    <div className="flex items-center gap-2 text-xs text-default-500">
+                      <div className="animate-spin h-3 w-3 border-2 border-primary border-t-transparent rounded-full" />
+                      Parsing transcripts...
+                    </div>
+                  )}
+
+                  {callTranscripts.length > 0 && (
+                    <div className="space-y-2">
+                      {callTranscripts.map((transcript) => (
+                        <div
+                          key={transcript.filename}
+                          className="flex items-center justify-between gap-3 rounded-xl border border-default-200/70 bg-default-100/40 px-3 py-2"
+                        >
+                          <div className="flex flex-col">
+                            <span className="text-sm font-medium text-default-600">
+                              {transcript.filename}
+                            </span>
+                            <span className="text-xs text-default-400">
+                              {formatFileSize(transcript.size)} · {transcript.content.length.toLocaleString()} chars
+                              {transcript.truncated ? " (truncated)" : ""}
+                            </span>
+                          </div>
+                          <Button
+                            isIconOnly
+                            size="sm"
+                            variant="light"
+                            className="text-default-400 hover:text-danger"
+                            onPress={() => handleRemoveTranscript(transcript.filename)}
+                            isDisabled={ucGeneratorMutation.isPending}
+                          >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                          </Button>
+                        </div>
+                      ))}
+
+                      <p className="text-xs text-default-400">
+                        {totalTranscriptChars.toLocaleString()} characters queued for context.
+                      </p>
+                    </div>
+                  )}
+                </div>
 
                 {ucGeneratorMutation.isPending && (
                   <Card className="glass-card border-secondary/30">
@@ -1064,7 +1308,7 @@ export default function AnalyzePage() {
             )}
           </ModalBody>
           <ModalFooter className="pb-6">
-            <Button variant="light" onPress={onClose}>
+            <Button variant="light" onPress={handleCloseUCGenerator}>
               Cancel
             </Button>
             {generatedUseCases.length === 0 ? (
@@ -1073,7 +1317,7 @@ export default function AnalyzePage() {
                 className="font-semibold"
                 onPress={handleGenerateUseCases}
                 isLoading={ucGeneratorMutation.isPending}
-                isDisabled={!ucInput.customer_name}
+                isDisabled={!ucInput.customer_name || transcriptsLoading}
               >
                 Generate
               </Button>

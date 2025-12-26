@@ -10,6 +10,7 @@ import type { LlmModel } from '../../../types/llm';
 import { loadPrompt, PROMPTS } from '../../../llm/prompts/index';
 import {
   UCGeneratorInput,
+  CallTranscript,
   CustomerResearch,
   CustomerResearchSchema,
   customerResearchJsonSchema,
@@ -30,7 +31,22 @@ function buildUserMessage(input: UCGeneratorInput): string {
     parts.push(`- user_notes: ${input.user_notes}`);
   }
 
+  if (input.call_transcripts?.length) {
+    parts.push('', 'call_transcripts:');
+    parts.push(formatCallTranscripts(input.call_transcripts));
+  }
+
   return parts.join('\n');
+}
+
+function formatCallTranscripts(transcripts: CallTranscript[]): string {
+  return transcripts
+    .map((transcript, index) => {
+      const header = `<<<TRANSCRIPT ${index + 1}: ${transcript.filename}>>>`;
+      const footer = `<<<END TRANSCRIPT ${index + 1}: ${transcript.filename}>>>`;
+      return `${header}\n${transcript.content}\n${footer}`;
+    })
+    .join('\n\n');
 }
 
 /**
