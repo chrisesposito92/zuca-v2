@@ -129,6 +129,16 @@ async function resolveProductRatePlanChargeId(
   }
 }
 
+interface ZoqlQueryResponse {
+  records?: any[];
+  done?: boolean;
+  queryLocator?: string;
+}
+
+type ZoqlQueryPayload =
+  | { queryLocator: string }
+  | { queryString: string; pageSize: number };
+
 export async function runZoqlQuery(
   baseUrl: string,
   token: string,
@@ -140,10 +150,12 @@ export async function runZoqlQuery(
   let hasMore = true;
 
   while (hasMore) {
-    const path = queryLocator ? DEFAULT_ZOQL_QUERY_MORE_PATH : DEFAULT_ZOQL_QUERY_PATH;
-    const payload = queryLocator ? { queryLocator } : { queryString, pageSize };
+    const path: string = queryLocator ? DEFAULT_ZOQL_QUERY_MORE_PATH : DEFAULT_ZOQL_QUERY_PATH;
+    const payload: ZoqlQueryPayload = queryLocator
+      ? { queryLocator }
+      : { queryString, pageSize };
 
-    const data = await zuoraFetch<any>(baseUrl, token, path, {
+    const data: ZoqlQueryResponse = await zuoraFetch<ZoqlQueryResponse>(baseUrl, token, path, {
       method: 'POST',
       body: JSON.stringify(payload),
     });

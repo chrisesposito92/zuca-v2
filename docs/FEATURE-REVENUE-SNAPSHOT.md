@@ -23,6 +23,7 @@ This feature lets users connect a Zuora Billing tenant, select subscription(s), 
    - **OTR**: Data Query via `/query/jobs` for BookingTransaction, BillingTransaction, RevenueRecognitionEventsTransaction (queries run in parallel; OTR is inferred by successful BookingTransaction retrieval).
    - **Non-OTR**: ZOQL/REST for Subscription, Order, Invoice, Credit Memo, Usage, Rate Plan Charge.
    - Custom field `POBCRITERIA__c` is fetched from ProductRatePlanCharge for POB template assignment.
+   - **ATR1** in Zuora Revenue corresponds to the POB Template (ProductRatePlanCharge.POBCRITERIA__c).
    - Custom fields are case-sensitive and require the `__c` suffix in queries.
 
 4. **Snapshot Pipeline**
@@ -30,6 +31,9 @@ This feature lets users connect a Zuora Billing tenant, select subscription(s), 
    - Billings (LLM or deterministic)
    - Rev Rec Waterfall (LLM, high reasoning)
    - Summary (LLM)
+   - Allocation columns are always populated deterministically from SSP method + pricing fields when the LLM leaves them empty.
+5. **Execution Model**
+   - User-selected model (GPT-5.2, Gemini 3 Pro, Gemini 3 Flash) applied to all snapshot steps
 
 ## API Routes
 - `POST /api/revenue-snapshot/auth` – save credentials for a named tenant (encrypted)

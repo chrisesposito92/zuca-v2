@@ -22,6 +22,21 @@ Return a JSON object with:
 - assumptions: array of strings
 - open_questions: array of strings
 
+### Required Allocation Fields (must be present on every row)
+- Unit List Price
+- Unit Sell Price
+- Ext List Price
+- Ext Sell Price
+- SSP Price
+- Ext SSP Price
+- SSP Percent
+- Ext Allocated Price
+- Allocation Eligible Flag
+- Unreleased Revenue
+- Released Revenue
+- POB Template
+- ATR1 (ATR1 represents the POB Template / POBCRITERIA__c in Zuora Revenue)
+
 ## OTR-Enabled Tenants
 - Use **BookingTransaction** records.
 - **Each BookingTransaction line → one Contracts/Orders row.**

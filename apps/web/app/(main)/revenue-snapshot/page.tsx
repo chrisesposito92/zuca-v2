@@ -7,6 +7,7 @@ import {
   CardHeader,
   Chip,
   Input,
+  Progress,
   Select,
   SelectItem,
   Textarea,
@@ -23,9 +24,16 @@ import {
   useZuoraSubscriptions,
   type SubscriptionSummary,
 } from "@/hooks/useRevenueSnapshot";
+import { useFunFacts } from "@/hooks/useFunFacts";
 
 const pageSizeOptions = [10, 25, 50, 100];
 const sspMethodOptions = ["None", "List Price", "Sell Price", "Custom Formula"] as const;
+const DEFAULT_MODEL = process.env.NEXT_PUBLIC_DEFAULT_MODEL || "gpt-5.2";
+const snapshotModelOptions = [
+  { key: "gpt-5.2", label: "GPT-5.2", time: "~7-9 min", description: "Best overall reasoning and accuracy" },
+  { key: "gemini-3-pro-preview", label: "Gemini 3 Pro", time: "~4-5 min", description: "Balanced quality and speed" },
+  { key: "gemini-3-flash-preview", label: "Gemini 3 Flash", time: "~1.5-2 min", description: "Fastest, good for interactive use" },
+];
 const sortOptions = [
   { key: "subscription_number", label: "Subscription #" },
   { key: "subscription_name", label: "Subscription Name" },
@@ -89,9 +97,12 @@ export default function RevenueSnapshotPage() {
   const [sspCustomFormula, setSspCustomFormula] = useState("");
   const [dataAugmentationRules, setDataAugmentationRules] = useState("");
   const [notes, setNotes] = useState("");
+  const [selectedModel, setSelectedModel] = useState<string>(DEFAULT_MODEL);
 
   const subscriptions = subscriptionsQuery.data?.subscriptions || [];
   const subscriptionsError = subscriptionsQuery.error as { error?: string; details?: string; raw?: string } | null;
+  const isGenerating = generateSnapshot.isPending;
+  const { currentFact } = useFunFacts({ interval: 10000 });
 
   useEffect(() => {
     if (!subscriptionsError) return;
@@ -261,6 +272,7 @@ export default function RevenueSnapshotPage() {
     try {
       await generateSnapshot.mutateAsync({
         connection_id: selectedConnectionId,
+        model: selectedModel,
         input: {
           subscription_numbers: selectedList,
           ...(hasAllocationEligible && { ssp_method: sspMethod }),
@@ -328,6 +340,7 @@ export default function RevenueSnapshotPage() {
                   }
                 }}
                 size="sm"
+                isDisabled={isGenerating}
               >
                 {connections.map((conn) => (
                   <SelectItem key={conn.id}>{conn.tenant_name}</SelectItem>
@@ -344,6 +357,7 @@ export default function RevenueSnapshotPage() {
               placeholder="e.g., Sandbox US"
               variant="bordered"
               size="sm"
+              isDisabled={isGenerating}
             />
             <Input
               label="Base URL"
@@ -352,6 +366,7 @@ export default function RevenueSnapshotPage() {
               placeholder="https://rest.test.zuora.com"
               variant="bordered"
               size="sm"
+              isDisabled={isGenerating}
             />
             <Input
               label="Client ID"
@@ -360,6 +375,7 @@ export default function RevenueSnapshotPage() {
               placeholder="Your OAuth client id"
               variant="bordered"
               size="sm"
+              isDisabled={isGenerating}
             />
             <Input
               label="Client Secret"
@@ -369,6 +385,7 @@ export default function RevenueSnapshotPage() {
               placeholder={activeConnection ? "••••••••" : "Your OAuth client secret"}
               variant="bordered"
               size="sm"
+              isDisabled={isGenerating}
             />
             <div className="flex items-center gap-3">
               <Button
@@ -376,6 +393,7 @@ export default function RevenueSnapshotPage() {
                 className="font-semibold"
                 onClick={handleConnect}
                 isLoading={saveConnection.isPending}
+                isDisabled={isGenerating}
               >
                 {activeConnection ? "Update Connection" : "Connect"}
               </Button>
@@ -384,6 +402,7 @@ export default function RevenueSnapshotPage() {
                   variant="bordered"
                   onClick={handleDisconnect}
                   isLoading={deleteConnection.isPending}
+                  isDisabled={isGenerating}
                 >
                   Remove
                 </Button>
@@ -424,6 +443,7 @@ export default function RevenueSnapshotPage() {
                     variant="bordered"
                     size="sm"
                     className="flex-1"
+                    isDisabled={isGenerating}
                   />
                   <Select
                     label="Rows"
@@ -437,6 +457,7 @@ export default function RevenueSnapshotPage() {
                     }}
                     size="sm"
                     className="w-32"
+                    isDisabled={isGenerating}
                   >
                     {pageSizeOptions.map((size) => (
                       <SelectItem key={String(size)}>{size}</SelectItem>
@@ -454,6 +475,7 @@ export default function RevenueSnapshotPage() {
                     }}
                     size="sm"
                     className="w-40"
+                    isDisabled={isGenerating}
                   >
                     {sortOptions.map((option) => (
                       <SelectItem key={option.key}>{option.label}</SelectItem>
@@ -471,6 +493,7 @@ export default function RevenueSnapshotPage() {
                     }}
                     size="sm"
                     className="w-28"
+                    isDisabled={isGenerating}
                   >
                     <SelectItem key="asc">Asc</SelectItem>
                     <SelectItem key="desc">Desc</SelectItem>
@@ -479,7 +502,7 @@ export default function RevenueSnapshotPage() {
                     size="sm"
                     variant="flat"
                     onClick={() => handleSelectPage(true)}
-                    isDisabled={pagedSubscriptions.length === 0}
+                    isDisabled={pagedSubscriptions.length === 0 || isGenerating}
                   >
                     Select Page
                   </Button>
@@ -487,7 +510,7 @@ export default function RevenueSnapshotPage() {
                     size="sm"
                     variant="flat"
                     onClick={() => handleSelectPage(false)}
-                    isDisabled={pagedSubscriptions.length === 0}
+                    isDisabled={pagedSubscriptions.length === 0 || isGenerating}
                   >
                     Clear Page
                   </Button>
@@ -509,6 +532,7 @@ export default function RevenueSnapshotPage() {
                           <Checkbox
                             isSelected={Boolean(selectedSubscriptions[sub.subscription_number])}
                             onValueChange={() => handleToggleSubscription(sub)}
+                            isDisabled={isGenerating}
                           />
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2 flex-wrap">
@@ -588,6 +612,7 @@ export default function RevenueSnapshotPage() {
                   }
                 }}
                 size="sm"
+                isDisabled={isGenerating}
               >
                 {sspMethodOptions.map((option) => (
                   <SelectItem key={option}>{option}</SelectItem>
@@ -600,6 +625,7 @@ export default function RevenueSnapshotPage() {
                   onChange={(e) => setSspCustomFormula(e.target.value)}
                   placeholder="Describe the allocation formula"
                   size="sm"
+                  isDisabled={isGenerating}
                 />
               )}
             </div>
@@ -611,6 +637,7 @@ export default function RevenueSnapshotPage() {
             value={dataAugmentationRules}
             onChange={(e) => setDataAugmentationRules(e.target.value)}
             minRows={3}
+            isDisabled={isGenerating}
           />
 
           <Textarea
@@ -619,7 +646,31 @@ export default function RevenueSnapshotPage() {
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             minRows={2}
+            isDisabled={isGenerating}
           />
+
+          <Select
+            label="Execution Model"
+            selectedKeys={[selectedModel]}
+            onSelectionChange={(keys) => setSelectedModel(Array.from(keys)[0] as string)}
+              size="sm"
+              isDisabled={isGenerating}
+            >
+              {snapshotModelOptions.map((model) => (
+                <SelectItem key={model.key} textValue={model.label}>
+                  <div className="flex flex-col">
+                  <div className="flex items-center gap-2">
+                    <span>{model.label}</span>
+                    <span className="text-xs text-default-400">({model.time})</span>
+                  </div>
+                  <span className="text-xs text-default-400">{model.description}</span>
+                </div>
+                </SelectItem>
+              ))}
+            </Select>
+            <p className="text-xs text-default-500">
+              Model changes apply to the entire snapshot run. Switching is disabled while generating.
+            </p>
 
           <div className="flex items-center justify-between">
             <div className="text-xs text-default-500">
@@ -637,6 +688,40 @@ export default function RevenueSnapshotPage() {
           </div>
         </CardBody>
       </Card>
+
+      {isGenerating && (
+        <Card className="glass-card border-primary/20">
+          <CardBody className="p-6 space-y-4">
+            <div className="flex items-center gap-4">
+              <div className="animate-spin h-5 w-5 border-2 border-primary border-t-transparent rounded-full" />
+              <div>
+                <p className="font-medium">Generating Revenue Snapshot...</p>
+                <p className="text-xs text-default-500">Processing Billing data and building Revenue tables</p>
+              </div>
+            </div>
+            <Progress
+              isIndeterminate
+              color="primary"
+              size="sm"
+              aria-label="Generating snapshot"
+              classNames={{
+                indicator: "bg-gradient-to-r from-primary to-secondary",
+              }}
+            />
+            <div className="p-4 rounded-xl bg-default-100/50 border border-default-200/60">
+              <div className="flex items-center gap-2 mb-2 text-default-500">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span className="text-xs font-medium uppercase tracking-wider">Did you know?</span>
+              </div>
+              <p className="text-sm text-default-600 leading-relaxed min-h-[2.5rem] transition-opacity duration-300">
+                {currentFact}
+              </p>
+            </div>
+          </CardBody>
+        </Card>
+      )}
     </div>
   );
 }
