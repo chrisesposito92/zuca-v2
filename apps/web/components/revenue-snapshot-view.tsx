@@ -1,11 +1,14 @@
 "use client";
 
+import { useState } from "react";
+import * as XLSX from "xlsx";
 import {
   Button,
   Card,
   CardBody,
   CardHeader,
   Chip,
+  Switch,
   Tab,
   Tabs,
   addToast,
@@ -108,14 +111,21 @@ function isRevRecRow(row: Record<string, any>): boolean {
   return "Period" in row || "period" in row;
 }
 
-function RevRecWaterfallTable({ rows }: { rows: Array<Record<string, any>> }) {
-  if (!rows.length) {
-    return <p className="text-default-500 italic">No data available</p>;
-  }
+type RevRecGroup = {
+  key: string;
+  label: string;
+  allocated: number;
+  periods: Record<string, number>;
+};
 
-  if (!isRevRecRow(rows[0])) {
-    return <TableView rows={rows} />;
-  }
+function buildRevRecPivot(rows: Array<Record<string, any>>): {
+  periods: string[];
+  rows: Array<Record<string, any>>;
+  totals: Record<string, number>;
+  totalAllocated: number;
+  groups: RevRecGroup[];
+} | null {
+  if (!rows.length || !isRevRecRow(rows[0])) return null;
 
   const periodSet = new Set<string>();
   const groups = new Map<string, { base: Record<string, any>; periods: Record<string, number> }>();
@@ -153,10 +163,11 @@ function RevRecWaterfallTable({ rows }: { rows: Array<Record<string, any>> }) {
 
   const periods = Array.from(periodSet).sort((a, b) => parsePeriod(a) - parsePeriod(b));
   const pivotRows: Array<Record<string, any>> = [];
-  let totalAllocated = 0;
   const totals: Record<string, number> = {};
+  const groupRows: RevRecGroup[] = [];
+  let totalAllocated = 0;
 
-  groups.forEach((group) => {
+  groups.forEach((group, key) => {
     const row: Record<string, any> = { ...group.base };
     const allocated = normalizeNumber(group.base.Allocated);
     row.Allocated = allocated;
@@ -169,7 +180,30 @@ function RevRecWaterfallTable({ rows }: { rows: Array<Record<string, any>> }) {
     });
 
     pivotRows.push(row);
+
+    const labelParts = [group.base["POB Name"], group.base["Line Item Num"]].filter(Boolean);
+    groupRows.push({
+      key,
+      label: labelParts.join(" · "),
+      allocated,
+      periods: group.periods,
+    });
   });
+
+  return { periods, rows: pivotRows, totals, totalAllocated, groups: groupRows };
+}
+
+function RevRecWaterfallTable({ rows }: { rows: Array<Record<string, any>> }) {
+  if (!rows.length) {
+    return <p className="text-default-500 italic">No data available</p>;
+  }
+
+  const pivot = buildRevRecPivot(rows);
+  if (!pivot) {
+    return <TableView rows={rows} />;
+  }
+
+  const pivotRows = [...pivot.rows];
 
   if (pivotRows.length > 1) {
     const totalRow: Record<string, any> = {
@@ -178,10 +212,10 @@ function RevRecWaterfallTable({ rows }: { rows: Array<Record<string, any>> }) {
       "Line Item Num": "",
       "Revenue Start Date": "",
       "Revenue End Date": "",
-      Allocated: totalAllocated,
+      Allocated: pivot.totalAllocated,
     };
-    periods.forEach((period) => {
-      totalRow[period] = totals[period] ?? 0;
+    pivot.periods.forEach((period) => {
+      totalRow[period] = pivot.totals[period] ?? 0;
     });
     pivotRows.push(totalRow);
   }
@@ -189,7 +223,158 @@ function RevRecWaterfallTable({ rows }: { rows: Array<Record<string, any>> }) {
   return <TableView rows={pivotRows} />;
 }
 
+type RevRecChartMode = "total" | "stacked" | "grouped";
+
+const CHART_COLORS = [
+  "bg-primary/70",
+  "bg-secondary/70",
+  "bg-success/70",
+  "bg-warning/70",
+  "bg-danger/70",
+  "bg-default/60",
+];
+
+function RevRecWaterfallChart({
+  rows,
+  mode,
+}: {
+  rows: Array<Record<string, any>>;
+  mode: RevRecChartMode;
+}) {
+  const pivot = buildRevRecPivot(rows);
+  if (!pivot || pivot.periods.length === 0) {
+    return (
+      <p className="text-default-500 italic text-sm">
+        Chart unavailable (no periodized rev rec data).
+      </p>
+    );
+  }
+
+  if (mode === "total") {
+    const series = pivot.periods.map((period) => ({
+      period,
+      amount: pivot.totals[period] ?? 0,
+    }));
+    const max = Math.max(...series.map((item) => item.amount), 0);
+
+    return (
+      <div className="rounded-lg border border-default-200/50 p-4 bg-default-50/40">
+        <div className="flex items-center justify-between">
+          <p className="text-sm font-semibold text-default-700">Revenue by Period</p>
+          <p className="text-xs text-default-500">
+            Total Allocated: {pivot.totalAllocated.toLocaleString()}
+          </p>
+        </div>
+        <div className="mt-4 h-40 flex items-end gap-2">
+          {series.map((item) => {
+            const height = max > 0 ? (item.amount / max) * 100 : 0;
+            return (
+              <div key={item.period} className="flex-1 min-w-[32px] h-full flex flex-col items-center gap-2">
+                <div className="w-full flex-1 flex items-end">
+                  <div
+                    className="w-full rounded-md bg-primary/70"
+                    style={{ height: `${height}%`, minHeight: item.amount > 0 ? "2px" : "0px" }}
+                  />
+                </div>
+                <div className="text-[11px] text-default-500">{item.period}</div>
+                <div className="text-[10px] text-default-400">{item.amount.toLocaleString()}</div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
+
+  const groups = pivot.groups;
+  const maxTotal = Math.max(
+    ...pivot.periods.map((period) => pivot.totals[period] ?? 0),
+    0
+  );
+  const maxGroupValue = Math.max(
+    ...groups.flatMap((group) => pivot.periods.map((period) => group.periods[period] ?? 0)),
+    0
+  );
+
+  return (
+    <div className="rounded-lg border border-default-200/50 p-4 bg-default-50/40 space-y-4">
+      <div className="flex items-center justify-between">
+        <p className="text-sm font-semibold text-default-700">
+          {mode === "stacked" ? "Revenue by Period (Stacked)" : "Revenue by Period (Grouped)"}
+        </p>
+        <p className="text-xs text-default-500">
+          Total Allocated: {pivot.totalAllocated.toLocaleString()}
+        </p>
+      </div>
+
+      <div className="flex flex-wrap gap-2 text-[11px] text-default-500">
+        {groups.slice(0, 6).map((group, index) => (
+          <div key={group.key} className="flex items-center gap-1">
+            <span className={`inline-block h-2.5 w-2.5 rounded-full ${CHART_COLORS[index % CHART_COLORS.length]}`} />
+            <span className="truncate max-w-[180px]">{group.label || "Line Item"}</span>
+          </div>
+        ))}
+        {groups.length > 6 && (
+          <span className="text-default-400">+{groups.length - 6} more</span>
+        )}
+      </div>
+
+      <div className="h-40 flex items-end gap-2">
+        {pivot.periods.map((period) => {
+          const periodTotal = pivot.totals[period] ?? 0;
+          const columnHeight = maxTotal > 0 ? (periodTotal / maxTotal) * 100 : 0;
+          return (
+            <div key={period} className="flex-1 min-w-[36px] h-full flex flex-col items-center gap-2">
+              <div className="w-full flex-1 flex items-end">
+                {mode === "stacked" ? (
+                  <div
+                    className="w-full flex flex-col-reverse rounded-md overflow-hidden"
+                    style={{ height: `${columnHeight}%` }}
+                  >
+                    {groups.map((group, index) => {
+                      const value = group.periods[period] ?? 0;
+                      if (value <= 0) return null;
+                      const segmentHeight = periodTotal > 0 ? (value / periodTotal) * 100 : 0;
+                      return (
+                        <div
+                          key={`${group.key}-${period}`}
+                          className={CHART_COLORS[index % CHART_COLORS.length]}
+                          style={{ height: `${segmentHeight}%` }}
+                          title={`${group.label}: ${value.toLocaleString()}`}
+                        />
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <div className="w-full h-full flex items-end gap-1">
+                    {groups.map((group, index) => {
+                      const value = group.periods[period] ?? 0;
+                      const height = maxGroupValue > 0 ? (value / maxGroupValue) * 100 : 0;
+                      return (
+                        <div
+                          key={`${group.key}-${period}`}
+                          className={`flex-1 rounded-md ${CHART_COLORS[index % CHART_COLORS.length]}`}
+                          style={{ height: `${height}%`, minHeight: value > 0 ? "2px" : "0px" }}
+                          title={`${group.label}: ${value.toLocaleString()}`}
+                        />
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+              <div className="text-[11px] text-default-500">{period}</div>
+              <div className="text-[10px] text-default-400">{periodTotal.toLocaleString()}</div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 export function RevenueSnapshotView({ result, sessionId, status, createdAt, model }: RevenueSnapshotViewProps) {
+  const [showRevRecChart, setShowRevRecChart] = useState(true);
+  const [revRecChartMode, setRevRecChartMode] = useState<RevRecChartMode>("total");
   const handleExportJSON = () => {
     const blob = new Blob([JSON.stringify(result, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
@@ -206,6 +391,62 @@ export function RevenueSnapshotView({ result, sessionId, status, createdAt, mode
     });
   };
 
+  const handleExportExcel = () => {
+    const workbook = XLSX.utils.book_new();
+
+    const addSheetFromArray = (data: unknown[], sheetName: string) => {
+      if (data && data.length > 0) {
+        const sheet = XLSX.utils.json_to_sheet(data as Record<string, unknown>[]);
+        XLSX.utils.book_append_sheet(workbook, sheet, sheetName.slice(0, 31));
+      }
+    };
+
+    addSheetFromArray(result.contracts_orders.rows, "Contracts-Orders");
+    addSheetFromArray(result.billings.rows, "Billings");
+
+    if (result.revrec_waterfall.rows.length) {
+      addSheetFromArray(result.revrec_waterfall.rows, "Rev Rec Raw");
+      const pivot = buildRevRecPivot(result.revrec_waterfall.rows);
+      if (pivot) {
+        const pivotRows = [...pivot.rows];
+        if (pivotRows.length > 1) {
+          const totalRow: Record<string, any> = {
+            "POB Name": "Total",
+            "Event Name": "",
+            "Line Item Num": "",
+            "Revenue Start Date": "",
+            "Revenue End Date": "",
+            Allocated: pivot.totalAllocated,
+          };
+          pivot.periods.forEach((period) => {
+            totalRow[period] = pivot.totals[period] ?? 0;
+          });
+          pivotRows.push(totalRow);
+        }
+        addSheetFromArray(pivotRows, "Rev Rec Pivot");
+      }
+    }
+
+    addSheetFromArray(
+      [
+        {
+          highlights: result.summary.highlights?.join(" | ") ?? "",
+          assumptions: result.summary.assumptions.join(" | "),
+          open_questions: result.summary.open_questions.join(" | "),
+        },
+      ],
+      "Summary"
+    );
+
+    XLSX.writeFile(workbook, `snapshot-${sessionId.slice(0, 8)}.xlsx`);
+
+    addToast({
+      title: "Exported",
+      description: "Excel file downloaded",
+      color: "success",
+    });
+  };
+
   return (
     <div className="space-y-8">
       <div className="flex items-center gap-4">
@@ -214,6 +455,9 @@ export function RevenueSnapshotView({ result, sessionId, status, createdAt, mode
             Back to History
           </Button>
         </Link>
+        <Button variant="bordered" size="sm" onClick={handleExportExcel}>
+          Export Excel
+        </Button>
         <Button color="primary" size="sm" onClick={handleExportJSON}>
           Export JSON
         </Button>
@@ -310,7 +554,51 @@ export function RevenueSnapshotView({ result, sessionId, status, createdAt, mode
         </Tab>
         <Tab key="revrec" title="Rev Rec Waterfall">
           <Card className="glass-card mt-4">
-            <CardBody className="p-6">
+            <CardHeader className="px-6 pt-5 pb-0 flex items-center justify-between">
+              <div>
+                <h4 className="text-base font-semibold">Revenue Recognition Waterfall</h4>
+                <p className="text-xs text-default-500">Periodized view with optional chart summary.</p>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2 text-xs text-default-500">
+                  <span className="font-medium text-default-600">Chart Mode</span>
+                  <div className="flex items-center rounded-full border border-default-200/70 bg-default-50/80 p-1">
+                    {[
+                      { key: "total", label: "Totals" },
+                      { key: "stacked", label: "Stacked" },
+                      { key: "grouped", label: "Grouped" },
+                    ].map((option) => (
+                      <button
+                        key={option.key}
+                        type="button"
+                        onClick={() => setRevRecChartMode(option.key as RevRecChartMode)}
+                        className={`px-2.5 py-1 rounded-full text-[11px] transition ${
+                          revRecChartMode === option.key
+                            ? "bg-primary text-white"
+                            : "text-default-500 hover:text-default-700"
+                        }`}
+                      >
+                        {option.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <Switch
+                  size="sm"
+                  isSelected={showRevRecChart}
+                  onValueChange={setShowRevRecChart}
+                  classNames={{
+                    wrapper: "group-data-[selected=true]:bg-primary",
+                  }}
+                >
+                  Show chart
+                </Switch>
+              </div>
+            </CardHeader>
+            <CardBody className="p-6 space-y-4">
+              {showRevRecChart ? (
+                <RevRecWaterfallChart rows={result.revrec_waterfall.rows} mode={revRecChartMode} />
+              ) : null}
               <RevRecWaterfallTable rows={result.revrec_waterfall.rows} />
             </CardBody>
           </Card>

@@ -34,6 +34,9 @@ This feature lets users connect a Zuora Billing tenant, select subscription(s), 
    - Allocation columns are always populated deterministically from SSP method + pricing fields when the LLM leaves them empty.
 5. **Execution Model**
    - User-selected model (GPT-5.2, Gemini 3 Pro, Gemini 3 Flash) applied to all snapshot steps
+6. **Exports & Visualization**
+   - Export tables to Excel (Contracts/Orders, Billings, Rev Rec raw + pivot, Summary).
+   - Rev Rec Waterfall includes an optional chart toggle with modes: Totals, Stacked by line item, or Grouped by line item.
 
 ## API Routes
 - `POST /api/revenue-snapshot/auth` – save credentials for a named tenant (encrypted)

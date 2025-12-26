@@ -9,7 +9,7 @@ ZUCA is an AI-powered solution architect that generates complete Zuora Billing a
 - **Subscription Generation**: Creates complete subscription specifications with rate plans and charges
 - **POB Template Mapping**: Maps charges to appropriate Performance Obligation templates for revenue recognition
 - **Table Generation**: Generates Contracts/Orders, Billings, and Revenue Recognition Waterfall tables
-- **Revenue Snapshot (Web)**: Connects to Zuora Billing and previews Revenue ingestion output from live tenant data
+- **Revenue Snapshot (Web)**: Connects to Zuora Billing and previews Revenue ingestion output from live tenant data (Excel export + Rev Rec chart toggle with total/stacked/grouped modes)
 - **Multi-turn Conversations**: Supports follow-up questions and solution refinements
 - **Multiple Interfaces**: CLI, HTTP API, and WebSocket support
 
