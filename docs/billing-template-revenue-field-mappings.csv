@@ -1,0 +1,85 @@
+Source Billing Object,Source Billing Field,Target Revenue Field
+BillingTransaction,Customer ID,Account Id
+BillingTransaction,Adjustment Liability Account Number,Adjustment Liability Account
+BillingTransaction,Discount Applied To Rate Plan Charge ID,Applied RPC ID
+BillingTransaction,Discount Applied To Rate Plan Charge Model ID,Applied RPC Model
+BillingTransaction,Discount Applied To Rate Plan Charge Type ID,Applied RPC Type
+BillingTransaction,Adjustment Revenue Account Number,Adjustment Revenue Account
+BillingTransaction,Avoid Overage,Avoid Overage
+BillingTransaction,Invoice ID,Billing Id
+BillingTransaction,Document Line ID,Billing Item Id
+BillingTransaction,Booking Reference,Booking Reference ID
+BillingTransaction,Organization Name,Business Unit
+BillingTransaction,Contract Asset Account Number,Contract Asset Account
+BillingTransaction,Charge Create Date,Charge Created Date
+BillingTransaction,Charge Last Update Date,Charge Last Update Date
+BillingTransaction,Charge Through Date,Rate Plan Charge Through Date
+BillingTransaction,Company Code,Company Code
+BillingTransaction,Customer Name,Customer Name
+BillingTransaction,Currency Code,Transaction Currency
+BillingTransaction,Customer Number,Customer Number
+BillingTransaction,Is Allocation Eligible,CV Eligible Flag
+BillingTransaction,Contract Liability Account Number,Deferred Segments
+BillingTransaction,End Date,Revenue End Date
+BillingTransaction,Entity ID,Entity Id
+BillingTransaction,List Price,Ext List Price
+BillingTransaction,Revenue Extended Selling Price,Ext Sell Price
+BillingTransaction,Home Currency Code,Functional Currency
+BillingTransaction,Fx Rate,Functional Ex Rate
+BillingTransaction,Global Fx Rate,Global Ex Rate
+BillingTransaction,Document Date,Invoice Date
+BillingTransaction,Document Line ID,Invoice Line ID
+BillingTransaction,Document Line Number,Invoice Line Num
+BillingTransaction,Document Number,Invoice Num
+BillingTransaction,Document Quantity,Invoice Qty
+BillingTransaction,Invoice Owner Name,Invoice Owner
+BillingTransaction,Charge Name,Line Item Num
+BillingTransaction,Ordered Quantity,Ordered Qty
+BillingTransaction,Original Invoice Line ID,Orig Inv Line Id
+BillingTransaction,Original Rate Plan Charge ID,Original Rate Plan Charge Id
+BillingTransaction,Original Sales Order Line ID,Orig SO Line ID
+BillingTransaction,Revenue Amortization Method,Revenue Amortization Method
+BillingTransaction,Revenue Recognition Timing,POB_POLICY
+BillingTransaction,Product Class,Product Class
+BillingTransaction,Product Category,Product Category
+BillingTransaction,Product Family,Product Family
+BillingTransaction,Product Line,Product Line
+BillingTransaction,Product ID,Product Id
+BillingTransaction,Product Rate Plan ID,Product Rate Plan Id
+BillingTransaction,Product Rate Plan Charge ID,Product Rate Plan Charge Id
+BillingTransaction,Retain Line ID,Retain Line ID
+BillingTransaction,Contract Recognized Revenue Account Number,Revenue Segments
+BillingTransaction,Rate Plan ID,Rate Plan Id
+BillingTransaction,Rate Plan Name,Rate Plan Name
+BillingTransaction,Rate Plan Charge ID,Rate Plan Charge Id
+BillingTransaction,Charge Model,Rate Plan Charge Model
+BillingTransaction,Charge Name,Rate Plan Charge Name
+BillingTransaction,Charge Number,Rate Plan Charge Num
+BillingTransaction,Charge Segment,Rate Plan Charge Segment
+BillingTransaction,Trigger Event,Rate Plan Charge Trigger Event
+BillingTransaction,Charge Type,Rate Plan Charge Type
+BillingTransaction,Booking Rate Plan Charge Version,Rate Plan Charge Version
+BillingTransaction,Sales Order Line ID,Rc So Line ID
+BillingTransaction,Sales Order Line Number,Rc So Line Num
+BillingTransaction,Sales Order Number,Rc So Num
+BillingTransaction,Start Date,Revenue Start Date
+BillingTransaction,Subscription End Date,Subscription End Date
+BillingTransaction,Subscription ID,Subscription ID
+BillingTransaction,Subscription Name,Subscription Name
+BillingTransaction,Subscription Owner Name,Subscription Owner
+BillingTransaction,Subscription Start Date,Subscription Start Date
+BillingTransaction,Subscription Status,Subscription Status
+BillingTransaction,Term Number,Subscription Term Number
+BillingTransaction,Subscription Term End Date,Subscription Term End Date
+BillingTransaction,Subscription Term Start Date,Subscription Term Start Date
+BillingTransaction,Term Type,Subscription Type
+BillingTransaction,Booking Subscription Version,Subscription Version
+BillingTransaction,ID,Transaction ID
+BillingTransaction,Document Type,Transaction Source
+BillingTransaction,Business Type,Line Type
+BillingTransaction,Unbilled Receivables Account Number,Unbilled AR Account
+BillingTransaction,Is Unbilled,Unbill Flag
+BillingTransaction,Unit List Price,Unit List Price
+BillingTransaction,Unit Sale Price,Unit Sell Price
+BillingTransaction,Zbill Ex Rate Date,Zbill Ex Rate Date
+OrderLineItem,PurchaseOrderNumber,PO_NUM

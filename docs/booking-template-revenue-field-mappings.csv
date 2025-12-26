@@ -1,0 +1,107 @@
+Source Billing Object,Source Billing Field,Target Revenue Field
+BookingTransaction,Customer ID,Account Id
+BookingTransaction,Adjustment Liability Account Number,Adjustment Liability Account
+BookingTransaction,Amendment Create Date,Amendment Created Date
+BookingTransaction,Amendment ID,Amendment Id
+BookingTransaction,Amendment Reason,Amendment Reason
+BookingTransaction,Amendment Type,Amendment Type
+BookingTransaction,Amended By Order On,Amend By Order On
+BookingTransaction,Discount Applied To Rate Plan Charge ID,Applied RPC ID
+BookingTransaction,Adjustment Revenue Account Number,Adjustment Revenue Account
+BookingTransaction,Organization Name,Business Unit
+BookingTransaction,Contract Asset Account Number,Contract Asset Account
+BookingTransaction,Order Create Date,Charge Created Date
+BookingTransaction,Order Update Date,Charge Last Update Date
+BookingTransaction,Company Code,Company Code
+BookingTransaction,Company Name,Customer Name
+BookingTransaction,Currency Code,Transaction Currency
+BookingTransaction,Customer Number,Customer Number
+BookingTransaction,Is Allocation Eligible,CV Eligible Flag
+BookingTransaction,Contract Liability Account Number,Deferred Segments
+BookingTransaction,Delta CCV,DELTA_CCV
+BookingTransaction,Delta ELP,DELTA_ELP
+BookingTransaction,Original Order Date,Sales Order Date
+BookingTransaction,Current End Date,Revenue End Date
+BookingTransaction,Entity ID,Entity Id
+BookingTransaction,Current ELP,Ext List Price
+BookingTransaction,Revenue Extended Selling Price,Ext Sell Price
+BookingTransaction,Home Currency Code,Functional Currency
+BookingTransaction,Fx Rate,Functional Ex Rate
+BookingTransaction,Global Fx Rate,Global Ex Rate
+BookingTransaction,Subscription Invoice Owner Account Name,Invoice Owner
+BookingTransaction,Is Done Flag,Is Done Flag
+BookingTransaction,Item Name,Line Item Num
+BookingTransaction,Current Quantity,Ordered Qty
+BookingTransaction,Order ID,Order Id
+BookingTransaction,Original Charge Create Date,Original Rate Plan Charge Created Date
+BookingTransaction,Original Charge Segment Create Date,Original Charge Segment Crt Date
+BookingTransaction,Original Order Date,Orig Order Date
+BookingTransaction,Original Rate Plan Charge ID,Original Rate Plan Charge Id
+BookingTransaction,Original Sales Order Line ID,Orig SO Line ID
+BookingTransaction,Original Term End Date,Original Term End Date
+BookingTransaction,Original Term Start Date,Original Term Start Date
+BookingTransaction,Subscription Creator Invoice Owner Name,ORIGINAL_INVOICE_OWNER
+BookingTransaction,Subscription Creator Account Name,ORIGINAL_SUBSCRP_OWNER
+BookingTransaction,Previous CCV,PRE_CCV
+BookingTransaction,Previous ELP,PRE_ELP
+BookingTransaction,Parent Charge Number,Parent Charge Number
+BookingTransaction,Parent Charge Segment,Parent Charge Segment
+BookingTransaction,Product Class,Product Class
+BookingTransaction,Product Category,Product Category
+BookingTransaction,Product Family,Product Family
+BookingTransaction,Product Line,Product Line
+BookingTransaction,Product ID,Product Id
+BookingTransaction,Product Rate Plan ID,Product Rate Plan Id
+BookingTransaction,Product Rate Plan Charge ID,Product Rate Plan Charge Id
+BookingTransaction,Previous Subscription Version,PRV_VER
+BookingTransaction,Revenue Amortization Method,Revenue Amortization Method
+BookingTransaction,Revenue Recognition Timing,POB_POLICY
+BookingTransaction,Contract Recognized Revenue Account Number,Revenue Segments
+BookingTransaction,Rate Plan ID,Rate Plan Id
+BookingTransaction,Product Rate Plan Name,Rate Plan Name
+BookingTransaction,Rate Plan Charge ID,Rate Plan Charge Id
+BookingTransaction,Charge Model,Rate Plan Charge Model
+BookingTransaction,Product Rate Plan Charge Name,Rate Plan Charge Name
+BookingTransaction,Charge Number,Rate Plan Charge Num
+BookingTransaction,Charge Segment,Rate Plan Charge Segment
+BookingTransaction,Trigger Event,Rate Plan Charge Trigger Event
+BookingTransaction,Charge Type,Rate Plan Charge Type
+BookingTransaction,Rate Plan Charge Version,Rate Plan Charge Version
+BookingTransaction,Restrict So Value Update Flag,Retrict SO Value Update
+BookingTransaction,Sequence Number,SEQ_NUM
+BookingTransaction,Skip CT Mod Flag,Skip CT Mod Flag
+BookingTransaction,Original Order Date,Rc So Date
+BookingTransaction,Sales Order Line ID,Rc So Line ID
+BookingTransaction,Sales Order Line Number,Rc So Line Num
+BookingTransaction,Sales Order Number,Rc So Num
+BookingTransaction,Current Start Date,Revenue Start Date
+BookingTransaction,Subscription End Date,Subscription End Date
+BookingTransaction,Subscription ID,Subscription ID
+BookingTransaction,Subscription Last Booking Date,Subscription Last Book Date
+BookingTransaction,Subscription Number,Subscription Name
+BookingTransaction,Subscription Owner Account Name,Subscription Owner
+BookingTransaction,Subscription Start Date,Subscription Start Date
+BookingTransaction,Subscription Status,Subscription Status
+BookingTransaction,Term Number,Subscription Term Number
+BookingTransaction,Subscription Term End Date,Subscription Term End Date
+BookingTransaction,Subscription Term Start Date,Subscription Term Start Date
+BookingTransaction,Term Type,Subscription Type
+BookingTransaction,Subscription Version,Subscription Version
+BookingTransaction,Business Type,Line Type
+BookingTransaction,Unbilled Receivables Account Number,Unbilled AR Account
+BookingTransaction,Is Unbilled,Unbill Flag
+BookingTransaction,Unit List Price,Unit List Price
+BookingTransaction,Unit Sale Price,Unit Sell Price
+BookingTransaction,Ramp ID,Ramp ID
+RatePlanCharge,AllocationPercent__c,ATR11
+RatePlanCharge,MRAmount__c,ATR10
+RatePlanCharge,DeliveryDate__c,DATE2
+Subscription,GoLiveDate__c,DATE1
+OrderLineItem,PurchaseOrderNumber,PO_NUM
+Account,SEUseCase__c,ATR3
+OrderLineItem,OpportunityID__c,ATR46
+OrderLineItem,QuoteID__c,ATR45
+Account,RABusUnit__c,ATR7
+Subscription,QuoteId__c,ATR8
+Subscription,OpportunityID__c,ATR5
+ProductRatePlanCharge,POBCRITERIA__c,ATR1
