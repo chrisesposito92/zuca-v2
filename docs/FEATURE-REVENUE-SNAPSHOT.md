@@ -37,6 +37,7 @@ This feature lets users connect a Zuora Billing tenant, select subscription(s), 
 6. **Exports & Visualization**
    - Export tables to Excel (Contracts/Orders, Billings, Rev Rec raw + pivot, Summary).
    - Rev Rec Waterfall includes an optional chart toggle with modes: Totals, Stacked by line item, or Grouped by line item.
+   - Rev Rec Waterfall pivot table always includes a Total column at the far right.
 
 ## API Routes
 - `POST /api/revenue-snapshot/auth` – save credentials for a named tenant (encrypted)

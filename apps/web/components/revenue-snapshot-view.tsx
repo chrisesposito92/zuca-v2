@@ -172,12 +172,17 @@ function buildRevRecPivot(rows: Array<Record<string, any>>): {
     const allocated = normalizeNumber(group.base.Allocated);
     row.Allocated = allocated;
     totalAllocated += allocated;
+    let rowTotal = 0;
 
     periods.forEach((period) => {
       const amount = group.periods[period] ?? 0;
       row[period] = amount;
+      rowTotal += amount;
       totals[period] = (totals[period] ?? 0) + amount;
     });
+
+    row["Total"] = rowTotal;
+    totals["Total"] = (totals["Total"] ?? 0) + rowTotal;
 
     pivotRows.push(row);
 
@@ -217,6 +222,7 @@ function RevRecWaterfallTable({ rows }: { rows: Array<Record<string, any>> }) {
     pivot.periods.forEach((period) => {
       totalRow[period] = pivot.totals[period] ?? 0;
     });
+    totalRow["Total"] = pivot.totals["Total"] ?? 0;
     pivotRows.push(totalRow);
   }
 
@@ -421,6 +427,7 @@ export function RevenueSnapshotView({ result, sessionId, status, createdAt, mode
           pivot.periods.forEach((period) => {
             totalRow[period] = pivot.totals[period] ?? 0;
           });
+          totalRow["Total"] = pivot.totals["Total"] ?? 0;
           pivotRows.push(totalRow);
         }
         addSheetFromArray(pivotRows, "Rev Rec Pivot");
