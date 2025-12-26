@@ -23,6 +23,7 @@ This document tracks the implementation of the ZUCA v2 web frontend.
 | 7. History & Polish | ✅ Complete | Session list with search/delete |
 | 8. Deployment | ⏳ Pending | |
 | 9. Model Selection | ✅ Complete | Multi-provider (GPT/Gemini) selection + persistence |
+| 10. Revenue Snapshot | 🧩 In Progress | Zuora Billing → Revenue snapshot UI + API integration |
 
 ---
 
@@ -223,6 +224,31 @@ apps/web/
 
 ### Related Plan
 - See `docs/PLAN-GEMINI-MODEL-SUPPORT.md`
+
+---
+
+## Phase 10: Revenue Snapshot 🧩
+
+### Completed
+- [x] Named tenant connection UI (save multiple tenants + active selection)
+- [x] Subscription selection list with search + pagination
+- [x] Subscription list sorting (client-side)
+- [x] Snapshot configuration inputs (SSP method, augmentation rules, notes)
+- [x] API routes for connection, subscription retrieval, and snapshot generation
+- [x] Snapshot result view in solution page
+
+### Remaining
+- [ ] Step progress indicators for long snapshot runs
+- [ ] Export options (CSV/Excel) for snapshot tables
+
+### Key Files
+```
+apps/web/app/(main)/revenue-snapshot/page.tsx
+apps/web/app/api/revenue-snapshot/auth/route.ts
+apps/web/app/api/revenue-snapshot/subscriptions/route.ts
+apps/web/app/api/revenue-snapshot/generate/route.ts
+apps/web/components/revenue-snapshot-view.tsx
+```
 
 ---
 

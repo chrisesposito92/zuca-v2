@@ -44,6 +44,11 @@ export const PROMPTS = {
   SUMMARIZE: 'summarize',
   EXPERT_ASSISTANT: 'expert-assistant',
   ROUTER: 'router',
+  // Revenue Snapshot prompts
+  SNAPSHOT_CONTRACTS_ORDERS: 'revenue-snapshot-contracts-orders',
+  SNAPSHOT_BILLINGS: 'revenue-snapshot-billings',
+  SNAPSHOT_REVREC_WATERFALL: 'revenue-snapshot-revrec-waterfall',
+  SNAPSHOT_SUMMARY: 'revenue-snapshot-summary',
   // Still used by quickAnalysis
   DETECT_CAPABILITIES: 'detect-capabilities',
   // UC Generator prompts

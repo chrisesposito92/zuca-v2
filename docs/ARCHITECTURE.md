@@ -155,6 +155,20 @@ zuca-v2/
 
 ---
 
+## Revenue Snapshot Pipeline (Read-Only)
+
+This is a parallel pipeline used by the web app to generate Zuora Revenue-style snapshots from **actual** Zuora Billing tenant data. It is intentionally read-only and does not create or modify any tenant records.
+
+| Step | LLM? | Description |
+|------|------|-------------|
+| Fetch Source Data | No | OAuth + Data Query (OTR) or ZOQL/REST (non-OTR) |
+| Build Contracts/Orders | Yes | Map BookingTransaction → Revenue fields |
+| Build Billings | Yes | Map BillingTransaction → Revenue fields |
+| Build Rev Rec Waterfall | Yes | Snapshot recognition from Contracts/Orders |
+| Summarize | Yes | Consolidate assumptions/questions |
+
+---
+
 ## Key Improvements Over Dify
 
 ### Tool Integration

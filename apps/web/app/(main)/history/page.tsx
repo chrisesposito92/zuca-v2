@@ -21,7 +21,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { useSessions, useDeleteSession } from "@/hooks/useSessions";
 
-type SessionTypeFilter = "all" | "analyze" | "uc-generate";
+type SessionTypeFilter = "all" | "analyze" | "uc-generate" | "revenue-snapshot";
 
 export default function HistoryPage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -118,7 +118,7 @@ export default function HistoryPage() {
             <span className="gradient-text">Session History</span>
           </h1>
           <p className="text-default-500 text-lg mt-1">
-            View and resume your previous analysis sessions
+            View and resume your previous sessions
           </p>
         </div>
         <div className="space-y-4">
@@ -242,6 +242,20 @@ export default function HistoryPage() {
             }
           />
           <Tab
+            key="revenue-snapshot"
+            title={
+              <div className="flex items-center gap-2">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                </svg>
+                <span>Revenue Snapshot</span>
+                <Chip size="sm" variant="flat" className="bg-default-200 text-default-600 text-xs">
+                  {sessions.filter((s) => s.session_type === "revenue-snapshot").length}
+                </Chip>
+              </div>
+            }
+          />
+          <Tab
             key="uc-generate"
             title={
               <div className="flex items-center gap-2">
@@ -290,14 +304,18 @@ export default function HistoryPage() {
               {sessions.length === 0
                 ? "No sessions yet"
                 : sessionTypeFilter !== "all" && sessions.filter(s => s.session_type === sessionTypeFilter).length === 0
-                ? `No ${sessionTypeFilter === "analyze" ? "analysis" : "generation"} sessions yet`
+                ? `No ${sessionTypeFilter === "analyze" ? "analysis" : sessionTypeFilter === "uc-generate" ? "generation" : "snapshot"} sessions yet`
                 : "No sessions match your search"}
             </p>
             <p className="text-default-400 text-sm mt-1">
               {sessions.length === 0
-                ? "Start a new analysis to see your history here"
+                ? "Start a new session to see your history here"
                 : sessionTypeFilter !== "all" && sessions.filter(s => s.session_type === sessionTypeFilter).length === 0
-                ? sessionTypeFilter === "analyze" ? "Run an analysis from the Analyze page" : "Generate use cases from the Analyze page"
+                ? sessionTypeFilter === "analyze"
+                  ? "Run an analysis from the Analyze page"
+                  : sessionTypeFilter === "uc-generate"
+                  ? "Generate use cases from the Analyze page"
+                  : "Create a snapshot from the Revenue Snapshot page"
                 : "Try adjusting your search terms or filter"}
             </p>
           </CardBody>
@@ -345,10 +363,16 @@ export default function HistoryPage() {
                         className={
                           session.session_type === "analyze"
                             ? "bg-primary/20 text-primary"
-                            : "bg-secondary/20 text-secondary"
+                            : session.session_type === "uc-generate"
+                            ? "bg-secondary/20 text-secondary"
+                            : "bg-default-200/70 text-default-600"
                         }
                       >
-                        {session.session_type === "analyze" ? "Analyze" : "Generate"}
+                        {session.session_type === "analyze"
+                          ? "Analyze"
+                          : session.session_type === "uc-generate"
+                          ? "Generate"
+                          : "Snapshot"}
                       </Chip>
                       {session.llm_model && (
                         <Chip

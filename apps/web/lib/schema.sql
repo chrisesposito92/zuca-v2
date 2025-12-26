@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS sessions (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    session_type VARCHAR(20) NOT NULL, -- 'analyze' | 'uc-generate'
+    session_type VARCHAR(20) NOT NULL, -- 'analyze' | 'uc-generate' | 'revenue-snapshot'
     llm_model VARCHAR(50),             -- 'gpt-5.2' | 'gemini-3-pro-preview' | 'gemini-3-flash-preview'
     input JSONB NOT NULL,              -- ZucaInput or UCGeneratorInput
     result JSONB,                      -- ZucaOutput or UCGeneratorOutput
@@ -79,6 +79,19 @@ CREATE TABLE IF NOT EXISTS bug_reports (
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+-- Zuora Connections table (stores encrypted tenant credentials per user)
+CREATE TABLE IF NOT EXISTS zuora_connections (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID REFERENCES auth_users(id) ON DELETE CASCADE,
+    tenant_name TEXT NOT NULL,
+    base_url TEXT NOT NULL,
+    client_id TEXT NOT NULL,
+    client_secret_encrypted TEXT NOT NULL,
+    is_active BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
 -- RAG Document Chunks table (for vector search)
 CREATE TABLE IF NOT EXISTS doc_chunks (
     id TEXT PRIMARY KEY,                    -- e.g., "zuora-billing/bill-runs.md#0"
@@ -102,6 +115,9 @@ CREATE INDEX IF NOT EXISTS idx_feedback_session_id ON feedback(session_id);
 CREATE INDEX IF NOT EXISTS idx_feedback_rating ON feedback(rating);
 CREATE INDEX IF NOT EXISTS idx_bug_reports_session_id ON bug_reports(session_id);
 CREATE INDEX IF NOT EXISTS idx_bug_reports_status ON bug_reports(status);
+CREATE INDEX IF NOT EXISTS idx_zuora_connections_user_id ON zuora_connections(user_id);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_zuora_connections_user_name ON zuora_connections(user_id, tenant_name);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_zuora_connections_active ON zuora_connections(user_id) WHERE is_active;
 
 -- Vector similarity index for RAG (HNSW is faster for our dataset size)
 CREATE INDEX IF NOT EXISTS idx_doc_chunks_embedding ON doc_chunks
@@ -121,5 +137,12 @@ $$ language 'plpgsql';
 DROP TRIGGER IF EXISTS update_sessions_updated_at ON sessions;
 CREATE TRIGGER update_sessions_updated_at
     BEFORE UPDATE ON sessions
+    FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at_column();
+
+-- Trigger for zuora_connections updated_at
+DROP TRIGGER IF EXISTS update_zuora_connections_updated_at ON zuora_connections;
+CREATE TRIGGER update_zuora_connections_updated_at
+    BEFORE UPDATE ON zuora_connections
     FOR EACH ROW
     EXECUTE FUNCTION update_updated_at_column();

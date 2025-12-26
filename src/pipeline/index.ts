@@ -38,3 +38,6 @@ export {
 
 // All pipeline steps
 export * from './steps/index';
+
+// Revenue Snapshot pipeline
+export * from './revenue-snapshot/index';

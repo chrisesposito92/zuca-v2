@@ -49,6 +49,22 @@ export {
   SummaryOutputSchema,
 } from './types/output';
 
+// Revenue Snapshot types
+export {
+  RevenueSnapshotInput,
+  RevenueSnapshotInputSchema,
+  RevenueSnapshotOutput,
+  RevenueSnapshotOutputSchema,
+  RevenueSnapshotSource,
+  RevenueSnapshotSourceSchema,
+  RevenueSnapshotTableOutput,
+  RevenueSnapshotTableOutputSchema,
+  RevenueSnapshotSummary,
+  RevenueSnapshotSummarySchema,
+  SnapshotSspMethod,
+  SnapshotSspMethodSchema,
+} from './types/revenue-snapshot';
+
 // Pipeline
 export {
   runPipeline,
@@ -60,6 +76,11 @@ export {
   PipelineOptions,
   PipelineSession,
 } from './pipeline/index';
+
+export {
+  runRevenueSnapshotPipeline,
+  RevenueSnapshotOptions,
+} from './pipeline/revenue-snapshot';
 
 // UC Generator
 export {

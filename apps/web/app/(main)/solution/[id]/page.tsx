@@ -20,6 +20,8 @@ import { useQueryClient } from "@tanstack/react-query";
 import { ConversationPanel } from "@/components/chat";
 import { UCGenerateView } from "@/components/uc-generate-view";
 import type { ZucaOutput, UCGeneratorOutput } from "@zuca/types";
+import type { RevenueSnapshotOutput } from "@zuca/types/revenue-snapshot";
+import { RevenueSnapshotView } from "@/components/revenue-snapshot-view";
 import * as XLSX from "xlsx";
 
 interface PageProps {
@@ -146,6 +148,57 @@ export default function SolutionPage({ params }: PageProps) {
         result={ucResult}
         sessionId={session.id}
         customerName={ucInput.customer_name || ucResult.generated?.customer_name || "Unknown"}
+        status={session.status}
+        createdAt={session.created_at}
+        model={session.llm_model}
+      />
+    );
+  }
+
+  if (session.session_type === "revenue-snapshot") {
+    const snapshotResult = session.result as RevenueSnapshotOutput | null;
+    if (!snapshotResult) {
+      return (
+        <div className="space-y-8">
+          <div className="flex items-center gap-4">
+            <Link href="/history">
+              <Button
+                variant="bordered"
+                size="sm"
+                className="border-2 border-default-300 hover:border-primary"
+                startContent={
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                  </svg>
+                }
+              >
+                Back to History
+              </Button>
+            </Link>
+          </div>
+          <Card className="glass-card border-warning/30">
+            <CardBody className="p-6 flex items-center gap-4">
+              <div className="w-12 h-12 rounded-full bg-warning/20 flex items-center justify-center">
+                <svg className="w-6 h-6 text-warning" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div>
+                <p className="font-medium text-warning">No Results</p>
+                <p className="text-sm text-default-500">
+                  This Revenue Snapshot session has no results yet.
+                </p>
+              </div>
+            </CardBody>
+          </Card>
+        </div>
+      );
+    }
+
+    return (
+      <RevenueSnapshotView
+        result={snapshotResult}
+        sessionId={session.id}
         status={session.status}
         createdAt={session.created_at}
         model={session.llm_model}

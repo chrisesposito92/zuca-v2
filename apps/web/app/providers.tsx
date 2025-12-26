@@ -1,6 +1,7 @@
 "use client";
 
 import { HeroUIProvider } from "@heroui/react";
+import { SSRProvider } from "@react-aria/ssr";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -21,9 +22,11 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <HeroUIProvider navigate={router.push}>
-        {children}
-      </HeroUIProvider>
+      <SSRProvider>
+        <HeroUIProvider navigate={router.push}>
+          {children}
+        </HeroUIProvider>
+      </SSRProvider>
     </QueryClientProvider>
   );
 }

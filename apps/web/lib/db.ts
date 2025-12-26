@@ -7,13 +7,14 @@
 
 import { sql } from '@vercel/postgres';
 import type { ZucaInput, ZucaOutput } from '@zuca/types';
+import type { RevenueSnapshotInput, RevenueSnapshotOutput } from '@zuca/types/revenue-snapshot';
 import type { UCGeneratorInput, UCGeneratorOutput } from '@zuca/types/uc-generator';
 
 // ============================================================================
 // Types
 // ============================================================================
 
-export type SessionType = 'analyze' | 'uc-generate';
+export type SessionType = 'analyze' | 'uc-generate' | 'revenue-snapshot';
 export type SessionStatus = 'pending' | 'running' | 'completed' | 'failed';
 export type MessageRole = 'user' | 'assistant';
 
@@ -22,8 +23,8 @@ export interface DbSession {
   created_at: Date;
   updated_at: Date;
   session_type: SessionType;
-  input: ZucaInput | UCGeneratorInput;
-  result: ZucaOutput | UCGeneratorOutput | null;
+  input: ZucaInput | UCGeneratorInput | RevenueSnapshotInput;
+  result: ZucaOutput | UCGeneratorOutput | RevenueSnapshotOutput | null;
   status: SessionStatus;
   current_step: number;
   error_message: string | null;
@@ -59,13 +60,25 @@ export interface DbInviteCode {
   created_at: Date;
 }
 
+export interface DbZuoraConnection {
+  id: string;
+  user_id: string;
+  tenant_name: string;
+  base_url: string;
+  client_id: string;
+  client_secret_encrypted: string;
+  is_active: boolean;
+  created_at: Date;
+  updated_at: Date;
+}
+
 // ============================================================================
 // Session Operations
 // ============================================================================
 
 export async function createSession(
   sessionType: SessionType,
-  input: ZucaInput | UCGeneratorInput,
+  input: ZucaInput | UCGeneratorInput | RevenueSnapshotInput,
   userId?: string | null,
   llmModel?: string | null
 ): Promise<DbSession> {
@@ -142,7 +155,7 @@ export async function updateSessionStatus(
 
 export async function updateSessionResult(
   id: string,
-  result: ZucaOutput | UCGeneratorOutput
+  result: ZucaOutput | UCGeneratorOutput | RevenueSnapshotOutput
 ): Promise<void> {
   await sql`
     UPDATE sessions
@@ -175,6 +188,122 @@ export async function deleteSession(id: string): Promise<boolean> {
     DELETE FROM sessions WHERE id = ${id}
   `;
   return (result.rowCount ?? 0) > 0;
+}
+
+// ============================================================================
+// Zuora Connection Operations
+// ============================================================================
+
+export async function upsertZuoraConnection(
+  userId: string,
+  tenantName: string,
+  baseUrl: string,
+  clientId: string,
+  clientSecretEncrypted: string,
+  setActive = true
+): Promise<DbZuoraConnection> {
+  if (setActive) {
+    await sql`
+      UPDATE zuora_connections
+      SET is_active = false
+      WHERE user_id = ${userId}
+    `;
+  }
+
+  const result = await sql<DbZuoraConnection>`
+    INSERT INTO zuora_connections (user_id, tenant_name, base_url, client_id, client_secret_encrypted, is_active)
+    VALUES (${userId}, ${tenantName}, ${baseUrl}, ${clientId}, ${clientSecretEncrypted}, ${setActive})
+    ON CONFLICT (user_id, tenant_name)
+    DO UPDATE SET
+      base_url = EXCLUDED.base_url,
+      client_id = EXCLUDED.client_id,
+      client_secret_encrypted = EXCLUDED.client_secret_encrypted,
+      is_active = EXCLUDED.is_active,
+      updated_at = NOW()
+    RETURNING *
+  `;
+  return result.rows[0];
+}
+
+export async function listZuoraConnections(userId: string): Promise<DbZuoraConnection[]> {
+  const result = await sql<DbZuoraConnection>`
+    SELECT * FROM zuora_connections
+    WHERE user_id = ${userId}
+    ORDER BY updated_at DESC
+  `;
+  return result.rows;
+}
+
+export async function getActiveZuoraConnection(userId: string): Promise<DbZuoraConnection | null> {
+  const result = await sql<DbZuoraConnection>`
+    SELECT * FROM zuora_connections
+    WHERE user_id = ${userId} AND is_active = true
+    ORDER BY updated_at DESC
+    LIMIT 1
+  `;
+  return result.rows[0] ?? null;
+}
+
+export async function getZuoraConnectionById(
+  userId: string,
+  connectionId: string
+): Promise<DbZuoraConnection | null> {
+  const result = await sql<DbZuoraConnection>`
+    SELECT * FROM zuora_connections
+    WHERE user_id = ${userId} AND id = ${connectionId}
+  `;
+  return result.rows[0] ?? null;
+}
+
+export async function setActiveZuoraConnection(
+  userId: string,
+  connectionId: string
+): Promise<DbZuoraConnection | null> {
+  await sql`
+    UPDATE zuora_connections
+    SET is_active = false
+    WHERE user_id = ${userId}
+  `;
+
+  const result = await sql<DbZuoraConnection>`
+    UPDATE zuora_connections
+    SET is_active = true, updated_at = NOW()
+    WHERE user_id = ${userId} AND id = ${connectionId}
+    RETURNING *
+  `;
+  return result.rows[0] ?? null;
+}
+
+export async function deleteZuoraConnection(
+  userId: string,
+  connectionId: string
+): Promise<boolean> {
+  const result = await sql<DbZuoraConnection>`
+    DELETE FROM zuora_connections
+    WHERE user_id = ${userId} AND id = ${connectionId}
+    RETURNING *
+  `;
+  const deleted = result.rows[0];
+  if (!deleted) return false;
+
+  if (deleted.is_active) {
+    const next = await sql<DbZuoraConnection>`
+      SELECT * FROM zuora_connections
+      WHERE user_id = ${userId}
+      ORDER BY updated_at DESC
+      LIMIT 1
+    `;
+    const nextRow = next.rows[0];
+    if (nextRow) {
+      await sql`
+        UPDATE zuora_connections
+        SET is_active = true, updated_at = NOW()
+        WHERE id = ${nextRow.id}
+      `;
+    }
+  }
+
+  return true;
 }
 
 // ============================================================================

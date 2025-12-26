@@ -28,6 +28,24 @@ These schemas capture **what** to build but lack the full field set required by 
 
 ---
 
+## Revenue Snapshot (Read-Only, In Progress)
+
+This feature connects to a Zuora Billing tenant, retrieves **actual** billing data, and generates a Zuora Revenue-style snapshot (Contracts/Orders, Billings, Rev Rec Waterfall) without creating any records in Zuora. It is intentionally read-only and does **not** project future invoices or usage.
+
+Key components:
+- OAuth-based tenant connection with encrypted credential storage
+- Subscription selection and local filtering
+- OTR detection (BookingTransaction presence)
+- Data Query for OTR objects (BookingTransaction, BillingTransaction, RevenueRecognitionEventsTransaction)
+- ZOQL/REST for non-OTR objects (Subscription, Order, Invoice, Credit Memo, Usage, Rate Plan Charge)
+- POB template assignment via custom field `POBCRITERIA__c` on ProductRatePlanCharge
+
+This work is a prerequisite for future **write** operations, but does not modify tenant data.
+
+See `docs/FEATURE-REVENUE-SNAPSHOT.md` for implementation notes.
+
+---
+
 ## New ZB API-Ready Schemas (Added, Not Wired)
 
 The following schemas have been added to `src/types/output.ts` but are **not yet connected to any pipeline steps**. They are dormant type definitions awaiting future implementation.

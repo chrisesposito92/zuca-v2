@@ -4,12 +4,13 @@
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import type { ZucaOutput } from "@zuca/types";
+import type { RevenueSnapshotOutput } from "@zuca/types/revenue-snapshot";
 import type { UCGeneratorOutput } from "@zuca/types/uc-generator";
 
 // Types
 interface Session {
   id: string;
-  session_type: "analyze" | "uc-generate";
+  session_type: "analyze" | "uc-generate" | "revenue-snapshot";
   customer_name: string;
   status: "pending" | "running" | "completed" | "failed";
   created_at: string;
@@ -19,7 +20,7 @@ interface Session {
 
 interface SessionDetail extends Session {
   input: Record<string, unknown>;
-  result: ZucaOutput | UCGeneratorOutput | null;
+  result: ZucaOutput | UCGeneratorOutput | RevenueSnapshotOutput | null;
   current_step: number;
   error_message: string | null;
   conversation_history: Array<{
