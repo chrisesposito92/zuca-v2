@@ -71,6 +71,124 @@ function TableView({ rows }: { rows: Array<Record<string, any>> }) {
   );
 }
 
+const MONTH_INDEX: Record<string, number> = {
+  Jan: 0,
+  Feb: 1,
+  Mar: 2,
+  Apr: 3,
+  May: 4,
+  Jun: 5,
+  Jul: 6,
+  Aug: 7,
+  Sep: 8,
+  Oct: 9,
+  Nov: 10,
+  Dec: 11,
+};
+
+function parsePeriod(period: string): number {
+  const [mon, yr] = period.split("-");
+  if (!mon || !yr) return Number.POSITIVE_INFINITY;
+  const year = Number(yr);
+  const month = MONTH_INDEX[mon] ?? 0;
+  if (Number.isNaN(year)) return Number.POSITIVE_INFINITY;
+  return year * 12 + month;
+}
+
+function normalizeNumber(value: unknown): number {
+  if (typeof value === "number" && Number.isFinite(value)) return value;
+  if (typeof value === "string") {
+    const parsed = Number(value.replace(/,/g, ""));
+    if (Number.isFinite(parsed)) return parsed;
+  }
+  return 0;
+}
+
+function isRevRecRow(row: Record<string, any>): boolean {
+  return "Period" in row || "period" in row;
+}
+
+function RevRecWaterfallTable({ rows }: { rows: Array<Record<string, any>> }) {
+  if (!rows.length) {
+    return <p className="text-default-500 italic">No data available</p>;
+  }
+
+  if (!isRevRecRow(rows[0])) {
+    return <TableView rows={rows} />;
+  }
+
+  const periodSet = new Set<string>();
+  const groups = new Map<string, { base: Record<string, any>; periods: Record<string, number> }>();
+
+  rows.forEach((row) => {
+    const period = (row.Period ?? row.period) as string | undefined;
+    if (!period) return;
+    periodSet.add(period);
+
+    const lineItem = row["Line Item Num"] ?? row.LineItemNum ?? "";
+    const pobName = row["POB Name"] ?? row.POBName ?? "";
+    const eventName = row["Event Name"] ?? row.EventName ?? "";
+    const startDate = row["Revenue Start Date"] ?? row.RevenueStartDate ?? "";
+    const endDate = row["Revenue End Date"] ?? row.RevenueEndDate ?? "";
+    const allocated = row["Ext Allocated Price"] ?? row.ExtAllocatedPrice ?? row.Allocated ?? 0;
+
+    const key = [lineItem, pobName, eventName, startDate, endDate].join("|");
+    if (!groups.has(key)) {
+      groups.set(key, {
+        base: {
+          "POB Name": pobName,
+          "Event Name": eventName,
+          "Line Item Num": lineItem,
+          "Revenue Start Date": startDate,
+          "Revenue End Date": endDate,
+          Allocated: allocated,
+        },
+        periods: {},
+      });
+    }
+    const group = groups.get(key)!;
+    const amount = normalizeNumber(row.Amount ?? row.amount);
+    group.periods[period] = (group.periods[period] ?? 0) + amount;
+  });
+
+  const periods = Array.from(periodSet).sort((a, b) => parsePeriod(a) - parsePeriod(b));
+  const pivotRows: Array<Record<string, any>> = [];
+  let totalAllocated = 0;
+  const totals: Record<string, number> = {};
+
+  groups.forEach((group) => {
+    const row: Record<string, any> = { ...group.base };
+    const allocated = normalizeNumber(group.base.Allocated);
+    row.Allocated = allocated;
+    totalAllocated += allocated;
+
+    periods.forEach((period) => {
+      const amount = group.periods[period] ?? 0;
+      row[period] = amount;
+      totals[period] = (totals[period] ?? 0) + amount;
+    });
+
+    pivotRows.push(row);
+  });
+
+  if (pivotRows.length > 1) {
+    const totalRow: Record<string, any> = {
+      "POB Name": "Total",
+      "Event Name": "",
+      "Line Item Num": "",
+      "Revenue Start Date": "",
+      "Revenue End Date": "",
+      Allocated: totalAllocated,
+    };
+    periods.forEach((period) => {
+      totalRow[period] = totals[period] ?? 0;
+    });
+    pivotRows.push(totalRow);
+  }
+
+  return <TableView rows={pivotRows} />;
+}
+
 export function RevenueSnapshotView({ result, sessionId, status, createdAt, model }: RevenueSnapshotViewProps) {
   const handleExportJSON = () => {
     const blob = new Blob([JSON.stringify(result, null, 2)], { type: "application/json" });
@@ -193,7 +311,7 @@ export function RevenueSnapshotView({ result, sessionId, status, createdAt, mode
         <Tab key="revrec" title="Rev Rec Waterfall">
           <Card className="glass-card mt-4">
             <CardBody className="p-6">
-              <TableView rows={result.revrec_waterfall.rows} />
+              <RevRecWaterfallTable rows={result.revrec_waterfall.rows} />
             </CardBody>
           </Card>
         </Tab>

@@ -22,9 +22,20 @@ Return a JSON object with:
 
 ## Instructions
 - Use allocated amounts from the Contracts/Orders snapshot rows.
-- **Each BookingTransaction line → one Rev Rec Waterfall row** (do not split into future periods).
-- If POB template implies a recognition pattern (e.g., ratable, point-in-time), reflect it in the row using a clear field name.
-- If you cannot determine a recognition pattern, add an assumption.
+- **Generate periodized Rev Rec Waterfall rows (like the main Analyze pipeline)**:
+  - Required columns for each row:
+    - `Line Item Num`
+    - `POB Name`
+    - `Event Name`
+    - `Revenue Start Date`
+    - `Revenue End Date`
+    - `Ext Allocated Price`
+    - `Period` (format `Jan-25`)
+    - `Amount`
+  - **Ratable**: split `Ext Allocated Price` evenly across months between Revenue Start/End (inclusive).
+  - **Point-in-time**: single row in the month of Revenue Start Date with Amount = Ext Allocated Price.
+  - If pattern is unclear, add an assumption and default to ratable.
+- Do not invent invoices or usage beyond the contract period. Periodization should be based only on provided start/end dates.
 
 ## Data Augmentation Rules
 - Apply the user-provided augmentation rules **only if they can be done deterministically** with the provided data.
@@ -32,4 +43,4 @@ Return a JSON object with:
 
 ## Output Quality Bar
 - Keep identifiers aligned with Contracts/Orders rows (Line Item Num, Subscription, POB Name).
-- Do not fabricate additional events or periods.
+- Ensure `Period` and `Amount` are present on every row.
