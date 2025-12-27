@@ -23,7 +23,7 @@ This document tracks the implementation of the ZUCA v2 web frontend.
 | 7. History & Polish | ✅ Complete | Session list with search/delete |
 | 8. Deployment | ⏳ Pending | |
 | 9. Model Selection | ✅ Complete | Multi-provider (GPT/Gemini) selection + persistence |
-| 10. Revenue Snapshot | 🧩 In Progress | Zuora Billing → Revenue snapshot UI + API integration (Excel export + Rev Rec chart toggle + table column filtering) |
+| 10. Revenue Snapshot | ✅ Complete | Zuora Billing → Revenue snapshot UI + API integration (Excel export + Rev Rec chart toggle + table column filtering) |
 
 ---
 
@@ -296,6 +296,20 @@ apps/web/components/revenue-snapshot-view.tsx
 - [ ] Update CLAUDE.md
 - [ ] Update README.md
 - [ ] Test production deployment
+
+---
+
+## Candidate Ideas (Not Scheduled)
+
+See `docs/FEATURE-CANDIDATES.md` for deeper notes on these potential additions:
+
+- Step Timeline card in solution view
+- Schema drift guardrails (single source of truth)
+- Automatic consistency checks + summary warnings
+- Revenue snapshot table virtualization
+- Contract ingestion (PDF/structured input → ZucaInput)
+- Deterministic re-runs (model + temperature + seed)
+- Global error boundary with draft preservation
 
 ---
 
