@@ -35,7 +35,65 @@ Return a JSON object with:
 - Unreleased Revenue
 - Released Revenue
 - POB Template
-- ATR1 (ATR1 represents the POB Template / POBCRITERIA__c in Zuora Revenue)
+
+### Allowed Columns (Contracts/Orders)
+Use only these exact field names in each row:
+- Adjustment Recognized to Date
+- Allocatable Ext Price
+- Allocation Eligible Flag
+- Average Pricing Method
+- Billed - Released Revenue
+- Billed - Unreleased Revenue
+- Billed Amount
+- Carves Adjustment
+- Contract Mod Rule
+- Contract Modification Date
+- Contractual Recognized to Date
+- Cumulative Allocated
+- Cumulative Carves
+- Customer Name
+- Ext Allocated Price
+- Ext List Price
+- Ext SSP Price
+- Ext Sell Price
+- Last CT Mod Period
+- Lead Line
+- Line Item Num
+- Ordered Qty
+- POB Dependency
+- POB IDENTIFIER
+- POB Name
+- POB Rule Name
+- POB Satisfied
+- POB Template
+- Posted PCT as on Last CT Mod
+- Product Category
+- Product Family
+- RPC Num
+- RPC Segment
+- RPC Type
+- Ramp Allocated Percent
+- Ramp Number
+- Release Event
+- Released Revenue
+- Revenue End Date
+- Revenue Start Date
+- SSP Group ID
+- SSP Percent
+- SSP Percentage
+- SSP Price
+- SSP Type
+- Sales Order Date
+- Subscription Name
+- Subscription Version
+- Transaction Currency
+- Transaction Price
+- Ttl Allocatable
+- Unit List Price
+- Unit Sell Price
+- Unreleased Revenue
+- VC Amount
+- Within SSP range
 
 ## OTR-Enabled Tenants
 - Use **BookingTransaction** records.

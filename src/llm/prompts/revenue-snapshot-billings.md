@@ -20,6 +20,51 @@ Return a JSON object with:
 - assumptions: array of strings
 - open_questions: array of strings
 
+### Allowed Columns (Billings)
+Use only these exact field names in each row:
+- Billing Quantity
+- Billing Reference
+- Ext List Price
+- Functional Currency
+- Functional Ex Rate
+- Global Ex Rate
+- Invoice Amount (F)
+- Invoice Amount (T)
+- Invoice Date
+- Invoice Line ID
+- Invoice Line Number
+- Invoice Num
+- Invoice Owner
+- Invoice Qty
+- Item Number
+- Line Item Num
+- Orig Inv Line ID
+- Parent Charge Number
+- Parent Charge Segment
+- RPC Num
+- RPC Segment
+- RPC Trigger Event
+- RPC Type
+- Rate Plan Name
+- Rc Bill Cancel Flag
+- Rc Bill Credit Rule
+- Rc Bill Source
+- Rc Bill Type
+- Rc Bill Unit List Price
+- Rc Bill Unit Sell Price
+- Released Revenue
+- Revenue End Date
+- Revenue Start Date
+- Sales Order Line ID
+- Sales Order Line Num
+- Sales Order Num
+- Subscription End Date
+- Subscription Name
+- Subscription Start Date
+- Transaction Currency
+- Unreleased Revenue
+- Void Flag
+
 ## OTR-Enabled Tenants
 - Use **BillingTransaction** records.
 - **Each BillingTransaction line → one Billings row.**

@@ -72,8 +72,6 @@ export const RevenueSnapshotOutputSchema = z.object({
   input: RevenueSnapshotInputSchema,
   otr_enabled: z.boolean(),
   source_counts: RevenueSnapshotSourceCountsSchema.optional(),
-  contracts_orders: RevenueSnapshotTableOutputSchema,
-  billings: RevenueSnapshotTableOutputSchema,
   revrec_waterfall: RevenueSnapshotTableOutputSchema,
   summary: RevenueSnapshotSummarySchema,
 });

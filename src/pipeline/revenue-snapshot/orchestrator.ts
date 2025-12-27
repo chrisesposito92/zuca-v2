@@ -7,9 +7,7 @@ import {
   RevenueSnapshotSourceCounts,
 } from '../../types/revenue-snapshot';
 import {
-  buildSnapshotContractsOrders,
-  buildSnapshotBillings,
-  buildSnapshotRevRecWaterfall,
+  buildSnapshotWaterfall,
   summarizeSnapshot,
 } from './steps';
 
@@ -40,10 +38,9 @@ export async function runRevenueSnapshotPipeline(
   const sessionId = options.sessionId || uuidv4();
   const selectedModel = options.model;
 
-  const contractsOrders = await buildSnapshotContractsOrders(input, source, undefined, 'high', selectedModel);
-  const billings = await buildSnapshotBillings(input, source, undefined, 'medium', selectedModel);
-  const revrec = await buildSnapshotRevRecWaterfall(input, source, contractsOrders, undefined, 'high', selectedModel);
-  const summary = await summarizeSnapshot(input, source, contractsOrders, billings, revrec, undefined, 'medium', selectedModel);
+  // Single step handles allocations + periodization
+  const revrec = await buildSnapshotWaterfall(input, source, undefined, 'high', selectedModel);
+  const summary = await summarizeSnapshot(input, source, revrec, undefined, 'high', selectedModel);
 
   return {
     session_id: sessionId,
@@ -51,8 +48,6 @@ export async function runRevenueSnapshotPipeline(
     input,
     otr_enabled: source.otr_enabled,
     source_counts: buildSourceCounts(source),
-    contracts_orders: contractsOrders,
-    billings,
     revrec_waterfall: revrec,
     summary,
   };

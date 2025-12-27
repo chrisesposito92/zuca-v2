@@ -11,7 +11,7 @@ This file is for LLM contributors. For install/run commands and product overview
 - `herouitheme.json` - HeroUI theme tokens consumed by Tailwind
 
 ## Common dev commands (minimal)
-- `npm run dev` - Express API + pipeline (tsx watch)
+- `npm run dev` - Next.js web app (same as `npm run dev:web`)
 - `npm run dev:web` - Next.js web app
 
 ## Pipeline v2 (actual runtime)
@@ -77,6 +77,11 @@ This file is for LLM contributors. For install/run commands and product overview
 - TypeScript strict; no repo-wide ESLint/Prettier config. Match the surrounding file style.
 - ESM modules everywhere; Node >= 20.
 - Web app uses `@/` alias to `apps/web` and `@zuca/*` to root `src`; keep imports consistent.
+
+## Testing expectations
+- Changes must include relevant test updates/additions; keep the full suite passing (`npm run test:run`).
+- New features are not complete until they ship with coverage for core behavior and edge cases.
+- Prefer meaningful behavior-driven tests over checkbox coverage.
 
 ## Docs hygiene
 - When changing core behavior, update `docs/ROADMAP-FRONTEND.md` or feature notes.

@@ -1,4 +1,4 @@
-import { complete, getZuoraMcpTools, ReasoningEffort } from '../../../llm/client';
+import { complete, ReasoningEffort } from '../../../llm/client';
 import type { LlmModel } from '../../../types/llm';
 import { loadPrompt, PROMPTS } from '../../../llm/prompts/index';
 import {
@@ -9,6 +9,61 @@ import {
 } from '../../../types/revenue-snapshot';
 import { loadBillingMappingCsv } from '../mappings';
 import { extractJsonPayload } from './json';
+// Field list sourced from docs/Golden Use Cases/golden_use_cases_zr_tables.json (BILLINGS).
+const BILLINGS_FIELDS = [
+  'Billing Quantity',
+  'Billing Reference',
+  'Ext List Price',
+  'Functional Currency',
+  'Functional Ex Rate',
+  'Global Ex Rate',
+  'Invoice Amount (F)',
+  'Invoice Amount (T)',
+  'Invoice Date',
+  'Invoice Line ID',
+  'Invoice Line Number',
+  'Invoice Num',
+  'Invoice Owner',
+  'Invoice Qty',
+  'Item Number',
+  'Line Item Num',
+  'Orig Inv Line ID',
+  'Parent Charge Number',
+  'Parent Charge Segment',
+  'RPC Num',
+  'RPC Segment',
+  'RPC Trigger Event',
+  'RPC Type',
+  'Rate Plan Name',
+  'Rc Bill Cancel Flag',
+  'Rc Bill Credit Rule',
+  'Rc Bill Source',
+  'Rc Bill Type',
+  'Rc Bill Unit List Price',
+  'Rc Bill Unit Sell Price',
+  'Released Revenue',
+  'Revenue End Date',
+  'Revenue Start Date',
+  'Sales Order Line ID',
+  'Sales Order Line Num',
+  'Sales Order Num',
+  'Subscription End Date',
+  'Subscription Name',
+  'Subscription Start Date',
+  'Transaction Currency',
+  'Unreleased Revenue',
+  'Void Flag',
+] as const;
+
+const VALUE_SCHEMA = { type: ['string', 'number', 'boolean', 'null'] } as const;
+
+const BILLINGS_FIELD_PROPERTIES = BILLINGS_FIELDS.reduce<Record<string, typeof VALUE_SCHEMA>>(
+  (acc, field) => {
+    acc[field] = VALUE_SCHEMA;
+    return acc;
+  },
+  {}
+);
 
 const snapshotTableSchema = {
   type: 'object',
@@ -17,7 +72,8 @@ const snapshotTableSchema = {
       type: 'array',
       items: {
         type: 'object',
-        additionalProperties: true,
+        properties: BILLINGS_FIELD_PROPERTIES,
+        additionalProperties: false,
       },
     },
     assumptions: { type: 'array', items: { type: 'string' } },
@@ -61,7 +117,7 @@ export async function buildSnapshotBillings(
   input: RevenueSnapshotInput,
   source: RevenueSnapshotSource,
   previousOutput?: RevenueSnapshotTableOutput,
-  reasoningEffort: ReasoningEffort = 'medium',
+  reasoningEffort: ReasoningEffort = 'high',
   model?: LlmModel
 ): Promise<RevenueSnapshotTableOutput> {
   const billingMappingCsv = source.otr_enabled ? await loadBillingMappingCsv() : undefined;
@@ -76,9 +132,9 @@ export async function buildSnapshotBillings(
     systemPrompt,
     userMessage,
     tools: ['web_search', 'code_interpreter'],
-    mcpTools: getZuoraMcpTools(),
     reasoningEffort,
     model,
+    responseSchema: snapshotTableSchema,
   });
 
   let parsed: unknown;

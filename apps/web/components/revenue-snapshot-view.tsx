@@ -9,8 +9,6 @@ import {
   CardHeader,
   Chip,
   Switch,
-  Tab,
-  Tabs,
   addToast,
 } from "@heroui/react";
 import Link from "next/link";
@@ -82,25 +80,38 @@ function TableView({
 
 const MONTH_INDEX: Record<string, number> = {
   Jan: 0,
+  January: 0,
   Feb: 1,
+  February: 1,
   Mar: 2,
+  March: 2,
   Apr: 3,
+  April: 3,
   May: 4,
   Jun: 5,
+  June: 5,
   Jul: 6,
+  July: 6,
   Aug: 7,
+  August: 7,
   Sep: 8,
+  September: 8,
   Oct: 9,
+  October: 9,
   Nov: 10,
+  November: 10,
   Dec: 11,
+  December: 11,
 };
 
 function parsePeriod(period: string): number {
   const [mon, yr] = period.split("-");
   if (!mon || !yr) return Number.POSITIVE_INFINITY;
+  const normalizedMon = `${mon[0]?.toUpperCase() ?? ""}${mon.slice(1).toLowerCase()}`;
   const year = Number(yr);
-  const month = MONTH_INDEX[mon] ?? 0;
+  const month = MONTH_INDEX[normalizedMon];
   if (Number.isNaN(year)) return Number.POSITIVE_INFINITY;
+  if (month === undefined) return Number.POSITIVE_INFINITY;
   return year * 12 + month;
 }
 
@@ -113,220 +124,24 @@ function normalizeNumber(value: unknown): number {
   return 0;
 }
 
-const CONTRACTS_BASE_COLUMNS = [
-  "Adjustment Recognized to Date",
-  "Allocatable Ext Price",
-  "Allocation Eligible Flag",
-  "Average Pricing Method",
-  "Billed - Released Revenue",
-  "Billed - Unreleased Revenue",
-  "Billed Amount",
-  "Carves Adjustment",
-  "Contract Mod Rule",
-  "Contract Modification Date",
-  "Contractual Recognized to Date",
-  "Cumulative Allocated",
-  "Cumulative Carves",
-  "Customer Name",
-  "Ext Allocated Price",
-  "Ext List Price",
-  "Ext SSP Price",
-  "Ext Sell Price",
-  "Last CT Mod Period",
-  "Lead Line",
-  "Line Item Num",
-  "Ordered Qty",
-  "POB Dependency",
-  "POB IDENTIFIER",
-  "POB Name",
-  "POB Rule Name",
-  "POB Satisfied",
-  "POB Template",
-  "Posted PCT as on Last CT Mod",
-  "Product Category",
-  "Product Family",
-  "RPC Num",
-  "RPC Segment",
-  "RPC Type",
-  "Ramp Allocated Percent",
-  "Ramp Number",
-  "Release Event",
-  "Released Revenue",
-  "Revenue End Date",
-  "Revenue Start Date",
-  "SSP Group ID",
-  "SSP Percent",
-  "SSP Percentage",
-  "SSP Price",
-  "SSP Type",
-  "Sales Order Date",
-  "Subscription Name",
-  "Subscription Version",
-  "Transaction Currency",
-  "Transaction Price",
-  "Ttl Allocatable",
-  "Unit List Price",
-  "Unit Sell Price",
-  "Unreleased Revenue",
-  "VC Amount",
-  "Within SSP range",
-];
 
-const CONTRACTS_REQUIRED_COLUMNS = [
-  "Unit List Price",
-  "Unit Sell Price",
-  "Ext List Price",
-  "Ext Sell Price",
-  "SSP Price",
-  "Ext SSP Price",
-  "SSP Percent",
-  "Ext Allocated Price",
-  "Allocation Eligible Flag",
-  "Unreleased Revenue",
-  "Released Revenue",
-  "POB Template",
-  "ATR1",
-];
+function isPeriodColumn(key: string): boolean {
+  const [mon, yr] = key.split("-");
+  if (!mon || !yr || !/^\d{2}$/.test(yr)) return false;
+  const normalizedMon = `${mon[0]?.toUpperCase() ?? ""}${mon.slice(1).toLowerCase()}`;
+  return normalizedMon in MONTH_INDEX;
+}
 
-const BILLINGS_BASE_COLUMNS = [
-  "Billing Quantity",
-  "Billing Reference",
-  "Ext List Price",
-  "Functional Currency",
-  "Functional Ex Rate",
-  "Global Ex Rate",
-  "Invoice Amount (F)",
-  "Invoice Amount (T)",
-  "Invoice Date",
-  "Invoice Line ID",
-  "Invoice Line Number",
-  "Invoice Num",
-  "Invoice Owner",
-  "Invoice Qty",
-  "Item Number",
-  "Line Item Num",
-  "Orig Inv Line ID",
-  "Parent Charge Number",
-  "Parent Charge Segment",
-  "RPC Num",
-  "RPC Segment",
-  "RPC Trigger Event",
-  "RPC Type",
-  "Rate Plan Name",
-  "Rc Bill Cancel Flag",
-  "Rc Bill Credit Rule",
-  "Rc Bill Source",
-  "Rc Bill Type",
-  "Rc Bill Unit List Price",
-  "Rc Bill Unit Sell Price",
-  "Released Revenue",
-  "Revenue End Date",
-  "Revenue Start Date",
-  "Sales Order Line ID",
-  "Sales Order Line Num",
-  "Sales Order Num",
-  "Subscription End Date",
-  "Subscription Name",
-  "Subscription Start Date",
-  "Transaction Currency",
-  "Unreleased Revenue",
-  "Void Flag",
-];
-
-function getRowColumnOrder(rows: Array<Record<string, any>>): string[] {
-  const order: string[] = [];
-  const seen = new Set<string>();
+function getMonthColumns(rows: Array<Record<string, any>>): string[] {
+  const periodSet = new Set<string>();
   rows.forEach((row) => {
     Object.keys(row).forEach((key) => {
-      if (!seen.has(key)) {
-        seen.add(key);
-        order.push(key);
+      if (isPeriodColumn(key)) {
+        periodSet.add(key);
       }
     });
   });
-  return order;
-}
-
-function isRampField(name: string): boolean {
-  const lower = name.toLowerCase();
-  return lower.includes("ramp") || lower === "average pricing method";
-}
-
-function isVcField(name: string): boolean {
-  const lower = name.toLowerCase();
-  return lower.includes("vc") || lower.includes("variable");
-}
-
-function buildVisibleColumns(
-  rows: Array<Record<string, any>>,
-  baseColumns: string[],
-  requiredColumns: string[],
-  showAll: boolean
-): string[] {
-  const order = getRowColumnOrder(rows);
-  const orderSet = new Set(order);
-
-  const hasMeaningfulValue = (col: string) =>
-    rows.some((row) => row[col] !== null && row[col] !== undefined && row[col] !== "");
-
-  const base = baseColumns.filter((col) => orderSet.has(col) && hasMeaningfulValue(col));
-  const baseSet = new Set(base);
-  const required = requiredColumns.filter((col) => !baseSet.has(col));
-  const requiredSet = new Set(required);
-
-  const dynamic = order.filter((col) => {
-    if (baseSet.has(col) || requiredSet.has(col)) return false;
-    if (!hasMeaningfulValue(col)) return false;
-    return isRampField(col) || isVcField(col);
-  });
-
-  const selected = [...base, ...required, ...dynamic];
-  if (showAll) {
-    const selectedSet = new Set(selected);
-    order.forEach((col) => {
-      if (!selectedSet.has(col)) {
-        selected.push(col);
-      }
-    });
-  }
-  return selected;
-}
-
-function normalizeContractsRows(rows: Array<Record<string, any>>): Array<Record<string, any>> {
-  return rows.map((row) => {
-    const next = { ...row };
-    if (next["Ext Allocated Price"] === undefined) {
-      next["Ext Allocated Price"] =
-        next["Ext Allocated"] ??
-        next["Ext Allocated Amount"] ??
-        next["Allocated Price"] ??
-        next["Allocated"];
-    }
-    if (
-      (next["Ext Allocated Price"] === undefined || next["Ext Allocated Price"] === null) &&
-      next["Ext Sell Price"] !== undefined
-    ) {
-      next["Ext Allocated Price"] = next["Ext Sell Price"];
-    }
-    if (next["Ext SSP Price"] === undefined) {
-      next["Ext SSP Price"] = next["Ext SSP"] ?? next["SSP Extended Price"];
-    }
-    if (next["SSP Percent"] === undefined) {
-      next["SSP Percent"] = next["SSP Percentage"];
-    }
-    if (next["Allocation Eligible Flag"] === undefined) {
-      next["Allocation Eligible Flag"] =
-        next["Is Allocation Eligible"] ?? next["IsAllocationEligible"];
-    }
-    if (next["POB Template"] === undefined) {
-      next["POB Template"] = next["POB IDENTIFIER"] ?? next["ATR1"];
-    }
-    return next;
-  });
-}
-
-function isRevRecRow(row: Record<string, any>): boolean {
-  return "Period" in row || "period" in row;
+  return Array.from(periodSet).sort((a, b) => parsePeriod(a) - parsePeriod(b));
 }
 
 type RevRecGroup = {
@@ -343,28 +158,38 @@ function buildRevRecPivot(rows: Array<Record<string, any>>): {
   totalAllocated: number;
   groups: RevRecGroup[];
 } | null {
-  if (!rows.length || !isRevRecRow(rows[0])) return null;
+  if (!rows.length) return null;
+
+  const hasPeriodRows = rows.some((row) => row?.Period !== undefined || row?.period !== undefined);
+  const monthColumns = hasPeriodRows ? [] : getMonthColumns(rows);
+  if (!hasPeriodRows && monthColumns.length === 0) return null;
 
   const periodSet = new Set<string>();
   const groups = new Map<string, { base: Record<string, any>; periods: Record<string, number> }>();
 
   rows.forEach((row) => {
-    const period = (row.Period ?? row.period) as string | undefined;
-    if (!period) return;
-    periodSet.add(period);
-
     const lineItem = row["Line Item Num"] ?? row.LineItemNum ?? "";
-    const pobName = row["POB Name"] ?? row.POBName ?? "";
+    const subscriptionName = row["Subscription Name"] ?? row.SubscriptionName ?? "";
+    const pobTemplate = row["POB Template"] ?? row.POBTemplate ?? "";
     const eventName = row["Event Name"] ?? row.EventName ?? "";
     const startDate = row["Revenue Start Date"] ?? row.RevenueStartDate ?? "";
     const endDate = row["Revenue End Date"] ?? row.RevenueEndDate ?? "";
-    const allocated = row["Ext Allocated Price"] ?? row.ExtAllocatedPrice ?? row.Allocated ?? 0;
+    const allocated =
+      row["Total"] ??
+      row.Total ??
+      row["Cumulative Allocated"] ??
+      row["Ext Sell Price"] ??
+      row["Ext Allocated Price"] ??
+      row.ExtAllocatedPrice ??
+      row.Allocated ??
+      0;
 
-    const key = [lineItem, pobName, eventName, startDate, endDate].join("|");
+    const key = [subscriptionName, lineItem, pobTemplate, eventName, startDate, endDate].join("|");
     if (!groups.has(key)) {
       groups.set(key, {
         base: {
-          "POB Name": pobName,
+          "Subscription Name": subscriptionName,
+          "POB Template": pobTemplate,
           "Event Name": eventName,
           "Line Item Num": lineItem,
           "Revenue Start Date": startDate,
@@ -375,11 +200,28 @@ function buildRevRecPivot(rows: Array<Record<string, any>>): {
       });
     }
     const group = groups.get(key)!;
-    const amount = normalizeNumber(row.Amount ?? row.amount);
-    group.periods[period] = (group.periods[period] ?? 0) + amount;
+
+    if (hasPeriodRows) {
+      const period = (row.Period ?? row.period) as string | undefined;
+      if (!period) return;
+      periodSet.add(period);
+      const amount = normalizeNumber(row.Amount ?? row.amount);
+      group.periods[period] = (group.periods[period] ?? 0) + amount;
+      return;
+    }
+
+    monthColumns.forEach((period) => {
+      if (!(period in row)) return;
+      const rawValue = row[period];
+      if (rawValue === null || rawValue === undefined || rawValue === "") return;
+      const amount = normalizeNumber(rawValue);
+      group.periods[period] = (group.periods[period] ?? 0) + amount;
+    });
   });
 
-  const periods = Array.from(periodSet).sort((a, b) => parsePeriod(a) - parsePeriod(b));
+  const periods = hasPeriodRows
+    ? Array.from(periodSet).sort((a, b) => parsePeriod(a) - parsePeriod(b))
+    : monthColumns;
   const pivotRows: Array<Record<string, any>> = [];
   const totals: Record<string, number> = {};
   const groupRows: RevRecGroup[] = [];
@@ -404,7 +246,11 @@ function buildRevRecPivot(rows: Array<Record<string, any>>): {
 
     pivotRows.push(row);
 
-    const labelParts = [group.base["POB Name"], group.base["Line Item Num"]].filter(Boolean);
+    const labelParts = [
+      group.base["Subscription Name"],
+      group.base["Line Item Num"],
+      group.base["POB Template"],
+    ].filter(Boolean);
     groupRows.push({
       key,
       label: labelParts.join(" · "),
@@ -430,7 +276,8 @@ function RevRecWaterfallTable({ rows }: { rows: Array<Record<string, any>> }) {
 
   if (pivotRows.length > 1) {
     const totalRow: Record<string, any> = {
-      "POB Name": "Total",
+      "Subscription Name": "Total",
+      "POB Template": "",
       "Event Name": "",
       "Line Item Num": "",
       "Revenue Start Date": "",
@@ -599,9 +446,6 @@ function RevRecWaterfallChart({
 export function RevenueSnapshotView({ result, sessionId, status, createdAt, model }: RevenueSnapshotViewProps) {
   const [showRevRecChart, setShowRevRecChart] = useState(true);
   const [revRecChartMode, setRevRecChartMode] = useState<RevRecChartMode>("total");
-  const [showAllContracts, setShowAllContracts] = useState(false);
-  const [showAllBillings, setShowAllBillings] = useState(false);
-  const contractsRows = normalizeContractsRows(result.contracts_orders.rows);
   const handleExportJSON = () => {
     const blob = new Blob([JSON.stringify(result, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
@@ -628,9 +472,6 @@ export function RevenueSnapshotView({ result, sessionId, status, createdAt, mode
       }
     };
 
-    addSheetFromArray(result.contracts_orders.rows, "Contracts-Orders");
-    addSheetFromArray(result.billings.rows, "Billings");
-
     if (result.revrec_waterfall.rows.length) {
       addSheetFromArray(result.revrec_waterfall.rows, "Rev Rec Raw");
       const pivot = buildRevRecPivot(result.revrec_waterfall.rows);
@@ -638,7 +479,8 @@ export function RevenueSnapshotView({ result, sessionId, status, createdAt, mode
         const pivotRows = [...pivot.rows];
         if (pivotRows.length > 1) {
           const totalRow: Record<string, any> = {
-            "POB Name": "Total",
+            "Subscription Name": "Total",
+            "POB Template": "",
             "Event Name": "",
             "Line Item Num": "",
             "Revenue Start Date": "",
@@ -755,135 +597,55 @@ export function RevenueSnapshotView({ result, sessionId, status, createdAt, mode
         </CardBody>
       </Card>
 
-      <Tabs
-        aria-label="Revenue snapshot tables"
-        variant="bordered"
-        color="primary"
-        classNames={{
-          tabList: "border-default-200 bg-default-50/50",
-          cursor: "bg-primary",
-          tab: "h-10 px-4",
-          tabContent: "group-data-[selected=true]:text-white font-medium text-default-500",
-        }}
-      >
-        <Tab key="contracts" title="Contracts/Orders">
-          <Card className="glass-card mt-4">
-            <CardHeader className="px-6 pt-5 pb-0 flex items-center justify-between">
-              <div>
-                <h4 className="text-base font-semibold">Contracts/Orders</h4>
-                <p className="text-xs text-default-500">
-                  Default fields mirror golden use cases. Toggle to show everything.
-                </p>
+      <Card className="glass-card">
+        <CardHeader className="px-6 pt-5 pb-0 flex items-center justify-between">
+          <div>
+            <h4 className="text-base font-semibold">Revenue Recognition Waterfall</h4>
+            <p className="text-xs text-default-500">Periodized view with optional chart summary.</p>
+          </div>
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 text-xs text-default-500">
+              <span className="font-medium text-default-600">Chart Mode</span>
+              <div className="flex items-center rounded-full border border-default-200/70 bg-default-50/80 p-1">
+                {[
+                  { key: "total", label: "Totals" },
+                  { key: "stacked", label: "Stacked" },
+                  { key: "grouped", label: "Grouped" },
+                ].map((option) => (
+                  <button
+                    key={option.key}
+                    type="button"
+                    onClick={() => setRevRecChartMode(option.key as RevRecChartMode)}
+                    className={`px-2.5 py-1 rounded-full text-[11px] transition ${
+                      revRecChartMode === option.key
+                        ? "bg-primary text-white"
+                        : "text-default-500 hover:text-default-700"
+                    }`}
+                  >
+                    {option.label}
+                  </button>
+                ))}
               </div>
-              <Switch
-                size="sm"
-                isSelected={showAllContracts}
-                onValueChange={setShowAllContracts}
-                classNames={{
-                  wrapper: "group-data-[selected=true]:bg-primary",
-                }}
-              >
-                Show all fields
-              </Switch>
-            </CardHeader>
-            <CardBody className="p-6">
-              <TableView
-                rows={contractsRows}
-                columns={buildVisibleColumns(
-                  contractsRows,
-                  CONTRACTS_BASE_COLUMNS,
-                  CONTRACTS_REQUIRED_COLUMNS,
-                  showAllContracts
-                )}
-              />
-            </CardBody>
-          </Card>
-        </Tab>
-        <Tab key="billings" title="Billings">
-          <Card className="glass-card mt-4">
-            <CardHeader className="px-6 pt-5 pb-0 flex items-center justify-between">
-              <div>
-                <h4 className="text-base font-semibold">Billings</h4>
-                <p className="text-xs text-default-500">
-                  Default fields mirror golden use cases. Toggle to show everything.
-                </p>
-              </div>
-              <Switch
-                size="sm"
-                isSelected={showAllBillings}
-                onValueChange={setShowAllBillings}
-                classNames={{
-                  wrapper: "group-data-[selected=true]:bg-primary",
-                }}
-              >
-                Show all fields
-              </Switch>
-            </CardHeader>
-            <CardBody className="p-6">
-              <TableView
-                rows={result.billings.rows}
-                columns={buildVisibleColumns(
-                  result.billings.rows,
-                  BILLINGS_BASE_COLUMNS,
-                  [],
-                  showAllBillings
-                )}
-              />
-            </CardBody>
-          </Card>
-        </Tab>
-        <Tab key="revrec" title="Rev Rec Waterfall">
-          <Card className="glass-card mt-4">
-            <CardHeader className="px-6 pt-5 pb-0 flex items-center justify-between">
-              <div>
-                <h4 className="text-base font-semibold">Revenue Recognition Waterfall</h4>
-                <p className="text-xs text-default-500">Periodized view with optional chart summary.</p>
-              </div>
-              <div className="flex items-center gap-4">
-                <div className="flex items-center gap-2 text-xs text-default-500">
-                  <span className="font-medium text-default-600">Chart Mode</span>
-                  <div className="flex items-center rounded-full border border-default-200/70 bg-default-50/80 p-1">
-                    {[
-                      { key: "total", label: "Totals" },
-                      { key: "stacked", label: "Stacked" },
-                      { key: "grouped", label: "Grouped" },
-                    ].map((option) => (
-                      <button
-                        key={option.key}
-                        type="button"
-                        onClick={() => setRevRecChartMode(option.key as RevRecChartMode)}
-                        className={`px-2.5 py-1 rounded-full text-[11px] transition ${
-                          revRecChartMode === option.key
-                            ? "bg-primary text-white"
-                            : "text-default-500 hover:text-default-700"
-                        }`}
-                      >
-                        {option.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <Switch
-                  size="sm"
-                  isSelected={showRevRecChart}
-                  onValueChange={setShowRevRecChart}
-                  classNames={{
-                    wrapper: "group-data-[selected=true]:bg-primary",
-                  }}
-                >
-                  Show chart
-                </Switch>
-              </div>
-            </CardHeader>
-            <CardBody className="p-6 space-y-4">
-              {showRevRecChart ? (
-                <RevRecWaterfallChart rows={result.revrec_waterfall.rows} mode={revRecChartMode} />
-              ) : null}
-              <RevRecWaterfallTable rows={result.revrec_waterfall.rows} />
-            </CardBody>
-          </Card>
-        </Tab>
-      </Tabs>
+            </div>
+            <Switch
+              size="sm"
+              isSelected={showRevRecChart}
+              onValueChange={setShowRevRecChart}
+              classNames={{
+                wrapper: "group-data-[selected=true]:bg-primary",
+              }}
+            >
+              Show chart
+            </Switch>
+          </div>
+        </CardHeader>
+        <CardBody className="p-6 space-y-4">
+          {showRevRecChart ? (
+            <RevRecWaterfallChart rows={result.revrec_waterfall.rows} mode={revRecChartMode} />
+          ) : null}
+          <RevRecWaterfallTable rows={result.revrec_waterfall.rows} />
+        </CardBody>
+      </Card>
     </div>
   );
 }

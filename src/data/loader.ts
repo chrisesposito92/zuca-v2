@@ -1,8 +1,14 @@
 import { readFile } from 'fs/promises';
-import { join, resolve } from 'path';
+import { join, resolve, dirname } from 'path';
+import { fileURLToPath } from 'url';
 import { z } from 'zod';
 
 import { config, debugLog } from '../config';
+
+// Get the project root relative to this file (src/data/loader.ts -> project root)
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const PROJECT_ROOT = resolve(__dirname, '../..');
 import {
   GoldenUseCaseCapability,
   GoldenUseCaseCapabilitySchema,
@@ -104,7 +110,11 @@ export async function loadGoldenUseCasesData(): Promise<GoldenUseCasesData> {
     return cachedData;
   }
 
-  const basePath = resolve(config.app.goldenUseCasesPath);
+  // Resolve relative paths from PROJECT_ROOT, not CWD
+  const configPath = config.app.goldenUseCasesPath;
+  const basePath = configPath.startsWith('.')
+    ? resolve(PROJECT_ROOT, configPath)
+    : resolve(configPath);
   debugLog('Loading Golden Use Cases from:', basePath);
 
   const [

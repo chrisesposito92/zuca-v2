@@ -49,7 +49,7 @@ None (decisions resolved).
 
 ### 5) API/CLI/UI Surface Area
 - **CLI:** add `--model` flag for analyze / interactive / quick / uc-generate.
-- **Backend API (Express + Next):** accept `model` in request body, pass through to pipeline.
+- **Backend API (Next.js):** accept `model` in request body, pass through to pipeline.
 - **Frontend:** add a model selector on the Analyze + UC Generator forms; disable while run is in progress.
 - **Sessions:** store selected model in DB (`sessions.llm_model`) and display in history/solution header.
 

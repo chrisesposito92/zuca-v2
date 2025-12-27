@@ -11,7 +11,7 @@ ZUCA is an AI-powered solution architect that generates complete Zuora Billing a
 - **Table Generation**: Generates Contracts/Orders, Billings, and Revenue Recognition Waterfall tables
 - **Revenue Snapshot (Web)**: Connects to Zuora Billing and previews Revenue ingestion output from live tenant data (Excel export + Rev Rec chart toggle + table column filtering)
 - **Multi-turn Conversations**: Supports follow-up questions and solution refinements
-- **Multiple Interfaces**: CLI, HTTP API, and WebSocket support
+- **Multiple Interfaces**: CLI and Next.js web app (API routes under `/api`)
 
 ## Quick Start
 
@@ -25,14 +25,18 @@ cd zuca-v2
 # Install dependencies
 npm install
 
-# Copy environment file and configure
+# Copy environment file and configure (CLI/legacy server)
 cp .env.example .env
 # Edit .env with your OpenAI or Gemini API key
+
+# Copy environment file for the web app
+cp apps/web/.env.example apps/web/.env.local
+# Edit apps/web/.env.local with Vercel Postgres + auth settings
 ```
 
 ### Configuration
 
-Edit `.env` with your settings:
+Edit `.env` with your settings (CLI/legacy server):
 
 ```env
 # Required (choose at least one provider)
@@ -57,6 +61,8 @@ ZUORA_MCP_SERVER_URL=http://localhost:8080/mcp  # Your MCP server endpoint
 ZUORA_CREDENTIALS_KEY=your-32+char-encryption-key
 ```
 
+For the Next.js web app, use `apps/web/.env.local` (see `apps/web/.env.example` for the full list).
+
 ### Usage
 
 #### CLI - Analyze a Use Case
@@ -78,75 +84,19 @@ npm run cli interactive
 npm run cli quick "Annual SaaS subscription with monthly billing"
 ```
 
-#### HTTP API
+#### API Routes (Next.js)
+
+When running the web app locally (`npm run dev:web`), API routes are available under `http://localhost:3000/api/*`.
+For example, `/api/analyze`, `/api/sessions`, and `/api/health` mirror the deployed routes used by the UI.
+
+#### Web App (Next.js)
 
 ```bash
-# Start the server
-npm run server
-```
+# Run the Next.js app (local)
+npm run dev:web
 
-API Endpoints:
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/analyze` | Analyze a new use case |
-| POST | `/api/sessions/:id/follow-up` | Handle follow-up query |
-| GET | `/api/sessions` | List all sessions |
-| GET | `/api/sessions/:id` | Get session details |
-| DELETE | `/api/sessions/:id` | Delete a session |
-| POST | `/api/quick` | Quick capability detection |
-| GET | `/health` | Health check |
-
-Example API call:
-
-```bash
-curl -X POST http://localhost:3000/api/analyze \
-  -H "Content-Type: application/json" \
-  -d @examples/sample-use-case.json
-```
-
-With explicit model:
-
-```bash
-curl -X POST http://localhost:3000/api/analyze \
-  -H "Content-Type: application/json" \
-  -d '{
-    "model": "gemini-3-flash-preview",
-    "input": {
-      "customer_name": "Acme Corp",
-      "contract_start_date": "01/01/2025",
-      "terms_months": 12,
-      "transaction_currency": "USD",
-      "billing_period": "Monthly",
-      "is_allocations": false,
-      "use_case_description": "..."
-    }
-  }'
-```
-
-#### WebSocket
-
-Connect to `ws://localhost:3000/ws` for streaming responses:
-
-```javascript
-const ws = new WebSocket('ws://localhost:3000/ws');
-
-// Analyze use case
-ws.send(JSON.stringify({
-  type: 'analyze',
-  input: {
-    customer_name: 'Acme Corp',
-    contract_start_date: '01/01/2025',
-    // ... rest of input
-  }
-}));
-
-// Follow-up question
-ws.send(JSON.stringify({
-  type: 'follow-up',
-  session_id: 'session-uuid',
-  query: 'Why did you choose Invoice Ratable for the usage charge?'
-}));
+# Or from apps/web
+npm run dev
 ```
 
 ## Input Schema
@@ -185,7 +135,7 @@ ZUCA generates:
 ```
 zuca-v2/
 ├── src/
-│   ├── index.ts              # Main entry point
+  │   ├── index.ts              # Main entry point
 │   ├── config.ts             # Configuration
 │   ├── types/                # Type definitions
 │   ├── data/                 # Golden Use Case data loader
@@ -208,6 +158,23 @@ zuca-v2/
 ├── examples/                 # Example inputs
 ├── tests/                    # Test files
 └── README.md
+```
+
+## Testing
+
+```bash
+# Watch mode
+npm run test
+
+# CI-friendly run
+npm run test:run
+```
+
+Database integration tests (in `tests/db/`) run only when `POSTGRES_URL_TEST` (or `POSTGRES_URL`) is set to a pooled Neon URL or a local Postgres URL. When using a pooled Neon URL, tests run in the default schema and clean up after themselves, so use a dedicated test branch/database.
+
+```bash
+# Run only DB integration tests
+POSTGRES_URL_TEST="postgresql://...-pooler.neon.tech/..." npm run test:db
 ```
 
 ## RAG System

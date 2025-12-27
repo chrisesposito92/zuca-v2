@@ -1,4 +1,4 @@
-import { complete, getZuoraMcpTools, ReasoningEffort } from '../../../llm/client';
+import { complete, ReasoningEffort } from '../../../llm/client';
 import type { LlmModel } from '../../../types/llm';
 import { loadPrompt, PROMPTS } from '../../../llm/prompts/index';
 import {
@@ -9,6 +9,93 @@ import {
 } from '../../../types/revenue-snapshot';
 import { loadBookingMappingCsv } from '../mappings';
 import { extractJsonPayload } from './json';
+// Field list sourced from docs/Golden Use Cases/golden_use_cases_zr_tables.json (CONTRACTS/ORDERS).
+const CONTRACTS_FIELDS = [
+  'Adjustment Recognized to Date',
+  'Allocatable Ext Price',
+  'Allocation Eligible Flag',
+  'Average Pricing Method',
+  'Billed - Released Revenue',
+  'Billed - Unreleased Revenue',
+  'Billed Amount',
+  'Carves Adjustment',
+  'Contract Mod Rule',
+  'Contract Modification Date',
+  'Contractual Recognized to Date',
+  'Cumulative Allocated',
+  'Cumulative Carves',
+  'Customer Name',
+  'Ext Allocated Price',
+  'Ext List Price',
+  'Ext SSP Price',
+  'Ext Sell Price',
+  'Last CT Mod Period',
+  'Lead Line',
+  'Line Item Num',
+  'Ordered Qty',
+  'POB Dependency',
+  'POB IDENTIFIER',
+  'POB Name',
+  'POB Rule Name',
+  'POB Satisfied',
+  'POB Template',
+  'Posted PCT as on Last CT Mod',
+  'Product Category',
+  'Product Family',
+  'RPC Num',
+  'RPC Segment',
+  'RPC Type',
+  'Ramp Allocated Percent',
+  'Ramp Number',
+  'Release Event',
+  'Released Revenue',
+  'Revenue End Date',
+  'Revenue Start Date',
+  'SSP Group ID',
+  'SSP Percent',
+  'SSP Percentage',
+  'SSP Price',
+  'SSP Type',
+  'Sales Order Date',
+  'Subscription Name',
+  'Subscription Version',
+  'Transaction Currency',
+  'Transaction Price',
+  'Ttl Allocatable',
+  'Unit List Price',
+  'Unit Sell Price',
+  'Unreleased Revenue',
+  'VC Amount',
+  'Within SSP range',
+] as const;
+
+const VALUE_SCHEMA = { type: ['string', 'number', 'boolean', 'null'] } as const;
+
+const CONTRACTS_FIELD_PROPERTIES = CONTRACTS_FIELDS.reduce<Record<string, typeof VALUE_SCHEMA>>(
+  (acc, field) => {
+    acc[field] = VALUE_SCHEMA;
+    return acc;
+  },
+  {}
+);
+
+const snapshotTableSchema = {
+  type: 'object',
+  properties: {
+    rows: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: CONTRACTS_FIELD_PROPERTIES,
+        additionalProperties: false,
+      },
+    },
+    assumptions: { type: 'array', items: { type: 'string' } },
+    open_questions: { type: 'array', items: { type: 'string' } },
+  },
+  required: ['rows', 'assumptions', 'open_questions'],
+  additionalProperties: false,
+} as const;
 
 function normalizeNumber(value: unknown): number | null {
   if (typeof value === 'number' && Number.isFinite(value)) return value;
@@ -62,7 +149,6 @@ function applyDeterministicAllocations(
     'Unreleased Revenue',
     'Released Revenue',
     'POB Template',
-    'ATR1',
   ];
   if (isCustomFormula && input.ssp_custom_formula) {
     assumptions.push(`SSP custom formula applied deterministically using Sell Price fallback: ${input.ssp_custom_formula}`);
@@ -99,12 +185,9 @@ function applyDeterministicAllocations(
       coerceBool(getFirstValue(row, ['Allocation Eligible Flag', 'CV Eligible Flag', 'Is Allocation Eligible', 'IsAllocationEligible', 'isAllocationEligible'])) ??
       false;
 
-    const pobTemplate = getFirstValue(row, ['POB Template', 'ATR1']);
+    const pobTemplate = getFirstValue(row, ['POB Template', 'POB IDENTIFIER']);
     if (!row['POB Template'] && pobTemplate) {
       row['POB Template'] = pobTemplate;
-    }
-    if (!row['ATR1'] && pobTemplate) {
-      row['ATR1'] = pobTemplate;
     }
 
     row['Ordered Qty'] = orderedQty;
@@ -200,23 +283,6 @@ function applyDeterministicAllocations(
   return { rows: normalizedRows, assumptions };
 }
 
-const snapshotTableSchema = {
-  type: 'object',
-  properties: {
-    rows: {
-      type: 'array',
-      items: {
-        type: 'object',
-        additionalProperties: true,
-      },
-    },
-    assumptions: { type: 'array', items: { type: 'string' } },
-    open_questions: { type: 'array', items: { type: 'string' } },
-  },
-  required: ['rows', 'assumptions', 'open_questions'],
-  additionalProperties: false,
-} as const;
-
 function buildUserMessage(
   input: RevenueSnapshotInput,
   source: RevenueSnapshotSource,
@@ -274,9 +340,9 @@ export async function buildSnapshotContractsOrders(
     systemPrompt,
     userMessage,
     tools: ['web_search', 'code_interpreter'],
-    mcpTools: getZuoraMcpTools(),
     reasoningEffort,
     model,
+    responseSchema: snapshotTableSchema,
   });
 
   let parsed: unknown;

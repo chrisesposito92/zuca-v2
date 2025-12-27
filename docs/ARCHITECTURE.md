@@ -106,8 +106,6 @@ zuca-v2/
 │   │   └── loader.ts            # Load Golden Use Case JSON files
 │   ├── cli/
 │   │   └── index.ts             # CLI interface
-│   ├── api/
-│   │   └── server.ts            # HTTP API server
 │   └── utils/
 │       ├── markdown-tables.ts   # Format output tables
 │       ├── jaccard.ts           # Jaccard similarity matching
@@ -130,7 +128,7 @@ zuca-v2/
 
 | Decision | Choice | Rationale |
 |----------|--------|-----------|
-| Interface | **CLI + HTTP API** | CLI for local use, API for integrations |
+| Interface | **CLI + Next.js API** | CLI for local use, API routes for the web app |
 | Zuora MCP | **Design-only + ask_zuora** | Use `ask_zuora` tool for Zuora knowledge. No create operations (future state) |
 | Conversation | **Multi-turn** | Remember context, allow follow-up queries |
 | Output | **Markdown + JSON** | Human-readable tables + machine-readable JSON |

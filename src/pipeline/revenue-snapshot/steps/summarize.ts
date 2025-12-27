@@ -1,4 +1,4 @@
-import { complete, getZuoraMcpTools, ReasoningEffort } from '../../../llm/client';
+import { complete, ReasoningEffort } from '../../../llm/client';
 import type { LlmModel } from '../../../types/llm';
 import { loadPrompt, PROMPTS } from '../../../llm/prompts/index';
 import {
@@ -10,6 +10,7 @@ import {
 } from '../../../types/revenue-snapshot';
 import { extractJsonPayload } from './json';
 
+// OpenAI structured output requires ALL properties in 'required' array
 const summarySchema = {
   type: 'object',
   properties: {
@@ -17,34 +18,18 @@ const summarySchema = {
     open_questions: { type: 'array', items: { type: 'string' } },
     highlights: { type: 'array', items: { type: 'string' } },
   },
-  required: ['assumptions', 'open_questions'],
+  required: ['assumptions', 'open_questions', 'highlights'],
   additionalProperties: false,
 } as const;
 
 function buildUserMessage(
   input: RevenueSnapshotInput,
   source: RevenueSnapshotSource,
-  contractsOrders: RevenueSnapshotTableOutput,
-  billings: RevenueSnapshotTableOutput,
   revrec: RevenueSnapshotTableOutput
 ): string {
   return [
     `Selected Subscriptions: ${input.subscription_numbers.join(', ')}`,
     `OTR Enabled: ${source.otr_enabled ? 'Yes' : 'No'}`,
-    '',
-    'Contracts/Orders Summary:',
-    JSON.stringify({
-      row_count: contractsOrders.rows.length,
-      assumptions: contractsOrders.assumptions,
-      open_questions: contractsOrders.open_questions,
-    }, null, 2),
-    '',
-    'Billings Summary:',
-    JSON.stringify({
-      row_count: billings.rows.length,
-      assumptions: billings.assumptions,
-      open_questions: billings.open_questions,
-    }, null, 2),
     '',
     'Rev Rec Waterfall Summary:',
     JSON.stringify({
@@ -58,15 +43,13 @@ function buildUserMessage(
 export async function summarizeSnapshot(
   input: RevenueSnapshotInput,
   source: RevenueSnapshotSource,
-  contractsOrders: RevenueSnapshotTableOutput,
-  billings: RevenueSnapshotTableOutput,
   revrec: RevenueSnapshotTableOutput,
   previousOutput?: RevenueSnapshotSummary,
-  reasoningEffort: ReasoningEffort = 'medium',
+  reasoningEffort: ReasoningEffort = 'high',
   model?: LlmModel
 ): Promise<RevenueSnapshotSummary> {
   const systemPrompt = await loadPrompt(PROMPTS.SNAPSHOT_SUMMARY);
-  let userMessage = buildUserMessage(input, source, contractsOrders, billings, revrec);
+  let userMessage = buildUserMessage(input, source, revrec);
 
   if (previousOutput) {
     userMessage = `Previous Summary:\n${JSON.stringify(previousOutput, null, 2)}\n\n${userMessage}`;
@@ -75,10 +58,10 @@ export async function summarizeSnapshot(
   const result = await complete<RevenueSnapshotSummary>({
     systemPrompt,
     userMessage,
-    tools: ['web_search'],
-    mcpTools: getZuoraMcpTools(),
+    tools: ['web_search', 'code_interpreter'],
     reasoningEffort,
     model,
+    responseSchema: summarySchema,
   });
 
   let parsed: unknown;

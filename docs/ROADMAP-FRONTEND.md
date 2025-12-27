@@ -21,7 +21,7 @@ This document tracks the implementation of the ZUCA v2 web frontend.
 | 5. Solution View | ✅ Complete | Tabs: Summary/Subscription/Contracts/Billings/RevRec |
 | 6. Conversation | ✅ Complete | Follow-up chat panel with Edit Field/Regenerate actions |
 | 7. History & Polish | ✅ Complete | Session list with search/delete |
-| 8. Deployment | ⏳ Pending | |
+| 8. Deployment | ⏳ In Progress | |
 | 9. Model Selection | ✅ Complete | Multi-provider (GPT/Gemini) selection + persistence |
 | 10. Revenue Snapshot | ✅ Complete | Zuora Billing → Revenue snapshot UI + API integration (Excel export + Rev Rec chart toggle + table column filtering) |
 
@@ -289,13 +289,15 @@ apps/web/components/revenue-snapshot-view.tsx
 ## Phase 8: Deployment
 
 ### Tasks
-- [ ] Configure Vercel project
-- [ ] Set up Vercel Postgres database
-- [ ] Set environment variables
-- [ ] Remove Express server (`src/api/server.ts`)
-- [ ] Update CLAUDE.md
-- [ ] Update README.md
-- [ ] Test production deployment
+- [x] Configure Vercel project
+- [x] Set up Vercel Postgres database
+- [x] Set environment variables
+- [x] Remove Express server (`src/api/server.ts`)
+- [x] Update CLAUDE.md
+- [x] Update README.md
+- [x] Test production deployment (Vercel smoke test: auth, analyze, history, revenue snapshot)
+- [ ] Add meaningful automated tests (target ~80%+ coverage)
+- [x] Add CI pipeline (GitHub Actions: typecheck/tests)
 
 ---
 
