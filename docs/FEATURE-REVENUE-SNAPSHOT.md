@@ -44,6 +44,8 @@ This feature lets users connect a Zuora Billing tenant, select subscription(s), 
    - Required allocation fields (including ATR1/POB Template) are always included.
    - Ramp/VC-related fields are auto-included when present.
    - Users can toggle "Show all fields" to display the full raw dataset.
+8. **Session Naming**
+   - Revenue Snapshot sessions in History are labeled using selected subscription numbers (up to 3, with “+N more”).
 
 ## API Routes
 - `POST /api/revenue-snapshot/auth` – save credentials for a named tenant (encrypted)

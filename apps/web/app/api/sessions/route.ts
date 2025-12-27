@@ -19,11 +19,23 @@ export async function GET(request: NextRequest) {
     // List sessions (filter by user if authenticated)
     const sessions = await listSessions(user?.userId, limit, offset);
 
+    const formatRevenueSnapshotName = (input: any, result: any): string => {
+      const subs = input?.subscription_numbers ?? result?.input?.subscription_numbers;
+      if (Array.isArray(subs) && subs.length) {
+        const shown = subs.slice(0, 3).join(', ');
+        return subs.length > 3 ? `${shown} (+${subs.length - 3} more)` : shown;
+      }
+      return 'Revenue Snapshot';
+    };
+
     // Map to API response format
     const mapped = sessions.map((s) => ({
       id: s.id,
       session_type: s.session_type,
-      customer_name: (s.input as { customer_name?: string })?.customer_name || 'Unknown',
+      customer_name:
+        s.session_type === 'revenue-snapshot'
+          ? formatRevenueSnapshotName(s.input, s.result)
+          : (s.input as { customer_name?: string })?.customer_name || 'Unknown',
       status: s.status,
       created_at: s.created_at,
       updated_at: s.updated_at,
