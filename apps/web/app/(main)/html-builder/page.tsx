@@ -197,24 +197,23 @@ export default function HTMLBuilderPage() {
                   trigger: "min-h-unit-12",
                 }}
               >
-                {Object.entries(currentTemplates).map(([category, templates]) => (
+                {Object.entries(currentTemplates).flatMap(([category, templates]) => [
+                  // Category header
                   <SelectItem key={`category-${category}`} textValue={categoryLabels[category] || category} isReadOnly>
                     <div className="text-xs font-semibold text-primary uppercase tracking-wider py-1">
                       {categoryLabels[category] || category}
                     </div>
-                  </SelectItem>
-                )).concat(
-                  Object.entries(currentTemplates).flatMap(([category, templates]) =>
-                    templates.map((template) => (
-                      <SelectItem key={template.id} textValue={template.name}>
-                        <div className="flex flex-col gap-0.5">
-                          <span className="font-medium">{template.name}</span>
-                          <span className="text-xs text-default-400">{template.description}</span>
-                        </div>
-                      </SelectItem>
-                    ))
-                  )
-                )}
+                  </SelectItem>,
+                  // Items in this category
+                  ...templates.map((template) => (
+                    <SelectItem key={template.id} textValue={template.name}>
+                      <div className="flex flex-col gap-0.5">
+                        <span className="font-medium">{template.name}</span>
+                        <span className="text-xs text-default-400">{template.description}</span>
+                      </div>
+                    </SelectItem>
+                  ))
+                ])}
               </Select>
             )}
 
