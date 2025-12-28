@@ -13,6 +13,7 @@ import {
 } from "@heroui/react";
 import Link from "next/link";
 import type { RevenueSnapshotOutput } from "@zuca/types/revenue-snapshot";
+import { FeedbackButtons } from "@/components/FeedbackButtons";
 
 interface RevenueSnapshotViewProps {
   result: RevenueSnapshotOutput;
@@ -772,6 +773,14 @@ export function RevenueSnapshotView({ result, sessionId, status, createdAt, mode
             <RevRecWaterfallChart rows={result.revrec_waterfall.rows} mode={revRecChartMode} aggregation={periodAggregation} />
           ) : null}
           <RevRecWaterfallTable rows={result.revrec_waterfall.rows} aggregation={periodAggregation} />
+          {/* Feedback */}
+          <div className="mt-6 pt-4 border-t border-default-200/30">
+            <FeedbackButtons
+              sessionId={sessionId}
+              targetType="revrec"
+              label="Was this revenue snapshot helpful?"
+            />
+          </div>
         </CardBody>
       </Card>
     </div>

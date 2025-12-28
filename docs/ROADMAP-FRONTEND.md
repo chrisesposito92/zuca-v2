@@ -127,6 +127,7 @@ apps/web/
 | /api/sessions/[id]/regenerate | POST | ✅ |
 | /api/feedback | POST/GET | ✅ |
 | /api/bugs | POST/GET | ✅ |
+| /api/bug-report | POST | ✅ |
 | /api/health | GET | ✅ |
 | /api/auth/login | POST | ✅ |
 | /api/auth/logout | POST | ✅ |
@@ -166,7 +167,18 @@ apps/web/app/api/
 │       ├── edit/route.ts
 │       └── regenerate/route.ts
 ├── feedback/route.ts
-└── bugs/route.ts
+├── bugs/route.ts
+└── bug-report/route.ts    # Creates GitHub issues
+
+apps/web/app/
+├── error.tsx              # Root error boundary
+├── global-error.tsx       # Critical error boundary
+└── (main)/
+    └── error.tsx          # App section error boundary
+
+apps/web/components/
+├── FeedbackButtons.tsx    # Thumbs up/down with comment on negative
+└── BugReportModal.tsx     # Floating bug report button + modal
 ```
 
 ---
@@ -280,9 +292,9 @@ apps/web/components/revenue-snapshot-view.tsx
 
 ### Remaining Polish (Nice to Have)
 - [ ] Responsive design pass for mobile
-- [ ] Global error boundaries
-- [ ] Feedback buttons (thumbs up/down) per section
-- [ ] Bug report modal
+- [x] Global error boundaries
+- [x] Feedback buttons (thumbs up/down) per section
+- [x] Bug report modal (creates GitHub issues)
 
 ---
 

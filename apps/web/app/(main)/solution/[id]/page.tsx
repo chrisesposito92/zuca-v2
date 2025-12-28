@@ -22,6 +22,7 @@ import { UCGenerateView } from "@/components/uc-generate-view";
 import type { ZucaOutput, UCGeneratorOutput } from "@zuca/types";
 import type { RevenueSnapshotOutput } from "@zuca/types/revenue-snapshot";
 import { RevenueSnapshotView } from "@/components/revenue-snapshot-view";
+import { FeedbackButtons } from "@/components/FeedbackButtons";
 import * as XLSX from "xlsx";
 
 interface PageProps {
@@ -588,6 +589,14 @@ export default function SolutionPage({ params }: PageProps) {
                     ) : (
                       <p className="text-default-500 italic">No summary available</p>
                     )}
+                    {/* Feedback */}
+                    <div className="mt-6 pt-4 border-t border-default-200/30">
+                      <FeedbackButtons
+                        sessionId={id}
+                        targetType="summary"
+                        label="Was this summary helpful?"
+                      />
+                    </div>
                   </CardBody>
                 </Card>
               </Tab>
@@ -738,6 +747,14 @@ export default function SolutionPage({ params }: PageProps) {
                     ) : (
                       <p className="text-default-500 italic">No contract data available</p>
                     )}
+                    {/* Feedback */}
+                    <div className="mt-6 pt-4 border-t border-default-200/30">
+                      <FeedbackButtons
+                        sessionId={id}
+                        targetType="contracts"
+                        label="Was this contracts data helpful?"
+                      />
+                    </div>
                   </CardBody>
                 </Card>
               </Tab>
@@ -845,6 +862,14 @@ export default function SolutionPage({ params }: PageProps) {
                     ) : (
                       <p className="text-default-500 italic">No billing data available</p>
                     )}
+                    {/* Feedback */}
+                    <div className="mt-6 pt-4 border-t border-default-200/30">
+                      <FeedbackButtons
+                        sessionId={id}
+                        targetType="billings"
+                        label="Was this billing data helpful?"
+                      />
+                    </div>
                   </CardBody>
                 </Card>
               </Tab>
@@ -984,6 +1009,14 @@ export default function SolutionPage({ params }: PageProps) {
                     ) : (
                       <p className="text-default-500 italic">No rev rec data available</p>
                     )}
+                    {/* Feedback */}
+                    <div className="mt-6 pt-4 border-t border-default-200/30">
+                      <FeedbackButtons
+                        sessionId={id}
+                        targetType="revrec"
+                        label="Was this rev rec data helpful?"
+                      />
+                    </div>
                   </CardBody>
                 </Card>
               </Tab>

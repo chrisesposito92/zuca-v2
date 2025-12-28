@@ -22,6 +22,7 @@ import {
   AlignmentType,
 } from "docx";
 import type { UCGeneratorOutput } from "@zuca/types";
+import { FeedbackButtons } from "@/components/FeedbackButtons";
 
 interface UCGenerateViewProps {
   result: UCGeneratorOutput;
@@ -882,6 +883,14 @@ export function UCGenerateView({
               </p>
               <p className="font-mono text-xs text-default-400">{sessionId}</p>
             </div>
+          </div>
+          {/* Feedback */}
+          <div className="mt-6 pt-4 border-t border-default-200/30">
+            <FeedbackButtons
+              sessionId={sessionId}
+              targetType="session"
+              label="Was this generation helpful?"
+            />
           </div>
         </CardBody>
       </Card>

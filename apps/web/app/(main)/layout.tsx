@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "../../hooks/useAuth";
+import { BugReportModal } from "@/components/BugReportModal";
 
 const navItems = [
   { href: "/analyze", label: "New Analysis", icon: "+" },
@@ -156,6 +157,9 @@ export default function MainLayout({
           {children}
         </div>
       </main>
+
+      {/* Floating bug report button */}
+      <BugReportModal />
     </div>
   );
 }
