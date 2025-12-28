@@ -21,7 +21,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { useSessions, useDeleteSession } from "@/hooks/useSessions";
 
-type SessionTypeFilter = "all" | "analyze" | "uc-generate" | "revenue-snapshot";
+type SessionTypeFilter = "all" | "analyze" | "uc-generate" | "revenue-snapshot" | "html-builder";
 
 export default function HistoryPage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -36,9 +36,14 @@ export default function HistoryPage() {
 
   // Filter sessions by search query and session type
   const filteredSessions = sessions.filter((s) => {
+    const searchLower = searchQuery.toLowerCase();
+    const htmlBuilderDesc = s.session_type === "html-builder"
+      ? (s.input as { description?: string })?.description?.toLowerCase()
+      : null;
     const matchesSearch =
-      s.customer_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      s.id.toLowerCase().includes(searchQuery.toLowerCase());
+      s.customer_name?.toLowerCase().includes(searchLower) ||
+      s.id.toLowerCase().includes(searchLower) ||
+      (htmlBuilderDesc && htmlBuilderDesc.includes(searchLower));
     const matchesType =
       sessionTypeFilter === "all" || s.session_type === sessionTypeFilter;
     return matchesSearch && matchesType;
@@ -269,6 +274,20 @@ export default function HistoryPage() {
               </div>
             }
           />
+          <Tab
+            key="html-builder"
+            title={
+              <div className="flex items-center gap-2">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                </svg>
+                <span>HTML Builder</span>
+                <Chip size="sm" variant="flat" className="bg-warning/20 text-warning text-xs">
+                  {sessions.filter((s) => s.session_type === "html-builder").length}
+                </Chip>
+              </div>
+            }
+          />
         </Tabs>
 
         {/* Search */}
@@ -304,7 +323,7 @@ export default function HistoryPage() {
               {sessions.length === 0
                 ? "No sessions yet"
                 : sessionTypeFilter !== "all" && sessions.filter(s => s.session_type === sessionTypeFilter).length === 0
-                ? `No ${sessionTypeFilter === "analyze" ? "analysis" : sessionTypeFilter === "uc-generate" ? "generation" : "snapshot"} sessions yet`
+                ? `No ${sessionTypeFilter === "analyze" ? "analysis" : sessionTypeFilter === "uc-generate" ? "generation" : sessionTypeFilter === "html-builder" ? "HTML builder" : "snapshot"} sessions yet`
                 : "No sessions match your search"}
             </p>
             <p className="text-default-400 text-sm mt-1">
@@ -315,6 +334,8 @@ export default function HistoryPage() {
                   ? "Run an analysis from the Analyze page"
                   : sessionTypeFilter === "uc-generate"
                   ? "Generate use cases from the Analyze page"
+                  : sessionTypeFilter === "html-builder"
+                  ? "Build templates from the Template Builder page"
                   : "Create a snapshot from the Revenue Snapshot page"
                 : "Try adjusting your search terms or filter"}
             </p>
@@ -346,7 +367,9 @@ export default function HistoryPage() {
                     <div className="flex items-center gap-3 flex-wrap">
                       <Link href={`/solution/${session.id}`}>
                         <h3 className="font-semibold text-lg hover:text-primary transition-colors cursor-pointer truncate">
-                          {session.customer_name || "Untitled"}
+                          {session.session_type === "html-builder"
+                            ? (session.input as { description?: string })?.description?.slice(0, 60) || "Template Request"
+                            : session.customer_name || "Untitled"}
                         </h3>
                       </Link>
                       <Chip
@@ -365,6 +388,8 @@ export default function HistoryPage() {
                             ? "bg-primary/20 text-primary"
                             : session.session_type === "uc-generate"
                             ? "bg-secondary/20 text-secondary"
+                            : session.session_type === "html-builder"
+                            ? "bg-warning/20 text-warning"
                             : "bg-default-200/70 text-default-600"
                         }
                       >
@@ -372,6 +397,8 @@ export default function HistoryPage() {
                           ? "Analyze"
                           : session.session_type === "uc-generate"
                           ? "Generate"
+                          : session.session_type === "html-builder"
+                          ? "HTML Builder"
                           : "Snapshot"}
                       </Chip>
                       {session.llm_model && (
