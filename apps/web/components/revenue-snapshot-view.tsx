@@ -124,6 +124,78 @@ function normalizeNumber(value: unknown): number {
   return 0;
 }
 
+type PeriodAggregation = "monthly" | "quarterly" | "yearly";
+
+/**
+ * Get the quarter key for a month column (e.g., "Jan-24" -> "Q1-24")
+ */
+function getQuarterKey(monthKey: string): string {
+  const [mon, yr] = monthKey.split("-");
+  if (!mon || !yr) return monthKey;
+  const normalizedMon = `${mon[0]?.toUpperCase() ?? ""}${mon.slice(1).toLowerCase()}`;
+  const monthIndex = MONTH_INDEX[normalizedMon];
+  if (monthIndex === undefined) return monthKey;
+  const quarter = Math.floor(monthIndex / 3) + 1;
+  return `Q${quarter}-${yr}`;
+}
+
+/**
+ * Get the year key for a month column (e.g., "Jan-24" -> "2024")
+ */
+function getYearKey(monthKey: string): string {
+  const [, yr] = monthKey.split("-");
+  if (!yr) return monthKey;
+  const year = Number(yr);
+  if (Number.isNaN(year)) return monthKey;
+  return `20${yr}`;
+}
+
+/**
+ * Parse a quarter key for sorting (e.g., "Q1-24" -> 2024 * 4 + 0)
+ */
+function parseQuarterKey(key: string): number {
+  const match = key.match(/^Q(\d)-(\d{2})$/);
+  if (!match) return Number.POSITIVE_INFINITY;
+  const quarter = Number(match[1]);
+  const year = 2000 + Number(match[2]);
+  return year * 4 + (quarter - 1);
+}
+
+/**
+ * Parse a year key for sorting (e.g., "2024" -> 2024)
+ */
+function parseYearKey(key: string): number {
+  const year = Number(key);
+  return Number.isNaN(year) ? Number.POSITIVE_INFINITY : year;
+}
+
+/**
+ * Aggregate monthly period data into quarterly or yearly buckets
+ */
+function aggregatePeriods(
+  periods: string[],
+  periodData: Record<string, number>,
+  aggregation: PeriodAggregation
+): { periods: string[]; data: Record<string, number> } {
+  if (aggregation === "monthly") {
+    return { periods, data: periodData };
+  }
+
+  const aggregated: Record<string, number> = {};
+  const getKey = aggregation === "quarterly" ? getQuarterKey : getYearKey;
+
+  periods.forEach((period) => {
+    const key = getKey(period);
+    const value = periodData[period] ?? 0;
+    aggregated[key] = (aggregated[key] ?? 0) + value;
+  });
+
+  const sortFn = aggregation === "quarterly" ? parseQuarterKey : parseYearKey;
+  const sortedPeriods = Object.keys(aggregated).sort((a, b) => sortFn(a) - sortFn(b));
+
+  return { periods: sortedPeriods, data: aggregated };
+}
+
 
 function isPeriodColumn(key: string): boolean {
   const [mon, yr] = key.split("-");
@@ -151,7 +223,10 @@ type RevRecGroup = {
   periods: Record<string, number>;
 };
 
-function buildRevRecPivot(rows: Array<Record<string, any>>): {
+function buildRevRecPivot(
+  rows: Array<Record<string, any>>,
+  aggregation: PeriodAggregation = "monthly"
+): {
   periods: string[];
   rows: Array<Record<string, any>>;
   totals: Record<string, number>;
@@ -219,23 +294,44 @@ function buildRevRecPivot(rows: Array<Record<string, any>>): {
     });
   });
 
-  const periods = hasPeriodRows
+  // Get raw monthly periods first
+  const rawPeriods = hasPeriodRows
     ? Array.from(periodSet).sort((a, b) => parsePeriod(a) - parsePeriod(b))
     : monthColumns;
+
   const pivotRows: Array<Record<string, any>> = [];
   const totals: Record<string, number> = {};
   const groupRows: RevRecGroup[] = [];
   let totalAllocated = 0;
+
+  // Determine aggregated period columns
+  let outputPeriods = rawPeriods;
+  if (aggregation !== "monthly" && rawPeriods.length > 0) {
+    const { periods: aggPeriods } = aggregatePeriods(rawPeriods, {}, aggregation);
+    // Get unique aggregated periods from the raw periods
+    const getKey = aggregation === "quarterly" ? getQuarterKey : getYearKey;
+    const aggSet = new Set<string>();
+    rawPeriods.forEach((p) => aggSet.add(getKey(p)));
+    const sortFn = aggregation === "quarterly" ? parseQuarterKey : parseYearKey;
+    outputPeriods = Array.from(aggSet).sort((a, b) => sortFn(a) - sortFn(b));
+  }
 
   groups.forEach((group, key) => {
     const row: Record<string, any> = { ...group.base };
     const allocated = normalizeNumber(group.base.Allocated);
     row.Allocated = allocated;
     totalAllocated += allocated;
-    let rowTotal = 0;
 
-    periods.forEach((period) => {
-      const amount = group.periods[period] ?? 0;
+    // Aggregate group periods if needed
+    const { periods: groupPeriods, data: groupPeriodData } = aggregatePeriods(
+      rawPeriods,
+      group.periods,
+      aggregation
+    );
+
+    let rowTotal = 0;
+    outputPeriods.forEach((period) => {
+      const amount = groupPeriodData[period] ?? 0;
       row[period] = amount;
       rowTotal += amount;
       totals[period] = (totals[period] ?? 0) + amount;
@@ -255,19 +351,25 @@ function buildRevRecPivot(rows: Array<Record<string, any>>): {
       key,
       label: labelParts.join(" · "),
       allocated,
-      periods: group.periods,
+      periods: groupPeriodData, // Use aggregated periods for chart
     });
   });
 
-  return { periods, rows: pivotRows, totals, totalAllocated, groups: groupRows };
+  return { periods: outputPeriods, rows: pivotRows, totals, totalAllocated, groups: groupRows };
 }
 
-function RevRecWaterfallTable({ rows }: { rows: Array<Record<string, any>> }) {
+function RevRecWaterfallTable({
+  rows,
+  aggregation = "monthly",
+}: {
+  rows: Array<Record<string, any>>;
+  aggregation?: PeriodAggregation;
+}) {
   if (!rows.length) {
     return <p className="text-default-500 italic">No data available</p>;
   }
 
-  const pivot = buildRevRecPivot(rows);
+  const pivot = buildRevRecPivot(rows, aggregation);
   if (!pivot) {
     return <TableView rows={rows} />;
   }
@@ -308,11 +410,13 @@ const CHART_COLORS = [
 function RevRecWaterfallChart({
   rows,
   mode,
+  aggregation = "monthly",
 }: {
   rows: Array<Record<string, any>>;
   mode: RevRecChartMode;
+  aggregation?: PeriodAggregation;
 }) {
-  const pivot = buildRevRecPivot(rows);
+  const pivot = buildRevRecPivot(rows, aggregation);
   if (!pivot || pivot.periods.length === 0) {
     return (
       <p className="text-default-500 italic text-sm">
@@ -446,6 +550,7 @@ function RevRecWaterfallChart({
 export function RevenueSnapshotView({ result, sessionId, status, createdAt, model }: RevenueSnapshotViewProps) {
   const [showRevRecChart, setShowRevRecChart] = useState(true);
   const [revRecChartMode, setRevRecChartMode] = useState<RevRecChartMode>("total");
+  const [periodAggregation, setPeriodAggregation] = useState<PeriodAggregation>("monthly");
   const handleExportJSON = () => {
     const blob = new Blob([JSON.stringify(result, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
@@ -605,6 +710,29 @@ export function RevenueSnapshotView({ result, sessionId, status, createdAt, mode
           </div>
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2 text-xs text-default-500">
+              <span className="font-medium text-default-600">Period</span>
+              <div className="flex items-center rounded-full border border-default-200/70 bg-default-50/80 p-1">
+                {[
+                  { key: "monthly", label: "Monthly" },
+                  { key: "quarterly", label: "Quarterly" },
+                  { key: "yearly", label: "Yearly" },
+                ].map((option) => (
+                  <button
+                    key={option.key}
+                    type="button"
+                    onClick={() => setPeriodAggregation(option.key as PeriodAggregation)}
+                    className={`px-2.5 py-1 rounded-full text-[11px] transition ${
+                      periodAggregation === option.key
+                        ? "bg-primary text-white"
+                        : "text-default-500 hover:text-default-700"
+                    }`}
+                  >
+                    {option.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="flex items-center gap-2 text-xs text-default-500">
               <span className="font-medium text-default-600">Chart Mode</span>
               <div className="flex items-center rounded-full border border-default-200/70 bg-default-50/80 p-1">
                 {[
@@ -641,9 +769,9 @@ export function RevenueSnapshotView({ result, sessionId, status, createdAt, mode
         </CardHeader>
         <CardBody className="p-6 space-y-4">
           {showRevRecChart ? (
-            <RevRecWaterfallChart rows={result.revrec_waterfall.rows} mode={revRecChartMode} />
+            <RevRecWaterfallChart rows={result.revrec_waterfall.rows} mode={revRecChartMode} aggregation={periodAggregation} />
           ) : null}
-          <RevRecWaterfallTable rows={result.revrec_waterfall.rows} />
+          <RevRecWaterfallTable rows={result.revrec_waterfall.rows} aggregation={periodAggregation} />
         </CardBody>
       </Card>
     </div>
