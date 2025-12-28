@@ -47,8 +47,10 @@ This file is for LLM contributors. For install/run commands and product overview
 - Doc corpus and QA generation live in `zuora-docs-scrapper/`; rebuild with `npm run rag:*` after changing docs or chunking.
 
 ## Revenue Snapshot (read-only)
+- Pipeline: 2 steps in `src/pipeline/revenue-snapshot/` (Waterfall → Summary).
+- Waterfall step handles SSP allocations + periodization in single LLM call.
 - Data retrieval + OTR detection: `apps/web/lib/zuora.ts`.
-- LLM prompts: `src/llm/prompts/revenue-snapshot-*.md`.
+- LLM prompts: `revenue-snapshot-waterfall.md`, `revenue-snapshot-summary.md`.
 - Types: `src/types/revenue-snapshot.ts`.
 - UI/export/pivot logic: `apps/web/components/revenue-snapshot-view.tsx`.
 - Feature notes: `docs/FEATURE-REVENUE-SNAPSHOT.md`.

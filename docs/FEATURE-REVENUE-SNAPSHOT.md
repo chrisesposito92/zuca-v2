@@ -23,24 +23,35 @@ This feature lets users connect a Zuora Billing tenant, select subscription(s), 
    - **OTR**: Data Query via `/query/jobs` for BookingTransaction, BillingTransaction, RevenueRecognitionEventsTransaction (queries run in parallel; OTR is inferred by successful BookingTransaction retrieval).
    - **Non-OTR**: ZOQL/REST for Subscription, Order, Invoice, Credit Memo, Usage, Rate Plan Charge.
    - Custom field `POBCRITERIA__c` is fetched from ProductRatePlanCharge for POB template assignment.
-   - **POB Template** in Zuora Revenue corresponds to ProductRatePlanCharge.POBCRITERIA__c.
+   - **POB Template** in Zuora Revenue corresponds to ProductRatePlanCharge.POBCRITERIA__c (ATR1).
    - Custom fields are case-sensitive and require the `__c` suffix in queries.
 
-4. **Snapshot Pipeline**
-   - Rev Rec Waterfall (LLM, high reasoning)
-   - Rev Rec Waterfall outputs one row per line item with month columns (Mon-YY) plus Total.
-   - Summary (LLM)
-   - Allocation columns are populated from SSP method + pricing fields; Ext Allocated Price defaults to Ext Sell Price when allocations are not applied.
+4. **Snapshot Pipeline** (2 steps)
+   - **Rev Rec Waterfall** (`build-waterfall.ts` + `revenue-snapshot-waterfall.md`)
+     - Single consolidated step that handles SSP allocations AND periodization
+     - Calculates allocations based on SSP method (None, List Price, Sell Price, Custom Formula)
+     - Distributes allocated amounts across periods using daily rate method for ratable items
+     - Outputs one row per line item with dynamic month columns (MMM-YY) plus Total
+     - Period columns are dynamically generated based on actual revenue dates in source data
+     - Includes robust fallback logic that extracts data directly from BookingTransactions if LLM fails
+     - Case-insensitive field matching handles Zuora API naming variations
+   - **Summary** (`summarize.ts` + `revenue-snapshot-summary.md`)
+     - Generates highlights, assumptions, and open questions
+
 5. **Execution Model**
    - User-selected model (GPT-5.2, Gemini 3 Pro, Gemini 3 Flash) applied to all snapshot steps
+   - OpenAI models require all schema properties in `required` array for structured output
+
 6. **Exports & Visualization**
    - Export tables to Excel (Rev Rec raw + pivot, Summary).
    - Rev Rec Waterfall includes an optional chart toggle with modes: Totals, Stacked by line item, or Grouped by line item.
    - Rev Rec Waterfall pivot table always includes a Total column at the far right.
+
 7. **Column Filtering**
    - Rev Rec Waterfall uses a fixed schema with month columns (Mon-YY) plus allocation fields.
+
 8. **Session Naming**
-   - Revenue Snapshot sessions in History are labeled using selected subscription numbers (up to 3, with “+N more”).
+   - Revenue Snapshot sessions in History are labeled using selected subscription numbers (up to 3, with "+N more").
 
 ## API Routes
 - `POST /api/revenue-snapshot/auth` – save credentials for a named tenant (encrypted)
