@@ -10,6 +10,7 @@ import { BugReportModal } from "@/components/BugReportModal";
 const navItems = [
   { href: "/analyze", label: "New Analysis", icon: "+" },
   { href: "/revenue-snapshot", label: "Revenue Snapshot", icon: "table" },
+  { href: "/html-builder", label: "Template Builder", icon: "code" },
   { href: "/history", label: "History", icon: "clock" },
 ];
 
@@ -28,6 +29,11 @@ const icons = {
   table: (
     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 6h18M3 10h18M3 14h18M3 18h18" />
+    </svg>
+  ),
+  code: (
+    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
     </svg>
   ),
   logout: (

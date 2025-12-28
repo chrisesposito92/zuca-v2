@@ -132,5 +132,3 @@ export {
   CompletionResult,
 } from './llm/client';
 
-// Server (for programmatic server startup)
-export { startServer, app, server } from './api/server';

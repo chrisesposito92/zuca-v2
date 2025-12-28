@@ -21,7 +21,9 @@ import { ConversationPanel } from "@/components/chat";
 import { UCGenerateView } from "@/components/uc-generate-view";
 import type { ZucaOutput, UCGeneratorOutput } from "@zuca/types";
 import type { RevenueSnapshotOutput } from "@zuca/types/revenue-snapshot";
+import type { HTMLTemplateOutput, HTMLTemplateRequest } from "@zuca/types/html-template";
 import { RevenueSnapshotView } from "@/components/revenue-snapshot-view";
+import { HTMLTemplateResultView } from "@/components/html-template-view";
 import { FeedbackButtons } from "@/components/FeedbackButtons";
 import * as XLSX from "xlsx";
 
@@ -204,6 +206,164 @@ export default function SolutionPage({ params }: PageProps) {
         createdAt={session.created_at}
         model={session.llm_model}
       />
+    );
+  }
+
+  if (session.session_type === "html-builder") {
+    const htmlResult = session.result as HTMLTemplateOutput | null;
+    const htmlInput = session.input as HTMLTemplateRequest;
+
+    if (!htmlResult) {
+      return (
+        <div className="space-y-8">
+          <div className="flex items-center gap-4">
+            <Link href="/history">
+              <Button
+                variant="bordered"
+                size="sm"
+                className="border-2 border-default-300 hover:border-primary"
+                startContent={
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                  </svg>
+                }
+              >
+                Back to History
+              </Button>
+            </Link>
+          </div>
+          <Card className="glass-card border-warning/30">
+            <CardBody className="p-6 flex items-center gap-4">
+              <div className="w-12 h-12 rounded-full bg-warning/20 flex items-center justify-center">
+                <svg className="w-6 h-6 text-warning" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div>
+                <p className="font-medium text-warning">No Results</p>
+                <p className="text-sm text-default-500">
+                  This HTML Template session has no results yet. The session may still be processing or may have failed.
+                </p>
+              </div>
+            </CardBody>
+          </Card>
+        </div>
+      );
+    }
+
+    return (
+      <div className="space-y-8">
+        {/* Header */}
+        <div className="flex justify-between items-start">
+          <div>
+            <div className="flex items-center gap-4">
+              <Link href="/html-builder">
+                <Button
+                  variant="light"
+                  size="sm"
+                  isIconOnly
+                  className="text-default-500 hover:text-primary"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                  </svg>
+                </Button>
+              </Link>
+              <div>
+                <h1 className="text-3xl font-bold tracking-tight">
+                  <span className="gradient-text">
+                    {htmlResult.mode === "code" ? "Template Code" : "Expression"}
+                  </span>
+                </h1>
+                <div className="flex items-center gap-3 mt-2">
+                  <Chip
+                    size="sm"
+                    variant="flat"
+                    className="bg-primary/10 text-primary capitalize"
+                  >
+                    {htmlResult.mode}
+                  </Chip>
+                  {session.llm_model && (
+                    <Chip
+                      size="sm"
+                      variant="flat"
+                      className="bg-default-200/70 text-default-600"
+                    >
+                      {session.llm_model}
+                    </Chip>
+                  )}
+                  <span className="text-default-500 text-sm flex items-center gap-1.5">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    {new Date(session.created_at).toLocaleString()}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <Link href="/html-builder">
+            <Button
+              color="primary"
+              size="sm"
+              className="font-semibold teal-glow-subtle"
+              startContent={
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                </svg>
+              }
+            >
+              New Template
+            </Button>
+          </Link>
+        </div>
+
+        {/* Main Content */}
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+          {/* Result */}
+          <Card className="glass-card">
+            <CardHeader className="px-6 pt-5 pb-0">
+              <h3 className="text-lg font-semibold">Generated Output</h3>
+            </CardHeader>
+            <CardBody className="p-6">
+              <HTMLTemplateResultView
+                mode={htmlResult.mode}
+                result={htmlResult.result}
+                sessionId={session.id}
+              />
+            </CardBody>
+          </Card>
+
+          {/* Input Summary */}
+          <Card className="glass-card">
+            <CardHeader className="px-6 pt-5 pb-0">
+              <h3 className="text-lg font-semibold">Input</h3>
+            </CardHeader>
+            <CardBody className="p-6 space-y-4">
+              <div className="space-y-2">
+                <p className="text-xs font-medium text-default-500 uppercase tracking-wide">Description</p>
+                <p className="text-default-600 leading-relaxed">{htmlInput.description}</p>
+              </div>
+              {htmlInput.context?.documentType && (
+                <div className="space-y-2">
+                  <p className="text-xs font-medium text-default-500 uppercase tracking-wide">Document Type</p>
+                  <Chip size="sm" variant="flat" className="bg-default-100 capitalize">
+                    {htmlInput.context.documentType}
+                  </Chip>
+                </div>
+              )}
+              {htmlInput.context?.existingCode && (
+                <div className="space-y-2">
+                  <p className="text-xs font-medium text-default-500 uppercase tracking-wide">Existing Code</p>
+                  <pre className="text-xs bg-default-100/50 p-3 rounded-lg overflow-x-auto font-mono">
+                    {htmlInput.context.existingCode}
+                  </pre>
+                </div>
+              )}
+            </CardBody>
+          </Card>
+        </div>
+      </div>
     );
   }
 

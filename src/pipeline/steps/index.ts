@@ -66,3 +66,7 @@ export { summarizeResults, formatSummaryForDisplay } from './summarize';
 
 // Expert Assistant (alternative path for general questions)
 export { expertAssistant, formatExpertResponse, type ExpertResponse } from './expert-assistant';
+
+// HTML Template Builder
+export { generateTemplateCode, formatTemplateCodeForDisplay } from './html-template-code';
+export { generateExpression, formatExpressionForDisplay } from './html-template-expression';

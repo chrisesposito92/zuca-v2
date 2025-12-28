@@ -54,6 +54,9 @@ export const PROMPTS = {
   UC_GENERATE_USE_CASES: 'uc-generate-use-cases',
   UC_FORMAT_OUTPUT: 'uc-format-output',
   UC_COMPANY_FUN_FACTS: 'uc-company-fun-facts',
+  // HTML Template Builder prompts
+  HTML_TEMPLATE_CODE: 'html-template-code',
+  HTML_TEMPLATE_EXPRESSION: 'html-template-expression',
 } as const;
 
 export type PromptName = typeof PROMPTS[keyof typeof PROMPTS];

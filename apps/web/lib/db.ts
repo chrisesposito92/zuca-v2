@@ -9,12 +9,13 @@ import { sql } from '@vercel/postgres';
 import type { ZucaInput, ZucaOutput } from '@zuca/types';
 import type { RevenueSnapshotInput, RevenueSnapshotOutput } from '@zuca/types/revenue-snapshot';
 import type { UCGeneratorInput, UCGeneratorOutput } from '@zuca/types/uc-generator';
+import type { HTMLTemplateRequest, HTMLTemplateOutput } from '@zuca/types/html-template';
 
 // ============================================================================
 // Types
 // ============================================================================
 
-export type SessionType = 'analyze' | 'uc-generate' | 'revenue-snapshot';
+export type SessionType = 'analyze' | 'uc-generate' | 'revenue-snapshot' | 'html-builder';
 export type SessionStatus = 'pending' | 'running' | 'completed' | 'failed';
 export type MessageRole = 'user' | 'assistant';
 
@@ -23,8 +24,8 @@ export interface DbSession {
   created_at: Date;
   updated_at: Date;
   session_type: SessionType;
-  input: ZucaInput | UCGeneratorInput | RevenueSnapshotInput;
-  result: ZucaOutput | UCGeneratorOutput | RevenueSnapshotOutput | null;
+  input: ZucaInput | UCGeneratorInput | RevenueSnapshotInput | HTMLTemplateRequest;
+  result: ZucaOutput | UCGeneratorOutput | RevenueSnapshotOutput | HTMLTemplateOutput | null;
   status: SessionStatus;
   current_step: number;
   error_message: string | null;
