@@ -70,3 +70,4 @@ export { expertAssistant, formatExpertResponse, type ExpertResponse } from './ex
 // HTML Template Builder
 export { generateTemplateCode, formatTemplateCodeForDisplay } from './html-template-code';
 export { generateExpression, formatExpressionForDisplay } from './html-template-expression';
+export { validateTemplate, formatValidationForDisplay } from './html-template-validator';

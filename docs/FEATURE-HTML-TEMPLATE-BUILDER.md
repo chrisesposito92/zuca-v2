@@ -91,24 +91,27 @@ Help users construct `{{#Wp_Eval}}` expressions:
 - Conditional styling
 - String operations and transformations
 
+#### 3. Template Validator & Debugger
+**Status**: ✅ Complete
+
+Validate template code for errors, warnings, and suggestions:
+- Syntax error detection (unclosed braces, malformed merge fields)
+- Section validation (unclosed/mismatched sections)
+- Object path validation (unknown fields, context errors)
+- Function validation (unknown functions, missing parameters)
+- Expression validation (Wp_Eval JEXL syntax)
+- Best practice suggestions (missing formatting, null handling)
+
+**Technical Approach**: Hybrid validation combining:
+1. **Code-based parsing** - Fast, deterministic checks for structural issues with exact line numbers
+2. **LLM semantic validation** - Intelligent checks for object paths, function usage, and best practices
+
 ---
 
 ### Backlog (Prioritized)
 
-#### 🥇 1. Template Validator & Debugger
+#### 🥇 1. GroupBy Wizard for Subtotals
 **Status**: Next Up
-**Impact**: High | **Complexity**: Medium
-
-Upload template code and validate:
-- Syntax error detection
-- Undefined object path warnings
-- Function improvement suggestions
-- Unclosed section detection
-
-**Why prioritize**: Complements the generators by catching errors before deployment. Reduces frustration when templates don't render as expected.
-
-#### 🥈 2. GroupBy Wizard for Subtotals
-**Status**: Backlog
 **Impact**: High | **Complexity**: Medium
 
 The `GroupBy` function is powerful but complex:
@@ -117,7 +120,7 @@ The `GroupBy` function is powerful but complex:
 
 **Why prioritize**: Explicitly identified pain point in docs. Subtotals are one of the most requested features in real invoice templates.
 
-#### 🥉 3. Sample Data Generator
+#### 🥈 2. Sample Data Generator
 **Status**: Backlog
 **Impact**: High | **Complexity**: Medium
 
@@ -128,7 +131,7 @@ Generate realistic sample invoice data:
 
 **Why prioritize**: Without sample data, users can't test their templates. This unlocks the value of the code generators.
 
-#### 4. Data Table Configuration Builder
+#### 🥉 3. Data Table Configuration Builder
 **Status**: Backlog
 **Impact**: Medium | **Complexity**: Low
 
@@ -140,7 +143,7 @@ Interactive wizard to build Data Table configurations:
 
 **Why here**: Code generator already handles much of this. A wizard adds polish but isn't essential.
 
-#### 5. Industry-Specific Template Library
+#### 4. Industry-Specific Template Library
 **Status**: Backlog
 **Impact**: Medium | **Complexity**: Low
 
@@ -152,7 +155,7 @@ Pre-built templates for verticals:
 
 **Why here**: Good for demos but users typically need customization. Better as curated examples than turnkey solutions.
 
-#### 6. AI-Powered Template Design from Description
+#### 5. AI-Powered Template Design from Description
 **Status**: Backlog
 **Impact**: High | **Complexity**: High
 
@@ -162,7 +165,7 @@ Full template generation from requirements:
 
 **Why here**: Natural evolution of code generator. High impact but requires combining multiple capabilities.
 
-#### 7. Interactive Template Preview
+#### 6. Interactive Template Preview
 **Status**: Future
 **Impact**: High | **Complexity**: High
 
@@ -173,7 +176,7 @@ Live playground:
 
 **Why here**: Depends on Sample Data Generator. Would be transformative but significant engineering effort.
 
-#### 8. Barcode/QR Code Generator
+#### 7. Barcode/QR Code Generator
 **Status**: Future
 **Impact**: Low-Medium | **Complexity**: Medium
 
@@ -184,7 +187,7 @@ Generate barcode syntax:
 
 **Why here**: Important for specific regions/use cases but not universally needed.
 
-#### 9. Template Diff & Migration Tool
+#### 8. Template Diff & Migration Tool
 **Status**: Future
 **Impact**: Medium | **Complexity**: High
 
@@ -195,7 +198,7 @@ Word → HTML template migration:
 
 **Why here**: Useful for migrations but lower frequency. Complex to parse Word docs reliably.
 
-#### 10. Custom Object Schema Helper
+#### 9. Custom Object Schema Helper
 **Status**: Future
 **Impact**: Low | **Complexity**: Medium
 
@@ -230,6 +233,41 @@ Design custom objects for templates:
 2. Conditional expressions (ternary, null coalescing)
 3. String operations (concatenation, substring, comparison)
 4. Formatting (rounding, localization)
+
+### Template Validator ✅
+
+**Implementation**: Complete - hybrid validation with API endpoint.
+
+**Architecture**:
+```
+User Input → API Route → Code Parser → LLM Validator → Merged Results → UI Display
+                              ↓                ↓
+                     Structural Issues    Semantic Issues
+                     (fast, precise)     (intelligent, contextual)
+```
+
+**Key Files**:
+| File | Purpose |
+|------|---------|
+| `src/types/html-template.ts` | Validation types, schemas, JSON schema for LLM |
+| `src/llm/prompts/html-template-validator.md` | LLM prompt with validation rules |
+| `src/pipeline/steps/html-template-validator.ts` | Hybrid validation logic |
+| `apps/web/app/api/html-template/validate/route.ts` | API endpoint |
+| `apps/web/hooks/useHTMLBuilder.ts` | `useTemplateValidator` hook |
+| `apps/web/components/html-template-view.tsx` | `TemplateValidationResultView` component |
+
+**Validation Categories**:
+1. **syntax** - Malformed merge fields, unclosed braces
+2. **section** - Unclosed/mismatched section tags
+3. **object_path** - Invalid field paths, context errors
+4. **function** - Unknown functions, incorrect usage
+5. **expression** - Wp_Eval JEXL syntax issues
+6. **best_practice** - Missing formatting, null handling
+
+**Severity Levels**:
+- **error** - Template will fail to render (must fix)
+- **warning** - May cause issues in some cases (should review)
+- **suggestion** - Improvements for reliability/maintainability (optional)
 
 ---
 

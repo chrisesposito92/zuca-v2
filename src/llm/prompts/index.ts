@@ -57,6 +57,7 @@ export const PROMPTS = {
   // HTML Template Builder prompts
   HTML_TEMPLATE_CODE: 'html-template-code',
   HTML_TEMPLATE_EXPRESSION: 'html-template-expression',
+  HTML_TEMPLATE_VALIDATOR: 'html-template-validator',
 } as const;
 
 export type PromptName = typeof PROMPTS[keyof typeof PROMPTS];

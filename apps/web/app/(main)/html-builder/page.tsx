@@ -15,9 +15,9 @@ import {
   addToast,
 } from "@heroui/react";
 import { useState, useMemo } from "react";
-import { useHTMLBuilder, useGroupedTemplates, type HTMLTemplateMode } from "@/hooks/useHTMLBuilder";
+import { useHTMLBuilder, useGroupedTemplates, useTemplateValidator, type HTMLTemplateMode } from "@/hooks/useHTMLBuilder";
 import { useFunFacts } from "@/hooks/useFunFacts";
-import { HTMLTemplateResultView } from "@/components/html-template-view";
+import { HTMLTemplateResultView, TemplateValidationResultView } from "@/components/html-template-view";
 
 const DEFAULT_MODEL = process.env.NEXT_PUBLIC_DEFAULT_MODEL || "gpt-5.2";
 
@@ -45,20 +45,25 @@ const categoryLabels: Record<string, string> = {
   formatting: "Formatting",
 };
 
+type BuilderMode = HTMLTemplateMode | "validate";
+
 export default function HTMLBuilderPage() {
-  const [activeTab, setActiveTab] = useState<HTMLTemplateMode>("code");
+  const [activeTab, setActiveTab] = useState<BuilderMode>("code");
   const [description, setDescription] = useState("");
   const [documentType, setDocumentType] = useState("invoice");
   const [existingCode, setExistingCode] = useState("");
   const [selectedModel, setSelectedModel] = useState(DEFAULT_MODEL);
   const [selectedTemplateId, setSelectedTemplateId] = useState<string>("");
+  const [templateToValidate, setTemplateToValidate] = useState("");
 
   const builderMutation = useHTMLBuilder();
+  const validatorMutation = useTemplateValidator();
   const { data: codeTemplates } = useGroupedTemplates("code");
   const { data: expressionTemplates } = useGroupedTemplates("expression");
   const { currentFact } = useFunFacts({ interval: 8000 });
 
   const isGenerating = builderMutation.isPending;
+  const isValidating = validatorMutation.isPending;
 
   // Get templates for current mode
   const currentTemplates = useMemo(() => {
@@ -122,9 +127,40 @@ export default function HTMLBuilderPage() {
   };
 
   const handleTabChange = (key: React.Key) => {
-    setActiveTab(key as HTMLTemplateMode);
+    setActiveTab(key as BuilderMode);
     setSelectedTemplateId("");
     // Keep description if user typed something custom
+  };
+
+  const handleValidate = async () => {
+    if (!templateToValidate.trim()) {
+      addToast({
+        title: "Template Required",
+        description: "Please paste template code to validate",
+        color: "warning",
+      });
+      return;
+    }
+
+    try {
+      await validatorMutation.mutateAsync({
+        template: templateToValidate.trim(),
+        documentType: documentType as "invoice" | "credit_memo" | "debit_memo",
+        model: selectedModel,
+      });
+      addToast({
+        title: "Validation Complete",
+        description: "Template has been analyzed for errors and suggestions",
+        color: "success",
+      });
+    } catch (error) {
+      const err = error as { error?: string; details?: string };
+      addToast({
+        title: "Validation Failed",
+        description: err.details || err.error || "An error occurred",
+        color: "danger",
+      });
+    }
   };
 
   return (
@@ -154,7 +190,7 @@ export default function HTMLBuilderPage() {
                 tab: "data-[selected=true]:text-black font-medium",
                 tabContent: "group-data-[selected=true]:text-black",
               }}
-              isDisabled={isGenerating}
+              isDisabled={isGenerating || isValidating}
             >
               <Tab
                 key="code"
@@ -178,10 +214,88 @@ export default function HTMLBuilderPage() {
                   </div>
                 }
               />
+              <Tab
+                key="validate"
+                title={
+                  <div className="flex items-center gap-2">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span>Validator</span>
+                  </div>
+                }
+              />
             </Tabs>
           </CardHeader>
 
           <CardBody className="p-6 space-y-5">
+            {/* Validator mode UI */}
+            {activeTab === "validate" ? (
+              <>
+                <Textarea
+                  label="Template Code to Validate"
+                  placeholder="Paste your HTML template code with merge fields here..."
+                  value={templateToValidate}
+                  onChange={(e) => setTemplateToValidate(e.target.value)}
+                  minRows={10}
+                  maxRows={20}
+                  isDisabled={isValidating}
+                  classNames={{
+                    input: "font-mono text-sm resize-y",
+                  }}
+                />
+
+                <Select
+                  label="Document Type"
+                  selectedKeys={[documentType]}
+                  onSelectionChange={(keys) => setDocumentType(Array.from(keys)[0] as string)}
+                  isDisabled={isValidating}
+                >
+                  {documentTypeOptions.map((opt) => (
+                    <SelectItem key={opt.key}>{opt.label}</SelectItem>
+                  ))}
+                </Select>
+
+                <Select
+                  label="Model"
+                  selectedKeys={[selectedModel]}
+                  onSelectionChange={(keys) => setSelectedModel(Array.from(keys)[0] as string)}
+                  isDisabled={isValidating}
+                >
+                  {modelOptions.map((model) => (
+                    <SelectItem key={model.key} textValue={model.label}>
+                      <div className="flex flex-col">
+                        <div className="flex items-center gap-2">
+                          <span>{model.label}</span>
+                          <span className="text-xs text-default-400">({model.time})</span>
+                        </div>
+                        <span className="text-xs text-default-400">{model.description}</span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </Select>
+
+                <div className="flex items-center justify-between pt-2">
+                  <Button
+                    variant="flat"
+                    onClick={() => setTemplateToValidate("")}
+                    isDisabled={isValidating || !templateToValidate}
+                  >
+                    Clear
+                  </Button>
+                  <Button
+                    color="primary"
+                    className="font-semibold teal-glow-subtle"
+                    onClick={handleValidate}
+                    isLoading={isValidating}
+                    isDisabled={isValidating || !templateToValidate.trim()}
+                  >
+                    {isValidating ? "Validating..." : "Validate Template"}
+                  </Button>
+                </div>
+              </>
+            ) : (
+            <>
             {/* Quick templates dropdown */}
             {currentTemplates && Object.keys(currentTemplates).length > 0 && (
               <Select
@@ -303,6 +417,8 @@ export default function HTMLBuilderPage() {
                 {isGenerating ? "Generating..." : "Generate"}
               </Button>
             </div>
+            </>
+            )}
           </CardBody>
         </Card>
 
@@ -310,12 +426,37 @@ export default function HTMLBuilderPage() {
         <Card className="glass-card">
           <CardHeader className="px-6 pt-5 pb-0 flex items-center justify-between">
             <div>
-              <h3 className="text-lg font-semibold">Generated Output</h3>
+              <h3 className="text-lg font-semibold">
+                {activeTab === "validate" ? "Validation Results" : "Generated Output"}
+              </h3>
               <p className="text-xs text-default-500">
-                {activeTab === "code" ? "HTML merge field code" : "Wp_Eval expression"}
+                {activeTab === "code"
+                  ? "HTML merge field code"
+                  : activeTab === "expression"
+                  ? "Wp_Eval expression"
+                  : "Errors, warnings, and suggestions"}
               </p>
             </div>
-            {builderMutation.data && (
+            {activeTab === "validate" && validatorMutation.data && (
+              <Chip
+                size="sm"
+                variant="flat"
+                className={
+                  validatorMutation.data.result.summary.errorCount > 0
+                    ? "bg-danger/20 text-danger"
+                    : validatorMutation.data.result.summary.warningCount > 0
+                    ? "bg-warning/20 text-warning"
+                    : "bg-success/20 text-success"
+                }
+              >
+                {validatorMutation.data.result.summary.errorCount > 0
+                  ? `${validatorMutation.data.result.summary.errorCount} Errors`
+                  : validatorMutation.data.result.summary.warningCount > 0
+                  ? `${validatorMutation.data.result.summary.warningCount} Warnings`
+                  : "Valid"}
+              </Chip>
+            )}
+            {activeTab !== "validate" && builderMutation.data && (
               <Chip size="sm" variant="flat" className="bg-success/20 text-success">
                 Ready
               </Chip>
@@ -323,56 +464,109 @@ export default function HTMLBuilderPage() {
           </CardHeader>
 
           <CardBody className="p-6">
-            {isGenerating ? (
-              <div className="space-y-4">
-                <div className="flex items-center gap-4">
-                  <div className="animate-spin h-5 w-5 border-2 border-primary border-t-transparent rounded-full" />
-                  <div>
-                    <p className="font-medium">Generating {activeTab === "code" ? "template code" : "expression"}...</p>
-                    <p className="text-xs text-default-500">This usually takes a few seconds</p>
+            {/* Validate mode */}
+            {activeTab === "validate" ? (
+              isValidating ? (
+                <div className="space-y-4">
+                  <div className="flex items-center gap-4">
+                    <div className="animate-spin h-5 w-5 border-2 border-primary border-t-transparent rounded-full" />
+                    <div>
+                      <p className="font-medium">Validating template...</p>
+                      <p className="text-xs text-default-500">Checking syntax, object paths, and best practices</p>
+                    </div>
+                  </div>
+                  <Progress
+                    isIndeterminate
+                    color="primary"
+                    size="sm"
+                    aria-label="Validating"
+                    classNames={{
+                      indicator: "bg-gradient-to-r from-primary to-secondary",
+                    }}
+                  />
+                  <div className="p-4 rounded-xl bg-default-100/50 border border-default-200/60">
+                    <div className="flex items-center gap-2 mb-2 text-default-500">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <span className="text-xs font-medium uppercase tracking-wider">Did you know?</span>
+                    </div>
+                    <p className="text-sm text-default-600 leading-relaxed min-h-[2.5rem] transition-opacity duration-300">
+                      {currentFact}
+                    </p>
                   </div>
                 </div>
-                <Progress
-                  isIndeterminate
-                  color="primary"
-                  size="sm"
-                  aria-label="Generating"
-                  classNames={{
-                    indicator: "bg-gradient-to-r from-primary to-secondary",
-                  }}
+              ) : validatorMutation.data ? (
+                <TemplateValidationResultView
+                  result={validatorMutation.data.result}
+                  sessionId={validatorMutation.data.session_id}
                 />
-                <div className="p-4 rounded-xl bg-default-100/50 border border-default-200/60">
-                  <div className="flex items-center gap-2 mb-2 text-default-500">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              ) : (
+                <div className="flex flex-col items-center justify-center py-16 text-center">
+                  <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mb-4">
+                    <svg className="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-                    <span className="text-xs font-medium uppercase tracking-wider">Did you know?</span>
                   </div>
-                  <p className="text-sm text-default-600 leading-relaxed min-h-[2.5rem] transition-opacity duration-300">
-                    {currentFact}
+                  <h4 className="text-lg font-medium text-foreground mb-1">No validation yet</h4>
+                  <p className="text-sm text-default-500 max-w-xs">
+                    Paste your HTML template code and click Validate to check for errors, warnings, and improvement suggestions.
                   </p>
                 </div>
-              </div>
-            ) : builderMutation.data ? (
-              <HTMLTemplateResultView
-                mode={builderMutation.data.mode}
-                result={builderMutation.data.result}
-                sessionId={builderMutation.data.session_id}
-              />
+              )
             ) : (
-              <div className="flex flex-col items-center justify-center py-16 text-center">
-                <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mb-4">
-                  <svg className="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
-                  </svg>
+              /* Code/Expression mode */
+              isGenerating ? (
+                <div className="space-y-4">
+                  <div className="flex items-center gap-4">
+                    <div className="animate-spin h-5 w-5 border-2 border-primary border-t-transparent rounded-full" />
+                    <div>
+                      <p className="font-medium">Generating {activeTab === "code" ? "template code" : "expression"}...</p>
+                      <p className="text-xs text-default-500">This usually takes a few seconds</p>
+                    </div>
+                  </div>
+                  <Progress
+                    isIndeterminate
+                    color="primary"
+                    size="sm"
+                    aria-label="Generating"
+                    classNames={{
+                      indicator: "bg-gradient-to-r from-primary to-secondary",
+                    }}
+                  />
+                  <div className="p-4 rounded-xl bg-default-100/50 border border-default-200/60">
+                    <div className="flex items-center gap-2 mb-2 text-default-500">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <span className="text-xs font-medium uppercase tracking-wider">Did you know?</span>
+                    </div>
+                    <p className="text-sm text-default-600 leading-relaxed min-h-[2.5rem] transition-opacity duration-300">
+                      {currentFact}
+                    </p>
+                  </div>
                 </div>
-                <h4 className="text-lg font-medium text-foreground mb-1">No output yet</h4>
-                <p className="text-sm text-default-500 max-w-xs">
-                  {activeTab === "code"
-                    ? "Describe what you want to display and click Generate to create template code."
-                    : "Describe your calculation or logic and click Generate to create an expression."}
-                </p>
-              </div>
+              ) : builderMutation.data ? (
+                <HTMLTemplateResultView
+                  mode={builderMutation.data.mode}
+                  result={builderMutation.data.result}
+                  sessionId={builderMutation.data.session_id}
+                />
+              ) : (
+                <div className="flex flex-col items-center justify-center py-16 text-center">
+                  <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mb-4">
+                    <svg className="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                    </svg>
+                  </div>
+                  <h4 className="text-lg font-medium text-foreground mb-1">No output yet</h4>
+                  <p className="text-sm text-default-500 max-w-xs">
+                    {activeTab === "code"
+                      ? "Describe what you want to display and click Generate to create template code."
+                      : "Describe your calculation or logic and click Generate to create an expression."}
+                  </p>
+                </div>
+              )
             )}
           </CardBody>
         </Card>

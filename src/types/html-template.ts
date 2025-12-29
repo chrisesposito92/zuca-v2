@@ -313,3 +313,182 @@ export function validateHTMLTemplateExpressionOutput(data: unknown): HTMLTemplat
   }
   return result.data;
 }
+
+// ============================================================================
+// TEMPLATE VALIDATOR TYPES
+// ============================================================================
+
+/**
+ * Severity level for validation issues
+ */
+export const ValidationSeveritySchema = z.enum(['error', 'warning', 'suggestion']);
+export type ValidationSeverity = z.infer<typeof ValidationSeveritySchema>;
+
+/**
+ * Category of validation issue
+ */
+export const ValidationCategorySchema = z.enum([
+  'syntax', // Malformed merge fields, unclosed tags
+  'section', // Unclosed sections, mismatched section tags
+  'object_path', // Invalid or unknown object paths
+  'function', // Unknown functions or incorrect usage
+  'expression', // Issues inside Wp_Eval blocks
+  'best_practice', // Style and best practice suggestions
+]);
+export type ValidationCategory = z.infer<typeof ValidationCategorySchema>;
+
+/**
+ * A single validation issue
+ */
+export const ValidationIssueSchema = z.object({
+  /** Severity: error (won't render), warning (may cause issues), suggestion (improvement) */
+  severity: ValidationSeveritySchema,
+
+  /** Category of the issue */
+  category: ValidationCategorySchema,
+
+  /** Line number where issue occurs (1-indexed), null if not line-specific */
+  line: z.number().nullable(),
+
+  /** Column position (1-indexed), null if not position-specific */
+  column: z.number().nullable(),
+
+  /** The problematic code snippet */
+  code_snippet: z.string(),
+
+  /** Human-readable description of the issue */
+  message: z.string(),
+
+  /** Suggested fix or corrected code */
+  suggestion: z.string().nullable(),
+});
+
+export type ValidationIssue = z.infer<typeof ValidationIssueSchema>;
+
+/**
+ * Summary statistics for validation results
+ */
+export const ValidationSummarySchema = z.object({
+  /** Total number of issues found */
+  total_issues: z.number(),
+
+  /** Count by severity */
+  errors: z.number(),
+  warnings: z.number(),
+  suggestions: z.number(),
+
+  /** Whether the template is valid (no errors) */
+  is_valid: z.boolean(),
+
+  /** Objects detected in the template */
+  objects_detected: z.array(z.string()),
+
+  /** Functions detected in the template */
+  functions_detected: z.array(z.string()),
+});
+
+export type ValidationSummary = z.infer<typeof ValidationSummarySchema>;
+
+/**
+ * Input for template validation
+ */
+export const TemplateValidationRequestSchema = z.object({
+  /** The template code to validate */
+  template: z.string().min(1, 'Template code is required'),
+
+  /** Optional document type context */
+  documentType: DocumentTypeSchema.optional().default('invoice'),
+});
+
+export type TemplateValidationRequest = z.infer<typeof TemplateValidationRequestSchema>;
+
+/**
+ * Output from template validation
+ */
+export const TemplateValidationOutputSchema = z.object({
+  /** List of all issues found */
+  issues: z.array(ValidationIssueSchema),
+
+  /** Summary statistics */
+  summary: ValidationSummarySchema,
+});
+
+export type TemplateValidationOutput = z.infer<typeof TemplateValidationOutputSchema>;
+
+// ============================================================================
+// VALIDATOR JSON SCHEMAS FOR LLM
+// ============================================================================
+
+/**
+ * JSON Schema for LLM semantic validation output
+ */
+export const templateValidationJsonSchema = {
+  type: 'object',
+  properties: {
+    issues: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          severity: {
+            type: 'string',
+            enum: ['error', 'warning', 'suggestion'],
+            description: 'Severity: error (breaks rendering), warning (may cause issues), suggestion (improvement)',
+          },
+          category: {
+            type: 'string',
+            enum: ['syntax', 'section', 'object_path', 'function', 'expression', 'best_practice'],
+            description: 'Category of the issue',
+          },
+          line: {
+            type: ['number', 'null'],
+            description: 'Line number (1-indexed) or null if not line-specific',
+          },
+          column: {
+            type: ['number', 'null'],
+            description: 'Column position (1-indexed) or null if not position-specific',
+          },
+          code_snippet: {
+            type: 'string',
+            description: 'The problematic code snippet',
+          },
+          message: {
+            type: 'string',
+            description: 'Human-readable description of the issue',
+          },
+          suggestion: {
+            type: ['string', 'null'],
+            description: 'Suggested fix or corrected code, null if no fix available',
+          },
+        },
+        required: ['severity', 'category', 'line', 'column', 'code_snippet', 'message', 'suggestion'],
+        additionalProperties: false,
+      },
+      description: 'List of validation issues found',
+    },
+    objects_detected: {
+      type: 'array',
+      items: { type: 'string' },
+      description: 'Zuora objects detected in template (e.g., Invoice, Account, InvoiceItem)',
+    },
+    functions_detected: {
+      type: 'array',
+      items: { type: 'string' },
+      description: 'Functions detected in template (e.g., Round, Localise, GroupBy)',
+    },
+  },
+  required: ['issues', 'objects_detected', 'functions_detected'],
+  additionalProperties: false,
+};
+
+/**
+ * Validate TemplateValidationOutput
+ */
+export function validateTemplateValidationOutput(data: unknown): TemplateValidationOutput {
+  const result = TemplateValidationOutputSchema.safeParse(data);
+  if (!result.success) {
+    const errors = result.error.errors.map((e) => `${e.path.join('.')}: ${e.message}`);
+    throw new Error(`Invalid validation output: ${errors.join(', ')}`);
+  }
+  return result.data;
+}

@@ -12,6 +12,8 @@ import type {
   HTMLTemplateExpressionOutput,
   QuickTemplate,
   HTMLTemplateMode,
+  TemplateValidationRequest,
+  TemplateValidationOutput,
 } from "@zuca/types/html-template";
 
 // Response types
@@ -31,6 +33,12 @@ interface TemplatesResponse {
 interface GroupedTemplatesResponse {
   success: boolean;
   templates: Record<string, QuickTemplate[]>;
+}
+
+interface ValidateResponse {
+  success: boolean;
+  session_id: string;
+  result: TemplateValidationOutput;
 }
 
 // API functions
@@ -61,6 +69,19 @@ async function fetchGroupedTemplates(
 ): Promise<GroupedTemplatesResponse> {
   const params = mode ? `?mode=${mode}&grouped=true` : "?grouped=true";
   const response = await fetch(`/api/html-template/templates${params}`);
+  const data = await response.json();
+  if (!response.ok) throw data;
+  return data;
+}
+
+async function validateTemplateCode(
+  payload: TemplateValidationRequest & { model?: string }
+): Promise<ValidateResponse> {
+  const response = await fetch("/api/html-template/validate", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
   const data = await response.json();
   if (!response.ok) throw data;
   return data;
@@ -108,14 +129,33 @@ export function useGroupedTemplates(mode?: HTMLTemplateMode) {
   });
 }
 
+/**
+ * Hook for validating HTML template code.
+ * Returns a mutation that validates template syntax, object paths, and best practices.
+ */
+export function useTemplateValidator() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: validateTemplateCode,
+    onSuccess: () => {
+      // Invalidate sessions list to show the new session
+      queryClient.invalidateQueries({ queryKey: ["sessions"] });
+    },
+  });
+}
+
 // Re-export types for convenience
 export type {
   GenerateResponse,
   TemplatesResponse,
   GroupedTemplatesResponse,
+  ValidateResponse,
   HTMLTemplateRequest,
   HTMLTemplateCodeOutput,
   HTMLTemplateExpressionOutput,
   QuickTemplate,
   HTMLTemplateMode,
+  TemplateValidationRequest,
+  TemplateValidationOutput,
 };

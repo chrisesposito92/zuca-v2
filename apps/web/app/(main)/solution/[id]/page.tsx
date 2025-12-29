@@ -21,9 +21,9 @@ import { ConversationPanel } from "@/components/chat";
 import { UCGenerateView } from "@/components/uc-generate-view";
 import type { ZucaOutput, UCGeneratorOutput } from "@zuca/types";
 import type { RevenueSnapshotOutput } from "@zuca/types/revenue-snapshot";
-import type { HTMLTemplateOutput, HTMLTemplateRequest } from "@zuca/types/html-template";
+import type { HTMLTemplateOutput, HTMLTemplateRequest, TemplateValidationRequest, TemplateValidationOutput } from "@zuca/types/html-template";
 import { RevenueSnapshotView } from "@/components/revenue-snapshot-view";
-import { HTMLTemplateResultView } from "@/components/html-template-view";
+import { HTMLTemplateResultView, TemplateValidationResultView } from "@/components/html-template-view";
 import { FeedbackButtons } from "@/components/FeedbackButtons";
 import * as XLSX from "xlsx";
 
@@ -210,8 +210,8 @@ export default function SolutionPage({ params }: PageProps) {
   }
 
   if (session.session_type === "html-builder") {
-    const htmlResult = session.result as HTMLTemplateOutput | null;
-    const htmlInput = session.input as HTMLTemplateRequest;
+    const htmlResult = session.result as (HTMLTemplateOutput | { mode: 'validate'; result: TemplateValidationOutput }) | null;
+    const htmlInput = session.input as (HTMLTemplateRequest | (TemplateValidationRequest & { mode: 'validate' }));
 
     if (!htmlResult) {
       return (
@@ -272,7 +272,7 @@ export default function SolutionPage({ params }: PageProps) {
               <div>
                 <h1 className="text-3xl font-bold tracking-tight">
                   <span className="gradient-text">
-                    {htmlResult.mode === "code" ? "Template Code" : "Expression"}
+                    {htmlResult.mode === "code" ? "Template Code" : htmlResult.mode === "expression" ? "Expression" : "Template Validation"}
                   </span>
                 </h1>
                 <div className="flex items-center gap-3 mt-2">
@@ -323,14 +323,23 @@ export default function SolutionPage({ params }: PageProps) {
           {/* Result */}
           <Card className="glass-card">
             <CardHeader className="px-6 pt-5 pb-0">
-              <h3 className="text-lg font-semibold">Generated Output</h3>
+              <h3 className="text-lg font-semibold">
+                {htmlResult.mode === "validate" ? "Validation Results" : "Generated Output"}
+              </h3>
             </CardHeader>
             <CardBody className="p-6">
-              <HTMLTemplateResultView
-                mode={htmlResult.mode}
-                result={htmlResult.result}
-                sessionId={session.id}
-              />
+              {htmlResult.mode === "validate" ? (
+                <TemplateValidationResultView
+                  result={htmlResult.result as TemplateValidationOutput}
+                  /* Don't pass sessionId - we're already on the detail page */
+                />
+              ) : (
+                <HTMLTemplateResultView
+                  mode={htmlResult.mode as "code" | "expression"}
+                  result={(htmlResult as HTMLTemplateOutput).result}
+                  /* Don't pass sessionId - we're already on the detail page */
+                />
+              )}
             </CardBody>
           </Card>
 
@@ -340,25 +349,46 @@ export default function SolutionPage({ params }: PageProps) {
               <h3 className="text-lg font-semibold">Input</h3>
             </CardHeader>
             <CardBody className="p-6 space-y-4">
-              <div className="space-y-2">
-                <p className="text-xs font-medium text-default-500 uppercase tracking-wide">Description</p>
-                <p className="text-default-600 leading-relaxed">{htmlInput.description}</p>
-              </div>
-              {htmlInput.context?.documentType && (
-                <div className="space-y-2">
-                  <p className="text-xs font-medium text-default-500 uppercase tracking-wide">Document Type</p>
-                  <Chip size="sm" variant="flat" className="bg-default-100 capitalize">
-                    {htmlInput.context.documentType}
-                  </Chip>
-                </div>
-              )}
-              {htmlInput.context?.existingCode && (
-                <div className="space-y-2">
-                  <p className="text-xs font-medium text-default-500 uppercase tracking-wide">Existing Code</p>
-                  <pre className="text-xs bg-default-100/50 p-3 rounded-lg overflow-x-auto font-mono">
-                    {htmlInput.context.existingCode}
-                  </pre>
-                </div>
+              {htmlResult.mode === "validate" ? (
+                <>
+                  <div className="space-y-2">
+                    <p className="text-xs font-medium text-default-500 uppercase tracking-wide">Template Code</p>
+                    <pre className="text-xs bg-default-100/50 p-3 rounded-lg overflow-x-auto font-mono max-h-80 overflow-y-auto">
+                      {(htmlInput as TemplateValidationRequest & { mode: 'validate' }).template}
+                    </pre>
+                  </div>
+                  {(htmlInput as TemplateValidationRequest).documentType && (
+                    <div className="space-y-2">
+                      <p className="text-xs font-medium text-default-500 uppercase tracking-wide">Document Type</p>
+                      <Chip size="sm" variant="flat" className="bg-default-100 capitalize">
+                        {(htmlInput as TemplateValidationRequest).documentType}
+                      </Chip>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <>
+                  <div className="space-y-2">
+                    <p className="text-xs font-medium text-default-500 uppercase tracking-wide">Description</p>
+                    <p className="text-default-600 leading-relaxed">{(htmlInput as HTMLTemplateRequest).description}</p>
+                  </div>
+                  {(htmlInput as HTMLTemplateRequest).context?.documentType && (
+                    <div className="space-y-2">
+                      <p className="text-xs font-medium text-default-500 uppercase tracking-wide">Document Type</p>
+                      <Chip size="sm" variant="flat" className="bg-default-100 capitalize">
+                        {(htmlInput as HTMLTemplateRequest).context?.documentType}
+                      </Chip>
+                    </div>
+                  )}
+                  {(htmlInput as HTMLTemplateRequest).context?.existingCode && (
+                    <div className="space-y-2">
+                      <p className="text-xs font-medium text-default-500 uppercase tracking-wide">Existing Code</p>
+                      <pre className="text-xs bg-default-100/50 p-3 rounded-lg overflow-x-auto font-mono">
+                        {(htmlInput as HTMLTemplateRequest).context?.existingCode}
+                      </pre>
+                    </div>
+                  )}
+                </>
               )}
             </CardBody>
           </Card>
