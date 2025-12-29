@@ -20,8 +20,6 @@ import {
   ModalHeader,
   ModalBody,
   useDisclosure,
-  Select,
-  SelectItem,
 } from "@heroui/react";
 import { useState, useMemo } from "react";
 import Link from "next/link";
@@ -894,12 +892,6 @@ const DEFAULT_SAMPLE_DATA = {
   },
 };
 
-// Currency options for the picklist
-const CURRENCY_OPTIONS = [
-  { value: "USD", label: "USD - US Dollar" },
-  { value: "CAD", label: "CAD - Canadian Dollar" },
-  { value: "EUR", label: "EUR - Euro" },
-];
 
 export function TemplateDesignResultView({
   result,
@@ -909,7 +901,6 @@ export function TemplateDesignResultView({
   const [activeTab, setActiveTab] = useState<"preview" | "code" | "live">("preview");
   const [sampleDataJson, setSampleDataJson] = useState(JSON.stringify(DEFAULT_SAMPLE_DATA, null, 2));
   const [dataError, setDataError] = useState<string | null>(null);
-  const [currency, setCurrency] = useState<string>("USD");
   const { isOpen: isModalOpen, onOpen: onModalOpen, onClose: onModalClose } = useDisclosure();
 
   // Parse sample data and render preview
@@ -917,13 +908,15 @@ export function TemplateDesignResultView({
     try {
       const data = JSON.parse(sampleDataJson);
       setDataError(null);
-      const renderResult = render(result.html, data, { currency, showMissingFields: true });
+      // Currency is derived from the sample data's Invoice.Currency or defaults to USD
+      const sampleCurrency = (data?.Invoice?.Currency as string) || 'USD';
+      const renderResult = render(result.html, data, { currency: sampleCurrency, showMissingFields: true });
       return renderResult;
     } catch (err) {
       setDataError(err instanceof Error ? err.message : "Invalid JSON");
       return null;
     }
-  }, [sampleDataJson, result.html, currency]);
+  }, [sampleDataJson, result.html]);
 
   const copyToClipboard = async () => {
     await navigator.clipboard.writeText(result.html);
@@ -1054,28 +1047,7 @@ export function TemplateDesignResultView({
       ) : (
         <div className="space-y-4">
           {/* Controls Bar */}
-          <div className="flex items-center justify-between flex-wrap gap-3 p-3 bg-default-50 rounded-lg border border-default-200">
-            <div className="flex items-center gap-3">
-              {/* Currency Selector */}
-              <div className="flex items-center gap-2">
-                <span className="text-sm text-default-600">Currency:</span>
-                <Select
-                  size="sm"
-                  selectedKeys={[currency]}
-                  onSelectionChange={(keys) => {
-                    const selected = Array.from(keys)[0] as string;
-                    if (selected) setCurrency(selected);
-                  }}
-                  className="w-40"
-                  aria-label="Select currency"
-                >
-                  {CURRENCY_OPTIONS.map((opt) => (
-                    <SelectItem key={opt.value}>{opt.label}</SelectItem>
-                  ))}
-                </Select>
-              </div>
-            </div>
-
+          <div className="flex items-center justify-end p-3 bg-default-50 rounded-lg border border-default-200">
             {/* Modal Button */}
             <Button
               size="sm"
@@ -1223,23 +1195,6 @@ export function TemplateDesignResultView({
                   )}
                 </div>
               )}
-            </div>
-            <div className="flex items-center gap-3">
-              <span className="text-sm text-default-500">Currency:</span>
-              <Select
-                size="sm"
-                selectedKeys={[currency]}
-                onSelectionChange={(keys) => {
-                  const selected = Array.from(keys)[0] as string;
-                  if (selected) setCurrency(selected);
-                }}
-                className="w-40"
-                aria-label="Select currency"
-              >
-                {CURRENCY_OPTIONS.map((opt) => (
-                  <SelectItem key={opt.value}>{opt.label}</SelectItem>
-                ))}
-              </Select>
             </div>
           </ModalHeader>
           <ModalBody className="p-4 overflow-hidden">

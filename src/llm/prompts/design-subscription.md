@@ -36,14 +36,30 @@ If you need clarification on Zuora charge models, billing configurations, or POB
 
 4. **If usage charges are present**, generate sample usage records within the subscription term.
 
-### Ramp Deals (Escalating Pricing)
+### Price Step-Up Scenarios (Ramps, Introductory Pricing, Promotions)
 
-When the use case involves ramping/escalating pricing over time:
+**CRITICAL: When pricing changes during the contract term, you MUST create separate charge segments.**
 
-**Ramp Charge Structure:**
-1. Create separate charge segments for each ramp period
-2. Use consistent charge naming with period indicator (e.g., "Platform License - Year 1", "Platform License - Year 2")
-3. Set effectiveStartDate and effectiveEndDate for each ramp segment
+This applies to ANY scenario with different prices for different periods:
+- Year-over-year ramps (Year 1 vs Year 2 pricing)
+- Introductory/promotional pricing (discounted initial period, then standard rate)
+- Mid-term price increases or decreases
+- Tiered commitment periods with different rates
+
+**Charge Segmentation Rules:**
+1. **Create ONE charge per distinct pricing period** - each price point = separate charge
+2. Use consistent charge naming with period indicator:
+   - Year-level: "Platform License - Year 1", "Platform License - Year 2"
+   - Month-level: "Wireless Service - Promo (Months 1-3)", "Wireless Service - Standard (Months 4-12)"
+3. Set effectiveStartDate and effectiveEndDate for each segment to cover exactly its period
+4. Each segment's pricing (listPrice, sellPrice) reflects that period's rate
+
+**Example: Introductory Pricing (3 months @ $15, then 9 months @ $20)**
+This MUST produce TWO charges:
+- Charge 1: "Service - Promo Period", effectiveStart: 01/01/2026, effectiveEnd: 03/31/2026, sellPrice: $15
+- Charge 2: "Service - Standard Period", effectiveStart: 04/01/2026, effectiveEnd: 12/31/2026, sellPrice: $20
+
+**DO NOT collapse multiple pricing periods into a single charge with averaged pricing.**
 
 ### Contract Amendments
 

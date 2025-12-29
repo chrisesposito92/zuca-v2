@@ -56,15 +56,19 @@ Each row object contains:
 - Product Family: string
 
 ## Instructions
-1. Create one row per charge/POB combination
-2. **Strictly follow the provided POB mapping for each charge**:
+1. **Create one row per charge/POB combination** - if the subscription spec has multiple charges (e.g., separate segments for promotional vs standard pricing periods), each charge becomes a separate row in the table
+2. **Price step-up scenarios** (introductory pricing, ramps): Each charge segment with distinct pricing MUST appear as its own line with:
+   - Its specific Revenue Start Date and Revenue End Date matching the charge's effective dates
+   - Its specific Unit Sell Price and extended prices for that period
+   - Separate Line Item Num for each segment
+3. **Strictly follow the provided POB mapping for each charge**:
    - POB Template, POB IDENTIFIER, and Release Event must match the mapped values
    - Do not substitute or infer a different template
    - If a charge is missing from the mapping, note it in assumptions and use a best-fit placeholder with a clear warning
-3. Calculate extended prices based on quantity and pricing
-4. For allocations: distribute transaction price across POBs based on SSP
-5. Set Unreleased Revenue = Ext Allocated Price initially; Released Revenue = 0
-6. Use code_interpreter tool for complex calculations if needed
+4. Calculate extended prices based on quantity and pricing
+5. For allocations: distribute transaction price across POBs based on SSP
+6. Set Unreleased Revenue = Ext Allocated Price initially; Released Revenue = 0
+7. Use code_interpreter tool for complex calculations if needed
 
 ## Allocation Methods
 

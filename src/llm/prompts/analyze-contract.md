@@ -62,10 +62,13 @@ This combines two analysis tasks:
 - "prospective", "go-forward only", "no restatement" → ZR prospective modification treatment
 - "new POB added", "new deliverable" → ZR prospective treatment (new performance obligation)
 
-### Ramp Deals
+### Ramp Deals & Price Step-Up Patterns
 - "ramp", "ramping", "year-over-year increase", "escalating pricing" → ZB ramp charges + ZR ramp allocation
 - "year 1 pricing different from year 2" → ramp deal pattern
 - "volume ramp", "term ramp" → ramp with specific average pricing method
+- "introductory pricing", "intro rate", "promotional pricing", "promo period" → ZB multi-segment charges + ZR ramp allocation
+- "first X months at Y, then Z" → introductory pricing pattern (requires separate charge segments)
+- "discounted initial period", "standard rate after", "price step-up" → introductory pricing pattern
 
 ### Variable Consideration (VC)
 - "variable consideration", "VC", "uncertain amount" → ZR VC allocation
