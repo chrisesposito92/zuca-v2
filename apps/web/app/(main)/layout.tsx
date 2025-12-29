@@ -60,7 +60,7 @@ export default function MainLayout({
 
         {/* Logo */}
         <div className="px-6 pt-4">
-          <Link href="/analyze" className="flex items-center gap-3 group">
+          <Link href="/" className="flex items-center gap-3 group">
             <div className="relative overflow-hidden">
               <Image
                 src="/zuca_logo_dark_v1.png"
