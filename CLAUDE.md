@@ -53,14 +53,25 @@ Automated feedback loop where the pipeline learns from evaluation failures:
 - **Test Suites** (`data/test-suites/*.yaml`) - Test cases with inputs and focus steps
 - **Evaluation Criteria** (`data/evaluation-criteria/*.yaml`) - Behavioral rules per step
 - **LLM Judge** (`src/self-learn/judge/`) - Evaluates outputs against criteria
-- **Corrections Store** (`data/corrections-index.json`) - Learned fixes from failures
+- **Corrections Store** - Dual backend: JSON (local dev) or Postgres (production)
 - **Injector** (`src/self-learn/injector/`) - Injects corrections as few-shot examples
 - **Evolution** (`src/self-learn/evolution/`) - Pattern analysis + prompt improvement suggestions
 
 ### Key Files
 - `src/self-learn/` - Main module: types, corrections, criteria, judge, evaluation, injector, evolution
+- `src/self-learn/corrections/postgres-backend.ts` - Postgres backend with pgvector embeddings
 - `src/llm/prompts/self-learn-judge.md` - Judge system prompt (registered in `index.ts`)
+- `apps/web/lib/schema.sql` - Database schema including corrections + prompt_suggestions tables
 - `docs/FEATURE-SELF-LEARNING.md` - Full feature documentation with phase status
+
+### Configuration
+```bash
+# Enable Postgres backend (requires POSTGRES_URL)
+USE_POSTGRES_CORRECTIONS=true
+
+# Disable embeddings for corrections (faster, keyword-only search)
+USE_CORRECTIONS_EMBEDDINGS=false
+```
 
 ### CLI Commands
 ```bash

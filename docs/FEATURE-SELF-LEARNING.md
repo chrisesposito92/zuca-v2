@@ -130,10 +130,11 @@ data/
 - [ ] Add embeddings to corrections (semantic search) - Deferred to Phase 5
 - [ ] Full effectiveness tracking (pass correction IDs through pipeline) - Deferred to Phase 5
 
-### Phase 5: Polish & Scale (Pending)
-- [ ] Implement Postgres backend for corrections (moved from Phase 4)
-- [ ] Add embeddings to corrections for semantic search (moved from Phase 4)
-- [ ] Full effectiveness tracking (moved from Phase 4)
+### Phase 5: Polish & Scale (In Progress)
+- [x] Implement Postgres backend for corrections (`postgres-backend.ts`)
+- [x] Add embeddings to corrections for semantic search (pgvector with HNSW index)
+- [x] Database schema for corrections and prompt_suggestions tables
+- [ ] Full effectiveness tracking (pass correction IDs through pipeline)
 - [ ] Add criteria for all pipeline steps
 - [ ] Build test suite from golden use cases
 - [ ] Add CI integration option

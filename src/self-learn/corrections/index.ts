@@ -7,17 +7,19 @@
  */
 
 import { CorrectionsJsonBackend } from './json-backend';
-// import { CorrectionsPostgresBackend } from './postgres-backend'; // Phase 4
+import { CorrectionsPostgresBackend } from './postgres-backend';
 import type { CorrectionsBackend, Correction, CorrectionInsert } from './types';
+import { debugLog } from '../../config';
 
 // Re-export types
 export * from './types';
 
 /**
  * Check if we should use Postgres backend
+ * Requires both POSTGRES_URL and USE_POSTGRES_CORRECTIONS=true
  */
 function usePostgres(): boolean {
-  return !!process.env.POSTGRES_URL && !!process.env.USE_POSTGRES_CORRECTIONS;
+  return !!process.env.POSTGRES_URL && process.env.USE_POSTGRES_CORRECTIONS === 'true';
 }
 
 /**
@@ -31,11 +33,12 @@ let backend: CorrectionsBackend | null = null;
 export function getCorrectionsBackend(): CorrectionsBackend {
   if (!backend) {
     if (usePostgres()) {
-      // Phase 4: Postgres backend
-      // backend = new CorrectionsPostgresBackend();
-      console.warn('Postgres corrections backend not yet implemented, falling back to JSON');
-      backend = new CorrectionsJsonBackend();
+      debugLog('Using Postgres corrections backend');
+      backend = new CorrectionsPostgresBackend({
+        useEmbeddings: process.env.USE_CORRECTIONS_EMBEDDINGS !== 'false',
+      });
     } else {
+      debugLog('Using JSON corrections backend');
       backend = new CorrectionsJsonBackend();
     }
   }

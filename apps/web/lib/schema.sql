@@ -146,3 +146,70 @@ CREATE TRIGGER update_zuora_connections_updated_at
     BEFORE UPDATE ON zuora_connections
     FOR EACH ROW
     EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================================================
+-- Self-Learning Pipeline Tables (Phase 5)
+-- ============================================================================
+
+-- Corrections table - stores learned fixes from evaluation failures
+CREATE TABLE IF NOT EXISTS corrections (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    test_case_id VARCHAR(100) NOT NULL,
+    step_name VARCHAR(50) NOT NULL,
+    issue_type VARCHAR(50) NOT NULL,
+    pattern VARCHAR(255) NOT NULL,
+    pattern_embedding vector(1536),          -- For semantic search
+    input_summary TEXT NOT NULL,
+    incorrect_output JSONB,
+    expected_behavior TEXT NOT NULL,
+    correction TEXT NOT NULL,
+    example_fix JSONB,
+    criteria_id VARCHAR(100),
+    confidence FLOAT DEFAULT 1.0,
+    times_applied INTEGER DEFAULT 0,
+    success_rate FLOAT DEFAULT 0.0,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Prompt suggestions table - stores LLM-generated prompt improvements
+CREATE TABLE IF NOT EXISTS prompt_suggestions (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    step_name VARCHAR(50) NOT NULL,
+    pattern VARCHAR(255) NOT NULL,
+    occurrence_count INTEGER DEFAULT 1,
+    suggested_update TEXT NOT NULL,
+    status VARCHAR(20) DEFAULT 'pending',    -- pending | approved | rejected | applied
+    applied_at TIMESTAMPTZ,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Indexes for corrections
+CREATE INDEX IF NOT EXISTS idx_corrections_step_name ON corrections(step_name);
+CREATE INDEX IF NOT EXISTS idx_corrections_pattern ON corrections(pattern);
+CREATE INDEX IF NOT EXISTS idx_corrections_test_case ON corrections(test_case_id);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_corrections_unique ON corrections(test_case_id, step_name, pattern);
+
+-- Vector similarity index for corrections embeddings
+CREATE INDEX IF NOT EXISTS idx_corrections_embedding ON corrections
+    USING hnsw (pattern_embedding vector_cosine_ops)
+    WHERE pattern_embedding IS NOT NULL;
+
+-- Indexes for prompt suggestions
+CREATE INDEX IF NOT EXISTS idx_prompt_suggestions_step ON prompt_suggestions(step_name);
+CREATE INDEX IF NOT EXISTS idx_prompt_suggestions_status ON prompt_suggestions(status);
+
+-- Trigger for corrections updated_at
+DROP TRIGGER IF EXISTS update_corrections_updated_at ON corrections;
+CREATE TRIGGER update_corrections_updated_at
+    BEFORE UPDATE ON corrections
+    FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at_column();
+
+-- Trigger for prompt_suggestions updated_at
+DROP TRIGGER IF EXISTS update_prompt_suggestions_updated_at ON prompt_suggestions;
+CREATE TRIGGER update_prompt_suggestions_updated_at
+    BEFORE UPDATE ON prompt_suggestions
+    FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at_column();
