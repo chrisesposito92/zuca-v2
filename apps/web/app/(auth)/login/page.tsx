@@ -80,14 +80,14 @@ export default function LoginPage() {
 
           <CardBody className="p-8 pt-10">
             {/* Logo and header */}
-            <div className="flex flex-col items-center gap-4 mb-8">
-              <div className="relative">
+            <div className="flex flex-col items-center gap-2 mb-8">
+              <div className="relative overflow-hidden">
                 <Image
                   src="/zuca_logo_dark_v1.png"
                   alt="ZUCA"
                   width={200}
                   height={56}
-                  className="w-full h-auto transition-transform group-hover:scale-[1.02]"
+                  className="w-full h-auto transition-transform group-hover:scale-[1.02] -my-8"
                   priority
                 />
                 {/* Subtle glow behind logo */}
@@ -95,10 +95,7 @@ export default function LoginPage() {
               </div>
               <div className="text-center">
                 <p className="text-default-500 text-sm">
-                  Zuora Use Case Architect
-                </p>
-                <p className="text-default-400 text-xs mt-1">
-                  Enterprise Billing & Revenue Solutions
+                  Zuora Use Case Assistant
                 </p>
               </div>
             </div>
