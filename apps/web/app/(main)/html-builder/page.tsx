@@ -204,8 +204,10 @@ export default function HTMLBuilderPage() {
     }
 
     try {
+      // activeTab is only "code" or "expression" when this function is called
+      // (the Generate button only appears on those tabs)
       await builderMutation.mutateAsync({
-        mode: activeTab,
+        mode: activeTab as HTMLTemplateMode,
         description: description.trim(),
         context: activeTab === "code" ? {
           documentType: documentType as "invoice" | "credit_memo" | "debit_memo",

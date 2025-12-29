@@ -1216,27 +1216,111 @@ export function TemplateDesignResultView({
                       {livePreview.stats.loopsProcessed} loops
                     </Chip>
                   )}
+                  {livePreview.warnings.length > 0 && (
+                    <Chip size="sm" variant="flat" color="warning">
+                      {livePreview.warnings.length} warnings
+                    </Chip>
+                  )}
                 </div>
               )}
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
               <span className="text-sm text-default-500">Currency:</span>
-              <Chip size="sm" variant="flat" color="secondary">{currency}</Chip>
+              <Select
+                size="sm"
+                selectedKeys={[currency]}
+                onSelectionChange={(keys) => {
+                  const selected = Array.from(keys)[0] as string;
+                  if (selected) setCurrency(selected);
+                }}
+                className="w-40"
+                aria-label="Select currency"
+              >
+                {CURRENCY_OPTIONS.map((opt) => (
+                  <SelectItem key={opt.value}>{opt.label}</SelectItem>
+                ))}
+              </Select>
             </div>
           </ModalHeader>
-          <ModalBody className="p-6">
-            {livePreview?.html ? (
-              <PreviewFrame
-                html={livePreview.html}
-                title="Full Preview"
-                initialZoom={100}
-                className="min-h-[80vh]"
-              />
-            ) : (
-              <div className="flex items-center justify-center h-[80vh] rounded-lg border border-default-200 bg-default-50">
-                <p className="text-sm text-default-400">No preview available. Check your sample data JSON.</p>
+          <ModalBody className="p-4 overflow-hidden">
+            <div className="grid grid-cols-[350px_1fr] gap-4 h-full">
+              {/* Sample Data Editor Panel */}
+              <div className="flex flex-col space-y-3 overflow-hidden">
+                <div className="flex items-center justify-between">
+                  <h4 className="text-sm font-semibold text-foreground flex items-center gap-2">
+                    <svg className="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4" />
+                    </svg>
+                    Sample Data (JSON)
+                  </h4>
+                  {dataError && (
+                    <Chip size="sm" color="danger" variant="flat" className="text-xs">
+                      Invalid
+                    </Chip>
+                  )}
+                </div>
+                <Textarea
+                  value={sampleDataJson}
+                  onValueChange={setSampleDataJson}
+                  classNames={{
+                    base: "flex-1",
+                    inputWrapper: "h-full",
+                    input: "font-mono text-xs h-full",
+                  }}
+                  isInvalid={!!dataError}
+                  placeholder="Edit JSON to see live preview..."
+                  style={{ minHeight: "calc(80vh - 100px)" }}
+                />
+                <p className="text-xs text-default-400 shrink-0">
+                  Edit JSON to see live preview updates.
+                </p>
               </div>
-            )}
+
+              {/* Preview Panel */}
+              <div className="flex flex-col space-y-3 overflow-hidden">
+                <div className="flex items-center justify-between">
+                  <h4 className="text-sm font-semibold text-foreground flex items-center gap-2">
+                    <svg className="w-4 h-4 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                    Rendered Output
+                  </h4>
+                </div>
+
+                {/* Warnings */}
+                {livePreview && livePreview.warnings.length > 0 && (
+                  <div className="space-y-1 max-h-16 overflow-y-auto shrink-0">
+                    {livePreview.warnings.slice(0, 2).map((warning, idx) => (
+                      <div key={idx} className="flex items-center gap-2 text-xs text-warning-600 bg-warning-50 rounded px-2 py-1">
+                        <svg className="w-3 h-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                        <span className="truncate">{warning.message}</span>
+                      </div>
+                    ))}
+                    {livePreview.warnings.length > 2 && (
+                      <p className="text-xs text-warning-400">...and {livePreview.warnings.length - 2} more</p>
+                    )}
+                  </div>
+                )}
+
+                {livePreview?.html ? (
+                  <div className="flex-1 min-h-0" style={{ minHeight: "calc(80vh - 100px)" }}>
+                    <PreviewFrame
+                      html={livePreview.html}
+                      title="Full Preview"
+                      initialZoom={100}
+                      className="h-full"
+                    />
+                  </div>
+                ) : (
+                  <div className="flex items-center justify-center flex-1 rounded-lg border border-default-200 bg-default-50" style={{ minHeight: "calc(80vh - 100px)" }}>
+                    <p className="text-sm text-default-400">Fix JSON errors to see preview</p>
+                  </div>
+                )}
+              </div>
+            </div>
           </ModalBody>
         </ModalContent>
       </Modal>
