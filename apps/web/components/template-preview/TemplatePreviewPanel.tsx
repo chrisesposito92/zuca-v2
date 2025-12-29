@@ -81,6 +81,7 @@ import {
 } from "@/hooks/useTemplatePreview";
 import type { RenderResult } from "@zuca/pipeline/template-preview";
 import PreviewFrame from "./PreviewFrame";
+import ConditionalToggles from "./ConditionalToggles";
 
 interface TemplatePreviewPanelProps {
   /** Initial template code */
@@ -364,6 +365,19 @@ export default function TemplatePreviewPanel({
                 />
               )}
 
+              {/* Conditional toggles for testing branches */}
+              {template && (
+                <ConditionalToggles
+                  template={template}
+                  data={data}
+                  onDataChange={(newData) => {
+                    setData(newData);
+                    setDataJson(stringifySampleData(newData));
+                    onDataChange?.(newData);
+                  }}
+                />
+              )}
+
               {/* Preview frame */}
               {result?.html ? (
                 <PreviewFrame
@@ -450,4 +464,4 @@ export default function TemplatePreviewPanel({
 }
 
 // Export subcomponents for flexible usage
-export { PreviewFrame, RenderStats, RenderMessages };
+export { PreviewFrame, RenderStats, RenderMessages, ConditionalToggles };

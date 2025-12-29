@@ -2,10 +2,12 @@
  * React hook for HTML template preview state management.
  *
  * Manages template code, sample data, and render results with debounced updates.
+ * Supports Web Worker rendering for large templates to prevent UI blocking.
  */
 
 import { useState, useCallback, useEffect, useRef, useMemo } from 'react';
 import { render, type RenderResult, type RenderOptions } from '@zuca/pipeline/template-preview';
+import { useWorkerRenderer } from './useWorkerRenderer';
 
 export interface UseTemplatePreviewOptions {
   /** Initial template code */
@@ -18,6 +20,10 @@ export interface UseTemplatePreviewOptions {
   debounceMs?: number;
   /** Auto-render on changes (default: true) */
   autoRender?: boolean;
+  /** Use Web Worker for large templates (default: true) */
+  useWorker?: boolean;
+  /** Size threshold in bytes to use worker (default: 50KB) */
+  workerThreshold?: number;
 }
 
 export interface UseTemplatePreviewReturn {
@@ -43,6 +49,10 @@ export interface UseTemplatePreviewReturn {
   options: RenderOptions;
   /** Update render options */
   setOptions: (options: Partial<RenderOptions>) => void;
+  /** Whether worker rendering is being used */
+  isUsingWorker: boolean;
+  /** Last render duration in ms (available when using worker) */
+  lastRenderDuration: number | null;
 }
 
 /**
@@ -57,6 +67,8 @@ export function useTemplatePreview(
     renderOptions = {},
     debounceMs = 300,
     autoRender = true,
+    useWorker = true,
+    workerThreshold = 50 * 1024,
   } = hookOptions;
 
   // State
@@ -65,12 +77,21 @@ export function useTemplatePreview(
   const [result, setResult] = useState<RenderResult | null>(null);
   const [isRendering, setIsRendering] = useState(false);
   const [options, setOptionsState] = useState<RenderOptions>(renderOptions);
+  const [isUsingWorker, setIsUsingWorker] = useState(false);
+  const [lastRenderDuration, setLastRenderDuration] = useState<number | null>(null);
+
+  // Worker renderer
+  const workerRenderer = useWorkerRenderer({
+    enabled: useWorker,
+    sizeThreshold: workerThreshold,
+  });
 
   // Refs
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
   const templateRef = useRef(template);
   const dataRef = useRef(data);
   const optionsRef = useRef(options);
+  const renderAbortRef = useRef<AbortController | null>(null);
 
   // Keep refs in sync
   templateRef.current = template;
@@ -80,35 +101,82 @@ export function useTemplatePreview(
   /**
    * Perform the actual render
    */
-  const doRender = useCallback(() => {
+  const doRender = useCallback(async () => {
     if (!templateRef.current) {
       setResult(null);
       setIsRendering(false);
+      setIsUsingWorker(false);
       return;
     }
 
-    try {
-      const renderResult = render(templateRef.current, dataRef.current, optionsRef.current);
-      setResult(renderResult);
-    } catch (error) {
-      setResult({
-        html: '',
-        errors: [{
-          type: 'syntax',
-          message: error instanceof Error ? error.message : 'Render failed',
-        }],
-        warnings: [],
-        stats: {
-          fieldsProcessed: 0,
-          loopsProcessed: 0,
-          conditionalsProcessed: 0,
-          expressionsProcessed: 0,
-        },
-      });
+    // Cancel any pending worker render
+    if (renderAbortRef.current) {
+      renderAbortRef.current.abort();
+    }
+    renderAbortRef.current = new AbortController();
+    const abortSignal = renderAbortRef.current.signal;
+
+    // Check if we should use the worker
+    const shouldUseWorkerForThisRender =
+      useWorker &&
+      workerRenderer.isSupported &&
+      workerRenderer.shouldUseWorker(templateRef.current, dataRef.current);
+
+    if (shouldUseWorkerForThisRender && workerRenderer.isReady) {
+      setIsUsingWorker(true);
+
+      try {
+        const { result: workerResult, duration } = await workerRenderer.render(
+          templateRef.current,
+          dataRef.current,
+          optionsRef.current
+        );
+
+        // Check if this render was aborted
+        if (abortSignal.aborted) return;
+
+        setResult(workerResult);
+        setLastRenderDuration(duration);
+      } catch (error) {
+        // Check if this render was aborted
+        if (abortSignal.aborted) return;
+
+        // Fall back to synchronous rendering
+        console.warn('[TemplatePreview] Worker render failed, falling back to sync:', error);
+        performSyncRender();
+      }
+    } else {
+      setIsUsingWorker(false);
+      performSyncRender();
     }
 
     setIsRendering(false);
-  }, []);
+
+    function performSyncRender() {
+      const startTime = performance.now();
+      try {
+        const renderResult = render(templateRef.current, dataRef.current, optionsRef.current);
+        setResult(renderResult);
+        setLastRenderDuration(performance.now() - startTime);
+      } catch (error) {
+        setResult({
+          html: '',
+          errors: [{
+            type: 'syntax',
+            message: error instanceof Error ? error.message : 'Render failed',
+          }],
+          warnings: [],
+          stats: {
+            fieldsProcessed: 0,
+            loopsProcessed: 0,
+            conditionalsProcessed: 0,
+            expressionsProcessed: 0,
+          },
+        });
+        setLastRenderDuration(null);
+      }
+    }
+  }, [useWorker, workerRenderer]);
 
   /**
    * Schedule a debounced render
@@ -240,6 +308,8 @@ export function useTemplatePreview(
     reset,
     options,
     setOptions,
+    isUsingWorker,
+    lastRenderDuration,
   }), [
     template,
     handleSetTemplate,
@@ -252,6 +322,8 @@ export function useTemplatePreview(
     reset,
     options,
     setOptions,
+    isUsingWorker,
+    lastRenderDuration,
   ]);
 }
 

@@ -426,6 +426,526 @@ const absHandler: PipeHandler = (value) => {
 };
 
 // ============================================================================
+// Phase 4+ Advanced Handlers
+// ============================================================================
+
+/**
+ * SortBy - Sorts an array by a field
+ * Usage: {{Items|SortBy("Name", "ASC")}} or {{Items|SortBy("Amount", "DESC")}}
+ */
+const sortByHandler: PipeHandler = (value, args) => {
+  if (!Array.isArray(value)) return value;
+  if (value.length === 0) return value;
+
+  const field = args[0]?.replace(/^["']|["']$/g, '') || '';
+  const direction = (args[1]?.replace(/^["']|["']$/g, '') || 'ASC').toUpperCase();
+  const isDesc = direction === 'DESC';
+
+  // Create a shallow copy to avoid mutating the original
+  const sorted = [...value].sort((a, b) => {
+    const aVal = field ? getNestedValue(a, field) : a;
+    const bVal = field ? getNestedValue(b, field) : b;
+
+    // Handle null/undefined
+    if (aVal == null && bVal == null) return 0;
+    if (aVal == null) return isDesc ? 1 : -1;
+    if (bVal == null) return isDesc ? -1 : 1;
+
+    // Numeric comparison
+    const aNum = parseNumericValue(aVal);
+    const bNum = parseNumericValue(bVal);
+    if (aNum !== null && bNum !== null) {
+      return isDesc ? bNum - aNum : aNum - bNum;
+    }
+
+    // Date comparison
+    if (isDateString(aVal) && isDateString(bVal)) {
+      const aDate = new Date(aVal as string).getTime();
+      const bDate = new Date(bVal as string).getTime();
+      return isDesc ? bDate - aDate : aDate - bDate;
+    }
+
+    // String comparison
+    const aStr = String(aVal);
+    const bStr = String(bVal);
+    const cmp = aStr.localeCompare(bStr);
+    return isDesc ? -cmp : cmp;
+  });
+
+  return sorted;
+};
+
+/**
+ * GroupBy - Groups an array by one or more fields
+ * Usage: {{Items|GroupBy("Category")}} or {{Items|GroupBy("Category", "SubCategory")}}
+ * Returns an array of group objects with { key, items } structure
+ */
+const groupByHandler: PipeHandler = (value, args) => {
+  if (!Array.isArray(value)) return [];
+  if (value.length === 0) return [];
+  if (args.length === 0) return [{ key: 'all', items: value }];
+
+  // Parse all group fields
+  const fields = args.map(a => a.replace(/^["']|["']$/g, ''));
+
+  // Build a nested grouping structure
+  const groupMap = new Map<string, unknown[]>();
+
+  for (const item of value) {
+    // Build composite key from all fields
+    const keyParts = fields.map(field => {
+      const val = getNestedValue(item, field);
+      return val != null ? String(val) : '__null__';
+    });
+    const compositeKey = keyParts.join('|||');
+
+    if (!groupMap.has(compositeKey)) {
+      groupMap.set(compositeKey, []);
+    }
+    groupMap.get(compositeKey)!.push(item);
+  }
+
+  // Convert to array of group objects
+  const groups: Array<{ key: string; keys: Record<string, unknown>; items: unknown[] }> = [];
+  for (const [compositeKey, items] of groupMap) {
+    const keyParts = compositeKey.split('|||');
+    const keys: Record<string, unknown> = {};
+    fields.forEach((field, i) => {
+      const val = keyParts[i];
+      keys[field] = val === '__null__' ? null : val;
+    });
+
+    // Use the first field value as the primary key for simple access
+    const primaryKey = keyParts[0] === '__null__' ? '' : keyParts[0];
+
+    groups.push({ key: primaryKey, keys, items });
+  }
+
+  return groups;
+};
+
+/**
+ * FlatMap - Flattens nested arrays by extracting a field
+ * Usage: {{Groups|FlatMap("items")}} - extracts and flattens "items" arrays from each group
+ */
+const flatMapHandler: PipeHandler = (value, args) => {
+  if (!Array.isArray(value)) return [];
+
+  const field = args[0]?.replace(/^["']|["']$/g, '') || '';
+
+  if (!field) {
+    // No field specified - flatten one level
+    return value.flat();
+  }
+
+  // Extract the field from each item and flatten
+  const result: unknown[] = [];
+  for (const item of value) {
+    if (item && typeof item === 'object') {
+      const fieldValue = getNestedValue(item, field);
+      if (Array.isArray(fieldValue)) {
+        result.push(...fieldValue);
+      } else if (fieldValue !== undefined) {
+        result.push(fieldValue);
+      }
+    }
+  }
+
+  return result;
+};
+
+/**
+ * FilterByValue - Filters an array by comparing a field to a value
+ * Usage: {{Items|FilterByValue("Status", "EQ", "Active")}}
+ * Operators: EQ, NE, GT, LT, GE, LE, CONTAINS, STARTSWITH, ENDSWITH
+ */
+const filterByValueHandler: PipeHandler = (value, args) => {
+  if (!Array.isArray(value)) return [];
+  if (args.length < 3) return value;
+
+  const field = args[0]?.replace(/^["']|["']$/g, '') || '';
+  const operator = (args[1]?.replace(/^["']|["']$/g, '') || 'EQ').toUpperCase();
+  const compareValue = args[2]?.replace(/^["']|["']$/g, '') || '';
+
+  return value.filter(item => {
+    const fieldValue = field ? getNestedValue(item, field) : item;
+    return compareValues(fieldValue, operator, compareValue);
+  });
+};
+
+/**
+ * FilterByRef - Filters an array by comparing a field to a reference value from context
+ * Usage: {{Items|FilterByRef("SubscriptionId", "EQ", "Subscription.Id")}}
+ */
+const filterByRefHandler: PipeHandler = (value, args, context) => {
+  if (!Array.isArray(value)) return [];
+  if (args.length < 3) return value;
+
+  const field = args[0]?.replace(/^["']|["']$/g, '') || '';
+  const operator = (args[1]?.replace(/^["']|["']$/g, '') || 'EQ').toUpperCase();
+  const refPath = args[2]?.replace(/^["']|["']$/g, '') || '';
+
+  // Get the reference value from context
+  const refValue = context.data ? getNestedValue(context.data, refPath) : undefined;
+  if (refValue === undefined) return value;
+
+  return value.filter(item => {
+    const fieldValue = field ? getNestedValue(item, field) : item;
+    return compareValues(fieldValue, operator, refValue);
+  });
+};
+
+/**
+ * Helper function for comparison operations
+ */
+function compareValues(fieldValue: unknown, operator: string, compareValue: unknown): boolean {
+  // Handle null/undefined
+  if (fieldValue == null) {
+    return operator === 'NE' ? compareValue != null : false;
+  }
+
+  const fieldStr = String(fieldValue);
+  const compareStr = String(compareValue);
+
+  switch (operator) {
+    case 'EQ':
+      return fieldStr === compareStr;
+    case 'NE':
+      return fieldStr !== compareStr;
+    case 'GT': {
+      const fNum = parseNumericValue(fieldValue);
+      const cNum = parseNumericValue(compareValue);
+      if (fNum !== null && cNum !== null) return fNum > cNum;
+      return fieldStr > compareStr;
+    }
+    case 'LT': {
+      const fNum = parseNumericValue(fieldValue);
+      const cNum = parseNumericValue(compareValue);
+      if (fNum !== null && cNum !== null) return fNum < cNum;
+      return fieldStr < compareStr;
+    }
+    case 'GE': {
+      const fNum = parseNumericValue(fieldValue);
+      const cNum = parseNumericValue(compareValue);
+      if (fNum !== null && cNum !== null) return fNum >= cNum;
+      return fieldStr >= compareStr;
+    }
+    case 'LE': {
+      const fNum = parseNumericValue(fieldValue);
+      const cNum = parseNumericValue(compareValue);
+      if (fNum !== null && cNum !== null) return fNum <= cNum;
+      return fieldStr <= compareStr;
+    }
+    case 'CONTAINS':
+      return fieldStr.toLowerCase().includes(compareStr.toLowerCase());
+    case 'STARTSWITH':
+      return fieldStr.toLowerCase().startsWith(compareStr.toLowerCase());
+    case 'ENDSWITH':
+      return fieldStr.toLowerCase().endsWith(compareStr.toLowerCase());
+    default:
+      return fieldStr === compareStr;
+  }
+}
+
+/**
+ * DateAdd - Adds a duration to a date
+ * Usage: {{Date|DateAdd(30, "days")}} or {{Date|DateAdd(-1, "months")}}
+ * Units: days, weeks, months, years, hours, minutes
+ */
+const dateAddHandler: PipeHandler = (value, args) => {
+  if (!value) return '';
+
+  let date: Date;
+  if (value instanceof Date) {
+    date = new Date(value);
+  } else if (typeof value === 'string') {
+    date = new Date(value);
+  } else {
+    return String(value);
+  }
+
+  if (isNaN(date.getTime())) return String(value);
+
+  const amount = parseInt(args[0] || '0', 10);
+  const unit = (args[1]?.replace(/^["']|["']$/g, '') || 'days').toLowerCase();
+
+  switch (unit) {
+    case 'days':
+    case 'day':
+      date.setDate(date.getDate() + amount);
+      break;
+    case 'weeks':
+    case 'week':
+      date.setDate(date.getDate() + amount * 7);
+      break;
+    case 'months':
+    case 'month':
+      date.setMonth(date.getMonth() + amount);
+      break;
+    case 'years':
+    case 'year':
+      date.setFullYear(date.getFullYear() + amount);
+      break;
+    case 'hours':
+    case 'hour':
+      date.setHours(date.getHours() + amount);
+      break;
+    case 'minutes':
+    case 'minute':
+      date.setMinutes(date.getMinutes() + amount);
+      break;
+    default:
+      // Default to days
+      date.setDate(date.getDate() + amount);
+  }
+
+  // Return ISO date string
+  return date.toISOString().split('T')[0];
+};
+
+// Timezone offset mapping (common timezones)
+const TIMEZONE_OFFSETS: Record<string, number> = {
+  // North America
+  'PST': -8, 'PDT': -7, 'MST': -7, 'MDT': -6, 'CST': -6, 'CDT': -5,
+  'EST': -5, 'EDT': -4,
+  // Europe
+  'GMT': 0, 'UTC': 0, 'WET': 0, 'WEST': 1, 'CET': 1, 'CEST': 2,
+  'EET': 2, 'EEST': 3,
+  // Asia
+  'IST': 5.5, 'SGT': 8, 'CST_CHINA': 8, 'JST': 9, 'KST': 9, 'AEST': 10,
+  // Pacific
+  'NZST': 12, 'NZDT': 13,
+};
+
+/**
+ * ConvertTZ - Converts a date to a different timezone
+ * Usage: {{Date|ConvertTZ("PST")}} or {{Date|ConvertTZ("America/Los_Angeles")}}
+ * Note: For preview purposes, uses simplified timezone handling
+ */
+const convertTzHandler: PipeHandler = (value, args) => {
+  if (!value) return '';
+
+  let date: Date;
+  if (value instanceof Date) {
+    date = new Date(value);
+  } else if (typeof value === 'string') {
+    date = new Date(value);
+  } else {
+    return String(value);
+  }
+
+  if (isNaN(date.getTime())) return String(value);
+
+  const tz = args[0]?.replace(/^["']|["']$/g, '') || 'UTC';
+
+  try {
+    // Try using Intl.DateTimeFormat for IANA timezone names
+    if (tz.includes('/')) {
+      return new Intl.DateTimeFormat('en-US', {
+        timeZone: tz,
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false,
+      }).format(date);
+    }
+
+    // Fallback to simple offset-based conversion
+    const offset = TIMEZONE_OFFSETS[tz.toUpperCase()];
+    if (offset !== undefined) {
+      const utcTime = date.getTime() + date.getTimezoneOffset() * 60000;
+      const targetTime = utcTime + offset * 3600000;
+      const targetDate = new Date(targetTime);
+      return targetDate.toISOString().replace('T', ' ').slice(0, 19);
+    }
+
+    // Unknown timezone, return as-is
+    return date.toISOString().split('T')[0];
+  } catch {
+    return date.toISOString().split('T')[0];
+  }
+};
+
+/**
+ * Count - Returns the count of items matching a condition
+ * Usage: {{Items|Count}} or {{Items|Count("Status", "EQ", "Active")}}
+ */
+const countHandler: PipeHandler = (value, args) => {
+  if (!Array.isArray(value)) return 0;
+
+  if (args.length >= 3) {
+    // Filter and count
+    const field = args[0]?.replace(/^["']|["']$/g, '') || '';
+    const operator = (args[1]?.replace(/^["']|["']$/g, '') || 'EQ').toUpperCase();
+    const compareValue = args[2]?.replace(/^["']|["']$/g, '') || '';
+
+    return value.filter(item => {
+      const fieldValue = field ? getNestedValue(item, field) : item;
+      return compareValues(fieldValue, operator, compareValue);
+    }).length;
+  }
+
+  return value.length;
+};
+
+/**
+ * Average - Calculates the average of a numeric field
+ * Usage: {{Items|Average("Amount")}}
+ */
+const averageHandler: PipeHandler = (value, args) => {
+  if (!Array.isArray(value) || value.length === 0) return 0;
+  if (args.length === 0) return 0;
+
+  const field = args[0].replace(/^["']|["']$/g, '');
+
+  let sum = 0;
+  let count = 0;
+  for (const item of value) {
+    if (item && typeof item === 'object') {
+      const fieldValue = getNestedValue(item, field);
+      const num = parseNumericValue(fieldValue);
+      if (num !== null) {
+        sum += num;
+        count++;
+      }
+    }
+  }
+
+  return count > 0 ? sum / count : 0;
+};
+
+/**
+ * Min - Returns the minimum value of a numeric field
+ * Usage: {{Items|Min("Amount")}}
+ */
+const minHandler: PipeHandler = (value, args) => {
+  if (!Array.isArray(value) || value.length === 0) return 0;
+  if (args.length === 0) return 0;
+
+  const field = args[0].replace(/^["']|["']$/g, '');
+
+  let min: number | null = null;
+  for (const item of value) {
+    if (item && typeof item === 'object') {
+      const fieldValue = getNestedValue(item, field);
+      const num = parseNumericValue(fieldValue);
+      if (num !== null) {
+        if (min === null || num < min) {
+          min = num;
+        }
+      }
+    }
+  }
+
+  return min ?? 0;
+};
+
+/**
+ * Max - Returns the maximum value of a numeric field
+ * Usage: {{Items|Max("Amount")}}
+ */
+const maxHandler: PipeHandler = (value, args) => {
+  if (!Array.isArray(value) || value.length === 0) return 0;
+  if (args.length === 0) return 0;
+
+  const field = args[0].replace(/^["']|["']$/g, '');
+
+  let max: number | null = null;
+  for (const item of value) {
+    if (item && typeof item === 'object') {
+      const fieldValue = getNestedValue(item, field);
+      const num = parseNumericValue(fieldValue);
+      if (num !== null) {
+        if (max === null || num > max) {
+          max = num;
+        }
+      }
+    }
+  }
+
+  return max ?? 0;
+};
+
+/**
+ * First - Returns the first item from an array
+ * Usage: {{Items|First}} or {{Items|First("Name")}}
+ */
+const firstHandler: PipeHandler = (value, args) => {
+  if (!Array.isArray(value) || value.length === 0) return null;
+
+  const item = value[0];
+  if (args.length > 0 && item && typeof item === 'object') {
+    const field = args[0].replace(/^["']|["']$/g, '');
+    return getNestedValue(item, field);
+  }
+
+  return item;
+};
+
+/**
+ * Last - Returns the last item from an array
+ * Usage: {{Items|Last}} or {{Items|Last("Name")}}
+ */
+const lastHandler: PipeHandler = (value, args) => {
+  if (!Array.isArray(value) || value.length === 0) return null;
+
+  const item = value[value.length - 1];
+  if (args.length > 0 && item && typeof item === 'object') {
+    const field = args[0].replace(/^["']|["']$/g, '');
+    return getNestedValue(item, field);
+  }
+
+  return item;
+};
+
+/**
+ * Take - Returns the first N items from an array
+ * Usage: {{Items|Take(5)}}
+ */
+const takeHandler: PipeHandler = (value, args) => {
+  if (!Array.isArray(value)) return [];
+
+  const count = parseInt(args[0] || '1', 10);
+  return value.slice(0, count);
+};
+
+/**
+ * Skip - Skips the first N items from an array
+ * Usage: {{Items|Skip(5)}}
+ */
+const skipHandler: PipeHandler = (value, args) => {
+  if (!Array.isArray(value)) return [];
+
+  const count = parseInt(args[0] || '0', 10);
+  return value.slice(count);
+};
+
+/**
+ * Distinct - Returns unique values from an array
+ * Usage: {{Items|Distinct}} or {{Items|Distinct("Category")}}
+ */
+const distinctHandler: PipeHandler = (value, args) => {
+  if (!Array.isArray(value)) return [];
+
+  if (args.length > 0) {
+    const field = args[0].replace(/^["']|["']$/g, '');
+    const seen = new Set<string>();
+    return value.filter(item => {
+      const key = String(getNestedValue(item, field) ?? '');
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+  }
+
+  // Simple deduplication for primitive arrays
+  return [...new Set(value.map(v => JSON.stringify(v)))].map(v => JSON.parse(v));
+};
+
+// ============================================================================
 // Pipe Registry
 // ============================================================================
 
@@ -527,6 +1047,103 @@ const PIPE_DEFINITIONS: PipeDefinition[] = [
     description: 'Returns the absolute value',
     handler: absHandler,
     examples: ['{{Adjustment|Abs}}', '{{Difference|Abs}}'],
+  },
+  // Phase 4+ Advanced
+  {
+    name: 'SortBy',
+    description: 'Sorts an array by a field with optional direction',
+    handler: sortByHandler,
+    examples: ['{{Items|SortBy("Name")}}', '{{Items|SortBy("Amount", "DESC")}}'],
+  },
+  {
+    name: 'GroupBy',
+    description: 'Groups an array by one or more fields',
+    handler: groupByHandler,
+    examples: ['{{Items|GroupBy("Category")}}', '{{Items|GroupBy("Type", "Status")}}'],
+  },
+  {
+    name: 'FlatMap',
+    description: 'Flattens nested arrays by extracting a field',
+    handler: flatMapHandler,
+    examples: ['{{Groups|FlatMap("items")}}', '{{Nested|FlatMap}}'],
+  },
+  {
+    name: 'FilterByValue',
+    description: 'Filters an array by comparing a field to a value',
+    handler: filterByValueHandler,
+    examples: ['{{Items|FilterByValue("Status", "EQ", "Active")}}', '{{Items|FilterByValue("Amount", "GT", "100")}}'],
+  },
+  {
+    name: 'FilterByRef',
+    description: 'Filters an array by comparing a field to a reference value from data',
+    handler: filterByRefHandler,
+    examples: ['{{Items|FilterByRef("SubscriptionId", "EQ", "Subscription.Id")}}'],
+  },
+  {
+    name: 'DateAdd',
+    description: 'Adds a duration to a date',
+    handler: dateAddHandler,
+    examples: ['{{Date|DateAdd(30, "days")}}', '{{Date|DateAdd(-1, "months")}}'],
+  },
+  {
+    name: 'ConvertTZ',
+    description: 'Converts a date to a different timezone',
+    handler: convertTzHandler,
+    examples: ['{{Date|ConvertTZ("PST")}}', '{{Date|ConvertTZ("America/New_York")}}'],
+  },
+  {
+    name: 'Count',
+    description: 'Returns the count of items, optionally matching a condition',
+    handler: countHandler,
+    examples: ['{{Items|Count}}', '{{Items|Count("Status", "EQ", "Active")}}'],
+  },
+  {
+    name: 'Average',
+    description: 'Calculates the average of a numeric field',
+    handler: averageHandler,
+    examples: ['{{Items|Average("Amount")}}', '{{LineItems|Average("Quantity")}}'],
+  },
+  {
+    name: 'Min',
+    description: 'Returns the minimum value of a numeric field',
+    handler: minHandler,
+    examples: ['{{Items|Min("Amount")}}', '{{Prices|Min("Value")}}'],
+  },
+  {
+    name: 'Max',
+    description: 'Returns the maximum value of a numeric field',
+    handler: maxHandler,
+    examples: ['{{Items|Max("Amount")}}', '{{Prices|Max("Value")}}'],
+  },
+  {
+    name: 'First',
+    description: 'Returns the first item from an array',
+    handler: firstHandler,
+    examples: ['{{Items|First}}', '{{Items|First("Name")}}'],
+  },
+  {
+    name: 'Last',
+    description: 'Returns the last item from an array',
+    handler: lastHandler,
+    examples: ['{{Items|Last}}', '{{Items|Last("Name")}}'],
+  },
+  {
+    name: 'Take',
+    description: 'Returns the first N items from an array',
+    handler: takeHandler,
+    examples: ['{{Items|Take(5)}}', '{{TopProducts|Take(3)}}'],
+  },
+  {
+    name: 'Skip',
+    description: 'Skips the first N items from an array',
+    handler: skipHandler,
+    examples: ['{{Items|Skip(5)}}', '{{AllItems|Skip(10)}}'],
+  },
+  {
+    name: 'Distinct',
+    description: 'Returns unique values from an array',
+    handler: distinctHandler,
+    examples: ['{{Items|Distinct}}', '{{Items|Distinct("Category")}}'],
   },
 ];
 
