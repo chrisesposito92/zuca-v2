@@ -7,9 +7,26 @@
 
 "use client";
 
-import { Button, Chip, addToast, Tooltip } from "@heroui/react";
-import { useState } from "react";
+import {
+  Button,
+  Chip,
+  addToast,
+  Tooltip,
+  Tabs,
+  Tab,
+  Textarea,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  useDisclosure,
+  Select,
+  SelectItem,
+} from "@heroui/react";
+import { useState, useMemo } from "react";
 import Link from "next/link";
+import { render } from "@zuca/pipeline/template-preview";
+import { PreviewFrame } from "./template-preview";
 import type {
   HTMLTemplateMode,
   HTMLTemplateCodeOutput,
@@ -17,6 +34,7 @@ import type {
   TemplateValidationOutput,
   ValidationIssue,
   SampleDataOutput,
+  TemplateDesignOutput,
 } from "@zuca/types/html-template";
 
 interface HTMLTemplateResultViewProps {
@@ -793,6 +811,518 @@ export function SampleDataResultView({
           <ul className="list-disc list-inside space-y-1 text-sm text-default-600">
             {result.notes.map((note, idx) => (
               <li key={idx}>{note}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {/* Session link */}
+      {sessionId && (
+        <div className="pt-4 border-t border-default-200/50 flex items-center justify-between">
+          <span className="text-xs text-default-400">Session: {sessionId.slice(0, 8)}...</span>
+          <Link href={`/html-builder/${sessionId}`}>
+            <Button size="sm" variant="flat">
+              View Details
+            </Button>
+          </Link>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ============================================================================
+// TEMPLATE DESIGN RESULT VIEW
+// ============================================================================
+
+interface TemplateDesignResultViewProps {
+  result: TemplateDesignOutput;
+  sessionId?: string;
+}
+
+/**
+ * Display component for AI-generated HTML template designs.
+ * Shows the complete HTML template with preview, metadata, and customization suggestions.
+ */
+// Default sample data for live preview
+// Sample data structured to match Zuora's nested object paths
+// Templates use paths like Invoice.Account.Name, Invoice.Account.BillTo.City
+const DEFAULT_SAMPLE_DATA = {
+  Invoice: {
+    InvoiceNumber: "INV-2024-001",
+    InvoiceDate: "2024-01-15",
+    DueDate: "2024-02-14",
+    Amount: 1250.00,
+    AmountWithoutTax: 1187.50,
+    TaxAmount: 62.50,
+    Balance: 1250.00,
+    Status: "Posted",
+    Currency: "USD",
+    Account: {
+      Name: "Acme Corporation",
+      AccountNumber: "A-00001234",
+      Currency: "USD",
+      BillTo: {
+        FirstName: "John",
+        LastName: "Smith",
+        Address1: "123 Main Street",
+        Address2: "Suite 100",
+        City: "San Francisco",
+        State: "CA",
+        PostalCode: "94105",
+        Country: "United States",
+        WorkEmail: "john.smith@acme.com",
+        Company: "Acme Corporation",
+      },
+      SoldTo: {
+        FirstName: "Jane",
+        LastName: "Doe",
+        Address1: "456 Oak Avenue",
+        City: "Los Angeles",
+        State: "CA",
+        PostalCode: "90001",
+        Country: "United States",
+      },
+    },
+    InvoiceItems: [
+      { ChargeName: "Monthly Subscription", ChargeDescription: "Base plan", ServiceStartDate: "2024-01-01", ServiceEndDate: "2024-01-31", Quantity: 1, UnitPrice: 500.00, ChargeAmount: 500.00 },
+      { ChargeName: "Usage Overage", ChargeDescription: "API calls", ServiceStartDate: "2024-01-01", ServiceEndDate: "2024-01-31", Quantity: 150, UnitPrice: 5.00, ChargeAmount: 750.00 },
+    ],
+    TaxationItems: [
+      { TaxName: "State Tax", TaxAmount: 62.50, TaxRate: 5.00, TaxJurisdiction: "California" },
+    ],
+  },
+};
+
+// Currency options for the picklist
+const CURRENCY_OPTIONS = [
+  { value: "USD", label: "USD - US Dollar" },
+  { value: "CAD", label: "CAD - Canadian Dollar" },
+  { value: "EUR", label: "EUR - Euro" },
+];
+
+export function TemplateDesignResultView({
+  result,
+  sessionId,
+}: TemplateDesignResultViewProps) {
+  const [copied, setCopied] = useState(false);
+  const [activeTab, setActiveTab] = useState<"preview" | "code" | "live">("preview");
+  const [sampleDataJson, setSampleDataJson] = useState(JSON.stringify(DEFAULT_SAMPLE_DATA, null, 2));
+  const [dataError, setDataError] = useState<string | null>(null);
+  const [currency, setCurrency] = useState<string>("USD");
+  const { isOpen: isModalOpen, onOpen: onModalOpen, onClose: onModalClose } = useDisclosure();
+
+  // Parse sample data and render preview
+  const livePreview = useMemo(() => {
+    try {
+      const data = JSON.parse(sampleDataJson);
+      setDataError(null);
+      const renderResult = render(result.html, data, { currency, showMissingFields: true });
+      return renderResult;
+    } catch (err) {
+      setDataError(err instanceof Error ? err.message : "Invalid JSON");
+      return null;
+    }
+  }, [sampleDataJson, result.html, currency]);
+
+  const copyToClipboard = async () => {
+    await navigator.clipboard.writeText(result.html);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const downloadHtml = () => {
+    const blob = new Blob([result.html], { type: "text/html" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "template.html";
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  return (
+    <div className="space-y-6">
+      {/* Header with actions */}
+      <div className="flex items-center justify-between">
+        <h3 className="text-lg font-semibold text-foreground flex items-center gap-2">
+          <svg className="w-5 h-5 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
+          </svg>
+          Generated Template
+        </h3>
+        <div className="flex items-center gap-2">
+          <Button
+            size="sm"
+            variant="flat"
+            startContent={
+              copied ? (
+                <svg className="w-4 h-4 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+              ) : (
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                </svg>
+              )
+            }
+            onPress={copyToClipboard}
+          >
+            {copied ? "Copied!" : "Copy HTML"}
+          </Button>
+          <Button
+            size="sm"
+            variant="flat"
+            startContent={
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+              </svg>
+            }
+            onPress={downloadHtml}
+          >
+            Download
+          </Button>
+        </div>
+      </div>
+
+      {/* Preview/Code Tabs */}
+      <Tabs
+        selectedKey={activeTab}
+        onSelectionChange={(key) => setActiveTab(key as "preview" | "code")}
+        variant="underlined"
+        classNames={{
+          tabList: "gap-4",
+          cursor: "bg-secondary",
+          tab: "px-0 h-10",
+        }}
+      >
+        <Tab
+          key="preview"
+          title={
+            <div className="flex items-center gap-2">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>
+              Preview
+            </div>
+          }
+        />
+        <Tab
+          key="code"
+          title={
+            <div className="flex items-center gap-2">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+              </svg>
+              HTML Code
+            </div>
+          }
+        />
+        <Tab
+          key="live"
+          title={
+            <div className="flex items-center gap-2">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              Live Preview
+              <Chip size="sm" variant="flat" className="bg-success/20 text-success text-xs">
+                New
+              </Chip>
+            </div>
+          }
+        />
+      </Tabs>
+
+      {/* Tab Content */}
+      {activeTab === "preview" ? (
+        <div className="rounded-lg border border-default-200 bg-white overflow-hidden">
+          <iframe
+            srcDoc={result.html}
+            className="w-full min-h-[600px]"
+            title="Template Preview"
+            sandbox="allow-same-origin"
+          />
+        </div>
+      ) : activeTab === "code" ? (
+        <div className="relative">
+          <pre className="bg-default-100/50 rounded-lg p-4 overflow-x-auto text-sm max-h-[600px] overflow-y-auto">
+            <code className="language-html text-default-700">{result.html}</code>
+          </pre>
+        </div>
+      ) : (
+        <div className="space-y-4">
+          {/* Controls Bar */}
+          <div className="flex items-center justify-between flex-wrap gap-3 p-3 bg-default-50 rounded-lg border border-default-200">
+            <div className="flex items-center gap-3">
+              {/* Currency Selector */}
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-default-600">Currency:</span>
+                <Select
+                  size="sm"
+                  selectedKeys={[currency]}
+                  onSelectionChange={(keys) => {
+                    const selected = Array.from(keys)[0] as string;
+                    if (selected) setCurrency(selected);
+                  }}
+                  className="w-40"
+                  aria-label="Select currency"
+                >
+                  {CURRENCY_OPTIONS.map((opt) => (
+                    <SelectItem key={opt.value}>{opt.label}</SelectItem>
+                  ))}
+                </Select>
+              </div>
+            </div>
+
+            {/* Modal Button */}
+            <Button
+              size="sm"
+              variant="flat"
+              color="primary"
+              startContent={
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+                </svg>
+              }
+              onPress={onModalOpen}
+            >
+              Open Full Preview
+            </Button>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            {/* Sample Data Editor */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <h4 className="text-sm font-semibold text-foreground flex items-center gap-2">
+                  <svg className="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4" />
+                  </svg>
+                  Sample Data (JSON)
+                </h4>
+                {dataError && (
+                  <Chip size="sm" color="danger" variant="flat">
+                    {dataError}
+                  </Chip>
+                )}
+              </div>
+              <Textarea
+                value={sampleDataJson}
+                onValueChange={setSampleDataJson}
+                minRows={20}
+                maxRows={30}
+                classNames={{
+                  input: "font-mono text-xs",
+                }}
+                isInvalid={!!dataError}
+                placeholder="Edit JSON to see live preview..."
+              />
+              <p className="text-xs text-default-400">
+                Edit the JSON above to see how the template renders with different data. The preview updates automatically.
+              </p>
+            </div>
+
+          {/* Live Rendered Preview */}
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <h4 className="text-sm font-semibold text-foreground flex items-center gap-2">
+                <svg className="w-4 h-4 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                Rendered Output
+              </h4>
+              {livePreview && (
+                <div className="flex items-center gap-2 text-xs">
+                  <Chip size="sm" variant="flat" color="default">
+                    {livePreview.stats.fieldsProcessed} fields
+                  </Chip>
+                  {livePreview.stats.loopsProcessed > 0 && (
+                    <Chip size="sm" variant="flat" color="primary">
+                      {livePreview.stats.loopsProcessed} loops
+                    </Chip>
+                  )}
+                  {livePreview.warnings.length > 0 && (
+                    <Chip size="sm" variant="flat" color="warning">
+                      {livePreview.warnings.length} warnings
+                    </Chip>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Warnings */}
+            {livePreview && livePreview.warnings.length > 0 && (
+              <div className="space-y-1 max-h-20 overflow-y-auto">
+                {livePreview.warnings.slice(0, 3).map((warning, idx) => (
+                  <div key={idx} className="flex items-center gap-2 text-xs text-warning-600 bg-warning-50 rounded px-2 py-1">
+                    <svg className="w-3 h-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                    <span>{warning.message}</span>
+                  </div>
+                ))}
+                {livePreview.warnings.length > 3 && (
+                  <p className="text-xs text-warning-400">...and {livePreview.warnings.length - 3} more</p>
+                )}
+              </div>
+            )}
+
+            {livePreview?.html ? (
+              <PreviewFrame
+                html={livePreview.html}
+                title="Live Preview"
+                initialZoom={75}
+                className="min-h-[500px]"
+              />
+            ) : (
+              <div className="flex items-center justify-center h-[500px] rounded-lg border border-default-200 bg-default-50">
+                <p className="text-sm text-default-400">Fix JSON errors to see preview</p>
+              </div>
+            )}
+          </div>
+          </div>
+        </div>
+      )}
+
+      {/* Full Preview Modal */}
+      <Modal
+        isOpen={isModalOpen}
+        onClose={onModalClose}
+        size="full"
+        scrollBehavior="inside"
+        classNames={{
+          base: "max-w-[95vw] max-h-[95vh]",
+          body: "p-0",
+        }}
+      >
+        <ModalContent>
+          <ModalHeader className="flex items-center justify-between gap-4 border-b border-default-200 px-6">
+            <div className="flex items-center gap-3">
+              <svg className="w-5 h-5 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>
+              <span>Full Preview</span>
+              {livePreview && (
+                <div className="flex items-center gap-2 text-xs">
+                  <Chip size="sm" variant="flat" color="default">
+                    {livePreview.stats.fieldsProcessed} fields
+                  </Chip>
+                  {livePreview.stats.loopsProcessed > 0 && (
+                    <Chip size="sm" variant="flat" color="primary">
+                      {livePreview.stats.loopsProcessed} loops
+                    </Chip>
+                  )}
+                </div>
+              )}
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-default-500">Currency:</span>
+              <Chip size="sm" variant="flat" color="secondary">{currency}</Chip>
+            </div>
+          </ModalHeader>
+          <ModalBody className="p-6">
+            {livePreview?.html ? (
+              <PreviewFrame
+                html={livePreview.html}
+                title="Full Preview"
+                initialZoom={100}
+                className="min-h-[80vh]"
+              />
+            ) : (
+              <div className="flex items-center justify-center h-[80vh] rounded-lg border border-default-200 bg-default-50">
+                <p className="text-sm text-default-400">No preview available. Check your sample data JSON.</p>
+              </div>
+            )}
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+
+      {/* Explanation */}
+      <div className="space-y-2">
+        <h4 className="text-sm font-semibold text-foreground flex items-center gap-2">
+          <svg className="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+          </svg>
+          Design Explanation
+        </h4>
+        <p className="text-sm text-default-600 leading-relaxed">{result.explanation}</p>
+      </div>
+
+      {/* Metadata Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Sections Included */}
+        {result.sections_included.length > 0 && (
+          <div className="space-y-2">
+            <h4 className="text-sm font-semibold text-foreground">Sections Included</h4>
+            <div className="flex flex-wrap gap-1.5">
+              {result.sections_included.map((section, idx) => (
+                <Chip key={idx} size="sm" variant="flat" color="primary">
+                  {section}
+                </Chip>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Objects Used */}
+        {result.objects_used.length > 0 && (
+          <div className="space-y-2">
+            <h4 className="text-sm font-semibold text-foreground">Objects Used</h4>
+            <div className="flex flex-wrap gap-1.5">
+              {result.objects_used.map((obj, idx) => (
+                <Chip key={idx} size="sm" variant="flat" color="secondary">
+                  {obj}
+                </Chip>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Functions Used */}
+        {result.functions_used.length > 0 && (
+          <div className="space-y-2">
+            <h4 className="text-sm font-semibold text-foreground">Functions Used</h4>
+            <div className="flex flex-wrap gap-1.5">
+              {result.functions_used.map((func, idx) => (
+                <Chip key={idx} size="sm" variant="flat" color="warning">
+                  {func}
+                </Chip>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Industry Customizations */}
+        {result.industry_customizations.length > 0 && (
+          <div className="space-y-2">
+            <h4 className="text-sm font-semibold text-foreground">Industry Customizations</h4>
+            <div className="flex flex-wrap gap-1.5">
+              {result.industry_customizations.map((custom, idx) => (
+                <Chip key={idx} size="sm" variant="flat" color="success">
+                  {custom}
+                </Chip>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Customization Suggestions */}
+      {result.customization_suggestions.length > 0 && (
+        <div className="space-y-2">
+          <h4 className="text-sm font-semibold text-foreground flex items-center gap-2">
+            <svg className="w-4 h-4 text-warning" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+            </svg>
+            Customization Suggestions
+          </h4>
+          <ul className="list-disc list-inside space-y-1 text-sm text-default-600">
+            {result.customization_suggestions.map((suggestion, idx) => (
+              <li key={idx}>{suggestion}</li>
             ))}
           </ul>
         </div>

@@ -21,12 +21,14 @@ import {
   useTemplateValidator,
   useGroupByWizard,
   useSampleDataGenerator,
+  useTemplateDesigner,
   type HTMLTemplateMode,
   type GroupByWizardRequest,
   type SampleDataRequest,
+  type TemplateDesignRequest,
 } from "@/hooks/useHTMLBuilder";
 import { useFunFacts } from "@/hooks/useFunFacts";
-import { HTMLTemplateResultView, TemplateValidationResultView, SampleDataResultView } from "@/components/html-template-view";
+import { HTMLTemplateResultView, TemplateValidationResultView, SampleDataResultView, TemplateDesignResultView } from "@/components/html-template-view";
 
 const DEFAULT_MODEL = process.env.NEXT_PUBLIC_DEFAULT_MODEL || "gpt-5.2";
 
@@ -59,12 +61,25 @@ const industryOptions = [
   { key: "general", label: "General / Other" },
 ];
 
+const styleOptions = [
+  { key: "modern", label: "Modern", description: "Clean, minimal design with subtle colors" },
+  { key: "classic", label: "Classic", description: "Traditional business document style" },
+  { key: "minimal", label: "Minimal", description: "Ultra-clean with maximum whitespace" },
+  { key: "corporate", label: "Corporate", description: "Professional enterprise styling" },
+];
+
 const aggregationTypeOptions = [
   { key: "Sum", label: "Sum" },
   { key: "Count", label: "Count" },
   { key: "Average", label: "Average" },
   { key: "Min", label: "Min" },
   { key: "Max", label: "Max" },
+];
+
+const currencyOptions = [
+  { key: "USD", label: "USD - US Dollar" },
+  { key: "CAD", label: "CAD - Canadian Dollar" },
+  { key: "EUR", label: "EUR - Euro" },
 ];
 
 // Category display names
@@ -79,7 +94,7 @@ const categoryLabels: Record<string, string> = {
   formatting: "Formatting",
 };
 
-type BuilderMode = HTMLTemplateMode | "validate" | "groupby" | "sample-data";
+type BuilderMode = HTMLTemplateMode | "validate" | "groupby" | "sample-data" | "design";
 
 // Types for GroupBy wizard state
 interface GroupByField {
@@ -132,10 +147,17 @@ export default function HTMLBuilderPage() {
   const [sampleDataCurrency, setSampleDataCurrency] = useState("USD");
   const [sampleDataCompanyName, setSampleDataCompanyName] = useState("");
 
+  // Design mode state
+  const [designDescription, setDesignDescription] = useState("");
+  const [designIndustry, setDesignIndustry] = useState("general");
+  const [designStyle, setDesignStyle] = useState("modern");
+  const [designCurrency, setDesignCurrency] = useState("USD");
+
   const builderMutation = useHTMLBuilder();
   const validatorMutation = useTemplateValidator();
   const groupByMutation = useGroupByWizard();
   const sampleDataMutation = useSampleDataGenerator();
+  const designMutation = useTemplateDesigner();
   const { data: codeTemplates } = useGroupedTemplates("code");
   const { data: expressionTemplates } = useGroupedTemplates("expression");
   const { currentFact } = useFunFacts({ interval: 8000 });
@@ -144,6 +166,7 @@ export default function HTMLBuilderPage() {
   const isValidating = validatorMutation.isPending;
   const isGroupByGenerating = groupByMutation.isPending;
   const isSampleDataGenerating = sampleDataMutation.isPending;
+  const isDesignGenerating = designMutation.isPending;
 
   // Get templates for current mode
   const currentTemplates = useMemo(() => {
@@ -363,6 +386,49 @@ export default function HTMLBuilderPage() {
     setSampleDataCompanyName("");
   };
 
+  // Design handlers
+  const handleDesignGenerate = async () => {
+    if (!designDescription.trim()) {
+      addToast({
+        title: "Description Required",
+        description: "Please describe the template you want to generate",
+        color: "warning",
+      });
+      return;
+    }
+
+    const request: TemplateDesignRequest = {
+      description: designDescription.trim(),
+      documentType: documentType as TemplateDesignRequest["documentType"],
+      industry: designIndustry as TemplateDesignRequest["industry"],
+      style: designStyle as TemplateDesignRequest["style"],
+      currency: designCurrency,
+    };
+
+    try {
+      await designMutation.mutateAsync({ ...request, model: selectedModel });
+      addToast({
+        title: "Generated Successfully",
+        description: "Your complete HTML template has been generated",
+        color: "success",
+      });
+    } catch (error) {
+      const err = error as { error?: string; details?: string };
+      addToast({
+        title: "Generation Failed",
+        description: err.details || err.error || "An error occurred",
+        color: "danger",
+      });
+    }
+  };
+
+  const handleDesignClear = () => {
+    setDesignDescription("");
+    setDesignIndustry("general");
+    setDesignStyle("modern");
+    setDesignCurrency("USD");
+  };
+
   const handleValidate = async () => {
     if (!templateToValidate.trim()) {
       addToast({
@@ -421,7 +487,7 @@ export default function HTMLBuilderPage() {
                 tab: "data-[selected=true]:text-black font-medium text-sm px-2.5",
                 tabContent: "group-data-[selected=true]:text-black whitespace-nowrap",
               }}
-              isDisabled={isGenerating || isValidating || isGroupByGenerating || isSampleDataGenerating}
+              isDisabled={isGenerating || isValidating || isGroupByGenerating || isSampleDataGenerating || isDesignGenerating}
             >
               <Tab
                 key="code"
@@ -475,6 +541,17 @@ export default function HTMLBuilderPage() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
                     </svg>
                     <span>Sample Data</span>
+                  </div>
+                }
+              />
+              <Tab
+                key="design"
+                title={
+                  <div className="flex items-center gap-1.5">
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
+                    </svg>
+                    <span>Design</span>
                   </div>
                 }
               />
@@ -854,17 +931,17 @@ export default function HTMLBuilderPage() {
                       className="w-full px-3 py-2 rounded-lg bg-default-100 border border-default-200 text-sm focus:outline-none focus:border-primary"
                     />
                   </div>
-                  <div className="space-y-1">
-                    <label className="text-sm font-medium text-foreground">Currency</label>
-                    <input
-                      type="text"
-                      placeholder="USD"
-                      value={sampleDataCurrency}
-                      onChange={(e) => setSampleDataCurrency(e.target.value.toUpperCase().slice(0, 3))}
-                      disabled={isSampleDataGenerating}
-                      className="w-full px-3 py-2 rounded-lg bg-default-100 border border-default-200 text-sm focus:outline-none focus:border-primary"
-                    />
-                  </div>
+                  <Select
+                    label="Currency"
+                    selectedKeys={[sampleDataCurrency]}
+                    onSelectionChange={(keys) => setSampleDataCurrency(Array.from(keys)[0] as string)}
+                    isDisabled={isSampleDataGenerating}
+                    size="sm"
+                  >
+                    {currencyOptions.map((opt) => (
+                      <SelectItem key={opt.key}>{opt.label}</SelectItem>
+                    ))}
+                  </Select>
                   <div className="space-y-1">
                     <label className="text-sm font-medium text-foreground">Company Name (Optional)</label>
                     <input
@@ -913,6 +990,111 @@ export default function HTMLBuilderPage() {
                     isDisabled={isSampleDataGenerating || !sampleDataTemplate.trim()}
                   >
                     {isSampleDataGenerating ? "Generating..." : "Generate Sample Data"}
+                  </Button>
+                </div>
+              </div>
+            ) : activeTab === "design" ? (
+              /* Design mode UI */
+              <div className="space-y-5">
+                <Textarea
+                  label="Describe Your Template"
+                  placeholder="e.g., I need an invoice for a telecom company with charges grouped by phone number, usage breakdown, and tax summary..."
+                  value={designDescription}
+                  onChange={(e) => setDesignDescription(e.target.value)}
+                  minRows={4}
+                  maxRows={8}
+                  isDisabled={isDesignGenerating}
+                  classNames={{
+                    input: "resize-y",
+                  }}
+                />
+
+                <div className="grid grid-cols-2 gap-4">
+                  <Select
+                    label="Industry"
+                    selectedKeys={[designIndustry]}
+                    onSelectionChange={(keys) => setDesignIndustry(Array.from(keys)[0] as string)}
+                    isDisabled={isDesignGenerating}
+                  >
+                    {industryOptions.map((opt) => (
+                      <SelectItem key={opt.key}>{opt.label}</SelectItem>
+                    ))}
+                  </Select>
+                  <Select
+                    label="Document Type"
+                    selectedKeys={[documentType]}
+                    onSelectionChange={(keys) => setDocumentType(Array.from(keys)[0] as string)}
+                    isDisabled={isDesignGenerating}
+                  >
+                    {documentTypeOptions.map((opt) => (
+                      <SelectItem key={opt.key}>{opt.label}</SelectItem>
+                    ))}
+                  </Select>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <Select
+                    label="Style"
+                    selectedKeys={[designStyle]}
+                    onSelectionChange={(keys) => setDesignStyle(Array.from(keys)[0] as string)}
+                    isDisabled={isDesignGenerating}
+                  >
+                    {styleOptions.map((opt) => (
+                      <SelectItem key={opt.key} textValue={opt.label}>
+                        <div className="flex flex-col">
+                          <span>{opt.label}</span>
+                          <span className="text-xs text-default-400">{opt.description}</span>
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </Select>
+                  <Select
+                    label="Currency"
+                    selectedKeys={[designCurrency]}
+                    onSelectionChange={(keys) => setDesignCurrency(Array.from(keys)[0] as string)}
+                    isDisabled={isDesignGenerating}
+                  >
+                    {currencyOptions.map((opt) => (
+                      <SelectItem key={opt.key}>{opt.label}</SelectItem>
+                    ))}
+                  </Select>
+                </div>
+
+                <Select
+                  label="Model"
+                  selectedKeys={[selectedModel]}
+                  onSelectionChange={(keys) => setSelectedModel(Array.from(keys)[0] as string)}
+                  isDisabled={isDesignGenerating}
+                >
+                  {modelOptions.map((model) => (
+                    <SelectItem key={model.key} textValue={model.label}>
+                      <div className="flex flex-col">
+                        <div className="flex items-center gap-2">
+                          <span>{model.label}</span>
+                          <span className="text-xs text-default-400">({model.time})</span>
+                        </div>
+                        <span className="text-xs text-default-400">{model.description}</span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </Select>
+
+                <div className="flex items-center justify-between pt-2">
+                  <Button
+                    variant="flat"
+                    onClick={handleDesignClear}
+                    isDisabled={isDesignGenerating}
+                  >
+                    Clear
+                  </Button>
+                  <Button
+                    color="primary"
+                    className="font-semibold teal-glow-subtle"
+                    onClick={handleDesignGenerate}
+                    isLoading={isDesignGenerating}
+                    isDisabled={isDesignGenerating || !designDescription.trim()}
+                  >
+                    {isDesignGenerating ? "Generating..." : "Generate Template"}
                   </Button>
                 </div>
               </div>
@@ -1049,7 +1231,7 @@ export default function HTMLBuilderPage() {
           <CardHeader className="px-6 pt-5 pb-0 flex items-center justify-between">
             <div>
               <h3 className="text-lg font-semibold">
-                {activeTab === "validate" ? "Validation Results" : "Generated Output"}
+                {activeTab === "validate" ? "Validation Results" : activeTab === "design" ? "Generated Template" : "Generated Output"}
               </h3>
               <p className="text-xs text-default-500">
                 {activeTab === "code"
@@ -1060,6 +1242,8 @@ export default function HTMLBuilderPage() {
                   ? "GroupBy template with subtotals"
                   : activeTab === "sample-data"
                   ? "Generated JSON for template testing"
+                  : activeTab === "design"
+                  ? "Complete HTML template with merge fields"
                   : "Errors, warnings, and suggestions"}
               </p>
             </div>
@@ -1092,7 +1276,12 @@ export default function HTMLBuilderPage() {
                 Ready
               </Chip>
             )}
-            {activeTab !== "validate" && activeTab !== "groupby" && activeTab !== "sample-data" && builderMutation.data && (
+            {activeTab === "design" && designMutation.data && (
+              <Chip size="sm" variant="flat" className="bg-success/20 text-success">
+                Ready
+              </Chip>
+            )}
+            {activeTab !== "validate" && activeTab !== "groupby" && activeTab !== "sample-data" && activeTab !== "design" && builderMutation.data && (
               <Chip size="sm" variant="flat" className="bg-success/20 text-success">
                 Ready
               </Chip>
@@ -1254,6 +1443,56 @@ export default function HTMLBuilderPage() {
                   <h4 className="text-lg font-medium text-foreground mb-1">No output yet</h4>
                   <p className="text-sm text-default-500 max-w-xs">
                     Paste your HTML template code and configure the industry settings, then click Generate to create sample test data.
+                  </p>
+                </div>
+              )
+            ) : activeTab === "design" ? (
+              /* Design mode */
+              isDesignGenerating ? (
+                <div className="space-y-4">
+                  <div className="flex items-center gap-4">
+                    <div className="animate-spin h-5 w-5 border-2 border-primary border-t-transparent rounded-full" />
+                    <div>
+                      <p className="font-medium">Generating complete template...</p>
+                      <p className="text-xs text-default-500">Creating production-ready HTML with industry customizations</p>
+                    </div>
+                  </div>
+                  <Progress
+                    isIndeterminate
+                    color="primary"
+                    size="sm"
+                    aria-label="Generating"
+                    classNames={{
+                      indicator: "bg-gradient-to-r from-primary to-secondary",
+                    }}
+                  />
+                  <div className="p-4 rounded-xl bg-default-100/50 border border-default-200/60">
+                    <div className="flex items-center gap-2 mb-2 text-default-500">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <span className="text-xs font-medium uppercase tracking-wider">Did you know?</span>
+                    </div>
+                    <p className="text-sm text-default-600 leading-relaxed min-h-[2.5rem] transition-opacity duration-300">
+                      {currentFact}
+                    </p>
+                  </div>
+                </div>
+              ) : designMutation.data ? (
+                <TemplateDesignResultView
+                  result={designMutation.data.result}
+                  sessionId={designMutation.data.session_id}
+                />
+              ) : (
+                <div className="flex flex-col items-center justify-center py-16 text-center">
+                  <div className="w-16 h-16 rounded-2xl bg-secondary/10 flex items-center justify-center mb-4">
+                    <svg className="w-8 h-8 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
+                    </svg>
+                  </div>
+                  <h4 className="text-lg font-medium text-foreground mb-1">AI Template Designer</h4>
+                  <p className="text-sm text-default-500 max-w-xs">
+                    Describe the template you need and select your industry and style preferences. The AI will generate a complete, production-ready HTML template.
                   </p>
                 </div>
               )

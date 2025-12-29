@@ -893,3 +893,196 @@ export function validateSampleDataOutput(data: unknown): SampleDataOutput {
   }
   return result.data;
 }
+
+// ============================================================================
+// TEMPLATE DESIGN TYPES (AI-Powered Full Template Generation)
+// ============================================================================
+
+/**
+ * Visual style preset for template design
+ */
+export const TemplateDesignStyleSchema = z.enum([
+  'modern',     // Clean, minimal, sans-serif fonts
+  'classic',    // Traditional, serif fonts, bordered tables
+  'minimal',    // Ultra-simple, lots of whitespace
+  'corporate',  // Professional, logo-focused, formal
+]);
+export type TemplateDesignStyle = z.infer<typeof TemplateDesignStyleSchema>;
+
+/**
+ * Optional section configuration for template design
+ */
+export const TemplateDesignSectionsSchema = z.object({
+  /** Include company logo and address header */
+  companyBranding: z.boolean().default(true),
+
+  /** Include invoice number, date, due date header */
+  invoiceHeader: z.boolean().default(true),
+
+  /** Include bill-to and sold-to addresses */
+  customerInfo: z.boolean().default(true),
+
+  /** Include line items table */
+  lineItemsTable: z.boolean().default(true),
+
+  /** Enable grouping of line items */
+  groupByEnabled: z.boolean().default(false),
+
+  /** Field to group by (if groupByEnabled) */
+  groupByField: z.string().optional(),
+
+  /** Include tax breakdown section */
+  taxSummary: z.boolean().default(true),
+
+  /** Include payment information section */
+  paymentInfo: z.boolean().default(false),
+
+  /** Include footer with terms/notes */
+  footer: z.boolean().default(true),
+});
+export type TemplateDesignSections = z.infer<typeof TemplateDesignSectionsSchema>;
+
+/**
+ * Optional color scheme for template design
+ */
+export const TemplateDesignColorsSchema = z.object({
+  /** Primary brand color (e.g., '#0066cc') */
+  primary: z.string().optional(),
+
+  /** Secondary color for accents */
+  secondary: z.string().optional(),
+
+  /** Accent color for highlights */
+  accent: z.string().optional(),
+});
+export type TemplateDesignColors = z.infer<typeof TemplateDesignColorsSchema>;
+
+/**
+ * Input for AI-powered template design
+ */
+export const TemplateDesignRequestSchema = z.object({
+  /** Natural language description of template requirements */
+  description: z.string().min(20, 'Description must be at least 20 characters'),
+
+  /** Document type */
+  documentType: DocumentTypeSchema.default('invoice'),
+
+  /** Industry preset for semantic defaults */
+  industry: SampleDataIndustrySchema.default('general'),
+
+  /** Visual style preference */
+  style: TemplateDesignStyleSchema.default('modern'),
+
+  /** Currency for formatting */
+  currency: z.string().default('USD'),
+
+  /** Optional section configuration overrides */
+  sections: TemplateDesignSectionsSchema.optional(),
+
+  /** Optional custom color scheme */
+  colors: TemplateDesignColorsSchema.optional(),
+});
+export type TemplateDesignRequest = z.infer<typeof TemplateDesignRequestSchema>;
+
+/**
+ * Output from AI-powered template design
+ */
+export const TemplateDesignOutputSchema = z.object({
+  /** Complete HTML template with doctype, head, CSS, and body */
+  html: z.string(),
+
+  /** Explanation of design decisions and structure */
+  explanation: z.string(),
+
+  /** Sections included in the template */
+  sections_included: z.array(z.string()),
+
+  /** Zuora objects used in the template */
+  objects_used: z.array(z.string()),
+
+  /** Functions used in the template */
+  functions_used: z.array(z.string()),
+
+  /** Industry-specific customizations applied */
+  industry_customizations: z.array(z.string()),
+
+  /** Suggestions for further customization */
+  customization_suggestions: z.array(z.string()),
+});
+export type TemplateDesignOutput = z.infer<typeof TemplateDesignOutputSchema>;
+
+/**
+ * JSON Schema for Template Design Output (used by LLM)
+ */
+export const templateDesignJsonSchema = {
+  type: 'object',
+  properties: {
+    html: {
+      type: 'string',
+      description: 'Complete HTML template including <!DOCTYPE html>, <head> with inline CSS, and <body> with all merge fields',
+    },
+    explanation: {
+      type: 'string',
+      description: 'Explanation of design choices, structure, and how sections work together',
+    },
+    sections_included: {
+      type: 'array',
+      items: { type: 'string' },
+      description: 'List of sections included (e.g., companyBranding, invoiceHeader, lineItemsTable)',
+    },
+    objects_used: {
+      type: 'array',
+      items: { type: 'string' },
+      description: 'Zuora objects referenced (e.g., Invoice, Account, InvoiceItems)',
+    },
+    functions_used: {
+      type: 'array',
+      items: { type: 'string' },
+      description: 'Template functions used (e.g., Round, Localise, GroupBy)',
+    },
+    industry_customizations: {
+      type: 'array',
+      items: { type: 'string' },
+      description: 'Industry-specific features applied (e.g., "Grouped charges by subscription", "Usage breakdown table")',
+    },
+    customization_suggestions: {
+      type: 'array',
+      items: { type: 'string' },
+      description: 'Suggestions for customizing the template (e.g., "Add logo URL", "Adjust colors")',
+    },
+  },
+  required: [
+    'html',
+    'explanation',
+    'sections_included',
+    'objects_used',
+    'functions_used',
+    'industry_customizations',
+    'customization_suggestions',
+  ],
+  additionalProperties: false,
+};
+
+/**
+ * Validate TemplateDesignRequest
+ */
+export function validateTemplateDesignRequest(input: unknown): TemplateDesignRequest {
+  const result = TemplateDesignRequestSchema.safeParse(input);
+  if (!result.success) {
+    const errors = result.error.errors.map((e) => `${e.path.join('.')}: ${e.message}`);
+    throw new Error(`Invalid Template Design request: ${errors.join(', ')}`);
+  }
+  return result.data;
+}
+
+/**
+ * Validate TemplateDesignOutput
+ */
+export function validateTemplateDesignOutput(data: unknown): TemplateDesignOutput {
+  const result = TemplateDesignOutputSchema.safeParse(data);
+  if (!result.success) {
+    const errors = result.error.errors.map((e) => `${e.path.join('.')}: ${e.message}`);
+    throw new Error(`Invalid Template Design output: ${errors.join(', ')}`);
+  }
+  return result.data;
+}

@@ -18,6 +18,8 @@ import type {
   GroupByWizardOutput,
   SampleDataRequest,
   SampleDataOutput,
+  TemplateDesignRequest,
+  TemplateDesignOutput,
 } from "@zuca/types/html-template";
 
 // Response types
@@ -57,6 +59,13 @@ interface SampleDataResponse {
   session_id: string;
   mode: "sample-data";
   result: SampleDataOutput;
+}
+
+interface TemplateDesignResponse {
+  success: boolean;
+  session_id: string;
+  mode: "design";
+  result: TemplateDesignOutput;
 }
 
 // API functions
@@ -122,6 +131,19 @@ async function generateSampleData(
   payload: SampleDataRequest & { model?: string }
 ): Promise<SampleDataResponse> {
   const response = await fetch("/api/html-template/sample-data", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  const data = await response.json();
+  if (!response.ok) throw data;
+  return data;
+}
+
+async function generateTemplateDesign(
+  payload: TemplateDesignRequest & { model?: string }
+): Promise<TemplateDesignResponse> {
+  const response = await fetch("/api/html-template/design", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
@@ -221,6 +243,22 @@ export function useSampleDataGenerator() {
   });
 }
 
+/**
+ * Hook for generating complete HTML templates from natural language.
+ * Uses AI to create production-ready templates with industry presets.
+ */
+export function useTemplateDesigner() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: generateTemplateDesign,
+    onSuccess: () => {
+      // Invalidate sessions list to show the new session
+      queryClient.invalidateQueries({ queryKey: ["sessions"] });
+    },
+  });
+}
+
 // Re-export types for convenience
 export type {
   GenerateResponse,
@@ -229,6 +267,7 @@ export type {
   ValidateResponse,
   GroupByResponse,
   SampleDataResponse,
+  TemplateDesignResponse,
   HTMLTemplateRequest,
   HTMLTemplateCodeOutput,
   HTMLTemplateExpressionOutput,
@@ -240,4 +279,6 @@ export type {
   GroupByWizardOutput,
   SampleDataRequest,
   SampleDataOutput,
+  TemplateDesignRequest,
+  TemplateDesignOutput,
 };
