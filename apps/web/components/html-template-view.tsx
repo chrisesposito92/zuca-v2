@@ -16,6 +16,7 @@ import type {
   HTMLTemplateExpressionOutput,
   TemplateValidationOutput,
   ValidationIssue,
+  SampleDataOutput,
 } from "@zuca/types/html-template";
 
 interface HTMLTemplateResultViewProps {
@@ -602,6 +603,210 @@ function IssueCard({ issue, colors }: IssueCardProps) {
               <p className="text-sm text-success-600">{issue.suggestion}</p>
             </div>
           )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ============================================================================
+// SAMPLE DATA RESULT VIEW
+// ============================================================================
+
+interface SampleDataResultViewProps {
+  result: SampleDataOutput;
+  sessionId?: string;
+}
+
+/**
+ * Display sample data generation results with JSON viewer and metadata
+ */
+export function SampleDataResultView({
+  result,
+  sessionId,
+}: SampleDataResultViewProps) {
+  const [copied, setCopied] = useState(false);
+
+  const jsonString = JSON.stringify(result.data, null, 2);
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(jsonString);
+      setCopied(true);
+      addToast({
+        title: "Copied!",
+        description: "JSON data copied to clipboard",
+        color: "success",
+      });
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      addToast({
+        title: "Copy failed",
+        description: "Unable to copy to clipboard",
+        color: "danger",
+      });
+    }
+  };
+
+  const handleDownload = () => {
+    const blob = new Blob([jsonString], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `sample-data-${result.industry}-${Date.now()}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    addToast({
+      title: "Downloaded!",
+      description: "JSON file saved to downloads",
+      color: "success",
+    });
+  };
+
+  return (
+    <div className="space-y-5">
+      {/* JSON Data Block */}
+      <div className="relative group">
+        <div className="absolute top-2 right-2 z-10 flex items-center gap-2">
+          <Tooltip content="Download JSON">
+            <Button
+              size="sm"
+              variant="flat"
+              isIconOnly
+              onClick={handleDownload}
+              className="bg-default-100/80 backdrop-blur-sm"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+              </svg>
+            </Button>
+          </Tooltip>
+          <Tooltip content={copied ? "Copied!" : "Copy to clipboard"}>
+            <Button
+              size="sm"
+              variant="flat"
+              isIconOnly
+              onClick={handleCopy}
+              className="bg-default-100/80 backdrop-blur-sm"
+            >
+              {copied ? (
+                <svg className="w-4 h-4 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+              ) : (
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                </svg>
+              )}
+            </Button>
+          </Tooltip>
+        </div>
+        <div className="rounded-xl border border-default-200/50 bg-default-50/50 overflow-hidden">
+          <div className="px-4 py-2 border-b border-default-200/50 bg-default-100/30 flex items-center justify-between">
+            <span className="text-xs font-medium text-default-500 uppercase tracking-wider">
+              Sample Data
+            </span>
+            <div className="flex items-center gap-2">
+              <Chip size="sm" variant="flat" className="bg-primary/10 text-primary capitalize">
+                {result.industry}
+              </Chip>
+              <Chip size="sm" variant="flat" className="bg-secondary/10 text-secondary">
+                {result.currency}
+              </Chip>
+            </div>
+          </div>
+          <pre className="p-4 overflow-x-auto text-sm font-mono leading-relaxed max-h-[400px] overflow-y-auto">
+            <code className="language-json">{jsonString}</code>
+          </pre>
+        </div>
+      </div>
+
+      {/* Fields and Lists Summary */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Fields Extracted */}
+        {result.fields_extracted.length > 0 && (
+          <div className="space-y-2">
+            <h4 className="text-sm font-semibold text-foreground flex items-center gap-2">
+              <svg className="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+              </svg>
+              Fields Extracted
+              <Chip size="sm" variant="flat" className="bg-default-100">
+                {result.fields_extracted.length}
+              </Chip>
+            </h4>
+            <div className="flex flex-wrap gap-1.5 max-h-[120px] overflow-y-auto">
+              {result.fields_extracted.map((field, idx) => (
+                <Chip
+                  key={idx}
+                  size="sm"
+                  variant="flat"
+                  className="bg-default-100 font-mono text-xs"
+                  title={`Type: ${field.type}${field.functions.length ? `, Functions: ${field.functions.join(", ")}` : ""}`}
+                >
+                  {field.path}
+                </Chip>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Lists Detected */}
+        {result.lists_detected.length > 0 && (
+          <div className="space-y-2">
+            <h4 className="text-sm font-semibold text-foreground flex items-center gap-2">
+              <svg className="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+              </svg>
+              Lists Detected
+              <Chip size="sm" variant="flat" className="bg-default-100">
+                {result.lists_detected.length}
+              </Chip>
+            </h4>
+            <div className="flex flex-wrap gap-1.5">
+              {result.lists_detected.map((list, idx) => (
+                <Chip
+                  key={idx}
+                  size="sm"
+                  variant="flat"
+                  className="bg-secondary/10 text-secondary font-mono text-xs"
+                >
+                  {list}
+                </Chip>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Notes */}
+      {result.notes.length > 0 && (
+        <div className="space-y-2">
+          <h4 className="text-sm font-semibold text-foreground flex items-center gap-2">
+            <svg className="w-4 h-4 text-warning" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Generation Notes
+          </h4>
+          <ul className="list-disc list-inside space-y-1 text-sm text-default-600">
+            {result.notes.map((note, idx) => (
+              <li key={idx}>{note}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {/* Session link */}
+      {sessionId && (
+        <div className="pt-4 border-t border-default-200/50 flex items-center justify-between">
+          <span className="text-xs text-default-400">Session: {sessionId.slice(0, 8)}...</span>
+          <Link href={`/html-builder/${sessionId}`}>
+            <Button size="sm" variant="flat">
+              View Details
+            </Button>
+          </Link>
         </div>
       )}
     </div>

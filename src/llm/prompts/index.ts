@@ -59,6 +59,7 @@ export const PROMPTS = {
   HTML_TEMPLATE_EXPRESSION: 'html-template-expression',
   HTML_TEMPLATE_VALIDATOR: 'html-template-validator',
   HTML_TEMPLATE_GROUPBY: 'html-template-groupby',
+  HTML_TEMPLATE_SAMPLE_DATA: 'html-template-sample-data',
 } as const;
 
 export type PromptName = typeof PROMPTS[keyof typeof PROMPTS];

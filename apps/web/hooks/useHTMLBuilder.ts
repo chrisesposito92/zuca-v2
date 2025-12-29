@@ -16,6 +16,8 @@ import type {
   TemplateValidationOutput,
   GroupByWizardRequest,
   GroupByWizardOutput,
+  SampleDataRequest,
+  SampleDataOutput,
 } from "@zuca/types/html-template";
 
 // Response types
@@ -48,6 +50,13 @@ interface GroupByResponse {
   session_id: string;
   mode: "groupby";
   result: GroupByWizardOutput;
+}
+
+interface SampleDataResponse {
+  success: boolean;
+  session_id: string;
+  mode: "sample-data";
+  result: SampleDataOutput;
 }
 
 // API functions
@@ -100,6 +109,19 @@ async function generateGroupByTemplate(
   payload: GroupByWizardRequest & { model?: string }
 ): Promise<GroupByResponse> {
   const response = await fetch("/api/html-template/groupby", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  const data = await response.json();
+  if (!response.ok) throw data;
+  return data;
+}
+
+async function generateSampleData(
+  payload: SampleDataRequest & { model?: string }
+): Promise<SampleDataResponse> {
+  const response = await fetch("/api/html-template/sample-data", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
@@ -183,6 +205,22 @@ export function useGroupByWizard() {
   });
 }
 
+/**
+ * Hook for generating sample data for HTML templates.
+ * Parses merge fields and generates realistic test data.
+ */
+export function useSampleDataGenerator() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: generateSampleData,
+    onSuccess: () => {
+      // Invalidate sessions list to show the new session
+      queryClient.invalidateQueries({ queryKey: ["sessions"] });
+    },
+  });
+}
+
 // Re-export types for convenience
 export type {
   GenerateResponse,
@@ -190,6 +228,7 @@ export type {
   GroupedTemplatesResponse,
   ValidateResponse,
   GroupByResponse,
+  SampleDataResponse,
   HTMLTemplateRequest,
   HTMLTemplateCodeOutput,
   HTMLTemplateExpressionOutput,
@@ -199,4 +238,6 @@ export type {
   TemplateValidationOutput,
   GroupByWizardRequest,
   GroupByWizardOutput,
+  SampleDataRequest,
+  SampleDataOutput,
 };

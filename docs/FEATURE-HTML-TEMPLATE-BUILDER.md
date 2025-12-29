@@ -124,20 +124,45 @@ Interactive wizard to generate GroupBy template code with nested loops and subto
 - `Sum`, `Count`, and other aggregation functions
 - Proper formatting with `Round` and `Localise`
 
+#### 5. Sample Data Generator
+**Status**: ✅ Complete
+
+Generate realistic sample data for template preview testing.
+
+**Capabilities**:
+- Parse merge fields from template code automatically
+- Detect lists/loops (InvoiceItems, TaxationItems, etc.) and generate multiple items
+- Support industry presets (SaaS, Telecom, Utilities, Professional Services, Media, Healthcare, General)
+- Configurable item count (1-20 items per list)
+- Currency customization (USD, EUR, GBP, etc.)
+- Optional company name for personalized data
+- Export JSON with copy-to-clipboard and download options
+
+**Technical Approach**: Hybrid parsing + LLM generation:
+1. **Code-based parsing** (`html-template-parser.ts`):
+   - Extract merge fields using regex pattern matching
+   - Detect loops and sections
+   - Infer field types from naming patterns and function usage
+   - Build structured representation of template needs
+2. **LLM generation** (`html-template-sample-data.ts`):
+   - Generate realistic, industry-specific data
+   - Ensure numeric consistency (totals match item sums)
+   - Apply currency and locale conventions
+
+**Key Files**:
+| File | Purpose |
+|------|---------|
+| `src/types/html-template.ts` | `SampleDataRequest`, `SampleDataOutput`, `ExtractedField` types |
+| `src/pipeline/steps/html-template-parser.ts` | Template parsing, field extraction |
+| `src/pipeline/steps/html-template-sample-data.ts` | LLM-based sample data generation |
+| `src/llm/prompts/html-template-sample-data.md` | LLM prompt for realistic data |
+| `apps/web/app/api/html-template/sample-data/route.ts` | API endpoint |
+| `apps/web/hooks/useHTMLBuilder.ts` | `useSampleDataGenerator` hook |
+| `apps/web/components/html-template-view.tsx` | `SampleDataResultView` component |
+
 ---
 
 ### Backlog (Prioritized)
-
-#### 🥈 2. Sample Data Generator
-**Status**: Backlog
-**Impact**: High | **Complexity**: Medium
-
-Generate realistic sample invoice data:
-- Parse merge fields from template
-- Generate matching JSON
-- Export for preview testing
-
-**Why prioritize**: Without sample data, users can't test their templates. This unlocks the value of the code generators.
 
 #### 🥉 3. Data Table Configuration Builder
 **Status**: Backlog

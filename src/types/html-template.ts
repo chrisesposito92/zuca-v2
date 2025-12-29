@@ -743,3 +743,153 @@ export function validateGroupByWizardOutput(data: unknown): GroupByWizardOutput 
   }
   return result.data;
 }
+
+// ============================================================================
+// SAMPLE DATA GENERATOR TYPES
+// ============================================================================
+
+/**
+ * Industry preset for sample data generation
+ */
+export const SampleDataIndustrySchema = z.enum([
+  'saas',
+  'telecom',
+  'utilities',
+  'professional_services',
+  'media',
+  'healthcare',
+  'general',
+]);
+export type SampleDataIndustry = z.infer<typeof SampleDataIndustrySchema>;
+
+/**
+ * Field type detected from merge fields
+ */
+export const ExtractedFieldTypeSchema = z.enum([
+  'string',
+  'number',
+  'date',
+  'boolean',
+  'currency',
+  'list',
+  'object',
+]);
+export type ExtractedFieldType = z.infer<typeof ExtractedFieldTypeSchema>;
+
+/**
+ * A single field extracted from the template
+ */
+export const ExtractedFieldSchema = z.object({
+  /** Full object path (e.g., "Invoice.Account.BillTo.FirstName") */
+  path: z.string(),
+
+  /** Inferred data type */
+  type: ExtractedFieldTypeSchema,
+
+  /** Whether this field is inside a loop */
+  inLoop: z.boolean(),
+
+  /** If in a loop, which loop (e.g., "InvoiceItems") */
+  loopContext: z.string().nullable(),
+
+  /** Functions applied to this field (e.g., ["Round", "Localise"]) */
+  functions: z.array(z.string()),
+});
+export type ExtractedField = z.infer<typeof ExtractedFieldSchema>;
+
+/**
+ * Input for sample data generation
+ */
+export const SampleDataRequestSchema = z.object({
+  /** The template code to parse for merge fields */
+  template: z.string().min(1, 'Template code is required'),
+
+  /** Document type context */
+  documentType: DocumentTypeSchema.default('invoice'),
+
+  /** Optional industry preset for realistic data */
+  industry: SampleDataIndustrySchema.optional().default('general'),
+
+  /** Number of invoice items to generate */
+  itemCount: z.number().min(1).max(20).default(3),
+
+  /** Currency code for amounts */
+  currency: z.string().default('USD'),
+
+  /** Optional custom company name */
+  companyName: z.string().optional(),
+
+  /** Optional seed for reproducible data */
+  seed: z.string().optional(),
+});
+export type SampleDataRequest = z.infer<typeof SampleDataRequestSchema>;
+
+/**
+ * Output from sample data generation
+ */
+export const SampleDataOutputSchema = z.object({
+  /** Generated JSON data matching the template structure */
+  data: z.record(z.unknown()),
+
+  /** Fields extracted from the template */
+  fields_extracted: z.array(ExtractedFieldSchema),
+
+  /** Lists/loops detected in the template */
+  lists_detected: z.array(z.string()),
+
+  /** Notes about the generated data */
+  notes: z.array(z.string()),
+
+  /** Industry used for generation */
+  industry: SampleDataIndustrySchema,
+
+  /** Currency used */
+  currency: z.string(),
+});
+export type SampleDataOutput = z.infer<typeof SampleDataOutputSchema>;
+
+/**
+ * JSON Schema for Sample Data Output (used by LLM)
+ * Note: data is output as a JSON string to work around OpenAI's
+ * additionalProperties:false requirement on nested objects
+ */
+export const sampleDataJsonSchema = {
+  type: 'object',
+  properties: {
+    data_json: {
+      type: 'string',
+      description: 'Generated sample data as a JSON STRING (will be parsed). Must be valid JSON containing all detected objects like Invoice, Account, InvoiceItems array, etc. Example: {"Invoice":{"InvoiceNumber":"INV-001"},"InvoiceItems":[...]}',
+    },
+    notes: {
+      type: 'array',
+      items: { type: 'string' },
+      description: 'Notes about the generated data (e.g., assumptions made, customization tips)',
+    },
+  },
+  required: ['data_json', 'notes'],
+  additionalProperties: false,
+};
+
+/**
+ * Validate SampleDataRequest
+ */
+export function validateSampleDataRequest(input: unknown): SampleDataRequest {
+  const result = SampleDataRequestSchema.safeParse(input);
+  if (!result.success) {
+    const errors = result.error.errors.map((e) => `${e.path.join('.')}: ${e.message}`);
+    throw new Error(`Invalid Sample Data request: ${errors.join(', ')}`);
+  }
+  return result.data;
+}
+
+/**
+ * Validate SampleDataOutput
+ */
+export function validateSampleDataOutput(data: unknown): SampleDataOutput {
+  const result = SampleDataOutputSchema.safeParse(data);
+  if (!result.success) {
+    const errors = result.error.errors.map((e) => `${e.path.join('.')}: ${e.message}`);
+    throw new Error(`Invalid Sample Data output: ${errors.join(', ')}`);
+  }
+  return result.data;
+}

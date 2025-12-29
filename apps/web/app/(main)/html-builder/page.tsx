@@ -20,11 +20,13 @@ import {
   useGroupedTemplates,
   useTemplateValidator,
   useGroupByWizard,
+  useSampleDataGenerator,
   type HTMLTemplateMode,
   type GroupByWizardRequest,
+  type SampleDataRequest,
 } from "@/hooks/useHTMLBuilder";
 import { useFunFacts } from "@/hooks/useFunFacts";
-import { HTMLTemplateResultView, TemplateValidationResultView } from "@/components/html-template-view";
+import { HTMLTemplateResultView, TemplateValidationResultView, SampleDataResultView } from "@/components/html-template-view";
 
 const DEFAULT_MODEL = process.env.NEXT_PUBLIC_DEFAULT_MODEL || "gpt-5.2";
 
@@ -47,6 +49,16 @@ const groupBySourceOptions = [
   { key: "PaymentParts", label: "Payment Parts" },
 ];
 
+const industryOptions = [
+  { key: "saas", label: "SaaS / Software" },
+  { key: "telecom", label: "Telecommunications" },
+  { key: "utilities", label: "Utilities" },
+  { key: "professional_services", label: "Professional Services" },
+  { key: "media", label: "Media / Streaming" },
+  { key: "healthcare", label: "Healthcare" },
+  { key: "general", label: "General / Other" },
+];
+
 const aggregationTypeOptions = [
   { key: "Sum", label: "Sum" },
   { key: "Count", label: "Count" },
@@ -67,7 +79,7 @@ const categoryLabels: Record<string, string> = {
   formatting: "Formatting",
 };
 
-type BuilderMode = HTMLTemplateMode | "validate" | "groupby";
+type BuilderMode = HTMLTemplateMode | "validate" | "groupby" | "sample-data";
 
 // Types for GroupBy wizard state
 interface GroupByField {
@@ -113,9 +125,17 @@ export default function HTMLBuilderPage() {
   const [includeGrandTotal, setIncludeGrandTotal] = useState(false);
   const [groupByDescription, setGroupByDescription] = useState("");
 
+  // Sample Data wizard state
+  const [sampleDataTemplate, setSampleDataTemplate] = useState("");
+  const [sampleDataIndustry, setSampleDataIndustry] = useState("general");
+  const [sampleDataItemCount, setSampleDataItemCount] = useState(3);
+  const [sampleDataCurrency, setSampleDataCurrency] = useState("USD");
+  const [sampleDataCompanyName, setSampleDataCompanyName] = useState("");
+
   const builderMutation = useHTMLBuilder();
   const validatorMutation = useTemplateValidator();
   const groupByMutation = useGroupByWizard();
+  const sampleDataMutation = useSampleDataGenerator();
   const { data: codeTemplates } = useGroupedTemplates("code");
   const { data: expressionTemplates } = useGroupedTemplates("expression");
   const { currentFact } = useFunFacts({ interval: 8000 });
@@ -123,6 +143,7 @@ export default function HTMLBuilderPage() {
   const isGenerating = builderMutation.isPending;
   const isValidating = validatorMutation.isPending;
   const isGroupByGenerating = groupByMutation.isPending;
+  const isSampleDataGenerating = sampleDataMutation.isPending;
 
   // Get templates for current mode
   const currentTemplates = useMemo(() => {
@@ -297,6 +318,51 @@ export default function HTMLBuilderPage() {
     setGroupByDescription("");
   };
 
+  // Sample Data handlers
+  const handleSampleDataGenerate = async () => {
+    if (!sampleDataTemplate.trim()) {
+      addToast({
+        title: "Template Required",
+        description: "Please paste template code to generate sample data",
+        color: "warning",
+      });
+      return;
+    }
+
+    const request: SampleDataRequest = {
+      template: sampleDataTemplate.trim(),
+      documentType: documentType as SampleDataRequest["documentType"],
+      industry: sampleDataIndustry as SampleDataRequest["industry"],
+      itemCount: sampleDataItemCount,
+      currency: sampleDataCurrency,
+      companyName: sampleDataCompanyName.trim() || undefined,
+    };
+
+    try {
+      await sampleDataMutation.mutateAsync({ ...request, model: selectedModel });
+      addToast({
+        title: "Generated Successfully",
+        description: "Sample data has been generated for your template",
+        color: "success",
+      });
+    } catch (error) {
+      const err = error as { error?: string; details?: string };
+      addToast({
+        title: "Generation Failed",
+        description: err.details || err.error || "An error occurred",
+        color: "danger",
+      });
+    }
+  };
+
+  const handleSampleDataClear = () => {
+    setSampleDataTemplate("");
+    setSampleDataIndustry("general");
+    setSampleDataItemCount(3);
+    setSampleDataCurrency("USD");
+    setSampleDataCompanyName("");
+  };
+
   const handleValidate = async () => {
     if (!templateToValidate.trim()) {
       addToast({
@@ -350,54 +416,65 @@ export default function HTMLBuilderPage() {
               onSelectionChange={handleTabChange}
               color="primary"
               classNames={{
-                tabList: "bg-default-100/50",
+                tabList: "bg-default-100/50 gap-0 overflow-x-auto",
                 cursor: "bg-primary",
-                tab: "data-[selected=true]:text-black font-medium",
-                tabContent: "group-data-[selected=true]:text-black",
+                tab: "data-[selected=true]:text-black font-medium text-sm px-2.5",
+                tabContent: "group-data-[selected=true]:text-black whitespace-nowrap",
               }}
-              isDisabled={isGenerating || isValidating || isGroupByGenerating}
+              isDisabled={isGenerating || isValidating || isGroupByGenerating || isSampleDataGenerating}
             >
               <Tab
                 key="code"
                 title={
-                  <div className="flex items-center gap-2">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="flex items-center gap-1.5">
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
                     </svg>
-                    <span>Code Generator</span>
+                    <span>Code</span>
                   </div>
                 }
               />
               <Tab
                 key="expression"
                 title={
-                  <div className="flex items-center gap-2">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="flex items-center gap-1.5">
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
                     </svg>
-                    <span>Expression Builder</span>
+                    <span>Expression</span>
                   </div>
                 }
               />
               <Tab
                 key="validate"
                 title={
-                  <div className="flex items-center gap-2">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="flex items-center gap-1.5">
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-                    <span>Validator</span>
+                    <span>Validate</span>
                   </div>
                 }
               />
               <Tab
                 key="groupby"
                 title={
-                  <div className="flex items-center gap-2">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="flex items-center gap-1.5">
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                     </svg>
-                    <span>GroupBy Wizard</span>
+                    <span>GroupBy</span>
+                  </div>
+                }
+              />
+              <Tab
+                key="sample-data"
+                title={
+                  <div className="flex items-center gap-1.5">
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
+                    </svg>
+                    <span>Sample Data</span>
                   </div>
                 }
               />
@@ -725,6 +802,120 @@ export default function HTMLBuilderPage() {
                   </Button>
                 </div>
               </div>
+            ) : activeTab === "sample-data" ? (
+              /* Sample Data mode UI */
+              <div className="space-y-5">
+                <Textarea
+                  label="Template Code"
+                  placeholder="Paste your HTML template code with merge fields here..."
+                  value={sampleDataTemplate}
+                  onChange={(e) => setSampleDataTemplate(e.target.value)}
+                  minRows={8}
+                  maxRows={14}
+                  isDisabled={isSampleDataGenerating}
+                  classNames={{
+                    input: "font-mono text-sm resize-y",
+                  }}
+                />
+
+                <div className="grid grid-cols-2 gap-4">
+                  <Select
+                    label="Industry"
+                    selectedKeys={[sampleDataIndustry]}
+                    onSelectionChange={(keys) => setSampleDataIndustry(Array.from(keys)[0] as string)}
+                    isDisabled={isSampleDataGenerating}
+                  >
+                    {industryOptions.map((opt) => (
+                      <SelectItem key={opt.key}>{opt.label}</SelectItem>
+                    ))}
+                  </Select>
+                  <Select
+                    label="Document Type"
+                    selectedKeys={[documentType]}
+                    onSelectionChange={(keys) => setDocumentType(Array.from(keys)[0] as string)}
+                    isDisabled={isSampleDataGenerating}
+                  >
+                    {documentTypeOptions.map((opt) => (
+                      <SelectItem key={opt.key}>{opt.label}</SelectItem>
+                    ))}
+                  </Select>
+                </div>
+
+                <div className="grid grid-cols-3 gap-4">
+                  <div className="space-y-1">
+                    <label className="text-sm font-medium text-foreground">Number of Items</label>
+                    <input
+                      type="number"
+                      min={1}
+                      max={20}
+                      value={sampleDataItemCount}
+                      onChange={(e) => setSampleDataItemCount(Math.min(20, Math.max(1, parseInt(e.target.value) || 1)))}
+                      disabled={isSampleDataGenerating}
+                      className="w-full px-3 py-2 rounded-lg bg-default-100 border border-default-200 text-sm focus:outline-none focus:border-primary"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-sm font-medium text-foreground">Currency</label>
+                    <input
+                      type="text"
+                      placeholder="USD"
+                      value={sampleDataCurrency}
+                      onChange={(e) => setSampleDataCurrency(e.target.value.toUpperCase().slice(0, 3))}
+                      disabled={isSampleDataGenerating}
+                      className="w-full px-3 py-2 rounded-lg bg-default-100 border border-default-200 text-sm focus:outline-none focus:border-primary"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-sm font-medium text-foreground">Company Name (Optional)</label>
+                    <input
+                      type="text"
+                      placeholder="Acme Corp"
+                      value={sampleDataCompanyName}
+                      onChange={(e) => setSampleDataCompanyName(e.target.value)}
+                      disabled={isSampleDataGenerating}
+                      className="w-full px-3 py-2 rounded-lg bg-default-100 border border-default-200 text-sm focus:outline-none focus:border-primary"
+                    />
+                  </div>
+                </div>
+
+                <Select
+                  label="Model"
+                  selectedKeys={[selectedModel]}
+                  onSelectionChange={(keys) => setSelectedModel(Array.from(keys)[0] as string)}
+                  isDisabled={isSampleDataGenerating}
+                >
+                  {modelOptions.map((model) => (
+                    <SelectItem key={model.key} textValue={model.label}>
+                      <div className="flex flex-col">
+                        <div className="flex items-center gap-2">
+                          <span>{model.label}</span>
+                          <span className="text-xs text-default-400">({model.time})</span>
+                        </div>
+                        <span className="text-xs text-default-400">{model.description}</span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </Select>
+
+                <div className="flex items-center justify-between pt-2">
+                  <Button
+                    variant="flat"
+                    onClick={handleSampleDataClear}
+                    isDisabled={isSampleDataGenerating}
+                  >
+                    Clear
+                  </Button>
+                  <Button
+                    color="primary"
+                    className="font-semibold teal-glow-subtle"
+                    onClick={handleSampleDataGenerate}
+                    isLoading={isSampleDataGenerating}
+                    isDisabled={isSampleDataGenerating || !sampleDataTemplate.trim()}
+                  >
+                    {isSampleDataGenerating ? "Generating..." : "Generate Sample Data"}
+                  </Button>
+                </div>
+              </div>
             ) : (
             <>
             {/* Quick templates dropdown */}
@@ -867,6 +1058,8 @@ export default function HTMLBuilderPage() {
                   ? "Wp_Eval expression"
                   : activeTab === "groupby"
                   ? "GroupBy template with subtotals"
+                  : activeTab === "sample-data"
+                  ? "Generated JSON for template testing"
                   : "Errors, warnings, and suggestions"}
               </p>
             </div>
@@ -894,7 +1087,12 @@ export default function HTMLBuilderPage() {
                 Ready
               </Chip>
             )}
-            {activeTab !== "validate" && activeTab !== "groupby" && builderMutation.data && (
+            {activeTab === "sample-data" && sampleDataMutation.data && (
+              <Chip size="sm" variant="flat" className="bg-success/20 text-success">
+                Ready
+              </Chip>
+            )}
+            {activeTab !== "validate" && activeTab !== "groupby" && activeTab !== "sample-data" && builderMutation.data && (
               <Chip size="sm" variant="flat" className="bg-success/20 text-success">
                 Ready
               </Chip>
@@ -1006,6 +1204,56 @@ export default function HTMLBuilderPage() {
                   <h4 className="text-lg font-medium text-foreground mb-1">No output yet</h4>
                   <p className="text-sm text-default-500 max-w-xs">
                     Configure your GroupBy fields, columns, and aggregations, then click Generate to create template code with nested loops and subtotals.
+                  </p>
+                </div>
+              )
+            ) : activeTab === "sample-data" ? (
+              /* Sample Data mode */
+              isSampleDataGenerating ? (
+                <div className="space-y-4">
+                  <div className="flex items-center gap-4">
+                    <div className="animate-spin h-5 w-5 border-2 border-primary border-t-transparent rounded-full" />
+                    <div>
+                      <p className="font-medium">Generating sample data...</p>
+                      <p className="text-xs text-default-500">Parsing template and creating realistic test data</p>
+                    </div>
+                  </div>
+                  <Progress
+                    isIndeterminate
+                    color="primary"
+                    size="sm"
+                    aria-label="Generating"
+                    classNames={{
+                      indicator: "bg-gradient-to-r from-primary to-secondary",
+                    }}
+                  />
+                  <div className="p-4 rounded-xl bg-default-100/50 border border-default-200/60">
+                    <div className="flex items-center gap-2 mb-2 text-default-500">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <span className="text-xs font-medium uppercase tracking-wider">Did you know?</span>
+                    </div>
+                    <p className="text-sm text-default-600 leading-relaxed min-h-[2.5rem] transition-opacity duration-300">
+                      {currentFact}
+                    </p>
+                  </div>
+                </div>
+              ) : sampleDataMutation.data ? (
+                <SampleDataResultView
+                  result={sampleDataMutation.data.result}
+                  sessionId={sampleDataMutation.data.session_id}
+                />
+              ) : (
+                <div className="flex flex-col items-center justify-center py-16 text-center">
+                  <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mb-4">
+                    <svg className="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
+                    </svg>
+                  </div>
+                  <h4 className="text-lg font-medium text-foreground mb-1">No output yet</h4>
+                  <p className="text-sm text-default-500 max-w-xs">
+                    Paste your HTML template code and configure the industry settings, then click Generate to create sample test data.
                   </p>
                 </div>
               )
