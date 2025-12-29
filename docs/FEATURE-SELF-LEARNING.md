@@ -120,17 +120,20 @@ data/
 - [x] Track `times_applied` when corrections are used
 - [ ] Full effectiveness tracking (did correction help?) - Deferred to Phase 4
 
-### Phase 4: Prompt Evolution (Pending)
-- [ ] Implement pattern frequency analysis
-- [ ] Implement prompt suggestion generation
-- [ ] Add `prompts analyze` CLI command
-- [ ] Add `prompts approve/reject` CLI commands
-- [ ] Implement Postgres backend for corrections
-- [ ] Add `self-improve` CLI command
-- [ ] Add embeddings to corrections (semantic search)
-- [ ] Full effectiveness tracking (pass correction IDs through pipeline)
+### Phase 4: Prompt Evolution ✅ (Complete)
+- [x] Implement pattern frequency analysis (`analyzePatterns()`)
+- [x] Implement prompt suggestion generation (`generatePromptSuggestion()`)
+- [x] Add `prompts analyze` CLI command
+- [x] Add `prompts suggest/list/approve/reject` CLI commands
+- [x] Add `self-improve` CLI command
+- [ ] Implement Postgres backend for corrections - Deferred to Phase 5
+- [ ] Add embeddings to corrections (semantic search) - Deferred to Phase 5
+- [ ] Full effectiveness tracking (pass correction IDs through pipeline) - Deferred to Phase 5
 
 ### Phase 5: Polish & Scale (Pending)
+- [ ] Implement Postgres backend for corrections (moved from Phase 4)
+- [ ] Add embeddings to corrections for semantic search (moved from Phase 4)
+- [ ] Full effectiveness tracking (moved from Phase 4)
 - [ ] Add criteria for all pipeline steps
 - [ ] Build test suite from golden use cases
 - [ ] Add CI integration option

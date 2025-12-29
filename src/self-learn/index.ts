@@ -66,4 +66,19 @@ export {
 } from './injector';
 
 // Evolution (Phase 4)
-// export { analyzePatterns, approvePromptUpdate } from './evolution';
+export {
+  analyzePatterns,
+  analyzeAllPatterns,
+  generatePromptSuggestion,
+  getPendingSuggestions,
+  getSuggestionsForStep,
+  getSuggestion,
+  approveSuggestion,
+  rejectSuggestion,
+  markSuggestionApplied,
+  getPromptPath,
+  runSelfImproveIteration,
+  type PatternAnalysis,
+  type AnalyzeOptions,
+  type SelfImproveResult,
+} from './evolution';

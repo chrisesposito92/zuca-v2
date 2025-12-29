@@ -109,6 +109,23 @@ npm run cli corrections summary
 
 # Filter corrections by step
 npm run cli corrections list --step billings
+
+# Analyze failure patterns for prompt improvement
+npm run cli prompts analyze
+npm run cli prompts analyze --step billings
+
+# Generate a prompt improvement suggestion
+npm run cli prompts suggest billings "missing payment term"
+
+# View and manage prompt suggestions
+npm run cli prompts list
+npm run cli prompts approve <suggestion-id>
+npm run cli prompts reject <suggestion-id>
+
+# Run automated self-improvement loop
+npm run cli self-improve
+npm run cli self-improve -m gemini-3-flash-preview --auto-suggest
+npm run cli self-improve --iterations 3
 ```
 
 See `docs/FEATURE-SELF-LEARNING.md` for full architecture and implementation details.
