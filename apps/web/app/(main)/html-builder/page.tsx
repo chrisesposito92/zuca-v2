@@ -1264,17 +1264,17 @@ export default function HTMLBuilderPage() {
                 size="sm"
                 variant="flat"
                 className={
-                  validatorMutation.data.result.summary.errorCount > 0
+                  validatorMutation.data.result.summary.errors > 0
                     ? "bg-danger/20 text-danger"
-                    : validatorMutation.data.result.summary.warningCount > 0
+                    : validatorMutation.data.result.summary.warnings > 0
                     ? "bg-warning/20 text-warning"
                     : "bg-success/20 text-success"
                 }
               >
-                {validatorMutation.data.result.summary.errorCount > 0
-                  ? `${validatorMutation.data.result.summary.errorCount} Errors`
-                  : validatorMutation.data.result.summary.warningCount > 0
-                  ? `${validatorMutation.data.result.summary.warningCount} Warnings`
+                {validatorMutation.data.result.summary.errors > 0
+                  ? `${validatorMutation.data.result.summary.errors} Errors`
+                  : validatorMutation.data.result.summary.warnings > 0
+                  ? `${validatorMutation.data.result.summary.warnings} Warnings`
                   : "Valid"}
               </Chip>
             )}
