@@ -9,7 +9,7 @@ import { sql } from '@vercel/postgres';
 import type { ZucaInput, ZucaOutput } from '@zuca/types';
 import type { RevenueSnapshotInput, RevenueSnapshotOutput } from '@zuca/types/revenue-snapshot';
 import type { UCGeneratorInput, UCGeneratorOutput } from '@zuca/types/uc-generator';
-import type { HTMLTemplateRequest, HTMLTemplateOutput } from '@zuca/types/html-template';
+import type { HTMLTemplateRequest, HTMLTemplateOutput, TemplateDesignRequest } from '@zuca/types/html-template';
 
 // ============================================================================
 // Types
@@ -24,7 +24,7 @@ export interface DbSession {
   created_at: Date;
   updated_at: Date;
   session_type: SessionType;
-  input: ZucaInput | UCGeneratorInput | RevenueSnapshotInput | HTMLTemplateRequest;
+  input: ZucaInput | UCGeneratorInput | RevenueSnapshotInput | HTMLTemplateRequest | TemplateDesignRequest;
   result: ZucaOutput | UCGeneratorOutput | RevenueSnapshotOutput | HTMLTemplateOutput | null;
   status: SessionStatus;
   current_step: number;
@@ -79,7 +79,7 @@ export interface DbZuoraConnection {
 
 export async function createSession(
   sessionType: SessionType,
-  input: ZucaInput | UCGeneratorInput | RevenueSnapshotInput,
+  input: ZucaInput | UCGeneratorInput | RevenueSnapshotInput | HTMLTemplateRequest | TemplateDesignRequest,
   userId?: string | null,
   llmModel?: string | null
 ): Promise<DbSession> {
