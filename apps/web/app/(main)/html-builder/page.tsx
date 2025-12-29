@@ -309,7 +309,12 @@ export default function HTMLBuilderPage() {
       source: groupBySource as GroupByWizardRequest["source"],
       documentType: documentType as GroupByWizardRequest["documentType"],
       groupByFields: validFields,
-      columns: validColumns,
+      // Ensure localise and align have defaults (Zod schema expects them required)
+      columns: validColumns.map((c) => ({
+        ...c,
+        localise: c.localise ?? false,
+        align: c.align ?? "left",
+      })),
       aggregations: validAggregations.length > 0 ? validAggregations : undefined,
       includeSubtotals,
       includeGrandTotal,
