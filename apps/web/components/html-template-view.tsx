@@ -1262,14 +1262,15 @@ export function TemplateDesignResultView({
                 <Textarea
                   value={sampleDataJson}
                   onValueChange={setSampleDataJson}
+                  minRows={30}
+                  maxRows={40}
                   classNames={{
                     base: "flex-1",
-                    inputWrapper: "h-full",
-                    input: "font-mono text-xs h-full",
+                    inputWrapper: "!h-auto",
+                    input: "font-mono text-xs",
                   }}
                   isInvalid={!!dataError}
                   placeholder="Edit JSON to see live preview..."
-                  style={{ minHeight: "calc(80vh - 100px)" }}
                 />
                 <p className="text-xs text-default-400 shrink-0">
                   Edit JSON to see live preview updates.
