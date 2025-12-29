@@ -1,0 +1,134 @@
+name: golden-scenarios
+version: "1.0"
+description: Test cases derived from golden use cases and known scenarios
+
+tests:
+  # Introductory Pricing Scenario (the original bug case)
+  - id: mint-mobile-intro-pricing
+    name: Introductory Pricing - Mint Mobile
+    description: |
+      Customer has introductory pricing: first 3 months at $15/month,
+      then $20/month for remaining 9 months. This should produce
+      separate line items in contracts/orders and billings.
+    input:
+      customer_name: Mint Mobile
+      contract_start_date: "01/01/2026"
+      terms_months: 12
+      transaction_currency: USD
+      billing_period: Monthly
+      is_allocations: false
+      use_case_description: |
+        Mint Mobile wireless plan:
+        - 3 months at $15/month introductory rate
+        - 9 months at $20/month standard rate
+        - Monthly billing in advance
+    focus_steps:
+      - contracts_orders
+      - billings
+      - design_subscription
+    tags:
+      - introductory-pricing
+      - ramp
+      - step-up
+
+  # Simple Recurring Subscription
+  - id: simple-recurring-12mo
+    name: Simple 12-Month Recurring
+    description: |
+      Basic 12-month SaaS subscription with flat monthly pricing.
+      No ramps, no usage, just simple recurring charges.
+    input:
+      customer_name: Acme Corp
+      contract_start_date: "01/01/2025"
+      terms_months: 12
+      transaction_currency: USD
+      billing_period: Monthly
+      is_allocations: false
+      use_case_description: |
+        Standard SaaS subscription:
+        - $100/month for enterprise software
+        - Monthly billing in advance
+        - 12-month commitment
+    focus_steps:
+      - contracts_orders
+      - billings
+    tags:
+      - simple
+      - recurring
+
+  # Year-over-Year Ramp
+  - id: annual-ramp-2year
+    name: Annual Ramp - 2 Year Contract
+    description: |
+      2-year contract with different pricing per year.
+      Year 1: $1000/month, Year 2: $1200/month
+    input:
+      customer_name: TechGiant Inc
+      contract_start_date: "01/01/2025"
+      terms_months: 24
+      transaction_currency: USD
+      billing_period: Monthly
+      is_allocations: false
+      use_case_description: |
+        Enterprise platform subscription with annual ramp:
+        - Year 1: $1000/month
+        - Year 2: $1200/month (20% increase)
+        - Monthly billing in advance
+    focus_steps:
+      - contracts_orders
+      - billings
+      - design_subscription
+      - revrec_waterfall
+    tags:
+      - ramp
+      - multi-year
+
+  # Quarterly Billing
+  - id: quarterly-billing-annual
+    name: Quarterly Billing - Annual Contract
+    description: |
+      Annual subscription with quarterly billing cycles.
+    input:
+      customer_name: Quarterly Corp
+      contract_start_date: "01/01/2025"
+      terms_months: 12
+      transaction_currency: USD
+      billing_period: Quarterly
+      is_allocations: false
+      use_case_description: |
+        Professional services subscription:
+        - $3000/quarter ($1000/month equivalent)
+        - Quarterly billing in advance
+        - 12-month term
+    focus_steps:
+      - billings
+    tags:
+      - quarterly
+      - simple
+
+  # Multi-Element with Allocation
+  - id: multi-element-allocation
+    name: Multi-Element Arrangement
+    description: |
+      Bundle with multiple deliverables requiring SSP allocation.
+    input:
+      customer_name: Bundle Customer
+      contract_start_date: "01/01/2025"
+      terms_months: 12
+      transaction_currency: USD
+      billing_period: Monthly
+      is_allocations: true
+      allocation_method: Use List Price
+      use_case_description: |
+        Software bundle with multiple elements:
+        - Core Platform: $500/month (list price $600)
+        - Premium Support: $100/month (list price $150)
+        - Implementation Services: $2000 one-time (list price $2500)
+        Total bundle: $8200/year
+    focus_steps:
+      - design_subscription
+      - revrec_waterfall
+    tags:
+      - allocation
+      - multi-element
+      - one-time

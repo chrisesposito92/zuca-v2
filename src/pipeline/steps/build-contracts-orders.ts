@@ -14,6 +14,7 @@ import { formatPobMappingForContext } from './assign-pob-templates';
 import { formatContractIntelForContext } from './contract-intel';
 import { debugLog } from '../../config';
 import { getDocContext, isIndexReady } from '../../rag';
+import { getCorrectionsContext } from '../../self-learn';
 
 /**
  * JSON schema for Contracts/Orders structured output
@@ -115,7 +116,8 @@ function buildUserMessage(
   subscriptionSpec: SubscriptionSpec,
   pobMapping: PobMappingOutput,
   contractIntel: ContractIntel,
-  docContext?: string
+  docContext?: string,
+  correctionsContext?: string
 ): string {
   const parts = [
     `Customer: ${input.customer_name}`,
@@ -127,6 +129,11 @@ function buildUserMessage(
     input.is_allocations ? `Allocation Method: ${input.allocation_method || 'Use List Price'}` : '',
     '',
   ];
+
+  // Include learned corrections if available
+  if (correctionsContext) {
+    parts.push(correctionsContext, '');
+  }
 
   // Include retrieved documentation if available
   if (docContext) {
@@ -174,8 +181,31 @@ export async function buildContractsOrders(
     debugLog('Retrieved doc context', { length: docContext?.length || 0 });
   }
 
+  // Retrieve learned corrections for this step
+  const inputSummary = [
+    `Customer: ${input.customer_name}`,
+    `Description: ${input.use_case_description?.substring(0, 200)}`,
+    `Billing: ${input.billing_period}`,
+    `Allocations: ${input.is_allocations ? 'Yes' : 'No'}`,
+  ].join('\n');
+
+  const correctionsContext = await getCorrectionsContext({
+    stepName: 'contracts_orders',
+    inputSummary,
+  });
+  if (correctionsContext) {
+    debugLog('Injecting corrections context', { length: correctionsContext.length });
+  }
+
   const systemPrompt = await loadPrompt(PROMPTS.BUILD_CONTRACTS_ORDERS);
-  let userMessage = buildUserMessage(input, subscriptionSpec, pobMapping, contractIntel, docContext);
+  let userMessage = buildUserMessage(
+    input,
+    subscriptionSpec,
+    pobMapping,
+    contractIntel,
+    docContext,
+    correctionsContext
+  );
 
   // Include previous results for multi-turn support
   if (previousOutput) {

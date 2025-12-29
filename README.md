@@ -84,6 +84,35 @@ npm run cli interactive
 npm run cli quick "Annual SaaS subscription with monthly billing"
 ```
 
+#### CLI - Self-Learning System
+
+ZUCA includes a self-learning pipeline that evaluates outputs against behavioral criteria and generates corrections for future improvement.
+
+```bash
+# Run evaluation suite against test cases
+npm run cli evaluate
+
+# Evaluate with specific model
+npm run cli evaluate -m gemini-3-pro-preview
+
+# Evaluate specific step only
+npm run cli evaluate --step contracts_orders
+
+# Generate corrections for failures
+npm run cli evaluate --corrections
+
+# List stored corrections
+npm run cli corrections list
+
+# Show corrections summary by step
+npm run cli corrections summary
+
+# Filter corrections by step
+npm run cli corrections list --step billings
+```
+
+See `docs/FEATURE-SELF-LEARNING.md` for full architecture and implementation details.
+
 #### API Routes (Next.js)
 
 When running the web app locally (`npm run dev:web`), API routes are available under `http://localhost:3000/api/*`.

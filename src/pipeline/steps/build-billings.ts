@@ -12,6 +12,7 @@ import { formatSubscriptionSpecForContext } from './generate-subscription';
 import { formatContractIntelForContext } from './contract-intel';
 import { debugLog } from '../../config';
 import { getDocContext, isIndexReady } from '../../rag';
+import { getCorrectionsContext } from '../../self-learn';
 
 /**
  * JSON schema for Billings structured output
@@ -66,7 +67,8 @@ function buildUserMessage(
   input: ZucaInput,
   subscriptionSpec: SubscriptionSpec,
   contractIntel: ContractIntel,
-  docContext?: string
+  docContext?: string,
+  correctionsContext?: string
 ): string {
   const parts = [
     `Customer: ${input.customer_name}`,
@@ -75,6 +77,11 @@ function buildUserMessage(
     input.use_case_description,
     '',
   ];
+
+  // Include learned corrections if available
+  if (correctionsContext) {
+    parts.push(correctionsContext, '');
+  }
 
   // Include retrieved documentation if available
   if (docContext) {
@@ -119,8 +126,30 @@ export async function buildBillings(
     debugLog('Retrieved doc context', { length: docContext?.length || 0 });
   }
 
+  // Retrieve learned corrections for this step
+  const inputSummary = [
+    `Customer: ${input.customer_name}`,
+    `Description: ${input.use_case_description?.substring(0, 200)}`,
+    `Billing Period: ${input.billing_period}`,
+    `Terms: ${input.terms_months} months`,
+  ].join('\n');
+
+  const correctionsContext = await getCorrectionsContext({
+    stepName: 'billings',
+    inputSummary,
+  });
+  if (correctionsContext) {
+    debugLog('Injecting corrections context', { length: correctionsContext.length });
+  }
+
   const systemPrompt = await loadPrompt(PROMPTS.BUILD_BILLINGS);
-  let userMessage = buildUserMessage(input, subscriptionSpec, contractIntel, docContext);
+  let userMessage = buildUserMessage(
+    input,
+    subscriptionSpec,
+    contractIntel,
+    docContext,
+    correctionsContext
+  );
 
   // Include previous results for multi-turn support
   if (previousOutput) {

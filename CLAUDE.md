@@ -46,6 +46,39 @@ This file is for LLM contributors. For install/run commands and product overview
 - RAG context is injected before the LLM call; it is not a tool.
 - Doc corpus and QA generation live in `zuora-docs-scrapper/`; rebuild with `npm run rag:*` after changing docs or chunking.
 
+## Self-Learning System
+Automated feedback loop where the pipeline learns from evaluation failures:
+
+### Architecture
+- **Test Suites** (`data/test-suites/*.yaml`) - Test cases with inputs and focus steps
+- **Evaluation Criteria** (`data/evaluation-criteria/*.yaml`) - Behavioral rules per step
+- **LLM Judge** (`src/self-learn/judge/`) - Evaluates outputs against criteria
+- **Corrections Store** (`data/corrections-index.json`) - Learned fixes from failures
+- **Injector** (Phase 3) - Injects corrections as few-shot examples
+
+### Key Files
+- `src/self-learn/` - Main module: types, corrections, criteria, judge, evaluation
+- `src/llm/prompts/self-learn-judge.md` - Judge system prompt (registered in `index.ts`)
+- `docs/FEATURE-SELF-LEARNING.md` - Full feature documentation with phase status
+
+### CLI Commands
+```bash
+npm run cli evaluate              # Run evaluation suite
+npm run cli evaluate --corrections # Generate corrections for failures
+npm run cli corrections list      # List stored corrections
+npm run cli corrections summary   # Show pattern statistics
+```
+
+### Adding New Criteria
+1. Create YAML file in `data/evaluation-criteria/<step-name>.yaml`
+2. Follow existing format: name, version, step, description, criteria array
+3. Each criterion needs: id, name, description, severity, patterns, check.rule, examples
+
+### Adding New Test Cases
+1. Edit `data/test-suites/golden-scenarios.yaml` or create new suite
+2. Include: id, name, description, input (ZucaInput fields), focus_steps, tags
+3. Test cases run through full pipeline; focus_steps controls which steps are evaluated
+
 ## Revenue Snapshot (read-only)
 - Pipeline: 2 steps in `src/pipeline/revenue-snapshot/` (Waterfall → Summary).
 - Waterfall step handles SSP allocations + periodization in single LLM call.

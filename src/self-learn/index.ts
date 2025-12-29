@@ -32,14 +32,38 @@ export {
   getCriteriaIfExists,
 } from './criteria';
 
-// Evaluation (Phase 2)
-// export { runEvaluationSuite, listSuites } from './evaluation';
-
 // Judge (Phase 2)
-// export { evaluateOutput } from './judge';
+export {
+  evaluateOutput,
+  evaluateSingleCriterion,
+  hasCriticalFailures,
+  getFailedEvaluations,
+  type EvaluateOptions,
+} from './judge';
+
+// Evaluation Runner (Phase 2)
+export {
+  runEvaluationSuite,
+  runStepEvaluation,
+  evaluateSingleTest,
+  loadTestSuite,
+  loadAllTestSuites,
+  listTestSuites,
+  createQuickTestCase,
+  type RunEvaluationOptions,
+  type TestCaseResult,
+} from './evaluation';
 
 // Injection (Phase 3)
-// export { getCorrectionsContext } from './injector';
+export {
+  getCorrectionsContext,
+  formatCorrectionForPrompt,
+  formatCorrectionsSection,
+  hasCorrectionsForStep,
+  markCorrectionEffectiveness,
+  buildInputSummary,
+  type GetCorrectionsContextOptions,
+} from './injector';
 
 // Evolution (Phase 4)
 // export { analyzePatterns, approvePromptUpdate } from './evolution';

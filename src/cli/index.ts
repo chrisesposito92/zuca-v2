@@ -35,6 +35,8 @@ import {
   getCorrectionsForStep,
   getPatternStats,
   listAvailableCriteria,
+  listTestSuites,
+  runEvaluationSuite,
   type Correction,
 } from '../self-learn';
 
@@ -524,12 +526,12 @@ program
 
 /**
  * Evaluate command - run evaluation suite against pipeline
- * Phase 2 will add actual evaluation logic
  */
 async function evaluateCommand(options: {
   suite?: string;
   model?: string;
   step?: string;
+  corrections?: boolean;
 }): Promise<void> {
   try {
     console.log(chalk.cyan.bold('\n═══ Self-Learning Evaluation ═══\n'));
@@ -567,10 +569,87 @@ criteria:
     });
     console.log('');
 
-    // Phase 2: Actually run evaluation
-    console.log(chalk.yellow('Note: Evaluation runner not yet implemented (Phase 2)'));
-    console.log(chalk.gray('This will run test cases through the pipeline and evaluate outputs'));
-    console.log(chalk.gray('against the behavioral criteria using an LLM judge.'));
+    // List available test suites
+    const availableSuites = listTestSuites();
+    if (availableSuites.length === 0) {
+      console.log(chalk.yellow('No test suites found.'));
+      console.log(chalk.gray('Create test suite files in data/test-suites/*.yaml'));
+      console.log('');
+      console.log(chalk.gray('Example test suite format:'));
+      console.log(chalk.gray(`
+name: golden-scenarios
+version: "1.0"
+description: Test cases from golden use cases
+
+tests:
+  - id: mint-mobile-intro
+    name: Introductory Pricing Test
+    description: 3 months at $15, then 9 months at $20
+    input:
+      customer_name: Mint Mobile
+      contract_start_date: "01/01/2026"
+      terms_months: 12
+      billing_period: Monthly
+      use_case_description: "3 months at $15/month, then $20/month for remaining 9 months"
+    focus_steps: [contracts_orders, billings]
+`));
+      return;
+    }
+
+    console.log(chalk.green('Available Test Suites:'));
+    availableSuites.forEach((name) => {
+      const indicator = options.suite && options.suite !== name ? chalk.gray('○') : chalk.green('●');
+      console.log(`  ${indicator} ${name}`);
+    });
+    console.log('');
+
+    // If no suite specified, just show available options
+    if (!options.suite) {
+      console.log(chalk.yellow('Usage: npm run cli -- evaluate --suite <name>'));
+      console.log(chalk.gray('Add --corrections to generate corrections for failures'));
+      return;
+    }
+
+    // Run the evaluation suite
+    const model = parseModelOption(options.model);
+    console.log(chalk.blue(`Running evaluation suite: ${options.suite}...`));
+    console.log('');
+
+    const result = await runEvaluationSuite(options.suite, {
+      model,
+      steps: options.step ? [options.step] : undefined,
+      generateCorrections: options.corrections ?? false,
+      onProgress: (current, total, testId) => {
+        console.log(chalk.gray(`  [${current}/${total}] ${testId}`));
+      },
+    });
+
+    // Print results
+    console.log('');
+    console.log(chalk.cyan.bold('═══ Results ═══'));
+    console.log('');
+    console.log(`Total Tests: ${chalk.yellow(result.total.toString())}`);
+    console.log(`Passed: ${chalk.green(result.passed.toString())}`);
+    console.log(`Failed: ${result.failed > 0 ? chalk.red(result.failed.toString()) : chalk.green('0')}`);
+    if (options.corrections) {
+      console.log(`Corrections Generated: ${chalk.yellow(result.correctionsGenerated.toString())}`);
+    }
+    console.log('');
+
+    if (result.failures.length > 0) {
+      console.log(chalk.red('Failures:'));
+      result.failures.forEach((f, i) => {
+        console.log(`  ${i + 1}. [${f.stepName}] ${f.criterionId}`);
+        console.log(`     Test: ${f.testId}`);
+        console.log(`     ${chalk.gray(f.explanation.substring(0, 100))}${f.explanation.length > 100 ? '...' : ''}`);
+        console.log('');
+      });
+    } else {
+      console.log(chalk.green('All tests passed!'));
+    }
+
+    console.log(chalk.gray(`Run ID: ${result.runId}`));
+    console.log(chalk.gray(`Duration: ${new Date(result.completedAt!).getTime() - new Date(result.startedAt).getTime()}ms`));
   } catch (error: any) {
     console.error(chalk.red(`Error: ${error.message}`));
     process.exit(1);
@@ -674,10 +753,11 @@ async function correctionsSummaryCommand(options: { step?: string }): Promise<vo
 
 program
   .command('evaluate')
-  .description('Run evaluation suite against pipeline (Phase 2)')
+  .description('Run evaluation suite against pipeline')
   .option('-s, --suite <name>', 'Test suite name')
   .option('-m, --model <model>', 'LLM model for evaluation')
   .option('--step <step>', 'Only evaluate specific step')
+  .option('--corrections', 'Generate corrections for failures')
   .action(evaluateCommand);
 
 // Corrections subcommand group

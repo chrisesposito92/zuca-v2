@@ -61,6 +61,8 @@ export const PROMPTS = {
   HTML_TEMPLATE_GROUPBY: 'html-template-groupby',
   HTML_TEMPLATE_SAMPLE_DATA: 'html-template-sample-data',
   HTML_TEMPLATE_DESIGN: 'html-template-design',
+  // Self-learning system prompts
+  SELF_LEARN_JUDGE: 'self-learn-judge',
 } as const;
 
 export type PromptName = typeof PROMPTS[keyof typeof PROMPTS];

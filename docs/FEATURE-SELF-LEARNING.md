@@ -57,12 +57,12 @@ npm run cli -- prompts approve <id>
 src/self-learn/
 ├── index.ts                 # Main exports
 ├── types.ts                 # Shared types (Correction, Criterion, etc.)
-├── evaluation/              # (Phase 2)
-│   ├── index.ts             # Evaluation runner
-│   └── runner.ts            # Test execution
-├── judge/                   # (Phase 2)
-│   ├── index.ts             # LLM judge
-│   └── evaluate.ts          # Core evaluation logic
+├── evaluation/              # ✅ Phase 2
+│   ├── index.ts             # Evaluation runner ✅
+│   ├── runner.ts            # Test execution ✅
+│   └── test-suites.ts       # Test suite loader ✅
+├── judge/                   # ✅ Phase 2
+│   └── index.ts             # LLM judge with evaluateOutput() ✅
 ├── corrections/
 │   ├── index.ts             # Dual backend router ✅
 │   ├── types.ts             # Correction types ✅
@@ -70,13 +70,13 @@ src/self-learn/
 │   └── postgres-backend.ts  # (Phase 4) Production Postgres
 ├── criteria/
 │   └── index.ts             # YAML criteria loader ✅
-├── injector/                # (Phase 3)
-│   └── index.ts             # Few-shot injection
+├── injector/                # ✅ Phase 3
+│   └── index.ts             # Few-shot injection ✅
 └── evolution/               # (Phase 4)
     └── index.ts             # Pattern analysis + suggestions
 
 src/llm/prompts/
-└── self-learn-judge.md      # (Phase 2) Judge system prompt
+└── self-learn-judge.md      # ✅ Judge system prompt
 
 data/
 ├── evaluation-criteria/     # Behavioral rules (YAML)
@@ -102,21 +102,23 @@ data/
 - [ ] Write evaluation criteria for ALL pipeline steps (6 YAML files)
 - [x] Create `docs/FEATURE-SELF-LEARNING.md`
 
-### Phase 2: Evaluation Engine (Pending)
-- [ ] Create judge prompt (`self-learn-judge.md`)
-- [ ] Implement `evaluateOutput()` with structured output
-- [ ] Implement evaluation runner
-- [ ] Add correction generation from failures
-- [ ] Add embeddings to corrections (reuse `src/rag/embeddings.ts`)
-- [ ] Create test suite format and loader
+### Phase 2: Evaluation Engine ✅ (Complete)
+- [x] Create judge prompt (`self-learn-judge.md`)
+- [x] Implement `evaluateOutput()` with structured output
+- [x] Implement evaluation runner
+- [x] Add correction generation from failures
+- [ ] Add embeddings to corrections (reuse `src/rag/embeddings.ts`) - Deferred to Phase 3
+- [x] Create test suite format and loader
+- [x] Create sample test suite (`golden-scenarios.yaml`)
 
-### Phase 3: Few-Shot Injection (Pending)
-- [ ] Implement `getCorrectionsContext()` function
-- [ ] Implement correction formatter for prompts
-- [ ] Modify `build-billings.ts` to inject corrections
-- [ ] Modify `build-contracts-orders.ts` to inject corrections
-- [ ] Modify `design-subscription.ts` to inject corrections
-- [ ] Add tracking for correction effectiveness
+### Phase 3: Few-Shot Injection ✅ (Complete)
+- [x] Implement `getCorrectionsContext()` function
+- [x] Implement correction formatter for prompts
+- [x] Modify `build-billings.ts` to inject corrections
+- [x] Modify `build-contracts-orders.ts` to inject corrections
+- [x] Modify `design-subscription.ts` to inject corrections
+- [x] Track `times_applied` when corrections are used
+- [ ] Full effectiveness tracking (did correction help?) - Deferred to Phase 4
 
 ### Phase 4: Prompt Evolution (Pending)
 - [ ] Implement pattern frequency analysis
@@ -125,6 +127,8 @@ data/
 - [ ] Add `prompts approve/reject` CLI commands
 - [ ] Implement Postgres backend for corrections
 - [ ] Add `self-improve` CLI command
+- [ ] Add embeddings to corrections (semantic search)
+- [ ] Full effectiveness tracking (pass correction IDs through pipeline)
 
 ### Phase 5: Polish & Scale (Pending)
 - [ ] Add criteria for all pipeline steps
