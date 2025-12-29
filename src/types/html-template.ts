@@ -492,3 +492,254 @@ export function validateTemplateValidationOutput(data: unknown): TemplateValidat
   }
   return result.data;
 }
+
+// ============================================================================
+// GROUPBY WIZARD TYPES
+// ============================================================================
+
+/**
+ * Available source lists for GroupBy operations
+ */
+export const GroupBySourceSchema = z.enum([
+  'InvoiceItems',
+  'TaxationItems',
+  'InvoicePayments',
+  'PaymentParts',
+]);
+export type GroupBySource = z.infer<typeof GroupBySourceSchema>;
+
+/**
+ * Common fields available for grouping
+ */
+export const GroupByFieldSchema = z.enum([
+  // Subscription level
+  'Subscription.Name',
+  'Subscription.SubscriptionNumber',
+  // Charge level
+  'RatePlanCharge.ChargeType',
+  'RatePlanCharge.ChargeModel',
+  'RatePlanCharge.Name',
+  // Product level
+  'RatePlanCharge.ProductRatePlanCharge.ProductRatePlan.Product.Name',
+  // Invoice Item fields
+  'ChargeName',
+  'ProcessingType',
+  'UOM',
+  // Service period
+  'ServiceStartDate',
+  'ServiceEndDate',
+  // Custom - allows any dotted path
+  'custom',
+]);
+export type GroupByField = z.infer<typeof GroupByFieldSchema>;
+
+/**
+ * A single grouping level configuration
+ */
+export const GroupByLevelSchema = z.object({
+  /** Field to group by */
+  field: z.string().min(1, 'Field is required'),
+
+  /** Display label for this grouping level */
+  label: z.string().optional(),
+});
+export type GroupByLevel = z.infer<typeof GroupByLevelSchema>;
+
+/**
+ * Aggregation type
+ */
+export const AggregationTypeSchema = z.enum(['Sum', 'Count', 'Average']);
+export type AggregationType = z.infer<typeof AggregationTypeSchema>;
+
+/**
+ * A single aggregation configuration
+ */
+export const GroupByAggregationSchema = z.object({
+  /** Field to aggregate */
+  field: z.string().min(1, 'Field is required'),
+
+  /** Aggregation function */
+  type: AggregationTypeSchema.default('Sum'),
+
+  /** Display label */
+  label: z.string().optional(),
+
+  /** Number of decimal places for rounding */
+  decimals: z.number().min(0).max(10).default(2),
+
+  /** Whether to format with locale */
+  localise: z.boolean().default(true),
+});
+export type GroupByAggregation = z.infer<typeof GroupByAggregationSchema>;
+
+/**
+ * Column configuration for display within groups
+ */
+export const GroupByColumnSchema = z.object({
+  /** Field path to display */
+  field: z.string().min(1, 'Field is required'),
+
+  /** Column header label */
+  label: z.string(),
+
+  /** Whether to format with locale */
+  localise: z.boolean().default(false),
+
+  /** Number of decimal places (for numbers) */
+  decimals: z.number().min(0).max(10).optional(),
+
+  /** Column alignment */
+  align: z.enum(['left', 'center', 'right']).default('left'),
+});
+export type GroupByColumn = z.infer<typeof GroupByColumnSchema>;
+
+/**
+ * Sort configuration
+ */
+export const GroupBySortSchema = z.object({
+  /** Field to sort by */
+  field: z.string().min(1, 'Field is required'),
+
+  /** Sort direction */
+  direction: z.enum(['ASC', 'DESC']).default('ASC'),
+});
+export type GroupBySort = z.infer<typeof GroupBySortSchema>;
+
+/**
+ * Input for GroupBy Wizard
+ */
+export const GroupByWizardRequestSchema = z.object({
+  /** Source list to group */
+  source: GroupBySourceSchema.default('InvoiceItems'),
+
+  /** Fields to group by (1-6 levels) */
+  groupByFields: z.array(GroupByLevelSchema).min(1).max(6),
+
+  /** Columns to display within each group */
+  columns: z.array(GroupByColumnSchema).min(1),
+
+  /** Aggregations to calculate for each group */
+  aggregations: z.array(GroupByAggregationSchema).optional(),
+
+  /** Sort before grouping */
+  sortBy: GroupBySortSchema.optional(),
+
+  /** Document type context */
+  documentType: DocumentTypeSchema.default('invoice'),
+
+  /** Whether to include subtotals for each group */
+  includeSubtotals: z.boolean().default(true),
+
+  /** Whether to show grand total at the end */
+  includeGrandTotal: z.boolean().default(false),
+
+  /** Optional natural language description for additional context */
+  description: z.string().optional(),
+});
+
+export type GroupByWizardRequest = z.infer<typeof GroupByWizardRequestSchema>;
+
+/**
+ * Output from GroupBy Wizard
+ */
+export const GroupByWizardOutputSchema = z.object({
+  /** Generated HTML/merge field code */
+  code: z.string(),
+
+  /** Explanation of the generated structure */
+  explanation: z.string(),
+
+  /** Variable assignments generated */
+  variables: z.array(z.object({
+    name: z.string(),
+    purpose: z.string(),
+  })),
+
+  /** Objects used in the template */
+  objects_used: z.array(z.string()),
+
+  /** Functions used in the template */
+  functions_used: z.array(z.string()),
+
+  /** Tips for customization */
+  customization_tips: z.array(z.string()),
+});
+
+export type GroupByWizardOutput = z.infer<typeof GroupByWizardOutputSchema>;
+
+/**
+ * JSON Schema for GroupBy Wizard Output (used by LLM)
+ */
+export const groupByWizardJsonSchema = {
+  type: 'object',
+  properties: {
+    code: {
+      type: 'string',
+      description: 'Generated HTML and merge field code with GroupBy, Cmd_Assign, nested loops, and aggregations',
+    },
+    explanation: {
+      type: 'string',
+      description: 'Explanation of the generated structure and how it works',
+    },
+    variables: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          name: {
+            type: 'string',
+            description: 'Variable name assigned via Cmd_Assign',
+          },
+          purpose: {
+            type: 'string',
+            description: 'What this variable holds and how it is used',
+          },
+        },
+        required: ['name', 'purpose'],
+        additionalProperties: false,
+      },
+      description: 'Variables created via Cmd_Assign for nested group access',
+    },
+    objects_used: {
+      type: 'array',
+      items: { type: 'string' },
+      description: 'Zuora objects used (e.g., InvoiceItems, Subscription)',
+    },
+    functions_used: {
+      type: 'array',
+      items: { type: 'string' },
+      description: 'Functions used (e.g., GroupBy, Sum, SortBy, FlatMap)',
+    },
+    customization_tips: {
+      type: 'array',
+      items: { type: 'string' },
+      description: 'Tips for customizing the output (styling, additional fields, etc.)',
+    },
+  },
+  required: ['code', 'explanation', 'variables', 'objects_used', 'functions_used', 'customization_tips'],
+  additionalProperties: false,
+};
+
+/**
+ * Validate GroupByWizardRequest
+ */
+export function validateGroupByWizardRequest(input: unknown): GroupByWizardRequest {
+  const result = GroupByWizardRequestSchema.safeParse(input);
+  if (!result.success) {
+    const errors = result.error.errors.map((e) => `${e.path.join('.')}: ${e.message}`);
+    throw new Error(`Invalid GroupBy Wizard request: ${errors.join(', ')}`);
+  }
+  return result.data;
+}
+
+/**
+ * Validate GroupByWizardOutput
+ */
+export function validateGroupByWizardOutput(data: unknown): GroupByWizardOutput {
+  const result = GroupByWizardOutputSchema.safeParse(data);
+  if (!result.success) {
+    const errors = result.error.errors.map((e) => `${e.path.join('.')}: ${e.message}`);
+    throw new Error(`Invalid GroupBy Wizard output: ${errors.join(', ')}`);
+  }
+  return result.data;
+}

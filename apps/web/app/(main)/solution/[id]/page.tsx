@@ -21,7 +21,7 @@ import { ConversationPanel } from "@/components/chat";
 import { UCGenerateView } from "@/components/uc-generate-view";
 import type { ZucaOutput, UCGeneratorOutput } from "@zuca/types";
 import type { RevenueSnapshotOutput } from "@zuca/types/revenue-snapshot";
-import type { HTMLTemplateOutput, HTMLTemplateRequest, TemplateValidationRequest, TemplateValidationOutput } from "@zuca/types/html-template";
+import type { HTMLTemplateOutput, HTMLTemplateRequest, TemplateValidationRequest, TemplateValidationOutput, GroupByWizardRequest, GroupByWizardOutput } from "@zuca/types/html-template";
 import { RevenueSnapshotView } from "@/components/revenue-snapshot-view";
 import { HTMLTemplateResultView, TemplateValidationResultView } from "@/components/html-template-view";
 import { FeedbackButtons } from "@/components/FeedbackButtons";
@@ -210,8 +210,11 @@ export default function SolutionPage({ params }: PageProps) {
   }
 
   if (session.session_type === "html-builder") {
-    const htmlResult = session.result as (HTMLTemplateOutput | { mode: 'validate'; result: TemplateValidationOutput }) | null;
-    const htmlInput = session.input as (HTMLTemplateRequest | (TemplateValidationRequest & { mode: 'validate' }));
+    type HTMLBuilderResult = HTMLTemplateOutput | { mode: 'validate'; result: TemplateValidationOutput } | { mode: 'groupby'; result: GroupByWizardOutput };
+    type HTMLBuilderInput = HTMLTemplateRequest | (TemplateValidationRequest & { mode: 'validate' }) | (GroupByWizardRequest & { mode: 'groupby' });
+
+    const htmlResult = session.result as HTMLBuilderResult | null;
+    const htmlInput = session.input as HTMLBuilderInput;
 
     if (!htmlResult) {
       return (
@@ -272,7 +275,7 @@ export default function SolutionPage({ params }: PageProps) {
               <div>
                 <h1 className="text-3xl font-bold tracking-tight">
                   <span className="gradient-text">
-                    {htmlResult.mode === "code" ? "Template Code" : htmlResult.mode === "expression" ? "Expression" : "Template Validation"}
+                    {htmlResult.mode === "code" ? "Template Code" : htmlResult.mode === "expression" ? "Expression" : htmlResult.mode === "groupby" ? "GroupBy Template" : "Template Validation"}
                   </span>
                 </h1>
                 <div className="flex items-center gap-3 mt-2">
@@ -333,6 +336,18 @@ export default function SolutionPage({ params }: PageProps) {
                   result={htmlResult.result as TemplateValidationOutput}
                   /* Don't pass sessionId - we're already on the detail page */
                 />
+              ) : htmlResult.mode === "groupby" ? (
+                <HTMLTemplateResultView
+                  mode="code"
+                  result={{
+                    code: (htmlResult.result as GroupByWizardOutput).code,
+                    explanation: (htmlResult.result as GroupByWizardOutput).explanation,
+                    objects_used: (htmlResult.result as GroupByWizardOutput).objects_used,
+                    functions_used: (htmlResult.result as GroupByWizardOutput).functions_used,
+                    customization_tips: (htmlResult.result as GroupByWizardOutput).customization_tips,
+                  }}
+                  /* Don't pass sessionId - we're already on the detail page */
+                />
               ) : (
                 <HTMLTemplateResultView
                   mode={htmlResult.mode as "code" | "expression"}
@@ -363,6 +378,65 @@ export default function SolutionPage({ params }: PageProps) {
                       <Chip size="sm" variant="flat" className="bg-default-100 capitalize">
                         {(htmlInput as TemplateValidationRequest).documentType}
                       </Chip>
+                    </div>
+                  )}
+                </>
+              ) : htmlResult.mode === "groupby" ? (
+                <>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <p className="text-xs font-medium text-default-500 uppercase tracking-wide">Source List</p>
+                      <Chip size="sm" variant="flat" className="bg-default-100">
+                        {(htmlInput as GroupByWizardRequest).source}
+                      </Chip>
+                    </div>
+                    <div className="space-y-2">
+                      <p className="text-xs font-medium text-default-500 uppercase tracking-wide">Document Type</p>
+                      <Chip size="sm" variant="flat" className="bg-default-100 capitalize">
+                        {(htmlInput as GroupByWizardRequest).documentType}
+                      </Chip>
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <p className="text-xs font-medium text-default-500 uppercase tracking-wide">Group By Fields</p>
+                    <div className="flex flex-wrap gap-2">
+                      {(htmlInput as GroupByWizardRequest).groupByFields.map((field, i) => (
+                        <Chip key={i} size="sm" variant="flat" className="bg-primary/10 text-primary">
+                          {i + 1}. {field.field}{field.label ? ` (${field.label})` : ""}
+                        </Chip>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <p className="text-xs font-medium text-default-500 uppercase tracking-wide">Columns</p>
+                    <div className="flex flex-wrap gap-2">
+                      {(htmlInput as GroupByWizardRequest).columns.map((col, i) => (
+                        <Chip key={i} size="sm" variant="bordered" className="border-default-300">
+                          {col.label}: {col.field}
+                        </Chip>
+                      ))}
+                    </div>
+                  </div>
+                  {(htmlInput as GroupByWizardRequest).aggregations && (htmlInput as GroupByWizardRequest).aggregations!.length > 0 && (
+                    <div className="space-y-2">
+                      <p className="text-xs font-medium text-default-500 uppercase tracking-wide">Aggregations</p>
+                      <div className="flex flex-wrap gap-2">
+                        {(htmlInput as GroupByWizardRequest).aggregations!.map((agg, i) => (
+                          <Chip key={i} size="sm" variant="flat" className="bg-secondary/10 text-secondary">
+                            {agg.type}({agg.field})
+                          </Chip>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  <div className="flex gap-4 text-sm text-default-500">
+                    <span>Subtotals: {(htmlInput as GroupByWizardRequest).includeSubtotals ? "Yes" : "No"}</span>
+                    <span>Grand Total: {(htmlInput as GroupByWizardRequest).includeGrandTotal ? "Yes" : "No"}</span>
+                  </div>
+                  {(htmlInput as GroupByWizardRequest).description && (
+                    <div className="space-y-2">
+                      <p className="text-xs font-medium text-default-500 uppercase tracking-wide">Additional Requirements</p>
+                      <p className="text-default-600 leading-relaxed">{(htmlInput as GroupByWizardRequest).description}</p>
                     </div>
                   )}
                 </>

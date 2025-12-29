@@ -15,7 +15,14 @@ import {
   addToast,
 } from "@heroui/react";
 import { useState, useMemo } from "react";
-import { useHTMLBuilder, useGroupedTemplates, useTemplateValidator, type HTMLTemplateMode } from "@/hooks/useHTMLBuilder";
+import {
+  useHTMLBuilder,
+  useGroupedTemplates,
+  useTemplateValidator,
+  useGroupByWizard,
+  type HTMLTemplateMode,
+  type GroupByWizardRequest,
+} from "@/hooks/useHTMLBuilder";
 import { useFunFacts } from "@/hooks/useFunFacts";
 import { HTMLTemplateResultView, TemplateValidationResultView } from "@/components/html-template-view";
 
@@ -33,6 +40,21 @@ const documentTypeOptions = [
   { key: "debit_memo", label: "Debit Memo" },
 ];
 
+const groupBySourceOptions = [
+  { key: "InvoiceItems", label: "Invoice Items" },
+  { key: "TaxationItems", label: "Taxation Items" },
+  { key: "InvoicePayments", label: "Invoice Payments" },
+  { key: "PaymentParts", label: "Payment Parts" },
+];
+
+const aggregationTypeOptions = [
+  { key: "Sum", label: "Sum" },
+  { key: "Count", label: "Count" },
+  { key: "Average", label: "Average" },
+  { key: "Min", label: "Min" },
+  { key: "Max", label: "Max" },
+];
+
 // Category display names
 const categoryLabels: Record<string, string> = {
   tables: "Tables & Lists",
@@ -45,7 +67,33 @@ const categoryLabels: Record<string, string> = {
   formatting: "Formatting",
 };
 
-type BuilderMode = HTMLTemplateMode | "validate";
+type BuilderMode = HTMLTemplateMode | "validate" | "groupby";
+
+// Types for GroupBy wizard state
+interface GroupByField {
+  field: string;
+  label?: string;
+}
+
+interface GroupByColumn {
+  field: string;
+  label: string;
+  localise?: boolean;
+  decimals?: number;
+  align?: "left" | "center" | "right";
+}
+
+interface GroupByAggregation {
+  field: string;
+  type: "Sum" | "Count" | "Average" | "Min" | "Max";
+  label?: string;
+  decimals?: number;
+  localise?: boolean;
+}
+
+const defaultGroupByField: GroupByField = { field: "", label: "" };
+const defaultGroupByColumn: GroupByColumn = { field: "", label: "", localise: false, align: "left" };
+const defaultGroupByAggregation: GroupByAggregation = { field: "", type: "Sum", label: "", decimals: 2, localise: true };
 
 export default function HTMLBuilderPage() {
   const [activeTab, setActiveTab] = useState<BuilderMode>("code");
@@ -56,14 +104,25 @@ export default function HTMLBuilderPage() {
   const [selectedTemplateId, setSelectedTemplateId] = useState<string>("");
   const [templateToValidate, setTemplateToValidate] = useState("");
 
+  // GroupBy wizard state
+  const [groupBySource, setGroupBySource] = useState("InvoiceItems");
+  const [groupByFields, setGroupByFields] = useState<GroupByField[]>([{ ...defaultGroupByField }]);
+  const [groupByColumns, setGroupByColumns] = useState<GroupByColumn[]>([{ ...defaultGroupByColumn }]);
+  const [groupByAggregations, setGroupByAggregations] = useState<GroupByAggregation[]>([]);
+  const [includeSubtotals, setIncludeSubtotals] = useState(true);
+  const [includeGrandTotal, setIncludeGrandTotal] = useState(false);
+  const [groupByDescription, setGroupByDescription] = useState("");
+
   const builderMutation = useHTMLBuilder();
   const validatorMutation = useTemplateValidator();
+  const groupByMutation = useGroupByWizard();
   const { data: codeTemplates } = useGroupedTemplates("code");
   const { data: expressionTemplates } = useGroupedTemplates("expression");
   const { currentFact } = useFunFacts({ interval: 8000 });
 
   const isGenerating = builderMutation.isPending;
   const isValidating = validatorMutation.isPending;
+  const isGroupByGenerating = groupByMutation.isPending;
 
   // Get templates for current mode
   const currentTemplates = useMemo(() => {
@@ -132,6 +191,112 @@ export default function HTMLBuilderPage() {
     // Keep description if user typed something custom
   };
 
+  // GroupBy wizard handlers
+  const handleAddGroupByField = () => {
+    if (groupByFields.length < 6) {
+      setGroupByFields([...groupByFields, { ...defaultGroupByField }]);
+    }
+  };
+
+  const handleRemoveGroupByField = (index: number) => {
+    if (groupByFields.length > 1) {
+      setGroupByFields(groupByFields.filter((_, i) => i !== index));
+    }
+  };
+
+  const handleUpdateGroupByField = (index: number, updates: Partial<GroupByField>) => {
+    setGroupByFields(groupByFields.map((f, i) => i === index ? { ...f, ...updates } : f));
+  };
+
+  const handleAddColumn = () => {
+    setGroupByColumns([...groupByColumns, { ...defaultGroupByColumn }]);
+  };
+
+  const handleRemoveColumn = (index: number) => {
+    if (groupByColumns.length > 1) {
+      setGroupByColumns(groupByColumns.filter((_, i) => i !== index));
+    }
+  };
+
+  const handleUpdateColumn = (index: number, updates: Partial<GroupByColumn>) => {
+    setGroupByColumns(groupByColumns.map((c, i) => i === index ? { ...c, ...updates } : c));
+  };
+
+  const handleAddAggregation = () => {
+    setGroupByAggregations([...groupByAggregations, { ...defaultGroupByAggregation }]);
+  };
+
+  const handleRemoveAggregation = (index: number) => {
+    setGroupByAggregations(groupByAggregations.filter((_, i) => i !== index));
+  };
+
+  const handleUpdateAggregation = (index: number, updates: Partial<GroupByAggregation>) => {
+    setGroupByAggregations(groupByAggregations.map((a, i) => i === index ? { ...a, ...updates } : a));
+  };
+
+  const handleGroupByGenerate = async () => {
+    // Validate required fields
+    const validFields = groupByFields.filter((f) => f.field.trim());
+    const validColumns = groupByColumns.filter((c) => c.field.trim() && c.label.trim());
+
+    if (validFields.length === 0) {
+      addToast({
+        title: "Group By Field Required",
+        description: "Please add at least one field to group by",
+        color: "warning",
+      });
+      return;
+    }
+
+    if (validColumns.length === 0) {
+      addToast({
+        title: "Column Required",
+        description: "Please add at least one column to display",
+        color: "warning",
+      });
+      return;
+    }
+
+    const validAggregations = groupByAggregations.filter((a) => a.field.trim());
+
+    const request: GroupByWizardRequest = {
+      source: groupBySource as GroupByWizardRequest["source"],
+      documentType: documentType as GroupByWizardRequest["documentType"],
+      groupByFields: validFields,
+      columns: validColumns,
+      aggregations: validAggregations.length > 0 ? validAggregations : undefined,
+      includeSubtotals,
+      includeGrandTotal,
+      description: groupByDescription.trim() || undefined,
+    };
+
+    try {
+      await groupByMutation.mutateAsync({ ...request, model: selectedModel });
+      addToast({
+        title: "Generated Successfully",
+        description: "Your GroupBy template code has been generated",
+        color: "success",
+      });
+    } catch (error) {
+      const err = error as { error?: string; details?: string };
+      addToast({
+        title: "Generation Failed",
+        description: err.details || err.error || "An error occurred",
+        color: "danger",
+      });
+    }
+  };
+
+  const handleGroupByClear = () => {
+    setGroupBySource("InvoiceItems");
+    setGroupByFields([{ ...defaultGroupByField }]);
+    setGroupByColumns([{ ...defaultGroupByColumn }]);
+    setGroupByAggregations([]);
+    setIncludeSubtotals(true);
+    setIncludeGrandTotal(false);
+    setGroupByDescription("");
+  };
+
   const handleValidate = async () => {
     if (!templateToValidate.trim()) {
       addToast({
@@ -190,7 +355,7 @@ export default function HTMLBuilderPage() {
                 tab: "data-[selected=true]:text-black font-medium",
                 tabContent: "group-data-[selected=true]:text-black",
               }}
-              isDisabled={isGenerating || isValidating}
+              isDisabled={isGenerating || isValidating || isGroupByGenerating}
             >
               <Tab
                 key="code"
@@ -222,6 +387,17 @@ export default function HTMLBuilderPage() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     <span>Validator</span>
+                  </div>
+                }
+              />
+              <Tab
+                key="groupby"
+                title={
+                  <div className="flex items-center gap-2">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                    </svg>
+                    <span>GroupBy Wizard</span>
                   </div>
                 }
               />
@@ -294,6 +470,261 @@ export default function HTMLBuilderPage() {
                   </Button>
                 </div>
               </>
+            ) : activeTab === "groupby" ? (
+              /* GroupBy Wizard mode UI */
+              <div className="space-y-5 max-h-[600px] overflow-y-auto pr-2">
+                {/* Source and Document Type */}
+                <div className="grid grid-cols-2 gap-4">
+                  <Select
+                    label="Source List"
+                    selectedKeys={[groupBySource]}
+                    onSelectionChange={(keys) => setGroupBySource(Array.from(keys)[0] as string)}
+                    isDisabled={isGroupByGenerating}
+                  >
+                    {groupBySourceOptions.map((opt) => (
+                      <SelectItem key={opt.key}>{opt.label}</SelectItem>
+                    ))}
+                  </Select>
+                  <Select
+                    label="Document Type"
+                    selectedKeys={[documentType]}
+                    onSelectionChange={(keys) => setDocumentType(Array.from(keys)[0] as string)}
+                    isDisabled={isGroupByGenerating}
+                  >
+                    {documentTypeOptions.map((opt) => (
+                      <SelectItem key={opt.key}>{opt.label}</SelectItem>
+                    ))}
+                  </Select>
+                </div>
+
+                {/* Group By Fields */}
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <label className="text-sm font-medium text-foreground">Group By Fields (order matters)</label>
+                    <Button
+                      size="sm"
+                      variant="flat"
+                      onClick={handleAddGroupByField}
+                      isDisabled={isGroupByGenerating || groupByFields.length >= 6}
+                    >
+                      + Add Level
+                    </Button>
+                  </div>
+                  {groupByFields.map((field, idx) => (
+                    <div key={idx} className="flex items-center gap-2">
+                      <Chip size="sm" variant="flat" className="bg-primary/20 text-primary min-w-[28px]">
+                        {idx + 1}
+                      </Chip>
+                      <input
+                        type="text"
+                        placeholder="Field path (e.g., ServiceStartDate)"
+                        value={field.field}
+                        onChange={(e) => handleUpdateGroupByField(idx, { field: e.target.value })}
+                        disabled={isGroupByGenerating}
+                        className="flex-1 px-3 py-2 rounded-lg bg-default-100 border border-default-200 text-sm focus:outline-none focus:border-primary"
+                      />
+                      <input
+                        type="text"
+                        placeholder="Label (optional)"
+                        value={field.label || ""}
+                        onChange={(e) => handleUpdateGroupByField(idx, { label: e.target.value })}
+                        disabled={isGroupByGenerating}
+                        className="w-32 px-3 py-2 rounded-lg bg-default-100 border border-default-200 text-sm focus:outline-none focus:border-primary"
+                      />
+                      <Button
+                        size="sm"
+                        variant="light"
+                        isIconOnly
+                        onClick={() => handleRemoveGroupByField(idx)}
+                        isDisabled={isGroupByGenerating || groupByFields.length <= 1}
+                        className="text-danger"
+                      >
+                        ×
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Columns to Display */}
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <label className="text-sm font-medium text-foreground">Columns to Display</label>
+                    <Button
+                      size="sm"
+                      variant="flat"
+                      onClick={handleAddColumn}
+                      isDisabled={isGroupByGenerating}
+                    >
+                      + Add Column
+                    </Button>
+                  </div>
+                  {groupByColumns.map((col, idx) => (
+                    <div key={idx} className="flex items-center gap-2">
+                      <input
+                        type="text"
+                        placeholder="Field path"
+                        value={col.field}
+                        onChange={(e) => handleUpdateColumn(idx, { field: e.target.value })}
+                        disabled={isGroupByGenerating}
+                        className="flex-1 px-3 py-2 rounded-lg bg-default-100 border border-default-200 text-sm focus:outline-none focus:border-primary"
+                      />
+                      <input
+                        type="text"
+                        placeholder="Header label"
+                        value={col.label}
+                        onChange={(e) => handleUpdateColumn(idx, { label: e.target.value })}
+                        disabled={isGroupByGenerating}
+                        className="w-32 px-3 py-2 rounded-lg bg-default-100 border border-default-200 text-sm focus:outline-none focus:border-primary"
+                      />
+                      <Button
+                        size="sm"
+                        variant="light"
+                        isIconOnly
+                        onClick={() => handleRemoveColumn(idx)}
+                        isDisabled={isGroupByGenerating || groupByColumns.length <= 1}
+                        className="text-danger"
+                      >
+                        ×
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Aggregations */}
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <label className="text-sm font-medium text-foreground">Aggregations (Subtotals)</label>
+                    <Button
+                      size="sm"
+                      variant="flat"
+                      onClick={handleAddAggregation}
+                      isDisabled={isGroupByGenerating}
+                    >
+                      + Add Aggregation
+                    </Button>
+                  </div>
+                  {groupByAggregations.length === 0 ? (
+                    <p className="text-xs text-default-400 italic">No aggregations added. Click &quot;+ Add Aggregation&quot; to add subtotals.</p>
+                  ) : (
+                    groupByAggregations.map((agg, idx) => (
+                      <div key={idx} className="flex items-center gap-2">
+                        <Select
+                          size="sm"
+                          selectedKeys={[agg.type]}
+                          onSelectionChange={(keys) => handleUpdateAggregation(idx, { type: Array.from(keys)[0] as GroupByAggregation["type"] })}
+                          isDisabled={isGroupByGenerating}
+                          className="w-24"
+                        >
+                          {aggregationTypeOptions.map((opt) => (
+                            <SelectItem key={opt.key}>{opt.label}</SelectItem>
+                          ))}
+                        </Select>
+                        <input
+                          type="text"
+                          placeholder="Field path"
+                          value={agg.field}
+                          onChange={(e) => handleUpdateAggregation(idx, { field: e.target.value })}
+                          disabled={isGroupByGenerating}
+                          className="flex-1 px-3 py-2 rounded-lg bg-default-100 border border-default-200 text-sm focus:outline-none focus:border-primary"
+                        />
+                        <input
+                          type="text"
+                          placeholder="Label"
+                          value={agg.label || ""}
+                          onChange={(e) => handleUpdateAggregation(idx, { label: e.target.value })}
+                          disabled={isGroupByGenerating}
+                          className="w-28 px-3 py-2 rounded-lg bg-default-100 border border-default-200 text-sm focus:outline-none focus:border-primary"
+                        />
+                        <Button
+                          size="sm"
+                          variant="light"
+                          isIconOnly
+                          onClick={() => handleRemoveAggregation(idx)}
+                          isDisabled={isGroupByGenerating}
+                          className="text-danger"
+                        >
+                          ×
+                        </Button>
+                      </div>
+                    ))
+                  )}
+                </div>
+
+                {/* Options */}
+                <div className="flex flex-wrap gap-4">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={includeSubtotals}
+                      onChange={(e) => setIncludeSubtotals(e.target.checked)}
+                      disabled={isGroupByGenerating}
+                      className="w-4 h-4 rounded border-default-300 text-primary focus:ring-primary"
+                    />
+                    <span className="text-sm">Include subtotals per group</span>
+                  </label>
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={includeGrandTotal}
+                      onChange={(e) => setIncludeGrandTotal(e.target.checked)}
+                      disabled={isGroupByGenerating}
+                      className="w-4 h-4 rounded border-default-300 text-primary focus:ring-primary"
+                    />
+                    <span className="text-sm">Include grand total</span>
+                  </label>
+                </div>
+
+                {/* Additional description */}
+                <Textarea
+                  label="Additional Requirements (Optional)"
+                  placeholder="Any special formatting, sorting, or display requirements..."
+                  value={groupByDescription}
+                  onChange={(e) => setGroupByDescription(e.target.value)}
+                  minRows={2}
+                  maxRows={4}
+                  isDisabled={isGroupByGenerating}
+                />
+
+                {/* Model selector */}
+                <Select
+                  label="Model"
+                  selectedKeys={[selectedModel]}
+                  onSelectionChange={(keys) => setSelectedModel(Array.from(keys)[0] as string)}
+                  isDisabled={isGroupByGenerating}
+                >
+                  {modelOptions.map((model) => (
+                    <SelectItem key={model.key} textValue={model.label}>
+                      <div className="flex flex-col">
+                        <div className="flex items-center gap-2">
+                          <span>{model.label}</span>
+                          <span className="text-xs text-default-400">({model.time})</span>
+                        </div>
+                        <span className="text-xs text-default-400">{model.description}</span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </Select>
+
+                {/* Actions */}
+                <div className="flex items-center justify-between pt-2">
+                  <Button
+                    variant="flat"
+                    onClick={handleGroupByClear}
+                    isDisabled={isGroupByGenerating}
+                  >
+                    Clear
+                  </Button>
+                  <Button
+                    color="primary"
+                    className="font-semibold teal-glow-subtle"
+                    onClick={handleGroupByGenerate}
+                    isLoading={isGroupByGenerating}
+                    isDisabled={isGroupByGenerating}
+                  >
+                    {isGroupByGenerating ? "Generating..." : "Generate GroupBy Code"}
+                  </Button>
+                </div>
+              </div>
             ) : (
             <>
             {/* Quick templates dropdown */}
@@ -434,6 +865,8 @@ export default function HTMLBuilderPage() {
                   ? "HTML merge field code"
                   : activeTab === "expression"
                   ? "Wp_Eval expression"
+                  : activeTab === "groupby"
+                  ? "GroupBy template with subtotals"
                   : "Errors, warnings, and suggestions"}
               </p>
             </div>
@@ -456,7 +889,12 @@ export default function HTMLBuilderPage() {
                   : "Valid"}
               </Chip>
             )}
-            {activeTab !== "validate" && builderMutation.data && (
+            {activeTab === "groupby" && groupByMutation.data && (
+              <Chip size="sm" variant="flat" className="bg-success/20 text-success">
+                Ready
+              </Chip>
+            )}
+            {activeTab !== "validate" && activeTab !== "groupby" && builderMutation.data && (
               <Chip size="sm" variant="flat" className="bg-success/20 text-success">
                 Ready
               </Chip>
@@ -511,6 +949,63 @@ export default function HTMLBuilderPage() {
                   <h4 className="text-lg font-medium text-foreground mb-1">No validation yet</h4>
                   <p className="text-sm text-default-500 max-w-xs">
                     Paste your HTML template code and click Validate to check for errors, warnings, and improvement suggestions.
+                  </p>
+                </div>
+              )
+            ) : activeTab === "groupby" ? (
+              /* GroupBy mode */
+              isGroupByGenerating ? (
+                <div className="space-y-4">
+                  <div className="flex items-center gap-4">
+                    <div className="animate-spin h-5 w-5 border-2 border-primary border-t-transparent rounded-full" />
+                    <div>
+                      <p className="font-medium">Generating GroupBy template...</p>
+                      <p className="text-xs text-default-500">Creating nested loops with subtotals</p>
+                    </div>
+                  </div>
+                  <Progress
+                    isIndeterminate
+                    color="primary"
+                    size="sm"
+                    aria-label="Generating"
+                    classNames={{
+                      indicator: "bg-gradient-to-r from-primary to-secondary",
+                    }}
+                  />
+                  <div className="p-4 rounded-xl bg-default-100/50 border border-default-200/60">
+                    <div className="flex items-center gap-2 mb-2 text-default-500">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <span className="text-xs font-medium uppercase tracking-wider">Did you know?</span>
+                    </div>
+                    <p className="text-sm text-default-600 leading-relaxed min-h-[2.5rem] transition-opacity duration-300">
+                      {currentFact}
+                    </p>
+                  </div>
+                </div>
+              ) : groupByMutation.data ? (
+                <HTMLTemplateResultView
+                  mode="code"
+                  result={{
+                    code: groupByMutation.data.result.code,
+                    explanation: groupByMutation.data.result.explanation,
+                    objects_used: groupByMutation.data.result.objects_used,
+                    functions_used: groupByMutation.data.result.functions_used,
+                    customization_tips: groupByMutation.data.result.customization_tips,
+                  }}
+                  sessionId={groupByMutation.data.session_id}
+                />
+              ) : (
+                <div className="flex flex-col items-center justify-center py-16 text-center">
+                  <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mb-4">
+                    <svg className="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                    </svg>
+                  </div>
+                  <h4 className="text-lg font-medium text-foreground mb-1">No output yet</h4>
+                  <p className="text-sm text-default-500 max-w-xs">
+                    Configure your GroupBy fields, columns, and aggregations, then click Generate to create template code with nested loops and subtotals.
                   </p>
                 </div>
               )

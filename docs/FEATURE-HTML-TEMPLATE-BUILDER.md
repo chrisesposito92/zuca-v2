@@ -106,19 +106,27 @@ Validate template code for errors, warnings, and suggestions:
 1. **Code-based parsing** - Fast, deterministic checks for structural issues with exact line numbers
 2. **LLM semantic validation** - Intelligent checks for object paths, function usage, and best practices
 
+#### 4. GroupBy Wizard for Subtotals
+**Status**: ✅ Complete
+
+Interactive wizard to generate GroupBy template code with nested loops and subtotals.
+
+**Capabilities**:
+- Select source list (InvoiceItems, TaxationItems, InvoicePayments, PaymentParts)
+- Add multiple grouping levels (up to 6 levels supported)
+- Define columns to display with formatting options
+- Add aggregations (Sum, Count, Average, Min, Max) for subtotals
+- Configure subtotals per group and grand totals
+
+**Technical Approach**: Form-based wizard that collects structured configuration and generates production-ready GroupBy code with:
+- Proper `Cmd_Assign` variable naming for nested group access
+- `FlatMap(_Group)` for parent-level aggregations
+- `Sum`, `Count`, and other aggregation functions
+- Proper formatting with `Round` and `Localise`
+
 ---
 
 ### Backlog (Prioritized)
-
-#### 🥇 1. GroupBy Wizard for Subtotals
-**Status**: Next Up
-**Impact**: High | **Complexity**: Medium
-
-The `GroupBy` function is powerful but complex:
-- "Group invoice items by Charge Type, show subtotals"
-- Generate nested loop structure with `Cmd_Assign` and `Sum`
-
-**Why prioritize**: Explicitly identified pain point in docs. Subtotals are one of the most requested features in real invoice templates.
 
 #### 🥈 2. Sample Data Generator
 **Status**: Backlog

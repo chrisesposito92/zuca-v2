@@ -14,6 +14,8 @@ import type {
   HTMLTemplateMode,
   TemplateValidationRequest,
   TemplateValidationOutput,
+  GroupByWizardRequest,
+  GroupByWizardOutput,
 } from "@zuca/types/html-template";
 
 // Response types
@@ -39,6 +41,13 @@ interface ValidateResponse {
   success: boolean;
   session_id: string;
   result: TemplateValidationOutput;
+}
+
+interface GroupByResponse {
+  success: boolean;
+  session_id: string;
+  mode: "groupby";
+  result: GroupByWizardOutput;
 }
 
 // API functions
@@ -78,6 +87,19 @@ async function validateTemplateCode(
   payload: TemplateValidationRequest & { model?: string }
 ): Promise<ValidateResponse> {
   const response = await fetch("/api/html-template/validate", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  const data = await response.json();
+  if (!response.ok) throw data;
+  return data;
+}
+
+async function generateGroupByTemplate(
+  payload: GroupByWizardRequest & { model?: string }
+): Promise<GroupByResponse> {
+  const response = await fetch("/api/html-template/groupby", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
@@ -145,12 +167,29 @@ export function useTemplateValidator() {
   });
 }
 
+/**
+ * Hook for generating GroupBy template code via wizard.
+ * Handles nested loops with subtotals using GroupBy, Cmd_Assign, and Sum patterns.
+ */
+export function useGroupByWizard() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: generateGroupByTemplate,
+    onSuccess: () => {
+      // Invalidate sessions list to show the new session
+      queryClient.invalidateQueries({ queryKey: ["sessions"] });
+    },
+  });
+}
+
 // Re-export types for convenience
 export type {
   GenerateResponse,
   TemplatesResponse,
   GroupedTemplatesResponse,
   ValidateResponse,
+  GroupByResponse,
   HTMLTemplateRequest,
   HTMLTemplateCodeOutput,
   HTMLTemplateExpressionOutput,
@@ -158,4 +197,6 @@ export type {
   HTMLTemplateMode,
   TemplateValidationRequest,
   TemplateValidationOutput,
+  GroupByWizardRequest,
+  GroupByWizardOutput,
 };

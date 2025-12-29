@@ -71,3 +71,4 @@ export { expertAssistant, formatExpertResponse, type ExpertResponse } from './ex
 export { generateTemplateCode, formatTemplateCodeForDisplay } from './html-template-code';
 export { generateExpression, formatExpressionForDisplay } from './html-template-expression';
 export { validateTemplate, formatValidationForDisplay } from './html-template-validator';
+export { generateGroupByCode, formatGroupByForDisplay } from './html-template-groupby';
