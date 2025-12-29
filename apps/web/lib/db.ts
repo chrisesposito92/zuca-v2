@@ -9,13 +9,40 @@ import { sql } from '@vercel/postgres';
 import type { ZucaInput, ZucaOutput } from '@zuca/types';
 import type { RevenueSnapshotInput, RevenueSnapshotOutput } from '@zuca/types/revenue-snapshot';
 import type { UCGeneratorInput, UCGeneratorOutput } from '@zuca/types/uc-generator';
-import type { HTMLTemplateRequest, HTMLTemplateOutput, TemplateDesignRequest } from '@zuca/types/html-template';
+import type {
+  HTMLTemplateRequest,
+  HTMLTemplateOutput,
+  TemplateDesignRequest,
+  TemplateDesignOutput,
+  GroupByWizardRequest,
+  GroupByWizardOutput,
+  SampleDataRequest,
+  SampleDataOutput,
+  TemplateValidationRequest,
+  TemplateValidationOutput,
+} from '@zuca/types/html-template';
 
 // ============================================================================
 // Types
 // ============================================================================
 
 export type SessionType = 'analyze' | 'uc-generate' | 'revenue-snapshot' | 'html-builder';
+
+// HTML Builder input types (with mode tag)
+type HTMLBuilderInput =
+  | HTMLTemplateRequest
+  | TemplateDesignRequest
+  | ({ mode: 'groupby' } & GroupByWizardRequest)
+  | ({ mode: 'sample-data' } & SampleDataRequest)
+  | ({ mode: 'validate' } & TemplateValidationRequest);
+
+// HTML Builder output types (with mode wrapper)
+type HTMLBuilderOutput =
+  | HTMLTemplateOutput
+  | { mode: 'design'; result: TemplateDesignOutput }
+  | { mode: 'groupby'; result: GroupByWizardOutput }
+  | { mode: 'sample-data'; result: SampleDataOutput }
+  | { mode: 'validate'; result: TemplateValidationOutput };
 export type SessionStatus = 'pending' | 'running' | 'completed' | 'failed';
 export type MessageRole = 'user' | 'assistant';
 
@@ -24,8 +51,8 @@ export interface DbSession {
   created_at: Date;
   updated_at: Date;
   session_type: SessionType;
-  input: ZucaInput | UCGeneratorInput | RevenueSnapshotInput | HTMLTemplateRequest | TemplateDesignRequest;
-  result: ZucaOutput | UCGeneratorOutput | RevenueSnapshotOutput | HTMLTemplateOutput | null;
+  input: ZucaInput | UCGeneratorInput | RevenueSnapshotInput | HTMLBuilderInput;
+  result: ZucaOutput | UCGeneratorOutput | RevenueSnapshotOutput | HTMLBuilderOutput | null;
   status: SessionStatus;
   current_step: number;
   error_message: string | null;
@@ -79,7 +106,7 @@ export interface DbZuoraConnection {
 
 export async function createSession(
   sessionType: SessionType,
-  input: ZucaInput | UCGeneratorInput | RevenueSnapshotInput | HTMLTemplateRequest | TemplateDesignRequest,
+  input: ZucaInput | UCGeneratorInput | RevenueSnapshotInput | HTMLBuilderInput,
   userId?: string | null,
   llmModel?: string | null
 ): Promise<DbSession> {
@@ -200,7 +227,7 @@ export async function updateSessionStatus(
 
 export async function updateSessionResult(
   id: string,
-  result: ZucaOutput | UCGeneratorOutput | RevenueSnapshotOutput
+  result: ZucaOutput | UCGeneratorOutput | RevenueSnapshotOutput | HTMLBuilderOutput
 ): Promise<void> {
   await sql`
     UPDATE sessions

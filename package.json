@@ -18,7 +18,7 @@
     "test:run": "vitest run",
     "test:db": "vitest run tests/db",
     "lint": "eslint src --ext .ts",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p apps/web/tsconfig.json",
     "rag:build": "tsx src/rag/cli.ts build",
     "rag:build:resume": "tsx src/rag/cli.ts build --resume",
     "rag:repair": "tsx src/rag/cli.ts repair",

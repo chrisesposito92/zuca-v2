@@ -3,7 +3,7 @@ import { NextRequest } from 'next/server';
 
 import { GET } from '@/app/api/sessions/route';
 import { getCurrentUser } from '@/lib/auth';
-import { listSessions } from '@/lib/db';
+import { listSessions, getSessionCount, fixStuckRunningSessions } from '@/lib/db';
 
 vi.mock('@/lib/auth', () => ({
   getCurrentUser: vi.fn(),
@@ -11,15 +11,25 @@ vi.mock('@/lib/auth', () => ({
 
 vi.mock('@/lib/db', () => ({
   listSessions: vi.fn(),
+  getSessionCount: vi.fn(),
+  fixStuckRunningSessions: vi.fn(),
 }));
 
 const getCurrentUserMock = vi.mocked(getCurrentUser);
 const listSessionsMock = vi.mocked(listSessions);
+const getSessionCountMock = vi.mocked(getSessionCount);
+const fixStuckRunningSessionsMock = vi.mocked(fixStuckRunningSessions);
 
 describe('GET /api/sessions', () => {
   beforeEach(() => {
     getCurrentUserMock.mockReset();
     listSessionsMock.mockReset();
+    getSessionCountMock.mockReset();
+    fixStuckRunningSessionsMock.mockReset();
+
+    // Default mock implementations
+    getSessionCountMock.mockResolvedValue(0);
+    fixStuckRunningSessionsMock.mockResolvedValue(0);
   });
 
   it('formats revenue snapshot session names with subscription numbers', async () => {
@@ -60,6 +70,6 @@ describe('GET /api/sessions', () => {
     expect(response.status).toBe(200);
     expect(body.sessions[0].customer_name).toBe('A-001, A-002, A-003 (+1 more)');
     expect(body.sessions[1].customer_name).toBe('Acme Corp');
-    expect(body.pagination).toEqual({ limit: 2, offset: 10, count: 2 });
+    expect(body.pagination).toEqual({ limit: 2, offset: 10, count: 2, total: 0 });
   });
 });

@@ -80,6 +80,16 @@ This file is for LLM contributors. For install/run commands and product overview
 - ESM modules everywhere; Node >= 20.
 - Web app uses `@/` alias to `apps/web` and `@zuca/*` to root `src`; keep imports consistent.
 
+## Pre-commit checks (CRITICAL)
+- **ALWAYS run `npm run typecheck` before committing** - Vercel builds will fail on type errors.
+- Run typecheck after ANY code changes, not just at the end.
+- Common type pitfalls to watch for:
+  - Zod `.default()` makes fields **required** in inferred types (not optional like `z.optional()`).
+  - Local interfaces in UI files may drift from Zod schemas in `src/types/` - always check both match.
+  - When adding new request/response types, update `apps/web/lib/db.ts` for `createSession` and `updateSessionResult` signatures.
+  - Property name mismatches (e.g., `errorCount` vs `errors`, `customization_tips` vs `notes`) - verify exact field names from types.
+  - Union types in function signatures must include all possible input types.
+
 ## Testing expectations
 - Changes must include relevant test updates/additions; keep the full suite passing (`npm run test:run`).
 - New features are not complete until they ship with coverage for core behavior and edge cases.
