@@ -68,10 +68,10 @@ Zuora's HTML Invoice Templates use a Mustache-like templating syntax with JEXL e
 
 ## Feature Roadmap
 
-### Tier 1: High-Value / Low Complexity
+### ✅ Completed
 
-#### 1. Template Code Generator ⭐ PRIORITY
-**Status**: Planning
+#### 1. Template Code Generator
+**Status**: ✅ Complete
 
 Generate merge field code from natural language descriptions.
 
@@ -83,38 +83,21 @@ Generate merge field code from natural language descriptions.
 - Function chaining
 - Conditional sections
 
-#### 2. Data Table Configuration Builder
-**Status**: Backlog
-
-Interactive wizard to build Data Table configurations:
-- Select table object (InvoiceItems, PaymentParts, TaxationItems)
-- Add columns with field picker
-- Configure sorting, filtering, grouping
-- Generate complete merge field code
-
-#### 3. Expression Builder ⭐ PRIORITY
-**Status**: Planning
+#### 2. Expression Builder
+**Status**: ✅ Complete
 
 Help users construct `{{#Wp_Eval}}` expressions:
 - Calculate derived values
 - Conditional styling
-- String transformations
+- String operations and transformations
 
 ---
 
-### Tier 2: Medium Complexity / High Impact
+### Backlog (Prioritized)
 
-#### 4. Industry-Specific Template Library
-**Status**: Backlog
-
-Pre-built templates for verticals:
-- **SaaS**: Usage-based, tiered pricing, subscription summary
-- **Telecom**: Data usage, per-minute charges, bundled plans
-- **Utilities**: Meter readings, tiered consumption
-- **Professional Services**: Time & materials, expenses
-
-#### 5. Template Validator & Debugger
-**Status**: Backlog
+#### 🥇 1. Template Validator & Debugger
+**Status**: Next Up
+**Impact**: High | **Complexity**: Medium
 
 Upload template code and validate:
 - Syntax error detection
@@ -122,71 +105,114 @@ Upload template code and validate:
 - Function improvement suggestions
 - Unclosed section detection
 
-#### 6. GroupBy Wizard for Subtotals
+**Why prioritize**: Complements the generators by catching errors before deployment. Reduces frustration when templates don't render as expected.
+
+#### 🥈 2. GroupBy Wizard for Subtotals
 **Status**: Backlog
+**Impact**: High | **Complexity**: Medium
 
 The `GroupBy` function is powerful but complex:
 - "Group invoice items by Charge Type, show subtotals"
 - Generate nested loop structure with `Cmd_Assign` and `Sum`
 
-#### 7. Barcode/QR Code Generator
+**Why prioritize**: Explicitly identified pain point in docs. Subtotals are one of the most requested features in real invoice templates.
+
+#### 🥉 3. Sample Data Generator
 **Status**: Backlog
-
-Generate barcode syntax:
-- `Wp_Barcode` for standard barcodes
-- JavaScript for Swiss QR codes
-- Preview rendering
-
----
-
-### Tier 3: Ambitious / Differentiated
-
-#### 8. AI-Powered Template Design from Description
-**Status**: Future
-
-Full template generation from requirements:
-"I need an invoice for a telecom company with grouped charges, usage breakdown, tax summary..."
-→ Complete template HTML
-
-#### 9. Sample Data Generator
-**Status**: Future
+**Impact**: High | **Complexity**: Medium
 
 Generate realistic sample invoice data:
 - Parse merge fields from template
 - Generate matching JSON
 - Export for preview testing
 
-#### 10. Template Diff & Migration Tool
-**Status**: Future
+**Why prioritize**: Without sample data, users can't test their templates. This unlocks the value of the code generators.
 
-Word → HTML template migration:
-- Parse Word template merge fields
-- Map to HTML syntax
-- Generate migration guide
+#### 4. Data Table Configuration Builder
+**Status**: Backlog
+**Impact**: Medium | **Complexity**: Low
 
-#### 11. Interactive Template Preview
+Interactive wizard to build Data Table configurations:
+- Select table object (InvoiceItems, PaymentParts, TaxationItems)
+- Add columns with field picker
+- Configure sorting, filtering, grouping
+- Generate complete merge field code
+
+**Why here**: Code generator already handles much of this. A wizard adds polish but isn't essential.
+
+#### 5. Industry-Specific Template Library
+**Status**: Backlog
+**Impact**: Medium | **Complexity**: Low
+
+Pre-built templates for verticals:
+- **SaaS**: Usage-based, tiered pricing, subscription summary
+- **Telecom**: Data usage, per-minute charges, bundled plans
+- **Utilities**: Meter readings, tiered consumption
+- **Professional Services**: Time & materials, expenses
+
+**Why here**: Good for demos but users typically need customization. Better as curated examples than turnkey solutions.
+
+#### 6. AI-Powered Template Design from Description
+**Status**: Backlog
+**Impact**: High | **Complexity**: High
+
+Full template generation from requirements:
+"I need an invoice for a telecom company with grouped charges, usage breakdown, tax summary..."
+→ Complete template HTML
+
+**Why here**: Natural evolution of code generator. High impact but requires combining multiple capabilities.
+
+#### 7. Interactive Template Preview
 **Status**: Future
+**Impact**: High | **Complexity**: High
 
 Live playground:
 - Edit template code
 - Real-time preview with sample data
 - Test conditional branches
 
-#### 12. Custom Object Schema Helper
+**Why here**: Depends on Sample Data Generator. Would be transformative but significant engineering effort.
+
+#### 8. Barcode/QR Code Generator
 **Status**: Future
+**Impact**: Low-Medium | **Complexity**: Medium
+
+Generate barcode syntax:
+- `Wp_Barcode` for standard barcodes
+- JavaScript for Swiss QR codes
+- Preview rendering
+
+**Why here**: Important for specific regions/use cases but not universally needed.
+
+#### 9. Template Diff & Migration Tool
+**Status**: Future
+**Impact**: Medium | **Complexity**: High
+
+Word → HTML template migration:
+- Parse Word template merge fields
+- Map to HTML syntax
+- Generate migration guide
+
+**Why here**: Useful for migrations but lower frequency. Complex to parse Word docs reliably.
+
+#### 10. Custom Object Schema Helper
+**Status**: Future
+**Impact**: Low | **Complexity**: Medium
 
 Design custom objects for templates:
 - Generate schema
 - Generate `FilterByRef` queries
 - Handle plural naming (`ExchangeRate` → `default__exchangerates`)
 
+**Why here**: Very specialized use case. Most users don't need custom objects.
+
 ---
 
 ## Implementation Details
 
-### Feature 1: Template Code Generator
+### Template Code Generator ✅
 
-See detailed implementation plan in the codebase.
+**Implementation**: Complete - integrated into ZUCA chat interface.
 
 **Core Capabilities**:
 1. Generate merge fields for displaying data
@@ -195,9 +221,9 @@ See detailed implementation plan in the codebase.
 4. Generate grouped/aggregated displays
 5. Handle common patterns (currency formatting, date formatting, etc.)
 
-### Feature 3: Expression Builder
+### Expression Builder ✅
 
-See detailed implementation plan in the codebase.
+**Implementation**: Complete - integrated into ZUCA chat interface.
 
 **Core Capabilities**:
 1. Arithmetic expressions (sum, difference, product, ratio)
