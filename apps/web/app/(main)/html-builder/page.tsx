@@ -1391,7 +1391,7 @@ export default function HTMLBuilderPage() {
                     explanation: groupByMutation.data.result.explanation,
                     objects_used: groupByMutation.data.result.objects_used,
                     functions_used: groupByMutation.data.result.functions_used,
-                    customization_tips: groupByMutation.data.result.customization_tips,
+                    notes: groupByMutation.data.result.customization_tips,
                   }}
                   sessionId={groupByMutation.data.session_id}
                 />
