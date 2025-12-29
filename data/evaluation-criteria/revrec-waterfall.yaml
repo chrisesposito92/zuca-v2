@@ -1,0 +1,119 @@
+name: revrec-waterfall-criteria
+version: "1.0"
+step: revrec_waterfall
+description: Rules for revenue recognition waterfall generation
+
+criteria:
+  - id: RR-001
+    name: recognition-period-alignment
+    description: Recognition periods must align with service delivery
+    severity: critical
+    patterns: [recognition period, service period, revenue timing]
+    check:
+      type: behavioral
+      rule: |
+        Revenue recognition periods must match when service is
+        delivered, not when billed. For ratable revenue:
+        - Daily recognition over the service period
+        - Recognition amount = (Annual Amount / Days) × Days in Period
+        For point-in-time: full recognition at delivery.
+
+  - id: RR-002
+    name: monthly-recognition-accuracy
+    description: Monthly recognition amounts must be correct
+    severity: critical
+    patterns: [monthly, recognition, amount]
+    check:
+      type: numeric
+      rule: |
+        For daily-prorated ratable revenue:
+        Monthly Amount = (Annual Amount / Total Days) × Days in Month
+        Account for varying days per month (28-31 days).
+      threshold: 0.01
+
+  - id: RR-003
+    name: ramp-revenue-handling
+    description: Ramp pricing must be recognized at appropriate rates
+    severity: critical
+    patterns: [ramp, step-up, pricing change]
+    check:
+      type: behavioral
+      rule: |
+        For ramp scenarios, recognize revenue at the rate
+        applicable during each period:
+        - Period 1 at Price 1 rate
+        - Period 2 at Price 2 rate
+        Do NOT average recognition across periods unless
+        ASC 606 allocation requires it.
+    examples:
+      passing:
+        - scenario: "3 months @ $15, then 9 months @ $20"
+          expected: "Months 1-3: $15/month recognition, Months 4-12: $20/month"
+      failing:
+        - scenario: "3 months @ $15, then 9 months @ $20"
+          incorrect: "All 12 months at $18.75 average"
+          why: "Recognition should follow contracted amounts per period"
+
+  - id: RR-004
+    name: deferred-revenue-tracking
+    description: Deferred revenue must be properly tracked
+    severity: high
+    patterns: [deferred revenue, contract liability, balance]
+    check:
+      type: behavioral
+      rule: |
+        Deferred Revenue balance must be maintained:
+        - Increases with each invoice (billing)
+        - Decreases with each recognition event
+        Opening Balance + Billings - Recognition = Closing Balance
+
+  - id: RR-005
+    name: total-revenue-equals-tcv
+    description: Total recognized revenue must equal TCV
+    severity: critical
+    patterns: [total revenue, TCV, contract value]
+    check:
+      type: numeric
+      rule: |
+        Sum of all revenue recognition amounts across all
+        periods must equal the Total Contract Value.
+        Sum(monthly recognition) = TCV
+      threshold: 0.01
+
+  - id: RR-006
+    name: recognition-by-pob
+    description: Recognition must be broken down by POB
+    severity: medium
+    patterns: [POB, performance obligation, allocation]
+    check:
+      type: behavioral
+      rule: |
+        If multiple POBs exist, revenue recognition should
+        be shown separately for each POB, allowing the user
+        to see how each obligation is being satisfied.
+
+  - id: RR-007
+    name: period-consistency
+    description: Recognition periods must be consistent
+    severity: medium
+    patterns: [period, monthly, calendar]
+    check:
+      type: behavioral
+      rule: |
+        Recognition periods should be calendar months
+        (or matching the reporting period). First and last
+        months may be partial based on service dates.
+
+  - id: RR-008
+    name: allocation-accuracy
+    description: SSP allocations must be applied correctly
+    severity: high
+    patterns: [allocation, SSP, standalone selling price]
+    check:
+      type: behavioral
+      rule: |
+        If allocation is required (multiple elements):
+        - Calculate SSP ratios
+        - Apply ratios to total transaction price
+        - Recognize based on allocated amounts, not list prices
+        Allocated Amount = (SSP / Total SSP) × Transaction Price

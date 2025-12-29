@@ -1,0 +1,117 @@
+name: billings-criteria
+version: "1.0"
+step: billings
+description: Rules for billing schedule generation
+
+criteria:
+  - id: BL-001
+    name: billing-period-alignment
+    description: Invoices must align with billing periods
+    severity: critical
+    patterns: [billing period, invoice date, monthly, quarterly]
+    check:
+      type: behavioral
+      rule: |
+        Invoice dates must align with the billing period:
+        - Monthly: one invoice per month
+        - Quarterly: one invoice per quarter
+        - Annually: one invoice per year
+        Invoice dates should be at period start (in advance) or
+        end (in arrears) based on billing timing.
+
+  - id: BL-002
+    name: invoice-amount-accuracy
+    description: Invoice amounts must match contracted prices per period
+    severity: critical
+    patterns: [invoice amount, price, billing amount]
+    check:
+      type: numeric
+      rule: |
+        Each invoice amount must equal:
+        Unit Price × Quantity × Periods in that invoice cycle
+        For ramp scenarios, the amount changes when the
+        new pricing period begins.
+      threshold: 0.01
+    examples:
+      passing:
+        - scenario: "3 months @ $15/month, then 9 months @ $20/month"
+          expected: "First 3 invoices: $15 each, Next 9 invoices: $20 each"
+      failing:
+        - scenario: "3 months @ $15, then 9 months @ $20"
+          incorrect: "All 12 invoices at $18.75 average"
+          why: "Invoice amounts must reflect actual contracted price per period"
+
+  - id: BL-003
+    name: proration-handling
+    description: Partial periods must be prorated correctly
+    severity: high
+    patterns: [proration, partial period, mid-month, mid-cycle]
+    check:
+      type: behavioral
+      rule: |
+        If service starts or ends mid-period, the first/last
+        invoice must be prorated based on days of service.
+        Proration = (Days of Service / Days in Period) × Full Amount
+
+  - id: BL-004
+    name: service-period-coverage
+    description: Billing schedule must cover entire service period
+    severity: critical
+    patterns: [service period, coverage, billing schedule]
+    check:
+      type: behavioral
+      rule: |
+        The sum of all billing periods must exactly cover
+        the service period from start to end date.
+        No gaps or overlaps in the billing schedule.
+
+  - id: BL-005
+    name: payment-term-consistency
+    description: Payment terms must be consistent across invoices
+    severity: medium
+    patterns: [payment terms, net 30, due date]
+    check:
+      type: behavioral
+      rule: |
+        Payment terms (e.g., Net 30, Due on Receipt) should
+        be consistent across all invoices unless the contract
+        specifies different terms for different periods.
+
+  - id: BL-006
+    name: billing-timing-accuracy
+    description: Billing timing must match contract terms
+    severity: high
+    patterns: [in advance, in arrears, billing timing]
+    check:
+      type: behavioral
+      rule: |
+        Invoices must be dated according to billing timing:
+        - "In Advance": Invoice at start of service period
+        - "In Arrears": Invoice at end of service period
+        Service Period dates on each invoice must reflect this.
+
+  - id: BL-007
+    name: charge-description-accuracy
+    description: Invoice line descriptions must be clear and accurate
+    severity: medium
+    patterns: [description, line item, charge name]
+    check:
+      type: behavioral
+      rule: |
+        Each invoice line should clearly describe:
+        - The service/product being billed
+        - The billing period covered
+        For ramps, indicate which pricing tier applies.
+
+  - id: BL-008
+    name: total-contract-value
+    description: Sum of all invoices must equal total contract value
+    severity: critical
+    patterns: [total, contract value, sum]
+    check:
+      type: numeric
+      rule: |
+        The sum of all invoice amounts must equal the
+        Total Contract Value (TCV) from the subscription spec.
+        Sum(all invoice amounts) = TCV
+      threshold: 0.01

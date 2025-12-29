@@ -1,0 +1,98 @@
+name: analyze-contract-criteria
+version: "1.0"
+step: analyze_contract
+description: Rules for contract analysis and capability detection
+
+criteria:
+  - id: AC-001
+    name: service-period-extraction
+    description: Service dates must be accurately extracted from contract
+    severity: critical
+    patterns: [service period, contract dates, start date, end date]
+    check:
+      type: behavioral
+      rule: |
+        Contract start and end dates must be correctly extracted.
+        If the contract specifies dates in any format, they must be
+        converted to MM/DD/YYYY format accurately.
+
+  - id: AC-002
+    name: term-calculation
+    description: Term months must match the service period
+    severity: high
+    patterns: [term, months, duration, contract length]
+    check:
+      type: numeric
+      rule: |
+        term_months must equal the number of months between
+        service_start_mdy and service_end_mdy (inclusive).
+      threshold: 0
+
+  - id: AC-003
+    name: billing-period-detection
+    description: Billing period must be accurately detected
+    severity: high
+    patterns: [billing, payment, monthly, quarterly, annual]
+    check:
+      type: behavioral
+      rule: |
+        billing_period must match what is specified in the contract.
+        If monthly billing is mentioned, use "Monthly".
+        If quarterly, use "Quarterly".
+        Default to "Monthly" if not specified.
+
+  - id: AC-004
+    name: ramp-detection
+    description: Multi-period pricing must be detected as ramp scenarios
+    severity: high
+    patterns: [ramp, step-up, introductory, promotional, year 1, year 2]
+    check:
+      type: behavioral
+      rule: |
+        If the contract has different prices for different periods
+        (e.g., "first 3 months at $15, then $20"), this MUST be
+        detected and flagged in the capabilities as a ramp or
+        multi-segment pricing scenario.
+
+  - id: AC-005
+    name: billing-caps-completeness
+    description: All relevant billing capabilities must be detected
+    severity: medium
+    patterns: [billing, capabilities, features]
+    check:
+      type: behavioral
+      rule: |
+        billing_caps array must include all capabilities mentioned
+        or implied by the contract. Common capabilities include:
+        - zb-recurring-charges (if subscription/recurring)
+        - zb-proration (if mid-cycle start)
+        - zb-usage-metering (if usage-based)
+        - zb-ramps (if pricing changes over time)
+
+  - id: AC-006
+    name: revenue-caps-completeness
+    description: All relevant revenue capabilities must be detected
+    severity: medium
+    patterns: [revenue, recognition, ASC 606]
+    check:
+      type: behavioral
+      rule: |
+        revenue_caps array must include relevant recognition methods.
+        Common capabilities include:
+        - zr-ratable-revenue (if service over time)
+        - zr-upfront-recognition (if point-in-time delivery)
+        - zr-allocation (if multiple elements)
+        - zr-ramps (if pricing changes affect recognition)
+
+  - id: AC-007
+    name: trigger-event-accuracy
+    description: Trigger event must match contract terms
+    severity: high
+    patterns: [trigger, start, effective, activation]
+    check:
+      type: behavioral
+      rule: |
+        trigger_event must be set appropriately:
+        - "Contract Effective" for standard contracts
+        - "Service Activation" if activation is mentioned
+        - "Customer Acceptance" if formal acceptance required

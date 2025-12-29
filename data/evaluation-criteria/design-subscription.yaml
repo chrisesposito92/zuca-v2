@@ -1,0 +1,118 @@
+name: design-subscription-criteria
+version: "1.0"
+step: design_subscription
+description: Rules for subscription specification and POB mapping
+
+criteria:
+  - id: DS-001
+    name: price-step-up-segments
+    description: Each pricing period must create separate charge segments
+    severity: critical
+    patterns: [step-up, ramp, introductory, promotional, price change]
+    check:
+      type: behavioral
+      rule: |
+        If the contract has different prices for different periods
+        (e.g., "first 3 months at $15, then $20 for remaining months"),
+        the output MUST have separate charges for each period:
+        - Charge 1: Promo period with its dates and price
+        - Charge 2: Standard period with its dates and price
+        DO NOT collapse into a single charge with averaged pricing.
+    examples:
+      passing:
+        - scenario: "3 months @ $15, then 9 months @ $20"
+          expected: "Two charges: Promo Period ($15) and Standard Period ($20)"
+      failing:
+        - scenario: "3 months @ $15, then 9 months @ $20"
+          incorrect: "Single charge at $225 total or $18.75 average"
+          why: "Must be separate charges per pricing period"
+
+  - id: DS-002
+    name: charge-effective-dates
+    description: Charge effective dates must match service periods
+    severity: critical
+    patterns: [effective date, service period, start, end]
+    check:
+      type: behavioral
+      rule: |
+        Each charge's effectiveStart and effectiveEnd must accurately
+        reflect when that specific price/service applies. For ramps:
+        - First segment: starts at contract start
+        - Subsequent segments: start when previous ends + 1 day
+        - Last segment: ends at contract end
+
+  - id: DS-003
+    name: charge-type-accuracy
+    description: Charge type must match the billing model
+    severity: high
+    patterns: [recurring, one-time, usage, charge type]
+    check:
+      type: behavioral
+      rule: |
+        Charge type must be correctly assigned:
+        - "Recurring" for subscription fees billed periodically
+        - "OneTime" for setup fees, activation fees
+        - "Usage" for consumption-based charges
+
+  - id: DS-004
+    name: billing-period-consistency
+    description: Billing period must be consistent with contract terms
+    severity: high
+    patterns: [billing period, monthly, quarterly, annual]
+    check:
+      type: behavioral
+      rule: |
+        The billingPeriod on each charge must match what was
+        extracted during contract analysis. All charges in a
+        subscription typically share the same billing period
+        unless explicitly specified otherwise.
+
+  - id: DS-005
+    name: pob-mapping-completeness
+    description: Every charge must have a POB mapping
+    severity: high
+    patterns: [POB, performance obligation, revenue recognition]
+    check:
+      type: behavioral
+      rule: |
+        Every charge in the subscription spec must have a
+        corresponding entry in the POB mapping output.
+        No charges should be left unmapped.
+
+  - id: DS-006
+    name: recognition-window-alignment
+    description: Recognition windows must align with service periods
+    severity: high
+    patterns: [recognition window, service period, revenue period]
+    check:
+      type: behavioral
+      rule: |
+        The recognition window (start, end) for each POB must
+        match the actual service delivery period for that charge.
+        For ratable revenue, this is typically the service period.
+
+  - id: DS-007
+    name: ratable-method-accuracy
+    description: Ratable method must match the revenue pattern
+    severity: medium
+    patterns: [ratable, straight-line, daily, prorated]
+    check:
+      type: behavioral
+      rule: |
+        ratable_method should be set appropriately:
+        - "Daily Prorated" for services recognized over time
+        - "Point in Time" for one-time deliverables
+        - "Percentage of Completion" for milestone-based
+
+  - id: DS-008
+    name: sell-price-accuracy
+    description: Sell prices must match contract amounts
+    severity: critical
+    patterns: [price, amount, sell price, unit price]
+    check:
+      type: numeric
+      rule: |
+        sellPrice on each charge must match the contracted
+        amount for that specific period. Do not average prices
+        across multiple periods into a single charge.
+      threshold: 0.01

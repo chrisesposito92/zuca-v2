@@ -1,0 +1,117 @@
+name: contracts-orders-criteria
+version: "1.0"
+step: contracts_orders
+description: Rules for contracts and orders table generation
+
+criteria:
+  - id: CO-001
+    name: price-step-up-segments
+    description: Each pricing period must appear as separate line item
+    severity: critical
+    patterns: [step-up, ramp, introductory, promotional, price change]
+    check:
+      type: behavioral
+      rule: |
+        If input has multiple price periods (e.g., introductory pricing,
+        annual ramps), output MUST have one row per price period with:
+        - Distinct Revenue Start Date and Revenue End Date
+        - Correct Unit Sell Price for that specific period
+        - Extended amounts calculated for that period only
+        - Separate Line Item Num for each segment
+    examples:
+      passing:
+        - scenario: "3 months @ $15, then 9 months @ $20"
+          expected: "Two lines: Line 1 for $45 (3x$15), Line 2 for $180 (9x$20)"
+      failing:
+        - scenario: "3 months @ $15, then 9 months @ $20"
+          incorrect: "Single line for $225 total"
+          why: "Should be 2 lines with distinct dates and amounts per period"
+
+  - id: CO-002
+    name: revenue-date-alignment
+    description: Revenue dates must match service period for each segment
+    severity: critical
+    patterns: [revenue date, service period, recognition period]
+    check:
+      type: behavioral
+      rule: |
+        Revenue Start Date and Revenue End Date must match the
+        actual service period for each charge segment:
+        - For segment 1 of a ramp: contract start to segment 1 end
+        - For segment 2: day after segment 1 ends to segment 2 end
+        Revenue dates should NOT span across different pricing periods.
+
+  - id: CO-003
+    name: extended-amount-calculation
+    description: Extended amounts must be mathematically correct
+    severity: critical
+    patterns: [extended amount, calculation, total]
+    check:
+      type: numeric
+      rule: |
+        Extended Sell Amount = Unit Sell Price × Quantity × Periods
+        Extended List Amount = Unit List Price × Quantity × Periods
+        These calculations must be accurate for each line item.
+      threshold: 0.01
+
+  - id: CO-004
+    name: line-item-numbering
+    description: Line items must be sequentially numbered
+    severity: medium
+    patterns: [line item, numbering, sequence]
+    check:
+      type: behavioral
+      rule: |
+        Line Item Num must be sequential starting from 1.
+        Each charge segment gets its own line number.
+        No gaps or duplicates in line numbering.
+
+  - id: CO-005
+    name: currency-consistency
+    description: All currency values must use the transaction currency
+    severity: high
+    patterns: [currency, USD, EUR, transaction currency]
+    check:
+      type: behavioral
+      rule: |
+        All monetary amounts in the table must use the
+        transaction currency specified in the input.
+        Currency symbols/codes should be consistent.
+
+  - id: CO-006
+    name: account-mapping
+    description: Revenue and deferred revenue accounts must be specified
+    severity: medium
+    patterns: [account, revenue account, deferred revenue]
+    check:
+      type: behavioral
+      rule: |
+        Each line item should have:
+        - Revenue Account (e.g., "4010-Subscription Revenue")
+        - Deferred Revenue Account (e.g., "2310-Deferred Revenue")
+        Accounts should match the charge type and recognition pattern.
+
+  - id: CO-007
+    name: charge-name-consistency
+    description: Charge names must match subscription spec
+    severity: medium
+    patterns: [charge name, product, service name]
+    check:
+      type: behavioral
+      rule: |
+        Charge Name in contracts/orders must match the
+        chargeName from the subscription specification.
+        For multi-segment charges, include segment identifier
+        (e.g., "Service - Promo Period", "Service - Standard").
+
+  - id: CO-008
+    name: booking-date-accuracy
+    description: Booking date must match contract effective date
+    severity: high
+    patterns: [booking date, contract date, order date]
+    check:
+      type: behavioral
+      rule: |
+        Booking Date should typically be the contract start date
+        or order date, representing when the order was placed.
+        All line items in the same contract share the same Booking Date.

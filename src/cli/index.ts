@@ -30,6 +30,13 @@ import {
   formatRevRecWaterfall,
 } from '../utils/markdown-tables';
 import { formatSummaryForDisplay } from '../pipeline/steps/summarize';
+import {
+  getAllCorrections,
+  getCorrectionsForStep,
+  getPatternStats,
+  listAvailableCriteria,
+  type Correction,
+} from '../self-learn';
 
 const program = new Command();
 
@@ -510,6 +517,185 @@ program
   .description('Interactive mode for use case generation')
   .option('-m, --model <model>', 'LLM model (gpt-5.2 | gemini-3-pro-preview | gemini-3-flash-preview)')
   .action(generateInteractiveCommand);
+
+// =============================================================================
+// Self-Learning Commands
+// =============================================================================
+
+/**
+ * Evaluate command - run evaluation suite against pipeline
+ * Phase 2 will add actual evaluation logic
+ */
+async function evaluateCommand(options: {
+  suite?: string;
+  model?: string;
+  step?: string;
+}): Promise<void> {
+  try {
+    console.log(chalk.cyan.bold('\n═══ Self-Learning Evaluation ═══\n'));
+
+    // List available criteria
+    const availableCriteria = listAvailableCriteria();
+
+    if (availableCriteria.length === 0) {
+      console.log(chalk.yellow('No evaluation criteria found.'));
+      console.log(chalk.gray('Create criteria files in data/evaluation-criteria/*.yaml'));
+      console.log('');
+      console.log(chalk.gray('Example criteria file format:'));
+      console.log(chalk.gray(`
+name: contracts-orders-criteria
+step: contracts_orders
+
+criteria:
+  - id: CO-001
+    name: price-step-up-segments
+    severity: high
+    patterns: [step-up, ramp, introductory]
+    check:
+      type: behavioral
+      rule: |
+        If input has multiple price periods, output must have
+        one row per price period with distinct dates and amounts.
+`));
+      return;
+    }
+
+    console.log(chalk.green('Available Criteria:'));
+    availableCriteria.forEach((name) => {
+      const indicator = options.step && options.step !== name ? chalk.gray('○') : chalk.green('●');
+      console.log(`  ${indicator} ${name}`);
+    });
+    console.log('');
+
+    // Phase 2: Actually run evaluation
+    console.log(chalk.yellow('Note: Evaluation runner not yet implemented (Phase 2)'));
+    console.log(chalk.gray('This will run test cases through the pipeline and evaluate outputs'));
+    console.log(chalk.gray('against the behavioral criteria using an LLM judge.'));
+  } catch (error: any) {
+    console.error(chalk.red(`Error: ${error.message}`));
+    process.exit(1);
+  }
+}
+
+/**
+ * Corrections list command - show stored corrections
+ */
+async function correctionsListCommand(options: { step?: string }): Promise<void> {
+  try {
+    console.log(chalk.cyan.bold('\n═══ Stored Corrections ═══\n'));
+
+    const corrections = options.step
+      ? await getCorrectionsForStep(options.step)
+      : await getAllCorrections();
+
+    if (corrections.length === 0) {
+      console.log(chalk.yellow('No corrections stored yet.'));
+      console.log(chalk.gray('Corrections are generated when the evaluation suite detects failures.'));
+      return;
+    }
+
+    console.log(`Found ${chalk.yellow(corrections.length.toString())} correction(s):`);
+    console.log('');
+
+    corrections.forEach((c: Correction, i: number) => {
+      const severityColor =
+        c.issue_type === 'behavioral_violation' ? chalk.red :
+        c.issue_type === 'logic_error' ? chalk.yellow :
+        chalk.white;
+
+      console.log(`${chalk.bold(`${i + 1}. [${c.step_name}]`)} ${severityColor(c.pattern)}`);
+      console.log(`   Issue: ${c.issue_type}`);
+      console.log(`   ${chalk.gray(c.expected_behavior.substring(0, 100))}${c.expected_behavior.length > 100 ? '...' : ''}`);
+      console.log(`   Applied: ${c.times_applied}x | Success: ${(c.success_rate * 100).toFixed(0)}%`);
+      console.log('');
+    });
+  } catch (error: any) {
+    console.error(chalk.red(`Error: ${error.message}`));
+    process.exit(1);
+  }
+}
+
+/**
+ * Corrections summary command - show pattern statistics
+ */
+async function correctionsSummaryCommand(options: { step?: string }): Promise<void> {
+  try {
+    console.log(chalk.cyan.bold('\n═══ Corrections Summary ═══\n'));
+
+    const corrections = await getAllCorrections();
+
+    if (corrections.length === 0) {
+      console.log(chalk.yellow('No corrections stored yet.'));
+      return;
+    }
+
+    // Group by step
+    const byStep = new Map<string, number>();
+    corrections.forEach((c: Correction) => {
+      byStep.set(c.step_name, (byStep.get(c.step_name) || 0) + 1);
+    });
+
+    console.log(chalk.green('Corrections by Step:'));
+    for (const [step, count] of byStep.entries()) {
+      console.log(`  ${step}: ${chalk.yellow(count.toString())}`);
+    }
+    console.log('');
+
+    // Show patterns for specific step or all steps
+    const stepsToShow = options.step ? [options.step] : Array.from(byStep.keys());
+
+    for (const stepName of stepsToShow) {
+      const patterns = await getPatternStats(stepName);
+      if (patterns.length > 0) {
+        console.log(chalk.green(`Top Patterns - ${stepName}:`));
+        patterns.slice(0, 5).forEach((p) => {
+          console.log(`  ${chalk.yellow(p.count.toString())}x ${p.pattern}`);
+        });
+        console.log('');
+      }
+    }
+
+    // Overall stats
+    const totalApplied = corrections.reduce((sum: number, c: Correction) => sum + c.times_applied, 0);
+    const avgSuccessRate =
+      corrections.length > 0
+        ? corrections.reduce((sum: number, c: Correction) => sum + c.success_rate, 0) / corrections.length
+        : 0;
+
+    console.log(chalk.green('Overall Statistics:'));
+    console.log(`  Total Corrections: ${chalk.yellow(corrections.length.toString())}`);
+    console.log(`  Total Applied: ${chalk.yellow(totalApplied.toString())}`);
+    console.log(`  Avg Success Rate: ${chalk.yellow((avgSuccessRate * 100).toFixed(1) + '%')}`);
+  } catch (error: any) {
+    console.error(chalk.red(`Error: ${error.message}`));
+    process.exit(1);
+  }
+}
+
+program
+  .command('evaluate')
+  .description('Run evaluation suite against pipeline (Phase 2)')
+  .option('-s, --suite <name>', 'Test suite name')
+  .option('-m, --model <model>', 'LLM model for evaluation')
+  .option('--step <step>', 'Only evaluate specific step')
+  .action(evaluateCommand);
+
+// Corrections subcommand group
+const corrections = program
+  .command('corrections')
+  .description('Manage learned corrections');
+
+corrections
+  .command('list')
+  .description('List stored corrections')
+  .option('--step <step>', 'Filter by step name')
+  .action(correctionsListCommand);
+
+corrections
+  .command('summary')
+  .description('Show correction pattern statistics')
+  .option('--step <step>', 'Filter by step name')
+  .action(correctionsSummaryCommand);
 
 // Parse and execute
 program.parse();

@@ -1,0 +1,253 @@
+/**
+ * Self-Learning Pipeline Types
+ *
+ * Types for the automated feedback loop that helps the pipeline learn from its mistakes.
+ */
+
+import { z } from 'zod';
+
+// =============================================================================
+// Correction Types
+// =============================================================================
+
+export const IssueTypeSchema = z.enum([
+  'missing_field',
+  'wrong_calculation',
+  'logic_error',
+  'format_error',
+  'behavioral_violation',
+  'structural_error',
+]);
+
+export type IssueType = z.infer<typeof IssueTypeSchema>;
+
+export const CorrectionSchema = z.object({
+  id: z.string(),
+  test_case_id: z.string(),
+  step_name: z.string(),
+  issue_type: IssueTypeSchema,
+  pattern: z.string(),
+  pattern_embedding: z.array(z.number()).optional(),
+
+  input_summary: z.string(),
+  incorrect_output: z.unknown().optional(),
+  expected_behavior: z.string(),
+  correction: z.string(),
+  example_fix: z.unknown().optional(),
+
+  criteria_id: z.string().optional(),
+  confidence: z.number().min(0).max(1).default(1.0),
+  times_applied: z.number().default(0),
+  success_rate: z.number().min(0).max(1).default(0),
+
+  created_at: z.string(),
+  updated_at: z.string(),
+});
+
+export type Correction = z.infer<typeof CorrectionSchema>;
+
+export const CorrectionInsertSchema = CorrectionSchema.omit({
+  id: true,
+  pattern_embedding: true,
+  times_applied: true,
+  success_rate: true,
+  created_at: true,
+  updated_at: true,
+});
+
+export type CorrectionInsert = z.infer<typeof CorrectionInsertSchema>;
+
+export const CorrectionsIndexSchema = z.object({
+  version: z.string(),
+  updated_at: z.string(),
+  corrections: z.array(CorrectionSchema),
+});
+
+export type CorrectionsIndex = z.infer<typeof CorrectionsIndexSchema>;
+
+// =============================================================================
+// Evaluation Criteria Types
+// =============================================================================
+
+export const SeveritySchema = z.enum(['critical', 'high', 'medium', 'low']);
+
+export type Severity = z.infer<typeof SeveritySchema>;
+
+export const CheckTypeSchema = z.enum(['behavioral', 'structural', 'numeric']);
+
+export type CheckType = z.infer<typeof CheckTypeSchema>;
+
+export const CriterionCheckSchema = z.object({
+  type: CheckTypeSchema,
+  rule: z.string(),
+  threshold: z.number().optional(),
+});
+
+export type CriterionCheck = z.infer<typeof CriterionCheckSchema>;
+
+export const CriterionExampleSchema = z.object({
+  scenario: z.string(),
+  expected: z.string().optional(),
+  incorrect: z.string().optional(),
+  why: z.string().optional(),
+});
+
+export type CriterionExample = z.infer<typeof CriterionExampleSchema>;
+
+export const CriterionSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  description: z.string(),
+  severity: SeveritySchema,
+  patterns: z.array(z.string()),
+  check: CriterionCheckSchema,
+  examples: z
+    .object({
+      passing: z.array(CriterionExampleSchema).optional(),
+      failing: z.array(CriterionExampleSchema).optional(),
+    })
+    .optional(),
+});
+
+export type Criterion = z.infer<typeof CriterionSchema>;
+
+export const EvaluationCriteriaSchema = z.object({
+  name: z.string(),
+  version: z.string().default('1.0'),
+  step: z.string(),
+  description: z.string().optional(),
+  criteria: z.array(CriterionSchema),
+});
+
+export type EvaluationCriteria = z.infer<typeof EvaluationCriteriaSchema>;
+
+// =============================================================================
+// Judge Types
+// =============================================================================
+
+export const CriterionEvaluationSchema = z.object({
+  criterion_id: z.string(),
+  criterion_name: z.string(),
+  passed: z.boolean(),
+  confidence: z.number().min(0).max(1),
+  explanation: z.string(),
+  correction: z
+    .object({
+      issue_type: IssueTypeSchema,
+      expected_behavior: z.string(),
+      suggested_fix: z.string(),
+      example_output: z.unknown().optional(),
+    })
+    .nullable(),
+});
+
+export type CriterionEvaluation = z.infer<typeof CriterionEvaluationSchema>;
+
+export const JudgeResultSchema = z.object({
+  overall_pass: z.boolean(),
+  evaluations: z.array(CriterionEvaluationSchema),
+  overall_notes: z.string(),
+});
+
+export type JudgeResult = z.infer<typeof JudgeResultSchema>;
+
+// =============================================================================
+// Test Suite Types
+// =============================================================================
+
+export const TestCaseSchema = z.object({
+  id: z.string(),
+  name: z.string().optional(),
+  description: z.string().optional(),
+  input: z.record(z.unknown()), // ZucaInput as record
+  focus_steps: z.array(z.string()).optional(), // Which steps to evaluate
+  expected_patterns: z.array(z.string()).optional(), // Patterns that should be detected
+  tags: z.array(z.string()).optional(),
+});
+
+export type TestCase = z.infer<typeof TestCaseSchema>;
+
+export const TestSuiteSchema = z.object({
+  name: z.string(),
+  version: z.string().default('1.0'),
+  description: z.string().optional(),
+  tests: z.array(TestCaseSchema),
+});
+
+export type TestSuite = z.infer<typeof TestSuiteSchema>;
+
+// =============================================================================
+// Evaluation Run Types
+// =============================================================================
+
+export const EvaluationFailureSchema = z.object({
+  testId: z.string(),
+  stepName: z.string(),
+  criterionId: z.string(),
+  explanation: z.string(),
+  correction: CriterionEvaluationSchema.shape.correction,
+});
+
+export type EvaluationFailure = z.infer<typeof EvaluationFailureSchema>;
+
+export const EvaluationRunResultSchema = z.object({
+  runId: z.string(),
+  suiteName: z.string(),
+  startedAt: z.string(),
+  completedAt: z.string().optional(),
+  total: z.number(),
+  passed: z.number(),
+  failed: z.number(),
+  correctionsGenerated: z.number(),
+  failures: z.array(EvaluationFailureSchema),
+  model: z.string().optional(),
+});
+
+export type EvaluationRunResult = z.infer<typeof EvaluationRunResultSchema>;
+
+// =============================================================================
+// Prompt Evolution Types
+// =============================================================================
+
+export const PromptSuggestionStatusSchema = z.enum(['pending', 'approved', 'applied', 'rejected']);
+
+export type PromptSuggestionStatus = z.infer<typeof PromptSuggestionStatusSchema>;
+
+export const PromptSuggestionSchema = z.object({
+  id: z.string(),
+  step_name: z.string(),
+  pattern: z.string(),
+  occurrence_count: z.number().default(1),
+  suggested_update: z.string(),
+  status: PromptSuggestionStatusSchema.default('pending'),
+  applied_at: z.string().optional(),
+  created_at: z.string(),
+  updated_at: z.string(),
+});
+
+export type PromptSuggestion = z.infer<typeof PromptSuggestionSchema>;
+
+// =============================================================================
+// Backend Interface
+// =============================================================================
+
+export interface CorrectionsBackend {
+  insert(correction: CorrectionInsert): Promise<Correction>;
+  search(query: string, stepName: string, limit?: number): Promise<Correction[]>;
+  getByPattern(pattern: string): Promise<Correction[]>;
+  getByStep(stepName: string): Promise<Correction[]>;
+  getAll(): Promise<Correction[]>;
+  updateStats(id: string, applied: boolean, helped: boolean): Promise<void>;
+  getPatternFrequencies(stepName: string): Promise<Array<{ pattern: string; count: number }>>;
+  isReady(): Promise<boolean>;
+}
+
+// =============================================================================
+// Injection Context
+// =============================================================================
+
+export interface InjectionContext {
+  stepName: string;
+  inputSummary: string;
+  capabilities?: string[];
+}

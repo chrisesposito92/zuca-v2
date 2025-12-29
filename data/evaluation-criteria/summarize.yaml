@@ -1,0 +1,117 @@
+name: summarize-criteria
+version: "1.0"
+step: summarize
+description: Rules for summary generation
+
+criteria:
+  - id: SM-001
+    name: tcv-consistency
+    description: TCV must match across all pipeline outputs
+    severity: critical
+    patterns: [TCV, total contract value, total]
+    check:
+      type: numeric
+      rule: |
+        Total Contract Value in summary must match:
+        - Sum of contracts/orders extended amounts
+        - Sum of all billing invoice amounts
+        - Sum of all revenue recognition amounts
+        All three should reconcile to the same TCV.
+      threshold: 0.01
+
+  - id: SM-002
+    name: charge-count-accuracy
+    description: Number of charges must match subscription spec
+    severity: high
+    patterns: [charges, count, total charges]
+    check:
+      type: behavioral
+      rule: |
+        The number of charges mentioned in summary must
+        match the actual count from subscription spec.
+        For ramp scenarios, count each pricing segment
+        as a separate charge.
+
+  - id: SM-003
+    name: billing-capability-summary
+    description: Key billing capabilities must be summarized
+    severity: medium
+    patterns: [billing, capabilities, features]
+    check:
+      type: behavioral
+      rule: |
+        Summary should mention the key Zuora Billing features
+        that will be used, such as:
+        - Recurring charges
+        - Proration handling
+        - Usage billing
+        - Ramp/tiered pricing
+
+  - id: SM-004
+    name: revenue-capability-summary
+    description: Key revenue capabilities must be summarized
+    severity: medium
+    patterns: [revenue, recognition, capabilities]
+    check:
+      type: behavioral
+      rule: |
+        Summary should mention the key Zuora Revenue features
+        that will be used, such as:
+        - Ratable revenue recognition
+        - Allocation methodology
+        - Contract modifications handling
+        - Ramp revenue handling
+
+  - id: SM-005
+    name: period-summary-accuracy
+    description: Service period summary must be accurate
+    severity: high
+    patterns: [period, term, months, duration]
+    check:
+      type: behavioral
+      rule: |
+        Summary must accurately state:
+        - Contract start and end dates
+        - Total term length
+        - Any key milestones (pricing changes, renewals)
+
+  - id: SM-006
+    name: complexity-identification
+    description: Complex scenarios must be flagged
+    severity: medium
+    patterns: [complex, complexity, special handling]
+    check:
+      type: behavioral
+      rule: |
+        If the use case involves complex scenarios, they
+        should be highlighted in the summary:
+        - Multi-element arrangements
+        - Ramp/step-up pricing
+        - Usage-based components
+        - Allocation requirements
+
+  - id: SM-007
+    name: action-items-completeness
+    description: Implementation notes should be actionable
+    severity: low
+    patterns: [notes, implementation, action items]
+    check:
+      type: behavioral
+      rule: |
+        Implementation notes or customization tips should
+        provide actionable guidance for configuring Zuora,
+        not just restate what was already shown in tables.
+
+  - id: SM-008
+    name: financial-reconciliation
+    description: Financial figures must reconcile
+    severity: critical
+    patterns: [reconcile, balance, total]
+    check:
+      type: numeric
+      rule: |
+        Key financial metrics must reconcile:
+        - Monthly Billing × Months = TCV (for simple cases)
+        - Sum of segment values = TCV (for ramps)
+        - Total Deferred Revenue release = Total Revenue
+      threshold: 0.01
