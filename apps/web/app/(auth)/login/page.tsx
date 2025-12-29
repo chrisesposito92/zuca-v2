@@ -83,11 +83,11 @@ export default function LoginPage() {
             <div className="flex flex-col items-center gap-4 mb-8">
               <div className="relative">
                 <Image
-                  src="/zuca_logo_v2.png"
+                  src="/zuca_logo_dark_v1.png"
                   alt="ZUCA"
                   width={200}
                   height={56}
-                  className="h-14 w-auto"
+                  className="w-full h-auto transition-transform group-hover:scale-[1.02]"
                   priority
                 />
                 {/* Subtle glow behind logo */}

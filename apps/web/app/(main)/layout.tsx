@@ -59,15 +59,15 @@ export default function MainLayout({
         <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-primary to-transparent opacity-50" />
 
         {/* Logo */}
-        <div className="p-6 pt-8">
+        <div className="px-6 pt-4">
           <Link href="/analyze" className="flex items-center gap-3 group">
-            <div className="relative">
+            <div className="relative overflow-hidden">
               <Image
-                src="/zuca_logo_v2.png"
+                src="/zuca_logo_dark_v1.png"
                 alt="ZUCA"
-                width={160}
-                height={45}
-                className="h-11 w-auto transition-transform group-hover:scale-[1.02]"
+                width={240}
+                height={65}
+                className="w-full h-auto transition-transform group-hover:scale-[1.02] -my-8"
                 priority
               />
               {/* Subtle glow behind logo on hover */}
