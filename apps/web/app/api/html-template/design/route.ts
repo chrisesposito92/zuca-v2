@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
 
     const session = await createSession(
       'html-builder',
-      { mode: 'design', ...validatedInput },
+      validatedInput,
       user?.userId,
       selectedModel
     );
