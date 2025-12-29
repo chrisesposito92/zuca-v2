@@ -344,7 +344,7 @@ export default function SolutionPage({ params }: PageProps) {
                     explanation: (htmlResult.result as GroupByWizardOutput).explanation,
                     objects_used: (htmlResult.result as GroupByWizardOutput).objects_used,
                     functions_used: (htmlResult.result as GroupByWizardOutput).functions_used,
-                    customization_tips: (htmlResult.result as GroupByWizardOutput).customization_tips,
+                    notes: (htmlResult.result as GroupByWizardOutput).customization_tips,
                   }}
                   /* Don't pass sessionId - we're already on the detail page */
                 />
