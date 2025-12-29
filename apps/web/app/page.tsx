@@ -3,7 +3,7 @@
 import { Button, Card, CardBody, Skeleton, Chip } from "@heroui/react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { useAuth } from "../hooks/useAuth";
 import { useQuery } from "@tanstack/react-query";
@@ -544,7 +544,7 @@ function DashboardHome() {
 // MAIN PAGE COMPONENT - Switches between variants
 // ============================================================================
 
-export default function HomePage() {
+function HomePageContent() {
   const searchParams = useSearchParams();
   const variantParam = searchParams.get("variant");
   const variant = variantParam === "dashboard" || variantParam === "welcome"
@@ -556,4 +556,12 @@ export default function HomePage() {
   }
 
   return <WelcomeHome />;
+}
+
+export default function HomePage() {
+  return (
+    <Suspense fallback={<WelcomeHome />}>
+      <HomePageContent />
+    </Suspense>
+  );
 }
