@@ -100,7 +100,7 @@ export async function getSession(id: string): Promise<DbSession | null> {
 
 export async function listSessions(
   userId?: string | null,
-  limit = 50,
+  limit = 1000,
   offset = 0
 ): Promise<DbSession[]> {
   if (userId) {
@@ -119,6 +119,50 @@ export async function listSessions(
     LIMIT ${limit} OFFSET ${offset}
   `;
   return result.rows;
+}
+
+export async function getSessionCount(userId?: string | null): Promise<number> {
+  if (userId) {
+    const result = await sql<{ count: string }>`
+      SELECT COUNT(*) as count FROM sessions WHERE user_id = ${userId}
+    `;
+    return parseInt(result.rows[0]?.count ?? '0', 10);
+  }
+
+  const result = await sql<{ count: string }>`
+    SELECT COUNT(*) as count FROM sessions
+  `;
+  return parseInt(result.rows[0]?.count ?? '0', 10);
+}
+
+/**
+ * Fix sessions that are stuck in 'running' status.
+ * Sessions older than the cutoff that are still 'running' are marked as 'failed'.
+ */
+export async function fixStuckRunningSessions(
+  userId?: string | null,
+  maxAgeMinutes = 30
+): Promise<number> {
+  const cutoff = new Date(Date.now() - maxAgeMinutes * 60 * 1000);
+
+  if (userId) {
+    const result = await sql`
+      UPDATE sessions
+      SET status = 'failed', error_message = 'Session timed out (auto-cleanup)'
+      WHERE user_id = ${userId}
+        AND status = 'running'
+        AND updated_at < ${cutoff.toISOString()}
+    `;
+    return result.rowCount ?? 0;
+  }
+
+  const result = await sql`
+    UPDATE sessions
+    SET status = 'failed', error_message = 'Session timed out (auto-cleanup)'
+    WHERE status = 'running'
+      AND updated_at < ${cutoff.toISOString()}
+  `;
+  return result.rowCount ?? 0;
 }
 
 export async function updateSessionStatus(

@@ -5,19 +5,23 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { listSessions } from '@/lib/db';
+import { listSessions, getSessionCount, fixStuckRunningSessions } from '@/lib/db';
 import { getCurrentUser } from '@/lib/auth';
 
 export async function GET(request: NextRequest) {
   try {
     const user = await getCurrentUser();
 
-    // Get pagination params
-    const limit = parseInt(request.nextUrl.searchParams.get('limit') || '50', 10);
+    // Get pagination params (default to 1000 to get all sessions)
+    const limit = parseInt(request.nextUrl.searchParams.get('limit') || '1000', 10);
     const offset = parseInt(request.nextUrl.searchParams.get('offset') || '0', 10);
+
+    // Auto-cleanup stuck running sessions (older than 30 min)
+    await fixStuckRunningSessions(user?.userId, 30);
 
     // List sessions (filter by user if authenticated)
     const sessions = await listSessions(user?.userId, limit, offset);
+    const total = await getSessionCount(user?.userId);
 
     // Helper to get display name based on session type
     const getSessionDisplayName = (session: typeof sessions[0]): string => {
@@ -66,6 +70,7 @@ export async function GET(request: NextRequest) {
         limit,
         offset,
         count: mapped.length,
+        total,
       },
     });
   } catch (error: unknown) {

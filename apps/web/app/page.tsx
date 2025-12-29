@@ -220,10 +220,22 @@ function WelcomeHome() {
 // DASHBOARD VARIANT - Data-rich hub with recent sessions and stats
 // ============================================================================
 
+interface ApiSession {
+  id: string;
+  session_type: "analyze" | "uc-generate" | "revenue-snapshot" | "html-builder";
+  customer_name: string;
+  input: Record<string, unknown>;
+  status: string;
+  created_at: string;
+  updated_at: string;
+}
+
 interface Session {
   id: string;
   type: "analyze" | "uc-generate" | "revenue-snapshot" | "html-builder";
+  customerName: string;
   input: Record<string, unknown>;
+  status: string;
   created_at: string;
   updated_at: string;
 }
@@ -265,6 +277,11 @@ function formatRelativeTime(dateString: string): string {
 }
 
 function getSessionTitle(session: Session): string {
+  // Use customerName from API (already computed server-side)
+  if (session.customerName && session.customerName !== "Unknown") {
+    return session.customerName;
+  }
+  // Fallback to extracting from input
   const input = session.input as Record<string, unknown>;
   if (session.type === "analyze" && input.contractText) {
     const text = String(input.contractText);
@@ -288,12 +305,23 @@ function getSessionTitle(session: Session): string {
 function DashboardHome() {
   const { user, isLoading: authLoading } = useAuth();
 
+  // Helper to map API response to internal Session type
+  const mapApiSession = (s: ApiSession): Session => ({
+    id: s.id,
+    type: s.session_type,
+    customerName: s.customer_name,
+    input: s.input,
+    status: s.status,
+    created_at: s.created_at,
+    updated_at: s.updated_at,
+  });
+
   const { data: sessions, isLoading: sessionsLoading } = useQuery<Session[]>({
     queryKey: ["sessions", "recent"],
     queryFn: async () => {
       const res = await fetch("/api/sessions?limit=5");
       const data = await res.json();
-      return data.sessions || [];
+      return (data.sessions || []).map(mapApiSession);
     },
     staleTime: 30000,
   });
@@ -301,9 +329,10 @@ function DashboardHome() {
   const { data: stats } = useQuery({
     queryKey: ["sessions", "stats"],
     queryFn: async () => {
-      const res = await fetch("/api/sessions");
+      // Fetch with high limit to get accurate count
+      const res = await fetch("/api/sessions?limit=1000");
       const data = await res.json();
-      const allSessions = data.sessions || [];
+      const allSessions: ApiSession[] = data.sessions || [];
 
       const today = new Date();
       today.setHours(0, 0, 0, 0);
@@ -312,7 +341,7 @@ function DashboardHome() {
 
       return {
         total: allSessions.length,
-        thisWeek: allSessions.filter((s: Session) => new Date(s.created_at) >= thisWeek).length,
+        thisWeek: allSessions.filter((s) => new Date(s.created_at) >= thisWeek).length,
       };
     },
     staleTime: 60000,

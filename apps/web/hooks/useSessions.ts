@@ -38,6 +38,7 @@ interface SessionsResponse {
     limit: number;
     offset: number;
     count: number;
+    total?: number; // Total count of all sessions
   };
 }
 
@@ -46,8 +47,8 @@ interface SessionDetailResponse {
   session: SessionDetail;
 }
 
-// Fetch all sessions
-async function fetchSessions(limit = 50, offset = 0): Promise<SessionsResponse> {
+// Fetch all sessions (default to 1000 to get all sessions for most users)
+async function fetchSessions(limit = 1000, offset = 0): Promise<SessionsResponse> {
   const response = await fetch(`/api/sessions?limit=${limit}&offset=${offset}`);
   const data = await response.json();
   if (!response.ok) throw data;
@@ -165,7 +166,7 @@ async function clearConversation(sessionId: string): Promise<{ success: boolean 
 
 // Hooks
 
-export function useSessions(limit = 50, offset = 0) {
+export function useSessions(limit = 1000, offset = 0) {
   return useQuery({
     queryKey: ["sessions", limit, offset],
     queryFn: () => fetchSessions(limit, offset),
