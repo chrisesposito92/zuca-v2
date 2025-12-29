@@ -22,9 +22,9 @@ const DEFAULT_VARIANT: "welcome" | "dashboard" = "welcome";
 const tools = [
   {
     href: "/analyze",
-    title: "New Analysis",
+    title: "Use Case Analysis",
     description: "Analyze subscription contracts and get tailored Zuora implementation guidance",
-    shortDesc: "Analyze contracts and get Zuora implementation guidance",
+    shortDesc: "Analyze contracts for Zuora config",
     icon: (
       <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
@@ -37,7 +37,6 @@ const tools = [
     ),
     gradient: "from-primary/20 to-primary/5",
     color: "primary" as const,
-    primary: true,
   },
   {
     href: "/revenue-snapshot",
@@ -181,45 +180,19 @@ function WelcomeHome() {
             {tools.map((tool, index) => (
               <Link key={tool.href} href={tool.href}>
                 <Card
-                  className={`
-                    glass-card-elevated hover:border-primary/30 cursor-pointer
-                    transition-all duration-300 hover:scale-[1.02] hover:shadow-lg
-                    ${tool.primary ? "md:col-span-2 border-primary/20" : ""}
-                  `}
+                  className="glass-card-elevated hover:border-primary/30 cursor-pointer transition-all duration-300 hover:scale-[1.02] hover:shadow-lg h-full"
                   style={{
                     transitionDelay: animationPhase === "tools" ? `${index * 100}ms` : "0ms",
                   }}
                 >
-                  <CardBody className={`p-6 ${tool.primary ? "md:flex md:flex-row md:items-center md:gap-6" : ""}`}>
-                    <div className={`
-                      w-14 h-14 rounded-xl bg-gradient-to-br ${tool.gradient}
-                      flex items-center justify-center text-primary mb-4
-                      ${tool.primary ? "md:mb-0 md:w-16 md:h-16" : ""}
-                    `}>
+                  <CardBody className="p-6 h-full flex flex-col">
+                    <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${tool.gradient} flex items-center justify-center text-primary mb-4`}>
                       {tool.icon}
                     </div>
-                    <div className={tool.primary ? "md:flex-1" : ""}>
-                      <h3 className={`font-semibold text-foreground ${tool.primary ? "text-xl" : "text-lg"}`}>
-                        {tool.title}
-                      </h3>
+                    <div className="flex-1">
+                      <h3 className="font-semibold text-foreground text-lg">{tool.title}</h3>
                       <p className="text-default-500 text-sm mt-1">{tool.description}</p>
                     </div>
-                    {tool.primary && (
-                      <div className="hidden md:block">
-                        <Button
-                          color="primary"
-                          size="lg"
-                          className="font-semibold"
-                          endContent={
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                            </svg>
-                          }
-                        >
-                          Get Started
-                        </Button>
-                      </div>
-                    )}
                   </CardBody>
                 </Card>
               </Link>
@@ -249,7 +222,7 @@ function WelcomeHome() {
 
 interface Session {
   id: string;
-  type: "analyze" | "uc-generate" | "revenue-snapshot";
+  type: "analyze" | "uc-generate" | "revenue-snapshot" | "html-builder";
   input: Record<string, unknown>;
   created_at: string;
   updated_at: string;
@@ -259,12 +232,14 @@ const typeLabels: Record<string, string> = {
   "analyze": "Analysis",
   "uc-generate": "Use Case",
   "revenue-snapshot": "Revenue",
+  "html-builder": "Template",
 };
 
-const typeColors: Record<string, "primary" | "secondary" | "warning"> = {
+const typeColors: Record<string, "primary" | "secondary" | "warning" | "default"> = {
   "analyze": "primary",
   "uc-generate": "secondary",
   "revenue-snapshot": "warning",
+  "html-builder": "warning",
 };
 
 function getGreeting(): string {
@@ -295,8 +270,17 @@ function getSessionTitle(session: Session): string {
     const text = String(input.contractText);
     return text.slice(0, 50) + (text.length > 50 ? "..." : "");
   }
-  if (session.type === "revenue-snapshot" && input.subscriptionNumber) {
-    return `Subscription ${input.subscriptionNumber}`;
+  if (session.type === "revenue-snapshot") {
+    const subs = input.subscription_numbers as string[] | undefined;
+    if (Array.isArray(subs) && subs.length) {
+      const shown = subs.slice(0, 2).join(", ");
+      return subs.length > 2 ? `${shown} (+${subs.length - 2})` : shown;
+    }
+    return "Revenue Snapshot";
+  }
+  if (session.type === "html-builder") {
+    const desc = input.description as string | undefined;
+    return desc?.slice(0, 50) || "Template Request";
   }
   return `${typeLabels[session.type] || session.type} Session`;
 }
@@ -380,7 +364,7 @@ function DashboardHome() {
 
         {/* Quick actions grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
-          {tools.filter(t => !t.primary || t.href !== "/history").slice(0, 3).map((tool) => (
+          {tools.filter(t => t.href !== "/history").slice(0, 3).map((tool) => (
             <Link key={tool.href} href={tool.href}>
               <Card className="glass-card-elevated hover:border-primary/30 cursor-pointer transition-all duration-300 hover:scale-[1.02] h-full">
                 <CardBody className="p-5 flex flex-row items-center gap-4">

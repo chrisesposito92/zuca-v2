@@ -409,7 +409,7 @@ export function UCGenerateView({
                 </svg>
               }
             >
-              New Analysis
+              New Use Case Analysis
             </Button>
           </Link>
         </div>

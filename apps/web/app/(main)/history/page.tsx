@@ -197,7 +197,7 @@ export default function HistoryPage() {
               </svg>
             }
           >
-            New Analysis
+            New Use Case Analysis
           </Button>
         </Link>
       </div>

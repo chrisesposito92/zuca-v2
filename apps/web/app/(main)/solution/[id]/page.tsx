@@ -654,7 +654,7 @@ export default function SolutionPage({ params }: PageProps) {
                 </svg>
               }
             >
-              New Analysis
+              New Use Case Analysis
             </Button>
           </Link>
         </div>

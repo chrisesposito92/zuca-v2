@@ -539,7 +539,7 @@ export default function AnalyzePage() {
       <div className="flex justify-between items-start">
         <div className="space-y-1">
           <h1 className="text-3xl font-bold tracking-tight">
-            <span className="gradient-text">New Analysis</span>
+            <span className="gradient-text">Use Case Analysis</span>
           </h1>
           <p className="text-default-500 text-lg">
             Configure your use case to generate a complete Zuora solution

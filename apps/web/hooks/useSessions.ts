@@ -10,8 +10,9 @@ import type { UCGeneratorOutput } from "@zuca/types/uc-generator";
 // Types
 interface Session {
   id: string;
-  session_type: "analyze" | "uc-generate" | "revenue-snapshot";
+  session_type: "analyze" | "uc-generate" | "revenue-snapshot" | "html-builder";
   customer_name: string;
+  input: Record<string, unknown>;
   status: "pending" | "running" | "completed" | "failed";
   created_at: string;
   updated_at: string;

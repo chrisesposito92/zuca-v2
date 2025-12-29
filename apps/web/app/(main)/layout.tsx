@@ -8,7 +8,7 @@ import { useAuth } from "../../hooks/useAuth";
 import { BugReportModal } from "@/components/BugReportModal";
 
 const navItems = [
-  { href: "/analyze", label: "New Analysis", icon: "+" },
+  { href: "/analyze", label: "Use Case Analysis", icon: "+" },
   { href: "/revenue-snapshot", label: "Revenue Snapshot", icon: "table" },
   { href: "/html-builder", label: "Template Builder", icon: "code" },
   { href: "/history", label: "History", icon: "clock" },

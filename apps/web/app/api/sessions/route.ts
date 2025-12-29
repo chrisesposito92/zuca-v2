@@ -19,23 +19,40 @@ export async function GET(request: NextRequest) {
     // List sessions (filter by user if authenticated)
     const sessions = await listSessions(user?.userId, limit, offset);
 
-    const formatRevenueSnapshotName = (input: any, result: any): string => {
-      const subs = input?.subscription_numbers ?? result?.input?.subscription_numbers;
-      if (Array.isArray(subs) && subs.length) {
-        const shown = subs.slice(0, 3).join(', ');
-        return subs.length > 3 ? `${shown} (+${subs.length - 3} more)` : shown;
+    // Helper to get display name based on session type
+    const getSessionDisplayName = (session: typeof sessions[0]): string => {
+      const input = session.input as Record<string, unknown>;
+      const result = session.result as Record<string, unknown> | null;
+
+      switch (session.session_type) {
+        case 'revenue-snapshot': {
+          const subs = (input?.subscription_numbers ?? result?.input) as string[] | undefined;
+          if (Array.isArray(subs) && subs.length) {
+            const shown = subs.slice(0, 3).join(', ');
+            return subs.length > 3 ? `${shown} (+${subs.length - 3} more)` : shown;
+          }
+          return 'Revenue Snapshot';
+        }
+        case 'html-builder': {
+          const desc = input?.description as string | undefined;
+          return desc?.slice(0, 60) || 'Template Request';
+        }
+        case 'uc-generate': {
+          return (input?.customer_name as string) || 'Use Case Generation';
+        }
+        case 'analyze':
+        default: {
+          return (input?.customer_name as string) || 'Analysis Session';
+        }
       }
-      return 'Revenue Snapshot';
     };
 
-    // Map to API response format
+    // Map to API response format (include input for dashboard display)
     const mapped = sessions.map((s) => ({
       id: s.id,
       session_type: s.session_type,
-      customer_name:
-        s.session_type === 'revenue-snapshot'
-          ? formatRevenueSnapshotName(s.input, s.result)
-          : (s.input as { customer_name?: string })?.customer_name || 'Unknown',
+      customer_name: getSessionDisplayName(s),
+      input: s.input, // Include input for rich display in dashboard/history
       status: s.status,
       created_at: s.created_at,
       updated_at: s.updated_at,
