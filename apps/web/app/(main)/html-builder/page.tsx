@@ -72,8 +72,6 @@ const aggregationTypeOptions = [
   { key: "Sum", label: "Sum" },
   { key: "Count", label: "Count" },
   { key: "Average", label: "Average" },
-  { key: "Min", label: "Min" },
-  { key: "Max", label: "Max" },
 ];
 
 const currencyOptions = [
@@ -112,7 +110,7 @@ interface GroupByColumn {
 
 interface GroupByAggregation {
   field: string;
-  type: "Sum" | "Count" | "Average" | "Min" | "Max";
+  type: "Sum" | "Count" | "Average";
   label?: string;
   decimals?: number;
   localise?: boolean;
@@ -315,7 +313,14 @@ export default function HTMLBuilderPage() {
         localise: c.localise ?? false,
         align: c.align ?? "left",
       })),
-      aggregations: validAggregations.length > 0 ? validAggregations : undefined,
+      // Ensure decimals and localise have defaults (Zod schema expects them required)
+      aggregations: validAggregations.length > 0
+        ? validAggregations.map((a) => ({
+            ...a,
+            decimals: a.decimals ?? 2,
+            localise: a.localise ?? true,
+          }))
+        : undefined,
       includeSubtotals,
       includeGrandTotal,
       description: groupByDescription.trim() || undefined,
