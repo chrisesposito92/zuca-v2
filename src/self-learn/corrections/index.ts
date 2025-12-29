@@ -7,12 +7,15 @@
  */
 
 import { CorrectionsJsonBackend } from './json-backend';
-import { CorrectionsPostgresBackend } from './postgres-backend';
+import { CorrectionsPostgresBackend, clearEmbeddingCache } from './postgres-backend';
 import type { CorrectionsBackend, Correction, CorrectionInsert } from './types';
 import { debugLog } from '../../config';
 
 // Re-export types
 export * from './types';
+
+// Re-export cache utilities
+export { clearEmbeddingCache };
 
 /**
  * Check if we should use Postgres backend

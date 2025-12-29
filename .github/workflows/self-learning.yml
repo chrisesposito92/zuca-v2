@@ -1,0 +1,161 @@
+name: Self-Learning Evaluation
+
+on:
+  # Manual trigger with options
+  workflow_dispatch:
+    inputs:
+      model:
+        description: 'LLM model to use'
+        required: false
+        default: 'gemini-3-flash-preview'
+        type: choice
+        options:
+          - gemini-3-flash-preview
+          - gemini-3-pro-preview
+          - gpt-5.2
+      suite:
+        description: 'Test suite to run'
+        required: false
+        default: 'golden-scenarios'
+      generate_corrections:
+        description: 'Generate corrections for failures'
+        required: false
+        default: false
+        type: boolean
+
+  # Weekly scheduled run
+  schedule:
+    - cron: '0 6 * * 1'  # Every Monday at 6 AM UTC
+
+jobs:
+  evaluate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Typecheck
+        run: npm run typecheck
+
+      - name: Run Evaluation Suite
+        id: evaluate
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
+          USE_POSTGRES_CORRECTIONS: ${{ secrets.POSTGRES_URL && 'true' || 'false' }}
+          INPUT_MODEL: ${{ inputs.model || 'gemini-3-flash-preview' }}
+          INPUT_SUITE: ${{ inputs.suite || 'golden-scenarios' }}
+          INPUT_CORRECTIONS: ${{ inputs.generate_corrections }}
+        run: |
+          CORRECTIONS_FLAG=""
+          if [ "$INPUT_CORRECTIONS" = "true" ]; then
+            CORRECTIONS_FLAG="--corrections"
+          fi
+
+          echo "Running evaluation with model: $INPUT_MODEL, suite: $INPUT_SUITE"
+
+          # Run evaluation and capture output
+          npm run cli -- evaluate --suite "$INPUT_SUITE" -m "$INPUT_MODEL" $CORRECTIONS_FLAG 2>&1 | tee evaluation-output.txt
+
+          # Extract results for summary
+          PASSED=$(grep -oP 'Passed: \K\d+' evaluation-output.txt || echo "0")
+          FAILED=$(grep -oP 'Failed: \K\d+' evaluation-output.txt || echo "0")
+          TOTAL=$(grep -oP 'Total Tests: \K\d+' evaluation-output.txt || echo "0")
+
+          echo "passed=$PASSED" >> $GITHUB_OUTPUT
+          echo "failed=$FAILED" >> $GITHUB_OUTPUT
+          echo "total=$TOTAL" >> $GITHUB_OUTPUT
+
+          # Fail the job if there are failures
+          if [ "$FAILED" -gt 0 ]; then
+            echo "::warning::$FAILED test(s) failed out of $TOTAL"
+            exit 1
+          fi
+
+      - name: Upload Evaluation Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: evaluation-results
+          path: evaluation-output.txt
+          retention-days: 30
+
+      - name: Create Summary
+        if: always()
+        env:
+          INPUT_MODEL: ${{ inputs.model || 'gemini-3-flash-preview' }}
+          INPUT_SUITE: ${{ inputs.suite || 'golden-scenarios' }}
+          EVAL_TOTAL: ${{ steps.evaluate.outputs.total }}
+          EVAL_PASSED: ${{ steps.evaluate.outputs.passed }}
+          EVAL_FAILED: ${{ steps.evaluate.outputs.failed }}
+        run: |
+          echo "## Self-Learning Evaluation Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Metric | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|--------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Model | $INPUT_MODEL |" >> $GITHUB_STEP_SUMMARY
+          echo "| Suite | $INPUT_SUITE |" >> $GITHUB_STEP_SUMMARY
+          echo "| Total Tests | $EVAL_TOTAL |" >> $GITHUB_STEP_SUMMARY
+          echo "| Passed | $EVAL_PASSED |" >> $GITHUB_STEP_SUMMARY
+          echo "| Failed | $EVAL_FAILED |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ "$EVAL_FAILED" -gt 0 ]; then
+            echo "### :x: Some tests failed" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "See the evaluation-output.txt artifact for details." >> $GITHUB_STEP_SUMMARY
+          else
+            echo "### :white_check_mark: All tests passed" >> $GITHUB_STEP_SUMMARY
+          fi
+
+  analyze-patterns:
+    runs-on: ubuntu-latest
+    needs: evaluate
+    if: failure()
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Analyze Correction Patterns
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
+          USE_POSTGRES_CORRECTIONS: ${{ secrets.POSTGRES_URL && 'true' || 'false' }}
+        run: |
+          echo "Analyzing correction patterns..."
+          npm run cli -- prompts analyze 2>&1 | tee pattern-analysis.txt
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Pattern Analysis" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          cat pattern-analysis.txt >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+
+      - name: Upload Pattern Analysis
+        uses: actions/upload-artifact@v4
+        with:
+          name: pattern-analysis
+          path: pattern-analysis.txt
+          retention-days: 30

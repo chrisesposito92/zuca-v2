@@ -5,9 +5,57 @@
  * for injection into pipeline step prompts.
  */
 
+import { v4 as uuidv4 } from 'uuid';
 import { debugLog } from '../../config';
 import { findRelevantCorrections, getCorrectionsBackend } from '../corrections';
-import type { Correction, InjectionContext } from '../types';
+import type { Correction, InjectionContext, InjectionResult, CorrectionRunContext } from '../types';
+
+// =============================================================================
+// Run Context Management (for effectiveness tracking)
+// =============================================================================
+
+/** Current active run context - tracks corrections applied during pipeline execution */
+let currentRunContext: CorrectionRunContext | null = null;
+
+/**
+ * Start a new correction tracking context for a pipeline run
+ *
+ * Call this before running the pipeline to begin tracking which corrections
+ * are applied. Then use `getRunContext()` after evaluation to see results.
+ */
+export function startCorrectionTracking(runId?: string): CorrectionRunContext {
+  currentRunContext = {
+    runId: runId || uuidv4(),
+    appliedByStep: new Map(),
+    startedAt: new Date(),
+  };
+  debugLog(`Started correction tracking for run: ${currentRunContext.runId}`);
+  return currentRunContext;
+}
+
+/**
+ * Get the current run context
+ */
+export function getRunContext(): CorrectionRunContext | null {
+  return currentRunContext;
+}
+
+/**
+ * Clear the current run context
+ */
+export function clearRunContext(): void {
+  currentRunContext = null;
+}
+
+/**
+ * Record that corrections were applied to a step
+ */
+function recordAppliedCorrections(stepName: string, correctionIds: string[]): void {
+  if (!currentRunContext) return;
+
+  const existing = currentRunContext.appliedByStep.get(stepName) || [];
+  currentRunContext.appliedByStep.set(stepName, [...existing, ...correctionIds]);
+}
 
 /**
  * Options for getting corrections context
@@ -85,13 +133,15 @@ export function formatCorrectionsSection(corrections: Correction[]): string {
  *
  * @param context - Information about the current step and input
  * @param options - Configuration options
- * @returns Formatted corrections string, or empty string if none found
+ * @returns InjectionResult with formatted text and applied correction IDs
  */
 export async function getCorrectionsContext(
   context: InjectionContext,
   options: GetCorrectionsContextOptions = {}
-): Promise<string> {
+): Promise<InjectionResult> {
   const { limit = 3, minConfidence = 0.5, trackApplied = true } = options;
+
+  const emptyResult: InjectionResult = { context: '', appliedCorrectionIds: [], count: 0 };
 
   try {
     // Search for relevant corrections
@@ -102,10 +152,12 @@ export async function getCorrectionsContext(
 
     if (corrections.length === 0) {
       debugLog(`No corrections found for step: ${context.stepName}`);
-      return '';
+      return emptyResult;
     }
 
     debugLog(`Found ${corrections.length} relevant corrections for ${context.stepName}`);
+
+    const appliedIds = corrections.map((c) => c.id);
 
     // Track that these corrections were applied
     if (trackApplied) {
@@ -118,13 +170,33 @@ export async function getCorrectionsContext(
           debugLog(`Failed to track correction application: ${correction.id}`);
         }
       }
+
+      // Record in run context for effectiveness tracking
+      recordAppliedCorrections(context.stepName, appliedIds);
     }
 
-    return formatCorrectionsSection(corrections);
+    return {
+      context: formatCorrectionsSection(corrections),
+      appliedCorrectionIds: appliedIds,
+      count: corrections.length,
+    };
   } catch (error) {
     debugLog(`Error getting corrections context: ${error}`);
-    return '';
+    return emptyResult;
   }
+}
+
+/**
+ * Get corrections context as a simple string (for backward compatibility)
+ *
+ * @deprecated Use getCorrectionsContext() which returns InjectionResult
+ */
+export async function getCorrectionsContextString(
+  context: InjectionContext,
+  options: GetCorrectionsContextOptions = {}
+): Promise<string> {
+  const result = await getCorrectionsContext(context, options);
+  return result.context;
 }
 
 /**

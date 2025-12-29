@@ -10,6 +10,10 @@ import OpenAI from 'openai';
 import type { CorrectionsBackend, Correction, CorrectionInsert } from './types';
 import { debugLog } from '../../config';
 
+// =============================================================================
+// OpenAI Client & Embedding Generation
+// =============================================================================
+
 // OpenAI client for generating embeddings
 let openaiClient: OpenAI | null = null;
 
@@ -24,16 +28,90 @@ function getOpenAI(): OpenAI {
   return openaiClient;
 }
 
+// =============================================================================
+// Embedding Cache (Performance Optimization)
+// =============================================================================
+
+interface CacheEntry {
+  embedding: number[];
+  timestamp: number;
+}
+
+/** LRU cache for embeddings to avoid redundant API calls */
+class EmbeddingCache {
+  private cache: Map<string, CacheEntry> = new Map();
+  private maxSize: number;
+  private ttlMs: number;
+
+  constructor(maxSize = 100, ttlMinutes = 30) {
+    this.maxSize = maxSize;
+    this.ttlMs = ttlMinutes * 60 * 1000;
+  }
+
+  get(key: string): number[] | null {
+    const entry = this.cache.get(key);
+    if (!entry) return null;
+
+    // Check if expired
+    if (Date.now() - entry.timestamp > this.ttlMs) {
+      this.cache.delete(key);
+      return null;
+    }
+
+    // Move to end (LRU update)
+    this.cache.delete(key);
+    this.cache.set(key, entry);
+
+    return entry.embedding;
+  }
+
+  set(key: string, embedding: number[]): void {
+    // Evict oldest if at capacity
+    if (this.cache.size >= this.maxSize) {
+      const oldest = this.cache.keys().next().value;
+      if (oldest) this.cache.delete(oldest);
+    }
+
+    this.cache.set(key, { embedding, timestamp: Date.now() });
+  }
+
+  clear(): void {
+    this.cache.clear();
+  }
+}
+
+const embeddingCache = new EmbeddingCache();
+
 /**
- * Generate embedding for a pattern/query
+ * Generate embedding for a pattern/query (with caching)
  */
 async function embedText(text: string): Promise<number[]> {
+  // Check cache first
+  const cached = embeddingCache.get(text);
+  if (cached) {
+    debugLog('Embedding cache hit');
+    return cached;
+  }
+
   const openai = getOpenAI();
   const response = await openai.embeddings.create({
     model: 'text-embedding-3-small',
     input: text,
   });
-  return response.data[0].embedding;
+
+  const embedding = response.data[0].embedding;
+
+  // Cache the result
+  embeddingCache.set(text, embedding);
+
+  return embedding;
+}
+
+/**
+ * Clear embedding cache (useful for testing)
+ */
+export function clearEmbeddingCache(): void {
+  embeddingCache.clear();
 }
 
 /**

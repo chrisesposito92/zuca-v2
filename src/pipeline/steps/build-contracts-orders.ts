@@ -189,12 +189,15 @@ export async function buildContractsOrders(
     `Allocations: ${input.is_allocations ? 'Yes' : 'No'}`,
   ].join('\n');
 
-  const correctionsContext = await getCorrectionsContext({
+  const correctionsResult = await getCorrectionsContext({
     stepName: 'contracts_orders',
     inputSummary,
   });
-  if (correctionsContext) {
-    debugLog('Injecting corrections context', { length: correctionsContext.length });
+  if (correctionsResult.count > 0) {
+    debugLog('Injecting corrections context', {
+      count: correctionsResult.count,
+      ids: correctionsResult.appliedCorrectionIds,
+    });
   }
 
   const systemPrompt = await loadPrompt(PROMPTS.BUILD_CONTRACTS_ORDERS);
@@ -204,7 +207,7 @@ export async function buildContractsOrders(
     pobMapping,
     contractIntel,
     docContext,
-    correctionsContext
+    correctionsResult.context
   );
 
   // Include previous results for multi-turn support

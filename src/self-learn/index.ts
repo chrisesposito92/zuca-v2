@@ -21,6 +21,7 @@ export {
   getCorrectionsForStep,
   getAllCorrections,
   isCorrectionsReady,
+  clearEmbeddingCache,
 } from './corrections';
 
 // Criteria Loading
@@ -54,14 +55,19 @@ export {
   type TestCaseResult,
 } from './evaluation';
 
-// Injection (Phase 3)
+// Injection (Phase 3) + Effectiveness Tracking (Phase 5)
 export {
   getCorrectionsContext,
+  getCorrectionsContextString,
   formatCorrectionForPrompt,
   formatCorrectionsSection,
   hasCorrectionsForStep,
   markCorrectionEffectiveness,
   buildInputSummary,
+  // Effectiveness tracking
+  startCorrectionTracking,
+  getRunContext,
+  clearRunContext,
   type GetCorrectionsContextOptions,
 } from './injector';
 

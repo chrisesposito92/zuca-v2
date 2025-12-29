@@ -11,7 +11,11 @@ import type { LlmModel } from '../../types/llm';
 import { runPipeline } from '../../pipeline/index';
 import { evaluateOutput, getFailedEvaluations } from '../judge';
 import { getCriteriaIfExists } from '../criteria';
-import { storeCorrection } from '../corrections';
+import { storeCorrection, getCorrectionsBackend } from '../corrections';
+import {
+  startCorrectionTracking,
+  clearRunContext,
+} from '../injector';
 import type {
   TestCase,
   EvaluationCriteria,
@@ -19,6 +23,7 @@ import type {
   EvaluationFailure,
   CorrectionInsert,
   JudgeResult,
+  CorrectionRunContext,
 } from '../types';
 import { loadTestSuite, testCaseToZucaInput } from './test-suites';
 
@@ -64,6 +69,42 @@ export interface TestCaseResult {
 }
 
 /**
+ * Update effectiveness stats for corrections that were applied during a run
+ *
+ * @param runContext - The run context with applied corrections
+ * @param stepResults - Map of step name -> judge result
+ */
+async function updateEffectivenessStats(
+  runContext: CorrectionRunContext | null,
+  stepResults: Map<string, JudgeResult>
+): Promise<void> {
+  if (!runContext) return;
+
+  const backend = getCorrectionsBackend();
+
+  for (const [stepName, correctionIds] of runContext.appliedByStep) {
+    const judgeResult = stepResults.get(stepName);
+
+    // If we evaluated this step, update effectiveness based on pass/fail
+    if (judgeResult) {
+      const helped = judgeResult.overall_pass;
+
+      for (const correctionId of correctionIds) {
+        try {
+          // Update success rate: applied=false (already tracked), helped=result
+          await backend.updateStats(correctionId, false, helped);
+          debugLog(
+            `Updated effectiveness for correction ${correctionId}: ${helped ? 'helped' : 'did not help'}`
+          );
+        } catch {
+          debugLog(`Failed to update effectiveness for ${correctionId}`);
+        }
+      }
+    }
+  }
+}
+
+/**
  * Run a single test case through the pipeline and evaluate
  */
 async function runTestCase(
@@ -76,6 +117,9 @@ async function runTestCase(
     passed: true,
     stepResults: new Map(),
   };
+
+  // Start tracking corrections for this test case
+  const runContext = startCorrectionTracking(testCase.id);
 
   try {
     // Convert test case to ZucaInput and run pipeline
@@ -149,6 +193,12 @@ async function runTestCase(
     result.passed = false;
     result.error = error instanceof Error ? error.message : 'Unknown error';
     debugLog(`Test case ${testCase.id} failed with error: ${result.error}`);
+  } finally {
+    // Update effectiveness stats for any corrections that were applied
+    await updateEffectivenessStats(runContext, result.stepResults);
+
+    // Clear run context to prepare for next test
+    clearRunContext();
   }
 
   return result;

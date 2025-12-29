@@ -367,12 +367,15 @@ export async function designSubscription(
     `Rev Rec Notes: ${input.rev_rec_notes?.substring(0, 100) || 'none'}`,
   ].join('\n');
 
-  const correctionsContext = await getCorrectionsContext({
+  const correctionsResult = await getCorrectionsContext({
     stepName: 'design_subscription',
     inputSummary,
   });
-  if (correctionsContext) {
-    debugLog('Injecting corrections context', { length: correctionsContext.length });
+  if (correctionsResult.count > 0) {
+    debugLog('Injecting corrections context', {
+      count: correctionsResult.count,
+      ids: correctionsResult.appliedCorrectionIds,
+    });
   }
 
   const systemPrompt = await loadPrompt(PROMPTS.DESIGN_SUBSCRIPTION);
@@ -384,7 +387,7 @@ export async function designSubscription(
     contextRpcs,
     pobTemplates,
     docContext,
-    correctionsContext
+    correctionsResult.context
   );
 
   // Include previous results for multi-turn support

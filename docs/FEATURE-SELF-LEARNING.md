@@ -130,16 +130,16 @@ data/
 - [ ] Add embeddings to corrections (semantic search) - Deferred to Phase 5
 - [ ] Full effectiveness tracking (pass correction IDs through pipeline) - Deferred to Phase 5
 
-### Phase 5: Polish & Scale (In Progress)
+### Phase 5: Polish & Scale ✅ (Complete)
 - [x] Implement Postgres backend for corrections (`postgres-backend.ts`)
 - [x] Add embeddings to corrections for semantic search (pgvector with HNSW index)
 - [x] Database schema for corrections and prompt_suggestions tables
-- [ ] Full effectiveness tracking (pass correction IDs through pipeline)
-- [ ] Add criteria for all pipeline steps
-- [ ] Build test suite from golden use cases
-- [ ] Add CI integration option
-- [ ] Performance optimization
-- [ ] Complete documentation
+- [x] Add criteria for all pipeline steps (6 YAML files)
+- [x] Build test suite from golden use cases (15 scenarios)
+- [x] Add CI integration option (`.github/workflows/self-learning.yml`)
+- [x] Full effectiveness tracking (see Effectiveness Tracking section below)
+- [x] Performance optimization (LRU embedding cache, 30min TTL)
+- [x] Complete documentation
 
 ## Evaluation Criteria Format (YAML)
 
@@ -267,6 +267,84 @@ CREATE TABLE prompt_suggestions (
 3. **Semantic Search**: Corrections retrieved by embedding similarity to input (Phase 2)
 4. **Injection Point**: User message augmentation (simplest, most flexible)
 5. **Manual Approval**: Prompt suggestions require human approval by default
+
+## Effectiveness Tracking
+
+The system tracks whether corrections actually help improve outputs. This closes the feedback loop by measuring correction impact.
+
+### How It Works
+
+1. **Run Context**: When a test case starts, a `CorrectionRunContext` is created
+2. **Injection Tracking**: When corrections are injected via `getCorrectionsContext()`, their IDs are recorded in the run context
+3. **Effectiveness Update**: After evaluation, the system updates each applied correction's `success_rate`:
+   - If the step passed → correction "helped" (success rate increases)
+   - If the step failed → correction "did not help" (success rate decreases)
+
+### Code Flow
+
+```typescript
+// 1. Injector returns applied correction IDs
+const result = await getCorrectionsContext({
+  stepName: 'billings',
+  inputSummary: '...',
+});
+// result.appliedCorrectionIds = ['uuid-1', 'uuid-2']
+
+// 2. Run context tracks per-step application
+// runContext.appliedByStep = Map { 'billings' => ['uuid-1', 'uuid-2'] }
+
+// 3. After evaluation, effectiveness is updated
+await updateEffectivenessStats(runContext, stepResults);
+// Calls backend.updateStats(id, applied=false, helped=passed)
+```
+
+### Stats Calculation
+
+The `success_rate` is calculated as:
+```
+success_rate = (times correction helped) / (total times applied)
+```
+
+Over time, corrections with high success rates are preferred by semantic search, while low-performing corrections can be identified for removal.
+
+### API
+
+```typescript
+// Manual effectiveness update (if needed outside evaluation)
+import { markCorrectionEffectiveness } from '@zuca/self-learn';
+await markCorrectionEffectiveness('correction-id', true);  // helped
+await markCorrectionEffectiveness('correction-id', false); // did not help
+```
+
+## Performance Optimizations
+
+### Embedding Cache
+
+The Postgres backend includes an LRU cache for embeddings to reduce OpenAI API calls:
+
+- **Cache Size**: 100 entries (configurable)
+- **TTL**: 30 minutes
+- **Benefit**: Repeated searches with similar queries reuse cached embeddings
+
+```typescript
+import { clearEmbeddingCache } from '@zuca/self-learn/corrections/postgres-backend';
+
+// Clear cache if needed (e.g., during testing)
+clearEmbeddingCache();
+```
+
+### Disabling Embeddings
+
+For faster corrections operations (at the cost of semantic search quality), disable embeddings:
+
+```bash
+# Use keyword-only search (faster, no OpenAI API calls)
+USE_CORRECTIONS_EMBEDDINGS=false
+```
+
+### Connection Pooling
+
+The `@vercel/postgres` library handles connection pooling automatically. The system uses the pooled connection URL (`POSTGRES_URL`) for optimal performance.
 
 ## Success Metrics
 

@@ -134,12 +134,15 @@ export async function buildBillings(
     `Terms: ${input.terms_months} months`,
   ].join('\n');
 
-  const correctionsContext = await getCorrectionsContext({
+  const correctionsResult = await getCorrectionsContext({
     stepName: 'billings',
     inputSummary,
   });
-  if (correctionsContext) {
-    debugLog('Injecting corrections context', { length: correctionsContext.length });
+  if (correctionsResult.count > 0) {
+    debugLog('Injecting corrections context', {
+      count: correctionsResult.count,
+      ids: correctionsResult.appliedCorrectionIds,
+    });
   }
 
   const systemPrompt = await loadPrompt(PROMPTS.BUILD_BILLINGS);
@@ -148,7 +151,7 @@ export async function buildBillings(
     subscriptionSpec,
     contractIntel,
     docContext,
-    correctionsContext
+    correctionsResult.context
   );
 
   // Include previous results for multi-turn support
