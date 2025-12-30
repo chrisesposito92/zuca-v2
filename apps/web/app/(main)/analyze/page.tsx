@@ -958,6 +958,7 @@ export default function AnalyzePage() {
                     onChange={(e) =>
                       setUcInput((prev) => ({ ...prev, customer_website: e.target.value }))
                     }
+                    isRequired
                     labelPlacement="outside"
                     variant="bordered"
                     size="lg"
@@ -1317,7 +1318,7 @@ export default function AnalyzePage() {
                 className="font-semibold"
                 onPress={handleGenerateUseCases}
                 isLoading={ucGeneratorMutation.isPending}
-                isDisabled={!ucInput.customer_name || transcriptsLoading}
+                isDisabled={!ucInput.customer_name || !ucInput.customer_website || transcriptsLoading}
               >
                 Generate
               </Button>
