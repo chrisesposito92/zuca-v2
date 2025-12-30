@@ -1,0 +1,570 @@
+name: "telecom"
+description: "Generated from UC outputs - 2025-12-30"
+version: "1.0"
+tests:
+  - id: "gen-at-t-1"
+    name: "AT&T - Consumer Wireless with Device Installment"
+    description: "Consumer Wireless with Device Installment"
+    input:
+      customer_name: "AT&T"
+      contract_start_date: "02/01/2026"
+      terms_months: 36
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Wireless service represents a stand-ready obligation recognized monthly as the service is provided.); Hardware: POB=point_in_time release=at_delivery (Revenue for the handset is recognized when control transfers to the customer, despite the 36-month payment term.)"
+      use_case_description: "A consumer subscribes to the 'Unlimited Premium PL' wireless plan for $85.99 per month. Along with the service, they purchase a high-end smartphone for $799.99, which is financed through a 36-month interest-free installment plan at $22.22 per month. The wireless service is a recurring monthly charge billed in advance. Although the hardware is paid monthly, the full revenue for the device is recognized upfront at the point of delivery, while the service revenue is recognized ratably each month. This scenario demonstrates Zuora's ability to handle recurring service billing alongside hardware installment plans with divergent revenue recognition patterns."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "recurring"
+      - "allocation"
+      - "multi-year"
+  - id: "gen-at-t-2"
+    name: "AT&T - Fiber Internet with Promotional Ramp and Installation"
+    description: "Fiber Internet with Promotional Ramp and Installation"
+    input:
+      customer_name: "AT&T"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      allocation_method: null
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Fiber internet service is recognized monthly over the service period.); Services: POB=point_in_time release=as_billed (Installation fee is recognized at the point of service completion, typically aligned with the first invoice.)"
+      use_case_description: "A residential customer signs up for 'AT&T Fiber 1 GIG' internet. The contract features a promotional ramp: the first 12 months are billed at a discounted rate of $60.00 per month, after which the price increases to the standard $80.00 per month. Additionally, a one-time 'Professional Installation' fee of $99.00 is charged on the initial invoice. The fiber service is billed monthly in advance and recognized ratably. The installation fee is a non-refundable one-time charge recognized upon completion of the technician visit. This use case highlights promotional pricing transitions and one-time service fee handling."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "ramp"
+      - "discount"
+      - "one-time"
+  - id: "gen-at-t-3"
+    name: "AT&T - Small Business Fiber and Voice Bundle Allocation"
+    description: "Small Business Fiber and Voice Bundle Allocation"
+    input:
+      customer_name: "AT&T"
+      contract_start_date: "02/01/2026"
+      terms_months: 24
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Both Fiber and Phone services are ratable over-time obligations; revenue is allocated based on SSP.)"
+      use_case_description: "A small business customer purchases the 'Business Fiber 1 Gig + Phone' bundle for a total price of $175.00 per month. This bundle consists of two distinct services: Business Fiber (Standalone List Price: $160.00) and Business Phone Service (Standalone List Price: $40.00). Because the total transaction price of $175.00 is a discount compared to the $200.00 sum of the standalone prices, revenue must be allocated across both performance obligations based on their relative list prices. Both services are recurring and recognized ratably over each monthly billing cycle. This scenario exercises Zuora Revenue's allocation engine for multi-product bundles."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "recurring"
+      - "allocation"
+      - "multi-year"
+  - id: "gen-ring-4"
+    name: "Ring - Starter Home Security Bundle"
+    description: "Starter Home Security Bundle"
+    input:
+      customer_name: "Ring"
+      contract_start_date: "01/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      allocation_method: null
+      rev_rec_notes: "Hardware: POB=point_in_time release=at_delivery (Hardware revenue for the doorbell is recognized when the device is delivered to the customer.); Subscription: POB=over_time release=ratable_over_term (Ring Home Basic is a SaaS subscription recognized ratably over the monthly billing cycle.)"
+      use_case_description: "A residential customer purchases a single Ring Video Doorbell for $159.99 and subscribes to the Ring Home Basic plan at $4.99 per month. The hardware is a one-time charge billed immediately upon the order date. The subscription is a recurring monthly charge that provides 180 days of video history for the single device. Revenue for the hardware should be recognized point-in-time upon delivery. Subscription revenue is recognized ratably over each monthly service period. This represents a typical entry-level consumer acquisition with a 12-month commitment."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "one-time"
+      - "recurring"
+  - id: "gen-ring-5"
+    name: "Ring - Full Professional Protection (Annual Bundle)"
+    description: "Full Professional Protection (Annual Bundle)"
+    input:
+      customer_name: "Ring"
+      contract_start_date: "01/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Hardware: POB=point_in_time release=at_delivery (Revenue for the Alarm Kit is recognized at delivery, subject to allocation of the bundle discount.); Subscription: POB=over_time release=ratable_over_term (Ring Home Standard annual fee is recognized ratably over the 12-month term.); Services: POB=over_time release=ratable_over_term (Professional Monitoring is a stand-ready service recognized ratably over the 12-month term.)"
+      use_case_description: "A homeowner opts for a comprehensive security setup including a Ring Alarm Security Kit for $199.99, a Ring Home Standard annual subscription for $99.99, and Professional Monitoring for $120.00 per year. The customer receives a $50 bundle discount applied to the total contract value. This scenario requires allocation of the discounted transaction price across the three performance obligations: the hardware kit, the standard SaaS plan, and the monitoring service. The hardware is recognized point-in-time, while the subscription and monitoring services are recognized ratably over the 12-month annual term. Billing occurs upfront for the full annual amount."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "license"
+      - "allocation"
+  - id: "gen-ring-6"
+    name: "Ring - Premium Multi-Cam & AI Monitoring"
+    description: "Premium Multi-Cam & AI Monitoring"
+    input:
+      customer_name: "Ring"
+      contract_start_date: "01/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      allocation_method: null
+      rev_rec_notes: "Hardware: POB=point_in_time release=at_delivery (One-time hardware charge for the 4K multi-pack recognized at delivery.); Subscription: POB=over_time release=ratable_over_term (Premium plan recognized ratably; includes 24/7 recording and AI features.); Services: POB=over_time release=ratable_over_term (Monthly monitoring service recognized ratably over the service month.)"
+      use_case_description: "A high-end user purchases a 4K Camera Multi-pack for $349.99 and signs up for the Ring Home Premium plan at $19.99 per month to enable 24/7 continuous recording. Additionally, they add Professional Monitoring as a monthly add-on for $10.00. All items are billed monthly except for the one-time hardware purchase. The contract term is 12 months. Revenue for the hardware is recognized at the point of delivery. Revenue for the Premium SaaS plan (which includes advanced AI features) and the Monitoring service is recognized ratably as the services are provided each month. This represents a high-ARPU residential account."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "one-time"
+      - "license"
+  - id: "gen-samsara-7"
+    name: "Samsara - Standard Connected Fleet Subscription"
+    description: "Standard Connected Fleet Subscription"
+    input:
+      customer_name: "Samsara"
+      contract_start_date: "02/01/2026"
+      terms_months: 36
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Hardware: POB=point_in_time release=at_delivery (Hardware control transfers at shipping (FOB origin) per standard TOS.); Subscription: POB=over_time release=ratable_over_term (SaaS license providing continuous access to the cloud platform over the 36-month term.)"
+      use_case_description: "A logistics company, Blue Trucking, is purchasing a 36-month subscription for their fleet of 50 vehicles. The deal includes 50 Vehicle Gateway (VG-Series) hardware units at a discounted price of $99 each, and 50 Connected Operations Software Licenses priced at $360 per vehicle per year. The hardware is billed upfront as a one-time charge, while the software licenses are billed annually in advance. Revenue for the hardware is recognized at the time of shipment, whereas the software subscription revenue is recognized ratably over the 3-year term. This represents a foundational fleet telematics scenario with a mix of hardware and recurring SaaS."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "license"
+      - "allocation"
+      - "multi-year"
+  - id: "gen-samsara-8"
+    name: "Samsara - Video-Based Safety with Implementation Services"
+    description: "Video-Based Safety with Implementation Services"
+    input:
+      customer_name: "Samsara"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      allocation_method: "Use Sell Price"
+      rev_rec_notes: "Hardware: POB=point_in_time release=at_delivery (AI Dash Cam hardware recognized upon transfer of control.); Services: POB=point_in_time release=at_go_live (Implementation services recognized upon successful project completion.); Subscription: POB=over_time release=ratable_over_term (Safety software license revenue recognized monthly over the contract year.)"
+      use_case_description: "SafeRoute Transit is deploying an AI-enhanced safety solution for 20 vehicles. This package includes 20 AI Dash Cams (CM-Series) at $300 each (one-time) and 20 Safety Software Licenses at $660 per unit per year. Additionally, a one-time Professional Services fee of $2,500 is charged for remote implementation and driver coaching setup. The hardware and services are billed upfront, while the software is billed annually. Revenue for the cameras is recognized at delivery, the services at completion (go-live), and the software ratably over the 12-month term. This scenario tests the allocation of discounts across hardware, services, and software POBs."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "license"
+      - "allocation"
+  - id: "gen-samsara-9"
+    name: "Samsara - Fleet Expansion with WiFi Usage Add-on"
+    description: "Fleet Expansion with WiFi Usage Add-on"
+    input:
+      customer_name: "Samsara"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      allocation_method: null
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Standard software license recognized over the 12-month expansion term.); Usage: POB=consumption release=as_used (WiFi data plans can be recognized based on data consumption or ratably if provided as a fixed allowance.); Hardware: POB=point_in_time release=at_delivery (Gateway hardware recognized at shipment.)"
+      use_case_description: "An existing customer, Metro Utilities, is expanding their fleet by 10 vehicles and adding WiFi Hotspot capabilities. They are purchasing 10 Vehicle Gateways ($148 each, one-time) and 10 Connected Operations Software Licenses ($360/year). Furthermore, they are adding a 1GB/month WiFi Hotspot Data Plan for each vehicle at $120 per year. The software and data plans are billed monthly to align with their internal budget cycles. While the software is recognized ratably, the WiFi data plan is treated as a consumption-based POB, recognized as data is used or monthly as the service is made available. This use case highlights mid-market expansion and usage-based add-ons."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "one-time"
+      - "license"
+  - id: "gen-charter-spectrum-10"
+    name: "Charter Spectrum - Spectrum One Converged Bundle"
+    description: "Spectrum One Converged Bundle"
+    input:
+      customer_name: "Charter Spectrum"
+      contract_start_date: "01/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Internet and Mobile services represent a stand-ready obligation recognized monthly.); Hardware: POB=over_time release=ratable_over_term (WiFi router rental is a monthly recurring service charge recognized over the month of use.); Onboarding: POB=point_in_time release=at_go_live (Installation fee recognized once the technician completes the setup and service is active.)"
+      use_case_description: "A residential customer signs up for the Spectrum One bundle which converges Internet, WiFi, and Mobile services. The package includes Spectrum Internet Premier at a promotional rate of $50.00 per month, Advanced WiFi Service (regularly $10.00/month), and one Spectrum Mobile Unlimited line (regularly $30.00/month). To achieve the promotional 'Spectrum One' price, the WiFi and Mobile charges are discounted by 100% for the first 12 months. A one-time Professional Installation fee of $59.99 is charged upfront. Revenue for the internet and mobile services is recognized ratably over the monthly service period, while the installation fee is recognized at the point of service activation."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "allocation"
+  - id: "gen-charter-spectrum-11"
+    name: "Charter Spectrum - Small Business Internet & Voice"
+    description: "Small Business Internet & Voice"
+    input:
+      customer_name: "Charter Spectrum"
+      contract_start_date: "01/01/2026"
+      terms_months: 24
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      allocation_method: null
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Business Internet and Voice are recurring services recognized over the 24-month term.); Onboarding: POB=point_in_time release=at_go_live (Professional installation fee is recognized at the point of technician sign-off.)"
+      use_case_description: "A small business customer signs a 24-month agreement for Business Internet Premier and Business Voice services. The Business Internet is priced at $64.99 per month and the Voice line is $29.99 per month. This contract includes a 24-month price guarantee, protecting the customer from standard rate increases. A one-time Business Professional Installation fee of $99.00 is applied to the first invoice. Monthly recurring charges are billed in advance, and revenue is recognized ratably over each service month. The installation is treated as a separate performance obligation satisfied at the start of the contract."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "one-time"
+      - "recurring"
+      - "multi-year"
+  - id: "gen-charter-spectrum-12"
+    name: "Charter Spectrum - Residential Triple Play with TV Select"
+    description: "Residential Triple Play with TV Select"
+    input:
+      customer_name: "Charter Spectrum"
+      contract_start_date: "01/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      allocation_method: null
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Internet and TV subscriptions are recognized ratably as the service is available to the customer.); Hardware: POB=over_time release=ratable_over_term (WiFi router rental is recognized monthly; treated as a service-like POB.); Onboarding: POB=point_in_time release=at_go_live (Installation fee recognized at the time of initial setup.)"
+      use_case_description: "This scenario covers a high-tier residential customer subscribing to a 'Triple Play' of Internet Premier ($50.00/mo), TV Select Signature ($95.00/mo), and a Mobile Unlimited line ($30.00/mo). The TV service includes a base set of 150+ channels. The customer also pays a $10.00 monthly rental fee for Advanced WiFi hardware. A $59.99 installation fee is charged at the outset. While Spectrum typically operates on a month-to-month basis, this use case is modeled as a 12-month term to demonstrate the total contract value and ratable revenue recognition for the recurring service components."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "recurring"
+  - id: "gen-t-mobile-us-inc-13"
+    name: "T-Mobile US, Inc. - Consumer Experience Beyond Bundle"
+    description: "Consumer Experience Beyond Bundle"
+    input:
+      customer_name: "T-Mobile"
+      contract_start_date: "01/01/2026"
+      terms_months: 24
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Monthly wireless service is a stand-ready obligation recognized ratably.); Hardware: POB=point_in_time release=at_delivery (Revenue for the handset is recognized upfront when control transfers to the customer.); Other: POB=point_in_time release=as_billed (Connection charge is recognized at the time of the activation service.)"
+      use_case_description: "A consumer signs up for the 'Experience Beyond' premium wireless plan at $95/month. They purchase a high-end smartphone for $1,200, financed via an Equipment Installment Plan (EIP) over 24 months at $50/month. A one-time 'Device Connection Charge' of $35 is applied at the time of activation. The wireless service is a recurring monthly charge recognized ratably over the service month. The hardware revenue for the phone is recognized at the point of delivery, even though payments are collected over 24 months. The connection charge is recognized as a point-in-time event upon activation."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "one-time"
+      - "recurring"
+      - "allocation"
+      - "multi-year"
+  - id: "gen-t-mobile-us-inc-14"
+    name: "T-Mobile US, Inc. - 5G Home Internet Plus Bundle"
+    description: "5G Home Internet Plus Bundle"
+    input:
+      customer_name: "T-Mobile"
+      contract_start_date: "01/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      allocation_method: null
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Internet service is recognized monthly as the service is provided.)"
+      use_case_description: "A residential customer adds '5G Home Internet Plus' to their account. The standard rate is $50/month, but they receive a $15/month 'Voice Link Discount' for having a qualifying wireless line, resulting in a net monthly fee of $35. The plan includes a 5G Gateway device provided at no additional cost. The service is billed monthly in advance. Revenue is recognized ratably over each monthly service period. No long-term contract is required, but for this demo, we will model a 12-month commitment to show the recurring revenue impact."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "recurring"
+  - id: "gen-t-mobile-us-inc-15"
+    name: "T-Mobile US, Inc. - Enterprise Unlimited Volume Deal"
+    description: "Enterprise Unlimited Volume Deal"
+    input:
+      customer_name: "T-Mobile"
+      contract_start_date: "01/01/2026"
+      terms_months: 36
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      allocation_method: null
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Enterprise wireless lines are recognized ratably over the contract term.); Services: POB=over_time release=ratable_over_term (Security add-on is a stand-ready SaaS obligation recognized ratably.)"
+      use_case_description: "An enterprise customer signs a 36-month agreement for 500 lines of 'Enterprise Unlimited' service. The volume-tiered pricing sets the rate at $25 per line per month. The package also includes 'Threat Protect Security' as a mandatory add-on at $5 per line per month. The total monthly recurring revenue (MRR) is $15,000. Billing is consolidated into a single monthly invoice for all 500 lines. Revenue for both the wireless service and the security add-on is recognized ratably over the 36-month contract term."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "recurring"
+      - "multi-year"
+  - id: "gen-verizon-16"
+    name: "Verizon - Consumer myPlan with Device Financing"
+    description: "Consumer myPlan with Device Financing"
+    input:
+      customer_name: "Verizon"
+      contract_start_date: "02/01/2026"
+      terms_months: 36
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Monthly wireless service and perks are recognized as the service is provided.); Hardware: POB=point_in_time release=at_delivery (Total device value is recognized upfront regardless of the 36-month payment schedule.); Other: POB=point_in_time release=at_go_live (Activation fees are typically recognized when the line is first energized.)"
+      use_case_description: "A consumer customer signs up for the 'Unlimited Plus myPlan' at a base price of $80.00 per month for a single line. They add a 'Disney Bundle Perk' as a recurring add-on for $10.00 per month. To complete the bundle, they finance a new smartphone at $27.77 per month on a 36-month installment plan at 0% APR. A one-time 'Activation Fee' of $35.00 is charged upfront. The subscription services are recognized ratably over the monthly billing period, while the hardware revenue is recognized upfront at the point of delivery. The activation fee is recognized at the time of service go-live."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "one-time"
+      - "recurring"
+      - "allocation"
+      - "multi-year"
+  - id: "gen-verizon-17"
+    name: "Verizon - SMB Business Unlimited Tiered Expansion"
+    description: "SMB Business Unlimited Tiered Expansion"
+    input:
+      customer_name: "Verizon"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      allocation_method: null
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Both the tiered wireless plan and the security add-on are ratable services.)"
+      use_case_description: "A small business customer purchases 'Business Unlimited Pro 2.0' for 10 mobile lines. The pricing follows a volume-tiered model: the first 4 lines are priced at $45.00 per line, and lines 5 through 10 are priced at $35.00 per line. Additionally, the customer opts for a 'Business Security Add-on' at $5.00 per line across all 10 lines. The contract term is 12 months with monthly billing. Revenue for all components is recognized ratably over the 12-month term as the service is delivered. This scenario tests Zuora's ability to handle tiered pricing models within a single rate plan."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+  - id: "gen-verizon-18"
+    name: "Verizon - Fios + Mobile Convergence Bundle"
+    description: "Fios + Mobile Convergence Bundle"
+    input:
+      customer_name: "Verizon"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      allocation_method: "Use Sell Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Fios and Mobile services are separate POBs but both recognized ratably.); Other: POB=point_in_time release=at_go_live (The setup fee is a point-in-time event, even if waived by a credit.)"
+      use_case_description: "An existing 'Fios Fiber Internet' customer on the 1 Gig plan ($89.99/mo) adds two lines of 'Unlimited Welcome' mobile service ($65.00/line). By bundling these services, the customer qualifies for a $20.00 'Mobile + Home' monthly discount. A one-time 'Fios Setup Fee' of $99.00 is applied but then waived via a promotional credit. The internet and mobile services are recognized ratably, while the setup fee (if it were net-positive) would be point-in-time. This scenario exercises multi-product discounting and revenue allocation between distinct service categories (Fixed-line vs. Wireless)."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "credits"
+      - "allocation"
+  - id: "gen-vodafone-19"
+    name: "Vodafone - Vodafone EVO Mobile Bundle"
+    description: "Vodafone EVO Mobile Bundle"
+    input:
+      customer_name: "Vodafone"
+      contract_start_date: "01/01/2026"
+      terms_months: 36
+      transaction_currency: "other"
+      billing_period: "Monthly"
+      is_allocations: true
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Hardware: POB=point_in_time release=at_delivery (Hardware revenue for the handset is recognized upfront upon transfer of control to the customer.); Subscription: POB=over_time release=ratable_over_term (Airtime services are a stand-ready obligation recognized monthly over the contract life.)"
+      use_case_description: "The Vodafone EVO bundle combines a Mobile Device Plan (Hardware) with an Unlimited Max Airtime Plan (SaaS). The device is priced at £25.00 per month over 36 months, while the airtime service is £30.00 per month. Under IFRS 15/ASC 606, the hardware revenue must be recognized point-in-time at delivery, whereas the airtime is recognized ratably over the service term. This scenario requires allocating the total contract value across the hardware and service performance obligations. The billing for both components occurs monthly, but the revenue triggers differ significantly."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "license"
+      - "allocation"
+      - "multi-year"
+  - id: "gen-vodafone-20"
+    name: "Vodafone - Pro II Broadband with Security Trial"
+    description: "Pro II Broadband with Security Trial"
+    input:
+      customer_name: "Vodafone"
+      contract_start_date: "01/01/2026"
+      terms_months: 24
+      transaction_currency: "other"
+      billing_period: "Monthly"
+      is_allocations: true
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Broadband and security fees are recognized ratably; the trial period results in lower revenue recognition for the first 3 months.); Hardware: POB=point_in_time release=at_delivery (Even if provided at £0, the WiFi booster may require a value allocation as a separate POB.)"
+      use_case_description: "This scenario covers the Pro II Full Fibre Xtra plan, featuring 910Mbps broadband at £45.00/month and Secure Net Security at £1.00/month. A 3-month promotional trial is applied to the Secure Net service, reducing the rate to £0.00 for the initial period. The contract includes a WiFi Booster (Hardware) provided at no additional cost as part of the bundle. A scheduled price increase of £3.50/month is set to apply to the broadband charge starting in April 2026. This use case tests promotional discounts, multi-product bundling, and scheduled price escalations."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "ramp"
+      - "bundle"
+      - "discount"
+      - "allocation"
+      - "multi-year"
+  - id: "gen-vodafone-21"
+    name: "Vodafone - Enterprise IoT Managed Fleet"
+    description: "Enterprise IoT Managed Fleet"
+    input:
+      customer_name: "Vodafone"
+      contract_start_date: "01/01/2026"
+      terms_months: 12
+      transaction_currency: "other"
+      billing_period: "Monthly"
+      is_allocations: false
+      allocation_method: null
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (The £1.50 per SIM platform fee is recognized monthly as the management service is provided.); Usage: POB=consumption release=as_used (Data overage revenue is recognized in the period the data is actually consumed by the IoT devices.)"
+      use_case_description: "This enterprise use case involves the Managed IoT Connectivity Platform for a fleet of 5,000 smart assets. The pricing model includes a recurring platform access fee of £1.50 per SIM per month (£7,500 total recurring). Additionally, usage-based charges are applied at £0.10 per MB for any data consumed beyond the 500GB pooled monthly allowance. Revenue for the platform fee is recognized ratably each month, while the usage overage is recognized as consumption occurs. This scenario demonstrates high-volume SIM management and complex pooled usage billing."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+      - "license"
+  - id: "gen-comcast-xfinity-22"
+    name: "Comcast Xfinity - Triple Play Bundle with Equipment Rental"
+    description: "Triple Play Bundle with Equipment Rental"
+    input:
+      customer_name: "Comcast Xfinity"
+      contract_start_date: "01/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Internet and TV services are delivered continuously over the subscription period.); Hardware: POB=over_time release=ratable_over_term (Gateway rental is a recurring service charge for equipment access, recognized monthly.); Services: POB=point_in_time release=at_go_live (Professional installation is a one-time service completed at the start of the contract.)"
+      use_case_description: "A residential customer signs up for the 'Connect More + Popular TV' bundle which includes Gigabit Extra Internet at $70/month and Popular TV service. The bundle includes a xFi Gateway Rental for $15/month. A one-time professional installation fee of $100 is charged at the start. The customer receives a $20 monthly multi-product discount for the first 12 months. Revenue for the internet, TV, and gateway rental is recognized ratably over each month, while the installation fee is recognized at the point of activation."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "allocation"
+  - id: "gen-comcast-xfinity-23"
+    name: "Comcast Xfinity - Xfinity Mobile with Usage-Based Overage"
+    description: "Xfinity Mobile with Usage-Based Overage"
+    input:
+      customer_name: "Comcast Xfinity"
+      contract_start_date: "01/01/2026"
+      terms_months: 1
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      allocation_method: null
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Mobile line monthly recurring charges.); Usage: POB=consumption release=as_billed (Data overage charges are recognized as the usage occurs and is invoiced.); Services: POB=point_in_time release=at_go_live (One-time mobile activation fees.)"
+      use_case_description: "An existing internet customer adds two lines of Xfinity Mobile Unlimited at $45 per line per month. The plan includes a 1.2 TB data cap on the home internet side, with usage overages billed at $10 per 50 GB block if exceeded. A $25 one-time activation fee is charged per mobile line. Mobile subscription fees are recognized ratably, while data overages are recognized in the month they are incurred as consumption-based revenue."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "one-time"
+      - "recurring"
+  - id: "gen-comcast-xfinity-24"
+    name: "Comcast Xfinity - Home Security with Hardware Financing"
+    description: "Home Security with Hardware Financing"
+    input:
+      customer_name: "Comcast Xfinity"
+      contract_start_date: "01/01/2026"
+      terms_months: 24
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      allocation_method: "Use Sell Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Professional monitoring service provided over the 24-month term.); Hardware: POB=point_in_time release=at_delivery (Financed hardware is a distinct POB recognized upfront at installation despite monthly billing.)"
+      use_case_description: "A customer purchases the 'Home Security Pro Protection Plus' plan. The service fee is $50/month for professional monitoring. Additionally, the customer finances a $360 hardware kit over 24 months at $15/month (0% APR). Under ASC 606, the hardware is treated as a distinct performance obligation and the full $360 value is recognized at the time of installation/delivery, while the $50 monitoring fee is recognized ratably over the 24-month service term."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "allocation"
+      - "multi-year"
