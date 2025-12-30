@@ -55,7 +55,7 @@ Automated feedback loop where the pipeline learns from evaluation failures:
 - **LLM Judge** (`src/self-learn/judge/`) - Evaluates outputs against criteria
 - **Corrections Store** - Dual backend: JSON (local dev) or Postgres (production)
 - **Injector** (`src/self-learn/injector/`) - Injects corrections as few-shot examples
-- **Evolution** (`src/self-learn/evolution/`) - Pattern analysis + prompt improvement suggestions
+- **Evolution** (`src/self-learn/evolution/`) - Pattern analysis + prompt improvement suggestions (dual backend: JSON/Postgres)
 
 ### Key Files
 - `src/self-learn/` - Main module: types, corrections, criteria, judge, evaluation, injector, evolution
@@ -66,8 +66,11 @@ Automated feedback loop where the pipeline learns from evaluation failures:
 
 ### Configuration
 ```bash
-# Enable Postgres backend (requires POSTGRES_URL)
+# Enable Postgres backend for corrections (requires POSTGRES_URL)
 USE_POSTGRES_CORRECTIONS=true
+
+# Enable Postgres backend for prompt suggestions (requires POSTGRES_URL)
+USE_POSTGRES_SUGGESTIONS=true
 
 # Disable embeddings for corrections (faster, keyword-only search)
 USE_CORRECTIONS_EMBEDDINGS=false

@@ -4,17 +4,68 @@
  * Analyzes correction patterns and generates prompt improvement suggestions.
  * When the same types of errors occur repeatedly, this module suggests
  * permanent prompt updates to prevent future failures.
+ *
+ * Uses dual-backend pattern: JSON for local dev, Postgres for production.
+ * Set USE_POSTGRES_SUGGESTIONS=true (with POSTGRES_URL) for Postgres.
  */
 
-import { v4 as uuidv4 } from 'uuid';
 import { complete } from '../../llm/client';
 import { loadPrompt, PROMPTS } from '../../llm/prompts';
 import { debugLog } from '../../config';
 import { getCorrectionsForStep, getPatternStats, getAllCorrections } from '../corrections';
-import type { Correction, PromptSuggestion, PromptSuggestionStatus } from '../types';
+import type { Correction } from '../types';
 
-// In-memory store for prompt suggestions (Phase 4 - later move to Postgres)
-const suggestionsStore: Map<string, PromptSuggestion> = new Map();
+// Backend imports
+import { SuggestionsJsonBackend } from './suggestions-json-backend';
+import { SuggestionsPostgresBackend } from './suggestions-postgres-backend';
+import type {
+  SuggestionsBackend,
+  PromptSuggestion,
+  PromptSuggestionStatus,
+} from './suggestions-types';
+
+// Re-export types for convenience
+export type { PromptSuggestion, PromptSuggestionStatus } from './suggestions-types';
+
+// =============================================================================
+// Dual Backend Setup
+// =============================================================================
+
+/**
+ * Check if we should use Postgres backend
+ * Requires both POSTGRES_URL and USE_POSTGRES_SUGGESTIONS=true
+ */
+function usePostgres(): boolean {
+  return !!process.env.POSTGRES_URL && process.env.USE_POSTGRES_SUGGESTIONS === 'true';
+}
+
+/**
+ * Singleton backend instance
+ */
+let backend: SuggestionsBackend | null = null;
+
+/**
+ * Get the suggestions backend (creates singleton on first call)
+ */
+export function getSuggestionsBackend(): SuggestionsBackend {
+  if (!backend) {
+    if (usePostgres()) {
+      debugLog('Using Postgres suggestions backend');
+      backend = new SuggestionsPostgresBackend();
+    } else {
+      debugLog('Using JSON suggestions backend');
+      backend = new SuggestionsJsonBackend();
+    }
+  }
+  return backend;
+}
+
+/**
+ * Reset the backend (useful for testing)
+ */
+export function resetSuggestionsBackend(): void {
+  backend = null;
+}
 
 /**
  * Pattern analysis result
@@ -227,20 +278,13 @@ Based on these recurring failures, suggest a specific improvement to the prompt 
     return null;
   }
 
-  // Create the suggestion
-  const suggestion: PromptSuggestion = {
-    id: uuidv4(),
+  // Create and store the suggestion using the backend
+  const suggestion = await getSuggestionsBackend().insert({
     step_name: stepName,
     pattern,
     occurrence_count: matchingCorrections.length,
     suggested_update: `## Placement: ${result.structured.placement}\n\n${result.structured.suggested_update}\n\n## Rationale\n${result.structured.rationale}`,
-    status: 'pending',
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-  };
-
-  // Store the suggestion
-  suggestionsStore.set(suggestion.id, suggestion);
+  });
 
   debugLog(`Generated suggestion: ${suggestion.id}`);
   return suggestion;
@@ -249,65 +293,59 @@ Based on these recurring failures, suggest a specific improvement to the prompt 
 /**
  * Get all pending prompt suggestions
  */
-export function getPendingSuggestions(): PromptSuggestion[] {
-  return Array.from(suggestionsStore.values()).filter((s) => s.status === 'pending');
+export async function getPendingSuggestions(): Promise<PromptSuggestion[]> {
+  return getSuggestionsBackend().getByStatus('pending');
+}
+
+/**
+ * Get all suggestions
+ */
+export async function getAllSuggestions(): Promise<PromptSuggestion[]> {
+  return getSuggestionsBackend().getAll();
 }
 
 /**
  * Get all suggestions for a step
  */
-export function getSuggestionsForStep(stepName: string): PromptSuggestion[] {
-  return Array.from(suggestionsStore.values()).filter((s) => s.step_name === stepName);
+export async function getSuggestionsForStep(stepName: string): Promise<PromptSuggestion[]> {
+  return getSuggestionsBackend().getByStep(stepName);
 }
 
 /**
  * Get a suggestion by ID
  */
-export function getSuggestion(id: string): PromptSuggestion | undefined {
-  return suggestionsStore.get(id);
+export async function getSuggestion(id: string): Promise<PromptSuggestion | null> {
+  return getSuggestionsBackend().getById(id);
 }
 
 /**
  * Update suggestion status
  */
-export function updateSuggestionStatus(
+export async function updateSuggestionStatus(
   id: string,
   status: PromptSuggestionStatus
-): PromptSuggestion | null {
-  const suggestion = suggestionsStore.get(id);
-  if (!suggestion) {
-    return null;
-  }
-
-  suggestion.status = status;
-  suggestion.updated_at = new Date().toISOString();
-
-  if (status === 'applied') {
-    suggestion.applied_at = new Date().toISOString();
-  }
-
-  suggestionsStore.set(id, suggestion);
-  return suggestion;
+): Promise<PromptSuggestion | null> {
+  return getSuggestionsBackend().updateStatus(id, status);
 }
 
 /**
  * Approve a prompt suggestion
  */
-export function approveSuggestion(id: string): PromptSuggestion | null {
+export async function approveSuggestion(id: string): Promise<PromptSuggestion | null> {
   return updateSuggestionStatus(id, 'approved');
 }
 
 /**
  * Reject a prompt suggestion
  */
-export function rejectSuggestion(id: string): PromptSuggestion | null {
+export async function rejectSuggestion(id: string): Promise<PromptSuggestion | null> {
   return updateSuggestionStatus(id, 'rejected');
 }
 
 /**
  * Mark a suggestion as applied
  */
-export function markSuggestionApplied(id: string): PromptSuggestion | null {
+export async function markSuggestionApplied(id: string): Promise<PromptSuggestion | null> {
   return updateSuggestionStatus(id, 'applied');
 }
 

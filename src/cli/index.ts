@@ -907,7 +907,7 @@ async function promptsListCommand(): Promise<void> {
   try {
     console.log(chalk.cyan.bold('\n═══ Pending Prompt Suggestions ═══\n'));
 
-    const suggestions = getPendingSuggestions();
+    const suggestions = await getPendingSuggestions();
 
     if (suggestions.length === 0) {
       console.log(chalk.yellow('No pending suggestions.'));
@@ -937,7 +937,7 @@ async function promptsListCommand(): Promise<void> {
  */
 async function promptsApproveCommand(id: string): Promise<void> {
   try {
-    const suggestion = approveSuggestion(id);
+    const suggestion = await approveSuggestion(id);
 
     if (!suggestion) {
       console.log(chalk.red(`Suggestion not found: ${id}`));
@@ -966,7 +966,7 @@ async function promptsApproveCommand(id: string): Promise<void> {
  */
 async function promptsRejectCommand(id: string): Promise<void> {
   try {
-    const suggestion = rejectSuggestion(id);
+    const suggestion = await rejectSuggestion(id);
 
     if (!suggestion) {
       console.log(chalk.red(`Suggestion not found: ${id}`));
