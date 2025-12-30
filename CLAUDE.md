@@ -81,6 +81,7 @@ USE_CORRECTIONS_EMBEDDINGS=false
 # Evaluation
 npm run cli evaluate              # Run evaluation suite
 npm run cli evaluate --corrections # Generate corrections for failures
+npm run cli evaluate --capture-training  # Capture passing outputs as training data
 npm run cli evaluate -m gemini-3-flash-preview  # Use specific model
 
 # Corrections Management
@@ -113,8 +114,10 @@ The self-learning system can export training data for fine-tuning small language
 - `data/training-data.json` - Stored training examples
 
 **Workflow:**
-1. Run evaluations to generate corrections with `example_fix`
-2. Sync corrections to training data: `npm run cli training sync`
+1. Run evaluations with training capture: `npm run cli evaluate --suite golden-scenarios --capture-training`
+   - Passing outputs are automatically saved as training examples
+2. Optionally sync corrections: `npm run cli training sync`
+   - Corrections with `example_fix` become additional training examples
 3. Export for fine-tuning: `npm run cli training export ./output.jsonl`
 
 **Output Format (JSONL):**

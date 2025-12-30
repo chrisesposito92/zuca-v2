@@ -547,6 +547,7 @@ async function evaluateCommand(options: {
   model?: string;
   step?: string;
   corrections?: boolean;
+  captureTraining?: boolean;
 }): Promise<void> {
   try {
     console.log(chalk.cyan.bold('\n═══ Self-Learning Evaluation ═══\n'));
@@ -634,6 +635,7 @@ tests:
       model,
       steps: options.step ? [options.step] : undefined,
       generateCorrections: options.corrections ?? false,
+      captureTraining: options.captureTraining ?? false,
       onProgress: (current, total, testId) => {
         console.log(chalk.gray(`  [${current}/${total}] ${testId}`));
       },
@@ -648,6 +650,9 @@ tests:
     console.log(`Failed: ${result.failed > 0 ? chalk.red(result.failed.toString()) : chalk.green('0')}`);
     if (options.corrections) {
       console.log(`Corrections Generated: ${chalk.yellow(result.correctionsGenerated.toString())}`);
+    }
+    if (options.captureTraining && result.trainingExamplesCaptured) {
+      console.log(`Training Examples Captured: ${chalk.green(result.trainingExamplesCaptured.toString())}`);
     }
     console.log('');
 
@@ -811,6 +816,7 @@ program
   .option('-m, --model <model>', 'LLM model for evaluation')
   .option('--step <step>', 'Only evaluate specific step')
   .option('--corrections', 'Generate corrections for failures')
+  .option('--capture-training', 'Capture successful outputs as training data')
   .action(evaluateCommand);
 
 // Corrections subcommand group

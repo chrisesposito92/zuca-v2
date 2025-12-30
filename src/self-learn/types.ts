@@ -243,6 +243,7 @@ export const EvaluationRunResultSchema = z.object({
   passed: z.number(),
   failed: z.number(),
   correctionsGenerated: z.number(),
+  trainingExamplesCaptured: z.number().optional(),
   failures: z.array(EvaluationFailureSchema),
   model: z.string().optional(),
   effectivenessSummary: EffectivenessSummarySchema.optional(),
