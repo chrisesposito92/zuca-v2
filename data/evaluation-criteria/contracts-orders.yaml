@@ -42,15 +42,15 @@ criteria:
         Revenue dates should NOT span across different pricing periods.
 
   - id: CO-003
-    name: extended-amount-calculation
-    description: Extended amounts must be mathematically correct
+    name: extended-price-calculation
+    description: Extended prices must be mathematically correct
     severity: critical
-    patterns: [extended amount, calculation, total]
+    patterns: [extended price, Ext Sell Price, Ext List Price, calculation]
     check:
       type: numeric
       rule: |
-        Extended Sell Amount = Unit Sell Price × Quantity × Periods
-        Extended List Amount = Unit List Price × Quantity × Periods
+        Ext Sell Price = Unit Sell Price × Ordered Qty
+        Ext List Price = Unit List Price × Ordered Qty
         These calculations must be accurate for each line item.
       threshold: 0.01
 
@@ -157,3 +157,17 @@ criteria:
         POB IDENTIFIER and POB Template on each line must exactly
         match the pob_identifier from the charge_pob_map in the
         design_subscription output. No invented identifiers.
+
+  - id: CO-012
+    name: date-format-consistency
+    description: Dates must use correct formats per field
+    severity: high
+    patterns: [date format, Revenue Start Date, Revenue End Date, Sales Order Date]
+    check:
+      type: behavioral
+      rule: |
+        Different date fields require different formats:
+        - Revenue Start Date: YYYY-MM-DD format
+        - Revenue End Date: YYYY-MM-DD format
+        - Sales Order Date: MM/DD/YYYY format
+        Do not mix formats between these fields.

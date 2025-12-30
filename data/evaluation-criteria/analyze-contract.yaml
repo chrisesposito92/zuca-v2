@@ -105,3 +105,17 @@ criteria:
         - "ServiceActivation" if activation is mentioned
         - "CustomerAcceptance" if formal acceptance required
         Use camelCase format without spaces.
+
+  - id: AC-008
+    name: billing-timing-accuracy
+    description: Billing timing must be accurately detected
+    severity: high
+    patterns: [billing timing, in advance, in arrears, prepaid, upfront]
+    check:
+      type: behavioral
+      rule: |
+        billing_timing must be set appropriately:
+        - "InAdvance" for prepaid, upfront, in advance
+        - "InArrears" for post-paid, at end of period, in arrears
+        Default to "InAdvance" if not specified.
+        Use camelCase format without spaces.

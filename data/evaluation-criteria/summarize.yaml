@@ -113,7 +113,7 @@ criteria:
         Key financial metrics must reconcile:
         - Monthly Billing × Months = TCV (for simple cases)
         - Sum of segment values = TCV (for ramps)
-        - Total Deferred Revenue release = Total Revenue
+        - Sum of all revenue recognition amounts = TCV
       threshold: 0.01
 
   - id: SM-009

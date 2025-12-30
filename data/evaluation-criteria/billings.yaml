@@ -84,13 +84,13 @@ criteria:
     name: billing-timing-accuracy
     description: Billing timing must match contract terms
     severity: high
-    patterns: [in advance, in arrears, billing timing]
+    patterns: [in advance, in arrears, billing timing, InAdvance, InArrears]
     check:
       type: behavioral
       rule: |
         Invoices must be dated according to billing timing:
-        - "In Advance": Invoice at start of service period
-        - "In Arrears": Invoice at end of service period
+        - "InAdvance": Invoice at start of service period
+        - "InArrears": Invoice at end of service period
         Service Period dates on each invoice must reflect this.
 
   - id: BL-007
