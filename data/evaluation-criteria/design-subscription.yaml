@@ -100,9 +100,26 @@ criteria:
       type: behavioral
       rule: |
         ratable_method should be set appropriately:
-        - "Daily Prorated" for services recognized over time
-        - "Point in Time" for one-time deliverables
-        - "Percentage of Completion" for milestone-based
+        - "Ratable" for services recognized over time (ratable OT POBs)
+        - Match the POB template ratable method from POB mapping
+        Common values include "Ratable", "Daily Prorated"
+
+  - id: DS-009
+    name: pob-identifier-validity
+    description: POB identifiers must come from the provided template list
+    severity: critical
+    patterns: [POB, identifier, template, BK-, BL-, EVT-]
+    check:
+      type: behavioral
+      rule: |
+        pob_identifier in charge_pob_map MUST be from the provided
+        "Available ZR POB templates" list. Never invent identifiers.
+        Valid prefixes:
+        - "BK-" for release upon Booking
+        - "BL-" for release upon Billing
+        - "EVT-" for release upon Event
+        Common identifiers: BK-OT-RATABLE, BK-PIT-STARTDATE,
+        BL-OT-INVRATABLE, EVT-PIT-CONSUMP-USAGE
 
   - id: DS-008
     name: sell-price-accuracy

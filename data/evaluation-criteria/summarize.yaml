@@ -113,5 +113,33 @@ criteria:
         Key financial metrics must reconcile:
         - Monthly Billing × Months = TCV (for simple cases)
         - Sum of segment values = TCV (for ramps)
-        - Total Deferred Revenue release = Total Revenue
+        - Sum of all revenue recognition amounts = TCV
       threshold: 0.01
+
+  - id: SM-009
+    name: open-question-priority-tags
+    description: Open questions must have priority tags
+    severity: high
+    patterns: [priority, BLOCKING, HIGH, MEDIUM, open question]
+    check:
+      type: behavioral
+      rule: |
+        Each open question should have a priority tag prefix:
+        - [BLOCKING] — Cannot finalize solution without answer
+        - [HIGH] — Significantly impacts accuracy
+        - [MEDIUM] — Would improve solution quality
+        Tag format: "[TAG] Question text here"
+
+  - id: SM-010
+    name: assumption-deduplication
+    description: Assumptions must be consolidated without duplicates
+    severity: medium
+    patterns: [duplicate, consolidate, assumptions]
+    check:
+      type: behavioral
+      rule: |
+        Assumptions should be:
+        - Deduplicated (no near-duplicates)
+        - Grouped by related topic
+        - Ordered by business impact (critical → minor)
+        - Reworded for clarity if needed

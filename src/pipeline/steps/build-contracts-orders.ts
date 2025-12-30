@@ -29,7 +29,7 @@ const contractsOrdersJsonSchema = {
         properties: {
           'POB Name': { type: 'string' },
           'POB Template': { type: 'string' },
-          'POB Satisfied': { type: 'boolean' },
+          'POB Satisfied': { type: 'string' },
           'Release Event': { type: 'string' },
           'Billing Period': { type: 'string' },
           'Billing Timing': { type: 'string' },

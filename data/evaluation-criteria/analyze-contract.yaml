@@ -37,9 +37,10 @@ criteria:
       type: behavioral
       rule: |
         billing_period must match what is specified in the contract.
-        If monthly billing is mentioned, use "Monthly".
-        If quarterly, use "Quarterly".
-        Default to "Monthly" if not specified.
+        Valid values: "Month", "Quarter", "Semi-Annual", "Year".
+        If monthly billing is mentioned, use "Month".
+        If quarterly, use "Quarter".
+        Default to "Month" if not specified.
 
   - id: AC-004
     name: ramp-detection
@@ -63,11 +64,15 @@ criteria:
       type: behavioral
       rule: |
         billing_caps array must include all capabilities mentioned
-        or implied by the contract. Common capabilities include:
-        - zb-recurring-charges (if subscription/recurring)
-        - zb-proration (if mid-cycle start)
-        - zb-usage-metering (if usage-based)
-        - zb-ramps (if pricing changes over time)
+        or implied by the contract. Use UPPERCASE label format.
+        Common patterns to capability mappings:
+        - "recurring", "subscription" → Recurring charge
+        - "one-time setup/implementation" → One-time charge
+        - "usage", "metered", "consumption" → Usage charge
+        - "tiered pricing", "volume discount" → Tiered/Volume pricing
+        - "prepaid credits", "drawdown" → Prepaid drawdown
+        - "minimum commit" → Min commit
+        - "upgrade/downgrade mid-term" → Amendment
 
   - id: AC-006
     name: revenue-caps-completeness
@@ -78,11 +83,14 @@ criteria:
       type: behavioral
       rule: |
         revenue_caps array must include relevant recognition methods.
-        Common capabilities include:
-        - zr-ratable-revenue (if service over time)
-        - zr-upfront-recognition (if point-in-time delivery)
-        - zr-allocation (if multiple elements)
-        - zr-ramps (if pricing changes affect recognition)
+        Use UPPERCASE label format. Common patterns to capability mappings:
+        - "SSP", "standalone selling price" → Allocation
+        - "bundle", "package" with components → Bundle
+        - "ramp", "escalating", "YoY increase" → Ramp
+        - "variable consideration", "rebate" → VC
+        - "amend", "modify mid-term" → Contract mod
+        - "over time", "ratable" → Over-time recognition
+        - "point-in-time", "immediately" → Point-in-time recognition
 
   - id: AC-007
     name: trigger-event-accuracy
@@ -93,6 +101,21 @@ criteria:
       type: behavioral
       rule: |
         trigger_event must be set appropriately:
-        - "Contract Effective" for standard contracts
-        - "Service Activation" if activation is mentioned
-        - "Customer Acceptance" if formal acceptance required
+        - "ContractEffective" for standard contracts (default)
+        - "ServiceActivation" if activation is mentioned
+        - "CustomerAcceptance" if formal acceptance required
+        Use camelCase format without spaces.
+
+  - id: AC-008
+    name: billing-timing-accuracy
+    description: Billing timing must be accurately detected
+    severity: high
+    patterns: [billing timing, in advance, in arrears, prepaid, upfront]
+    check:
+      type: behavioral
+      rule: |
+        billing_timing must be set appropriately:
+        - "InAdvance" for prepaid, upfront, in advance
+        - "InArrears" for post-paid, at end of period, in arrears
+        Default to "InAdvance" if not specified.
+        Use camelCase format without spaces.

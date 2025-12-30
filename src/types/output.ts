@@ -252,7 +252,7 @@ export type PobMappingOutput = z.infer<typeof PobMappingOutputSchema>;
 export const ContractsOrdersRowSchema = z.object({
   'POB Name': z.string(),
   'POB Template': z.string(),
-  'POB Satisfied': z.boolean(),
+  'POB Satisfied': z.string(),
   'Release Event': z.string(),
   'Billing Period': z.string(),
   'Billing Timing': z.string(),
