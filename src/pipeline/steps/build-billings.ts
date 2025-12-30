@@ -53,6 +53,17 @@ const billingsJsonSchema = {
         additionalProperties: false,
       },
     },
+    totals: {
+      type: 'object',
+      description: 'TCV reconciliation check - validates schedule_total matches target_tcv',
+      properties: {
+        target_tcv: { type: 'number', description: 'Target Total Contract Value from input' },
+        schedule_total: { type: 'number', description: 'Sum of all invoice line amounts' },
+        delta: { type: 'number', description: 'Difference: target_tcv - schedule_total (should be <= $0.01)' },
+      },
+      required: ['target_tcv', 'schedule_total', 'delta'],
+      additionalProperties: false,
+    },
     assumptions: { type: 'array', items: { type: 'string' } },
     open_questions: { type: 'array', items: { type: 'string' } },
   },

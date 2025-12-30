@@ -1,0 +1,16 @@
+{
+  "version": "1.0",
+  "updated_at": "2025-12-30T20:41:13.664Z",
+  "suggestions": [
+    {
+      "id": "57b22fca-7f94-408d-99f4-c2d3c01d27bc",
+      "step_name": "billings",
+      "pattern": "BL-008: total-contract-value",
+      "occurrence_count": 9,
+      "suggested_update": "## Placement: After the \"Calculate amounts\" / \"Proration Rules\" section (i.e., immediately before any output-format instructions, so it’s executed as a mandatory final validation step).\n\n### Contract Value Reconciliation (TCV Check) — REQUIRED\nBefore finalizing the invoice schedule, you MUST reconcile totals against the contract’s Total Contract Value (TCV).\n\n1) **Determine the target TCV definition** (state it explicitly in the output):\n   - If the input provides **Gross TCV / Net TCV / discount %**, treat **Net TCV as the target**.\n   - If the contract includes **usage/drawdown/overage**, clarify whether TCV **includes an estimate of usage** or is **fixed-fees-only**:\n     - If an explicit usage estimate/bucket amount is provided, include it in the target.\n     - If no estimate is provided, **exclude usage from the target** and record an item in `open_questions`.\n\n2) **Compute an internal check-sum**:\n   - `schedule_total = sum(all invoice line amounts, including discounts or negative lines)`\n   - `delta = target_tcv - schedule_total`\n\n3) **Hard rule:** the final schedule MUST satisfy `abs(delta) <= $0.01`.\n   - If not, you must **recalculate** (correct unit prices, quantities, proration day-counts, discounts, drawdown/overage logic) until it matches.\n   - If matching is impossible due to missing/ambiguous inputs, do NOT guess; put the discrepancy and the missing assumption(s) in `open_questions` and provide the closest schedule with `delta` shown.\n\n4) **Discount handling:**\n   - Apply discounts either (a) as a separate negative invoice line item, or (b) by reducing each affected charge, but ensure the **net total equals Net TCV**.\n\n5) **Output requirement:** include a `totals` block showing `target_tcv`, `schedule_total`, and `delta`.\n\n\n## Rationale\nBL-008 failures show the model produces internally consistent schedules that don’t reconcile to the contractual total (wrong prices/quantities, missing discounts, invented usage, or incorrect drawdown/overage math). Adding a mandatory TCV reconciliation step with an explicit target definition, a computed check-sum (schedule_total vs target_tcv), and a hard constraint to rework the schedule until the delta is ~$0 forces the model to validate and correct arithmetic/assumption errors before output. Requiring a `totals` block makes the check observable and prevents silent mismatches.",
+      "status": "approved",
+      "created_at": "2025-12-30T19:04:21.267Z",
+      "updated_at": "2025-12-30T20:41:13.664Z"
+    }
+  ]
+}

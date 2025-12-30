@@ -316,8 +316,17 @@ export const BillingsRowSchema = z.object({
 
 export type BillingsRow = z.infer<typeof BillingsRowSchema>;
 
+export const BillingsTotalsSchema = z.object({
+  target_tcv: z.number(),
+  schedule_total: z.number(),
+  delta: z.number(),
+});
+
+export type BillingsTotals = z.infer<typeof BillingsTotalsSchema>;
+
 export const BillingsOutputSchema = z.object({
   zb_billings: z.array(BillingsRowSchema),
+  totals: BillingsTotalsSchema.optional(),
   assumptions: z.array(z.string()),
   open_questions: z.array(z.string()),
 });

@@ -18,9 +18,37 @@ const DEFAULT_CRITERIA_DIR = path.join(process.cwd(), 'data', 'evaluation-criter
 const criteriaCache = new Map<string, EvaluationCriteria>();
 
 /**
+ * Normalize step name to file name, trying both underscore and hyphen variants.
+ * Returns the path that exists, or null if neither exists.
+ */
+function findCriteriaFile(stepName: string, criteriaDir: string): string | null {
+  // Try exact name first
+  const exactPath = path.join(criteriaDir, `${stepName}.yaml`);
+  if (fs.existsSync(exactPath)) {
+    return exactPath;
+  }
+
+  // Try with underscores converted to hyphens
+  const hyphenated = stepName.replace(/_/g, '-');
+  const hyphenPath = path.join(criteriaDir, `${hyphenated}.yaml`);
+  if (fs.existsSync(hyphenPath)) {
+    return hyphenPath;
+  }
+
+  // Try with hyphens converted to underscores
+  const underscored = stepName.replace(/-/g, '_');
+  const underscorePath = path.join(criteriaDir, `${underscored}.yaml`);
+  if (fs.existsSync(underscorePath)) {
+    return underscorePath;
+  }
+
+  return null;
+}
+
+/**
  * Load evaluation criteria for a specific step
  *
- * @param stepName - The pipeline step name (e.g., 'analyze-contract', 'build-billings')
+ * @param stepName - The pipeline step name (e.g., 'analyze_contract', 'billings')
  * @param criteriaDir - Optional custom directory path
  * @returns Parsed and validated evaluation criteria
  */
@@ -34,10 +62,13 @@ export async function loadCriteria(
     return criteriaCache.get(cacheKey)!;
   }
 
-  const filePath = path.join(criteriaDir, `${stepName}.yaml`);
+  const filePath = findCriteriaFile(stepName, criteriaDir);
 
-  if (!fs.existsSync(filePath)) {
-    throw new Error(`Criteria file not found: ${filePath}`);
+  if (!filePath) {
+    throw new Error(
+      `Criteria file not found for step '${stepName}'. ` +
+      `Tried: ${stepName}.yaml, ${stepName.replace(/_/g, '-')}.yaml, ${stepName.replace(/-/g, '_')}.yaml`
+    );
   }
 
   try {

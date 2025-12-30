@@ -123,6 +123,31 @@ Prorated Amount = Full Period Amount × (Actual Days / Full Period Days)
 
 ---
 
+## Contract Value Reconciliation (TCV Check) — REQUIRED
+
+Before finalizing the invoice schedule, you MUST reconcile totals against the contract's Total Contract Value (TCV).
+
+1) **Determine the target TCV definition** (state it explicitly in the output):
+   - If the input provides **Gross TCV / Net TCV / discount %**, treat **Net TCV as the target**.
+   - If the contract includes **usage/drawdown/overage**, clarify whether TCV **includes an estimate of usage** or is **fixed-fees-only**:
+     - If an explicit usage estimate/bucket amount is provided, include it in the target.
+     - If no estimate is provided, **exclude usage from the target** and record an item in `open_questions`.
+
+2) **Compute an internal check-sum**:
+   - `schedule_total = sum(all invoice line amounts, including discounts or negative lines)`
+   - `delta = target_tcv - schedule_total`
+
+3) **Hard rule:** the final schedule MUST satisfy `abs(delta) <= $0.01`.
+   - If not, you must **recalculate** (correct unit prices, quantities, proration day-counts, discounts, drawdown/overage logic) until it matches.
+   - If matching is impossible due to missing/ambiguous inputs, do NOT guess; put the discrepancy and the missing assumption(s) in `open_questions` and provide the closest schedule with `delta` shown.
+
+4) **Discount handling:**
+   - Apply discounts either (a) as a separate negative invoice line item, or (b) by reducing each affected charge, but ensure the **net total equals Net TCV**.
+
+5) **Output requirement:** include a `totals` block showing `target_tcv`, `schedule_total`, and `delta`.
+
+---
+
 ## Output
 
 Return JSON with complete billing schedule:
@@ -144,6 +169,11 @@ Return JSON with complete billing schedule:
       "Currency": "USD"
     }
   ],
+  "totals": {
+    "target_tcv": 1200,
+    "schedule_total": 1200,
+    "delta": 0
+  },
   "assumptions": ["All dates are based on calendar month boundaries"],
   "open_questions": []
 }
@@ -157,6 +187,7 @@ Return JSON with complete billing schedule:
 2. Billing periods are contiguous (no gaps)
 3. Total billed per charge = quantity × unitPrice × number of periods
 4. Proration math is correct for partial periods
+5. **TCV reconciliation: schedule_total matches target_tcv (delta ≤ $0.01)**
 
 ---
 
