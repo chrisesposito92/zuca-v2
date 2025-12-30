@@ -1073,6 +1073,7 @@ async function selfImproveCommand(options: {
   suite?: string;
   iterations?: string;
   autoSuggest?: boolean;
+  captureTraining?: boolean;
   model?: string;
 }): Promise<void> {
   try {
@@ -1086,6 +1087,7 @@ async function selfImproveCommand(options: {
     console.log(`Iterations: ${chalk.yellow(iterations.toString())}`);
     console.log(`Model: ${chalk.yellow(model || 'default')}`);
     console.log(`Auto-suggest: ${chalk.yellow(options.autoSuggest ? 'Yes' : 'No')}`);
+    console.log(`Capture Training: ${chalk.yellow(options.captureTraining ? 'Yes' : 'No')}`);
     console.log('');
 
     for (let i = 1; i <= iterations; i++) {
@@ -1096,6 +1098,7 @@ async function selfImproveCommand(options: {
 
       const result = await runSelfImproveIteration(suiteName, {
         autoSuggest: options.autoSuggest,
+        captureTraining: options.captureTraining,
         minPatternCount: 2,
         model,
         onProgress: (current, total, testId) => {
@@ -1115,6 +1118,9 @@ async function selfImproveCommand(options: {
 
       console.log(`  Evaluation: ${chalk.green(result.evaluationPassed.toString())} passed, ${result.evaluationFailed > 0 ? chalk.red(result.evaluationFailed.toString()) : '0'} failed`);
       console.log(`  Corrections Generated: ${chalk.yellow(result.correctionsGenerated.toString())}`);
+      if (options.captureTraining && result.trainingExamplesCaptured > 0) {
+        console.log(`  Training Examples Captured: ${chalk.green(result.trainingExamplesCaptured.toString())}`);
+      }
 
       if (result.topPatterns.length > 0) {
         console.log('');
@@ -1154,6 +1160,7 @@ program
   .option('-s, --suite <name>', 'Test suite name', 'golden-scenarios')
   .option('-i, --iterations <n>', 'Number of improvement iterations', '1')
   .option('--auto-suggest', 'Automatically generate suggestions for top patterns')
+  .option('--capture-training', 'Capture successful outputs as training data')
   .option('-m, --model <model>', 'LLM model for evaluation')
   .action(selfImproveCommand);
 

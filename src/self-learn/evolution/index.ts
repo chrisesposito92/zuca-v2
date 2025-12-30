@@ -383,12 +383,14 @@ export interface SelfImproveResult {
   evaluationPassed: number;
   evaluationFailed: number;
   correctionsGenerated: number;
+  trainingExamplesCaptured: number;
   suggestionsGenerated: number;
   topPatterns: Array<{ step: string; pattern: string; count: number }>;
 }
 
 export interface SelfImproveOptions {
   autoSuggest?: boolean;
+  captureTraining?: boolean;
   minPatternCount?: number;
   model?: string;
   onProgress?: (current: number, total: number, testId: string) => void;
@@ -398,16 +400,17 @@ export async function runSelfImproveIteration(
   suiteName: string,
   options: SelfImproveOptions = {}
 ): Promise<SelfImproveResult> {
-  const { autoSuggest = false, minPatternCount = 3, model, onProgress } = options;
+  const { autoSuggest = false, captureTraining = false, minPatternCount = 3, model, onProgress } = options;
 
   // Import evaluation runner dynamically to avoid circular deps
   const { runEvaluationSuite } = await import('../evaluation');
 
   debugLog('Running self-improvement iteration');
 
-  // Step 1: Run evaluation with corrections
+  // Step 1: Run evaluation with corrections (and optionally capture training data)
   const evalResult = await runEvaluationSuite(suiteName, {
     generateCorrections: true,
+    captureTraining,
     model: model as import('../../types/llm').LlmModel | undefined,
     onProgress,
   });
@@ -446,6 +449,7 @@ export async function runSelfImproveIteration(
     evaluationPassed: evalResult.passed,
     evaluationFailed: evalResult.failed,
     correctionsGenerated: evalResult.correctionsGenerated,
+    trainingExamplesCaptured: evalResult.trainingExamplesCaptured ?? 0,
     suggestionsGenerated,
     topPatterns: topPatterns.slice(0, 5),
   };
