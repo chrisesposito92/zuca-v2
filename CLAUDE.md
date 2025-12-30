@@ -96,7 +96,33 @@ npm run cli prompts approve <id>  # Approve a suggestion
 # Self-Improvement Loop
 npm run cli self-improve          # Run evaluation + pattern analysis
 npm run cli self-improve --auto-suggest  # Auto-generate suggestions
+
+# Training Data Export (for SLM fine-tuning)
+npm run cli training stats        # Show training data statistics
+npm run cli training sync         # Sync corrections to training data
+npm run cli training list         # List training examples
+npm run cli training export data/zuora-training.jsonl  # Export to JSONL
+npm run cli training export data/zuora-training.jsonl --format huggingface  # HuggingFace format
 ```
+
+### Training Data for SLM Fine-Tuning
+The self-learning system can export training data for fine-tuning small language models:
+
+**Key Files:**
+- `src/self-learn/training/` - Training data module
+- `data/training-data.json` - Stored training examples
+
+**Workflow:**
+1. Run evaluations to generate corrections with `example_fix`
+2. Sync corrections to training data: `npm run cli training sync`
+3. Export for fine-tuning: `npm run cli training export ./output.jsonl`
+
+**Output Format (JSONL):**
+```json
+{"messages": [{"role": "system", "content": "..."}, {"role": "user", "content": "..."}, {"role": "assistant", "content": "..."}]}
+```
+
+Compatible with HuggingFace TRL/SFTTrainer and Unsloth.
 
 ### Adding New Criteria
 1. Create YAML file in `data/evaluation-criteria/<step-name>.yaml`
