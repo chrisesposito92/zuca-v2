@@ -119,6 +119,24 @@ When new distinct deliverable added:
 
 ---
 
+## Prepay Drawdown (PPDD)
+
+PPDD has two recognition patterns based on POB template:
+
+### Ratable Recognition (BK-OT-CONSUMP-RATABLE)
+- Prepaid amount spread evenly over term
+- Recognition NOT tied to consumption
+- Example: $12,000 prepaid / 12 months = $1,000/month
+
+### Consumption Recognition (EVT-PIT-CONSUMP-USAGE)
+- Revenue = $0 until consumption events occur
+- Each consumption event: Amount = Units × Unit Rate
+- **CRITICAL:** Do NOT spread ratably—this is event-driven
+
+**If no consumption data provided:** Show $0 for all periods, add open question asking for usage schedule.
+
+---
+
 ## Output
 
 Generate one row per Line Item per Period:
@@ -159,3 +177,13 @@ Generate one row per Line Item per Period:
 2. Periods cover Revenue Start to Revenue End with no gaps
 3. Event-driven charges show $0 when no events provided
 4. POB Name and Event Name match the POB mapping
+
+---
+
+## Reference Documentation
+
+- Revenue Waterfall: https://docs.zuora.com/en/zuora-revenue/day-to-day-operation/waterfall-summary
+- Contract Modifications: https://docs.zuora.com/en/zuora-revenue/advanced-revenue-operations/contract-modifications
+- Ramp Deals: https://docs.zuora.com/en/zuora-revenue/day-to-day-operation/ramp-deals
+- VC Processing: https://docs.zuora.com/en/zuora-revenue/day-to-day-operation/variable-consideration-processing
+- Prepaid with Drawdown: https://docs.zuora.com/en/zuora-billing/manage-subscriptions/prepaid-with-drawdown

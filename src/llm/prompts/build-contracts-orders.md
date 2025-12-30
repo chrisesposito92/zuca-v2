@@ -125,6 +125,21 @@ When charges are ramp segments (same service, different periods/prices):
 - Term-based average: $12,000/year
 - Each year allocates as if $12,000 (recognition spread evenly)
 
+### Variable Consideration (VC)
+
+When charges have uncertain amounts (rebates, refund rights, performance bonuses):
+
+1. Only include VC to the extent a significant reversal is NOT probable
+2. Use constrained estimate for allocation
+3. When uncertainty resolves, adjust in that period
+
+### Carves (Carve-In / Carve-Out)
+
+When specific POBs need revenue adjustment:
+- `Carves Adjustment` reflects movement between POBs
+- Net sum of all carves = 0
+- Carve-out reduces source POB, carve-in increases destination
+
 ---
 
 ## Special Scenarios
@@ -205,3 +220,13 @@ Return JSON with ALL fields populated:
 2. Revenue Start Date ≤ Revenue End Date for all lines
 3. Every charge from subscription spec has a corresponding line
 4. POB identifiers match the POB mapping exactly
+
+---
+
+## Reference Documentation
+
+- SSP Allocation: https://docs.zuora.com/en/zuora-revenue/advanced-revenue-operations/ssp-assignment-and-allocation
+- Ramp Deals: https://docs.zuora.com/en/zuora-revenue/day-to-day-operation/ramp-deals
+- VC Processing: https://docs.zuora.com/en/zuora-revenue/day-to-day-operation/variable-consideration-processing
+- Contract Modifications: https://docs.zuora.com/en/zuora-revenue/advanced-revenue-operations/contract-modifications
+- Bundle Explosion: https://docs.zuora.com/en/zuora-revenue/advanced-revenue-operations/bundle-explosion

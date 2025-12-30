@@ -157,3 +157,14 @@ Return JSON with complete billing schedule:
 2. Billing periods are contiguous (no gaps)
 3. Total billed per charge = quantity × unitPrice × number of periods
 4. Proration math is correct for partial periods
+
+---
+
+## Reference Documentation
+
+- Billing Timing: https://docs.zuora.com/en/zuora-billing/manage-bill-runs/billing-timing
+- Proration Overview: https://docs.zuora.com/en/zuora-billing/manage-subscriptions/proration/proration-overview
+- Partial Period Proration: https://docs.zuora.com/en/zuora-billing/manage-subscriptions/proration/calculate-total-with-partial-period-proration
+- Usage Charges: https://docs.zuora.com/en/zuora-billing/manage-product-catalog/charge-model-configurations/tiered-with-overage-charges
+- Invoice Management: https://docs.zuora.com/en/zuora-billing/manage-billing-documents/manage-invoices/invoice-management-overview
+- Bill Run Target Date: https://docs.zuora.com/en/zuora-billing/manage-bill-runs/bill-run-target-date
