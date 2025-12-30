@@ -84,6 +84,32 @@ npm run cli interactive
 npm run cli quick "Annual SaaS subscription with monthly billing"
 ```
 
+#### CLI - Generate Use Cases
+
+Generate realistic Zuora use cases by researching a company's website:
+
+```bash
+# Generate use cases for a company
+npm run cli -- generate <customer_name> -w <website_url> [options]
+
+# Examples
+npm run cli -- generate "Salesforce" -w "https://www.salesforce.com" -c 3
+npm run cli -- generate "Twilio" -w "https://www.twilio.com" -c 2 -m gemini-3-pro-preview
+npm run cli -- generate "Datadog" -w "https://www.datadoghq.com" -c 3 -o generated-uc/datadog.json
+
+# Options:
+#   -w, --website <url>     Customer website URL (required)
+#   -c, --count <number>    Number of use cases to generate (1-3, default: 1)
+#   -n, --notes <text>      Additional notes to guide generation
+#   -o, --output <file>     Save results to a JSON file
+#   -l, --local             Use local formatting (faster, no LLM for formatting)
+#   -m, --model <model>     LLM model (gpt-5.2 | gemini-3-pro-preview | gemini-3-flash-preview)
+
+# Interactive mode (guided prompts)
+npm run cli generate-interactive
+npm run cli gi  # shorthand
+```
+
 #### CLI - Self-Learning System
 
 ZUCA includes a self-learning pipeline that evaluates outputs against behavioral criteria and generates corrections for future improvement.
@@ -100,6 +126,8 @@ npm run cli evaluate --step contracts_orders
 
 # Generate corrections for failures
 npm run cli evaluate --corrections
+
+npm run cli -- evaluate --suite advanced-scenarios
 
 # List stored corrections
 npm run cli corrections list
@@ -126,6 +154,10 @@ npm run cli prompts reject <suggestion-id>
 npm run cli self-improve
 npm run cli self-improve -m gemini-3-flash-preview --auto-suggest
 npm run cli self-improve --iterations 3
+npm run cli -- self-improve --suite advanced-scenarios
+
+# Build custom test suites from UC generator output (see "Generate Use Cases" above)
+npm run uc:to-suite -- generated-uc/ data/test-suites/real-world-scenarios.yaml
 ```
 
 See `docs/FEATURE-SELF-LEARNING.md` for full architecture and implementation details.

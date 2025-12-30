@@ -1041,11 +1041,27 @@ async function selfImproveCommand(options: {
     for (let i = 1; i <= iterations; i++) {
       console.log(chalk.blue(`\n─── Iteration ${i}/${iterations} ───\n`));
 
+      // Progress tracking
+      let lastProgressLine = '';
+
       const result = await runSelfImproveIteration(suiteName, {
         autoSuggest: options.autoSuggest,
         minPatternCount: 2,
         model,
+        onProgress: (current, total, testId) => {
+          // Clear previous line and print progress
+          if (lastProgressLine) {
+            process.stdout.write('\r' + ' '.repeat(lastProgressLine.length) + '\r');
+          }
+          lastProgressLine = `  Testing: ${current}/${total} - ${testId}`;
+          process.stdout.write(chalk.gray(lastProgressLine));
+        },
       });
+
+      // Clear progress line and move to results
+      if (lastProgressLine) {
+        process.stdout.write('\r' + ' '.repeat(lastProgressLine.length) + '\r');
+      }
 
       console.log(`  Evaluation: ${chalk.green(result.evaluationPassed.toString())} passed, ${result.evaluationFailed > 0 ? chalk.red(result.evaluationFailed.toString()) : '0'} failed`);
       console.log(`  Corrections Generated: ${chalk.yellow(result.correctionsGenerated.toString())}`);

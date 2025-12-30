@@ -87,4 +87,5 @@ export {
   type PatternAnalysis,
   type AnalyzeOptions,
   type SelfImproveResult,
+  type SelfImproveOptions,
 } from './evolution';

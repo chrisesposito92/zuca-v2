@@ -105,6 +105,18 @@ npm run cli self-improve --auto-suggest  # Auto-generate suggestions
 2. Include: id, name, description, input (ZucaInput fields), focus_steps, tags
 3. Test cases run through full pipeline; focus_steps controls which steps are evaluated
 
+### Building Test Suites from UC Generator
+```bash
+# Generate use cases from real companies
+npm run cli -- generate "Salesforce" -w "https://www.salesforce.com" -c 3 -o /tmp/uc/salesforce.json
+
+# Convert to test suite YAML
+npm run uc:to-suite -- /tmp/uc/ data/test-suites/real-world-scenarios.yaml
+
+# Run evaluation on custom suite
+npm run cli -- self-improve --suite real-world-scenarios -m gemini-3-flash-preview
+```
+
 ## Revenue Snapshot (read-only)
 - Pipeline: 2 steps in `src/pipeline/revenue-snapshot/` (Waterfall → Summary).
 - Waterfall step handles SSP allocations + periodization in single LLM call.

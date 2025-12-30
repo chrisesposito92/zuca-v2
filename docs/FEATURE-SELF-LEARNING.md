@@ -400,6 +400,136 @@ npm run cli -- self-improve
 # Run multiple iterations
 npm run cli -- self-improve --iterations 3
 
-# Auto-apply suggestions above threshold
-npm run cli -- self-improve --auto-apply
+# Auto-generate suggestions for top failure patterns
+npm run cli -- self-improve --auto-suggest
+
+# Use a specific model
+npm run cli -- self-improve -m gemini-3-flash-preview --iterations 2
+```
+
+### Prompt Suggestions
+
+```bash
+# Analyze failure patterns across all corrections
+npm run cli -- prompts analyze
+
+# Generate a suggestion for a specific pattern
+npm run cli -- prompts suggest billings "BL-002: invoice-amount-accuracy"
+
+# List pending suggestions
+npm run cli -- prompts list
+
+# Approve or reject suggestions
+npm run cli -- prompts approve <suggestion-id>
+npm run cli -- prompts reject <suggestion-id>
+```
+
+## Creating Custom Test Suites
+
+Test suites are YAML files in `data/test-suites/`. You can create multiple suites for different purposes.
+
+### Test Suite Format
+
+```yaml
+name: my-custom-suite
+description: Custom test scenarios
+version: "1.0"
+
+tests:
+  - id: custom-001
+    name: My Test Case
+    description: Description of what this tests
+    input:
+      customer_name: Test Corp
+      contract_start_date: "01/01/2025"
+      terms_months: 12
+      transaction_currency: USD
+      billing_period: Monthly
+      is_allocations: false
+      use_case_description: |
+        Detailed description of the subscription...
+    focus_steps:
+      - design_subscription
+      - contracts_orders
+      - billings
+    tags:
+      - custom
+      - recurring
+```
+
+### Using UC Generator to Build Test Suites
+
+Generate real-world test cases using the UC generator and convert them to a test suite:
+
+```bash
+# 1. Create output directory
+mkdir -p /tmp/uc
+
+# 2. Generate use cases from real companies
+npm run cli -- generate "Salesforce" -w "https://www.salesforce.com" -c 3 -o /tmp/uc/salesforce.json -m gemini-3-pro-preview
+npm run cli -- generate "Twilio" -w "https://www.twilio.com" -c 3 -o /tmp/uc/twilio.json -m gemini-3-pro-preview
+npm run cli -- generate "Snowflake" -w "https://www.snowflake.com" -c 3 -o /tmp/uc/snowflake.json -m gemini-3-pro-preview
+
+# 3. Convert to test suite
+npm run uc:to-suite -- /tmp/uc/ data/test-suites/real-world-scenarios.yaml
+
+# 4. Run evaluation on the new suite
+npm run cli -- evaluate --suite real-world-scenarios -m gemini-3-flash-preview --corrections
+```
+
+The `uc:to-suite` script:
+- Accepts a directory of JSON files or a single JSON file
+- Auto-detects tags (`usage`, `ramp`, `bundle`, `allocation`, etc.)
+- Creates unique IDs from company names
+- Sets all pipeline steps as focus steps
+
+### Running Multiple Test Suites
+
+```bash
+# Run the default golden scenarios
+npm run cli -- self-improve --suite golden-scenarios --iterations 2
+
+# Run your custom real-world suite
+npm run cli -- self-improve --suite real-world-scenarios --iterations 2
+
+# Corrections from both runs accumulate in the same store
+npm run cli -- corrections summary
+```
+
+## Workflow Summary
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    SELF-LEARNING WORKFLOW                        │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│  1. BUILD TEST SUITE                                            │
+│     ├─ Manual: Edit data/test-suites/*.yaml                     │
+│     └─ Generated: npm run uc:to-suite -- <input> <output>       │
+│                                                                  │
+│  2. RUN EVALUATION                                              │
+│     npm run cli -- self-improve --suite <name> --iterations N   │
+│     └─ Corrections auto-stored for failures                     │
+│                                                                  │
+│  3. ANALYZE PATTERNS                                            │
+│     npm run cli -- prompts analyze                              │
+│     └─ See which issues recur most often                        │
+│                                                                  │
+│  4. GENERATE SUGGESTIONS (optional)                             │
+│     npm run cli -- prompts suggest <step> "<pattern>"           │
+│     └─ Or use --auto-suggest flag in self-improve               │
+│                                                                  │
+│  5. REVIEW & APPLY                                              │
+│     npm run cli -- prompts list                                 │
+│     npm run cli -- prompts approve <id>                         │
+│     └─ Manually edit prompt file based on suggestion            │
+│                                                                  │
+│  6. VERIFY FIX                                                  │
+│     npm run cli -- evaluate --suite <name> --step <step>        │
+│     └─ Confirm the fix works                                    │
+│                                                                  │
+│  MEANWHILE: Corrections are auto-injected as few-shot examples  │
+│  on every pipeline run, providing immediate improvement.        │
+│                                                                  │
+└─────────────────────────────────────────────────────────────────┘
 ```
