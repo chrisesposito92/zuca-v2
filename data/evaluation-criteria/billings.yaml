@@ -66,16 +66,19 @@ criteria:
         No gaps or overlaps in the billing schedule.
 
   - id: BL-005
-    name: payment-term-consistency
-    description: Payment terms must be consistent across invoices
-    severity: medium
-    patterns: [payment terms, net 30, due date]
+    name: date-format-consistency
+    description: All dates must use MM/DD/YYYY format
+    severity: high
+    patterns: [date format, invoice date, billing date]
     check:
       type: behavioral
       rule: |
-        Payment terms (e.g., Net 30, Due on Receipt) should
-        be consistent across all invoices unless the contract
-        specifies different terms for different periods.
+        All dates in the billing output must use MM/DD/YYYY format:
+        - Invoice Date
+        - Billing Date
+        - Billing Period Start
+        - Billing Period End
+        Do not use YYYY-MM-DD or other formats.
 
   - id: BL-006
     name: billing-timing-accuracy
@@ -115,3 +118,17 @@ criteria:
         Total Contract Value (TCV) from the subscription spec.
         Sum(all invoice amounts) = TCV
       threshold: 0.01
+
+  - id: BL-009
+    name: usage-charge-handling
+    description: Usage charges must be handled appropriately
+    severity: high
+    patterns: [usage, consumption, metered]
+    check:
+      type: behavioral
+      rule: |
+        For Usage charges:
+        - If usage records are provided: calculate billing per usage period
+        - If no usage data provided: note in open_questions that
+          usage billing is TBD and cannot be calculated
+        Do not invent usage amounts if no data is provided.

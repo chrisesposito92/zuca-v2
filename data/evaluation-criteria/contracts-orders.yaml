@@ -55,16 +55,17 @@ criteria:
       threshold: 0.01
 
   - id: CO-004
-    name: line-item-numbering
-    description: Line items must be sequentially numbered
+    name: line-item-identification
+    description: Line Item Num must uniquely identify each charge
     severity: medium
-    patterns: [line item, numbering, sequence]
+    patterns: [line item, charge, identifier]
     check:
       type: behavioral
       rule: |
-        Line Item Num must be sequential starting from 1.
-        Each charge segment gets its own line number.
-        No gaps or duplicates in line numbering.
+        Line Item Num identifies the charge/POB, typically using
+        sequential numbering (1, 2, 3...) for each distinct charge.
+        Each charge from the subscription spec gets its own Line Item Num.
+        For ramp segments of the same service, each segment is a separate line.
 
   - id: CO-005
     name: currency-consistency
@@ -79,17 +80,17 @@ criteria:
         Currency symbols/codes should be consistent.
 
   - id: CO-006
-    name: account-mapping
-    description: Revenue and deferred revenue accounts must be specified
-    severity: medium
-    patterns: [account, revenue account, deferred revenue]
+    name: pob-satisfied-accuracy
+    description: POB Satisfied must indicate recognition timing
+    severity: high
+    patterns: [POB Satisfied, over time, point in time]
     check:
       type: behavioral
       rule: |
-        Each line item should have:
-        - Revenue Account (e.g., "4010-Subscription Revenue")
-        - Deferred Revenue Account (e.g., "2310-Deferred Revenue")
-        Accounts should match the charge type and recognition pattern.
+        POB Satisfied must be a string indicating recognition pattern:
+        - "Over Time" for ratable recognition (OT POB templates)
+        - "Point In Time" for immediate recognition (PIT POB templates)
+        The value must match the POB template type (OT vs PIT).
 
   - id: CO-007
     name: charge-name-consistency
@@ -105,13 +106,54 @@ criteria:
         (e.g., "Service - Promo Period", "Service - Standard").
 
   - id: CO-008
-    name: booking-date-accuracy
-    description: Booking date must match contract effective date
+    name: sales-order-date-accuracy
+    description: Sales Order Date must match contract effective date
     severity: high
-    patterns: [booking date, contract date, order date]
+    patterns: [sales order date, contract date, order date]
     check:
       type: behavioral
       rule: |
-        Booking Date should typically be the contract start date
-        or order date, representing when the order was placed.
-        All line items in the same contract share the same Booking Date.
+        Sales Order Date should be the contract effective date in
+        MM/DD/YYYY format, representing when the order was placed.
+        All line items in the same contract share the same Sales Order Date.
+
+  - id: CO-009
+    name: ssp-allocation-math
+    description: SSP allocation must be mathematically correct
+    severity: critical
+    patterns: [SSP, allocation, percent, allocated price]
+    check:
+      type: numeric
+      rule: |
+        When is_allocations = true:
+        1. SSP Percent = (Ext SSP Price / Total Ext SSP) × 100
+        2. Ext Allocated Price = Total Transaction Price × (SSP Percent / 100)
+        3. Sum of all Ext Allocated Price = Sum of all Ext Sell Price
+        Allocation must redistribute transaction price by SSP ratios.
+      threshold: 0.01
+
+  - id: CO-010
+    name: carves-balance
+    description: Carves adjustments must net to zero
+    severity: high
+    patterns: [carves, adjustment, carve-in, carve-out]
+    check:
+      type: numeric
+      rule: |
+        If Carves Adjustment is used on any line items:
+        - Carve-out (negative) reduces source POB
+        - Carve-in (positive) increases destination POB
+        - Sum of all Carves Adjustment across all lines = 0
+      threshold: 0.01
+
+  - id: CO-011
+    name: pob-identifier-match
+    description: POB identifiers must match the POB mapping
+    severity: critical
+    patterns: [POB IDENTIFIER, POB Template, mapping]
+    check:
+      type: behavioral
+      rule: |
+        POB IDENTIFIER and POB Template on each line must exactly
+        match the pob_identifier from the charge_pob_map in the
+        design_subscription output. No invented identifiers.
