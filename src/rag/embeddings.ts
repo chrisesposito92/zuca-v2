@@ -8,7 +8,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import OpenAI from 'openai';
-import { config } from '../config';
+import { config, debugLog } from '../config';
 import { DocChunk, EmbeddingIndex, EmbeddingProgress } from './types';
 import { PreEmbeddingChunk, chunkAllDocs } from './chunker';
 
@@ -17,6 +17,18 @@ const EMBEDDING_MODEL = 'text-embedding-3-small';
 const INDEX_VERSION = '1.0.0';
 const BATCH_SIZE = 100; // OpenAI supports up to 2048, but smaller batches = better progress tracking
 const DELAY_MS = 100; // Rate limiting delay between batches
+
+// =============================================================================
+// In-Memory Cache (for runtime embedding requests)
+// =============================================================================
+
+interface CacheEntry {
+  embedding: number[];
+  timestamp: number;
+}
+
+const embeddingCache = new Map<string, CacheEntry>();
+const CACHE_TTL_MS = 30 * 60 * 1000; // 30 minutes
 
 /**
  * Get OpenAI client
@@ -238,4 +250,195 @@ export async function buildIndex(options: {
   console.log(`  Index: ${indexPath}\n`);
 
   return index;
+}
+
+// =============================================================================
+// Utility Functions for Self-Learning & Clustering
+// =============================================================================
+
+/**
+ * Get embedding with caching
+ *
+ * Caches embeddings in memory to avoid redundant API calls during
+ * clustering and similarity operations.
+ */
+export async function getEmbedding(
+  text: string,
+  options: { useCache?: boolean } = {}
+): Promise<number[]> {
+  const { useCache = true } = options;
+
+  if (useCache) {
+    const cacheKey = `${EMBEDDING_MODEL}:${text}`;
+    const cached = embeddingCache.get(cacheKey);
+
+    if (cached && Date.now() - cached.timestamp < CACHE_TTL_MS) {
+      debugLog('Embedding cache hit');
+      return cached.embedding;
+    }
+  }
+
+  // Generate embedding
+  const embedding = await embedQuery(text);
+
+  if (useCache) {
+    const cacheKey = `${EMBEDDING_MODEL}:${text}`;
+    embeddingCache.set(cacheKey, {
+      embedding,
+      timestamp: Date.now(),
+    });
+  }
+
+  return embedding;
+}
+
+/**
+ * Get embeddings for multiple texts with batching and caching
+ *
+ * Efficiently handles multiple texts by:
+ * 1. Checking cache for each text
+ * 2. Batching uncached texts into a single API call
+ * 3. Caching results for future use
+ */
+export async function getEmbeddings(
+  texts: string[],
+  options: { useCache?: boolean } = {}
+): Promise<number[][]> {
+  const { useCache = true } = options;
+
+  // Check cache for each text
+  const results: (number[] | null)[] = texts.map(text => {
+    if (!useCache) return null;
+
+    const cacheKey = `${EMBEDDING_MODEL}:${text}`;
+    const cached = embeddingCache.get(cacheKey);
+    return cached && Date.now() - cached.timestamp < CACHE_TTL_MS
+      ? cached.embedding
+      : null;
+  });
+
+  // Find uncached texts
+  const uncachedIndices = results
+    .map((r, i) => (r === null ? i : -1))
+    .filter(i => i !== -1);
+
+  if (uncachedIndices.length === 0) {
+    debugLog('All embeddings from cache');
+    return results as number[][];
+  }
+
+  debugLog(`Generating ${uncachedIndices.length} embeddings (${texts.length - uncachedIndices.length} cached)`);
+
+  // Batch request for uncached
+  const client = getOpenAIClient();
+  const uncachedTexts = uncachedIndices.map(i => texts[i]);
+
+  const response = await client.embeddings.create({
+    model: EMBEDDING_MODEL,
+    input: uncachedTexts,
+  });
+
+  // Sort response by index to match input order
+  const sortedData = response.data.sort((a, b) => a.index - b.index);
+
+  // Update cache and results
+  for (let i = 0; i < uncachedIndices.length; i++) {
+    const originalIndex = uncachedIndices[i];
+    const embedding = sortedData[i].embedding;
+
+    results[originalIndex] = embedding;
+
+    if (useCache) {
+      const cacheKey = `${EMBEDDING_MODEL}:${texts[originalIndex]}`;
+      embeddingCache.set(cacheKey, {
+        embedding,
+        timestamp: Date.now(),
+      });
+    }
+  }
+
+  return results as number[][];
+}
+
+/**
+ * Calculate cosine similarity between two vectors
+ *
+ * Returns a value between -1 and 1:
+ * - 1: identical direction (most similar)
+ * - 0: orthogonal (unrelated)
+ * - -1: opposite direction (most dissimilar)
+ */
+export function cosineSimilarity(a: number[], b: number[]): number {
+  if (a.length !== b.length) {
+    throw new Error(`Vector length mismatch: ${a.length} vs ${b.length}`);
+  }
+
+  let dotProduct = 0;
+  let normA = 0;
+  let normB = 0;
+
+  for (let i = 0; i < a.length; i++) {
+    dotProduct += a[i] * b[i];
+    normA += a[i] * a[i];
+    normB += b[i] * b[i];
+  }
+
+  const denominator = Math.sqrt(normA) * Math.sqrt(normB);
+
+  if (denominator === 0) {
+    return 0;
+  }
+
+  return dotProduct / denominator;
+}
+
+/**
+ * Find most similar texts from a corpus
+ *
+ * @param queryEmbedding - The query embedding to compare against
+ * @param corpus - Array of {text, embedding} pairs
+ * @param topK - Number of results to return
+ * @returns Top K most similar items with similarity scores
+ */
+export function findMostSimilar<T extends { embedding: number[] }>(
+  queryEmbedding: number[],
+  corpus: T[],
+  topK: number = 5
+): Array<{ item: T; similarity: number }> {
+  const scored = corpus.map(item => ({
+    item,
+    similarity: cosineSimilarity(queryEmbedding, item.embedding),
+  }));
+
+  // Sort by similarity descending
+  scored.sort((a, b) => b.similarity - a.similarity);
+
+  return scored.slice(0, topK);
+}
+
+/**
+ * Clear the in-memory embedding cache
+ */
+export function clearEmbeddingCache(): void {
+  embeddingCache.clear();
+  debugLog('Embedding cache cleared');
+}
+
+/**
+ * Get cache statistics
+ */
+export function getEmbeddingCacheStats(): { size: number; oldestAge: number } {
+  const now = Date.now();
+  let oldestTimestamp = now;
+
+  for (const entry of embeddingCache.values()) {
+    if (entry.timestamp < oldestTimestamp) {
+      oldestTimestamp = entry.timestamp;
+    }
+  }
+
+  return {
+    size: embeddingCache.size,
+    oldestAge: now - oldestTimestamp,
+  };
 }
