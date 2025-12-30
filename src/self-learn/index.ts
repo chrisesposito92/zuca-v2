@@ -21,6 +21,7 @@ export {
   getCorrectionsForStep,
   getAllCorrections,
   isCorrectionsReady,
+  clearEmbeddingCache,
 } from './corrections';
 
 // Criteria Loading
@@ -32,14 +33,59 @@ export {
   getCriteriaIfExists,
 } from './criteria';
 
-// Evaluation (Phase 2)
-// export { runEvaluationSuite, listSuites } from './evaluation';
-
 // Judge (Phase 2)
-// export { evaluateOutput } from './judge';
+export {
+  evaluateOutput,
+  evaluateSingleCriterion,
+  hasCriticalFailures,
+  getFailedEvaluations,
+  type EvaluateOptions,
+} from './judge';
 
-// Injection (Phase 3)
-// export { getCorrectionsContext } from './injector';
+// Evaluation Runner (Phase 2)
+export {
+  runEvaluationSuite,
+  runStepEvaluation,
+  evaluateSingleTest,
+  loadTestSuite,
+  loadAllTestSuites,
+  listTestSuites,
+  createQuickTestCase,
+  type RunEvaluationOptions,
+  type TestCaseResult,
+} from './evaluation';
+
+// Injection (Phase 3) + Effectiveness Tracking (Phase 5)
+export {
+  getCorrectionsContext,
+  getCorrectionsContextString,
+  formatCorrectionForPrompt,
+  formatCorrectionsSection,
+  hasCorrectionsForStep,
+  markCorrectionEffectiveness,
+  buildInputSummary,
+  // Effectiveness tracking
+  startCorrectionTracking,
+  getRunContext,
+  clearRunContext,
+  type GetCorrectionsContextOptions,
+} from './injector';
 
 // Evolution (Phase 4)
-// export { analyzePatterns, approvePromptUpdate } from './evolution';
+export {
+  analyzePatterns,
+  analyzeAllPatterns,
+  generatePromptSuggestion,
+  getPendingSuggestions,
+  getSuggestionsForStep,
+  getSuggestion,
+  approveSuggestion,
+  rejectSuggestion,
+  markSuggestionApplied,
+  getPromptPath,
+  runSelfImproveIteration,
+  type PatternAnalysis,
+  type AnalyzeOptions,
+  type SelfImproveResult,
+  type SelfImproveOptions,
+} from './evolution';

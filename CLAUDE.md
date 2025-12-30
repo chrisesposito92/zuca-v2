@@ -46,6 +46,77 @@ This file is for LLM contributors. For install/run commands and product overview
 - RAG context is injected before the LLM call; it is not a tool.
 - Doc corpus and QA generation live in `zuora-docs-scrapper/`; rebuild with `npm run rag:*` after changing docs or chunking.
 
+## Self-Learning System
+Automated feedback loop where the pipeline learns from evaluation failures:
+
+### Architecture
+- **Test Suites** (`data/test-suites/*.yaml`) - Test cases with inputs and focus steps
+- **Evaluation Criteria** (`data/evaluation-criteria/*.yaml`) - Behavioral rules per step
+- **LLM Judge** (`src/self-learn/judge/`) - Evaluates outputs against criteria
+- **Corrections Store** - Dual backend: JSON (local dev) or Postgres (production)
+- **Injector** (`src/self-learn/injector/`) - Injects corrections as few-shot examples
+- **Evolution** (`src/self-learn/evolution/`) - Pattern analysis + prompt improvement suggestions
+
+### Key Files
+- `src/self-learn/` - Main module: types, corrections, criteria, judge, evaluation, injector, evolution
+- `src/self-learn/corrections/postgres-backend.ts` - Postgres backend with pgvector embeddings
+- `src/llm/prompts/self-learn-judge.md` - Judge system prompt (registered in `index.ts`)
+- `apps/web/lib/schema.sql` - Database schema including corrections + prompt_suggestions tables
+- `docs/FEATURE-SELF-LEARNING.md` - Full feature documentation with phase status
+
+### Configuration
+```bash
+# Enable Postgres backend (requires POSTGRES_URL)
+USE_POSTGRES_CORRECTIONS=true
+
+# Disable embeddings for corrections (faster, keyword-only search)
+USE_CORRECTIONS_EMBEDDINGS=false
+```
+
+### CLI Commands
+```bash
+# Evaluation
+npm run cli evaluate              # Run evaluation suite
+npm run cli evaluate --corrections # Generate corrections for failures
+npm run cli evaluate -m gemini-3-flash-preview  # Use specific model
+
+# Corrections Management
+npm run cli corrections list      # List stored corrections
+npm run cli corrections summary   # Show pattern statistics
+
+# Pattern Analysis & Prompt Evolution (Phase 4)
+npm run cli prompts analyze       # Analyze failure patterns
+npm run cli prompts suggest <step> "<pattern>"  # Generate suggestion
+npm run cli prompts list          # View pending suggestions
+npm run cli prompts approve <id>  # Approve a suggestion
+
+# Self-Improvement Loop
+npm run cli self-improve          # Run evaluation + pattern analysis
+npm run cli self-improve --auto-suggest  # Auto-generate suggestions
+```
+
+### Adding New Criteria
+1. Create YAML file in `data/evaluation-criteria/<step-name>.yaml`
+2. Follow existing format: name, version, step, description, criteria array
+3. Each criterion needs: id, name, description, severity, patterns, check.rule, examples
+
+### Adding New Test Cases
+1. Edit `data/test-suites/golden-scenarios.yaml` or create new suite
+2. Include: id, name, description, input (ZucaInput fields), focus_steps, tags
+3. Test cases run through full pipeline; focus_steps controls which steps are evaluated
+
+### Building Test Suites from UC Generator
+```bash
+# Generate use cases from real companies
+npm run cli -- generate "Salesforce" -w "https://www.salesforce.com" -c 3 -o /tmp/uc/salesforce.json
+
+# Convert to test suite YAML
+npm run uc:to-suite -- /tmp/uc/ data/test-suites/real-world-scenarios.yaml
+
+# Run evaluation on custom suite
+npm run cli -- self-improve --suite real-world-scenarios -m gemini-3-flash-preview
+```
+
 ## Revenue Snapshot (read-only)
 - Pipeline: 2 steps in `src/pipeline/revenue-snapshot/` (Waterfall → Summary).
 - Waterfall step handles SSP allocations + periodization in single LLM call.

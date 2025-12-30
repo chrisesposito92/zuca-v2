@@ -251,3 +251,30 @@ export interface InjectionContext {
   inputSummary: string;
   capabilities?: string[];
 }
+
+/**
+ * Result of getting corrections context, including which corrections were applied
+ */
+export interface InjectionResult {
+  /** Formatted corrections text for prompt injection */
+  context: string;
+  /** IDs of corrections that were applied */
+  appliedCorrectionIds: string[];
+  /** Number of corrections applied */
+  count: number;
+}
+
+// =============================================================================
+// Effectiveness Tracking
+// =============================================================================
+
+/**
+ * Tracks corrections applied during a pipeline run for effectiveness measurement
+ */
+export interface CorrectionRunContext {
+  runId: string;
+  /** Map of step name -> applied correction IDs */
+  appliedByStep: Map<string, string[]>;
+  /** Timestamp when the run started */
+  startedAt: Date;
+}

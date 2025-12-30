@@ -1,0 +1,511 @@
+name: "fintech"
+description: "Generated from UC outputs - 2025-12-30"
+version: "1.0"
+tests:
+  - id: "gen-adyen-1"
+    name: "Adyen - Standard E-commerce Merchant Setup"
+    description: "Standard E-commerce Merchant Setup"
+    input:
+      customer_name: "Adyen"
+      contract_start_date: "01/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      allocation_method: null
+      rev_rec_notes: "Usage: POB=consumption release=as_used (Processing and fraud check fees are earned and recognized at the moment of transaction capture.)"
+      use_case_description: "A mid-market e-commerce brand signs a 12-month agreement for global payment processing. The contract includes the Online Payment Processing product and the RevenueProtect fraud prevention add-on. The processing fee is set at $0.13 per transaction, and the RevenueProtect fee is $0.06 per transaction check. Both charges are usage-based and billed monthly in arrears based on actual volume. Revenue is recognized as the transactions occur, following a consumption-based pattern. This scenario represents a standard high-volume merchant with no fixed monthly subscription fees."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "one-time"
+      - "recurring"
+  - id: "gen-adyen-2"
+    name: "Adyen - Unified Commerce Omnichannel Deployment"
+    description: "Unified Commerce Omnichannel Deployment"
+    input:
+      customer_name: "Adyen"
+      contract_start_date: "01/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Hardware: POB=point_in_time release=at_delivery (Revenue for POS terminals is recognized when control of the physical device passes to the customer.); Usage: POB=consumption release=as_used (Transaction processing revenue is recognized as services are rendered.)"
+      use_case_description: "A global retailer implementing a Unified Commerce strategy requires both online processing and physical hardware. This use case involves the purchase of 50 POS Terminals at a one-time price of $299 per unit and ongoing Online Payment Processing at $0.13 per transaction. The hardware is billed as a one-time charge upon the order effective date. Transaction fees are billed monthly in arrears. Revenue for the hardware is recognized at a point-in-time upon delivery, while processing fees are recognized as usage occurs. This scenario tests the ability to handle mixed hardware and usage-based revenue streams in a single contract."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "one-time"
+      - "allocation"
+  - id: "gen-adyen-3"
+    name: "Adyen - Adyen for Platforms Enterprise Agreement"
+    description: "Adyen for Platforms Enterprise Agreement"
+    input:
+      customer_name: "Adyen"
+      contract_start_date: "01/01/2026"
+      terms_months: 24
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      allocation_method: null
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (The Platform Access Fee represents a right to access the platform and is recognized linearly over the contract term.); Usage: POB=consumption release=as_used (Transaction fees are recognized as sub-merchants process payments through the platform.)"
+      use_case_description: "A large SaaS marketplace platform signs a 24-month enterprise agreement for the Adyen for Platforms product. The contract includes a recurring Platform Access Fee of $5,000 per month and a discounted usage-based Processing Fee of $0.10 per transaction. The Platform Access Fee is billed monthly in advance, while usage is billed monthly in arrears. Revenue for the Platform Access Fee is recognized ratably over the 24-month term as an 'over-time' performance obligation. Processing revenue is recognized as consumption occurs. This case demonstrates a multi-year SaaS-style commitment combined with high-scale transaction volume."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "discount"
+      - "recurring"
+      - "license"
+      - "multi-year"
+  - id: "gen-mailchimp-4"
+    name: "Mailchimp - Standard SMB Growth Bundle"
+    description: "Standard SMB Growth Bundle"
+    input:
+      customer_name: "Mailchimp"
+      contract_start_date: "01/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Standard SaaS subscription for the Marketing Platform.); Usage: POB=over_time release=ratable_over_term (SMS credits are a recurring monthly bundle; since they do not roll over, they are recognized over the monthly period.); Onboarding: POB=point_in_time release=at_go_live (Single onboarding session recognized upon delivery.)"
+      use_case_description: "A growing retail customer signs up for the Standard Marketing Plan at $60 per month, supporting up to 2,500 contacts. They add a recurring monthly SMS Marketing Credit bundle of 1,000 credits for $20 per month to drive holiday promotions. The package includes one Personalized Onboarding session, which is bundled at no additional cost but has a standalone value of $150. Revenue for the platform and SMS credits is recognized ratably over the monthly service period. The onboarding session revenue is recognized point-in-time upon completion of the session. This scenario demonstrates a typical mid-tier bundle with a mix of recurring SaaS and a discrete professional service."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "one-time"
+      - "recurring"
+      - "support"
+      - "license"
+      - "credits"
+      - "allocation"
+  - id: "gen-mailchimp-5"
+    name: "Mailchimp - Premium Enterprise Transactional Suite"
+    description: "Premium Enterprise Transactional Suite"
+    input:
+      customer_name: "Mailchimp"
+      contract_start_date: "01/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Premium tier subscription recognized ratably over the annual term.); Usage: POB=consumption release=as_used (Transactional email blocks (Mandrill) recognized as emails are sent via API.); Onboarding: POB=point_in_time release=at_go_live (Four discrete sessions; revenue recognized per session completion.)"
+      use_case_description: "An enterprise customer selects the Premium Marketing Plan for 50,000 contacts at $700 per month, opting for annual billing ($8,400 upfront). To support their product-led growth, they add 10 blocks of Transactional Email (Mandrill) per month at $200 total ($20 per 25k block). The contract includes 4 Personalized Onboarding sessions to assist with audience migration and API integration. Subscription revenue is recognized ratably over the 12-month term. Transactional email blocks are recognized as consumption occurs. The onboarding sessions are treated as separate performance obligations recognized as each session is completed. This highlights high-volume enterprise billing with mixed recognition triggers."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "one-time"
+      - "recurring"
+      - "support"
+      - "allocation"
+  - id: "gen-mailchimp-6"
+    name: "Mailchimp - Essentials Scaling Startup"
+    description: "Essentials Scaling Startup"
+    input:
+      customer_name: "Mailchimp"
+      contract_start_date: "01/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      allocation_method: null
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Essentials tier subscription recognized monthly.); Usage: POB=over_time release=ratable_over_term (SMS bundles are recurring and expire monthly, so they are recognized over the month.)"
+      use_case_description: "A tech startup signs up for the Essentials Plan at $75 per month to manage 5,000 contacts. They require higher SMS volume and purchase 2,000 monthly credits for $40 per month. This is a pure self-service scenario with no professional services or onboarding sessions included. The customer is billed monthly on a recurring basis. Revenue for both the platform subscription and the SMS credit bundles is recognized ratably over each monthly service period. This scenario represents the high-velocity, low-complexity segment of the Mailchimp business model, focusing on automated recurring billing and simple revenue recognition."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "one-time"
+      - "recurring"
+      - "license"
+      - "credits"
+  - id: "gen-paypal-7"
+    name: "PayPal - SaaS Growth Subscription Plan"
+    description: "SaaS Growth Subscription Plan"
+    input:
+      customer_name: "PayPal"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      allocation_method: null
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Monthly platform fees for Payments Pro and Recurring Billing provide continuous access to the service.); Usage: POB=consumption release=as_used (Transaction fees are earned and recognized at the point each payment is successfully processed.)"
+      use_case_description: "A scaling software merchant signs up for the SaaS Growth Subscription Plan to manage their customer billing and branded checkout. The plan includes the PayPal Payments Pro product and the Recurring Billing Service add-on for a combined recurring fee of $40 per month. Additionally, the merchant is charged a usage-based fee of 2.9% plus $0.30 for every digital payment transaction processed. The contract is set for a 12-month term with monthly billing. Revenue for the fixed monthly subscription fees is recognized ratably over the service period, while the transaction-based usage fees are recognized as consumption occurs each month."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+      - "license"
+  - id: "gen-paypal-8"
+    name: "PayPal - SMB Retail Omnichannel Bundle"
+    description: "SMB Retail Omnichannel Bundle"
+    input:
+      customer_name: "PayPal"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Hardware: POB=point_in_time release=at_delivery (Revenue for Zettle terminals is recognized when the physical control of the devices is transferred.); Usage: POB=consumption release=as_used (In-person transaction fees are recognized immediately upon successful payment processing.)"
+      use_case_description: "A new retail merchant adopts the SMB Retail Starter Bundle to support both in-person and digital sales. The merchant purchases two Zettle Terminal devices at a total one-time cost of $228, reflecting a promotional discount on the first unit ($29) and list price for the second ($199). They also utilize PayPal Checkout for all in-person transactions at a flat usage rate of 2.29% per transaction. Although the merchant operates on a month-to-month basis, the agreement is modeled as a 12-month term for demo purposes. Hardware revenue is recognized point-in-time upon delivery, while transaction fees are recognized as usage occurs."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "support"
+      - "allocation"
+  - id: "gen-paypal-9"
+    name: "PayPal - Braintree Enterprise Global Agreement"
+    description: "Braintree Enterprise Global Agreement"
+    input:
+      customer_name: "PayPal"
+      contract_start_date: "02/01/2026"
+      terms_months: 36
+      transaction_currency: "USD"
+      billing_period: "Quarterly"
+      is_allocations: false
+      allocation_method: null
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (The annual platform access fee is treated as a single POB recognized over the contract year.); Usage: POB=consumption release=as_used (Variable transaction fees are recognized in the period the processing services are rendered.)"
+      use_case_description: "A global enterprise merchant enters into a 3-year strategic agreement for the Braintree Enterprise Platform. The contract includes a fixed annual platform access fee of $12,000, billed quarterly at $3,000, which covers core vaulting and advanced fraud protection tools. Usage is priced using a custom Interchange Plus (IC++) model, estimated at 2.89% plus $0.29 per transaction for demo purposes. The agreement covers multiple regions and currencies, though the primary billing is in USD. The platform fee is recognized ratably over the 36-month term, and the transaction usage is recognized as billed based on monthly volume."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "license"
+      - "multi-year"
+  - id: "gen-intuit-quickbooks-online-10"
+    name: "Intuit QuickBooks Online - SMB Growth Bundle with Promo Discount"
+    description: "SMB Growth Bundle with Promo Discount"
+    input:
+      customer_name: "Intuit QuickBooks Online"
+      contract_start_date: "01/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Standard SaaS subscription for QBO Plus and Payroll Core base fees recognized monthly.); Usage: POB=consumption release=as_used (Per-employee payroll fees recognized based on the actual headcount processed each month.)"
+      use_case_description: "A small business customer signs up for the 'Small Business Growth Bundle' consisting of QuickBooks Online Plus and QuickBooks Online Payroll Core. The QBO Plus subscription is $90/month, and Payroll Core is $50/month plus a recurring usage charge of $6.50 per employee per month. To incentivize the signup, a 50% discount is applied to the base subscription fees for the first 3 months of the 12-month term. The base subscriptions are recognized ratably over time, while the per-employee usage fees are recognized as incurred each month. This scenario tests Zuora's ability to handle bundled recurring charges with time-limited discounts and monthly usage-based components."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "bundle"
+      - "discount"
+      - "recurring"
+      - "allocation"
+  - id: "gen-intuit-quickbooks-online-11"
+    name: "Intuit QuickBooks Online - Hands-Off Enterprise with Cleanup Service"
+    description: "Hands-Off Enterprise with Cleanup Service"
+    input:
+      customer_name: "Intuit QuickBooks Online"
+      contract_start_date: "01/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      allocation_method: "Use Sell Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Advanced, Elite Payroll, and Live Bookkeeping monthly fees recognized over the term.); Services: POB=point_in_time release=at_go_live (Cleanup fee recognized when the initial bookkeeping cleanup is finalized.); Usage: POB=consumption release=as_used (Elite Payroll per-employee fees recognized as consumed.)"
+      use_case_description: "A mid-market company opts for the 'Hands-Off Enterprise Plan' which includes QuickBooks Online Advanced ($200/month), QuickBooks Online Payroll Elite ($125/month + $12/employee), and QuickBooks Live Bookkeeping ($300/month). Because their existing books are disorganized, they are charged a one-time 'Cleanup' fee of $800. The cleanup fee is a distinct performance obligation recognized upon completion of the historical data cleanup. The recurring subscriptions are billed monthly and recognized ratably. This use case highlights the mix of high-tier SaaS, usage-based payroll, and a one-time professional service fee within a single contract."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "one-time"
+      - "recurring"
+      - "license"
+      - "allocation"
+  - id: "gen-intuit-quickbooks-online-12"
+    name: "Intuit QuickBooks Online - Freelancer Bundle with Embedded Payments"
+    description: "Freelancer Bundle with Embedded Payments"
+    input:
+      customer_name: "Intuit QuickBooks Online"
+      contract_start_date: "01/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      allocation_method: null
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Simple Start subscription recognized monthly.); Usage: POB=consumption release=as_used (Payment processing fees recognized at the time of transaction.)"
+      use_case_description: "A sole proprietor signs up for the 'Freelancer Bundle' featuring QuickBooks Online Simple Start at $38/month. This bundle automatically enables QuickBooks Payments with no monthly base fee, but with a usage-based charge model of 2.99% per credit card transaction and 1% for ACH. Revenue for the subscription is recognized monthly. Revenue for the payments component is recognized as transactions occur, typically as a deduction from the payout. This scenario demonstrates Zuora's ability to manage a subscription alongside high-volume, low-value transactional usage charges where the 'price' is a percentage of the transaction volume."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "bundle"
+      - "recurring"
+      - "credits"
+  - id: "gen-square-block-inc-13"
+    name: "Square (Block, Inc.) - Retail Expansion with Square Plus"
+    description: "Retail Expansion with Square Plus"
+    input:
+      customer_name: "Square"
+      contract_start_date: "01/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      allocation_method: null
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Square Plus software provides continuous access to retail features.); Hardware: POB=point_in_time release=at_delivery (Square Terminal ownership transfers at delivery.); Usage: POB=consumption release=as_billed (Processing fees are earned at the moment of transaction.)"
+      use_case_description: "A growing retail customer with three physical locations subscribes to the Square Plus plan at $49 per location per month. To support these locations, they purchase three Square Terminals as a one-time hardware cost of $299 each ($897 total). The software subscription revenue is recognized ratably over the 12-month term, while the hardware revenue is recognized as a point-in-time event upon delivery. Payment processing is enabled at the standard Plus rate of 2.5% plus $0.15 per transaction, with revenue recognized as usage occurs. This scenario demonstrates the management of recurring SaaS fees alongside one-time physical goods and high-volume usage processing."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "one-time"
+      - "recurring"
+      - "support"
+      - "license"
+  - id: "gen-square-block-inc-14"
+    name: "Square (Block, Inc.) - Enterprise Restaurant Ecosystem"
+    description: "Enterprise Restaurant Ecosystem"
+    input:
+      customer_name: "Square"
+      contract_start_date: "01/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      allocation_method: null
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Includes Premium POS and Payroll base fees.); Usage: POB=consumption release=as_used (Payroll employee fees recognized as active employees are processed.); Usage: POB=consumption release=as_billed (Negotiated payment processing fees recognized on transaction.)"
+      use_case_description: "A large restaurant group signs a contract for 5 locations on the Square Premium plan at $149 per location per month. They also implement Square Payroll, which carries a $35 monthly base fee and a variable $6 per-employee fee for an estimated 40 employees. Due to their high volume, they have negotiated a custom payment processing rate of 2.3% plus $0.10 per transaction. Revenue for the POS software and the Payroll base fee is recognized ratably over the 12-month term. The variable payroll employee fees and the payment processing revenue are recognized monthly based on actual consumption. This case tests Zuora's ability to handle complex mixed-model billing with both flat recurring and volume-based usage fees."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+  - id: "gen-square-block-inc-15"
+    name: "Square (Block, Inc.) - Hardware Bundle with Revenue Allocation"
+    description: "Hardware Bundle with Revenue Allocation"
+    input:
+      customer_name: "Square"
+      contract_start_date: "01/01/2026"
+      terms_months: 24
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Hardware: POB=point_in_time release=at_delivery (Allocated hardware value recognized at delivery.); Subscription: POB=over_time release=ratable_over_term (Allocated software value recognized over 24 months.)"
+      use_case_description: "An enterprise merchant signs a 24-month agreement for 10 Square Registers bundled with 10 Square Premium software licenses. The Square Registers have a list price of $799 each, and the software is $149 per location per month. As part of a promotion, Square provides a 15% discount across the total contract value. Because this bundle involves a significant hardware component (point-in-time) and a recurring software component (over-time) with a shared discount, revenue allocation is required. This ensures the hardware revenue is correctly valued at its standalone selling price (SSP) and recognized upon delivery, while the software portion is allocated and recognized over the 24-month term. This scenario exercises Zuora Revenue's allocation engine."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "recurring"
+      - "license"
+      - "allocation"
+      - "multi-year"
+  - id: "gen-stripe-16"
+    name: "Stripe - Marketplace Platform Launch"
+    description: "Marketplace Platform Launch"
+    input:
+      customer_name: "Stripe"
+      contract_start_date: "01/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      allocation_method: null
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Stripe Connect account fees ($2/month) represent a standing ready obligation to provide platform access.); Usage: POB=consumption release=as_used (Stripe Billing volume fees (0.7%) are recognized as the billing transactions are processed by the system.)"
+      use_case_description: "Marketplace Solutions Inc. is launching a new platform using Stripe Connect to manage 250 active Express accounts. They also utilize Stripe Billing to manage their platform fee subscriptions for sellers, with an estimated monthly volume of $500,000. The commercial terms include a $2 per account monthly fee for Connect and a 0.7% fee on the recurring billing volume managed through Stripe Billing. Revenue for the account fees is recognized ratably over the monthly term as access is provided, while the volume-based billing fees are recognized as usage occurs. This scenario represents a standard mid-market SaaS and usage combination billed monthly."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+      - "license"
+  - id: "gen-stripe-17"
+    name: "Stripe - Omnichannel Retail Expansion"
+    description: "Omnichannel Retail Expansion"
+    input:
+      customer_name: "Stripe"
+      contract_start_date: "01/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      allocation_method: null
+      rev_rec_notes: "Hardware: POB=point_in_time release=at_delivery (Terminal readers are distinct physical goods with revenue recognized upon transfer of control (shipment).); Usage: POB=point_in_time release=as_billed (Payment processing fees for both Online and Terminal are recognized as the individual transactions are completed.)"
+      use_case_description: "Urban Goods is expanding their online presence into physical retail and requires Stripe Terminal hardware and processing. They are purchasing 15 Stripe Terminal M2 readers at a one-time cost of $249 each. In addition to the hardware, they will pay a usage-based fee of 2.7% + $0.05 per in-person transaction. Their existing online business will continue to use Stripe Payments at 2.9% + $0.30 per transaction. Revenue for the hardware readers is recognized at the point of delivery (shipment), while all transaction processing fees are recognized at the point in time the transaction occurs."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "one-time"
+  - id: "gen-stripe-18"
+    name: "Stripe - Enterprise Startup Bundle"
+    description: "Enterprise Startup Bundle"
+    input:
+      customer_name: "Stripe"
+      contract_start_date: "01/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Services: POB=point_in_time release=at_go_live (Stripe Atlas incorporation is a one-time service recognized when the company formation is complete.); Subscription: POB=over_time release=ratable_over_term (The fixed-fee Billing plan provides continuous access to the platform and is recognized monthly over the year.)"
+      use_case_description: "A venture studio is setting up a new portfolio company using Stripe Atlas for legal incorporation ($500 one-time) and a customized Stripe Billing 'Predictable' plan. The custom Billing plan is priced at a flat $10,000 annual fee for the first year, billed upfront. To incentivize the bundle, a 15% discount is applied to the total contract value. This requires revenue allocation between the Atlas service (point-in-time) and the Billing subscription (over-time). Atlas revenue is recognized when the incorporation documents are filed, while the Billing subscription is recognized ratably over the 12-month term."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "allocation"
+  - id: "gen-xero-19"
+    name: "Xero - Growing Business with Payroll Bundle"
+    description: "Growing Business with Payroll Bundle"
+    input:
+      customer_name: "Xero"
+      contract_start_date: "01/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Accounting and Payroll base fees are standard recurring services provided over the subscription term.); Usage: POB=consumption release=as_used (Per-employee payroll fees are recognized in the period the payroll run occurs.)"
+      use_case_description: "A growing small business signs up for the Xero Growing Plan at $42.00 per month and adds the Xero Payroll (powered by Gusto) base subscription at $40.00 per month. Additionally, they anticipate having 5 employees, billed at a usage rate of $6.00 per person per month. To incentivize the sign-up, Xero offers a 75% discount on the recurring Accounting and Payroll base fees for the first 3 months of the 12-month contract. Billing is handled monthly in advance for the recurring fees, while the per-person payroll usage is billed monthly in arrears. Revenue for the base subscriptions is recognized ratably over each month, while the per-person usage is recognized as the payroll service is consumed."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "bundle"
+      - "discount"
+      - "recurring"
+      - "allocation"
+  - id: "gen-xero-20"
+    name: "Xero - Established Plan with Multi-User Expenses"
+    description: "Established Plan with Multi-User Expenses"
+    input:
+      customer_name: "Xero"
+      contract_start_date: "01/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      allocation_method: null
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Established Plan fee is a recurring SaaS subscription recognized over the annual term.); Usage: POB=consumption release=as_used (Additional user fees for Expenses are recognized as users are active in the system.)"
+      use_case_description: "An established business selects the Xero Established Plan for $78.00 per month, which includes multi-currency support and the first user for Xero Expenses and Projects for free. The customer adds 4 additional team members to the Expenses module at a rate of $5.00 per user per month. This scenario uses an annual billing cycle where the $78.00 monthly fee is collected upfront for the year ($936.00), while the additional user fees are billed monthly based on active users. The core accounting subscription revenue is recognized ratably over the 12-month term. The expense user fees are treated as consumption-based revenue recognized monthly."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+      - "support"
+  - id: "gen-xero-21"
+    name: "Xero - Early Plan Entry with High-Incentive Promotion"
+    description: "Early Plan Entry with High-Incentive Promotion"
+    input:
+      customer_name: "Xero"
+      contract_start_date: "01/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      allocation_method: null
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (The discounted monthly fee is part of a single POB for the accounting software access.)"
+      use_case_description: "A sole trader starts with the Xero Early Plan, priced at $15.00 per month. To support new business growth, Xero provides a 'New Starter' promotion consisting of a 90% discount for the first 6 months of the 12-month term. This plan has strict limits (e.g., 20 invoices per month), and any invoices exceeding this limit would trigger a plan upgrade or overage fee (though for this scenario, we focus on the base fee and discount). Billing is monthly. Revenue is recognized ratably over the 12-month contract, with the total contract value (including the deep discount) spread across the performance obligation period to reflect the 12-month commitment."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "discount"
+      - "support"

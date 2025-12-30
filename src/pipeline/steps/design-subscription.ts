@@ -23,6 +23,7 @@ import { formatMatchResultsForContext } from './match-golden-use-cases';
 import { formatPobTemplatesForContext } from '../../data/loader';
 import { debugLog } from '../../config';
 import { getDocContext, isIndexReady } from '../../rag';
+import { getCorrectionsContext } from '../../self-learn';
 
 /**
  * Combined output from subscription design
@@ -263,7 +264,8 @@ function buildUserMessage(
   contextSubs: GoldenSubscription[],
   contextRpcs: GoldenRatePlanChargesDoc[],
   pobTemplates: PobTemplate[],
-  docContext?: string
+  docContext?: string,
+  correctionsContext?: string
 ): string {
   const parts = [
     `Customer: ${input.customer_name}`,
@@ -286,6 +288,11 @@ function buildUserMessage(
     `Trigger Event: ${contractIntel.trigger_event}`,
     '',
   ];
+
+  // Include learned corrections if available
+  if (correctionsContext) {
+    parts.push(correctionsContext, '');
+  }
 
   // Include retrieved documentation if available
   if (docContext) {
@@ -352,6 +359,25 @@ export async function designSubscription(
     debugLog('Retrieved doc context', { length: docContext?.length || 0 });
   }
 
+  // Retrieve learned corrections for this step
+  const inputSummary = [
+    `Customer: ${input.customer_name}`,
+    `Description: ${input.use_case_description?.substring(0, 200)}`,
+    `Billing Period: ${input.billing_period}`,
+    `Rev Rec Notes: ${input.rev_rec_notes?.substring(0, 100) || 'none'}`,
+  ].join('\n');
+
+  const correctionsResult = await getCorrectionsContext({
+    stepName: 'design_subscription',
+    inputSummary,
+  });
+  if (correctionsResult.count > 0) {
+    debugLog('Injecting corrections context', {
+      count: correctionsResult.count,
+      ids: correctionsResult.appliedCorrectionIds,
+    });
+  }
+
   const systemPrompt = await loadPrompt(PROMPTS.DESIGN_SUBSCRIPTION);
   let userMessage = buildUserMessage(
     input,
@@ -360,7 +386,8 @@ export async function designSubscription(
     contextSubs,
     contextRpcs,
     pobTemplates,
-    docContext
+    docContext,
+    correctionsResult.context
   );
 
   // Include previous results for multi-turn support

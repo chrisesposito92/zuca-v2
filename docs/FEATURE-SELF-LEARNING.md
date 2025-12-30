@@ -57,12 +57,12 @@ npm run cli -- prompts approve <id>
 src/self-learn/
 ├── index.ts                 # Main exports
 ├── types.ts                 # Shared types (Correction, Criterion, etc.)
-├── evaluation/              # (Phase 2)
-│   ├── index.ts             # Evaluation runner
-│   └── runner.ts            # Test execution
-├── judge/                   # (Phase 2)
-│   ├── index.ts             # LLM judge
-│   └── evaluate.ts          # Core evaluation logic
+├── evaluation/              # ✅ Phase 2
+│   ├── index.ts             # Evaluation runner ✅
+│   ├── runner.ts            # Test execution ✅
+│   └── test-suites.ts       # Test suite loader ✅
+├── judge/                   # ✅ Phase 2
+│   └── index.ts             # LLM judge with evaluateOutput() ✅
 ├── corrections/
 │   ├── index.ts             # Dual backend router ✅
 │   ├── types.ts             # Correction types ✅
@@ -70,13 +70,13 @@ src/self-learn/
 │   └── postgres-backend.ts  # (Phase 4) Production Postgres
 ├── criteria/
 │   └── index.ts             # YAML criteria loader ✅
-├── injector/                # (Phase 3)
-│   └── index.ts             # Few-shot injection
+├── injector/                # ✅ Phase 3
+│   └── index.ts             # Few-shot injection ✅
 └── evolution/               # (Phase 4)
     └── index.ts             # Pattern analysis + suggestions
 
 src/llm/prompts/
-└── self-learn-judge.md      # (Phase 2) Judge system prompt
+└── self-learn-judge.md      # ✅ Judge system prompt
 
 data/
 ├── evaluation-criteria/     # Behavioral rules (YAML)
@@ -102,36 +102,44 @@ data/
 - [ ] Write evaluation criteria for ALL pipeline steps (6 YAML files)
 - [x] Create `docs/FEATURE-SELF-LEARNING.md`
 
-### Phase 2: Evaluation Engine (Pending)
-- [ ] Create judge prompt (`self-learn-judge.md`)
-- [ ] Implement `evaluateOutput()` with structured output
-- [ ] Implement evaluation runner
-- [ ] Add correction generation from failures
-- [ ] Add embeddings to corrections (reuse `src/rag/embeddings.ts`)
-- [ ] Create test suite format and loader
+### Phase 2: Evaluation Engine ✅ (Complete)
+- [x] Create judge prompt (`self-learn-judge.md`)
+- [x] Implement `evaluateOutput()` with structured output
+- [x] Implement evaluation runner
+- [x] Add correction generation from failures
+- [ ] Add embeddings to corrections (reuse `src/rag/embeddings.ts`) - Deferred to Phase 3
+- [x] Create test suite format and loader
+- [x] Create sample test suite (`golden-scenarios.yaml`)
 
-### Phase 3: Few-Shot Injection (Pending)
-- [ ] Implement `getCorrectionsContext()` function
-- [ ] Implement correction formatter for prompts
-- [ ] Modify `build-billings.ts` to inject corrections
-- [ ] Modify `build-contracts-orders.ts` to inject corrections
-- [ ] Modify `design-subscription.ts` to inject corrections
-- [ ] Add tracking for correction effectiveness
+### Phase 3: Few-Shot Injection ✅ (Complete)
+- [x] Implement `getCorrectionsContext()` function
+- [x] Implement correction formatter for prompts
+- [x] Modify `build-billings.ts` to inject corrections
+- [x] Modify `build-contracts-orders.ts` to inject corrections
+- [x] Modify `design-subscription.ts` to inject corrections
+- [x] Track `times_applied` when corrections are used
+- [ ] Full effectiveness tracking (did correction help?) - Deferred to Phase 4
 
-### Phase 4: Prompt Evolution (Pending)
-- [ ] Implement pattern frequency analysis
-- [ ] Implement prompt suggestion generation
-- [ ] Add `prompts analyze` CLI command
-- [ ] Add `prompts approve/reject` CLI commands
-- [ ] Implement Postgres backend for corrections
-- [ ] Add `self-improve` CLI command
+### Phase 4: Prompt Evolution ✅ (Complete)
+- [x] Implement pattern frequency analysis (`analyzePatterns()`)
+- [x] Implement prompt suggestion generation (`generatePromptSuggestion()`)
+- [x] Add `prompts analyze` CLI command
+- [x] Add `prompts suggest/list/approve/reject` CLI commands
+- [x] Add `self-improve` CLI command
+- [ ] Implement Postgres backend for corrections - Deferred to Phase 5
+- [ ] Add embeddings to corrections (semantic search) - Deferred to Phase 5
+- [ ] Full effectiveness tracking (pass correction IDs through pipeline) - Deferred to Phase 5
 
-### Phase 5: Polish & Scale (Pending)
-- [ ] Add criteria for all pipeline steps
-- [ ] Build test suite from golden use cases
-- [ ] Add CI integration option
-- [ ] Performance optimization
-- [ ] Complete documentation
+### Phase 5: Polish & Scale ✅ (Complete)
+- [x] Implement Postgres backend for corrections (`postgres-backend.ts`)
+- [x] Add embeddings to corrections for semantic search (pgvector with HNSW index)
+- [x] Database schema for corrections and prompt_suggestions tables
+- [x] Add criteria for all pipeline steps (6 YAML files)
+- [x] Build test suite from golden use cases (15 scenarios)
+- [x] Add CI integration option (`.github/workflows/self-learning.yml`)
+- [x] Full effectiveness tracking (see Effectiveness Tracking section below)
+- [x] Performance optimization (LRU embedding cache, 30min TTL)
+- [x] Complete documentation
 
 ## Evaluation Criteria Format (YAML)
 
@@ -260,6 +268,84 @@ CREATE TABLE prompt_suggestions (
 4. **Injection Point**: User message augmentation (simplest, most flexible)
 5. **Manual Approval**: Prompt suggestions require human approval by default
 
+## Effectiveness Tracking
+
+The system tracks whether corrections actually help improve outputs. This closes the feedback loop by measuring correction impact.
+
+### How It Works
+
+1. **Run Context**: When a test case starts, a `CorrectionRunContext` is created
+2. **Injection Tracking**: When corrections are injected via `getCorrectionsContext()`, their IDs are recorded in the run context
+3. **Effectiveness Update**: After evaluation, the system updates each applied correction's `success_rate`:
+   - If the step passed → correction "helped" (success rate increases)
+   - If the step failed → correction "did not help" (success rate decreases)
+
+### Code Flow
+
+```typescript
+// 1. Injector returns applied correction IDs
+const result = await getCorrectionsContext({
+  stepName: 'billings',
+  inputSummary: '...',
+});
+// result.appliedCorrectionIds = ['uuid-1', 'uuid-2']
+
+// 2. Run context tracks per-step application
+// runContext.appliedByStep = Map { 'billings' => ['uuid-1', 'uuid-2'] }
+
+// 3. After evaluation, effectiveness is updated
+await updateEffectivenessStats(runContext, stepResults);
+// Calls backend.updateStats(id, applied=false, helped=passed)
+```
+
+### Stats Calculation
+
+The `success_rate` is calculated as:
+```
+success_rate = (times correction helped) / (total times applied)
+```
+
+Over time, corrections with high success rates are preferred by semantic search, while low-performing corrections can be identified for removal.
+
+### API
+
+```typescript
+// Manual effectiveness update (if needed outside evaluation)
+import { markCorrectionEffectiveness } from '@zuca/self-learn';
+await markCorrectionEffectiveness('correction-id', true);  // helped
+await markCorrectionEffectiveness('correction-id', false); // did not help
+```
+
+## Performance Optimizations
+
+### Embedding Cache
+
+The Postgres backend includes an LRU cache for embeddings to reduce OpenAI API calls:
+
+- **Cache Size**: 100 entries (configurable)
+- **TTL**: 30 minutes
+- **Benefit**: Repeated searches with similar queries reuse cached embeddings
+
+```typescript
+import { clearEmbeddingCache } from '@zuca/self-learn/corrections/postgres-backend';
+
+// Clear cache if needed (e.g., during testing)
+clearEmbeddingCache();
+```
+
+### Disabling Embeddings
+
+For faster corrections operations (at the cost of semantic search quality), disable embeddings:
+
+```bash
+# Use keyword-only search (faster, no OpenAI API calls)
+USE_CORRECTIONS_EMBEDDINGS=false
+```
+
+### Connection Pooling
+
+The `@vercel/postgres` library handles connection pooling automatically. The system uses the pooled connection URL (`POSTGRES_URL`) for optimal performance.
+
 ## Success Metrics
 
 - Evaluation suite passes without manual prompt fixes
@@ -314,6 +400,136 @@ npm run cli -- self-improve
 # Run multiple iterations
 npm run cli -- self-improve --iterations 3
 
-# Auto-apply suggestions above threshold
-npm run cli -- self-improve --auto-apply
+# Auto-generate suggestions for top failure patterns
+npm run cli -- self-improve --auto-suggest
+
+# Use a specific model
+npm run cli -- self-improve -m gemini-3-flash-preview --iterations 2
+```
+
+### Prompt Suggestions
+
+```bash
+# Analyze failure patterns across all corrections
+npm run cli -- prompts analyze
+
+# Generate a suggestion for a specific pattern
+npm run cli -- prompts suggest billings "BL-002: invoice-amount-accuracy"
+
+# List pending suggestions
+npm run cli -- prompts list
+
+# Approve or reject suggestions
+npm run cli -- prompts approve <suggestion-id>
+npm run cli -- prompts reject <suggestion-id>
+```
+
+## Creating Custom Test Suites
+
+Test suites are YAML files in `data/test-suites/`. You can create multiple suites for different purposes.
+
+### Test Suite Format
+
+```yaml
+name: my-custom-suite
+description: Custom test scenarios
+version: "1.0"
+
+tests:
+  - id: custom-001
+    name: My Test Case
+    description: Description of what this tests
+    input:
+      customer_name: Test Corp
+      contract_start_date: "01/01/2025"
+      terms_months: 12
+      transaction_currency: USD
+      billing_period: Monthly
+      is_allocations: false
+      use_case_description: |
+        Detailed description of the subscription...
+    focus_steps:
+      - design_subscription
+      - contracts_orders
+      - billings
+    tags:
+      - custom
+      - recurring
+```
+
+### Using UC Generator to Build Test Suites
+
+Generate real-world test cases using the UC generator and convert them to a test suite:
+
+```bash
+# 1. Create output directory
+mkdir -p /tmp/uc
+
+# 2. Generate use cases from real companies
+npm run cli -- generate "Salesforce" -w "https://www.salesforce.com" -c 3 -o /tmp/uc/salesforce.json -m gemini-3-pro-preview
+npm run cli -- generate "Twilio" -w "https://www.twilio.com" -c 3 -o /tmp/uc/twilio.json -m gemini-3-pro-preview
+npm run cli -- generate "Snowflake" -w "https://www.snowflake.com" -c 3 -o /tmp/uc/snowflake.json -m gemini-3-pro-preview
+
+# 3. Convert to test suite
+npm run uc:to-suite -- /tmp/uc/ data/test-suites/real-world-scenarios.yaml
+
+# 4. Run evaluation on the new suite
+npm run cli -- evaluate --suite real-world-scenarios -m gemini-3-flash-preview --corrections
+```
+
+The `uc:to-suite` script:
+- Accepts a directory of JSON files or a single JSON file
+- Auto-detects tags (`usage`, `ramp`, `bundle`, `allocation`, etc.)
+- Creates unique IDs from company names
+- Sets all pipeline steps as focus steps
+
+### Running Multiple Test Suites
+
+```bash
+# Run the default golden scenarios
+npm run cli -- self-improve --suite golden-scenarios --iterations 2
+
+# Run your custom real-world suite
+npm run cli -- self-improve --suite real-world-scenarios --iterations 2
+
+# Corrections from both runs accumulate in the same store
+npm run cli -- corrections summary
+```
+
+## Workflow Summary
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    SELF-LEARNING WORKFLOW                        │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│  1. BUILD TEST SUITE                                            │
+│     ├─ Manual: Edit data/test-suites/*.yaml                     │
+│     └─ Generated: npm run uc:to-suite -- <input> <output>       │
+│                                                                  │
+│  2. RUN EVALUATION                                              │
+│     npm run cli -- self-improve --suite <name> --iterations N   │
+│     └─ Corrections auto-stored for failures                     │
+│                                                                  │
+│  3. ANALYZE PATTERNS                                            │
+│     npm run cli -- prompts analyze                              │
+│     └─ See which issues recur most often                        │
+│                                                                  │
+│  4. GENERATE SUGGESTIONS (optional)                             │
+│     npm run cli -- prompts suggest <step> "<pattern>"           │
+│     └─ Or use --auto-suggest flag in self-improve               │
+│                                                                  │
+│  5. REVIEW & APPLY                                              │
+│     npm run cli -- prompts list                                 │
+│     npm run cli -- prompts approve <id>                         │
+│     └─ Manually edit prompt file based on suggestion            │
+│                                                                  │
+│  6. VERIFY FIX                                                  │
+│     npm run cli -- evaluate --suite <name> --step <step>        │
+│     └─ Confirm the fix works                                    │
+│                                                                  │
+│  MEANWHILE: Corrections are auto-injected as few-shot examples  │
+│  on every pipeline run, providing immediate improvement.        │
+│                                                                  │
+└─────────────────────────────────────────────────────────────────┘
 ```

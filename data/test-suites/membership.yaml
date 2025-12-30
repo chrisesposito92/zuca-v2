@@ -1,0 +1,688 @@
+name: "membership"
+description: "Generated from UC outputs - 2025-12-30"
+version: "1.0"
+tests:
+  - id: "gen-barkbox-bark-inc-1"
+    name: "BarkBox (Bark, Inc.) - 12-Month Classic Commitment"
+    description: "12-Month Classic Commitment"
+    input:
+      customer_name: "BarkBox"
+      contract_start_date: "01/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      allocation_method: null
+      rev_rec_notes: "Subscription: POB=point_in_time release=at_delivery (Revenue for physical subscription boxes is recognized when the customer takes possession, typically at the point of delivery each month.)"
+      use_case_description: "The customer signs up for the 12-Month Classic Commitment plan for their dog. This subscription consists of one Classic BarkBox delivered every month for a 12-month term. The price is set at $23.00 per month, billed at the start of each month. Although the contract is for a year, revenue is recognized monthly upon the delivery of the physical box. This scenario tests Zuora's capability to manage term commitments with monthly recurring billing for physical goods. The performance obligation is satisfied at the point of delivery for each unit."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "recurring"
+  - id: "gen-barkbox-bark-inc-2"
+    name: "BarkBox (Bark, Inc.) - 6-Month Super Chewer with Add-on"
+    description: "6-Month Super Chewer with Add-on"
+    input:
+      customer_name: "BarkBox"
+      contract_start_date: "01/01/2026"
+      terms_months: 6
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      allocation_method: null
+      rev_rec_notes: "Subscription: POB=point_in_time release=at_delivery (Both the base Super Chewer box and the Extra Toy add-on are physical goods recognized at delivery.)"
+      use_case_description: "This use case involves a 6-month commitment to the Super Chewer product line for a dog that needs tougher toys. The base subscription is $35.00 per month, and the customer also adds the Extra Toy Club for an additional $9.00 per month. Both charges are recurring and billed monthly throughout the 6-month term. Revenue recognition is point-in-time, triggered by the shipment of the box each month. This scenario demonstrates handling primary subscriptions with recurring add-ons on a fixed-term contract. It ensures that the total contract value is correctly tracked and recognized as goods are fulfilled."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "recurring"
+  - id: "gen-barkbox-bark-inc-3"
+    name: "BarkBox (Bark, Inc.) - Multi-Product Bundle with Allocation"
+    description: "Multi-Product Bundle with Allocation"
+    input:
+      customer_name: "BarkBox"
+      contract_start_date: "01/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=point_in_time release=at_delivery (Revenue for the BarkBox and Bright Dental kit is allocated based on SSP and recognized upon delivery.); Other: POB=point_in_time release=at_delivery (The one-time Double Deluxe upgrade is a separate POB recognized when the specific upgraded box is delivered.)"
+      use_case_description: "A customer signs up for a comprehensive care package including a 12-month Classic BarkBox ($23.00/mo) and a Bark Bright Dental subscription ($30.00/mo). They also opt for a one-time Double Deluxe upgrade in the first month for $22.00 to receive extra toys immediately. To incentivize the bundle, a $10.00 monthly discount is applied to the recurring total, bringing it to $43.00/mo. This scenario utilizes Zuora Revenue's allocation engine to distribute the transaction price across the three performance obligations based on their standalone selling prices. Revenue for the boxes and dental kits is recognized at delivery, while the one-time upgrade is recognized upon shipment."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "allocation"
+  - id: "gen-birchbox-4"
+    name: "Birchbox - Monthly Discovery & E-commerce Upsell"
+    description: "Monthly Discovery & E-commerce Upsell"
+    input:
+      customer_name: "Birchbox"
+      contract_start_date: "02/01/2026"
+      terms_months: 1
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      allocation_method: null
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Monthly discovery service recognized over the course of the month.); Other: POB=point_in_time release=at_delivery (Full-size product purchase recognized upon shipment/delivery.)"
+      use_case_description: "A new customer signs up for the 'Birchbox Monthly Beauty Box' at $25.00 per month on a month-to-month basis. In addition to the recurring subscription, the customer makes a one-time purchase of a 'Full-size Shop Product' (Radiance Serum) for $30.00. The subscription charge is recurring and billed monthly in advance. Revenue for the subscription is recognized ratably over the monthly term as the curation service is provided. The serum is a one-time charge recognized at the point in time when the product is shipped to the customer."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "one-time"
+      - "recurring"
+  - id: "gen-birchbox-5"
+    name: "Birchbox - Annual Prepaid Membership Value Plan"
+    description: "Annual Prepaid Membership Value Plan"
+    input:
+      customer_name: "Birchbox"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      allocation_method: null
+      rev_rec_notes: "Subscription: POB=point_in_time release=at_delivery (Prepaid revenue is released in increments as each of the 12 boxes is shipped.)"
+      use_case_description: "A customer commits to a '12-Month Prepaid Membership' to take advantage of the discounted rate of $22.00 per box. The total amount of $264.00 is billed upfront at the start of the 12-month term. This plan includes 12 monthly curated beauty boxes. Revenue is initially recorded as deferred revenue and then released in 12 equal installments as each box is delivered. This scenario demonstrates Zuora's ability to handle annual billing for a monthly fulfillment obligation."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "discount"
+  - id: "gen-birchbox-6"
+    name: "Birchbox - Premium Bi-Monthly Tier & Limited Edition Gift"
+    description: "Premium Bi-Monthly Tier & Limited Edition Gift"
+    input:
+      customer_name: "Birchbox"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Quarterly"
+      is_allocations: true
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=point_in_time release=at_delivery (Signature Box recognized every two months upon fulfillment.); Other: POB=point_in_time release=at_delivery (Limited Edition Kit recognized as a single event at shipment.)"
+      use_case_description: "A customer subscribes to the 'Birchbox Signature Box' which is a premium tier priced at $44.00 per box, delivered bi-monthly (every two months). To supplement this, they also purchase a 'Limited Edition Kit' (Holiday Glow) for $65.00 as a one-time gift. The Signature Box is billed every other month. Revenue for the Signature Box is recognized point-in-time upon delivery of the premium items. The Limited Edition Kit is also recognized at the point of shipment. This scenario tests non-monthly recurring cycles and high-value one-time bundles."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "one-time"
+      - "recurring"
+      - "allocation"
+  - id: "gen-blue-apron-7"
+    name: "Blue Apron - High-Volume Family Autoship Plan"
+    description: "High-Volume Family Autoship Plan"
+    input:
+      customer_name: "Blue Apron"
+      contract_start_date: "01/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      allocation_method: null
+      rev_rec_notes: "Subscription: POB=point_in_time release=at_delivery (Meal kits are physical goods; revenue is recognized when control transfers to the customer upon delivery.); Other: POB=event_based release=at_delivery (Shipping fees are recognized as the delivery service is performed.)"
+      use_case_description: "This scenario models a high-volume family subscription using the Family Friendly 4-Person Plan. The customer selects 5 recipes per week, totaling 20 servings at a discounted rate of $8.99 per serving. The subscription includes a recurring weekly shipping fee of $10.99. In Zuora, this is represented as a recurring monthly charge (aggregated weekly cost) and a recurring shipping charge. Revenue for the meal kits is recognized at the point of delivery each week. Shipping revenue is also recognized upon delivery completion. The contract is month-to-month with no fixed term beyond the monthly billing cycle."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "discount"
+      - "recurring"
+  - id: "gen-blue-apron-8"
+    name: "Blue Apron - Premium Membership & Wine Club Bundle"
+    description: "Premium Membership & Wine Club Bundle"
+    input:
+      customer_name: "Blue Apron"
+      contract_start_date: "01/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Blue Apron+ is a stand-ready obligation providing continuous benefits (free shipping, content) over the month.); Other: POB=point_in_time release=at_delivery (Wine Club revenue is recognized upon delivery of the physical box.)"
+      use_case_description: "This use case features a premium customer who subscribes to both the Blue Apron+ Membership and the Blue Apron Wine Club. The Blue Apron+ Membership is a $9.99 monthly fee that provides free shipping and access to digital content. The Wine Club is a $69.99 monthly subscription for 6 bottles of curated wine. To incentivize the bundle, a 10% discount is applied to the Wine Club subscription. This triggers revenue allocation between the ratable membership service and the point-in-time wine delivery. The membership revenue is recognized over the course of the month. The wine revenue is recognized in full when the box is delivered."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "recurring"
+      - "allocation"
+  - id: "gen-blue-apron-9"
+    name: "Blue Apron - Wellness Hybrid: Kits & Prepared Meals"
+    description: "Wellness Hybrid: Kits & Prepared Meals"
+    input:
+      customer_name: "Blue Apron"
+      contract_start_date: "01/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      allocation_method: null
+      rev_rec_notes: "Subscription: POB=point_in_time release=at_delivery (Both meal kits and prepared meals are recognized as revenue upon delivery.); Other: POB=event_based release=at_delivery (Shipping is recognized as the delivery event occurs.)"
+      use_case_description: "This scenario demonstrates a hybrid 'Wellness' subscription combining traditional meal kits with 'Prepared & Ready' meals. The customer selects the Signature 2-Person plan (3 recipes/week) at $11.99/serving and adds 4 Prepared & Ready meals per week at $13.49/serving. The total monthly subscription reflects both product lines, plus a single monthly shipping fee of $10.99. Both product lines are physical goods with point-in-time revenue recognition at delivery. This use case tests Zuora's ability to handle multiple recurring charge lines within a single rate plan or subscription. The billing is set to monthly for streamlined administration."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "recurring"
+  - id: "gen-classpass-10"
+    name: "ClassPass - B2C Core Plan with Ad-hoc Usage"
+    description: "B2C Core Plan with Ad-hoc Usage"
+    input:
+      customer_name: "ClassPass"
+      contract_start_date: "02/01/2025"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      allocation_method: null
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (The monthly fee provides platform access and a credit pool, recognized daily over the service month.); Usage: POB=consumption release=as_used (Top-up credits should ideally be recognized as the classes are attended or when credits expire (breakage).); Other: POB=point_in_time release=at_delivery (Late fees are penalty-based and recognized immediately upon the missed event.)"
+      use_case_description: "An individual consumer signs up for the Core Subscription plan at $79.00 per month, which provides 42 credits. During the first billing cycle, the user runs out of credits and purchases a 'Top-up' pack of 10 credits for $20.00. Additionally, the user misses a scheduled class, triggering an automated $15.00 Late Cancellation Fee. The monthly subscription is billed in advance and recognized ratably over the 30-day term. Top-up credits are billed at the point of purchase and recognized as used or upon expiration at the end of the cycle. The cancellation fee is a one-time charge recognized at the moment the event occurs."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "one-time"
+      - "recurring"
+      - "credits"
+  - id: "gen-classpass-11"
+    name: "ClassPass - B2B Corporate Wellness with Platform Fee"
+    description: "B2B Corporate Wellness with Platform Fee"
+    input:
+      customer_name: "ClassPass"
+      contract_start_date: "02/01/2025"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Services: POB=over_time release=ratable_over_term (The Platform Fee is a recurring service charge recognized monthly over the contract term.); Subscription: POB=over_time release=ratable_over_term (Employee memberships are ratable over the specific month of activation.)"
+      use_case_description: "A corporate client, 'TechFlow Inc.', signs a 12-month agreement for the Corporate Wellness Program. The contract includes a recurring $500.00 monthly Platform Fee for account management and analytics. Additionally, the employer pays a subsidized rate of $40.00 per month for every employee who activates a ClassPass account (estimated 100 employees). A 10% bundle discount is applied to both the Platform Fee and the per-user subscription charges. Because the discount applies to multiple distinct performance obligations, revenue allocation is required. The Platform Fee is recognized ratably, while employee subscriptions are recognized over the month they are active."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "recurring"
+      - "license"
+      - "allocation"
+  - id: "gen-classpass-12"
+    name: "ClassPass - Promotional Starter Ramp with Trial"
+    description: "Promotional Starter Ramp with Trial"
+    input:
+      customer_name: "ClassPass"
+      contract_start_date: "02/01/2025"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      allocation_method: null
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Ramp deal where month 1 is $0; revenue is recognized as the service is provided in each respective month.); Onboarding: POB=point_in_time release=at_go_live (One-time activation fee recognized when the account is first created.)"
+      use_case_description: "A new user in a high-growth market enters a 'Starter' promotional ramp. The first month is a free trial ($0.00) with 11 credits to encourage platform adoption. Following the trial, the subscription automatically converts to a paid Starter Plan at $24.00 per month for the remaining 11 months of the year. The user also incurs a one-time $10.00 'Activation Fee' in the first month. Revenue for the activation fee is recognized at go-live. The total contract value (TCV) for the subscription is recognized ratably starting from the end of the trial period, or potentially carved back to the trial period depending on accounting policy."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "ramp"
+      - "one-time"
+      - "recurring"
+      - "license"
+      - "credits"
+  - id: "gen-dollar-shave-club-13"
+    name: "Dollar Shave Club - Standard Subscription Restock Box"
+    description: "Standard Subscription Restock Box"
+    input:
+      customer_name: "Dollar Shave Club"
+      contract_start_date: "01/01/2026"
+      terms_months: 1
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      allocation_method: null
+      rev_rec_notes: "Subscription: POB=point_in_time release=at_delivery (Revenue is recognized when control of physical goods transfers to the customer at shipment.)"
+      use_case_description: "A customer signs up for a recurring 'Restock Box' featuring the Club Series 6 Blade Refills. The subscription is set at $10.00 per shipment, recurring every month. This plan includes a recurring delivery of a 4-pack of blades. Revenue for the physical goods is recognized at the point in time of shipment/delivery rather than ratably over the month. The contract is month-to-month with no long-term commitment, billed at the start of each cycle."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "recurring"
+  - id: "gen-dollar-shave-club-14"
+    name: "Dollar Shave Club - Starter Set with Discounted Bundle"
+    description: "Starter Set with Discounted Bundle"
+    input:
+      customer_name: "Dollar Shave Club"
+      contract_start_date: "01/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Hardware: POB=point_in_time release=at_delivery (The razor handle is a distinct POB recognized at delivery.); Subscription: POB=point_in_time release=at_delivery (Initial blades and subsequent monthly refills are recognized at delivery.)"
+      use_case_description: "A new member purchases the 'Mixed Blade Starter Set' for an introductory price of $8.00. This bundle includes a Diamond Grip Handle, a 6-Blade Cartridge, a 4-Blade Cartridge, and a trial-size Shave Butter. The list price of these items individually would be approximately $15.00, requiring a revenue allocation to ensure each performance obligation is tracked at its relative fair value. Following the first month, the customer automatically transitions to a recurring $9.00 monthly subscription for 4-Blade refills. Revenue for the starter kit is recognized upon delivery."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "recurring"
+      - "allocation"
+  - id: "gen-dollar-shave-club-15"
+    name: "Dollar Shave Club - Custom Restock Box with Add-ons"
+    description: "Custom Restock Box with Add-ons"
+    input:
+      customer_name: "Dollar Shave Club"
+      contract_start_date: "01/01/2026"
+      terms_months: 1
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      allocation_method: "Use Sell Price"
+      rev_rec_notes: "Subscription: POB=point_in_time release=at_delivery (Monthly blade refills recognized at shipment.); Other: POB=point_in_time release=at_delivery (Grooming add-ons (Butter, Oil) recognized as point-in-time revenue upon shipment.)"
+      use_case_description: "An existing member creates a 'Custom Restock Box' that includes a recurring subscription for 6-Blade Refills ($10.00) plus a one-time 'on-demand' purchase of Shave Butter ($8.00) and Beard Oil ($10.00). The customer receives a 'Bundle & Save' discount of 10% across the entire order because they added more than two items. The one-time items are billed and recognized immediately upon shipment, while the blade refills continue on a monthly cadence. This scenario tests Zuora's ability to handle mixed charge types (recurring and one-time) with a shared discount."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "allocation"
+  - id: "gen-fabfitfun-16"
+    name: "FabFitFun - Annual Membership with Seasonal reFills"
+    description: "Annual Membership with Seasonal reFills"
+    input:
+      customer_name: "FabFitFun"
+      contract_start_date: "01/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=point_in_time release=at_delivery (Annual fee represents 4 boxes; revenue should be split into 4 POBs recognized at each shipment.); Usage: POB=point_in_time release=at_delivery (reFills are physical goods shipped with the seasonal box.); Other: POB=point_in_time release=at_delivery (One-time customization items are recognized when the associated box is delivered.)"
+      use_case_description: "The customer signs up for an Annual Membership priced at $259.96, which covers four seasonal boxes. This membership includes priority shipping and early access to customization features. In addition to the base membership, the customer adds a 'reFill' subscription for a Skincare Night Cream at $15.00 per season, billed quarterly. During the initial customization window, they also select one 'Additional Customization Item' from Category 1 for a one-time fee of $19.00. The contract is set for 12 months, with the annual fee billed upfront and reFills billed quarterly. Revenue for the membership is recognized in four equal installments upon the shipment of each seasonal box. The reFill and one-time items are also recognized at the point of delivery."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "one-time"
+      - "recurring"
+      - "allocation"
+  - id: "gen-fabfitfun-17"
+    name: "FabFitFun - Starter Box Trial to Seasonal Conversion"
+    description: "Starter Box Trial to Seasonal Conversion"
+    input:
+      customer_name: "FabFitFun"
+      contract_start_date: "01/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Quarterly"
+      is_allocations: false
+      allocation_method: null
+      rev_rec_notes: "Subscription: POB=point_in_time release=at_delivery (Quarterly membership fee recognized upon shipment of the seasonal box.); Usage: POB=point_in_time release=at_delivery (Recurring reFill items recognized at shipment.); Other: POB=point_in_time release=at_delivery (Starter box shipping fee recognized at the point of initial delivery.)"
+      use_case_description: "A new customer enters via the Starter Box Trial, paying a $5.00 one-time shipping fee for the initial trial box. After a 21-day trial period, the account automatically converts into a standard Seasonal Membership priced at $79.99 per quarter. The customer also selects two recurring 'reFill' items: a Vitamin C Serum for $12.00 per season and a Pet Toy for $10.00 per season. Billing for the membership and reFills occurs every three months following the trial conversion. Revenue for all physical goods, including the trial box and subsequent seasonal boxes, is recognized at the point of shipment. This scenario tests the transition from a one-time trial to a recurring quarterly subscription."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "one-time"
+      - "recurring"
+  - id: "gen-fabfitfun-18"
+    name: "FabFitFun - Shopping Club Digital Access and Flash Sales"
+    description: "Shopping Club Digital Access and Flash Sales"
+    input:
+      customer_name: "FabFitFun"
+      contract_start_date: "01/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      allocation_method: null
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Digital access to the shopping club is a service provided over the month.); Other: POB=point_in_time release=at_delivery (Flash sale items are physical goods recognized at shipment.)"
+      use_case_description: "The customer subscribes to the Shopping Club Membership for a recurring fee of $5.00 per month. This digital-only tier provides exclusive access to the FabFitFun shop and flash sales without the commitment of a seasonal box. During the first month, the customer participates in a flash sale and purchases three one-time items: a designer candle ($20.00), a tech accessory ($15.00), and a beauty tool ($10.00). The $5.00 monthly fee is billed at the start of each month, while shop purchases are billed at the time of transaction. Revenue for the Shopping Club fee is recognized ratably over each month of service. Revenue for the shop items is recognized at the point of delivery."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "one-time"
+      - "recurring"
+  - id: "gen-hellofresh-19"
+    name: "HelloFresh - New Subscriber Acquisition Promo"
+    description: "New Subscriber Acquisition Promo"
+    input:
+      customer_name: "HelloFresh"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=point_in_time release=at_delivery (Revenue is recognized when the box is delivered to the customer's doorstep.); Other: POB=point_in_time release=at_delivery (Shipping fees are recognized at the same time as the physical goods delivery.)"
+      use_case_description: "A new customer signs up for the 2-Person Plan (3 Meals/Week) which includes 6 servings at a list price of $10.99 per serving and a $10.99 weekly shipping fee. To incentivize the signup, the customer receives a 50% discount on their first month of deliveries. The contract is structured as a 12-month recurring subscription billed monthly, though deliveries occur weekly. Revenue for both the meal servings and the shipping fee is recognized point-in-time upon delivery of each box. This scenario demonstrates Zuora's ability to handle high-volume DTC subscriptions with aggressive introductory discounting and POBs triggered by fulfillment events."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "discount"
+      - "recurring"
+      - "allocation"
+  - id: "gen-hellofresh-20"
+    name: "HelloFresh - Family Plan with Market Add-ons"
+    description: "Family Plan with Market Add-ons"
+    input:
+      customer_name: "HelloFresh"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      allocation_method: null
+      rev_rec_notes: "Subscription: POB=point_in_time release=at_delivery (Base meal kit servings recognized upon delivery.); Usage: POB=point_in_time release=at_delivery (Market add-ons and shipping fees recognized upon delivery of the associated box.)"
+      use_case_description: "A family of four subscribes to the 4-Person Family Plan (4 Meals/Week), triggering a volume discount where the price per serving drops to $9.99 (16 servings total per week). In addition to the base kit and the $10.99 shipping fee, the customer frequently adds 'HelloFresh Market' items such as breakfast bundles and desserts, averaging $30 in add-ons per week. These Market items are treated as usage-based charges that are added to the monthly invoice. Revenue for the base subscription, shipping, and add-ons is recognized at the point of delivery for each specific box. This use case highlights volume-based pricing and the integration of a-la-carte grocery items into a core subscription."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "bundle"
+      - "discount"
+      - "recurring"
+  - id: "gen-hellofresh-21"
+    name: "HelloFresh - Subscription Upsell and Flexibility"
+    description: "Subscription Upsell and Flexibility"
+    input:
+      customer_name: "HelloFresh"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      allocation_method: null
+      rev_rec_notes: "Subscription: POB=point_in_time release=at_delivery (Revenue recognition shifts to the new price point immediately upon the first delivery of the upgraded plan.)"
+      use_case_description: "A customer initially signs up for a 2-Person Plan (2 Meals/Week) at $12.49 per serving. After three months, they upgrade their subscription to a 4-Person Plan (3 Meals/Week) to accommodate a growing household, which lowers their price per serving to $10.49. The upgrade occurs mid-month, requiring Zuora to handle the proration of the subscription fees and the adjustment of the weekly delivery schedule. All charges, including the recurring kit fee and the $10.99 shipping fee, continue to be recognized as revenue only when the physical box is delivered. This scenario showcases Zuora's Order Actions for mid-term amendments and the flexibility of the 'skip-anytime' subscription model."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "recurring"
+  - id: "gen-ipsy-22"
+    name: "IPSY - Annual Glam Bag Membership"
+    description: "Annual Glam Bag Membership"
+    input:
+      customer_name: "IPSY"
+      contract_start_date: "01/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      allocation_method: null
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Annual prepaid plans for physical goods are typically recognized 1/12th per month as each box is shipped.)"
+      use_case_description: "The customer signs up for the Annual Glam Bag Membership, which is a prepaid commitment for 12 months of beauty boxes. This plan is priced at $156 per year, providing a discount compared to the $14 monthly rate. The subscription includes one recurring charge for the 'Annual Glam Bag' rate plan. Billing occurs upfront as a single annual payment. Revenue should be recognized ratably over the 12-month term, with 1/12th of the total price released each month as the physical bag is shipped to the subscriber. This scenario demonstrates Zuora's ability to handle prepaid annual terms for physical goods delivery."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "discount"
+      - "recurring"
+  - id: "gen-ipsy-23"
+    name: "IPSY - BoxyCharm Monthly with Beauty Boost"
+    description: "BoxyCharm Monthly with Beauty Boost"
+    input:
+      customer_name: "IPSY"
+      contract_start_date: "01/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      allocation_method: null
+      rev_rec_notes: "Subscription: POB=point_in_time release=at_go_live (Monthly subscriptions for physical goods are recognized upon shipment/delivery each month.)"
+      use_case_description: "This scenario represents a mid-tier subscriber who chooses the BoxyCharm monthly plan at $32 per month. To enhance their experience, the customer adds 'Beauty Boost' for an additional $15 per month, which guarantees one high-value full-size product in each box. The total monthly recurring revenue (MRR) for this subscription is $47. Both charges are recurring and billed monthly on a month-to-month basis. Revenue for both the base box and the boost is recognized at a point-in-time when the shipment is processed each month. This use case highlights the bundling of a core subscription with a recurring monthly add-on product."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "recurring"
+  - id: "gen-ipsy-24"
+    name: "IPSY - Icon Box Quarterly with Refreshments Usage"
+    description: "Icon Box Quarterly with Refreshments Usage"
+    input:
+      customer_name: "IPSY"
+      contract_start_date: "01/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Quarterly"
+      is_allocations: false
+      allocation_method: null
+      rev_rec_notes: "Subscription: POB=point_in_time release=at_go_live (Icon Box revenue is recognized once per quarter when the box is shipped.); Usage: POB=consumption release=as_used (Refreshments are billed based on the number of items selected and recognized upon delivery.)"
+      use_case_description: "The customer is a high-end subscriber on the Icon Box plan, which bills $60 every quarter. In addition to the quarterly celebrity-curated box, the customer has opted into the 'Refreshments' program for recurring personal care items. These Refreshments are modeled as usage-based charges, where the customer is billed $12 per month for two items ($6 each) that ship alongside their beauty bags. The billing cycle for the Icon Box is quarterly, while the Refreshments are billed monthly. Revenue for the Icon Box is recognized point-in-time upon the quarterly shipment, while Refreshments revenue is recognized monthly as those items are delivered. This scenario tests multi-frequency billing and usage-based add-ons within a single subscription."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+  - id: "gen-peloton-interactive-inc-25"
+    name: "Peloton Interactive, Inc. - Consumer Hardware Purchase with Subscription"
+    description: "Consumer Hardware Purchase with Subscription"
+    input:
+      customer_name: "Peloton"
+      contract_start_date: "01/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      allocation_method: null
+      rev_rec_notes: "Hardware: POB=point_in_time release=at_delivery (Control transfers upon delivery and setup of the Bike.); Subscription: POB=over_time release=ratable_over_term (Membership provides continuous access to content; recognized monthly.); Services: POB=point_in_time release=at_go_live (Assembly is a distinct service completed at the time of delivery.)"
+      use_case_description: "A new customer purchases a Peloton Bike for $1,695 upfront along with a required All-Access Membership at $49.99 per month. The transaction includes a $150 Delivery & Expert Assembly fee. The hardware and assembly are one-time charges, while the membership is a recurring monthly subscription. Revenue for the hardware and assembly should be recognized at the point of delivery/installation. The membership revenue is recognized ratably over each monthly service period."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "one-time"
+      - "recurring"
+  - id: "gen-peloton-interactive-inc-26"
+    name: "Peloton Interactive, Inc. - Peloton Rental Program (Hybrid Model)"
+    description: "Peloton Rental Program (Hybrid Model)"
+    input:
+      customer_name: "Peloton"
+      contract_start_date: "01/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      allocation_method: null
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (The $124.99 monthly fee is recognized as the rental/membership service is delivered.); Services: POB=point_in_time release=at_go_live (Setup fee recognized upon successful installation.)"
+      use_case_description: "A user opts for the Peloton Rental Program, which bundles the Bike hardware and All-Access Membership into a single recurring monthly fee of $124.99. There is an initial one-time setup fee of $150 paid at the start. This model represents a subscription-based approach to physical goods. The setup fee is recognized at delivery. The monthly rental fee covers both the equipment usage and the content access, recognized ratably each month as the service is provided."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "bundle"
+      - "one-time"
+      - "recurring"
+  - id: "gen-peloton-interactive-inc-27"
+    name: "Peloton Interactive, Inc. - Annual Digital App Subscription with Bundle Discount"
+    description: "Annual Digital App Subscription with Bundle Discount"
+    input:
+      customer_name: "Peloton"
+      contract_start_date: "01/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      allocation_method: null
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Annual payment is recognized in 1/12th increments over the year.)"
+      use_case_description: "A customer signs up for the Peloton App+ on an annual basis to save on the monthly cost. The annual price is $289.00 (discounted from the $28.99 monthly rate). This is a pure SaaS play with no hardware involved. The customer pays the full amount upfront. Revenue must be deferred and recognized ratably over the 12-month membership term. This scenario demonstrates Zuora's ability to handle annual billing with monthly revenue recognition."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "recurring"
+      - "license"
+  - id: "gen-stitch-fix-28"
+    name: "Stitch Fix - Standard Subscription Fix"
+    description: "Standard Subscription Fix"
+    input:
+      customer_name: "Stitch Fix"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      allocation_method: "Use Sell Price"
+      rev_rec_notes: "Services: POB=point_in_time release=at_go_live (Styling fee is recognized when the curation service is delivered/shipped.); Hardware: POB=point_in_time release=at_delivery (Apparel revenue recognized upon customer acceptance/expiration of return window.)"
+      use_case_description: "A customer signs up for a recurring 'Fix' shipment every month. Each shipment incurs a $20.00 'Personalized Fix' styling fee, which is a one-time charge per box. If the customer keeps items, the $20 fee is applied as a credit toward the 'Apparel & Accessories' purchase. If the customer keeps all 5 items, a 25% 'Buy All' discount is applied to the total apparel cost. For revenue purposes, the styling fee is recognized at the point of service delivery, while apparel sales are recognized when the try-on window expires."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "credits"
+      - "allocation"
+  - id: "gen-stitch-fix-29"
+    name: "Stitch Fix - Annual Style Pass Membership"
+    description: "Annual Style Pass Membership"
+    input:
+      customer_name: "Stitch Fix"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      allocation_method: null
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Annual membership fee providing access to services over time.); Other: POB=point_in_time release=at_delivery (Individual apparel items purchased via Freestyle or Fixes.)"
+      use_case_description: "A high-frequency customer is invited to the 'Annual Style Pass' for a $49.00 upfront annual fee. This subscription grants unlimited 'Personalized Fix' shipments for 12 months with $0 styling fees. The $49 fee is also provided as an account credit toward the first apparel purchase of the year. The membership fee is recognized ratably over the 12-month term. Apparel purchases within this plan are treated as separate point-in-time transactions."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "recurring"
+      - "credits"
+  - id: "gen-stitch-fix-30"
+    name: "Stitch Fix - Freestyle Direct Purchase"
+    description: "Freestyle Direct Purchase"
+    input:
+      customer_name: "Stitch Fix"
+      contract_start_date: "02/01/2026"
+      terms_months: 1
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      allocation_method: null
+      rev_rec_notes: "Other: POB=point_in_time release=at_delivery (Standard retail revenue recognition upon delivery of physical goods.)"
+      use_case_description: "A customer uses the 'Freestyle' shop to make direct, on-demand purchases of 'Apparel & Accessories' without a recurring subscription or styling fee. Each transaction consists of one or more one-time charges based on item list prices (e.g., a $120.00 jacket and $60.00 jeans). Revenue is recognized at the point of delivery/acceptance. This scenario tests Zuora's ability to handle high-volume, non-subscription e-commerce transactions alongside recurring models."
+    focus_steps:
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "one-time"
+      - "recurring"

@@ -35,7 +35,18 @@ import {
   getCorrectionsForStep,
   getPatternStats,
   listAvailableCriteria,
+  listTestSuites,
+  runEvaluationSuite,
+  analyzePatterns,
+  analyzeAllPatterns,
+  generatePromptSuggestion,
+  getPendingSuggestions,
+  approveSuggestion,
+  rejectSuggestion,
+  getPromptPath,
+  runSelfImproveIteration,
   type Correction,
+  type PromptSuggestion,
 } from '../self-learn';
 
 const program = new Command();
@@ -524,12 +535,12 @@ program
 
 /**
  * Evaluate command - run evaluation suite against pipeline
- * Phase 2 will add actual evaluation logic
  */
 async function evaluateCommand(options: {
   suite?: string;
   model?: string;
   step?: string;
+  corrections?: boolean;
 }): Promise<void> {
   try {
     console.log(chalk.cyan.bold('\n═══ Self-Learning Evaluation ═══\n'));
@@ -567,10 +578,87 @@ criteria:
     });
     console.log('');
 
-    // Phase 2: Actually run evaluation
-    console.log(chalk.yellow('Note: Evaluation runner not yet implemented (Phase 2)'));
-    console.log(chalk.gray('This will run test cases through the pipeline and evaluate outputs'));
-    console.log(chalk.gray('against the behavioral criteria using an LLM judge.'));
+    // List available test suites
+    const availableSuites = listTestSuites();
+    if (availableSuites.length === 0) {
+      console.log(chalk.yellow('No test suites found.'));
+      console.log(chalk.gray('Create test suite files in data/test-suites/*.yaml'));
+      console.log('');
+      console.log(chalk.gray('Example test suite format:'));
+      console.log(chalk.gray(`
+name: golden-scenarios
+version: "1.0"
+description: Test cases from golden use cases
+
+tests:
+  - id: mint-mobile-intro
+    name: Introductory Pricing Test
+    description: 3 months at $15, then 9 months at $20
+    input:
+      customer_name: Mint Mobile
+      contract_start_date: "01/01/2026"
+      terms_months: 12
+      billing_period: Monthly
+      use_case_description: "3 months at $15/month, then $20/month for remaining 9 months"
+    focus_steps: [contracts_orders, billings]
+`));
+      return;
+    }
+
+    console.log(chalk.green('Available Test Suites:'));
+    availableSuites.forEach((name) => {
+      const indicator = options.suite && options.suite !== name ? chalk.gray('○') : chalk.green('●');
+      console.log(`  ${indicator} ${name}`);
+    });
+    console.log('');
+
+    // If no suite specified, just show available options
+    if (!options.suite) {
+      console.log(chalk.yellow('Usage: npm run cli -- evaluate --suite <name>'));
+      console.log(chalk.gray('Add --corrections to generate corrections for failures'));
+      return;
+    }
+
+    // Run the evaluation suite
+    const model = parseModelOption(options.model);
+    console.log(chalk.blue(`Running evaluation suite: ${options.suite}...`));
+    console.log('');
+
+    const result = await runEvaluationSuite(options.suite, {
+      model,
+      steps: options.step ? [options.step] : undefined,
+      generateCorrections: options.corrections ?? false,
+      onProgress: (current, total, testId) => {
+        console.log(chalk.gray(`  [${current}/${total}] ${testId}`));
+      },
+    });
+
+    // Print results
+    console.log('');
+    console.log(chalk.cyan.bold('═══ Results ═══'));
+    console.log('');
+    console.log(`Total Tests: ${chalk.yellow(result.total.toString())}`);
+    console.log(`Passed: ${chalk.green(result.passed.toString())}`);
+    console.log(`Failed: ${result.failed > 0 ? chalk.red(result.failed.toString()) : chalk.green('0')}`);
+    if (options.corrections) {
+      console.log(`Corrections Generated: ${chalk.yellow(result.correctionsGenerated.toString())}`);
+    }
+    console.log('');
+
+    if (result.failures.length > 0) {
+      console.log(chalk.red('Failures:'));
+      result.failures.forEach((f, i) => {
+        console.log(`  ${i + 1}. [${f.stepName}] ${f.criterionId}`);
+        console.log(`     Test: ${f.testId}`);
+        console.log(`     ${chalk.gray(f.explanation.substring(0, 100))}${f.explanation.length > 100 ? '...' : ''}`);
+        console.log('');
+      });
+    } else {
+      console.log(chalk.green('All tests passed!'));
+    }
+
+    console.log(chalk.gray(`Run ID: ${result.runId}`));
+    console.log(chalk.gray(`Duration: ${new Date(result.completedAt!).getTime() - new Date(result.startedAt).getTime()}ms`));
   } catch (error: any) {
     console.error(chalk.red(`Error: ${error.message}`));
     process.exit(1);
@@ -674,10 +762,11 @@ async function correctionsSummaryCommand(options: { step?: string }): Promise<vo
 
 program
   .command('evaluate')
-  .description('Run evaluation suite against pipeline (Phase 2)')
+  .description('Run evaluation suite against pipeline')
   .option('-s, --suite <name>', 'Test suite name')
   .option('-m, --model <model>', 'LLM model for evaluation')
   .option('--step <step>', 'Only evaluate specific step')
+  .option('--corrections', 'Generate corrections for failures')
   .action(evaluateCommand);
 
 // Corrections subcommand group
@@ -696,6 +785,327 @@ corrections
   .description('Show correction pattern statistics')
   .option('--step <step>', 'Filter by step name')
   .action(correctionsSummaryCommand);
+
+// =============================================================================
+// Prompts Commands (Phase 4 - Prompt Evolution)
+// =============================================================================
+
+/**
+ * Prompts analyze command - analyze correction patterns
+ */
+async function promptsAnalyzeCommand(options: { step?: string }): Promise<void> {
+  try {
+    console.log(chalk.cyan.bold('\n═══ Pattern Analysis ═══\n'));
+
+    if (options.step) {
+      // Analyze specific step
+      const analysis = await analyzePatterns(options.step);
+
+      console.log(chalk.green(`Step: ${analysis.stepName}`));
+      console.log(`Total Corrections: ${chalk.yellow(analysis.totalCorrections.toString())}`);
+      console.log('');
+
+      if (analysis.patterns.length === 0) {
+        console.log(chalk.gray('No recurring patterns found yet.'));
+      } else {
+        console.log(chalk.green('Recurring Patterns:'));
+        analysis.patterns.forEach((p, i) => {
+          console.log(`  ${i + 1}. ${chalk.bold(p.pattern)}`);
+          console.log(`     Count: ${chalk.yellow(p.count.toString())} (${p.percentage}%)`);
+          console.log(`     Issue Types: ${p.issueTypes.join(', ')}`);
+          console.log('');
+        });
+      }
+
+      if (analysis.suggestedActions.length > 0) {
+        console.log(chalk.green('Suggested Actions:'));
+        analysis.suggestedActions.forEach((action) => {
+          console.log(`  • ${action}`);
+        });
+      }
+    } else {
+      // Analyze all steps
+      const allAnalysis = await analyzeAllPatterns();
+
+      if (allAnalysis.size === 0) {
+        console.log(chalk.yellow('No corrections found. Run evaluation first.'));
+        console.log(chalk.gray('Usage: npm run cli -- evaluate --suite <name> --corrections'));
+        return;
+      }
+
+      for (const [stepName, analysis] of allAnalysis) {
+        console.log(chalk.green.bold(`\n${stepName}`));
+        console.log(`  Corrections: ${chalk.yellow(analysis.totalCorrections.toString())}`);
+
+        if (analysis.patterns.length > 0) {
+          console.log('  Top Patterns:');
+          analysis.patterns.slice(0, 3).forEach((p) => {
+            console.log(`    • ${p.pattern} (${chalk.yellow(p.count.toString())}x, ${p.percentage}%)`);
+          });
+        }
+      }
+    }
+  } catch (error: any) {
+    console.error(chalk.red(`Error: ${error.message}`));
+    process.exit(1);
+  }
+}
+
+/**
+ * Prompts suggest command - generate a prompt improvement suggestion
+ */
+async function promptsSuggestCommand(
+  step: string,
+  pattern: string,
+  _options: { model?: string }
+): Promise<void> {
+  try {
+    console.log(chalk.cyan.bold('\n═══ Generate Prompt Suggestion ═══\n'));
+
+    console.log(chalk.blue(`Generating suggestion for ${step}: ${pattern}...`));
+    console.log('');
+
+    const suggestion = await generatePromptSuggestion(step, pattern);
+
+    if (!suggestion) {
+      console.log(chalk.yellow('Could not generate suggestion.'));
+      console.log(chalk.gray('Make sure the pattern exists in corrections.'));
+      return;
+    }
+
+    console.log(chalk.green('Suggestion Generated:'));
+    console.log('');
+    console.log(chalk.bold(`ID: ${suggestion.id}`));
+    console.log(`Step: ${suggestion.step_name}`);
+    console.log(`Pattern: ${suggestion.pattern}`);
+    console.log(`Occurrences: ${suggestion.occurrence_count}`);
+    console.log('');
+    console.log(chalk.yellow('Suggested Update:'));
+    console.log(chalk.gray('─'.repeat(60)));
+    console.log(suggestion.suggested_update);
+    console.log(chalk.gray('─'.repeat(60)));
+    console.log('');
+
+    const promptPath = getPromptPath(step);
+    if (promptPath) {
+      console.log(chalk.gray(`Target file: ${promptPath}`));
+    }
+
+    console.log('');
+    console.log(chalk.gray('To approve: npm run cli -- prompts approve ' + suggestion.id));
+    console.log(chalk.gray('To reject:  npm run cli -- prompts reject ' + suggestion.id));
+  } catch (error: any) {
+    console.error(chalk.red(`Error: ${error.message}`));
+    process.exit(1);
+  }
+}
+
+/**
+ * Prompts list command - list pending suggestions
+ */
+async function promptsListCommand(): Promise<void> {
+  try {
+    console.log(chalk.cyan.bold('\n═══ Pending Prompt Suggestions ═══\n'));
+
+    const suggestions = getPendingSuggestions();
+
+    if (suggestions.length === 0) {
+      console.log(chalk.yellow('No pending suggestions.'));
+      console.log(chalk.gray('Generate one with: npm run cli -- prompts suggest <step> "<pattern>"'));
+      return;
+    }
+
+    console.log(`Found ${chalk.yellow(suggestions.length.toString())} pending suggestion(s):`);
+    console.log('');
+
+    suggestions.forEach((s: PromptSuggestion, i: number) => {
+      console.log(`${i + 1}. ${chalk.bold(s.id.substring(0, 8))}...`);
+      console.log(`   Step: ${s.step_name}`);
+      console.log(`   Pattern: ${s.pattern}`);
+      console.log(`   Occurrences: ${s.occurrence_count}`);
+      console.log(`   Created: ${new Date(s.created_at).toLocaleDateString()}`);
+      console.log('');
+    });
+  } catch (error: any) {
+    console.error(chalk.red(`Error: ${error.message}`));
+    process.exit(1);
+  }
+}
+
+/**
+ * Prompts approve command
+ */
+async function promptsApproveCommand(id: string): Promise<void> {
+  try {
+    const suggestion = approveSuggestion(id);
+
+    if (!suggestion) {
+      console.log(chalk.red(`Suggestion not found: ${id}`));
+      return;
+    }
+
+    console.log(chalk.green(`\n✓ Suggestion approved: ${id}\n`));
+    console.log(chalk.yellow('Next steps:'));
+    console.log('  1. Review the suggested update above');
+
+    const promptPath = getPromptPath(suggestion.step_name);
+    if (promptPath) {
+      console.log(`  2. Manually apply changes to: ${promptPath}`);
+    }
+
+    console.log('  3. Run evaluation to verify improvement');
+    console.log('  4. Mark as applied: npm run cli -- prompts applied ' + id);
+  } catch (error: any) {
+    console.error(chalk.red(`Error: ${error.message}`));
+    process.exit(1);
+  }
+}
+
+/**
+ * Prompts reject command
+ */
+async function promptsRejectCommand(id: string): Promise<void> {
+  try {
+    const suggestion = rejectSuggestion(id);
+
+    if (!suggestion) {
+      console.log(chalk.red(`Suggestion not found: ${id}`));
+      return;
+    }
+
+    console.log(chalk.yellow(`\n✗ Suggestion rejected: ${id}\n`));
+  } catch (error: any) {
+    console.error(chalk.red(`Error: ${error.message}`));
+    process.exit(1);
+  }
+}
+
+// Prompts subcommand group
+const prompts = program
+  .command('prompts')
+  .description('Manage prompt evolution suggestions');
+
+prompts
+  .command('analyze')
+  .description('Analyze correction patterns for prompt improvements')
+  .option('--step <step>', 'Analyze specific step')
+  .action(promptsAnalyzeCommand);
+
+prompts
+  .command('suggest <step> <pattern>')
+  .description('Generate a prompt improvement suggestion')
+  .option('-m, --model <model>', 'LLM model for suggestion generation')
+  .action(promptsSuggestCommand);
+
+prompts
+  .command('list')
+  .description('List pending prompt suggestions')
+  .action(promptsListCommand);
+
+prompts
+  .command('approve <id>')
+  .description('Approve a prompt suggestion')
+  .action(promptsApproveCommand);
+
+prompts
+  .command('reject <id>')
+  .description('Reject a prompt suggestion')
+  .action(promptsRejectCommand);
+
+// =============================================================================
+// Self-Improve Command
+// =============================================================================
+
+/**
+ * Self-improve command - automated improvement loop
+ */
+async function selfImproveCommand(options: {
+  suite?: string;
+  iterations?: string;
+  autoSuggest?: boolean;
+  model?: string;
+}): Promise<void> {
+  try {
+    console.log(chalk.cyan.bold('\n═══ Self-Improvement Loop ═══\n'));
+
+    const suiteName = options.suite || 'golden-scenarios';
+    const iterations = options.iterations ? parseInt(options.iterations, 10) : 1;
+    const model = parseModelOption(options.model);
+
+    console.log(`Suite: ${chalk.yellow(suiteName)}`);
+    console.log(`Iterations: ${chalk.yellow(iterations.toString())}`);
+    console.log(`Model: ${chalk.yellow(model || 'default')}`);
+    console.log(`Auto-suggest: ${chalk.yellow(options.autoSuggest ? 'Yes' : 'No')}`);
+    console.log('');
+
+    for (let i = 1; i <= iterations; i++) {
+      console.log(chalk.blue(`\n─── Iteration ${i}/${iterations} ───\n`));
+
+      // Progress tracking
+      let lastProgressLine = '';
+
+      const result = await runSelfImproveIteration(suiteName, {
+        autoSuggest: options.autoSuggest,
+        minPatternCount: 2,
+        model,
+        onProgress: (current, total, testId) => {
+          // Clear previous line and print progress
+          if (lastProgressLine) {
+            process.stdout.write('\r' + ' '.repeat(lastProgressLine.length) + '\r');
+          }
+          lastProgressLine = `  Testing: ${current}/${total} - ${testId}`;
+          process.stdout.write(chalk.gray(lastProgressLine));
+        },
+      });
+
+      // Clear progress line and move to results
+      if (lastProgressLine) {
+        process.stdout.write('\r' + ' '.repeat(lastProgressLine.length) + '\r');
+      }
+
+      console.log(`  Evaluation: ${chalk.green(result.evaluationPassed.toString())} passed, ${result.evaluationFailed > 0 ? chalk.red(result.evaluationFailed.toString()) : '0'} failed`);
+      console.log(`  Corrections Generated: ${chalk.yellow(result.correctionsGenerated.toString())}`);
+
+      if (result.topPatterns.length > 0) {
+        console.log('');
+        console.log('  Top Failure Patterns:');
+        result.topPatterns.forEach((p) => {
+          console.log(`    • [${p.step}] ${p.pattern} (${p.count}x)`);
+        });
+      }
+
+      if (result.suggestionsGenerated > 0) {
+        console.log('');
+        console.log(chalk.green(`  ✓ Generated ${result.suggestionsGenerated} prompt suggestion(s)`));
+        console.log(chalk.gray('    Review with: npm run cli -- prompts list'));
+      }
+
+      // If all passed, stop early
+      if (result.evaluationFailed === 0) {
+        console.log('');
+        console.log(chalk.green('All tests passing - stopping early.'));
+        break;
+      }
+    }
+
+    console.log('');
+    console.log(chalk.cyan('Self-improvement complete.'));
+    console.log(chalk.gray('Review suggestions: npm run cli -- prompts list'));
+    console.log(chalk.gray('Analyze patterns:   npm run cli -- prompts analyze'));
+  } catch (error: any) {
+    console.error(chalk.red(`Error: ${error.message}`));
+    process.exit(1);
+  }
+}
+
+program
+  .command('self-improve')
+  .description('Run automated self-improvement loop')
+  .option('-s, --suite <name>', 'Test suite name', 'golden-scenarios')
+  .option('-i, --iterations <n>', 'Number of improvement iterations', '1')
+  .option('--auto-suggest', 'Automatically generate suggestions for top patterns')
+  .option('-m, --model <model>', 'LLM model for evaluation')
+  .action(selfImproveCommand);
 
 // Parse and execute
 program.parse();

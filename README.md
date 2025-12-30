@@ -84,6 +84,84 @@ npm run cli interactive
 npm run cli quick "Annual SaaS subscription with monthly billing"
 ```
 
+#### CLI - Generate Use Cases
+
+Generate realistic Zuora use cases by researching a company's website:
+
+```bash
+# Generate use cases for a company
+npm run cli -- generate <customer_name> -w <website_url> [options]
+
+# Examples
+npm run cli -- generate "Salesforce" -w "https://www.salesforce.com" -c 3
+npm run cli -- generate "Twilio" -w "https://www.twilio.com" -c 2 -m gemini-3-pro-preview
+npm run cli -- generate "Datadog" -w "https://www.datadoghq.com" -c 3 -o generated-uc/datadog.json
+
+# Options:
+#   -w, --website <url>     Customer website URL (required)
+#   -c, --count <number>    Number of use cases to generate (1-3, default: 1)
+#   -n, --notes <text>      Additional notes to guide generation
+#   -o, --output <file>     Save results to a JSON file
+#   -l, --local             Use local formatting (faster, no LLM for formatting)
+#   -m, --model <model>     LLM model (gpt-5.2 | gemini-3-pro-preview | gemini-3-flash-preview)
+
+# Interactive mode (guided prompts)
+npm run cli generate-interactive
+npm run cli gi  # shorthand
+```
+
+#### CLI - Self-Learning System
+
+ZUCA includes a self-learning pipeline that evaluates outputs against behavioral criteria and generates corrections for future improvement.
+
+```bash
+# Run evaluation suite against test cases
+npm run cli evaluate
+
+# Evaluate with specific model
+npm run cli evaluate -m gemini-3-pro-preview
+
+# Evaluate specific step only
+npm run cli evaluate --step contracts_orders
+
+# Generate corrections for failures
+npm run cli evaluate --corrections
+
+npm run cli -- evaluate --suite advanced-scenarios
+
+# List stored corrections
+npm run cli corrections list
+
+# Show corrections summary by step
+npm run cli corrections summary
+
+# Filter corrections by step
+npm run cli corrections list --step billings
+
+# Analyze failure patterns for prompt improvement
+npm run cli prompts analyze
+npm run cli prompts analyze --step billings
+
+# Generate a prompt improvement suggestion
+npm run cli prompts suggest billings "missing payment term"
+
+# View and manage prompt suggestions
+npm run cli prompts list
+npm run cli prompts approve <suggestion-id>
+npm run cli prompts reject <suggestion-id>
+
+# Run automated self-improvement loop
+npm run cli self-improve
+npm run cli self-improve -m gemini-3-flash-preview --auto-suggest
+npm run cli self-improve --iterations 3
+npm run cli -- self-improve --suite advanced-scenarios
+
+# Build custom test suites from UC generator output (see "Generate Use Cases" above)
+npm run uc:to-suite -- generated-uc/ data/test-suites/real-world-scenarios.yaml
+```
+
+See `docs/FEATURE-SELF-LEARNING.md` for full architecture and implementation details.
+
 #### API Routes (Next.js)
 
 When running the web app locally (`npm run dev:web`), API routes are available under `http://localhost:3000/api/*`.

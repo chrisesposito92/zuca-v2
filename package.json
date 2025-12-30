@@ -24,7 +24,8 @@
     "rag:repair": "tsx src/rag/cli.ts repair",
     "rag:test": "tsx src/rag/cli.ts test",
     "rag:stats": "tsx src/rag/cli.ts stats",
-    "rag:migrate": "tsx src/rag/cli.ts migrate"
+    "rag:migrate": "tsx src/rag/cli.ts migrate",
+    "uc:to-suite": "tsx scripts/uc-to-test-suite.ts"
   },
   "keywords": [
     "zuora",
