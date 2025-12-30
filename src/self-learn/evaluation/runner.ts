@@ -15,6 +15,10 @@ import { storeCorrection, getCorrectionsBackend } from '../corrections';
 import {
   startCorrectionTracking,
   clearRunContext,
+  startEffectivenessTracking,
+  recordEffectivenessOutcomes,
+  getEffectivenessSummary,
+  clearEffectivenessLog,
 } from '../injector';
 import type {
   TestCase,
@@ -71,10 +75,12 @@ export interface TestCaseResult {
 /**
  * Update effectiveness stats for corrections that were applied during a run
  *
+ * @param testId - The test case ID
  * @param runContext - The run context with applied corrections
  * @param stepResults - Map of step name -> judge result
  */
 async function updateEffectivenessStats(
+  testId: string,
   runContext: CorrectionRunContext | null,
   stepResults: Map<string, JudgeResult>
 ): Promise<void> {
@@ -82,12 +88,16 @@ async function updateEffectivenessStats(
 
   const backend = getCorrectionsBackend();
 
+  // Build a simple pass/fail map for the effectiveness log
+  const stepPassMap = new Map<string, boolean>();
+
   for (const [stepName, correctionIds] of runContext.appliedByStep) {
     const judgeResult = stepResults.get(stepName);
 
     // If we evaluated this step, update effectiveness based on pass/fail
     if (judgeResult) {
       const helped = judgeResult.overall_pass;
+      stepPassMap.set(stepName, helped);
 
       for (const correctionId of correctionIds) {
         try {
@@ -102,6 +112,9 @@ async function updateEffectivenessStats(
       }
     }
   }
+
+  // Record outcomes for the run-level effectiveness summary
+  recordEffectivenessOutcomes(testId, stepPassMap);
 }
 
 /**
@@ -195,7 +208,7 @@ async function runTestCase(
     debugLog(`Test case ${testCase.id} failed with error: ${result.error}`);
   } finally {
     // Update effectiveness stats for any corrections that were applied
-    await updateEffectivenessStats(runContext, result.stepResults);
+    await updateEffectivenessStats(testCase.id, runContext, result.stepResults);
 
     // Clear run context to prepare for next test
     clearRunContext();
@@ -258,6 +271,9 @@ export async function runEvaluationSuite(
   const startedAt = new Date().toISOString();
 
   debugLog(`Starting evaluation run ${runId} for suite: ${suiteName}`);
+
+  // Start effectiveness tracking for this evaluation run
+  startEffectivenessTracking();
 
   // Load test suite
   const suite = await loadTestSuite(suiteName);
@@ -349,6 +365,12 @@ export async function runEvaluationSuite(
     }
   }
 
+  // Get effectiveness summary before clearing the log
+  const effectivenessSummary = getEffectivenessSummary();
+
+  // Clear the effectiveness log for the next run
+  clearEffectivenessLog();
+
   return {
     runId,
     suiteName,
@@ -360,6 +382,7 @@ export async function runEvaluationSuite(
     correctionsGenerated,
     failures,
     model: options.model,
+    effectivenessSummary,
   };
 }
 

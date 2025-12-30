@@ -13,6 +13,7 @@ import { formatContractsOrdersForContext } from './build-contracts-orders';
 import { formatContractIntelForContext } from './contract-intel';
 import { debugLog } from '../../config';
 import { getDocContext, isIndexReady } from '../../rag';
+import { getCorrectionsContext } from '../../self-learn';
 
 /**
  * JSON schema for Rev Rec Waterfall structured output
@@ -93,7 +94,8 @@ function buildUserMessage(
   pobMapping: PobMappingOutput,
   contractIntel: ContractIntel,
   pobTemplates: PobTemplate[],
-  docContext?: string
+  docContext?: string,
+  correctionsContext?: string
 ): string {
   const parts = [
     'Generate the revenue recognition waterfall based on the following:',
@@ -103,6 +105,11 @@ function buildUserMessage(
   // Include retrieved documentation if available
   if (docContext) {
     parts.push('## Relevant Documentation', docContext, '');
+  }
+
+  // Include learned corrections if available
+  if (correctionsContext) {
+    parts.push(correctionsContext, '');
   }
 
   parts.push(
@@ -155,8 +162,27 @@ export async function buildRevRecWaterfall(
     debugLog('Retrieved doc context', { length: docContext?.length || 0 });
   }
 
+  // Retrieve learned corrections for this step
+  const inputSummary = [
+    `Line Items: ${contractsOrders.zr_contracts_orders?.length || 0}`,
+    `POBs: ${pobMapping.charge_pob_map?.map((m) => m.pob_name).join(', ')}`,
+    `Service Period: ${contractIntel.service_start_mdy} to ${contractIntel.service_end_mdy}`,
+    `Billing Period: ${contractIntel.billing_period}`,
+  ].join('\n');
+
+  const correctionsResult = await getCorrectionsContext({
+    stepName: 'revrec_waterfall',
+    inputSummary,
+  });
+  if (correctionsResult.count > 0) {
+    debugLog('Injecting corrections context', {
+      count: correctionsResult.count,
+      ids: correctionsResult.appliedCorrectionIds,
+    });
+  }
+
   const systemPrompt = await loadPrompt(PROMPTS.BUILD_REVREC_WATERFALL);
-  let userMessage = buildUserMessage(contractsOrders, pobMapping, contractIntel, pobTemplates, docContext);
+  let userMessage = buildUserMessage(contractsOrders, pobMapping, contractIntel, pobTemplates, docContext, correctionsResult.context);
 
   // Include previous results for multi-turn support
   if (previousOutput) {

@@ -11,6 +11,7 @@ import {
   RevRecWaterfallOutput,
 } from '../../types/output';
 import { debugLog } from '../../config';
+import { getCorrectionsContext } from '../../self-learn';
 
 /**
  * JSON schema for Summary structured output
@@ -98,12 +99,21 @@ function collectOpenQuestions(
 function buildUserMessage(
   useCaseDescription: string,
   allAssumptions: string[],
-  allQuestions: string[]
+  allQuestions: string[],
+  correctionsContext?: string
 ): string {
   const parts = [
     'Original Use Case:',
     useCaseDescription,
     '',
+  ];
+
+  // Include learned corrections if available
+  if (correctionsContext) {
+    parts.push(correctionsContext, '');
+  }
+
+  parts.push(
     'All Assumptions (from pipeline steps):',
     ...allAssumptions.map((a, i) => `${i + 1}. ${a}`),
     '',
@@ -112,7 +122,7 @@ function buildUserMessage(
     '',
     'Consolidate and prioritize these assumptions and questions.',
     'Remove duplicates, group related items, and order by business impact.',
-  ];
+  );
 
   return parts.join('\n');
 }
@@ -157,8 +167,26 @@ export async function summarizeResults(
     };
   }
 
+  // Retrieve learned corrections for this step
+  const inputSummary = [
+    `Use Case: ${useCaseDescription.substring(0, 200)}`,
+    `Assumptions Count: ${allAssumptions.length}`,
+    `Questions Count: ${allQuestions.length}`,
+  ].join('\n');
+
+  const correctionsResult = await getCorrectionsContext({
+    stepName: 'summarize',
+    inputSummary,
+  });
+  if (correctionsResult.count > 0) {
+    debugLog('Injecting corrections context', {
+      count: correctionsResult.count,
+      ids: correctionsResult.appliedCorrectionIds,
+    });
+  }
+
   const systemPrompt = await loadPrompt(PROMPTS.SUMMARIZE);
-  const userMessage = buildUserMessage(useCaseDescription, allAssumptions, allQuestions);
+  const userMessage = buildUserMessage(useCaseDescription, allAssumptions, allQuestions, correctionsResult.context);
 
   const result = await complete<SummaryOutput>({
     systemPrompt,

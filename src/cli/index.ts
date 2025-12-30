@@ -659,6 +659,44 @@ tests:
 
     console.log(chalk.gray(`Run ID: ${result.runId}`));
     console.log(chalk.gray(`Duration: ${new Date(result.completedAt!).getTime() - new Date(result.startedAt).getTime()}ms`));
+
+    // Report correction effectiveness if available
+    if (result.effectivenessSummary) {
+      const eff = result.effectivenessSummary;
+      console.log('');
+      console.log(chalk.cyan.bold('═══ Correction Effectiveness ═══'));
+      console.log('');
+      const ratePercent = (eff.effectivenessRate * 100).toFixed(1);
+      const rateColor = eff.effectivenessRate >= 0.7 ? chalk.green : eff.effectivenessRate >= 0.4 ? chalk.yellow : chalk.red;
+      console.log(`Corrections Applied: ${chalk.yellow(eff.totalApplied.toString())}`);
+      console.log(`Helped: ${chalk.green(eff.helped.toString())} | Did Not Help: ${eff.didNotHelp > 0 ? chalk.red(eff.didNotHelp.toString()) : '0'}`);
+      console.log(`Effectiveness Rate: ${rateColor(ratePercent + '%')}`);
+
+      if (Object.keys(eff.byStep).length > 0) {
+        console.log('');
+        console.log(chalk.gray('By Step:'));
+        for (const [stepName, stats] of Object.entries(eff.byStep)) {
+          const stepRate = (stats.rate * 100).toFixed(0);
+          console.log(`  ${stepName}: ${stats.helped}/${stats.applied} (${stepRate}%)`);
+        }
+      }
+
+      if (eff.topPerformers && eff.topPerformers.length > 0) {
+        console.log('');
+        console.log(chalk.green('Top Performing Corrections:'));
+        eff.topPerformers.slice(0, 3).forEach((p) => {
+          console.log(`  ✓ ${p.pattern.substring(0, 50)}${p.pattern.length > 50 ? '...' : ''} (${(p.rate * 100).toFixed(0)}%)`);
+        });
+      }
+
+      if (eff.lowPerformers && eff.lowPerformers.length > 0) {
+        console.log('');
+        console.log(chalk.yellow('Low Performing Corrections (consider reviewing):'));
+        eff.lowPerformers.slice(0, 3).forEach((p) => {
+          console.log(`  ✗ ${p.pattern.substring(0, 50)}${p.pattern.length > 50 ? '...' : ''} (${(p.rate * 100).toFixed(0)}%)`);
+        });
+      }
+    }
   } catch (error: any) {
     console.error(chalk.red(`Error: ${error.message}`));
     process.exit(1);

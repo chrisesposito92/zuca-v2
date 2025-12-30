@@ -8,7 +8,14 @@
 import { v4 as uuidv4 } from 'uuid';
 import { debugLog } from '../../config';
 import { findRelevantCorrections, getCorrectionsBackend } from '../corrections';
-import type { Correction, InjectionContext, InjectionResult, CorrectionRunContext } from '../types';
+import type {
+  Correction,
+  InjectionContext,
+  InjectionResult,
+  CorrectionRunContext,
+  EffectivenessRecord,
+  EffectivenessSummary,
+} from '../types';
 
 // =============================================================================
 // Run Context Management (for effectiveness tracking)
@@ -16,6 +23,12 @@ import type { Correction, InjectionContext, InjectionResult, CorrectionRunContex
 
 /** Current active run context - tracks corrections applied during pipeline execution */
 let currentRunContext: CorrectionRunContext | null = null;
+
+/** Effectiveness log for the current evaluation run - persists across test cases */
+let effectivenessLog: EffectivenessRecord[] = [];
+
+/** Pattern lookup for building the summary */
+const correctionPatternMap = new Map<string, string>();
 
 /**
  * Start a new correction tracking context for a pipeline run
@@ -48,13 +61,140 @@ export function clearRunContext(): void {
 }
 
 /**
- * Record that corrections were applied to a step
+ * Start a new effectiveness tracking session (call at start of evaluation run)
  */
-function recordAppliedCorrections(stepName: string, correctionIds: string[]): void {
+export function startEffectivenessTracking(): void {
+  effectivenessLog = [];
+  correctionPatternMap.clear();
+  debugLog('Started effectiveness tracking for evaluation run');
+}
+
+/**
+ * Record that corrections were applied to a step (with pattern caching for summary)
+ */
+function recordAppliedCorrections(
+  stepName: string,
+  corrections: Correction[]
+): void {
   if (!currentRunContext) return;
 
+  const correctionIds = corrections.map((c) => c.id);
   const existing = currentRunContext.appliedByStep.get(stepName) || [];
   currentRunContext.appliedByStep.set(stepName, [...existing, ...correctionIds]);
+
+  // Cache patterns for summary building
+  for (const c of corrections) {
+    correctionPatternMap.set(c.id, c.pattern);
+  }
+}
+
+/**
+ * Record effectiveness outcomes for corrections applied during a test case
+ *
+ * Call this after evaluating each test case to log whether corrections helped.
+ *
+ * @param testId - The test case ID
+ * @param stepResults - Map of step name -> whether the step passed
+ */
+export function recordEffectivenessOutcomes(
+  testId: string,
+  stepResults: Map<string, boolean>
+): void {
+  if (!currentRunContext) return;
+
+  for (const [stepName, correctionIds] of currentRunContext.appliedByStep) {
+    const passed = stepResults.get(stepName);
+    if (passed === undefined) continue; // Step wasn't evaluated
+
+    for (const correctionId of correctionIds) {
+      effectivenessLog.push({
+        correctionId,
+        stepName,
+        testId,
+        helped: passed,
+        appliedAt: new Date().toISOString(),
+      });
+    }
+  }
+}
+
+/**
+ * Get the effectiveness summary for the current evaluation run
+ */
+export function getEffectivenessSummary(): EffectivenessSummary | undefined {
+  if (effectivenessLog.length === 0) {
+    return undefined;
+  }
+
+  const totalApplied = effectivenessLog.length;
+  const helped = effectivenessLog.filter((r) => r.helped).length;
+  const didNotHelp = totalApplied - helped;
+  const effectivenessRate = totalApplied > 0 ? helped / totalApplied : 0;
+
+  // Group by step
+  const byStep: Record<string, { applied: number; helped: number; rate: number }> = {};
+  for (const record of effectivenessLog) {
+    if (!byStep[record.stepName]) {
+      byStep[record.stepName] = { applied: 0, helped: 0, rate: 0 };
+    }
+    byStep[record.stepName].applied++;
+    if (record.helped) {
+      byStep[record.stepName].helped++;
+    }
+  }
+  for (const step of Object.keys(byStep)) {
+    byStep[step].rate =
+      byStep[step].applied > 0 ? byStep[step].helped / byStep[step].applied : 0;
+  }
+
+  // Calculate per-correction stats
+  const correctionStats = new Map<string, { helped: number; total: number }>();
+  for (const record of effectivenessLog) {
+    const stats = correctionStats.get(record.correctionId) || { helped: 0, total: 0 };
+    stats.total++;
+    if (record.helped) {
+      stats.helped++;
+    }
+    correctionStats.set(record.correctionId, stats);
+  }
+
+  // Sort to find top and low performers
+  const sortedCorrections = Array.from(correctionStats.entries())
+    .map(([id, stats]) => ({
+      correctionId: id,
+      pattern: correctionPatternMap.get(id) || 'Unknown',
+      helpedCount: stats.helped,
+      totalApplied: stats.total,
+      rate: stats.total > 0 ? stats.helped / stats.total : 0,
+    }))
+    .sort((a, b) => b.rate - a.rate || b.totalApplied - a.totalApplied);
+
+  const topPerformers = sortedCorrections
+    .filter((c) => c.rate >= 0.7 && c.totalApplied >= 1)
+    .slice(0, 5);
+
+  const lowPerformers = sortedCorrections
+    .filter((c) => c.rate <= 0.3 && c.totalApplied >= 2)
+    .slice(-5)
+    .reverse();
+
+  return {
+    totalApplied,
+    helped,
+    didNotHelp,
+    effectivenessRate,
+    byStep,
+    topPerformers: topPerformers.length > 0 ? topPerformers : undefined,
+    lowPerformers: lowPerformers.length > 0 ? lowPerformers : undefined,
+  };
+}
+
+/**
+ * Clear effectiveness log (call at end of evaluation run)
+ */
+export function clearEffectivenessLog(): void {
+  effectivenessLog = [];
+  correctionPatternMap.clear();
 }
 
 /**
@@ -171,8 +311,8 @@ export async function getCorrectionsContext(
         }
       }
 
-      // Record in run context for effectiveness tracking
-      recordAppliedCorrections(context.stepName, appliedIds);
+      // Record in run context for effectiveness tracking (pass full corrections for pattern caching)
+      recordAppliedCorrections(context.stepName, corrections);
     }
 
     return {

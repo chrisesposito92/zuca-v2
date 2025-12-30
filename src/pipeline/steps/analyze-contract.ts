@@ -15,6 +15,7 @@ import { GoldenUseCaseCapability, KeyTerm } from '../../types/golden-use-cases';
 import { formatCapabilitiesForContext, formatKeyTermsForContext } from '../../data/loader';
 import { debugLog } from '../../config';
 import { getDocContext, isIndexReady } from '../../rag';
+import { getCorrectionsContext } from '../../self-learn';
 
 /**
  * Combined output from contract analysis
@@ -96,7 +97,8 @@ function buildUserMessage(
   input: ZucaInput,
   capabilities: GoldenUseCaseCapability[],
   keyTerms: KeyTerm[],
-  docContext?: string
+  docContext?: string,
+  correctionsContext?: string
 ): string {
   const parts = [
     `Customer: ${input.customer_name}`,
@@ -115,6 +117,11 @@ function buildUserMessage(
   // Include retrieved documentation if available
   if (docContext) {
     parts.push('', docContext);
+  }
+
+  // Include learned corrections if available
+  if (correctionsContext) {
+    parts.push('', correctionsContext);
   }
 
   // Add capability dictionaries for classification
@@ -157,8 +164,28 @@ export async function analyzeContract(
     debugLog('Retrieved doc context', { length: docContext?.length || 0 });
   }
 
+  // Retrieve learned corrections for this step
+  const inputSummary = [
+    `Customer: ${input.customer_name}`,
+    `Use Case: ${input.use_case_description?.substring(0, 300)}`,
+    `Terms: ${input.terms_months} months`,
+    `Billing Period: ${input.billing_period}`,
+    `Start Date: ${input.contract_start_date}`,
+  ].join('\n');
+
+  const correctionsResult = await getCorrectionsContext({
+    stepName: 'analyze_contract',
+    inputSummary,
+  });
+  if (correctionsResult.count > 0) {
+    debugLog('Injecting corrections context', {
+      count: correctionsResult.count,
+      ids: correctionsResult.appliedCorrectionIds,
+    });
+  }
+
   const systemPrompt = await loadPrompt(PROMPTS.ANALYZE_CONTRACT);
-  let userMessage = buildUserMessage(input, capabilities, keyTerms, docContext);
+  let userMessage = buildUserMessage(input, capabilities, keyTerms, docContext, correctionsResult.context);
 
   // Include previous results for multi-turn support
   if (previousAnalysis) {

@@ -190,6 +190,50 @@ export const EvaluationFailureSchema = z.object({
 
 export type EvaluationFailure = z.infer<typeof EvaluationFailureSchema>;
 
+/**
+ * Effectiveness record for a single correction application
+ */
+export const EffectivenessRecordSchema = z.object({
+  correctionId: z.string(),
+  stepName: z.string(),
+  testId: z.string(),
+  helped: z.boolean(),
+  appliedAt: z.string(),
+});
+
+export type EffectivenessRecord = z.infer<typeof EffectivenessRecordSchema>;
+
+/**
+ * Summary of correction effectiveness across an evaluation run
+ */
+export const EffectivenessSummarySchema = z.object({
+  totalApplied: z.number(),
+  helped: z.number(),
+  didNotHelp: z.number(),
+  effectivenessRate: z.number(), // helped / totalApplied
+  byStep: z.record(z.object({
+    applied: z.number(),
+    helped: z.number(),
+    rate: z.number(),
+  })),
+  topPerformers: z.array(z.object({
+    correctionId: z.string(),
+    pattern: z.string(),
+    helpedCount: z.number(),
+    totalApplied: z.number(),
+    rate: z.number(),
+  })).optional(),
+  lowPerformers: z.array(z.object({
+    correctionId: z.string(),
+    pattern: z.string(),
+    helpedCount: z.number(),
+    totalApplied: z.number(),
+    rate: z.number(),
+  })).optional(),
+});
+
+export type EffectivenessSummary = z.infer<typeof EffectivenessSummarySchema>;
+
 export const EvaluationRunResultSchema = z.object({
   runId: z.string(),
   suiteName: z.string(),
@@ -201,6 +245,7 @@ export const EvaluationRunResultSchema = z.object({
   correctionsGenerated: z.number(),
   failures: z.array(EvaluationFailureSchema),
   model: z.string().optional(),
+  effectivenessSummary: EffectivenessSummarySchema.optional(),
 });
 
 export type EvaluationRunResult = z.infer<typeof EvaluationRunResultSchema>;
