@@ -309,6 +309,7 @@ export default function UCGeneratePage() {
               onChange={(e) =>
                 setUcInput((prev) => ({ ...prev, customer_website: e.target.value }))
               }
+              isRequired
               labelPlacement="outside"
               variant="bordered"
               size="lg"
@@ -517,7 +518,7 @@ export default function UCGeneratePage() {
               className="font-semibold"
               onPress={handleGenerateUseCases}
               isLoading={ucGeneratorMutation.isPending}
-              isDisabled={!ucInput.customer_name || transcriptsLoading}
+              isDisabled={!ucInput.customer_name || !ucInput.customer_website || transcriptsLoading}
               startContent={
                 !ucGeneratorMutation.isPending && (
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
