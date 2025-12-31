@@ -47,7 +47,18 @@ export {
   evaluateSingleCriterion,
   hasCriticalFailures,
   getFailedEvaluations,
+  // Ensemble evaluation
+  evaluateWithEnsemble,
+  formatEnsembleResultForDisplay,
+  createEnsembleConfig,
+  DEFAULT_ENSEMBLE_CONFIG,
+  LIGHTWEIGHT_ENSEMBLE_CONFIG,
   type EvaluateOptions,
+  type EnsembleConfig,
+  type EnsembleResult,
+  type JudgeConfig,
+  type SingleJudgeResult,
+  type Disagreement,
 } from './judge';
 
 // Evaluation Runner (Phase 2)

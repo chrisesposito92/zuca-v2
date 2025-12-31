@@ -9,7 +9,13 @@ import { v4 as uuidv4 } from 'uuid';
 import { debugLog } from '../../config';
 import type { LlmModel } from '../../types/llm';
 import { runPipeline } from '../../pipeline/index';
-import { evaluateOutput, getFailedEvaluations } from '../judge';
+import {
+  evaluateOutput,
+  getFailedEvaluations,
+  evaluateWithEnsemble,
+  createEnsembleConfig,
+} from '../judge';
+import type { EnsembleConfig } from '../judge';
 import { getCriteriaIfExists } from '../criteria';
 import { storeCorrection, getCorrectionsBackend } from '../corrections';
 import {
@@ -67,6 +73,12 @@ export interface RunEvaluationOptions {
   stopOnFirstFailure?: boolean;
   /** Callback for progress updates */
   onProgress?: (current: number, total: number, testId: string) => void;
+  /** Use multi-judge ensemble evaluation */
+  ensemble?: boolean;
+  /** Custom ensemble configuration */
+  ensembleConfig?: Partial<EnsembleConfig>;
+  /** Models to use for ensemble (creates config from these) */
+  ensembleModels?: LlmModel[];
 }
 
 /**
@@ -179,14 +191,43 @@ async function runTestCase(
         `Description: ${input.use_case_description?.substring(0, 200)}...`,
       ].join('\n');
 
-      // Evaluate the output
-      const judgeResult = await evaluateOutput(
-        stepName,
-        inputSummary,
-        stepOutput,
-        criteria,
-        { model: options.model }
-      );
+      // Evaluate the output (using ensemble if enabled)
+      let judgeResult: JudgeResult;
+
+      if (options.ensemble) {
+        // Build ensemble config
+        const ensembleConfig = options.ensembleModels
+          ? createEnsembleConfig(options.ensembleModels, options.ensembleConfig)
+          : options.ensembleConfig;
+
+        debugLog(`Using ensemble evaluation for step: ${stepName}`);
+        const ensembleResult = await evaluateWithEnsemble(
+          stepName,
+          inputSummary,
+          stepOutput,
+          criteria,
+          ensembleConfig
+        );
+
+        judgeResult = ensembleResult.consensus;
+
+        // Log disagreements if any
+        if (ensembleResult.disagreements.length > 0) {
+          debugLog(
+            `Ensemble had ${ensembleResult.disagreements.length} disagreements ` +
+              `(confidence: ${(ensembleResult.overallConfidence * 100).toFixed(1)}%)`
+          );
+        }
+      } else {
+        // Standard single-judge evaluation
+        judgeResult = await evaluateOutput(
+          stepName,
+          inputSummary,
+          stepOutput,
+          criteria,
+          { model: options.model }
+        );
+      }
 
       result.stepResults.set(stepName, judgeResult);
 

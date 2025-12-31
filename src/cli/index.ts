@@ -555,6 +555,8 @@ async function evaluateCommand(options: {
   step?: string;
   corrections?: boolean;
   captureTraining?: boolean;
+  ensemble?: boolean;
+  ensembleModels?: string;
 }): Promise<void> {
   try {
     console.log(chalk.cyan.bold('\n═══ Self-Learning Evaluation ═══\n'));
@@ -638,11 +640,32 @@ tests:
     console.log(chalk.blue(`Running evaluation suite: ${options.suite}...`));
     console.log('');
 
+    // Parse ensemble models if provided
+    let ensembleModels: LlmModel[] | undefined;
+    if (options.ensembleModels) {
+      ensembleModels = options.ensembleModels.split(',').map((m) => {
+        const parsed = parseModelOption(m.trim());
+        if (!parsed) {
+          console.error(chalk.red(`Invalid model in ensemble: ${m}`));
+          process.exit(1);
+        }
+        return parsed;
+      });
+    }
+
+    if (options.ensemble) {
+      const judgeList = ensembleModels?.join(', ') || 'default (GPT-5.2, Gemini 3 Pro, Gemini 3 Flash)';
+      console.log(chalk.blue(`Using ensemble evaluation with judges: ${judgeList}`));
+      console.log('');
+    }
+
     const result = await runEvaluationSuite(options.suite, {
       model,
       steps: options.step ? [options.step] : undefined,
       generateCorrections: options.corrections ?? false,
       captureTraining: options.captureTraining ?? false,
+      ensemble: options.ensemble,
+      ensembleModels,
       onProgress: (current, total, testId) => {
         console.log(chalk.gray(`  [${current}/${total}] ${testId}`));
       },
@@ -824,6 +847,8 @@ program
   .option('--step <step>', 'Only evaluate specific step')
   .option('--corrections', 'Generate corrections for failures')
   .option('--capture-training', 'Capture successful outputs as training data')
+  .option('--ensemble', 'Use multi-judge ensemble evaluation')
+  .option('--ensemble-models <models>', 'Comma-separated list of models for ensemble (e.g., gpt-5.2,gemini-3-pro-preview)')
   .action(evaluateCommand);
 
 // Corrections subcommand group

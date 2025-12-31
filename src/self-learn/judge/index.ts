@@ -16,6 +16,10 @@ import type {
   Criterion,
 } from '../types';
 
+// Re-export ensemble functionality
+export * from './ensemble-types';
+export { evaluateWithEnsemble, formatEnsembleResultForDisplay } from './ensemble';
+
 /**
  * JSON schema for JudgeResult structured output
  */
