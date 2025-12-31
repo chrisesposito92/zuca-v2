@@ -1,0 +1,758 @@
+name: golden-edge
+version: "1.0"
+description: Edge cases and complex Zuora scenarios - 24 tests
+
+tests:
+  # ============================================================================
+  # EDGE CASES - Basic
+  # ============================================================================
+
+  - id: b2c-annual-prepaid
+    name: B2C Annual Prepaid Subscription
+    description: |
+      Annual B2C subscription billed upfront.
+    input:
+      customer_name: Annual Consumer
+      contract_start_date: "01/01/2025"
+      terms_months: 12
+      transaction_currency: USD
+      billing_period: Annually
+      is_allocations: false
+      use_case_description: |
+        Consumer productivity app (annual plan):
+        - $99.99/year (vs $9.99/month = $119.88)
+        - Billed annually upfront
+        - Revenue recognized ratably over 12 months
+    focus_steps:
+      - contracts_orders
+      - billings
+      - revrec_waterfall
+    tags:
+      - b2c
+      - annual
+      - prepaid
+
+  - id: semi-annual-billing
+    name: Semi-Annual Billing Cycle
+    description: |
+      Subscription with semi-annual (every 6 months) billing.
+    input:
+      customer_name: Semi-Annual Corp
+      contract_start_date: "01/01/2025"
+      terms_months: 24
+      transaction_currency: USD
+      billing_period: Semi-Annually
+      is_allocations: false
+      use_case_description: |
+        Enterprise license with semi-annual billing:
+        - $6,000 every 6 months
+        - 24-month contract term
+        - 4 billing periods total
+        - Revenue recognized monthly ($1,000/month)
+    focus_steps:
+      - billings
+      - revrec_waterfall
+    tags:
+      - semi-annual
+      - multi-year
+
+  - id: cad-multi-element
+    name: CAD Multi-Element Bundle
+    description: |
+      Canadian dollar bundle with SSP allocation.
+    input:
+      customer_name: Canadian Inc
+      contract_start_date: "01/01/2025"
+      terms_months: 12
+      transaction_currency: CAD
+      billing_period: Monthly
+      is_allocations: true
+      allocation_method: Use Sell Price
+      use_case_description: |
+        Canadian software bundle:
+        - Core software: CAD $800/month
+        - Training package: CAD $2,000 one-time
+        - Support: CAD $200/month
+        - Allocate based on sell prices
+    focus_steps:
+      - design_subscription
+      - revrec_waterfall
+    tags:
+      - currency
+      - cad
+      - allocation
+      - multi-element
+
+  - id: leap-year
+    name: Leap Year Daily Proration
+    description: |
+      Contract spanning leap year affects daily rates.
+    input:
+      customer_name: Leap Year Corp
+      contract_start_date: "01/01/2024"
+      terms_months: 12
+      transaction_currency: USD
+      billing_period: Monthly
+      is_allocations: false
+      use_case_description: |
+        Subscription during leap year (2024):
+        - Annual fee: $12,000
+        - Daily rate: $12,000 / 366 = $32.79
+        - February has 29 days
+        - Recognition must account for leap year
+    focus_steps:
+      - revrec_waterfall
+    tags:
+      - edge-case
+      - leap-year
+      - proration
+
+  - id: zero-dollar-line
+    name: Zero Dollar Line Item
+    description: |
+      Bundle includes free element (promotional).
+    input:
+      customer_name: Free Element Corp
+      contract_start_date: "01/01/2025"
+      terms_months: 12
+      transaction_currency: USD
+      billing_period: Monthly
+      is_allocations: true
+      allocation_method: Use List Price
+      use_case_description: |
+        Bundle with free promotional element:
+        - Core Platform: $500/month
+        - Premium Support: $100/month
+        - Analytics Module: FREE (normally $200/month)
+        - Free element still needs SSP for allocation
+        - Use list price $200 for allocation purposes
+    focus_steps:
+      - design_subscription
+      - contracts_orders
+      - revrec_waterfall
+    tags:
+      - edge-case
+      - free
+      - zero-dollar
+      - allocation
+
+  - id: very-short-term
+    name: 1-Month Contract
+    description: |
+      Very short term subscription.
+    input:
+      customer_name: Short Term Inc
+      contract_start_date: "01/01/2025"
+      terms_months: 1
+      transaction_currency: USD
+      billing_period: Monthly
+      is_allocations: false
+      use_case_description: |
+        Month-to-month subscription:
+        - Single month commitment
+        - $500 for January 2025
+        - Billed and recognized in same month
+        - Auto-renews unless cancelled
+    focus_steps:
+      - contracts_orders
+      - billings
+    tags:
+      - edge-case
+      - short-term
+      - month-to-month
+
+  - id: multi-year-upfront
+    name: 3-Year Upfront Payment
+    description: |
+      Customer pays entire 3-year contract upfront.
+    input:
+      customer_name: Upfront Payment Corp
+      contract_start_date: "01/01/2025"
+      terms_months: 36
+      transaction_currency: USD
+      billing_period: Upfront
+      is_allocations: false
+      use_case_description: |
+        3-year prepaid subscription:
+        - Total contract: $108,000 ($3,000/month equivalent)
+        - Single invoice for full amount at start
+        - Revenue recognized monthly over 36 months
+        - Large deferred revenue balance
+    focus_steps:
+      - contracts_orders
+      - billings
+      - revrec_waterfall
+    tags:
+      - multi-year
+      - upfront
+      - prepaid
+      - deferred-revenue
+
+  - id: onetime-hardware
+    name: Hardware with Installation
+    description: |
+      Hardware sale with installation service.
+    input:
+      customer_name: Hardware Corp
+      contract_start_date: "01/01/2025"
+      terms_months: 1
+      transaction_currency: USD
+      billing_period: Monthly
+      is_allocations: true
+      allocation_method: Use List Price
+      use_case_description: |
+        Hardware and installation:
+        - Server Hardware: $50,000 (list $55,000)
+        - Installation Service: $5,000 (list $7,000)
+        - Hardware recognized at delivery
+        - Installation recognized at completion
+        - Single invoice at contract start
+    focus_steps:
+      - design_subscription
+      - contracts_orders
+      - revrec_waterfall
+    tags:
+      - one-time
+      - hardware
+      - installation
+      - allocation
+
+  # ============================================================================
+  # ZUORA EDGE CASES - Complex Real-World Scenarios
+  # ============================================================================
+
+  - id: ramp-misaligned-18month
+    name: 18-Month Term with Annual Ramp Steps
+    description: |
+      Subscription term doesn't align with ramp interval.
+    input:
+      customer_name: Misaligned Ramp Inc
+      contract_start_date: "01/01/2025"
+      terms_months: 18
+      transaction_currency: USD
+      billing_period: Monthly
+      is_allocations: false
+      use_case_description: |
+        18-month subscription with annual ramp pricing:
+        - Year 1 rate: $1,000/month (months 1-12)
+        - Year 2 rate: $1,500/month (months 13-18 only, 6 months)
+        - Total contract value: $12,000 + $9,000 = $21,000
+        - Rev rec must handle partial Year 2 recognition
+        - ASC 606 requires straight-line over 18 months = $1,166.67/month
+    focus_steps:
+      - contracts_orders
+      - billings
+      - revrec_waterfall
+    tags:
+      - ramp
+      - misalignment
+      - proration
+      - asc606
+
+  - id: ramp-quarterly-with-annual-term
+    name: Quarterly Ramps in Annual Contract
+    description: |
+      4 quarterly price increases within a 12-month term.
+    input:
+      customer_name: Quarterly Ramp Co
+      contract_start_date: "01/01/2025"
+      terms_months: 12
+      transaction_currency: USD
+      billing_period: Monthly
+      is_allocations: false
+      use_case_description: |
+        Annual subscription with quarterly ramp-up:
+        - Q1 (Jan-Mar): $500/month = $1,500
+        - Q2 (Apr-Jun): $750/month = $2,250
+        - Q3 (Jul-Sep): $1,000/month = $3,000
+        - Q4 (Oct-Dec): $1,250/month = $3,750
+        - Total: $10,500 over 12 months
+        - Straight-line rev rec: $875/month
+        - Each quarter needs separate contract line
+    focus_steps:
+      - contracts_orders
+      - revrec_waterfall
+    tags:
+      - ramp
+      - quarterly
+      - multiple-segments
+
+  - id: ssp-residual-method
+    name: Bundle with Indeterminable SSP (Residual Method)
+    description: |
+      Bundle where one component has no observable SSP.
+    input:
+      customer_name: Residual SSP Corp
+      contract_start_date: "01/01/2025"
+      terms_months: 12
+      transaction_currency: USD
+      billing_period: Annual
+      is_allocations: true
+      allocation_method: Residual
+      use_case_description: |
+        Software bundle with custom development:
+        - Platform License: $50,000 (SSP: $60,000)
+        - Support: $10,000 (SSP: $12,000)
+        - Custom Integration: $40,000 (SSP: Not determinable)
+        - Total contract: $100,000
+
+        Residual allocation:
+        - Platform gets: $60,000 / $72,000 * ($100,000 - $40,000) = $50,000
+        - Support gets: $12,000 / $72,000 * ($100,000 - $40,000) = $10,000
+        - Custom gets residual: $40,000
+
+        Recognition:
+        - Platform: Ratably over 12 months
+        - Support: Ratably over 12 months
+        - Custom Integration: Point-in-time on delivery (assume month 3)
+    focus_steps:
+      - design_subscription
+      - contracts_orders
+      - revrec_waterfall
+    tags:
+      - allocation
+      - residual
+      - ssp
+      - custom-development
+
+  - id: ssp-significant-discount
+    name: Bundle with Significant Discount Requiring Allocation
+    description: |
+      Bundle sold at 40% discount - must allocate discount proportionally.
+    input:
+      customer_name: Deep Discount Inc
+      contract_start_date: "01/01/2025"
+      terms_months: 24
+      transaction_currency: USD
+      billing_period: Annual
+      is_allocations: true
+      allocation_method: Relative SSP
+      use_case_description: |
+        Enterprise bundle at significant discount:
+        - Product A: List $100,000, SSP $100,000
+        - Product B: List $50,000, SSP $50,000
+        - Product C: List $50,000, SSP $50,000
+        - Total SSP: $200,000
+        - Contract price: $120,000 (40% discount)
+
+        Proportional allocation of $120,000:
+        - Product A: $100k/$200k * $120k = $60,000
+        - Product B: $50k/$200k * $120k = $30,000
+        - Product C: $50k/$200k * $120k = $30,000
+
+        All products recognized ratably over 24 months.
+    focus_steps:
+      - design_subscription
+      - contracts_orders
+      - revrec_waterfall
+    tags:
+      - allocation
+      - discount
+      - ssp
+      - bundle
+
+  - id: modification-upgrade-extend
+    name: Mid-Term Upgrade with Term Extension
+    description: |
+      Customer upgrades service and extends term mid-contract.
+    input:
+      customer_name: Upgrade Extend LLC
+      contract_start_date: "01/01/2025"
+      terms_months: 12
+      transaction_currency: USD
+      billing_period: Monthly
+      is_allocations: false
+      use_case_description: |
+        Original contract (Jan 1, 2025):
+        - Standard Plan: $1,000/month for 12 months
+        - Total: $12,000
+
+        Modification (Jul 1, 2025 - month 7):
+        - Upgrade to Premium: $1,500/month
+        - Extend term by 6 months (new end: Jun 30, 2026)
+        - Remaining original: 6 months @ $1,000 = $6,000
+        - New commitment: 12 months @ $1,500 = $18,000
+
+        Modification treatment (prospective):
+        - Recognize $6,000 already earned (Jan-Jun)
+        - New contract: $18,000 over 12 months = $1,500/month
+    focus_steps:
+      - design_subscription
+      - contracts_orders
+      - revrec_waterfall
+    tags:
+      - modification
+      - upgrade
+      - extension
+      - asc606
+
+  - id: modification-partial-termination
+    name: Partial Contract Termination
+    description: |
+      Customer terminates one product line mid-term while keeping others.
+    input:
+      customer_name: Partial Term Corp
+      contract_start_date: "01/01/2025"
+      terms_months: 24
+      transaction_currency: USD
+      billing_period: Monthly
+      is_allocations: true
+      allocation_method: Relative SSP
+      use_case_description: |
+        Original 2-year contract:
+        - Product A: $2,000/month ($48,000 total)
+        - Product B: $1,000/month ($24,000 total)
+        - Total: $72,000
+
+        Termination at month 12:
+        - Product B terminated (customer no longer needs)
+        - Product A continues for remaining 12 months
+        - No termination fee
+
+        Accounting:
+        - First 12 months: Recognize per original allocation
+        - Product B: Accelerate any remaining deferred revenue
+        - Product A: Continue normal recognition
+    focus_steps:
+      - design_subscription
+      - contracts_orders
+      - revrec_waterfall
+    tags:
+      - modification
+      - termination
+      - partial
+      - multi-product
+
+  - id: usage-unbilled-recognition
+    name: Usage with Unbilled Revenue Recognition
+    description: |
+      Usage-based billing in arrears with revenue recognition before invoice.
+    input:
+      customer_name: Unbilled Usage Inc
+      contract_start_date: "01/01/2025"
+      terms_months: 12
+      transaction_currency: USD
+      billing_period: Monthly
+      is_allocations: false
+      use_case_description: |
+        API usage contract billed in arrears:
+        - Base platform fee: $500/month (billed in advance)
+        - API calls: $0.001 per call (billed in arrears)
+
+        January activity:
+        - Base fee billed Jan 1: $500
+        - API calls in January: 2,000,000 calls = $2,000
+        - Usage invoice generated Feb 1
+
+        Rev rec timing:
+        - Base fee: Recognize in January
+        - Usage: Recognize in January (when consumed)
+        - Creates unbilled AR of $2,000 on Jan 31
+        - Invoice clears unbilled AR on Feb 1
+    focus_steps:
+      - design_subscription
+      - billings
+      - revrec_waterfall
+    tags:
+      - usage
+      - unbilled
+      - arrears
+      - api
+
+  - id: prepaid-expiring-balance
+    name: Prepaid Credits with Expiration
+    description: |
+      Prepaid credit purchase with time-based expiration.
+    input:
+      customer_name: Expiring Credits LLC
+      contract_start_date: "01/01/2025"
+      terms_months: 12
+      transaction_currency: USD
+      billing_period: Annual
+      is_allocations: false
+      use_case_description: |
+        Prepaid credit purchase:
+        - Credits purchased: $120,000
+        - Credit value: 1,200,000 units ($0.10 each)
+        - Expiration: 12 months from purchase
+        - Historical usage pattern: 85% utilization
+
+        Expected consumption:
+        - Monthly average: 85,000 units ($8,500)
+        - Total expected usage: 1,020,000 units ($102,000)
+        - Expected breakage: 180,000 units ($18,000)
+
+        Rev rec (ASC 606 breakage):
+        - Recognize proportionally with redemption
+        - Monthly recognition: ~$10,000 (usage + proportional breakage)
+        - If breakage estimate changes, catch-up adjustment
+    focus_steps:
+      - design_subscription
+      - billings
+      - revrec_waterfall
+    tags:
+      - prepaid
+      - credits
+      - expiration
+      - breakage
+
+  - id: prepaid-drawdown-overage
+    name: Prepaid Drawdown with Overage Charges
+    description: |
+      Prepaid commitment that converts to overage when exhausted.
+    input:
+      customer_name: Drawdown Overage Inc
+      contract_start_date: "01/01/2025"
+      terms_months: 12
+      transaction_currency: USD
+      billing_period: Monthly
+      is_allocations: false
+      use_case_description: |
+        Annual prepaid with overage:
+        - Prepaid commitment: $60,000 (paid upfront)
+        - Drawdown rate: $5,000/month equivalent
+        - Overage rate: $6,000/month (120% of prepaid rate)
+
+        Consumption pattern:
+        - Months 1-8: $5,000/month (on track)
+        - Month 9-10: $8,000/month (heavy usage)
+        - Prepaid exhausted mid-month 10
+        - Months 10-12: Overage billing
+
+        Rev rec:
+        - Prepaid: Recognize as consumed ($40k in 8mo, then accelerate)
+        - Overage: Recognize when incurred
+    focus_steps:
+      - design_subscription
+      - billings
+      - revrec_waterfall
+    tags:
+      - prepaid
+      - drawdown
+      - overage
+      - consumption
+
+  - id: evergreen-mid-month-cancel
+    name: Evergreen Subscription Mid-Month Cancellation
+    description: |
+      Month-to-month subscription cancelled mid-billing period.
+    input:
+      customer_name: Mid-Month Cancel Co
+      contract_start_date: "01/15/2025"
+      terms_months: 0
+      transaction_currency: USD
+      billing_period: Monthly
+      is_allocations: false
+      use_case_description: |
+        Evergreen monthly subscription:
+        - Start date: January 15, 2025
+        - Monthly fee: $3,000
+        - Billing: 15th of each month
+        - Cancellation notice: March 20, 2025
+        - Effective end: March 31, 2025 (end of notice period)
+
+        Billing sequence:
+        - Jan 15: $1,500 (prorated Jan 15-31)
+        - Feb 15: $3,000 (full month)
+        - Mar 15: $3,000 (full month - no proration on cancel)
+        - OR: Credit $1,500 for unused Mar 20-Apr 14
+
+        Rev rec: Recognize as service delivered
+    focus_steps:
+      - design_subscription
+      - billings
+    tags:
+      - evergreen
+      - cancellation
+      - proration
+      - mid-month
+
+  - id: multi-element-mixed-timing
+    name: Multi-Element with Different Delivery Timing
+    description: |
+      Bundle where components are delivered at different times.
+    input:
+      customer_name: Mixed Delivery Corp
+      contract_start_date: "01/01/2025"
+      terms_months: 24
+      transaction_currency: USD
+      billing_period: Annual
+      is_allocations: true
+      allocation_method: Relative SSP
+      use_case_description: |
+        Enterprise implementation bundle:
+        - Software License: $100,000 (SSP: $120,000) - Delivered day 1, recognize over 24mo
+        - Implementation: $50,000 (SSP: $60,000) - Delivered month 1-3, POC at go-live
+        - Training: $20,000 (SSP: $25,000) - Delivered month 2, POC at delivery
+        - Support: $30,000 (SSP: $35,000) - Over 24 months, ratably
+        - Total: $200,000, Total SSP: $240,000
+
+        Allocation ($200,000):
+        - Software: $120k/$240k * $200k = $100,000
+        - Implementation: $60k/$240k * $200k = $50,000
+        - Training: $25k/$240k * $200k = $20,833
+        - Support: $35k/$240k * $200k = $29,167
+
+        Recognition timing:
+        - Software: $4,167/month over 24 months
+        - Implementation: $50,000 at go-live (month 3)
+        - Training: $20,833 at delivery (month 2)
+        - Support: $1,215/month over 24 months
+    focus_steps:
+      - design_subscription
+      - contracts_orders
+      - revrec_waterfall
+    tags:
+      - multi-element
+      - mixed-recognition
+      - implementation
+      - training
+
+  - id: billing-anniversary-vs-calendar
+    name: Anniversary Billing vs Calendar Month
+    description: |
+      Subscription starting mid-month with anniversary billing.
+    input:
+      customer_name: Anniversary Bill LLC
+      contract_start_date: "01/15/2025"
+      terms_months: 12
+      transaction_currency: USD
+      billing_period: Monthly
+      is_allocations: false
+      use_case_description: |
+        Mid-month start with anniversary billing:
+        - Start: January 15, 2025
+        - Monthly fee: $3,000
+        - Billing anchor: 15th of each month (anniversary)
+        - End: January 14, 2026
+
+        Billing schedule:
+        - Jan 15: $3,000 (Jan 15 - Feb 14)
+        - Feb 15: $3,000 (Feb 15 - Mar 14)
+        - ... continues on 15th
+        - Jan 15, 2026: Renewal or final bill
+
+        Rev rec alignment:
+        - Each billing period spans calendar months
+        - January rev rec: $1,500 (Jan 15-31)
+        - February rev rec: $3,000 (Feb 1-28)
+        - December rev rec: $1,500 (Dec 1-14) + $1,500 (Dec 15-31)
+    focus_steps:
+      - billings
+      - revrec_waterfall
+    tags:
+      - anniversary
+      - billing-date
+      - mid-month
+      - proration
+
+  - id: billing-advance-arrears-mix
+    name: Mixed Advance and Arrears Billing
+    description: |
+      Single contract with some components billed in advance, others in arrears.
+    input:
+      customer_name: Mixed Billing Corp
+      contract_start_date: "01/01/2025"
+      terms_months: 12
+      transaction_currency: USD
+      billing_period: Monthly
+      is_allocations: false
+      use_case_description: |
+        Platform with mixed billing timing:
+        - Platform License: $2,000/month (billed in advance on 1st)
+        - Support: $500/month (billed in advance on 1st)
+        - Professional Services: $150/hour (billed in arrears)
+        - API Usage: $0.01/call (billed in arrears)
+
+        January billing:
+        - Jan 1: $2,500 (platform + support for January)
+        - Feb 1: $2,500 (platform + support for February)
+                 + PS hours from January + API from January
+
+        Cash vs revenue timing:
+        - Advance items: Cash before revenue
+        - Arrears items: Revenue before cash
+        - Creates deferred revenue and unbilled AR
+    focus_steps:
+      - design_subscription
+      - billings
+    tags:
+      - advance
+      - arrears
+      - mixed-billing
+      - timing
+
+  - id: edge-negative-invoice
+    name: Credit Exceeding Invoice (Negative Balance)
+    description: |
+      Credit memo application resulting in negative invoice.
+    input:
+      customer_name: Negative Invoice Inc
+      contract_start_date: "01/01/2025"
+      terms_months: 12
+      transaction_currency: USD
+      billing_period: Monthly
+      is_allocations: false
+      use_case_description: |
+        Subscription with service credit:
+        - Monthly fee: $1,000
+        - SLA violation credit issued: $1,500
+
+        February billing:
+        - Regular invoice: $1,000
+        - Credit memo applied: -$1,500
+        - Net amount: -$500 (credit balance)
+
+        Options:
+        1. Carry credit forward to March
+        2. Issue refund for $500
+        3. Apply to outstanding AR
+
+        Rev rec impact:
+        - Credit reduces recognized revenue
+        - May require adjustment to prior period
+    focus_steps:
+      - billings
+      - revrec_waterfall
+    tags:
+      - credit-memo
+      - negative
+      - sla-credit
+      - adjustment
+
+  - id: edge-backdated-start
+    name: Backdated Contract Start
+    description: |
+      Contract signed with effective date in the past.
+    input:
+      customer_name: Backdated Start Co
+      contract_start_date: "01/01/2025"
+      terms_months: 12
+      transaction_currency: USD
+      billing_period: Monthly
+      is_allocations: false
+      use_case_description: |
+        Contract execution vs effective date:
+        - Contract signed: March 15, 2025
+        - Effective start: January 1, 2025 (backdated)
+        - Monthly fee: $2,000
+        - Customer was using service since Jan 1
+
+        Catch-up billing on Mar 15:
+        - January: $2,000
+        - February: $2,000
+        - March (1-15): $1,000 prorated
+        - Total catch-up: $5,000
+        - Then regular billing resumes
+
+        Rev rec:
+        - Recognize $2,000/month starting January
+        - Creates unbilled AR until catch-up invoice
+    focus_steps:
+      - billings
+      - revrec_waterfall
+    tags:
+      - backdated
+      - catch-up
+      - unbilled
+      - effective-date

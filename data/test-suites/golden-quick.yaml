@@ -1,0 +1,141 @@
+name: golden-quick
+version: "1.0"
+description: Quick smoke test - 5 core scenarios for fast validation
+
+tests:
+  # Simple Recurring Subscription
+  - id: simple-recurring-12mo
+    name: Simple 12-Month Recurring
+    description: |
+      Basic 12-month SaaS subscription with flat monthly pricing.
+      No ramps, no usage, just simple recurring charges.
+    input:
+      customer_name: Acme Corp
+      contract_start_date: "01/01/2025"
+      terms_months: 12
+      transaction_currency: USD
+      billing_period: Monthly
+      is_allocations: false
+      use_case_description: |
+        Standard SaaS subscription:
+        - $100/month for enterprise software
+        - Monthly billing in advance
+        - 12-month commitment
+    focus_steps:
+      - contracts_orders
+      - billings
+    tags:
+      - simple
+      - recurring
+
+  # Introductory Pricing Scenario (the original bug case)
+  - id: mint-mobile-intro-pricing
+    name: Introductory Pricing - Mint Mobile
+    description: |
+      Customer has introductory pricing: first 3 months at $15/month,
+      then $20/month for remaining 9 months. This should produce
+      separate line items in contracts/orders and billings.
+    input:
+      customer_name: Mint Mobile
+      contract_start_date: "01/01/2026"
+      terms_months: 12
+      transaction_currency: USD
+      billing_period: Monthly
+      is_allocations: false
+      use_case_description: |
+        Mint Mobile wireless plan:
+        - 3 months at $15/month introductory rate
+        - 9 months at $20/month standard rate
+        - Monthly billing in advance
+    focus_steps:
+      - contracts_orders
+      - billings
+      - design_subscription
+    tags:
+      - introductory-pricing
+      - ramp
+      - step-up
+
+  # Multi-Element with Allocation
+  - id: multi-element-allocation
+    name: Multi-Element Arrangement
+    description: |
+      Bundle with multiple deliverables requiring SSP allocation.
+    input:
+      customer_name: Bundle Customer
+      contract_start_date: "01/01/2025"
+      terms_months: 12
+      transaction_currency: USD
+      billing_period: Monthly
+      is_allocations: true
+      allocation_method: Use List Price
+      use_case_description: |
+        Software bundle with multiple elements:
+        - Core Platform: $500/month (list price $600)
+        - Premium Support: $100/month (list price $150)
+        - Implementation Services: $2000 one-time (list price $2500)
+        Total bundle: $8200/year
+    focus_steps:
+      - design_subscription
+      - revrec_waterfall
+    tags:
+      - allocation
+      - multi-element
+      - one-time
+
+  # Usage-based
+  - id: usage-paygo
+    name: Pay As You Go Usage
+    description: |
+      Pure usage-based billing with no commitment.
+      Billed in arrears based on actual consumption.
+    input:
+      customer_name: Usage Customer
+      contract_start_date: "01/01/2025"
+      terms_months: 12
+      transaction_currency: USD
+      billing_period: Monthly
+      is_allocations: false
+      use_case_description: |
+        API consumption service:
+        - $0.01 per API call
+        - No minimum commitment
+        - Billed monthly in arrears
+        - Usage-based revenue recognition
+    focus_steps:
+      - design_subscription
+      - billings
+    tags:
+      - usage
+      - paygo
+      - consumption
+      - arrears
+
+  # Amendment
+  - id: amendment-upgrade
+    name: Mid-Term Upgrade Amendment
+    description: |
+      Customer upgrades to higher tier mid-contract.
+      Tests amendment handling and prorated charges.
+    input:
+      customer_name: Upgrade Customer
+      contract_start_date: "01/01/2025"
+      terms_months: 12
+      transaction_currency: USD
+      billing_period: Monthly
+      is_allocations: false
+      use_case_description: |
+        SaaS subscription with mid-term upgrade:
+        - Original: Basic tier at $100/month (Jan-Jun)
+        - Amendment: Upgrade to Pro tier at $200/month (Jul-Dec)
+        - Amendment effective July 1, 2025
+        - Co-termed to original end date
+        - Prorate any billing adjustments
+    focus_steps:
+      - contracts_orders
+      - billings
+      - design_subscription
+    tags:
+      - amendment
+      - upgrade
+      - co-term

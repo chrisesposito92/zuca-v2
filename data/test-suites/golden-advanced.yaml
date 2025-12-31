@@ -1,0 +1,563 @@
+name: golden-advanced
+version: "1.0"
+description: Advanced scenarios - ramps, modifications, bundles, usage - 20 tests
+
+tests:
+  # ============================================================================
+  # RAMP SCENARIOS
+  # ============================================================================
+
+  - id: quarterly-ramp-3year
+    name: Quarterly Step-Up Ramp - 3 Year
+    description: |
+      3-year contract with quarterly price increases.
+    input:
+      customer_name: Quarterly Ramp Corp
+      contract_start_date: "01/01/2025"
+      terms_months: 36
+      transaction_currency: USD
+      billing_period: Monthly
+      is_allocations: false
+      use_case_description: |
+        Enterprise platform with quarterly ramps:
+        - Q1 Year 1: $1,000/month
+        - Q2 Year 1: $1,100/month
+        - Q3 Year 1: $1,200/month
+        - Q4 Year 1: $1,300/month
+        - Year 2: 10% increase each quarter continuing pattern
+        - Year 3: 10% increase each quarter continuing pattern
+        - Monthly billing in advance
+    focus_steps:
+      - contracts_orders
+      - billings
+      - design_subscription
+      - revrec_waterfall
+    tags:
+      - ramp
+      - quarterly-ramp
+      - multi-year
+      - complex
+
+  - id: decreasing-ramp
+    name: Decreasing Price Ramp (Volume Discount)
+    description: |
+      Contract where price decreases over time as volume commitment kicks in.
+    input:
+      customer_name: Volume Discount Inc
+      contract_start_date: "01/01/2025"
+      terms_months: 24
+      transaction_currency: USD
+      billing_period: Monthly
+      is_allocations: false
+      use_case_description: |
+        Volume-based decreasing pricing:
+        - Year 1: $500/month (base rate)
+        - Year 2: $400/month (20% volume discount)
+        - Customer commits to 2-year term for discount
+        - Monthly billing in advance
+    focus_steps:
+      - contracts_orders
+      - billings
+      - revrec_waterfall
+    tags:
+      - ramp
+      - decreasing
+      - volume-discount
+
+  - id: mid-term-ramp
+    name: Mid-Contract Price Change
+    description: |
+      Price change happens mid-year, not at annual boundary.
+    input:
+      customer_name: MidTerm Ramp LLC
+      contract_start_date: "03/15/2025"
+      terms_months: 12
+      transaction_currency: USD
+      billing_period: Monthly
+      is_allocations: false
+      use_case_description: |
+        Software license with mid-term adjustment:
+        - Months 1-6: $800/month
+        - Months 7-12: $1,000/month (25% increase)
+        - Price change effective September 15, 2025
+        - Monthly billing in advance
+    focus_steps:
+      - contracts_orders
+      - billings
+      - revrec_waterfall
+    tags:
+      - ramp
+      - mid-term
+      - partial-period
+
+  # ============================================================================
+  # CONTRACT MODIFICATIONS
+  # ============================================================================
+
+  - id: amendment-downgrade
+    name: Mid-Term Downgrade Amendment
+    description: |
+      Customer downgrades mid-contract with credit handling.
+    input:
+      customer_name: Downgrade Customer
+      contract_start_date: "01/01/2025"
+      terms_months: 12
+      transaction_currency: USD
+      billing_period: Monthly
+      is_allocations: false
+      use_case_description: |
+        SaaS subscription with mid-term downgrade:
+        - Original: Enterprise at $500/month (Jan-Jun)
+        - Amendment: Downgrade to Pro at $200/month (Jul-Dec)
+        - Amendment effective July 1, 2025
+        - Credit issued for prepaid difference
+        - Co-termed to original end date
+    focus_steps:
+      - contracts_orders
+      - billings
+      - design_subscription
+    tags:
+      - amendment
+      - downgrade
+      - credit
+
+  - id: amendment-add-product
+    name: Add Product to Existing Contract
+    description: |
+      Customer adds new product to existing subscription.
+    input:
+      customer_name: Add Product Corp
+      contract_start_date: "01/01/2025"
+      terms_months: 12
+      transaction_currency: USD
+      billing_period: Monthly
+      is_allocations: true
+      allocation_method: Use List Price
+      use_case_description: |
+        Existing subscription with product addition:
+        - Original: Core Platform at $300/month (full term)
+        - Amendment: Add Analytics Module at $150/month (Jul-Dec)
+        - Amendment effective July 1, 2025
+        - New product co-termed to original end date
+        - Re-allocate revenue for new bundle
+    focus_steps:
+      - contracts_orders
+      - billings
+      - design_subscription
+      - revrec_waterfall
+    tags:
+      - amendment
+      - add-product
+      - allocation
+      - co-term
+
+  - id: renewal-price-increase
+    name: Renewal with Price Increase
+    description: |
+      Contract renewal with annual price escalation.
+    input:
+      customer_name: Renewal Corp
+      contract_start_date: "01/01/2026"
+      terms_months: 12
+      transaction_currency: USD
+      billing_period: Monthly
+      is_allocations: false
+      use_case_description: |
+        Renewal of existing subscription:
+        - Previous term: $1,000/month (2025)
+        - Renewal term: $1,050/month (5% increase)
+        - 12-month renewal term starting Jan 2026
+        - Auto-renewal with 30-day notice
+        - Monthly billing in advance
+    focus_steps:
+      - contracts_orders
+      - billings
+    tags:
+      - renewal
+      - price-increase
+
+  - id: early-renewal-extension
+    name: Early Renewal with Term Extension
+    description: |
+      Customer renews early and extends term.
+    input:
+      customer_name: Early Renew Inc
+      contract_start_date: "07/01/2025"
+      terms_months: 24
+      transaction_currency: USD
+      billing_period: Monthly
+      is_allocations: false
+      use_case_description: |
+        Early renewal with term extension:
+        - Original end date: December 31, 2025
+        - Early renewal: July 1, 2025 (6 months early)
+        - New 24-month term at $800/month
+        - Credit remaining months from old contract
+        - New end date: June 30, 2027
+    focus_steps:
+      - contracts_orders
+      - billings
+      - revrec_waterfall
+    tags:
+      - renewal
+      - early-renewal
+      - extension
+
+  # ============================================================================
+  # BUNDLE SCENARIOS
+  # ============================================================================
+
+  - id: bundle-5-element
+    name: 5-Element Software Bundle
+    description: |
+      Complex bundle with 5 distinct performance obligations.
+    input:
+      customer_name: Full Bundle Corp
+      contract_start_date: "01/01/2025"
+      terms_months: 12
+      transaction_currency: USD
+      billing_period: Monthly
+      is_allocations: true
+      allocation_method: Use List Price
+      use_case_description: |
+        Enterprise software bundle with 5 elements:
+        - Core Platform License: $600/month (list $700)
+        - Advanced Analytics: $200/month (list $250)
+        - Premium Support: $150/month (list $200)
+        - Implementation Services: $10,000 one-time (list $12,000)
+        - Training Package: $3,000 one-time (list $4,000)
+        - Total bundle price: $24,400/year
+        - Allocate based on list prices
+    focus_steps:
+      - design_subscription
+      - contracts_orders
+      - revrec_waterfall
+    tags:
+      - bundle
+      - multi-element
+      - allocation
+      - complex
+
+  - id: bundle-mixed-recognition
+    name: Bundle with Mixed Recognition Patterns
+    description: |
+      Bundle where different elements have different recognition timing.
+    input:
+      customer_name: Mixed Recognition LLC
+      contract_start_date: "01/01/2025"
+      terms_months: 12
+      transaction_currency: USD
+      billing_period: Monthly
+      is_allocations: true
+      allocation_method: Use List Price
+      use_case_description: |
+        Bundle with mixed recognition patterns:
+        - SaaS Platform: $500/month, ratable over term
+        - Implementation: $8,000 one-time, recognize at completion (Month 2)
+        - Training: $2,000 one-time, recognize at delivery (Month 1)
+        - Hardware: $3,000 one-time, recognize at shipment (Month 1)
+        - Support: $100/month, ratable over term
+        - Different POBs satisfy at different times
+    focus_steps:
+      - design_subscription
+      - contracts_orders
+      - revrec_waterfall
+    tags:
+      - bundle
+      - mixed-recognition
+      - point-in-time
+      - over-time
+
+  - id: bundle-with-usage
+    name: Bundle with Recurring and Usage Components
+    description: |
+      Bundle combining fixed recurring fees with usage-based charges.
+    input:
+      customer_name: Hybrid Bundle Inc
+      contract_start_date: "01/01/2025"
+      terms_months: 12
+      transaction_currency: USD
+      billing_period: Monthly
+      is_allocations: true
+      allocation_method: Use Sell Price
+      use_case_description: |
+        Platform bundle with usage:
+        - Base Platform: $400/month fixed
+        - API Calls: $0.001 per call (est. 500,000/month)
+        - Storage: $0.10 per GB (est. 1,000 GB/month)
+        - Premium Support: $100/month fixed
+        - Usage billed in arrears
+        - Fixed fees billed in advance
+    focus_steps:
+      - design_subscription
+      - billings
+    tags:
+      - bundle
+      - usage
+      - hybrid
+      - arrears
+
+  - id: bundle-tiered-discount
+    name: Bundle with Tiered Volume Discount
+    description: |
+      Bundle price depends on volume tier selected.
+    input:
+      customer_name: Tiered Bundle Corp
+      contract_start_date: "01/01/2025"
+      terms_months: 12
+      transaction_currency: USD
+      billing_period: Monthly
+      is_allocations: true
+      allocation_method: Use List Price
+      use_case_description: |
+        Volume-tiered enterprise bundle:
+        - Tier selected: Enterprise (100+ seats)
+        - Core Platform: $800/month (Tier 1 would be $1200)
+        - Advanced Features: $300/month (Tier 1 would be $450)
+        - Support: $200/month (Tier 1 would be $300)
+        - 33% discount for volume commitment
+        - Allocate pre-discount list prices
+    focus_steps:
+      - design_subscription
+      - contracts_orders
+      - revrec_waterfall
+    tags:
+      - bundle
+      - tiered
+      - volume-discount
+      - allocation
+
+  # ============================================================================
+  # USAGE SCENARIOS
+  # ============================================================================
+
+  - id: usage-tiered
+    name: Tiered Usage Pricing
+    description: |
+      Usage with tier-based pricing (unit price decreases with volume).
+    input:
+      customer_name: Tiered Usage Corp
+      contract_start_date: "01/01/2025"
+      terms_months: 12
+      transaction_currency: USD
+      billing_period: Monthly
+      is_allocations: false
+      use_case_description: |
+        API service with tiered pricing:
+        - Tier 1 (0-10,000 calls): $0.10 per call
+        - Tier 2 (10,001-50,000 calls): $0.08 per call
+        - Tier 3 (50,001-100,000 calls): $0.05 per call
+        - Tier 4 (100,001+ calls): $0.03 per call
+        - Monthly billing in arrears
+        - Tiers reset each month
+    focus_steps:
+      - design_subscription
+      - billings
+    tags:
+      - usage
+      - tiered
+      - volume-pricing
+
+  - id: usage-high-watermark
+    name: High Watermark Usage Billing
+    description: |
+      Billing based on peak usage during period.
+    input:
+      customer_name: High Watermark Inc
+      contract_start_date: "01/01/2025"
+      terms_months: 12
+      transaction_currency: USD
+      billing_period: Monthly
+      is_allocations: false
+      use_case_description: |
+        Compute platform with high watermark billing:
+        - Price: $0.50 per concurrent user
+        - Billed on peak concurrent users during month
+        - If peak was 200 users, bill 200 × $0.50 = $100
+        - Monthly billing in arrears
+    focus_steps:
+      - design_subscription
+      - billings
+    tags:
+      - usage
+      - high-watermark
+      - peak-billing
+
+  - id: usage-prepaid-credits
+    name: Prepaid Usage Credits
+    description: |
+      Customer buys credits upfront, draws down with usage.
+    input:
+      customer_name: Credit Customer
+      contract_start_date: "01/01/2025"
+      terms_months: 12
+      transaction_currency: USD
+      billing_period: Annually
+      is_allocations: false
+      use_case_description: |
+        Prepaid credit model:
+        - Customer purchases $24,000 in credits upfront
+        - Credits consumed at $0.01 per API call
+        - 2,400,000 API calls included
+        - Revenue recognized as credits consumed
+        - Unused credits expire at term end
+    focus_steps:
+      - design_subscription
+      - billings
+      - revrec_waterfall
+    tags:
+      - usage
+      - prepaid
+      - credits
+      - drawdown
+
+  # ============================================================================
+  # ALLOCATION SCENARIOS
+  # ============================================================================
+
+  - id: allocation-residual
+    name: Residual Allocation Method
+    description: |
+      Allocation using residual method for one element.
+    input:
+      customer_name: Residual Alloc Inc
+      contract_start_date: "01/01/2025"
+      terms_months: 12
+      transaction_currency: USD
+      billing_period: Monthly
+      is_allocations: true
+      allocation_method: Residual
+      use_case_description: |
+        Bundle with residual allocation:
+        - Professional Services: $50,000 one-time (known SSP: $50,000)
+        - Software License: residual of transaction price
+        - Total contract: $120,000
+        - License gets residual: $70,000
+        - Use residual method per ASC 606-10-32-35
+    focus_steps:
+      - design_subscription
+      - revrec_waterfall
+    tags:
+      - allocation
+      - residual
+      - asc606
+
+  - id: allocation-with-discount
+    name: Bundle Discount Allocation
+    description: |
+      Discount on bundle must be allocated across elements.
+    input:
+      customer_name: Discount Allocation LLC
+      contract_start_date: "01/01/2025"
+      terms_months: 12
+      transaction_currency: USD
+      billing_period: Monthly
+      is_allocations: true
+      allocation_method: Use List Price
+      use_case_description: |
+        Bundle with significant discount:
+        - Product A: List $1,000/month, Sell $800/month
+        - Product B: List $500/month, Sell $400/month
+        - Product C: List $300/month, Sell $250/month
+        - Total List: $1,800/month, Total Sell: $1,450/month
+        - 19.4% bundle discount to allocate proportionally
+        - Each element gets proportional discount
+    focus_steps:
+      - design_subscription
+      - revrec_waterfall
+    tags:
+      - allocation
+      - discount
+      - proportional
+
+  # ============================================================================
+  # ONE-TIME CHARGES
+  # ============================================================================
+
+  - id: onetime-implementation
+    name: Implementation Services Only
+    description: |
+      Pure professional services engagement.
+    input:
+      customer_name: Impl Only Corp
+      contract_start_date: "01/01/2025"
+      terms_months: 3
+      transaction_currency: USD
+      billing_period: Monthly
+      is_allocations: false
+      use_case_description: |
+        Implementation services project:
+        - Total project: $75,000
+        - Milestone 1 (Month 1): $25,000
+        - Milestone 2 (Month 2): $25,000
+        - Milestone 3 (Month 3): $25,000
+        - Recognize at milestone completion
+        - No ongoing subscription
+    focus_steps:
+      - contracts_orders
+      - billings
+      - revrec_waterfall
+    tags:
+      - one-time
+      - services
+      - milestone
+
+  - id: onetime-license-perpetual
+    name: Perpetual License Sale
+    description: |
+      Perpetual software license (not subscription).
+    input:
+      customer_name: Perpetual License Inc
+      contract_start_date: "01/01/2025"
+      terms_months: 12
+      transaction_currency: USD
+      billing_period: Annually
+      is_allocations: true
+      allocation_method: Use List Price
+      use_case_description: |
+        Perpetual license with maintenance:
+        - Perpetual License: $100,000 one-time
+        - Year 1 Maintenance: $20,000 (20% of license)
+        - License recognized at delivery (point in time)
+        - Maintenance recognized ratably over 12 months
+        - License billed upfront, maintenance quarterly
+    focus_steps:
+      - design_subscription
+      - contracts_orders
+      - revrec_waterfall
+    tags:
+      - one-time
+      - perpetual
+      - license
+      - maintenance
+
+  # ============================================================================
+  # HYBRID SCENARIOS
+  # ============================================================================
+
+  - id: hybrid-ramp-with-usage
+    name: Ramp Subscription with Usage
+    description: |
+      Ramping base fee plus usage component.
+    input:
+      customer_name: Ramp Usage Corp
+      contract_start_date: "01/01/2025"
+      terms_months: 24
+      transaction_currency: USD
+      billing_period: Monthly
+      is_allocations: false
+      use_case_description: |
+        Platform with ramping base + usage:
+        - Year 1 Base: $800/month
+        - Year 2 Base: $1,000/month (25% ramp)
+        - Usage component: $0.05 per transaction
+        - Estimated 50,000 transactions/month
+        - Base billed in advance, usage in arrears
+    focus_steps:
+      - design_subscription
+      - billings
+      - revrec_waterfall
+    tags:
+      - hybrid
+      - ramp
+      - usage

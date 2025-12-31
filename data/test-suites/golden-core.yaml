@@ -1,0 +1,403 @@
+name: golden-core
+version: "1.0"
+description: Core scenarios covering main Zuora capabilities - 15 tests
+
+tests:
+  # Simple Recurring Subscription
+  - id: simple-recurring-12mo
+    name: Simple 12-Month Recurring
+    description: |
+      Basic 12-month SaaS subscription with flat monthly pricing.
+    input:
+      customer_name: Acme Corp
+      contract_start_date: "01/01/2025"
+      terms_months: 12
+      transaction_currency: USD
+      billing_period: Monthly
+      is_allocations: false
+      use_case_description: |
+        Standard SaaS subscription:
+        - $100/month for enterprise software
+        - Monthly billing in advance
+        - 12-month commitment
+    focus_steps:
+      - contracts_orders
+      - billings
+    tags:
+      - simple
+      - recurring
+
+  # Introductory Pricing
+  - id: mint-mobile-intro-pricing
+    name: Introductory Pricing - Mint Mobile
+    description: |
+      Introductory pricing: first 3 months at $15/month, then $20/month.
+    input:
+      customer_name: Mint Mobile
+      contract_start_date: "01/01/2026"
+      terms_months: 12
+      transaction_currency: USD
+      billing_period: Monthly
+      is_allocations: false
+      use_case_description: |
+        Mint Mobile wireless plan:
+        - 3 months at $15/month introductory rate
+        - 9 months at $20/month standard rate
+        - Monthly billing in advance
+    focus_steps:
+      - contracts_orders
+      - billings
+      - design_subscription
+    tags:
+      - introductory-pricing
+      - ramp
+
+  # Year-over-Year Ramp
+  - id: annual-ramp-2year
+    name: Annual Ramp - 2 Year Contract
+    description: |
+      2-year contract with different pricing per year.
+    input:
+      customer_name: TechGiant Inc
+      contract_start_date: "01/01/2025"
+      terms_months: 24
+      transaction_currency: USD
+      billing_period: Monthly
+      is_allocations: false
+      use_case_description: |
+        Enterprise platform subscription with annual ramp:
+        - Year 1: $1000/month
+        - Year 2: $1200/month (20% increase)
+        - Monthly billing in advance
+    focus_steps:
+      - contracts_orders
+      - billings
+      - design_subscription
+      - revrec_waterfall
+    tags:
+      - ramp
+      - multi-year
+
+  # Quarterly Billing
+  - id: quarterly-billing-annual
+    name: Quarterly Billing - Annual Contract
+    description: |
+      Annual subscription with quarterly billing cycles.
+    input:
+      customer_name: Quarterly Corp
+      contract_start_date: "01/01/2025"
+      terms_months: 12
+      transaction_currency: USD
+      billing_period: Quarterly
+      is_allocations: false
+      use_case_description: |
+        Professional services subscription:
+        - $3000/quarter ($1000/month equivalent)
+        - Quarterly billing in advance
+        - 12-month term
+    focus_steps:
+      - billings
+    tags:
+      - quarterly
+      - simple
+
+  # Multi-Element with Allocation
+  - id: multi-element-allocation
+    name: Multi-Element Arrangement
+    description: |
+      Bundle with multiple deliverables requiring SSP allocation.
+    input:
+      customer_name: Bundle Customer
+      contract_start_date: "01/01/2025"
+      terms_months: 12
+      transaction_currency: USD
+      billing_period: Monthly
+      is_allocations: true
+      allocation_method: Use List Price
+      use_case_description: |
+        Software bundle with multiple elements:
+        - Core Platform: $500/month (list price $600)
+        - Premium Support: $100/month (list price $150)
+        - Implementation Services: $2000 one-time (list price $2500)
+        Total bundle: $8200/year
+    focus_steps:
+      - design_subscription
+      - revrec_waterfall
+    tags:
+      - allocation
+      - multi-element
+
+  # Prepaid Drawdown
+  - id: prepaid-drawdown-ratable
+    name: Annual Prepaid with Ratable Release
+    description: |
+      Annual prepaid credits with ratable revenue recognition.
+    input:
+      customer_name: Prepaid Corp
+      contract_start_date: "01/01/2025"
+      terms_months: 12
+      transaction_currency: USD
+      billing_period: Annually
+      is_allocations: false
+      use_case_description: |
+        Annual prepaid cloud credits:
+        - $12,000 prepaid annually
+        - Credits drawn down as used
+        - Revenue recognized ratably over 12 months ($1000/month)
+        - Billing upfront at contract start
+    focus_steps:
+      - contracts_orders
+      - billings
+      - revrec_waterfall
+    tags:
+      - prepaid
+      - drawdown
+      - ratable
+
+  # Pay As You Go Usage
+  - id: usage-paygo
+    name: Pay As You Go Usage
+    description: |
+      Pure usage-based billing with no commitment.
+    input:
+      customer_name: Usage Customer
+      contract_start_date: "01/01/2025"
+      terms_months: 12
+      transaction_currency: USD
+      billing_period: Monthly
+      is_allocations: false
+      use_case_description: |
+        API consumption service:
+        - $0.01 per API call
+        - No minimum commitment
+        - Billed monthly in arrears
+        - Usage-based revenue recognition
+    focus_steps:
+      - design_subscription
+      - billings
+    tags:
+      - usage
+      - paygo
+
+  # Free Months Promotion
+  - id: promo-free-months
+    name: Subscription with Free Months
+    description: |
+      Subscription with promotional free period at start.
+    input:
+      customer_name: Promo Customer
+      contract_start_date: "01/01/2025"
+      terms_months: 12
+      transaction_currency: USD
+      billing_period: Monthly
+      is_allocations: false
+      use_case_description: |
+        SaaS subscription with promotional offer:
+        - First 3 months FREE (100% discount)
+        - Months 4-12: $100/month
+        - Total contract value: $900 over 12 months
+        - Revenue recognized over full 12-month term
+    focus_steps:
+      - contracts_orders
+      - billings
+      - design_subscription
+      - revrec_waterfall
+    tags:
+      - promotion
+      - discount
+      - free-months
+
+  # Setup Fee
+  - id: subscription-setup-fee
+    name: Subscription with One-Time Setup Fee
+    description: |
+      Recurring subscription with upfront implementation fee.
+    input:
+      customer_name: Setup Corp
+      contract_start_date: "01/01/2025"
+      terms_months: 12
+      transaction_currency: USD
+      billing_period: Monthly
+      is_allocations: true
+      allocation_method: Use List Price
+      use_case_description: |
+        Enterprise software with implementation:
+        - One-time setup fee: $5,000 (billed upfront)
+        - Monthly subscription: $500/month
+        - Setup fee revenue recognized over 12-month term
+        - Total contract: $11,000
+    focus_steps:
+      - contracts_orders
+      - billings
+      - design_subscription
+      - revrec_waterfall
+    tags:
+      - setup-fee
+      - one-time
+      - allocation
+
+  # B2C Monthly
+  - id: b2c-monthly-simple
+    name: B2C Monthly Subscription
+    description: |
+      Simple B2C consumer subscription with monthly billing.
+    input:
+      customer_name: Consumer User
+      contract_start_date: "01/01/2025"
+      terms_months: 12
+      transaction_currency: USD
+      billing_period: Monthly
+      is_allocations: false
+      use_case_description: |
+        Consumer streaming service:
+        - $9.99/month subscription
+        - Monthly billing in advance
+        - No allocations required
+        - Simple recurring revenue recognition
+    focus_steps:
+      - contracts_orders
+      - billings
+    tags:
+      - b2c
+      - consumer
+      - simple
+
+  # EUR Currency
+  - id: eur-currency-subscription
+    name: EUR Currency Subscription
+    description: |
+      Subscription in EUR currency for European customers.
+    input:
+      customer_name: European GmbH
+      contract_start_date: "01/01/2025"
+      terms_months: 12
+      transaction_currency: EUR
+      billing_period: Monthly
+      is_allocations: false
+      use_case_description: |
+        European SaaS subscription:
+        - €500/month for platform access
+        - Monthly billing in advance
+        - 12-month term
+        - All amounts in EUR
+    focus_steps:
+      - contracts_orders
+      - billings
+    tags:
+      - currency
+      - eur
+      - international
+
+  # Amendment Upgrade
+  - id: amendment-upgrade
+    name: Mid-Term Upgrade Amendment
+    description: |
+      Customer upgrades to higher tier mid-contract.
+    input:
+      customer_name: Upgrade Customer
+      contract_start_date: "01/01/2025"
+      terms_months: 12
+      transaction_currency: USD
+      billing_period: Monthly
+      is_allocations: false
+      use_case_description: |
+        SaaS subscription with mid-term upgrade:
+        - Original: Basic tier at $100/month (Jan-Jun)
+        - Amendment: Upgrade to Pro tier at $200/month (Jul-Dec)
+        - Amendment effective July 1, 2025
+        - Co-termed to original end date
+        - Prorate any billing adjustments
+    focus_steps:
+      - contracts_orders
+      - billings
+      - design_subscription
+    tags:
+      - amendment
+      - upgrade
+      - co-term
+
+  # Usage with Overage
+  - id: usage-overage
+    name: Usage with Overage Charges
+    description: |
+      Base commitment with overage for usage above threshold.
+    input:
+      customer_name: Overage Corp
+      contract_start_date: "01/01/2025"
+      terms_months: 12
+      transaction_currency: USD
+      billing_period: Monthly
+      is_allocations: false
+      use_case_description: |
+        Platform with committed usage:
+        - Base fee: $500/month (includes 10,000 transactions)
+        - Overage: $0.10 per transaction above 10,000
+        - Unused transactions do not roll over
+        - Base billed in advance, overage in arrears
+    focus_steps:
+      - design_subscription
+      - billings
+    tags:
+      - usage
+      - overage
+      - commitment
+
+  # All Charge Types Combined
+  - id: hybrid-all-charge-types
+    name: All Charge Types Combined
+    description: |
+      Contract with recurring, one-time, and usage charges.
+    input:
+      customer_name: Everything Inc
+      contract_start_date: "01/01/2025"
+      terms_months: 12
+      transaction_currency: USD
+      billing_period: Monthly
+      is_allocations: true
+      allocation_method: Use List Price
+      use_case_description: |
+        Complete platform deal:
+        - Platform License: $1,000/month recurring
+        - Implementation: $15,000 one-time (Month 1)
+        - Training: $5,000 one-time (Month 2)
+        - API Usage: $0.01 per call (est. 100,000/month)
+        - Storage: $0.05 per GB (est. 500 GB/month)
+        - Premium Support: $200/month recurring
+        - Mixed billing: advance for recurring, arrears for usage
+    focus_steps:
+      - design_subscription
+      - contracts_orders
+      - billings
+      - revrec_waterfall
+    tags:
+      - hybrid
+      - all-types
+      - complex
+      - allocation
+
+  # Mid-Month Start
+  - id: mid-month-start
+    name: Mid-Month Contract Start
+    description: |
+      Contract starts mid-month requiring proration.
+    input:
+      customer_name: Mid-Month Corp
+      contract_start_date: "01/15/2025"
+      terms_months: 12
+      transaction_currency: USD
+      billing_period: Monthly
+      is_allocations: false
+      use_case_description: |
+        Subscription starting mid-month:
+        - Start date: January 15, 2025
+        - Monthly fee: $1,000/month
+        - First month prorated: 17 days = ~$548.39
+        - Full months February through December
+        - Last month: January 1-14, 2026 = ~$451.61
+    focus_steps:
+      - billings
+      - revrec_waterfall
+    tags:
+      - edge-case
+      - proration
+      - mid-month
