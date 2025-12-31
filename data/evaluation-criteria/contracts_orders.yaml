@@ -154,9 +154,11 @@ criteria:
     check:
       type: behavioral
       rule: |
-        POB IDENTIFIER and POB Template on each line must exactly
-        match the pob_identifier from the charge_pob_map in the
-        design_subscription output. No invented identifiers.
+        The output includes both contracts_orders and pob_mapping.
+        POB IDENTIFIER and POB Template on each line in
+        contracts_orders.zr_contracts_orders must exactly match
+        pob_identifier values from pob_mapping.charge_pob_map.
+        No invented identifiers allowed.
 
   - id: CO-012
     name: date-format-consistency

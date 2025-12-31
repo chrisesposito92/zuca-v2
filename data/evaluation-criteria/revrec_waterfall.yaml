@@ -75,9 +75,11 @@ criteria:
     check:
       type: numeric
       rule: |
-        For each Line Item Num, the sum of all Amount values
-        across all periods must equal the Ext Allocated Price
-        from the Contracts/Orders table for that line.
+        The output includes revrec_waterfall, contracts_orders, and pob_mapping.
+        For each Line Item Num in revrec_waterfall.zr_revrec, the sum
+        of all Amount values across all periods must equal the
+        Ext Allocated Price from contracts_orders.zr_contracts_orders
+        for that line.
         Sum(Amount for Line X) = Ext Allocated Price for Line X
       threshold: 0.01
 
@@ -140,7 +142,9 @@ criteria:
     check:
       type: behavioral
       rule: |
-        Recognition pattern must match the POB template:
+        The output includes revrec_waterfall, contracts_orders, and pob_mapping.
+        Recognition pattern in revrec_waterfall.zr_revrec must match
+        the POB template from pob_mapping.charge_pob_map:
         - BK-OT-*, BL-OT-* (Over Time): Spread ratably over revenue window
         - BK-PIT-*, BL-PIT-* (Point-in-Time): 100% in single period
         - EVT-PIT-* (Event-Driven): $0 until events, then per-event

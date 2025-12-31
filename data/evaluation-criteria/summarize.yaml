@@ -1,122 +1,31 @@
 name: summarize-criteria
-version: "1.0"
+version: "1.1"
 step: summarize
-description: Rules for summary generation
+description: Rules for summary generation (consolidated assumptions and open questions)
+
+# NOTE: The summarize step outputs only:
+# - assumptions: array of consolidated assumption strings
+# - open_questions: array of consolidated question strings
+# Financial metrics (TCV, charge counts) are NOT in this output.
+# This step consolidates and prioritizes assumptions/questions from earlier steps.
 
 criteria:
   - id: SM-001
-    name: tcv-consistency
-    description: TCV must match across all pipeline outputs
-    severity: critical
-    patterns: [TCV, total contract value, total]
+    name: assumption-deduplication
+    description: Assumptions must be consolidated without duplicates
+    severity: high
+    patterns: [duplicate, consolidate, assumptions]
     check:
-      type: numeric
+      type: behavioral
       rule: |
-        Total Contract Value in summary must match:
-        - Sum of contracts/orders extended amounts
-        - Sum of all billing invoice amounts
-        - Sum of all revenue recognition amounts
-        All three should reconcile to the same TCV.
-      threshold: 0.01
+        The assumptions array should be:
+        - Deduplicated (no near-duplicates or redundant entries)
+        - Grouped by related topic where possible
+        - Ordered by business impact (critical → minor)
+        - Reworded for clarity if original wording was ambiguous
+        Each assumption should provide clear, actionable information.
 
   - id: SM-002
-    name: charge-count-accuracy
-    description: Number of charges must match subscription spec
-    severity: high
-    patterns: [charges, count, total charges]
-    check:
-      type: behavioral
-      rule: |
-        The number of charges mentioned in summary must
-        match the actual count from subscription spec.
-        For ramp scenarios, count each pricing segment
-        as a separate charge.
-
-  - id: SM-003
-    name: billing-capability-summary
-    description: Key billing capabilities must be summarized
-    severity: medium
-    patterns: [billing, capabilities, features]
-    check:
-      type: behavioral
-      rule: |
-        Summary should mention the key Zuora Billing features
-        that will be used, such as:
-        - Recurring charges
-        - Proration handling
-        - Usage billing
-        - Ramp/tiered pricing
-
-  - id: SM-004
-    name: revenue-capability-summary
-    description: Key revenue capabilities must be summarized
-    severity: medium
-    patterns: [revenue, recognition, capabilities]
-    check:
-      type: behavioral
-      rule: |
-        Summary should mention the key Zuora Revenue features
-        that will be used, such as:
-        - Ratable revenue recognition
-        - Allocation methodology
-        - Contract modifications handling
-        - Ramp revenue handling
-
-  - id: SM-005
-    name: period-summary-accuracy
-    description: Service period summary must be accurate
-    severity: high
-    patterns: [period, term, months, duration]
-    check:
-      type: behavioral
-      rule: |
-        Summary must accurately state:
-        - Contract start and end dates
-        - Total term length
-        - Any key milestones (pricing changes, renewals)
-
-  - id: SM-006
-    name: complexity-identification
-    description: Complex scenarios must be flagged
-    severity: medium
-    patterns: [complex, complexity, special handling]
-    check:
-      type: behavioral
-      rule: |
-        If the use case involves complex scenarios, they
-        should be highlighted in the summary:
-        - Multi-element arrangements
-        - Ramp/step-up pricing
-        - Usage-based components
-        - Allocation requirements
-
-  - id: SM-007
-    name: action-items-completeness
-    description: Implementation notes should be actionable
-    severity: low
-    patterns: [notes, implementation, action items]
-    check:
-      type: behavioral
-      rule: |
-        Implementation notes or customization tips should
-        provide actionable guidance for configuring Zuora,
-        not just restate what was already shown in tables.
-
-  - id: SM-008
-    name: financial-reconciliation
-    description: Financial figures must reconcile
-    severity: critical
-    patterns: [reconcile, balance, total]
-    check:
-      type: numeric
-      rule: |
-        Key financial metrics must reconcile:
-        - Monthly Billing × Months = TCV (for simple cases)
-        - Sum of segment values = TCV (for ramps)
-        - Sum of all revenue recognition amounts = TCV
-      threshold: 0.01
-
-  - id: SM-009
     name: open-question-priority-tags
     description: Open questions must have priority tags
     severity: high
@@ -124,22 +33,64 @@ criteria:
     check:
       type: behavioral
       rule: |
-        Each open question should have a priority tag prefix:
+        Each open question in open_questions should have a priority tag prefix:
         - [BLOCKING] — Cannot finalize solution without answer
         - [HIGH] — Significantly impacts accuracy
         - [MEDIUM] — Would improve solution quality
         Tag format: "[TAG] Question text here"
 
-  - id: SM-010
-    name: assumption-deduplication
-    description: Assumptions must be consolidated without duplicates
+  - id: SM-003
+    name: question-deduplication
+    description: Open questions must be consolidated without duplicates
     severity: medium
-    patterns: [duplicate, consolidate, assumptions]
+    patterns: [duplicate, consolidate, questions]
     check:
       type: behavioral
       rule: |
-        Assumptions should be:
+        The open_questions array should be:
         - Deduplicated (no near-duplicates)
-        - Grouped by related topic
-        - Ordered by business impact (critical → minor)
-        - Reworded for clarity if needed
+        - Ordered by priority (BLOCKING → HIGH → MEDIUM)
+        - Clear and specific about what information is needed
+        Each question should be actionable for the user.
+
+  - id: SM-004
+    name: source-attribution
+    description: Items should indicate their source step
+    severity: low
+    patterns: [source, step, attribution]
+    check:
+      type: behavioral
+      rule: |
+        Assumptions and questions should ideally indicate which
+        pipeline step they originated from, using prefixes like:
+        - [Subscription], [POB Mapping], [Contracts/Orders]
+        - [Billings], [Rev Rec]
+        This helps users trace where each item came from.
+
+  - id: SM-005
+    name: no-empty-arrays
+    description: Arrays should not be empty if earlier steps had items
+    severity: medium
+    patterns: [empty, missing, consolidation]
+    check:
+      type: behavioral
+      rule: |
+        If earlier pipeline steps generated assumptions or
+        open questions, the summary should consolidate them.
+        Empty arrays are only acceptable if no earlier steps
+        produced any assumptions or questions.
+
+  - id: SM-006
+    name: actionable-content
+    description: Content should be actionable and specific
+    severity: medium
+    patterns: [actionable, specific, vague]
+    check:
+      type: behavioral
+      rule: |
+        Each assumption and question should be:
+        - Specific (not vague generalizations)
+        - Actionable (user knows what to do/answer)
+        - Relevant to the use case (no boilerplate)
+        Avoid generic statements like "Verify with customer"
+        without specifying what to verify.

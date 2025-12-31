@@ -52,7 +52,8 @@ criteria:
       rule: |
         If the contract has different prices for different periods
         (e.g., "first 3 months at $15, then $20"), this MUST be
-        detected and flagged in the capabilities as a ramp or
+        detected and flagged in detected_capabilities.billing_caps
+        or detected_capabilities.revenue_caps as a ramp or
         multi-segment pricing scenario.
 
   - id: AC-005
@@ -63,8 +64,10 @@ criteria:
     check:
       type: behavioral
       rule: |
-        billing_caps array must include all capabilities mentioned
-        or implied by the contract. Use UPPERCASE label format.
+        The output includes both contract_intel and detected_capabilities.
+        detected_capabilities.billing_caps array must include all
+        capabilities mentioned or implied by the contract.
+        Use UPPERCASE label format.
         Common patterns to capability mappings:
         - "recurring", "subscription" → Recurring charge
         - "one-time setup/implementation" → One-time charge
@@ -82,8 +85,9 @@ criteria:
     check:
       type: behavioral
       rule: |
-        revenue_caps array must include relevant recognition methods.
-        Use UPPERCASE label format. Common patterns to capability mappings:
+        detected_capabilities.revenue_caps array must include
+        relevant recognition methods. Use UPPERCASE label format.
+        Common patterns to capability mappings:
         - "SSP", "standalone selling price" → Allocation
         - "bundle", "package" with components → Bundle
         - "ramp", "escalating", "YoY increase" → Ramp

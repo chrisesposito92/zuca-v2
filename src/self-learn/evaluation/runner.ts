@@ -45,15 +45,38 @@ import { loadTestSuite, testCaseToZucaInput } from './test-suites';
 
 /**
  * Mapping from step names to output fields in pipeline result
+ * For most steps, this is a single field. For design_subscription,
+ * we use a special marker to combine subscription_spec + pob_mapping.
  */
-const STEP_OUTPUT_MAP: Record<string, string> = {
-  analyze_contract: 'contract_intel',
-  design_subscription: 'subscription_spec',
-  contracts_orders: 'contracts_orders',
+const STEP_OUTPUT_MAP: Record<string, string | string[]> = {
+  analyze_contract: ['contract_intel', 'detected_capabilities'], // Combined for evaluation
+  design_subscription: ['subscription_spec', 'pob_mapping'], // Combined for evaluation
+  contracts_orders: ['contracts_orders', 'pob_mapping'], // Include pob_mapping for CO-011 cross-reference
   billings: 'billings',
-  revrec_waterfall: 'revrec_waterfall',
+  revrec_waterfall: ['revrec_waterfall', 'contracts_orders', 'pob_mapping'], // Include context for cross-step validation
   summarize: 'summary',
 };
+
+/**
+ * Get step output from pipeline result, handling combined outputs
+ */
+function getStepOutput(stepName: string, pipelineResult: Record<string, unknown>): unknown {
+  const outputField = STEP_OUTPUT_MAP[stepName];
+
+  if (Array.isArray(outputField)) {
+    // Combine multiple fields into a single object for evaluation
+    const combined: Record<string, unknown> = {};
+    for (const field of outputField) {
+      const value = pipelineResult[field];
+      if (value !== undefined) {
+        combined[field] = value;
+      }
+    }
+    return Object.keys(combined).length > 0 ? combined : null;
+  }
+
+  return outputField ? pipelineResult[outputField] : null;
+}
 
 /**
  * Options for running evaluation
@@ -174,9 +197,8 @@ async function runTestCase(
         continue;
       }
 
-      // Get the output for this step
-      const outputField = STEP_OUTPUT_MAP[stepName];
-      const stepOutput = outputField ? (pipelineResult as Record<string, unknown>)[outputField] : null;
+      // Get the output for this step (may combine multiple fields for some steps)
+      const stepOutput = getStepOutput(stepName, pipelineResult as Record<string, unknown>);
 
       if (!stepOutput) {
         debugLog(`No output found for step ${stepName}, skipping evaluation`);

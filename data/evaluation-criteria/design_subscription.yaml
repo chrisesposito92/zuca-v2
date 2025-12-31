@@ -75,8 +75,10 @@ criteria:
     check:
       type: behavioral
       rule: |
-        Every charge in the subscription spec must have a
-        corresponding entry in the POB mapping output.
+        The output includes both subscription_spec (with rate_plans/charges)
+        and pob_mapping (with charge_pob_map array).
+        Every charge in subscription_spec.rate_plans[*].charges must have a
+        corresponding entry in pob_mapping.charge_pob_map.
         No charges should be left unmapped.
 
   - id: DS-006
@@ -87,9 +89,10 @@ criteria:
     check:
       type: behavioral
       rule: |
-        The recognition window (start, end) for each POB must
-        match the actual service delivery period for that charge.
-        For ratable revenue, this is typically the service period.
+        In pob_mapping.charge_pob_map, each entry's recognition_window
+        (start_date, end_date) must match the actual service delivery
+        period for that charge. For ratable revenue, this is typically
+        the charge's effective period from subscription_spec.
 
   - id: DS-007
     name: ratable-method-accuracy
@@ -99,12 +102,12 @@ criteria:
     check:
       type: behavioral
       rule: |
-        ratable_method should be set appropriately:
+        In pob_mapping.charge_pob_map, ratable_method should be set:
         - "Ratable" for services recognized over time (ratable OT POBs)
-        - Match the POB template ratable method from POB mapping
+        - Match the POB template ratable method
         Common values include "Ratable", "Daily Prorated"
 
-  - id: DS-009
+  - id: DS-010
     name: pob-identifier-validity
     description: POB identifiers must come from the provided template list
     severity: critical
@@ -112,8 +115,8 @@ criteria:
     check:
       type: behavioral
       rule: |
-        pob_identifier in charge_pob_map MUST be from the provided
-        "Available ZR POB templates" list. Never invent identifiers.
+        In pob_mapping.charge_pob_map, each pob_identifier MUST be
+        from the "Available ZR POB templates" list. Never invent identifiers.
         Valid prefixes:
         - "BK-" for release upon Booking
         - "BL-" for release upon Billing
