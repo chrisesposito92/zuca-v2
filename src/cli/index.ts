@@ -45,6 +45,13 @@ import {
   rejectSuggestion,
   getPromptPath,
   runSelfImproveIteration,
+  // Apply suggestions
+  applyPromptSuggestion,
+  rollbackPromptSuggestion,
+  listBackups,
+  getAvailableSteps,
+  // Clustering
+  clusterCorrections,
   // Training data exports
   getTrainingStats,
   syncCorrectionsToTraining,
@@ -836,6 +843,100 @@ corrections
   .option('--step <step>', 'Filter by step name')
   .action(correctionsSummaryCommand);
 
+corrections
+  .command('cluster <stepName>')
+  .description('Cluster corrections by semantic similarity')
+  .option('--threshold <number>', 'Similarity threshold (0.0-1.0)', '0.85')
+  .action(correctionsClusterCommand);
+
+/**
+ * Corrections cluster command - group similar corrections
+ */
+async function correctionsClusterCommand(
+  stepName: string,
+  options: { threshold?: string }
+): Promise<void> {
+  try {
+    console.log(chalk.cyan.bold('\n═══ Correction Clustering ═══\n'));
+
+    const threshold = options.threshold ? parseFloat(options.threshold) : 0.85;
+
+    if (threshold < 0 || threshold > 1) {
+      console.error(chalk.red('Threshold must be between 0.0 and 1.0'));
+      process.exit(1);
+    }
+
+    console.log(chalk.blue(`Clustering corrections for ${stepName}...`));
+    console.log(chalk.gray(`(similarity threshold: ${threshold})`));
+    console.log('');
+
+    const result = await clusterCorrections(stepName, {
+      similarityThreshold: threshold,
+    });
+
+    if (result.stats.totalCorrections === 0) {
+      console.log(chalk.yellow('No corrections found for this step.'));
+      console.log(chalk.gray('Run evaluation with --corrections to generate some.'));
+      return;
+    }
+
+    // Statistics
+    console.log(chalk.green('Clustering Results:'));
+    console.log(`  Total Corrections: ${chalk.yellow(result.stats.totalCorrections.toString())}`);
+    console.log(`  Clusters Formed: ${chalk.yellow(result.stats.totalClusters.toString())}`);
+    console.log(`  Avg Cluster Size: ${chalk.yellow(result.stats.avgClusterSize.toFixed(1))}`);
+    console.log(`  Largest Cluster: ${chalk.yellow(result.stats.largestCluster.toString())}`);
+    console.log(`  Reduction Ratio: ${chalk.green((result.stats.reductionRatio * 100).toFixed(1) + '%')}`);
+    console.log('');
+
+    // Show clusters
+    if (result.clusters.length > 0) {
+      console.log(chalk.green('Clusters:'));
+      console.log('');
+
+      result.clusters.slice(0, 10).forEach((cluster, i) => {
+        console.log(chalk.bold(`  ${i + 1}. "${cluster.canonicalPattern}"`));
+        console.log(`     Count: ${chalk.yellow(cluster.count.toString())} corrections`);
+        console.log(`     Avg Confidence: ${chalk.cyan((cluster.avgConfidence * 100).toFixed(0) + '%')}`);
+        console.log(`     Avg Success Rate: ${chalk.cyan((cluster.avgSuccessRate * 100).toFixed(0) + '%')}`);
+        console.log(`     Total Applied: ${cluster.totalTimesApplied}x`);
+
+        // Show representative correction
+        const rep = cluster.representativeCorrection;
+        console.log(chalk.gray(`     Representative: ${rep.expected_behavior.substring(0, 80)}...`));
+        console.log('');
+      });
+
+      if (result.clusters.length > 10) {
+        console.log(chalk.gray(`  ... and ${result.clusters.length - 10} more clusters`));
+      }
+    }
+
+    if (result.unclustered.length > 0) {
+      console.log(chalk.yellow(`  (${result.unclustered.length} unclustered corrections)`));
+    }
+
+    // Insights
+    console.log('');
+    console.log(chalk.green('Insights:'));
+    if (result.stats.reductionRatio > 0.5) {
+      console.log(chalk.cyan('  ✓ High duplication detected - clustering will significantly reduce noise'));
+    } else if (result.stats.reductionRatio > 0.2) {
+      console.log(chalk.cyan('  ✓ Moderate clustering - some patterns are recurring'));
+    } else {
+      console.log(chalk.gray('  ○ Low clustering - corrections are mostly unique'));
+    }
+
+    const lowPerformers = result.clusters.filter((c) => c.avgSuccessRate < 0.3);
+    if (lowPerformers.length > 0) {
+      console.log(chalk.yellow(`  ⚠ ${lowPerformers.length} cluster(s) have low success rate (<30%)`));
+    }
+  } catch (error: any) {
+    console.error(chalk.red(`Error: ${error.message}`));
+    process.exit(1);
+  }
+}
+
 // =============================================================================
 // Prompts Commands (Phase 4 - Prompt Evolution)
 // =============================================================================
@@ -996,15 +1097,15 @@ async function promptsApproveCommand(id: string): Promise<void> {
 
     console.log(chalk.green(`\n✓ Suggestion approved: ${id}\n`));
     console.log(chalk.yellow('Next steps:'));
-    console.log('  1. Review the suggested update above');
+    console.log('  1. Review the suggested update');
+    console.log(`  2. Auto-apply: npm run cli -- prompts apply ${id}`);
 
     const promptPath = getPromptPath(suggestion.step_name);
     if (promptPath) {
-      console.log(`  2. Manually apply changes to: ${promptPath}`);
+      console.log(`     (Or manually edit: ${promptPath})`);
     }
 
     console.log('  3. Run evaluation to verify improvement');
-    console.log('  4. Mark as applied: npm run cli -- prompts applied ' + id);
   } catch (error: any) {
     console.error(chalk.red(`Error: ${error.message}`));
     process.exit(1);
@@ -1024,6 +1125,118 @@ async function promptsRejectCommand(id: string): Promise<void> {
     }
 
     console.log(chalk.yellow(`\n✗ Suggestion rejected: ${id}\n`));
+  } catch (error: any) {
+    console.error(chalk.red(`Error: ${error.message}`));
+    process.exit(1);
+  }
+}
+
+/**
+ * Prompts apply command - auto-apply an approved suggestion
+ */
+async function promptsApplyCommand(id: string): Promise<void> {
+  try {
+    console.log(chalk.cyan.bold('\n═══ Apply Prompt Suggestion ═══\n'));
+
+    const result = await applyPromptSuggestion(id);
+
+    if (!result.success) {
+      console.log(chalk.red(`Failed to apply suggestion: ${result.error}`));
+      return;
+    }
+
+    console.log(chalk.green('✓ Suggestion applied successfully!\n'));
+    console.log(`Prompt file: ${chalk.blue(result.promptPath)}`);
+    console.log(`Backup: ${chalk.gray(result.backupPath)}`);
+    console.log('');
+    console.log(chalk.yellow('Content added:'));
+    console.log(chalk.gray('─'.repeat(60)));
+    console.log(result.contentAdded);
+    console.log(chalk.gray('─'.repeat(60)));
+    console.log('');
+    console.log(chalk.yellow('Next steps:'));
+    console.log('  1. Review the changes in the prompt file');
+    console.log('  2. Run evaluation to verify improvement');
+    console.log('');
+    console.log(chalk.gray(`To rollback: npm run cli -- prompts rollback ${id} "${result.backupPath}"`));
+  } catch (error: any) {
+    console.error(chalk.red(`Error: ${error.message}`));
+    process.exit(1);
+  }
+}
+
+/**
+ * Prompts rollback command - rollback an applied suggestion
+ */
+async function promptsRollbackCommand(id: string, backupPath: string): Promise<void> {
+  try {
+    console.log(chalk.cyan.bold('\n═══ Rollback Prompt Suggestion ═══\n'));
+
+    const result = await rollbackPromptSuggestion(id, backupPath);
+
+    if (!result.success) {
+      console.log(chalk.red(`Failed to rollback: ${result.error}`));
+      return;
+    }
+
+    console.log(chalk.green('✓ Suggestion rolled back successfully!'));
+    console.log(chalk.gray('Prompt file restored from backup.'));
+    console.log(chalk.gray('Suggestion status reverted to "approved".'));
+  } catch (error: any) {
+    console.error(chalk.red(`Error: ${error.message}`));
+    process.exit(1);
+  }
+}
+
+/**
+ * Prompts backups command - list backups for a step
+ */
+async function promptsBackupsCommand(stepName?: string): Promise<void> {
+  try {
+    console.log(chalk.cyan.bold('\n═══ Prompt Backups ═══\n'));
+
+    if (stepName) {
+      // List backups for specific step
+      const backups = await listBackups(stepName);
+
+      if (backups.length === 0) {
+        console.log(chalk.yellow(`No backups found for step: ${stepName}`));
+        return;
+      }
+
+      console.log(`${chalk.blue(stepName)} - ${backups.length} backup(s):`);
+      backups.forEach((backup) => {
+        const timestamp = backup.match(/\.backup\.(\d+)$/)?.[1];
+        const date = timestamp ? new Date(parseInt(timestamp)).toLocaleString() : 'unknown';
+        console.log(`  • ${chalk.gray(backup)} (${date})`);
+      });
+    } else {
+      // List backups for all steps
+      const steps = getAvailableSteps();
+      let hasBackups = false;
+
+      for (const step of steps) {
+        const backups = await listBackups(step);
+        if (backups.length > 0) {
+          hasBackups = true;
+          console.log(`${chalk.blue(step)} - ${backups.length} backup(s):`);
+          backups.slice(0, 3).forEach((backup) => {
+            const timestamp = backup.match(/\.backup\.(\d+)$/)?.[1];
+            const date = timestamp ? new Date(parseInt(timestamp)).toLocaleString() : 'unknown';
+            console.log(`  • ${chalk.gray(backup)} (${date})`);
+          });
+          if (backups.length > 3) {
+            console.log(chalk.gray(`  ... and ${backups.length - 3} more`));
+          }
+          console.log('');
+        }
+      }
+
+      if (!hasBackups) {
+        console.log(chalk.yellow('No backups found for any step.'));
+        console.log(chalk.gray('Backups are created when using `prompts apply`.'));
+      }
+    }
   } catch (error: any) {
     console.error(chalk.red(`Error: ${error.message}`));
     process.exit(1);
@@ -1061,6 +1274,21 @@ prompts
   .command('reject <id>')
   .description('Reject a prompt suggestion')
   .action(promptsRejectCommand);
+
+prompts
+  .command('apply <id>')
+  .description('Auto-apply an approved prompt suggestion to its prompt file')
+  .action(promptsApplyCommand);
+
+prompts
+  .command('rollback <id> <backupPath>')
+  .description('Rollback an applied suggestion by restoring from backup')
+  .action(promptsRollbackCommand);
+
+prompts
+  .command('backups [stepName]')
+  .description('List prompt backups (optionally for a specific step)')
+  .action(promptsBackupsCommand);
 
 // =============================================================================
 // Self-Improve Command

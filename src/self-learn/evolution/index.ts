@@ -27,6 +27,16 @@ import type {
 // Re-export types for convenience
 export type { PromptSuggestion, PromptSuggestionStatus } from './suggestions-types';
 
+// Re-export apply suggestion functionality
+export {
+  applyPromptSuggestion,
+  rollbackPromptSuggestion,
+  listBackups,
+  getAvailableSteps,
+  type ApplyResult,
+  type RollbackResult,
+} from './apply-suggestion';
+
 // =============================================================================
 // Dual Backend Setup
 // =============================================================================

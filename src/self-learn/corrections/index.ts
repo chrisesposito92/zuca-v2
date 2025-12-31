@@ -14,6 +14,15 @@ import { debugLog } from '../../config';
 // Re-export types
 export * from './types';
 
+// Re-export clustering types and functions
+export * from './clustering-types';
+export {
+  clusterCorrections,
+  findRelevantClusters,
+  getClusterStats,
+  clusterAllCorrections,
+} from './clustering';
+
 // Re-export cache utilities
 export { clearEmbeddingCache };
 

@@ -7,7 +7,7 @@
 
 import { v4 as uuidv4 } from 'uuid';
 import { debugLog } from '../../config';
-import { findRelevantCorrections, getCorrectionsBackend } from '../corrections';
+import { findRelevantCorrections, getCorrectionsBackend, findRelevantClusters } from '../corrections';
 import type {
   Correction,
   InjectionContext,
@@ -209,6 +209,14 @@ export interface GetCorrectionsContextOptions {
   includeExampleFix?: boolean;
   /** Track that corrections were applied */
   trackApplied?: boolean;
+  /**
+   * Use semantic clustering for retrieval (default: false)
+   *
+   * When enabled, corrections are first clustered by semantic similarity,
+   * and only the best representative from each cluster is returned.
+   * This reduces noise when there are many similar corrections.
+   */
+  useClustering?: boolean;
 }
 
 /**
@@ -279,13 +287,23 @@ export async function getCorrectionsContext(
   context: InjectionContext,
   options: GetCorrectionsContextOptions = {}
 ): Promise<InjectionResult> {
-  const { limit = 3, minConfidence = 0.5, trackApplied = true } = options;
+  const { limit = 3, minConfidence = 0.5, trackApplied = true, useClustering = false } = options;
 
   const emptyResult: InjectionResult = { context: '', appliedCorrectionIds: [], count: 0 };
 
   try {
-    // Search for relevant corrections
-    let corrections = await findRelevantCorrections(context.inputSummary, context.stepName, limit);
+    let corrections: Correction[];
+
+    if (useClustering) {
+      // Use clustered retrieval - returns representative correction from each cluster
+      debugLog(`Using clustered correction retrieval for step: ${context.stepName}`);
+      const clusters = await findRelevantClusters(context.inputSummary, context.stepName, limit);
+      corrections = clusters.map((cluster) => cluster.representativeCorrection);
+      debugLog(`Retrieved ${corrections.length} cluster representatives`);
+    } else {
+      // Standard retrieval - search for relevant corrections directly
+      corrections = await findRelevantCorrections(context.inputSummary, context.stepName, limit);
+    }
 
     // Filter by confidence
     corrections = corrections.filter((c) => c.confidence >= minConfidence);

@@ -87,12 +87,17 @@ npm run cli evaluate -m gemini-3-flash-preview  # Use specific model
 # Corrections Management
 npm run cli corrections list      # List stored corrections
 npm run cli corrections summary   # Show pattern statistics
+npm run cli corrections cluster <step>  # Cluster similar corrections
+npm run cli corrections cluster <step> --threshold 0.9  # Custom similarity
 
 # Pattern Analysis & Prompt Evolution (Phase 4)
 npm run cli prompts analyze       # Analyze failure patterns
 npm run cli prompts suggest <step> "<pattern>"  # Generate suggestion
 npm run cli prompts list          # View pending suggestions
 npm run cli prompts approve <id>  # Approve a suggestion
+npm run cli prompts apply <id>    # Auto-apply approved suggestion
+npm run cli prompts rollback <id> <backupPath>  # Rollback to backup
+npm run cli prompts backups       # List all prompt backups
 
 # Self-Improvement Loop
 npm run cli self-improve          # Run evaluation + pattern analysis

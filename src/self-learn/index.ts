@@ -22,6 +22,14 @@ export {
   getAllCorrections,
   isCorrectionsReady,
   clearEmbeddingCache,
+  // Clustering
+  clusterCorrections,
+  findRelevantClusters,
+  getClusterStats,
+  clusterAllCorrections,
+  type CorrectionCluster,
+  type ClusteringConfig,
+  type ClusteringResult,
 } from './corrections';
 
 // Criteria Loading
@@ -84,10 +92,17 @@ export {
   markSuggestionApplied,
   getPromptPath,
   runSelfImproveIteration,
+  // Apply suggestion functionality
+  applyPromptSuggestion,
+  rollbackPromptSuggestion,
+  listBackups,
+  getAvailableSteps,
   type PatternAnalysis,
   type AnalyzeOptions,
   type SelfImproveResult,
   type SelfImproveOptions,
+  type ApplyResult,
+  type RollbackResult,
 } from './evolution';
 
 // Training Data Export (for SLM fine-tuning)
