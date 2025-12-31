@@ -35,7 +35,6 @@ tests:
       transaction_currency: "USD"
       billing_period: "Monthly"
       is_allocations: false
-      allocation_method: null
       rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Fiber internet service is recognized monthly over the service period.); Services: POB=point_in_time release=as_billed (Installation fee is recognized at the point of service completion, typically aligned with the first invoice.)"
       use_case_description: "A residential customer signs up for 'AT&T Fiber 1 GIG' internet. The contract features a promotional ramp: the first 12 months are billed at a discounted rate of $60.00 per month, after which the price increases to the standard $80.00 per month. Additionally, a one-time 'Professional Installation' fee of $99.00 is charged on the initial invoice. The fiber service is billed monthly in advance and recognized ratably. The installation fee is a non-refundable one-time charge recognized upon completion of the technician visit. This use case highlights promotional pricing transitions and one-time service fee handling."
     focus_steps:
@@ -83,7 +82,6 @@ tests:
       transaction_currency: "USD"
       billing_period: "Monthly"
       is_allocations: false
-      allocation_method: null
       rev_rec_notes: "Hardware: POB=point_in_time release=at_delivery (Hardware revenue for the doorbell is recognized when the device is delivered to the customer.); Subscription: POB=over_time release=ratable_over_term (Ring Home Basic is a SaaS subscription recognized ratably over the monthly billing cycle.)"
       use_case_description: "A residential customer purchases a single Ring Video Doorbell for $159.99 and subscribes to the Ring Home Basic plan at $4.99 per month. The hardware is a one-time charge billed immediately upon the order date. The subscription is a recurring monthly charge that provides 180 days of video history for the single device. Revenue for the hardware should be recognized point-in-time upon delivery. Subscription revenue is recognized ratably over each monthly service period. This represents a typical entry-level consumer acquisition with a 12-month commitment."
     focus_steps:
@@ -132,7 +130,6 @@ tests:
       transaction_currency: "USD"
       billing_period: "Monthly"
       is_allocations: false
-      allocation_method: null
       rev_rec_notes: "Hardware: POB=point_in_time release=at_delivery (One-time hardware charge for the 4K multi-pack recognized at delivery.); Subscription: POB=over_time release=ratable_over_term (Premium plan recognized ratably; includes 24/7 recording and AI features.); Services: POB=over_time release=ratable_over_term (Monthly monitoring service recognized ratably over the service month.)"
       use_case_description: "A high-end user purchases a 4K Camera Multi-pack for $349.99 and signs up for the Ring Home Premium plan at $19.99 per month to enable 24/7 continuous recording. Additionally, they add Professional Monitoring as a monthly add-on for $10.00. All items are billed monthly except for the one-time hardware purchase. The contract term is 12 months. Revenue for the hardware is recognized at the point of delivery. Revenue for the Premium SaaS plan (which includes advanced AI features) and the Monitoring service is recognized ratably as the services are provided each month. This represents a high-ARPU residential account."
     focus_steps:
@@ -205,7 +202,6 @@ tests:
       transaction_currency: "USD"
       billing_period: "Monthly"
       is_allocations: false
-      allocation_method: null
       rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Standard software license recognized over the 12-month expansion term.); Usage: POB=consumption release=as_used (WiFi data plans can be recognized based on data consumption or ratably if provided as a fixed allowance.); Hardware: POB=point_in_time release=at_delivery (Gateway hardware recognized at shipment.)"
       use_case_description: "An existing customer, Metro Utilities, is expanding their fleet by 10 vehicles and adding WiFi Hotspot capabilities. They are purchasing 10 Vehicle Gateways ($148 each, one-time) and 10 Connected Operations Software Licenses ($360/year). Furthermore, they are adding a 1GB/month WiFi Hotspot Data Plan for each vehicle at $120 per year. The software and data plans are billed monthly to align with their internal budget cycles. While the software is recognized ratably, the WiFi data plan is treated as a consumption-based POB, recognized as data is used or monthly as the service is made available. This use case highlights mid-market expansion and usage-based add-ons."
     focus_steps:
@@ -252,7 +248,6 @@ tests:
       transaction_currency: "USD"
       billing_period: "Monthly"
       is_allocations: false
-      allocation_method: null
       rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Business Internet and Voice are recurring services recognized over the 24-month term.); Onboarding: POB=point_in_time release=at_go_live (Professional installation fee is recognized at the point of technician sign-off.)"
       use_case_description: "A small business customer signs a 24-month agreement for Business Internet Premier and Business Voice services. The Business Internet is priced at $64.99 per month and the Voice line is $29.99 per month. This contract includes a 24-month price guarantee, protecting the customer from standard rate increases. A one-time Business Professional Installation fee of $99.00 is applied to the first invoice. Monthly recurring charges are billed in advance, and revenue is recognized ratably over each service month. The installation is treated as a separate performance obligation satisfied at the start of the contract."
     focus_steps:
@@ -275,7 +270,6 @@ tests:
       transaction_currency: "USD"
       billing_period: "Monthly"
       is_allocations: false
-      allocation_method: null
       rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Internet and TV subscriptions are recognized ratably as the service is available to the customer.); Hardware: POB=over_time release=ratable_over_term (WiFi router rental is recognized monthly; treated as a service-like POB.); Onboarding: POB=point_in_time release=at_go_live (Installation fee recognized at the time of initial setup.)"
       use_case_description: "This scenario covers a high-tier residential customer subscribing to a 'Triple Play' of Internet Premier ($50.00/mo), TV Select Signature ($95.00/mo), and a Mobile Unlimited line ($30.00/mo). The TV service includes a base set of 150+ channels. The customer also pays a $10.00 monthly rental fee for Advanced WiFi hardware. A $59.99 installation fee is charged at the outset. While Spectrum typically operates on a month-to-month basis, this use case is modeled as a 12-month term to demonstrate the total contract value and ratable revenue recognition for the recurring service components."
     focus_steps:
@@ -321,7 +315,6 @@ tests:
       transaction_currency: "USD"
       billing_period: "Monthly"
       is_allocations: false
-      allocation_method: null
       rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Internet service is recognized monthly as the service is provided.)"
       use_case_description: "A residential customer adds '5G Home Internet Plus' to their account. The standard rate is $50/month, but they receive a $15/month 'Voice Link Discount' for having a qualifying wireless line, resulting in a net monthly fee of $35. The plan includes a 5G Gateway device provided at no additional cost. The service is billed monthly in advance. Revenue is recognized ratably over each monthly service period. No long-term contract is required, but for this demo, we will model a 12-month commitment to show the recurring revenue impact."
     focus_steps:
@@ -344,7 +337,6 @@ tests:
       transaction_currency: "USD"
       billing_period: "Monthly"
       is_allocations: false
-      allocation_method: null
       rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Enterprise wireless lines are recognized ratably over the contract term.); Services: POB=over_time release=ratable_over_term (Security add-on is a stand-ready SaaS obligation recognized ratably.)"
       use_case_description: "An enterprise customer signs a 36-month agreement for 500 lines of 'Enterprise Unlimited' service. The volume-tiered pricing sets the rate at $25 per line per month. The package also includes 'Threat Protect Security' as a mandatory add-on at $5 per line per month. The total monthly recurring revenue (MRR) is $15,000. Billing is consolidated into a single monthly invoice for all 500 lines. Revenue for both the wireless service and the security add-on is recognized ratably over the 36-month contract term."
     focus_steps:
@@ -392,7 +384,6 @@ tests:
       transaction_currency: "USD"
       billing_period: "Monthly"
       is_allocations: false
-      allocation_method: null
       rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Both the tiered wireless plan and the security add-on are ratable services.)"
       use_case_description: "A small business customer purchases 'Business Unlimited Pro 2.0' for 10 mobile lines. The pricing follows a volume-tiered model: the first 4 lines are priced at $45.00 per line, and lines 5 through 10 are priced at $35.00 per line. Additionally, the customer opts for a 'Business Security Add-on' at $5.00 per line across all 10 lines. The contract term is 12 months with monthly billing. Revenue for all components is recognized ratably over the 12-month term as the service is delivered. This scenario tests Zuora's ability to handle tiered pricing models within a single rate plan."
     focus_steps:
@@ -486,7 +477,6 @@ tests:
       transaction_currency: "other"
       billing_period: "Monthly"
       is_allocations: false
-      allocation_method: null
       rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (The £1.50 per SIM platform fee is recognized monthly as the management service is provided.); Usage: POB=consumption release=as_used (Data overage revenue is recognized in the period the data is actually consumed by the IoT devices.)"
       use_case_description: "This enterprise use case involves the Managed IoT Connectivity Platform for a fleet of 5,000 smart assets. The pricing model includes a recurring platform access fee of £1.50 per SIM per month (£7,500 total recurring). Additionally, usage-based charges are applied at £0.10 per MB for any data consumed beyond the 500GB pooled monthly allowance. Revenue for the platform fee is recognized ratably each month, while the usage overage is recognized as consumption occurs. This scenario demonstrates high-volume SIM management and complex pooled usage billing."
     focus_steps:
@@ -533,7 +523,6 @@ tests:
       transaction_currency: "USD"
       billing_period: "Monthly"
       is_allocations: false
-      allocation_method: null
       rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Mobile line monthly recurring charges.); Usage: POB=consumption release=as_billed (Data overage charges are recognized as the usage occurs and is invoiced.); Services: POB=point_in_time release=at_go_live (One-time mobile activation fees.)"
       use_case_description: "An existing internet customer adds two lines of Xfinity Mobile Unlimited at $45 per line per month. The plan includes a 1.2 TB data cap on the home internet side, with usage overages billed at $10 per 50 GB block if exceeded. A $25 one-time activation fee is charged per mobile line. Mobile subscription fees are recognized ratably, while data overages are recognized in the month they are incurred as consumption-based revenue."
     focus_steps:

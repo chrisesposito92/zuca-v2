@@ -12,7 +12,6 @@ tests:
       transaction_currency: "USD"
       billing_period: "Annually"
       is_allocations: false
-      allocation_method: null
       rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (The $139 annual fee covers a stand-ready obligation to provide streaming and shipping benefits over 12 months.); Other: POB=over_time release=ratable_over_term (The Ad-Free upgrade is a recurring monthly service recognized over the monthly billing period.)"
       use_case_description: "A consumer signs up for the 'Amazon Prime Membership' plan, which is billed annually at $139.00. To enhance their viewing experience, they also subscribe to the 'Ad-Free Upgrade' add-on, which is billed monthly at $2.99. This scenario demonstrates Zuora's ability to manage mixed billing frequencies (Annual and Monthly) within a single subscription or account. Revenue for the annual membership is recognized ratably over the 12-month term, while the ad-free supplement is recognized ratably each month. The contract is set for an initial 12-month term with auto-renewal enabled."
     focus_steps:
@@ -33,7 +32,6 @@ tests:
       transaction_currency: "USD"
       billing_period: "Monthly"
       is_allocations: false
-      allocation_method: null
       rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Standalone and Channel subscriptions provide continuous access over the month.); Other: POB=point_in_time release=at_delivery (The $3.99 rental is a one-time charge recognized when the digital access is granted.)"
       use_case_description: "A user subscribes to the 'Prime Video Standalone' plan at $8.99 per month. In the same month, they add a 'Premium Channel Add-on' (e.g., Max) for $15.99 per month through the Prime Video marketplace. Additionally, the user performs a one-time transaction in the 'Prime Video Store' to rent a movie for $3.99. This use case highlights the hybrid nature of the platform, combining recurring SaaS subscriptions with transactional video-on-demand (TVOD). Revenue for subscriptions is recognized ratably, whereas the rental fee is recognized at the point of purchase/delivery."
     focus_steps:
@@ -56,7 +54,6 @@ tests:
       transaction_currency: "USD"
       billing_period: "Monthly"
       is_allocations: false
-      allocation_method: null
       rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (All components are recurring subscriptions providing access to content libraries.)"
       use_case_description: "A customer initiates a monthly 'Amazon Prime Membership' at $14.99. After the first month, they expand their service by adding multiple 'Prime Video Channels': Paramount+ at $11.99/month and MGM+ at $5.99/month. This scenario tests Zuora's ability to handle mid-term subscription amendments and the stacking of multiple recurring charges. The billing system must consolidate these into a single monthly invoice. All charges are recurring and recognized ratably over their respective monthly service periods."
     focus_steps:
@@ -101,7 +98,6 @@ tests:
       transaction_currency: "USD"
       billing_period: "Annually"
       is_allocations: false
-      allocation_method: null
       rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Annual TV+ plan recognized over 12 months.); Usage: POB=over_time release=ratable_over_term (MLS Pass recognized over the specific months of the active sports season.)"
       use_case_description: "A sports enthusiast subscribes to the Apple TV+ Annual Plan for $99.00/year to secure a discount over the monthly rate. Simultaneously, they add the MLS Season Pass as a recurring add-on. Since they are an Apple TV+ subscriber, they qualify for the discounted MLS rate of $79.00 for the season (compared to the $99.00 standalone price). The Apple TV+ fee is billed upfront annually, while the MLS Season Pass is billed as a single seasonal charge. Revenue for the Apple TV+ subscription is recognized ratably over the 12-month term. Revenue for the MLS Season Pass is recognized ratably over the 9-month active major league soccer season, rather than the full year, to align with the delivery of live match content."
     focus_steps:
@@ -123,7 +119,6 @@ tests:
       transaction_currency: "USD"
       billing_period: "Monthly"
       is_allocations: false
-      allocation_method: null
       rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Revenue recognized monthly as billed once the paid period commences.)"
       use_case_description: "A customer purchases a new Apple TV 4K device and receives a promotional offer for 3 months of Apple TV+ for free. The subscription is activated immediately upon device setup. The first 3 months are billed at $0.00, acting as a trial period. After the 3-month promotion expires, the subscription automatically converts to the standard monthly recurring rate of $12.99. This is modeled in Zuora using a 'Ramp' structure or a multi-period rate plan charge. For demo purposes, we assume revenue for the $0.00 period is zero, and revenue recognition starts when the paid monthly cycles begin. The customer has the right to cancel at any time before the first paid invoice is generated."
     focus_steps:
@@ -146,7 +141,6 @@ tests:
       transaction_currency: "USD"
       billing_period: "Annually"
       is_allocations: false
-      allocation_method: null
       rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Annual Disney+ Premium fee recognized daily over the 365-day contract period.); Subscription: POB=over_time release=ratable_over_term (Extra Member monthly add-on recognized over the monthly service window.)"
       use_case_description: "A customer signs up for the Disney+ Premium annual plan at $189.99 per year, providing a discount over the monthly rate. During the same transaction, they add an 'Extra Member Add-on' for $6.99 per month to accommodate a family member living at a different address. The primary subscription is billed annually in advance, while the add-on is billed monthly. Revenue for the annual plan is recognized ratably over the 12-month term, and the add-on revenue is recognized ratably over each monthly service period. This scenario tests Zuora's ability to manage mixed billing frequencies (annual and monthly) within a single subscription."
     focus_steps:
@@ -168,7 +162,6 @@ tests:
       transaction_currency: "USD"
       billing_period: "Monthly"
       is_allocations: false
-      allocation_method: null
       rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (The $29.99 bundle price is recognized ratably over the monthly billing cycle.)"
       use_case_description: "A household subscribes to the Disney Bundle Trio Premium for $29.99 per month. This consolidated offering provides ad-free access to Disney+ and Hulu, along with ESPN+ (ad-supported). The customer is billed a single recurring monthly fee. Although it is a single line item for the customer, the revenue must be tracked as a subscription service recognized ratably over the month. This use case demonstrates how Zuora simplifies the billing of complex multi-product bundles into a single customer-facing charge."
     focus_steps:
@@ -235,7 +228,6 @@ tests:
       transaction_currency: "USD"
       billing_period: "Monthly"
       is_allocations: false
-      allocation_method: null
       rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Core Live TV and Screens add-on revenue is recognized ratably over the service month.); Other: POB=over_time release=ratable_over_term (Partner add-on (Max) revenue is recognized ratably, though net-reporting may apply if Hulu is an agent.)"
       use_case_description: "A premium 'cord-cutter' subscriber opts for the Hulu + Live TV (No Ads) Bundle at $99.99/month. To enhance their experience, they add the Unlimited Screens Add-on for $9.99/month and the Max (Partner Add-on) for $16.99/month. This scenario showcases Zuora's flexibility in managing core streaming products alongside feature-based add-ons and third-party partner services. Total monthly recurring revenue is $126.97. Revenue for the Hulu bundle and the screens add-on is recognized ratably. The Max add-on is also recognized ratably over the monthly term, assuming Hulu acts as the primary billing relationship holder."
     focus_steps:
@@ -257,7 +249,6 @@ tests:
       transaction_currency: "USD"
       billing_period: "Annually"
       is_allocations: false
-      allocation_method: null
       rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (The $119.99 annual fee is recognized as 1/12th each month over the 1-year term.)"
       use_case_description: "A budget-conscious subscriber chooses the Hulu (With Ads) Annual plan for $119.99/year. This scenario highlights Zuora's capability to manage annual billing cycles and the associated deferred revenue. The customer pays the full amount upfront, providing immediate cash flow but requiring revenue to be spread over the 12-month term. This plan offers a discount compared to the monthly $11.99 rate, incentivizing long-term retention. Zuora will automate the monthly revenue recognition of approximately $10 per month. This demonstrates effective management of the 'Contract Liability' or 'Deferred Revenue' balance."
     focus_steps:
@@ -279,7 +270,6 @@ tests:
       transaction_currency: "USD"
       billing_period: "Monthly"
       is_allocations: false
-      allocation_method: null
       rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Base subscription revenue recognized daily over the monthly billing period.); Usage: POB=over_time release=ratable_over_term (Sports add-on is a recurring monthly fee recognized ratably over the service month.)"
       use_case_description: "The customer subscribes to the Max Ad-Free (Standard) rate plan at $16.99 per month to enjoy offline downloads and no ads. They also add the B/R Sports Add-On for a recurring fee of $10.00 per month to access live NBA and MLB games. Both charges are recurring and billed monthly in advance. The contract is modeled as a 12-month term with monthly billing. Revenue for both the base subscription and the sports add-on is recognized ratably over the monthly service period as the customer has continuous access to the content library."
     focus_steps:
@@ -300,7 +290,6 @@ tests:
       transaction_currency: "USD"
       billing_period: "Annually"
       is_allocations: false
-      allocation_method: null
       rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Prepaid annual subscription revenue is deferred and recognized monthly over 12 months.); Other: POB=point_in_time release=at_go_live (PPV revenue is recognized on the day of the event broadcast.)"
       use_case_description: "A power user signs up for the Max Ultimate Annual Plan, which is a single recurring charge of $209.99 billed annually in advance. This tier provides 4K UHD streaming and 4 concurrent streams. During the first month of the term, the customer also purchases a 'PPV Event' for a specific championship boxing match, which is a one-time charge of $74.99. The annual subscription fee is recognized ratably over the 12-month term. The PPV revenue is recognized as a point-in-time event upon the date of the live broadcast."
     focus_steps:
@@ -345,7 +334,6 @@ tests:
       transaction_currency: "USD"
       billing_period: "Monthly"
       is_allocations: false
-      allocation_method: null
       rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (The Premium Plan fee is recognized daily over the monthly billing cycle.); Other: POB=over_time release=ratable_over_term (Extra Member Slots are recurring add-ons recognized ratably over the same period as the primary subscription.)"
       use_case_description: "A residential customer signs up for the Netflix Premium Plan at $24.99 per month to access 4K streaming and spatial audio. To accommodate family members living in different households, the customer adds two 'Extra Member Slots' at $8.99 each per month. The subscription is billed monthly in advance on a month-to-month basis. This scenario demonstrates Zuora's ability to manage a primary subscription plan alongside multiple recurring add-on charges. Revenue for both the base plan and the add-on slots is recognized ratably over the monthly service period. The total monthly recurring revenue (MRR) for this account is $42.97."
     focus_steps:
@@ -367,7 +355,6 @@ tests:
       transaction_currency: "USD"
       billing_period: "Monthly"
       is_allocations: false
-      allocation_method: null
       rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Revenue is recognized at the $7.99/mo rate for the first 15 days and the $17.99/mo rate for the remainder of the month.)"
       use_case_description: "A new subscriber joins the 'Standard with Ads' plan at $7.99 per month. After 15 days, the user decides to upgrade to the 'Standard' (Ad-Free) plan at $17.99 per month to avoid interruptions and enable downloads. This use case exercises Zuora's Order Actions for product amendments and proration logic. The system must calculate the credit for the remaining 15 days of the 'with Ads' plan and the additional charge for the 15 days of the 'Standard' plan. Revenue recognition follows the service period, adjusting the daily rate upon the effective date of the upgrade. This highlights Zuora's precision in handling mid-cycle plan migrations."
     focus_steps:
@@ -411,7 +398,6 @@ tests:
       transaction_currency: "USD"
       billing_period: "Annually"
       is_allocations: false
-      allocation_method: null
       rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Standard SaaS streaming revenue recognized daily over the 12-month service period.)"
       use_case_description: "A consumer signs up for the Paramount+ Premium (with SHOWTIME) Annual plan. This plan provides ad-free streaming, the full SHOWTIME library, and local CBS station access. The customer is billed $119.99 upfront for a 12-month term. In Zuora, this is modeled as a recurring annual charge on a single rate plan. Revenue recognition is handled ratably over the 12-month subscription period. This scenario demonstrates the annual upfront billing model which offers a significant discount compared to the cumulative monthly billing rate. The contract is set to auto-renew at the end of the term."
     focus_steps:
@@ -433,7 +419,6 @@ tests:
       transaction_currency: "USD"
       billing_period: "Monthly"
       is_allocations: false
-      allocation_method: null
       rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Revenue is recognized ratably over the monthly billing cycle.)"
       use_case_description: "A verified student subscribes to the Paramount+ Essential tier. The standard list price for this ad-supported plan is $7.99 per month. However, the student receives a 25% recurring discount, resulting in a net monthly charge of $5.99. The subscription is evergreen, but for this demo, we are modeling a 12-month initial term. Billing occurs monthly on the anniversary of the sign-up date. Revenue is recognized ratably over each monthly service period. This case highlights Zuora's ability to manage recurring discounts for specific customer segments and handle high-volume monthly billing."
     focus_steps:
@@ -456,7 +441,6 @@ tests:
       transaction_currency: "USD"
       billing_period: "Monthly"
       is_allocations: false
-      allocation_method: null
       rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Wholesale revenue for a fixed seat count is recognized ratably over the month.)"
       use_case_description: "This scenario represents a B2B2C wholesale distribution agreement with a retail partner like Walmart. The partner pays a negotiated wholesale rate of $4.00 per month for each active member assigned a Paramount+ Essential account. For this specific contract, the partner commits to a fixed block of 10,000 seats. Billing is consolidated into a single monthly invoice sent to the partner's corporate headquarters. Revenue is recognized monthly as the service is delivered to the partner's user base. This demonstrates the wholesale/bulk distribution model common in streaming media partnerships, distinct from the direct-to-consumer model."
     focus_steps:
@@ -476,7 +460,6 @@ tests:
       transaction_currency: "USD"
       billing_period: "Monthly"
       is_allocations: false
-      allocation_method: null
       rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Standard monthly SaaS subscription recognized daily over the billing cycle.)"
       use_case_description: "A standard consumer signs up for the Peacock Premium monthly plan. The product is the 'Peacock Premium' subscription, which includes an ad-supported content library and live sports. The billing is set to $7.99 per month on a recurring basis. This is a month-to-month arrangement with no long-term commitment. Revenue for the monthly fee is recognized ratably over the 1-month service period. The scenario reflects the mid-2024 price increase for new subscribers."
     focus_steps:
@@ -498,7 +481,6 @@ tests:
       transaction_currency: "USD"
       billing_period: "Annually"
       is_allocations: false
-      allocation_method: null
       rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Prepaid annual subscription recognized over the 12-month contract duration.)"
       use_case_description: "A power user opts for the 'Peacock Premium Plus' annual plan to receive ad-free viewing and local NBC access. The annual list price is $139.99, billed upfront. This plan provides 12 months of service for the price of 10, effectively a built-in discount for the annual commitment. The subscription includes offline download capabilities and 24/7 local channel access. Revenue is recognized ratably over the 12-month term. This scenario tests the ability to handle large upfront payments with deferred revenue schedules."
     focus_steps:
@@ -520,7 +502,6 @@ tests:
       transaction_currency: "USD"
       billing_period: "Monthly"
       is_allocations: false
-      allocation_method: null
       rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Revenue recognized monthly based on the $1.99 net price per month.)"
       use_case_description: "A student signs up for a discounted Peacock Premium plan after SheerID verification. The plan is priced at $1.99 per month for a 12-month period, representing a significant discount from the standard $7.99 rate. This scenario uses a recurring monthly charge with a specific discount applied for the duration of the student status. After 12 months, the price is expected to revert to the standard rate unless re-verified. Revenue is recognized monthly based on the discounted transaction price. This tests promotional pricing and term-limited discounts."
     focus_steps:
@@ -542,7 +523,6 @@ tests:
       transaction_currency: "USD"
       billing_period: "Monthly"
       is_allocations: false
-      allocation_method: null
       rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Standard monthly subscription for music streaming services.); Usage: POB=consumption release=as_used (Top-up hours are recognized as the customer consumes the additional 10-hour block.)"
       use_case_description: "A consumer subscribes to the Spotify Premium Individual plan at a recurring rate of $11.99 per month. In the middle of the first billing cycle, the user exhausts their 15-hour audiobook allotment and purchases an 'Audiobook Top-up' for a one-time fee of $12.99, which provides an additional 10 hours of listening time. The subscription revenue is recognized ratably over the monthly term. The top-up fee is treated as consumption-based revenue, recognized as the additional hours are used or at the end of the billing cycle if unused. This scenario tests the handling of recurring subscriptions alongside ad-hoc one-time usage purchases."
     focus_steps:
@@ -588,7 +568,6 @@ tests:
       transaction_currency: "USD"
       billing_period: "Monthly"
       is_allocations: false
-      allocation_method: null
       rev_rec_notes: "Usage: POB=consumption release=as_used (Revenue is recognized as clicks are delivered to the artist's profile or album.)"
       use_case_description: "An independent artist uses Spotify for Artists to launch a 'Marquee' campaign to promote their new album. The campaign is set with a total budget of $500, priced at $0.50 per click on the full-screen recommendation. This is a pure usage-based model where the customer is billed at the end of the campaign period based on actual clicks delivered, up to the $500 cap. Revenue is recognized as consumption occurs (event-based) when listeners engage with the Marquee. The campaign duration is set for 30 days."
     focus_steps:
@@ -609,7 +588,6 @@ tests:
       transaction_currency: "USD"
       billing_period: "Monthly"
       is_allocations: false
-      allocation_method: null
       rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Monthly subscription fee for digital content access is recognized ratably over the billing period.)"
       use_case_description: "A standard consumer signs up for the YouTube Premium Individual plan via the website. The subscription is billed monthly at $13.99 and provides ad-free video, background play, and YouTube Music Premium access. This is a high-volume, low-touch transaction typical of YouTube's direct-to-consumer model. The contract is evergreen but modeled here as a 12-month term for demo purposes. Revenue is recognized ratably over each monthly service period as the service is delivered to the user."
     focus_steps:
@@ -630,7 +608,6 @@ tests:
       transaction_currency: "USD"
       billing_period: "Annually"
       is_allocations: false
-      allocation_method: null
       rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Upfront annual payment is recognized ratably over the 12-month contract term.)"
       use_case_description: "A user opts for the YouTube Premium Individual Annual plan to take advantage of the 15% discount compared to monthly billing. The customer pays a single upfront amount of $139.99 for a fixed 12-month term. This plan provides the same benefits as the monthly individual plan but is billed once at the start of the year. Although payment is collected upfront, the revenue must be deferred and recognized ratably over the 12-month service period. This scenario demonstrates Zuora's ability to manage annual billing with monthly revenue amortization."
     focus_steps:
@@ -651,7 +628,6 @@ tests:
       transaction_currency: "USD"
       billing_period: "Monthly"
       is_allocations: false
-      allocation_method: null
       rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Flat monthly fee for family access is recognized ratably over the month.)"
       use_case_description: "A household head subscribes to the YouTube Premium Family plan to provide ad-free access for up to 6 family members. The plan is priced at a flat recurring fee of $22.99 per month. The billing is consolidated to a single payment method managed by the primary account holder. All members receive the full suite of Premium features including YouTube Music. Revenue recognition follows a standard ratable pattern over the monthly billing cycle, as the performance obligation is the provision of access to the family group."
     focus_steps:
