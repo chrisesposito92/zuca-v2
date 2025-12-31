@@ -143,3 +143,27 @@ export {
   type TrainingExportOptions,
   type TrainingCaptureContext,
 } from './training';
+
+// Test Generation (Phase 4 - Synthetic test case generation)
+export {
+  // Generator functions
+  generateFromCorrection,
+  generateFromPattern,
+  generateAdversarialTests,
+  generateTestsFromFailures,
+  // Suite writer functions
+  writeTestSuite,
+  exportToJson,
+  listGeneratedSuites,
+  getGeneratedTestStats,
+  // Config
+  DEFAULT_GENERATION_CONFIG,
+  // Types
+  type GenerationSource,
+  type GeneratedTestInput,
+  type GeneratedTestCase,
+  type GenerationConfig,
+  type GenerationResult,
+  type WriteSuiteOptions,
+  type WriteSuiteResult,
+} from './test-generation';

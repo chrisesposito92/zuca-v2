@@ -404,13 +404,25 @@ export interface SelfImproveOptions {
   minPatternCount?: number;
   model?: string;
   onProgress?: (current: number, total: number, testId: string) => void;
+  /** Use multi-judge ensemble evaluation */
+  ensemble?: boolean;
+  /** Models to use for ensemble evaluation */
+  ensembleModels?: import('../../types/llm').LlmModel[];
 }
 
 export async function runSelfImproveIteration(
   suiteName: string,
   options: SelfImproveOptions = {}
 ): Promise<SelfImproveResult> {
-  const { autoSuggest = false, captureTraining = false, minPatternCount = 3, model, onProgress } = options;
+  const {
+    autoSuggest = false,
+    captureTraining = false,
+    minPatternCount = 3,
+    model,
+    onProgress,
+    ensemble,
+    ensembleModels,
+  } = options;
 
   // Import evaluation runner dynamically to avoid circular deps
   const { runEvaluationSuite } = await import('../evaluation');
@@ -423,6 +435,8 @@ export async function runSelfImproveIteration(
     captureTraining,
     model: model as import('../../types/llm').LlmModel | undefined,
     onProgress,
+    ensemble,
+    ensembleModels,
   });
 
   debugLog(`Evaluation complete: ${evalResult.passed}/${evalResult.total} passed`);

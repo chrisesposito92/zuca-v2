@@ -110,6 +110,14 @@ export async function getAllCorrections(): Promise<Correction[]> {
 }
 
 /**
+ * Get a single correction by ID
+ */
+export async function getCorrection(id: string): Promise<Correction | undefined> {
+  const all = await getCorrectionsBackend().getAll();
+  return all.find((c) => c.id === id);
+}
+
+/**
  * Check if corrections store is ready
  */
 export async function isCorrectionsReady(): Promise<boolean> {

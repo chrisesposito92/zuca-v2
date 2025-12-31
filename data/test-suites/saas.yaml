@@ -12,7 +12,6 @@ tests:
       transaction_currency: "USD"
       billing_period: "Monthly"
       is_allocations: false
-      allocation_method: null
       rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Standard SaaS subscription for Creative Cloud apps provides continuous access.); Usage: POB=consumption release=as_used (Adobe Stock asset consumption is recognized as the credits are utilized.)"
       use_case_description: "A mid-sized design agency, 'Pixel Perfect', is subscribing to 10 licenses of Creative Cloud for Teams to support their expanding creative department. Each license is priced at $89.99 per month under an annual commitment, which includes 20+ creative apps and 100GB of cloud storage. They are also adding a standalone Adobe Stock subscription for $29.99 per month to provide the team with a base of 10 assets per month. The contract is for a 12-month term with monthly billing. Revenue for the software licenses and the stock subscription base fee is recognized ratably over the 12-month term."
     focus_steps:
@@ -61,7 +60,6 @@ tests:
       transaction_currency: "USD"
       billing_period: "Annually"
       is_allocations: false
-      allocation_method: null
       rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Prepaid annual subscriptions are still recognized ratably over the service period.)"
       use_case_description: "An independent legal consultant is purchasing the Acrobat Studio plan to leverage advanced PDF editing and the new AI Assistant features. They choose the 'Annual, prepaid' billing option to minimize administrative overhead and lock in a lower rate of $239.88 for the year (equivalent to $19.99/month). The plan includes Acrobat Pro, AI Assistant, and Adobe Express Premium. Since the entire amount is paid upfront, the transaction currency is USD. Revenue is recognized ratably over the 12-month term as the service is provided continuously."
     focus_steps:
@@ -81,7 +79,6 @@ tests:
       transaction_currency: "USD"
       billing_period: "Monthly"
       is_allocations: false
-      allocation_method: null
       rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Standard SaaS subscription for Jira and Confluence recognized evenly over the 1-month term.)"
       use_case_description: "A growing software team of 50 users subscribes to the Standard Plan for Jira Software and Confluence. Jira Software is priced at $7.53 per user per month, and Confluence is priced at $6.05 per user per month. The customer is billed monthly in advance based on the total user count. Both products are recurring subscriptions with revenue recognized ratably over the monthly billing period. This scenario demonstrates Zuora's ability to handle multi-product recurring charges with per-user quantity-based pricing."
     focus_steps:
@@ -124,7 +121,6 @@ tests:
       transaction_currency: "USD"
       billing_period: "Annually"
       is_allocations: false
-      allocation_method: null
       rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (JSM Agent seats recognized ratably over the annual term.); Usage: POB=consumption release=as_used (Virtual Agent AI conversations recognized as usage occurs/is billed.)"
       use_case_description: "An IT department deploys Jira Service Management (JSM) Premium for 50 agents. The base subscription for agents is priced at $45 per agent per month, billed annually ($27,000 total). Additionally, the customer utilizes the Virtual Agent AI feature, which includes a base volume of conversations but charges $2.00 per conversation for any usage exceeding the included limit. Agent fees are recognized ratably over the 12-month term, while Virtual Agent overages are recognized in the month the consumption occurs. This scenario demonstrates Zuora's capability to manage hybrid recurring and usage-based billing models."
     focus_steps:
@@ -146,7 +142,6 @@ tests:
       transaction_currency: "USD"
       billing_period: "Annually"
       is_allocations: false
-      allocation_method: null
       rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Infrastructure and APM host-based fees represent a stand-ready obligation to provide software access over the term.)"
       use_case_description: "A mid-sized technology company commits to a 12-month contract for Datadog's core observability products. The deal includes 100 hosts for Infrastructure Pro at $15 per host per month and 50 hosts for APM & Continuous Profiler at $31 per host per month. Both products are configured as recurring charges billed annually in advance. The customer expects a unified dashboard experience across both products. Revenue for both subscription components is recognized ratably over the 12-month term of the contract."
     focus_steps:
@@ -167,7 +162,6 @@ tests:
       transaction_currency: "USD"
       billing_period: "Monthly"
       is_allocations: false
-      allocation_method: null
       rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Enterprise host fees are fixed recurring charges recognized over the 12-month term.); Usage: POB=consumption release=as_used (Log ingestion and indexing are variable charges recognized as the processing occurs.)"
       use_case_description: "A high-growth fintech firm requires deep log analysis alongside infrastructure monitoring. The contract includes 200 hosts of Infrastructure Enterprise at $23 per host per month (billed annually) and Log Management billed on consumption. Log ingestion is priced at $0.10 per GB, with an estimated monthly volume of 2,000 GB. Log indexing is also included, estimated at $1.70 per million events. While the host fees are fixed and ratable, the log management components are recognized as revenue upon consumption each month based on actual data processed."
     focus_steps:
@@ -214,7 +208,6 @@ tests:
       transaction_currency: "USD"
       billing_period: "Annually"
       is_allocations: false
-      allocation_method: null
       rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Standard SaaS access is a stand-ready obligation recognized over the contract period.); Usage: POB=consumption release=as_used (Envelope overages represent a separate performance obligation satisfied upon consumption.)"
       use_case_description: "A growing mid-market company signs up for the Business Pro plan for 10 users. The contract is for a 12-month term with an annual billing frequency. The plan includes a base subscription for eSignature access at $40 per user per month ($4,800 total per year). This plan includes an annual allowance of 1,000 envelopes (100 per user). Any usage exceeding this allowance is billed as an overage at $5.00 per envelope. The subscription fee is recognized ratably over the 12-month term, while any overages are recognized as consumption occurs."
     focus_steps:
@@ -312,7 +305,6 @@ tests:
       transaction_currency: "USD"
       billing_period: "Annually"
       is_allocations: false
-      allocation_method: null
       rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Enterprise base and Sales Seats recognized ratably over the 24-month term.); Usage: POB=consumption release=as_used (Commerce Hub transaction fees recognized as payments are processed.)"
       use_case_description: "An enterprise-level customer commits to a 24-month agreement for the Enterprise Customer Platform at a base rate of $4,700 per month. This includes 10 core seats and 10,000 marketing contacts. To support their sales team, they add 20 'Sales Seats' at $150 per seat per month ($3,000 total recurring). They also implement Commerce Hub, which incurs a usage-based fee of 0.5% on all transaction volume processed through HubSpot Payments. Billing for the platform and seats is handled annually in advance, while Commerce Hub fees are billed monthly in arrears based on actual usage. Revenue for the recurring seats is ratable, while transaction fees are recognized as consumption occurs."
     focus_steps:
@@ -337,7 +329,6 @@ tests:
       transaction_currency: "USD"
       billing_period: "Monthly"
       is_allocations: false
-      allocation_method: null
       rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Starter seats recognized monthly as service is provided.)"
       use_case_description: "A small business adopts the Starter Customer Platform for an initial 5 users at $15 per seat per month ($75 total). The contract is a standard 12-month term but billed monthly. Three months into the contract, the customer expands by adding 5 additional seats, bringing the total monthly recurring revenue (MRR) to $150. Revenue for the initial and additional seats is recognized ratably over the remaining term of the contract. This scenario tests Zuora's ability to handle mid-term amendments (add-ons) and the resulting impact on revenue schedules."
     focus_steps:
@@ -409,7 +400,6 @@ tests:
       transaction_currency: "USD"
       billing_period: "Monthly"
       is_allocations: false
-      allocation_method: null
       rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Monthly recurring revenue for Business Premium licenses.); Usage: POB=consumption release=as_used (Teams Phone calling minutes recognized as usage occurs.)"
       use_case_description: "A startup selects Microsoft 365 Business Premium for 25 users on a month-to-month flexible plan. This plan carries a 20% premium over the annual rate, priced at $26.40 per user per month. The package includes Teams Phone, and the customer has enabled 'Pay-As-You-Go' calling minutes for international calls, billed at a rate of $0.05 per minute. Subscription fees are billed at the start of the month, while usage overages are billed in arrears. Subscription revenue is recognized ratably over the month, and usage is recognized as consumed."
     focus_steps:
@@ -529,7 +519,6 @@ tests:
       transaction_currency: "USD"
       billing_period: "Annually"
       is_allocations: false
-      allocation_method: null
       rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (CSM Enterprise licenses are standard SaaS subscriptions.); Usage: POB=over_time release=ratable_over_term (ITOM node commitments are treated as capacity-based subscriptions recognized over the term.)"
       use_case_description: "A large organization is deploying CSM Enterprise for 200 agents at $250 per agent per month to manage external customer support. Alongside this, they are implementing ITOM Visibility to manage their cloud infrastructure, priced at $150 per node per year for an initial commitment of 1,000 nodes. The CSM portion is billed annually upfront, while the ITOM nodes are billed annually based on the committed capacity. Revenue for CSM is recognized ratably over the 12-month term. ITOM revenue is recognized as a subscription for the committed units. A $50,000 'Impact' premium support package is included as a recurring annual service, also recognized ratably."
     focus_steps:
@@ -553,7 +542,6 @@ tests:
       transaction_currency: "USD"
       billing_period: "Annually"
       is_allocations: false
-      allocation_method: null
       rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (The multi-year ramped subscription is recognized straight-line over the 36-month duration.)"
       use_case_description: "A Fortune 500 company is consolidating legacy systems onto the ServiceNow platform with a 3-year multi-product agreement. The bundle includes ITSM, ITOM, and IT Asset Management with a total annual contract value (ACV) of $500,000. The contract features a ramp-up structure: Year 1 at $400,000, Year 2 at $500,000, and Year 3 at $600,000 to account for phased global deployment. Billing occurs annually at the start of each contract year. Revenue is recognized ratably based on the total contract value divided by the 36-month term (straight-line) to comply with ASC 606 for multi-year tiered ramps. No professional services are included in this specific SKU as they are handled by a third-party partner."
     focus_steps:
@@ -577,7 +565,6 @@ tests:
       transaction_currency: "USD"
       billing_period: "Monthly"
       is_allocations: false
-      allocation_method: null
       rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Core platform and POS Pro subscriptions are provided as continuous access.); Hardware: POB=point_in_time release=at_delivery (POS Go devices represent a transfer of physical control at shipment.)"
       use_case_description: "A retail customer signs up for the Advanced Shopify plan to manage their online store and one physical location. The subscription includes the Advanced Shopify core plan at $399 per month and one Shopify POS Pro location at $89 per month, both billed monthly. Additionally, the customer purchases two POS Go hardware devices for a one-time fee of $399 each. The contract is for a 12-month term. Revenue for the software subscriptions is recognized ratably over the month, while the hardware revenue is recognized at the point of delivery."
     focus_steps:
@@ -600,7 +587,6 @@ tests:
       transaction_currency: "USD"
       billing_period: "Monthly"
       is_allocations: false
-      allocation_method: null
       rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Shopify Plus base fee is a standard recurring SaaS POB.); Usage: POB=consumption release=as_used (Variable GMV fees are recognized as the transaction volume occurs on the platform.)"
       use_case_description: "A high-volume enterprise brand signs a 3-year Shopify Plus agreement. The base platform fee is $2,300 per month, billed monthly. The contract includes a variable platform fee of 0.25% for any monthly Gross Merchandise Volume (GMV) exceeding $800,000, which is billed in arrears. Shopify Payments is integrated, but the primary revenue focus for this scenario is the subscription and the GMV-based overage. The platform fee is recognized ratably, whereas the variable fee is recognized in the month the usage occurs."
     focus_steps:
@@ -674,7 +660,6 @@ tests:
       transaction_currency: "USD"
       billing_period: "Annually"
       is_allocations: false
-      allocation_method: null
       rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Enterprise Grid base fee recognized over the 36-month contract term.); Usage: POB=consumption release=as_used (Premium Workflow overages recognized in the month the usage occurs.)"
       use_case_description: "A large enterprise enters a 3-year agreement for Slack Enterprise Grid starting with 1,000 users at a negotiated rate of $25.00 per user per month. The plan includes an allotment of 5,000 Premium Workflow Runs per month. Any runs exceeding this allotment are billed monthly in arrears at $0.05 per run. The base subscription is billed annually in advance, while usage overages are billed monthly. Revenue for the subscription is ratable, while usage revenue is recognized as consumed."
     focus_steps:
@@ -747,7 +732,6 @@ tests:
       transaction_currency: "USD"
       billing_period: "Annually"
       is_allocations: false
-      allocation_method: null
       rev_rec_notes: "Usage: POB=consumption release=as_used (Ramped compute credits are recognized as consumption occurs across the 3-year term.); Services: POB=point_in_time release=at_delivery (Annual architecture reviews are recognized when the final assessment is delivered.)"
       use_case_description: "A healthcare provider signs a 3-year Business Critical Edition contract to support HIPAA-compliant data workloads. The deal features a ramped credit commitment: $100,000 in Year 1, $250,000 in Year 2, and $500,000 in Year 3, all at a locked rate of $4.00 per credit. Storage is estimated at 50TB per month at $23/TB, billed monthly. The contract also includes an annual 'Architecture Review' service for $20,000 per year to ensure ongoing security compliance. All compute usage is billed annually at the start of each ramp period. Revenue for credits is recognized based on actual consumption, while the Architecture Review is recognized point-in-time upon delivery of the annual report."
     focus_steps:
@@ -772,7 +756,6 @@ tests:
       transaction_currency: "USD"
       billing_period: "Monthly"
       is_allocations: false
-      allocation_method: null
       rev_rec_notes: "Usage: POB=consumption release=as_used (On-demand credits and egress charges are recognized in the month the activity occurs.); Services: POB=point_in_time release=at_go_live (Migration services are recognized as a single POB at the completion of the migration.)"
       use_case_description: "A retail customer starts with the Standard Edition on an On-Demand basis to facilitate a data migration project. They pay $2.00 per credit for compute and $40 per TB for storage, with no upfront commitment, billed monthly in arrears. To assist with the transition from their legacy on-premise system, they have engaged Snowflake Professional Services for a $50,000 migration project. Data transfer (egress) is expected to be high during the first three months, charged at $0.09 per GB. Revenue for all usage-based charges (compute, storage, egress) is recognized as used. The migration service revenue is recognized point-in-time upon the successful go-live of the production data pipelines."
     focus_steps:
@@ -817,7 +800,6 @@ tests:
       transaction_currency: "USD"
       billing_period: "Annually"
       is_allocations: false
-      allocation_method: null
       rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Base platform fee for Segment Connections recognized monthly.); Usage: POB=consumption release=as_used (MTU overages are recognized in the period the tracking events occur.)"
       use_case_description: "A growth-stage startup subscribes to the Segment Team Plan for $120 per month, which includes 10,000 Monthly Tracked Users (MTU). Any usage beyond the 10,000 MTU limit is charged at a rate of $10 per 1,000 MTUs, billed monthly in arrears. The contract is set for an initial 12-month term with annual billing for the base platform fee. Revenue for the $120 monthly base is recognized ratably. Overage revenue is recognized as consumption occurs based on actual MTU counts tracked each month."
     focus_steps:
@@ -839,7 +821,6 @@ tests:
       transaction_currency: "USD"
       billing_period: "Monthly"
       is_allocations: false
-      allocation_method: null
       rev_rec_notes: "Usage: POB=consumption release=as_used (Revenue is tied to the delivery of SMS segments.); Other: POB=over_time release=as_billed (Any monthly minimum shortfall is recognized when billed at month-end.)"
       use_case_description: "A digital marketing firm utilizes Twilio Programmable Messaging for high-volume SMS campaigns. They commit to a monthly minimum spend of $5,000, which offsets their usage at a discounted rate of $0.0075 per message segment (standard list is $0.0083). Usage is tracked and billed monthly in arrears. If usage falls below $5,000, the minimum is still charged. Revenue is recognized as messages are sent (consumption-based), with any 'shortfall' from the minimum commitment recognized at the end of the monthly period."
     focus_steps:
@@ -861,7 +842,6 @@ tests:
       transaction_currency: "USD"
       billing_period: "Annually"
       is_allocations: false
-      allocation_method: null
       rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Standard SaaS subscription for HCM access.); Services: POB=over_time release=ratable_over_term (Implementation fees for Workday are often considered non-distinct from the subscription and recognized over the contract term.)"
       use_case_description: "A large enterprise customer is licensing Workday Human Capital Management (HCM) for a workforce of 5,000 Full-Service Equivalent (FSE) workers. The agreement includes the core HCM subscription at a rate of $35 per FSE per month, billed annually in advance. Additionally, a one-time Implementation Service fee of $500,000 is charged at the start of the contract to cover data migration and system configuration. The contract term is 36 months to align with Workday's typical enterprise commitment. Revenue for the HCM subscription will be recognized ratably over the 3-year term, while the implementation fee is also treated as a non-distinct setup activity to be recognized ratably over the same period per ASC 606 standards."
     focus_steps:
@@ -909,7 +889,6 @@ tests:
       transaction_currency: "USD"
       billing_period: "Monthly"
       is_allocations: false
-      allocation_method: null
       rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Adaptive Planning SaaS access recognized over the 12-month term.); Other: POB=point_in_time release=at_go_live (Training is a distinct service recognized upon delivery/completion of sessions.)"
       use_case_description: "An existing Workday customer is expanding their footprint by adding Workday Adaptive Planning for 100 planning users at $25 per user per month. To ensure successful adoption, the deal includes a mandatory 'Planning QuickStart' training package for a one-time fee of $15,000. Unlike the core implementation, this training is considered a distinct performance obligation as it provides immediate value upon delivery. The Adaptive Planning subscription is billed monthly to match the customer's mid-market preference, while the training is billed upfront. Revenue for the subscription is recognized ratably, while the training revenue is recognized at a point-in-time once the sessions are completed (assumed within the first month)."
     focus_steps:
@@ -956,7 +935,6 @@ tests:
       transaction_currency: "USD"
       billing_period: "Annually"
       is_allocations: false
-      allocation_method: null
       rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Enterprise seats are recognized ratably over the two-year term.); Usage: POB=consumption release=as_used (AI Resolutions are recognized as the 'outcome' (successful resolution) is delivered.)"
       use_case_description: "An enterprise customer signs a 24-month agreement for 200 seats of Zendesk Suite Enterprise at $169 per agent per month. To leverage Zendesk's new AI capabilities, the customer also commits to a monthly block of 5,000 AI Agent Resolutions at $1.50 per resolution, totaling $7,500 per month. Any resolutions beyond the 5,000 monthly commitment are billed as overages at $2.00 per resolution. The seat licenses are billed annually, while the AI resolutions (both committed and overage) are billed monthly in arrears. Subscription revenue is recognized ratably over the 24-month term. AI resolution revenue is recognized as consumption occurs each month. This scenario demonstrates hybrid billing models combining high-volume recurring seats with outcome-based usage."
     focus_steps:
@@ -1029,7 +1007,6 @@ tests:
       transaction_currency: "USD"
       billing_period: "Annually"
       is_allocations: false
-      allocation_method: null
       rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Workplace Pro licenses recognized linearly over the 1-year term.); Usage: POB=consumption release=as_used (Event credits recognized based on actual attendee check-ins reported by the platform.)"
       use_case_description: "This scenario targets a marketing department using the Zoom Events Pay Per Attendee model alongside standard collaboration tools. The customer purchases an annual credit pool of 5,000 attendee credits at $1.50 per attendee, totaling $7,500.00 upfront. Additionally, the team is provisioned with 20 Zoom Workplace Pro seats at $15.99 per user per month to manage their internal coordination. The Pro seats are billed annually ($3,837.60 total). Revenue for the Pro seats is recognized ratably over the 12-month term, while the Event credits are recognized as consumption occurs when attendees join sessions."
     focus_steps:
@@ -1052,7 +1029,6 @@ tests:
       transaction_currency: "USD"
       billing_period: "Monthly"
       is_allocations: false
-      allocation_method: null
       rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Monthly recurring charges for Business and Phone seats recognized over each service month.); Usage: POB=consumption release=as_used (Variable PSTN minutes recognized in the month the usage occurs.)"
       use_case_description: "A mid-market deployment for a global firm requiring 100 Zoom Workplace Business seats at $19.99 per user per month. The deal also includes 100 Zoom Phone Metered seats at a base rate of $10.00 per user per month. International PSTN usage is billed monthly in arrears based on actual minutes consumed, estimated at an average of $0.05 per minute. The base subscription fees (Workplace and Phone) are billed monthly in advance. Revenue for the base seats is recognized ratably each month, while the metered phone usage is recognized as the calls occur."
     focus_steps:

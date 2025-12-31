@@ -111,6 +111,17 @@ npm run cli training sync         # Sync corrections to training data
 npm run cli training list         # List training examples
 npm run cli training export data/zuora-training.jsonl  # Export to JSONL
 npm run cli training export data/zuora-training.jsonl --format huggingface  # HuggingFace format
+
+# Synthetic Test Generation
+npm run cli testgen from-failures <step>  # Generate tests from step failures
+npm run cli testgen from-failures billings -c 5  # Generate 5 tests
+npm run cli testgen from-failures billings -a  # Adversarial edge cases
+npm run cli testgen from-failures billings -o generated-tests  # Write to suite
+npm run cli testgen from-failures billings -o generated-tests --append  # Append to existing
+npm run cli testgen from-pattern "<pattern>" <step>  # Generate from pattern
+npm run cli testgen from-correction <correctionId>  # Generate from correction
+npm run cli testgen stats         # Show generated test statistics
+npm run cli testgen list          # List suites with generated tests
 ```
 
 ### Training Data for SLM Fine-Tuning

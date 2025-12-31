@@ -57,9 +57,18 @@ import {
   syncCorrectionsToTraining,
   exportTrainingData,
   loadTrainingDataset,
+  // Test generation
+  generateFromCorrection,
+  generateFromPattern,
+  generateAdversarialTests,
+  generateTestsFromFailures,
+  writeTestSuite,
+  listGeneratedSuites,
+  getGeneratedTestStats,
   type Correction,
   type PromptSuggestion,
   type TrainingExportOptions,
+  type GenerationConfig,
 } from '../self-learn';
 
 const program = new Command();
@@ -1328,6 +1337,8 @@ async function selfImproveCommand(options: {
   autoSuggest?: boolean;
   captureTraining?: boolean;
   model?: string;
+  ensemble?: boolean;
+  ensembleModels?: string;
 }): Promise<void> {
   try {
     console.log(chalk.cyan.bold('\n═══ Self-Improvement Loop ═══\n'));
@@ -1336,11 +1347,28 @@ async function selfImproveCommand(options: {
     const iterations = options.iterations ? parseInt(options.iterations, 10) : 1;
     const model = parseModelOption(options.model);
 
+    // Parse ensemble models if provided
+    let ensembleModels: LlmModel[] | undefined;
+    if (options.ensembleModels) {
+      ensembleModels = options.ensembleModels.split(',').map((m) => {
+        const parsed = parseModelOption(m.trim());
+        if (!parsed) {
+          console.error(chalk.red(`Invalid model in ensemble: ${m}`));
+          process.exit(1);
+        }
+        return parsed;
+      });
+    }
+
     console.log(`Suite: ${chalk.yellow(suiteName)}`);
     console.log(`Iterations: ${chalk.yellow(iterations.toString())}`);
     console.log(`Model: ${chalk.yellow(model || 'default')}`);
     console.log(`Auto-suggest: ${chalk.yellow(options.autoSuggest ? 'Yes' : 'No')}`);
     console.log(`Capture Training: ${chalk.yellow(options.captureTraining ? 'Yes' : 'No')}`);
+    if (options.ensemble) {
+      const judgeList = ensembleModels?.join(', ') || 'default (GPT-5.2, Gemini 3 Pro, Gemini 3 Flash)';
+      console.log(`Ensemble: ${chalk.yellow('Yes')} (${judgeList})`);
+    }
     console.log('');
 
     for (let i = 1; i <= iterations; i++) {
@@ -1354,6 +1382,8 @@ async function selfImproveCommand(options: {
         captureTraining: options.captureTraining,
         minPatternCount: 2,
         model,
+        ensemble: options.ensemble,
+        ensembleModels,
         onProgress: (current, total, testId) => {
           // Clear previous line and print progress
           if (lastProgressLine) {
@@ -1415,6 +1445,8 @@ program
   .option('--auto-suggest', 'Automatically generate suggestions for top patterns')
   .option('--capture-training', 'Capture successful outputs as training data')
   .option('-m, --model <model>', 'LLM model for evaluation')
+  .option('--ensemble', 'Use multi-judge ensemble evaluation')
+  .option('--ensemble-models <models>', 'Comma-separated list of models for ensemble')
   .action(selfImproveCommand);
 
 // =============================================================================
@@ -1630,6 +1662,337 @@ training
   .option('--step <step>', 'Filter by step name')
   .option('--limit <n>', 'Maximum examples to show', '10')
   .action(trainingListCommand);
+
+// =============================================================================
+// Test Generation Commands (Synthetic test case generation)
+// =============================================================================
+
+/**
+ * Test generation from failures command
+ */
+async function testgenFromFailuresCommand(
+  stepName: string,
+  options: {
+    count?: string;
+    output?: string;
+    adversarial?: boolean;
+    model?: string;
+    append?: boolean;
+  }
+): Promise<void> {
+  try {
+    console.log(chalk.cyan.bold('\n═══ Generate Tests from Failures ═══\n'));
+
+    const count = options.count ? parseInt(options.count, 10) : 3;
+    const model = parseModelOption(options.model);
+    const config: Partial<GenerationConfig> = {
+      adversarial: options.adversarial ?? false,
+    };
+    if (model) config.model = model;
+
+    console.log(`Step: ${chalk.yellow(stepName)}`);
+    console.log(`Count: ${chalk.yellow(count.toString())}`);
+    console.log(`Mode: ${chalk.yellow(options.adversarial ? 'Adversarial' : 'Variation')}`);
+    console.log('');
+
+    console.log(chalk.blue('Generating test cases...'));
+
+    const result = options.adversarial
+      ? await generateAdversarialTests(stepName, count, config)
+      : await generateTestsFromFailures(stepName, count, config);
+
+    if (result.errors.length > 0) {
+      console.log(chalk.yellow('\nWarnings:'));
+      result.errors.forEach((err) => console.log(`  • ${err}`));
+    }
+
+    if (result.testCases.length === 0) {
+      console.log(chalk.yellow('\nNo test cases generated.'));
+      console.log(chalk.gray('Make sure you have corrections for this step.'));
+      console.log(chalk.gray('Run: npm run cli -- evaluate --suite <name> --corrections'));
+      return;
+    }
+
+    console.log('');
+    console.log(chalk.green(`✓ Generated ${result.testCases.length} test case(s)`));
+    console.log('');
+
+    // Display generated tests
+    result.testCases.forEach((tc, i) => {
+      console.log(chalk.bold(`${i + 1}. ${tc.name}`));
+      console.log(`   ${chalk.gray(tc.description)}`);
+      console.log(`   Customer: ${tc.input.customer_name}`);
+      console.log(`   Term: ${tc.input.terms_months} months, ${tc.input.billing_period}`);
+      console.log(`   Tags: ${tc.tags.join(', ')}`);
+      console.log('');
+    });
+
+    // Print stats
+    console.log(chalk.gray('─'.repeat(60)));
+    console.log(`Requested: ${result.stats.requested} | Generated: ${result.stats.generated} | Duplicates removed: ${result.stats.duplicatesRemoved}`);
+
+    // Write to file if output specified
+    if (options.output) {
+      console.log('');
+      console.log(chalk.blue(`Writing to test suite: ${options.output}...`));
+
+      const writeResult = await writeTestSuite(options.output, result.testCases, {
+        append: options.append ?? false,
+        description: `Tests generated from ${stepName} failures`,
+      });
+
+      console.log(chalk.green(`✓ Wrote ${writeResult.testsAdded} test(s) to ${writeResult.filePath}`));
+      if (writeResult.duplicatesSkipped > 0) {
+        console.log(chalk.gray(`  (${writeResult.duplicatesSkipped} duplicates skipped)`));
+      }
+      console.log(chalk.gray(`  Total tests in suite: ${writeResult.totalTests}`));
+    }
+  } catch (error: any) {
+    console.error(chalk.red(`Error: ${error.message}`));
+    process.exit(1);
+  }
+}
+
+/**
+ * Test generation from pattern command
+ */
+async function testgenFromPatternCommand(
+  pattern: string,
+  stepName: string,
+  options: {
+    count?: string;
+    output?: string;
+    model?: string;
+    append?: boolean;
+  }
+): Promise<void> {
+  try {
+    console.log(chalk.cyan.bold('\n═══ Generate Tests from Pattern ═══\n'));
+
+    const count = options.count ? parseInt(options.count, 10) : 3;
+    const model = parseModelOption(options.model);
+    const config: Partial<GenerationConfig> = { count };
+    if (model) config.model = model;
+
+    console.log(`Pattern: ${chalk.yellow(pattern)}`);
+    console.log(`Step: ${chalk.yellow(stepName)}`);
+    console.log(`Count: ${chalk.yellow(count.toString())}`);
+    console.log('');
+
+    console.log(chalk.blue('Generating test cases...'));
+
+    const result = await generateFromPattern(pattern, stepName, config);
+
+    if (result.errors.length > 0) {
+      console.log(chalk.yellow('\nWarnings:'));
+      result.errors.forEach((err) => console.log(`  • ${err}`));
+    }
+
+    if (result.testCases.length === 0) {
+      console.log(chalk.yellow('\nNo test cases generated.'));
+      console.log(chalk.gray('Make sure the pattern exists in corrections for this step.'));
+      return;
+    }
+
+    console.log('');
+    console.log(chalk.green(`✓ Generated ${result.testCases.length} test case(s)`));
+    console.log('');
+
+    // Display generated tests
+    result.testCases.forEach((tc, i) => {
+      console.log(chalk.bold(`${i + 1}. ${tc.name}`));
+      console.log(`   ${chalk.gray(tc.description)}`);
+      console.log(`   Customer: ${tc.input.customer_name}`);
+      console.log(`   Term: ${tc.input.terms_months} months, ${tc.input.billing_period}`);
+      console.log('');
+    });
+
+    // Write to file if output specified
+    if (options.output) {
+      console.log(chalk.blue(`Writing to test suite: ${options.output}...`));
+
+      const writeResult = await writeTestSuite(options.output, result.testCases, {
+        append: options.append ?? false,
+        description: `Tests generated from pattern: ${pattern}`,
+      });
+
+      console.log(chalk.green(`✓ Wrote ${writeResult.testsAdded} test(s) to ${writeResult.filePath}`));
+    }
+  } catch (error: any) {
+    console.error(chalk.red(`Error: ${error.message}`));
+    process.exit(1);
+  }
+}
+
+/**
+ * Test generation from correction ID command
+ */
+async function testgenFromCorrectionCommand(
+  correctionId: string,
+  options: {
+    count?: string;
+    output?: string;
+    model?: string;
+    append?: boolean;
+  }
+): Promise<void> {
+  try {
+    console.log(chalk.cyan.bold('\n═══ Generate Tests from Correction ═══\n'));
+
+    const count = options.count ? parseInt(options.count, 10) : 3;
+    const model = parseModelOption(options.model);
+    const config: Partial<GenerationConfig> = { count };
+    if (model) config.model = model;
+
+    console.log(`Correction ID: ${chalk.yellow(correctionId)}`);
+    console.log(`Count: ${chalk.yellow(count.toString())}`);
+    console.log('');
+
+    console.log(chalk.blue('Generating test cases...'));
+
+    const result = await generateFromCorrection(correctionId, config);
+
+    if (result.errors.length > 0) {
+      console.log(chalk.yellow('\nErrors:'));
+      result.errors.forEach((err) => console.log(`  • ${err}`));
+    }
+
+    if (result.testCases.length === 0) {
+      console.log(chalk.yellow('\nNo test cases generated.'));
+      return;
+    }
+
+    console.log('');
+    console.log(chalk.green(`✓ Generated ${result.testCases.length} test case(s)`));
+    console.log('');
+
+    // Display generated tests
+    result.testCases.forEach((tc, i) => {
+      console.log(chalk.bold(`${i + 1}. ${tc.name}`));
+      console.log(`   ${chalk.gray(tc.description)}`);
+      console.log(`   Customer: ${tc.input.customer_name}`);
+      console.log('');
+    });
+
+    // Write to file if output specified
+    if (options.output) {
+      console.log(chalk.blue(`Writing to test suite: ${options.output}...`));
+
+      const writeResult = await writeTestSuite(options.output, result.testCases, {
+        append: options.append ?? false,
+        description: `Tests generated from correction ${correctionId}`,
+      });
+
+      console.log(chalk.green(`✓ Wrote ${writeResult.testsAdded} test(s) to ${writeResult.filePath}`));
+    }
+  } catch (error: any) {
+    console.error(chalk.red(`Error: ${error.message}`));
+    process.exit(1);
+  }
+}
+
+/**
+ * Test generation stats command
+ */
+async function testgenStatsCommand(): Promise<void> {
+  try {
+    console.log(chalk.cyan.bold('\n═══ Generated Test Statistics ═══\n'));
+
+    const stats = getGeneratedTestStats();
+
+    if (stats.totalTests === 0) {
+      console.log(chalk.yellow('No generated tests found.'));
+      console.log(chalk.gray('Generate tests with: npm run cli -- testgen from-failures <step>'));
+      return;
+    }
+
+    console.log(`Total Generated Suites: ${chalk.yellow(stats.totalSuites.toString())}`);
+    console.log(`Total Generated Tests: ${chalk.yellow(stats.totalTests.toString())}`);
+    console.log('');
+
+    if (Object.keys(stats.byTag).length > 0) {
+      console.log(chalk.green('By Tag:'));
+      for (const [tag, count] of Object.entries(stats.byTag)) {
+        if (tag !== 'generated') {
+          console.log(`  ${tag}: ${chalk.yellow(count.toString())}`);
+        }
+      }
+    }
+  } catch (error: any) {
+    console.error(chalk.red(`Error: ${error.message}`));
+    process.exit(1);
+  }
+}
+
+/**
+ * Test generation list suites command
+ */
+async function testgenListCommand(): Promise<void> {
+  try {
+    console.log(chalk.cyan.bold('\n═══ Generated Test Suites ═══\n'));
+
+    const suites = listGeneratedSuites();
+
+    if (suites.length === 0) {
+      console.log(chalk.yellow('No generated test suites found.'));
+      console.log(chalk.gray('Generate tests with: npm run cli -- testgen from-failures <step> -o <suite-name>'));
+      return;
+    }
+
+    console.log(`Found ${chalk.yellow(suites.length.toString())} suite(s) with generated tests:`);
+    console.log('');
+
+    suites.forEach((suite) => {
+      console.log(`  • ${chalk.blue(suite)}`);
+    });
+  } catch (error: any) {
+    console.error(chalk.red(`Error: ${error.message}`));
+    process.exit(1);
+  }
+}
+
+// Test generation subcommand group
+const testgen = program
+  .command('testgen')
+  .description('Generate synthetic test cases from corrections');
+
+testgen
+  .command('from-failures <stepName>')
+  .description('Generate test cases from step failures')
+  .option('-c, --count <n>', 'Number of tests to generate', '3')
+  .option('-o, --output <suite>', 'Write to test suite (creates data/test-suites/<suite>.yaml)')
+  .option('-a, --adversarial', 'Generate adversarial edge-case tests')
+  .option('-m, --model <model>', 'LLM model for generation')
+  .option('--append', 'Append to existing suite instead of overwriting')
+  .action(testgenFromFailuresCommand);
+
+testgen
+  .command('from-pattern <pattern> <stepName>')
+  .description('Generate test cases from a failure pattern')
+  .option('-c, --count <n>', 'Number of tests to generate', '3')
+  .option('-o, --output <suite>', 'Write to test suite')
+  .option('-m, --model <model>', 'LLM model for generation')
+  .option('--append', 'Append to existing suite')
+  .action(testgenFromPatternCommand);
+
+testgen
+  .command('from-correction <correctionId>')
+  .description('Generate test cases from a specific correction')
+  .option('-c, --count <n>', 'Number of tests to generate', '3')
+  .option('-o, --output <suite>', 'Write to test suite')
+  .option('-m, --model <model>', 'LLM model for generation')
+  .option('--append', 'Append to existing suite')
+  .action(testgenFromCorrectionCommand);
+
+testgen
+  .command('stats')
+  .description('Show generated test statistics')
+  .action(testgenStatsCommand);
+
+testgen
+  .command('list')
+  .description('List test suites with generated tests')
+  .action(testgenListCommand);
 
 // Parse and execute
 program.parse();
