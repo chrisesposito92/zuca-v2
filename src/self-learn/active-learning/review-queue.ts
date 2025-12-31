@@ -19,6 +19,25 @@ import { ReviewQueueIndexSchema } from './types';
 
 const DEFAULT_QUEUE_PATH = path.join(process.cwd(), 'data', 'review-queue.json');
 
+// Configurable path (set via setReviewQueuePath for tests)
+let configuredQueuePath: string | null = null;
+
+/**
+ * Set custom path for review queue (used for test isolation)
+ */
+export function setReviewQueuePath(customPath: string | null): void {
+  configuredQueuePath = customPath;
+  // Reset singleton so next access uses new path
+  queueBackend = null;
+}
+
+/**
+ * Get current review queue path
+ */
+export function getReviewQueuePath(): string {
+  return configuredQueuePath ?? DEFAULT_QUEUE_PATH;
+}
+
 // =============================================================================
 // JSON Backend
 // =============================================================================
@@ -171,7 +190,7 @@ let queueBackend: ReviewQueueJsonBackend | null = null;
 
 function getQueueBackend(): ReviewQueueJsonBackend {
   if (!queueBackend) {
-    queueBackend = new ReviewQueueJsonBackend();
+    queueBackend = new ReviewQueueJsonBackend(getReviewQueuePath());
   }
   return queueBackend;
 }

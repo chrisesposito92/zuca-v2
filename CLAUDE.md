@@ -210,7 +210,7 @@ ENABLE_ACTIVE_LEARNING=true              # Enable uncertainty sampling
 ACTIVE_LEARNING_THRESHOLD=0.6            # Combined uncertainty threshold
 ACTIVE_LEARNING_NOVELTY_WEIGHT=0.4       # Weight for novelty score
 ACTIVE_LEARNING_CONFIDENCE_WEIGHT=0.6    # Weight for confidence
-ACTIVE_LEARNING_MODEL=gpt-4o-mini        # Model for self-assessment
+ACTIVE_LEARNING_MODEL=gpt-5.2            # Model for self-assessment
 ACTIVE_LEARNING_SELF_ASSESSMENT=true     # Enable LLM self-assessment
 ACTIVE_LEARNING_NOVELTY=true             # Enable novelty scoring
 ```

@@ -16,8 +16,8 @@ import type {
   PromptSuggestionStatus,
 } from './suggestions-types';
 
-// Storage file path
-const SUGGESTIONS_FILE = path.join(process.cwd(), 'data', 'prompt-suggestions.json');
+// Default storage file path
+const DEFAULT_SUGGESTIONS_FILE = path.join(process.cwd(), 'data', 'prompt-suggestions.json');
 
 /**
  * Store structure for JSON persistence
@@ -30,12 +30,20 @@ interface SuggestionsStore {
 
 /**
  * JSON-based suggestions backend for local development
+ *
+ * Accepts an optional custom file path for test isolation.
  */
 export class SuggestionsJsonBackend implements SuggestionsBackend {
+  private readonly filePath: string;
+
+  constructor(filePath?: string) {
+    this.filePath = filePath ?? DEFAULT_SUGGESTIONS_FILE;
+  }
+
   private loadStore(): SuggestionsStore {
-    if (fs.existsSync(SUGGESTIONS_FILE)) {
+    if (fs.existsSync(this.filePath)) {
       try {
-        const data = fs.readFileSync(SUGGESTIONS_FILE, 'utf-8');
+        const data = fs.readFileSync(this.filePath, 'utf-8');
         return JSON.parse(data);
       } catch {
         debugLog('Failed to load suggestions file, creating new');
@@ -50,11 +58,11 @@ export class SuggestionsJsonBackend implements SuggestionsBackend {
 
   private saveStore(store: SuggestionsStore): void {
     store.updated_at = new Date().toISOString();
-    const dir = path.dirname(SUGGESTIONS_FILE);
+    const dir = path.dirname(this.filePath);
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir, { recursive: true });
     }
-    fs.writeFileSync(SUGGESTIONS_FILE, JSON.stringify(store, null, 2));
+    fs.writeFileSync(this.filePath, JSON.stringify(store, null, 2));
   }
 
   async insert(input: PromptSuggestionInsert): Promise<PromptSuggestion> {

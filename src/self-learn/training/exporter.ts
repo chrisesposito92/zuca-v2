@@ -26,7 +26,24 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 // Default path for training data storage
-const TRAINING_DATA_PATH = join(__dirname, '../../../data/training-data.json');
+const DEFAULT_TRAINING_DATA_PATH = join(__dirname, '../../../data/training-data.json');
+
+// Configurable path (set via setTrainingDataPath for tests)
+let trainingDataPath = DEFAULT_TRAINING_DATA_PATH;
+
+/**
+ * Set custom path for training data (used for test isolation)
+ */
+export function setTrainingDataPath(customPath: string | null): void {
+  trainingDataPath = customPath ?? DEFAULT_TRAINING_DATA_PATH;
+}
+
+/**
+ * Get current training data path
+ */
+export function getTrainingDataPath(): string {
+  return trainingDataPath;
+}
 
 // =============================================================================
 // Step to Prompt Mapping
@@ -192,12 +209,12 @@ export async function captureSuccessfulOutput(
  * Load existing training dataset or create empty one
  */
 export async function loadTrainingDataset(): Promise<TrainingDataset> {
-  if (!existsSync(TRAINING_DATA_PATH)) {
+  if (!existsSync(trainingDataPath)) {
     return createEmptyDataset();
   }
 
   try {
-    const content = await readFile(TRAINING_DATA_PATH, 'utf-8');
+    const content = await readFile(trainingDataPath, 'utf-8');
     return JSON.parse(content) as TrainingDataset;
   } catch {
     return createEmptyDataset();
@@ -249,12 +266,12 @@ export async function saveTrainingDataset(dataset: TrainingDataset): Promise<voi
   updateStats(dataset);
 
   // Ensure directory exists
-  const dir = dirname(TRAINING_DATA_PATH);
+  const dir = dirname(trainingDataPath);
   if (!existsSync(dir)) {
     await mkdir(dir, { recursive: true });
   }
 
-  await writeFile(TRAINING_DATA_PATH, JSON.stringify(dataset, null, 2));
+  await writeFile(trainingDataPath, JSON.stringify(dataset, null, 2));
 }
 
 /**

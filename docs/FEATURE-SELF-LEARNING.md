@@ -62,18 +62,40 @@ src/self-learn/
 │   ├── runner.ts            # Test execution ✅
 │   └── test-suites.ts       # Test suite loader ✅
 ├── judge/                   # ✅ Phase 2
-│   └── index.ts             # LLM judge with evaluateOutput() ✅
+│   ├── index.ts             # LLM judge with evaluateOutput() ✅
+│   └── index.test.ts        # Judge tests (33 tests) ✅
 ├── corrections/
 │   ├── index.ts             # Dual backend router ✅
 │   ├── types.ts             # Correction types ✅
 │   ├── json-backend.ts      # Local JSON storage ✅
-│   └── postgres-backend.ts  # (Phase 4) Production Postgres
+│   ├── json-backend.test.ts # JSON backend tests (18 tests) ✅
+│   ├── maintenance.ts       # Correction lifecycle (decay, archive, promote) ✅
+│   ├── maintenance.test.ts  # Maintenance tests (18 tests) ✅
+│   ├── clustering.ts        # Semantic clustering ✅
+│   └── postgres-backend.ts  # Production Postgres ✅
 ├── criteria/
-│   └── index.ts             # YAML criteria loader ✅
+│   ├── index.ts             # YAML criteria loader ✅
+│   └── index.test.ts        # Criteria tests (22 tests) ✅
 ├── injector/                # ✅ Phase 3
-│   └── index.ts             # Few-shot injection ✅
-└── evolution/               # (Phase 4)
-    └── index.ts             # Pattern analysis + suggestions
+│   ├── index.ts             # Few-shot injection ✅
+│   └── index.test.ts        # Injector tests ✅
+├── active-learning/         # ✅ Phase 5
+│   ├── index.ts             # Uncertainty sampling + review queue ✅
+│   └── index.test.ts        # Active learning tests (25 tests) ✅
+├── evolution/               # ✅ Phase 4
+│   ├── index.ts             # Pattern analysis + suggestions ✅
+│   ├── index.test.ts        # Evolution tests (27 tests) ✅
+│   ├── suggestions-json-backend.ts    # JSON backend ✅
+│   ├── suggestions-postgres-backend.ts # Postgres backend ✅
+│   ├── suggestions-types.ts # Suggestion types ✅
+│   └── apply-suggestion.ts  # Auto-apply approved suggestions ✅
+├── training/                # ✅ Phase 6
+│   ├── index.ts             # Training data exports ✅
+│   ├── exporter.ts          # Training capture + export ✅
+│   ├── exporter.test.ts     # Training tests (27 tests) ✅
+│   └── types.ts             # Training data types ✅
+└── test-generation/         # ✅ Phase 6
+    └── index.ts             # Synthetic test generation ✅
 
 src/llm/prompts/
 └── self-learn-judge.md      # ✅ Judge system prompt

@@ -306,7 +306,7 @@ export function formatCorrectionsSection(corrections: Correction[]): string {
 
   const formattedCorrections = corrections.map(formatCorrectionForPrompt);
 
-  return [...header, ...formattedCorrections.join('\n\n---\n\n'), '---', ''].join('\n');
+  return [...header, formattedCorrections.join('\n\n---\n\n'), '---', ''].join('\n');
 }
 
 /**
