@@ -133,3 +133,15 @@ criteria:
         amount for that specific period. Do not average prices
         across multiple periods into a single charge.
       threshold: 0.01
+
+  - id: DS-009
+    name: usage-amounts-correct
+    description: Every STANDALONE usage charge must have a quantity that matches the generate usage records
+    severity: high
+    patterns: [Usage, quantity, revenue recognition]
+    check:
+      type: numeric
+      rule: |
+        Every STANDALONE usage charge must have a quantity that matches 
+        the sum of the generated usage records.
+      threshold: 0.01
