@@ -20,6 +20,12 @@ import {
   getEffectivenessSummary,
   clearEffectivenessLog,
 } from '../injector';
+import {
+  startTrainingCapture,
+  captureSuccessfulOutput,
+  flushCapturedExamples,
+  clearCaptureContext,
+} from '../training';
 import type {
   TestCase,
   EvaluationCriteria,
@@ -55,6 +61,8 @@ export interface RunEvaluationOptions {
   testIds?: string[];
   /** Generate and store corrections for failures */
   generateCorrections?: boolean;
+  /** Capture successful outputs as training data */
+  captureTraining?: boolean;
   /** Stop on first failure */
   stopOnFirstFailure?: boolean;
   /** Callback for progress updates */
@@ -182,7 +190,15 @@ async function runTestCase(
 
       result.stepResults.set(stepName, judgeResult);
 
-      if (!judgeResult.overall_pass) {
+      if (judgeResult.overall_pass) {
+        // Capture successful output as training data if enabled
+        if (options.captureTraining) {
+          // Build full input context for training (more detailed than inputSummary)
+          const fullInputContext = JSON.stringify(input, null, 2);
+          await captureSuccessfulOutput(testCase.id, stepName, fullInputContext, stepOutput);
+          debugLog(`Captured training example for ${stepName} from test ${testCase.id}`);
+        }
+      } else {
         result.passed = false;
 
         // Generate corrections if enabled
@@ -274,6 +290,12 @@ export async function runEvaluationSuite(
 
   // Start effectiveness tracking for this evaluation run
   startEffectivenessTracking();
+
+  // Start training capture if enabled
+  if (options.captureTraining) {
+    startTrainingCapture(runId, options.model);
+    debugLog('Training capture enabled for this run');
+  }
 
   // Load test suite
   const suite = await loadTestSuite(suiteName);
@@ -371,6 +393,14 @@ export async function runEvaluationSuite(
   // Clear the effectiveness log for the next run
   clearEffectivenessLog();
 
+  // Flush training examples if capture was enabled
+  let trainingExamplesCaptured = 0;
+  if (options.captureTraining) {
+    trainingExamplesCaptured = await flushCapturedExamples();
+    clearCaptureContext();
+    debugLog(`Flushed ${trainingExamplesCaptured} training examples`);
+  }
+
   return {
     runId,
     suiteName,
@@ -380,6 +410,7 @@ export async function runEvaluationSuite(
     passed,
     failed: testsToRun.length - passed,
     correctionsGenerated,
+    trainingExamplesCaptured,
     failures,
     model: options.model,
     effectivenessSummary,

@@ -45,8 +45,14 @@ import {
   rejectSuggestion,
   getPromptPath,
   runSelfImproveIteration,
+  // Training data exports
+  getTrainingStats,
+  syncCorrectionsToTraining,
+  exportTrainingData,
+  loadTrainingDataset,
   type Correction,
   type PromptSuggestion,
+  type TrainingExportOptions,
 } from '../self-learn';
 
 const program = new Command();
@@ -541,6 +547,7 @@ async function evaluateCommand(options: {
   model?: string;
   step?: string;
   corrections?: boolean;
+  captureTraining?: boolean;
 }): Promise<void> {
   try {
     console.log(chalk.cyan.bold('\n═══ Self-Learning Evaluation ═══\n'));
@@ -628,6 +635,7 @@ tests:
       model,
       steps: options.step ? [options.step] : undefined,
       generateCorrections: options.corrections ?? false,
+      captureTraining: options.captureTraining ?? false,
       onProgress: (current, total, testId) => {
         console.log(chalk.gray(`  [${current}/${total}] ${testId}`));
       },
@@ -642,6 +650,9 @@ tests:
     console.log(`Failed: ${result.failed > 0 ? chalk.red(result.failed.toString()) : chalk.green('0')}`);
     if (options.corrections) {
       console.log(`Corrections Generated: ${chalk.yellow(result.correctionsGenerated.toString())}`);
+    }
+    if (options.captureTraining && result.trainingExamplesCaptured) {
+      console.log(`Training Examples Captured: ${chalk.green(result.trainingExamplesCaptured.toString())}`);
     }
     console.log('');
 
@@ -805,6 +816,7 @@ program
   .option('-m, --model <model>', 'LLM model for evaluation')
   .option('--step <step>', 'Only evaluate specific step')
   .option('--corrections', 'Generate corrections for failures')
+  .option('--capture-training', 'Capture successful outputs as training data')
   .action(evaluateCommand);
 
 // Corrections subcommand group
@@ -1061,6 +1073,7 @@ async function selfImproveCommand(options: {
   suite?: string;
   iterations?: string;
   autoSuggest?: boolean;
+  captureTraining?: boolean;
   model?: string;
 }): Promise<void> {
   try {
@@ -1074,6 +1087,7 @@ async function selfImproveCommand(options: {
     console.log(`Iterations: ${chalk.yellow(iterations.toString())}`);
     console.log(`Model: ${chalk.yellow(model || 'default')}`);
     console.log(`Auto-suggest: ${chalk.yellow(options.autoSuggest ? 'Yes' : 'No')}`);
+    console.log(`Capture Training: ${chalk.yellow(options.captureTraining ? 'Yes' : 'No')}`);
     console.log('');
 
     for (let i = 1; i <= iterations; i++) {
@@ -1084,6 +1098,7 @@ async function selfImproveCommand(options: {
 
       const result = await runSelfImproveIteration(suiteName, {
         autoSuggest: options.autoSuggest,
+        captureTraining: options.captureTraining,
         minPatternCount: 2,
         model,
         onProgress: (current, total, testId) => {
@@ -1103,6 +1118,9 @@ async function selfImproveCommand(options: {
 
       console.log(`  Evaluation: ${chalk.green(result.evaluationPassed.toString())} passed, ${result.evaluationFailed > 0 ? chalk.red(result.evaluationFailed.toString()) : '0'} failed`);
       console.log(`  Corrections Generated: ${chalk.yellow(result.correctionsGenerated.toString())}`);
+      if (options.captureTraining && result.trainingExamplesCaptured > 0) {
+        console.log(`  Training Examples Captured: ${chalk.green(result.trainingExamplesCaptured.toString())}`);
+      }
 
       if (result.topPatterns.length > 0) {
         console.log('');
@@ -1142,8 +1160,223 @@ program
   .option('-s, --suite <name>', 'Test suite name', 'golden-scenarios')
   .option('-i, --iterations <n>', 'Number of improvement iterations', '1')
   .option('--auto-suggest', 'Automatically generate suggestions for top patterns')
+  .option('--capture-training', 'Capture successful outputs as training data')
   .option('-m, --model <model>', 'LLM model for evaluation')
   .action(selfImproveCommand);
+
+// =============================================================================
+// Training Data Commands (for SLM fine-tuning)
+// =============================================================================
+
+/**
+ * Training stats command - show training data statistics
+ */
+async function trainingStatsCommand(): Promise<void> {
+  try {
+    console.log(chalk.cyan.bold('\n═══ Training Data Statistics ═══\n'));
+
+    const stats = await getTrainingStats();
+
+    console.log(`Total Examples: ${chalk.yellow(stats.total.toString())}`);
+    console.log(`Corrections with example_fix: ${chalk.yellow(stats.correctionsWithFix.toString())}`);
+    console.log('');
+
+    if (Object.keys(stats.byStep).length > 0) {
+      console.log(chalk.green('By Step:'));
+      for (const [step, count] of Object.entries(stats.byStep)) {
+        console.log(`  ${step}: ${chalk.yellow(count.toString())}`);
+      }
+      console.log('');
+    }
+
+    if (Object.keys(stats.bySource).length > 0) {
+      console.log(chalk.green('By Source:'));
+      for (const [source, count] of Object.entries(stats.bySource)) {
+        const label = source === 'evaluation_pass' ? 'Evaluation Passes' :
+                      source === 'correction_fix' ? 'Correction Fixes' : source;
+        console.log(`  ${label}: ${chalk.yellow(count.toString())}`);
+      }
+    }
+
+    if (stats.total === 0) {
+      console.log(chalk.yellow('No training examples yet.'));
+      console.log(chalk.gray('Run evaluation with --capture-training to collect examples.'));
+      console.log(chalk.gray('Or sync corrections: npm run cli -- training sync'));
+    }
+  } catch (error: any) {
+    console.error(chalk.red(`Error: ${error.message}`));
+    process.exit(1);
+  }
+}
+
+/**
+ * Training sync command - sync corrections to training data
+ */
+async function trainingSyncCommand(): Promise<void> {
+  try {
+    console.log(chalk.cyan.bold('\n═══ Sync Corrections to Training Data ═══\n'));
+
+    console.log(chalk.blue('Syncing corrections with example_fix to training data...'));
+
+    const added = await syncCorrectionsToTraining();
+
+    if (added > 0) {
+      console.log(chalk.green(`\n✓ Added ${added} new training example(s) from corrections.`));
+    } else {
+      console.log(chalk.yellow('\nNo new examples to add.'));
+      console.log(chalk.gray('Corrections need example_fix field to be converted to training data.'));
+    }
+
+    // Show updated stats
+    const stats = await getTrainingStats();
+    console.log('');
+    console.log(`Total training examples: ${chalk.yellow(stats.total.toString())}`);
+  } catch (error: any) {
+    console.error(chalk.red(`Error: ${error.message}`));
+    process.exit(1);
+  }
+}
+
+/**
+ * Training export command - export training data to file
+ */
+async function trainingExportCommand(
+  outputPath: string,
+  options: {
+    format?: string;
+    step?: string;
+    source?: string;
+    maxPerStep?: string;
+    noSystemPrompt?: boolean;
+  }
+): Promise<void> {
+  try {
+    console.log(chalk.cyan.bold('\n═══ Export Training Data ═══\n'));
+
+    const exportOptions: TrainingExportOptions = {
+      format: (options.format as 'jsonl' | 'json' | 'huggingface') || 'jsonl',
+      includeSystemPrompt: !options.noSystemPrompt,
+    };
+
+    if (options.step) {
+      exportOptions.steps = [options.step];
+    }
+
+    if (options.source) {
+      exportOptions.sources = [options.source as 'evaluation_pass' | 'correction_fix' | 'manual'];
+    }
+
+    if (options.maxPerStep) {
+      exportOptions.maxPerStep = parseInt(options.maxPerStep, 10);
+    }
+
+    console.log(`Format: ${chalk.yellow(exportOptions.format || 'jsonl')}`);
+    if (options.step) console.log(`Step filter: ${chalk.yellow(options.step)}`);
+    if (options.source) console.log(`Source filter: ${chalk.yellow(options.source)}`);
+    if (options.maxPerStep) console.log(`Max per step: ${chalk.yellow(options.maxPerStep)}`);
+    console.log('');
+
+    const result = await exportTrainingData(outputPath, exportOptions);
+
+    console.log(chalk.green(`\n✓ Exported ${result.exported} training example(s)`));
+    console.log(`  Output: ${chalk.cyan(result.path)}`);
+    console.log('');
+
+    if (exportOptions.format === 'jsonl') {
+      console.log(chalk.gray('JSONL format is compatible with HuggingFace TRL/SFTTrainer.'));
+      console.log(chalk.gray('Usage with Unsloth/TRL:'));
+      console.log(chalk.gray('  from datasets import load_dataset'));
+      console.log(chalk.gray(`  dataset = load_dataset('json', data_files='${result.path}')`));
+    }
+  } catch (error: any) {
+    console.error(chalk.red(`Error: ${error.message}`));
+    process.exit(1);
+  }
+}
+
+/**
+ * Training list command - list training examples
+ */
+async function trainingListCommand(options: { step?: string; limit?: string }): Promise<void> {
+  try {
+    console.log(chalk.cyan.bold('\n═══ Training Examples ═══\n'));
+
+    const dataset = await loadTrainingDataset();
+    let examples = dataset.examples;
+
+    if (options.step) {
+      examples = examples.filter((e) => e.step_name === options.step);
+    }
+
+    const limit = options.limit ? parseInt(options.limit, 10) : 10;
+    const displayExamples = examples.slice(0, limit);
+
+    if (displayExamples.length === 0) {
+      console.log(chalk.yellow('No training examples found.'));
+      console.log(chalk.gray('Sync corrections: npm run cli -- training sync'));
+      return;
+    }
+
+    console.log(`Showing ${displayExamples.length} of ${examples.length} examples:`);
+    console.log('');
+
+    displayExamples.forEach((ex, i) => {
+      const sourceLabel = ex.source === 'evaluation_pass' ? chalk.green('eval-pass') :
+                          ex.source === 'correction_fix' ? chalk.yellow('correction') : ex.source;
+      console.log(`${i + 1}. [${ex.step_name}] ${sourceLabel}`);
+      console.log(`   ID: ${ex.id.substring(0, 8)}...`);
+
+      // Show user message preview
+      const userMsg = ex.messages.find((m) => m.role === 'user');
+      if (userMsg) {
+        const preview = userMsg.content.substring(0, 80).replace(/\n/g, ' ');
+        console.log(`   Input: ${chalk.gray(preview)}${userMsg.content.length > 80 ? '...' : ''}`);
+      }
+
+      console.log(`   Created: ${new Date(ex.metadata.created_at).toLocaleDateString()}`);
+      console.log('');
+    });
+
+    if (examples.length > limit) {
+      console.log(chalk.gray(`... and ${examples.length - limit} more. Use --limit to show more.`));
+    }
+  } catch (error: any) {
+    console.error(chalk.red(`Error: ${error.message}`));
+    process.exit(1);
+  }
+}
+
+// Training subcommand group
+const training = program
+  .command('training')
+  .description('Manage training data for SLM fine-tuning');
+
+training
+  .command('stats')
+  .description('Show training data statistics')
+  .action(trainingStatsCommand);
+
+training
+  .command('sync')
+  .description('Sync corrections (with example_fix) to training data')
+  .action(trainingSyncCommand);
+
+training
+  .command('export <output>')
+  .description('Export training data to file')
+  .option('-f, --format <format>', 'Output format: jsonl | json | huggingface', 'jsonl')
+  .option('--step <step>', 'Filter by step name')
+  .option('--source <source>', 'Filter by source: evaluation_pass | correction_fix')
+  .option('--max-per-step <n>', 'Maximum examples per step (for balancing)')
+  .option('--no-system-prompt', 'Exclude system prompts from output')
+  .action(trainingExportCommand);
+
+training
+  .command('list')
+  .description('List training examples')
+  .option('--step <step>', 'Filter by step name')
+  .option('--limit <n>', 'Maximum examples to show', '10')
+  .action(trainingListCommand);
 
 // Parse and execute
 program.parse();

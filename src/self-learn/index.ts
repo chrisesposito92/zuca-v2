@@ -89,3 +89,31 @@ export {
   type SelfImproveResult,
   type SelfImproveOptions,
 } from './evolution';
+
+// Training Data Export (for SLM fine-tuning)
+export {
+  // Capture functions (for use during evaluation)
+  startTrainingCapture,
+  getCaptureContext,
+  clearCaptureContext,
+  captureSuccessfulOutput,
+  flushCapturedExamples,
+  // Example creation
+  createExampleFromEvaluation,
+  createExampleFromCorrection,
+  generateExamplesFromCorrections,
+  // Dataset management
+  loadTrainingDataset,
+  saveTrainingDataset,
+  addExamplesToDataset,
+  // Export functions
+  exportTrainingData,
+  getTrainingStats,
+  syncCorrectionsToTraining,
+  // Types
+  type ChatMessage,
+  type TrainingExample,
+  type TrainingDataset,
+  type TrainingExportOptions,
+  type TrainingCaptureContext,
+} from './training';

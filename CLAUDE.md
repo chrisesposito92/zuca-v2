@@ -81,6 +81,7 @@ USE_CORRECTIONS_EMBEDDINGS=false
 # Evaluation
 npm run cli evaluate              # Run evaluation suite
 npm run cli evaluate --corrections # Generate corrections for failures
+npm run cli evaluate --capture-training  # Capture passing outputs as training data
 npm run cli evaluate -m gemini-3-flash-preview  # Use specific model
 
 # Corrections Management
@@ -96,7 +97,35 @@ npm run cli prompts approve <id>  # Approve a suggestion
 # Self-Improvement Loop
 npm run cli self-improve          # Run evaluation + pattern analysis
 npm run cli self-improve --auto-suggest  # Auto-generate suggestions
+
+# Training Data Export (for SLM fine-tuning)
+npm run cli training stats        # Show training data statistics
+npm run cli training sync         # Sync corrections to training data
+npm run cli training list         # List training examples
+npm run cli training export data/zuora-training.jsonl  # Export to JSONL
+npm run cli training export data/zuora-training.jsonl --format huggingface  # HuggingFace format
 ```
+
+### Training Data for SLM Fine-Tuning
+The self-learning system can export training data for fine-tuning small language models:
+
+**Key Files:**
+- `src/self-learn/training/` - Training data module
+- `data/training-data.json` - Stored training examples
+
+**Workflow:**
+1. Run evaluations with training capture: `npm run cli evaluate --suite golden-scenarios --capture-training`
+   - Passing outputs are automatically saved as training examples
+2. Optionally sync corrections: `npm run cli training sync`
+   - Corrections with `example_fix` become additional training examples
+3. Export for fine-tuning: `npm run cli training export ./output.jsonl`
+
+**Output Format (JSONL):**
+```json
+{"messages": [{"role": "system", "content": "..."}, {"role": "user", "content": "..."}, {"role": "assistant", "content": "..."}]}
+```
+
+Compatible with HuggingFace TRL/SFTTrainer and Unsloth.
 
 ### Adding New Criteria
 1. Create YAML file in `data/evaluation-criteria/<step-name>.yaml`
