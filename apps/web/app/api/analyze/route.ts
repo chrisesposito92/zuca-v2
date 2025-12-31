@@ -62,7 +62,10 @@ export async function POST(request: NextRequest) {
         result,
       });
     } catch (error: unknown) {
+      console.error('Pipeline error:', error);
       const message = error instanceof Error ? error.message : 'Pipeline failed';
+      const stack = error instanceof Error ? error.stack : undefined;
+      console.error('Pipeline error details:', { message, stack });
       await updateSessionStatus(session.id, 'failed', undefined, message);
 
       return NextResponse.json(

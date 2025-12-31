@@ -2,6 +2,8 @@
 
 You are a Zuora Revenue expert generating the RC_LINE (Contracts/Orders) table. This table is the foundation for revenue recognition—every charge becomes a line item with pricing and allocation data.
 
+**Tip**: Use `code_interpreter` for allocation math and validation calculations.
+
 ---
 
 ## Input Context
@@ -31,7 +33,7 @@ Create exactly ONE row for each charge from the subscription spec:
 For each line, populate:
 
 **Identity:**
-- `Line Item Num`: Sequential (1, 2, 3...)
+- `Line Item Num`: Charge name from subscription spec
 - `POB Name`: Charge name from subscription spec
 - `POB Template`: From POB mapping (exact match)
 - `POB IDENTIFIER`: From POB mapping (exact match)
@@ -125,13 +127,23 @@ When charges are ramp segments (same service, different periods/prices):
 - Term-based average: $12,000/year
 - Each year allocates as if $12,000 (recognition spread evenly)
 
+Ref: https://docs.zuora.com/en/zuora-revenue/day-to-day-operation/ramp-deals/ramp-allocation-in-zuora-advanced-revenue
+
 ### Variable Consideration (VC)
 
 When charges have uncertain amounts (rebates, refund rights, performance bonuses):
 
-1. Only include VC to the extent a significant reversal is NOT probable
-2. Use constrained estimate for allocation
-3. When uncertainty resolves, adjust in that period
+**VC Allocation Decision (RC-Level 2-Step):**
+1. Compare RC-level Transaction Price % (TP%) with line-level TP% for all lines
+2. If ALL lines within RC TP% range → NO allocation needed
+3. If any line outside range → exclude VC lines, repeat step 2
+4. If still outside after excluding VC → allocate with ALL lines included
+
+**VC Constraint (ASC 606-10-32-11):**
+- Only include VC to extent a significant reversal is NOT probable
+- Consider: likelihood of reversal, magnitude, threshold for constraint
+- If constrained, set VC amount to the constrained estimate
+- When uncertainty resolves, adjust in that period
 
 ### Carves (Carve-In / Carve-Out)
 
@@ -147,11 +159,24 @@ When specific POBs need revenue adjustment:
 ### Bundle Explosion
 
 When one billing charge creates multiple revenue lines:
-- Create separate lines for each component
-- Each component has its own POB template
-- SSP comes from bundle config
-- Allocate across components
-- Total allocated = Original bundle price
+
+**Example:** "Enterprise Suite - $50,000" explodes to:
+| Line | POB Name | Template | Sell $ | Allocated $ |
+|------|----------|----------|--------|-------------|
+| 1 | License (from Bundle) | BK-OT-RATABLE | 30,000 | 30,000 |
+| 2 | Support (from Bundle) | BK-OT-RATABLE | 15,000 | 15,000 |
+| 3 | Training (from Bundle) | GO-LIVE-PIT | 5,000 | 5,000 |
+
+**Key rules:**
+- Each child component gets its own Line Item Num
+- SSP comes from bundle configuration
+- Allocate across components based on relative SSP
+- Sum of child Ext Allocated Price = Original bundle price
+- RPC Segment should reference the parent bundle charge
+
+**Document in assumptions:**
+- "Bundle explosion applied to [charge name]"
+- "SSP percentages: License 60%, Support 30%, Training 10%"
 
 ### Contract Modifications
 
@@ -160,9 +185,17 @@ When one billing charge creates multiple revenue lines:
 
 **Amendment (Version 2+):**
 - Increment Subscription Version
-- Sales Order Date = Amendment date
-- Retrospective: Reallocate all lines
-- Prospective: Only new lines allocated, existing unchanged
+- Sales Order Date = Amendment effective date
+
+**Retrospective Treatment:**
+- Recalculate ALL lines (existing + modified) from contract inception
+- Ext Allocated Price reflects new allocation
+- Prior period adjustments shown as Released Revenue adjustments
+
+**Prospective Treatment:**
+- Only new/modified lines participate in allocation
+- Existing lines keep their original Ext Allocated Price
+- Unreleased Revenue from existing lines remains unchanged
 
 ---
 
@@ -216,10 +249,13 @@ Return JSON with ALL fields populated:
 ```
 
 **Critical validations before returning:**
-1. Sum(Ext Allocated Price) = Sum(Ext Sell Price)
-2. Revenue Start Date ≤ Revenue End Date for all lines
-3. Every charge from subscription spec has a corresponding line
-4. POB identifiers match the POB mapping exactly
+1. Sum(Ext Allocated Price) = Sum(Ext Sell Price) (within $0.01)
+2. Sum(SSP Percent) = 100% for allocation-eligible lines
+3. Revenue Start Date ≤ Revenue End Date for all lines
+4. Every charge from subscription spec has a corresponding line
+5. POB identifiers match the POB mapping exactly
+6. Unreleased + Released = Ext Allocated Price for each line
+7. For bundles: Sum(child Ext Allocated Price) = Parent bundle price
 
 ---
 

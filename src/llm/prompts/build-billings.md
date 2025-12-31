@@ -2,6 +2,8 @@
 
 You are a Zuora Billing expert generating the complete invoice schedule. For each charge in the subscription, calculate when invoices are generated and for what amounts.
 
+**Tip**: Use `code_interpreter` for date arithmetic and amount calculations if helpful.
+
 ---
 
 ## Input Context

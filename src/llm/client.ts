@@ -446,6 +446,92 @@ function sanitizeSchemaForGemini(schema: Record<string, unknown>): Record<string
   return result;
 }
 
+/**
+ * Recursively sanitize a JSON schema for OpenAI strict mode compatibility.
+ * GPT-5.2 and newer models have stricter schema validation:
+ * - Converts `type: ["string", "null"]` to `type: "string"` (nullable by omitting from required)
+ * - Removes `null` from enum arrays
+ * - Ensures all objects have `required` array containing ALL property keys
+ * - Ensures all objects have `additionalProperties: false`
+ *
+ * CRITICAL: OpenAI strict mode requires ALL properties to be in `required`.
+ * This is stricter than JSON Schema standard where `required` only lists mandatory fields.
+ */
+function sanitizeSchemaForOpenAI(schema: Record<string, unknown>): Record<string, unknown> {
+  const result: Record<string, unknown> = {};
+
+  for (const [key, value] of Object.entries(schema)) {
+    // Handle type arrays like ["string", "null"] -> "string"
+    // OpenAI strict mode doesn't support union types - nullability is handled by required array
+    if (key === 'type' && Array.isArray(value)) {
+      const types = value.filter((t) => t !== 'null');
+      result.type = types.length === 1 ? types[0] : types[0]; // Take first non-null type
+      continue;
+    }
+
+    // Handle enum arrays containing null
+    if (key === 'enum' && Array.isArray(value)) {
+      // Filter out null (OpenAI strict mode doesn't support null in enums)
+      const filteredEnum = value.filter((v) => v !== null);
+      if (filteredEnum.length > 0) {
+        result.enum = filteredEnum;
+      }
+      continue;
+    }
+
+    // Recursively process properties object
+    if (key === 'properties' && value && typeof value === 'object') {
+      const sanitizedProps: Record<string, unknown> = {};
+      for (const [propKey, propValue] of Object.entries(value as Record<string, unknown>)) {
+        if (propValue && typeof propValue === 'object') {
+          sanitizedProps[propKey] = sanitizeSchemaForOpenAI(propValue as Record<string, unknown>);
+        } else {
+          sanitizedProps[propKey] = propValue;
+        }
+      }
+      result[key] = sanitizedProps;
+      continue;
+    }
+
+    // Handle items in arrays
+    if (key === 'items' && value && typeof value === 'object' && !Array.isArray(value)) {
+      result[key] = sanitizeSchemaForOpenAI(value as Record<string, unknown>);
+      continue;
+    }
+
+    // Recursively process other nested objects
+    if (value && typeof value === 'object' && !Array.isArray(value)) {
+      result[key] = sanitizeSchemaForOpenAI(value as Record<string, unknown>);
+    } else if (Array.isArray(value)) {
+      result[key] = value.map((item) =>
+        item && typeof item === 'object'
+          ? sanitizeSchemaForOpenAI(item as Record<string, unknown>)
+          : item
+      );
+    } else {
+      result[key] = value;
+    }
+  }
+
+  // Ensure objects have required array containing ALL properties and additionalProperties: false
+  // OpenAI strict mode requires EVERY property to be in required array
+  if (result.type === 'object') {
+    const properties = result.properties as Record<string, unknown> | undefined;
+    if (properties) {
+      // Get all property keys and set them as required
+      const allPropertyKeys = Object.keys(properties);
+      result.required = allPropertyKeys;
+    } else if (!result.required) {
+      result.required = [];
+    }
+    if (result.additionalProperties === undefined) {
+      result.additionalProperties = false;
+    }
+  }
+
+  return result;
+}
+
 function extractGeminiText(parts: GeminiPart[] | undefined): string {
   if (!parts) return '';
   return parts
@@ -588,12 +674,14 @@ async function completeOpenAI<T = unknown>(
   }
 
   // Add structured output if schema provided
+  // Sanitize schema for OpenAI strict mode (GPT-5.2+ has stricter validation)
   if (responseSchema) {
+    const sanitizedSchema = sanitizeSchemaForOpenAI(responseSchema);
     requestParams.text = {
       format: {
         type: 'json_schema',
         name: 'structured_output',
-        schema: responseSchema,
+        schema: sanitizedSchema,
         strict: true,
       },
     };

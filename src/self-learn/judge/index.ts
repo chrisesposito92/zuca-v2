@@ -22,6 +22,12 @@ export { evaluateWithEnsemble, formatEnsembleResultForDisplay } from './ensemble
 
 /**
  * JSON schema for JudgeResult structured output
+ *
+ * Note: OpenAI's strict mode requires:
+ * - All objects must have 'required' array (even if empty)
+ * - No union types like ['object', 'null'] - use nullable by omitting from required
+ * - No empty schemas {} - must have explicit type
+ * - additionalProperties: false on all objects
  */
 const judgeResultSchema = {
   type: 'object',
@@ -38,10 +44,11 @@ const judgeResultSchema = {
           criterion_id: { type: 'string' },
           criterion_name: { type: 'string' },
           passed: { type: 'boolean' },
-          confidence: { type: 'number', minimum: 0, maximum: 1 },
+          confidence: { type: 'number' },
           explanation: { type: 'string' },
           correction: {
-            type: ['object', 'null'],
+            type: 'object',
+            description: 'Correction details if criterion failed, or empty object {} if passed',
             properties: {
               issue_type: {
                 type: 'string',
@@ -56,9 +63,13 @@ const judgeResultSchema = {
               },
               expected_behavior: { type: 'string' },
               suggested_fix: { type: 'string' },
-              example_output: {},
+              example_output: {
+                type: 'string',
+                description: 'JSON string showing example correct output, if applicable',
+              },
             },
-            required: ['issue_type', 'expected_behavior', 'suggested_fix'],
+            required: [],
+            additionalProperties: false,
           },
         },
         required: ['criterion_id', 'criterion_name', 'passed', 'confidence', 'explanation', 'correction'],
