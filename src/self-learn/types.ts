@@ -40,6 +40,12 @@ export const CorrectionSchema = z.object({
   times_applied: z.number().default(0),
   success_rate: z.number().min(0).max(1).default(0),
 
+  // Archive fields for correction lifecycle management
+  archived: z.boolean().default(false),
+  archived_at: z.string().optional(),
+  archived_reason: z.string().optional(),
+  last_maintained_at: z.string().optional(),
+
   created_at: z.string(),
   updated_at: z.string(),
 });
@@ -51,6 +57,10 @@ export const CorrectionInsertSchema = CorrectionSchema.omit({
   pattern_embedding: true,
   times_applied: true,
   success_rate: true,
+  archived: true,
+  archived_at: true,
+  archived_reason: true,
+  last_maintained_at: true,
   created_at: true,
   updated_at: true,
 });
@@ -286,7 +296,66 @@ export interface CorrectionsBackend {
   updateStats(id: string, applied: boolean, helped: boolean): Promise<void>;
   getPatternFrequencies(stepName: string): Promise<Array<{ pattern: string; count: number }>>;
   isReady(): Promise<boolean>;
+
+  // Maintenance methods for correction lifecycle
+  archiveCorrection?(id: string, reason: string): Promise<void>;
+  restoreCorrection?(id: string): Promise<void>;
+  listArchived?(): Promise<Correction[]>;
+  updateConfidence?(id: string, newConfidence: number): Promise<void>;
+  getById?(id: string): Promise<Correction | null>;
 }
+
+// =============================================================================
+// Maintenance Types
+// =============================================================================
+
+export const MaintenanceOptionsSchema = z.object({
+  dryRun: z.boolean().default(false),
+  verbose: z.boolean().default(false),
+});
+
+export type MaintenanceOptions = z.infer<typeof MaintenanceOptionsSchema>;
+
+export const MaintenanceActionSchema = z.object({
+  correctionId: z.string(),
+  action: z.enum(['decay', 'archive', 'promote']),
+  reason: z.string(),
+  before: z.object({
+    confidence: z.number(),
+    archived: z.boolean().optional(),
+  }),
+  after: z.object({
+    confidence: z.number(),
+    archived: z.boolean().optional(),
+  }),
+});
+
+export type MaintenanceAction = z.infer<typeof MaintenanceActionSchema>;
+
+export const MaintenanceReportSchema = z.object({
+  runAt: z.string(),
+  dryRun: z.boolean(),
+  decayed: z.number(),
+  archived: z.number(),
+  promoted: z.number(),
+  actions: z.array(MaintenanceActionSchema),
+});
+
+export type MaintenanceReport = z.infer<typeof MaintenanceReportSchema>;
+
+export const MaintenanceThresholdsSchema = z.object({
+  decayAgeDays: z.number().default(30),
+  decayMinApplies: z.number().default(3),
+  decayFactor: z.number().default(0.9),
+  archiveMinApplies: z.number().default(10),
+  archiveThreshold: z.number().default(0.2),
+  promoteMinApplies: z.number().default(5),
+  promoteThreshold: z.number().default(0.8),
+  promoteFactor: z.number().default(1.1),
+  minConfidence: z.number().default(0.1),
+});
+
+export type MaintenanceThresholds = z.infer<typeof MaintenanceThresholdsSchema>;
 
 // =============================================================================
 // Injection Context

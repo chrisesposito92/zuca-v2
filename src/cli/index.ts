@@ -70,6 +70,25 @@ import {
   type TrainingExportOptions,
   type GenerationConfig,
 } from '../self-learn';
+import {
+  // Maintenance
+  runMaintenance,
+  getMaintenanceStats,
+  formatMaintenanceReport,
+  listArchivedCorrections,
+  restoreArchivedCorrection,
+  getCorrectionsBackend,
+} from '../self-learn/corrections';
+import {
+  // Active Learning / Review Queue
+  getReviewQueue,
+  getPendingReviews,
+  getReviewItem,
+  approveReviewItem,
+  dismissReviewItem,
+  getReviewQueueStats,
+  clearReviewQueue,
+} from '../self-learn/active-learning';
 
 const program = new Command();
 
@@ -882,6 +901,311 @@ corrections
   .description('Cluster corrections by semantic similarity')
   .option('--threshold <number>', 'Similarity threshold (0.0-1.0)', '0.85')
   .action(correctionsClusterCommand);
+
+corrections
+  .command('maintain')
+  .description('Run maintenance on corrections (decay, archive, promote)')
+  .option('--dry-run', 'Show what would be done without making changes')
+  .option('-v, --verbose', 'Show detailed output')
+  .action(correctionsMaintainCommand);
+
+corrections
+  .command('archived')
+  .description('List archived corrections')
+  .action(correctionsArchivedCommand);
+
+corrections
+  .command('restore <id>')
+  .description('Restore an archived correction to active status')
+  .action(correctionsRestoreCommand);
+
+// Review queue subcommand group (Active Learning)
+const review = program
+  .command('review')
+  .description('Manage active learning review queue');
+
+review
+  .command('list')
+  .description('List items in the review queue')
+  .option('--pending', 'Only show pending items')
+  .action(reviewListCommand);
+
+review
+  .command('show <id>')
+  .description('Show details of a review item')
+  .action(reviewShowCommand);
+
+review
+  .command('approve <id>')
+  .description('Mark a review item as correct (no action needed)')
+  .action(reviewApproveCommand);
+
+review
+  .command('dismiss <id>')
+  .description('Dismiss a review item without action')
+  .action(reviewDismissCommand);
+
+review
+  .command('stats')
+  .description('Show review queue statistics')
+  .action(reviewStatsCommand);
+
+review
+  .command('clear')
+  .description('Clear the entire review queue')
+  .action(reviewClearCommand);
+
+// =============================================================================
+// Maintenance Commands (Correction Lifecycle)
+// =============================================================================
+
+/**
+ * Corrections maintain command - run lifecycle maintenance
+ */
+async function correctionsMaintainCommand(
+  options: { dryRun?: boolean; verbose?: boolean }
+): Promise<void> {
+  try {
+    console.log(chalk.cyan.bold('\n═══ Correction Maintenance ═══\n'));
+
+    // Show preview stats first
+    const stats = await getMaintenanceStats(getCorrectionsBackend());
+    console.log(chalk.blue('Current State:'));
+    console.log(`  Active: ${chalk.yellow(stats.active.toString())}`);
+    console.log(`  Archived: ${chalk.gray(stats.archived.toString())}`);
+    console.log(`  Pending Decay: ${chalk.yellow(stats.pendingDecay.toString())}`);
+    console.log(`  Pending Archive: ${chalk.red(stats.pendingArchive.toString())}`);
+    console.log(`  Pending Promote: ${chalk.green(stats.pendingPromote.toString())}`);
+    console.log('');
+
+    if (options.dryRun) {
+      console.log(chalk.yellow('DRY RUN - No changes will be made\n'));
+    }
+
+    const report = await runMaintenance(
+      getCorrectionsBackend(),
+      { dryRun: options.dryRun ?? false, verbose: options.verbose ?? false }
+    );
+
+    console.log(formatMaintenanceReport(report));
+
+    if (!options.dryRun && (report.decayed > 0 || report.archived > 0 || report.promoted > 0)) {
+      console.log('');
+      console.log(chalk.green('✓ Maintenance completed successfully'));
+    }
+  } catch (error: any) {
+    console.error(chalk.red(`Error: ${error.message}`));
+    process.exit(1);
+  }
+}
+
+/**
+ * Corrections archived command - list archived corrections
+ */
+async function correctionsArchivedCommand(): Promise<void> {
+  try {
+    console.log(chalk.cyan.bold('\n═══ Archived Corrections ═══\n'));
+
+    const archived = await listArchivedCorrections(getCorrectionsBackend());
+
+    if (archived.length === 0) {
+      console.log(chalk.gray('No archived corrections.'));
+      return;
+    }
+
+    console.log(chalk.blue(`Found ${archived.length} archived correction(s):\n`));
+
+    for (const c of archived) {
+      console.log(chalk.bold(`ID: ${c.id.slice(0, 8)}...`));
+      console.log(`  Step: ${chalk.cyan(c.step_name)}`);
+      console.log(`  Pattern: ${c.pattern}`);
+      console.log(`  Reason: ${chalk.yellow(c.archived_reason || 'Unknown')}`);
+      console.log(`  Archived: ${c.archived_at || 'Unknown'}`);
+      console.log(`  Stats: ${c.times_applied}x applied, ${((c.success_rate ?? 0) * 100).toFixed(0)}% success`);
+      console.log('');
+    }
+
+    console.log(chalk.gray('Use "corrections restore <id>" to restore an archived correction.'));
+  } catch (error: any) {
+    console.error(chalk.red(`Error: ${error.message}`));
+    process.exit(1);
+  }
+}
+
+/**
+ * Corrections restore command - restore an archived correction
+ */
+async function correctionsRestoreCommand(id: string): Promise<void> {
+  try {
+    console.log(chalk.cyan.bold('\n═══ Restore Correction ═══\n'));
+
+    await restoreArchivedCorrection(getCorrectionsBackend(), id);
+
+    console.log(chalk.green(`✓ Correction ${id.slice(0, 8)}... restored to active status`));
+  } catch (error: any) {
+    console.error(chalk.red(`Error: ${error.message}`));
+    process.exit(1);
+  }
+}
+
+// =============================================================================
+// Review Queue Commands (Active Learning)
+// =============================================================================
+
+/**
+ * Review list command - show review queue items
+ */
+async function reviewListCommand(options: { pending?: boolean }): Promise<void> {
+  try {
+    console.log(chalk.cyan.bold('\n═══ Review Queue ═══\n'));
+
+    const items = options.pending
+      ? await getPendingReviews()
+      : await getReviewQueue();
+
+    if (items.length === 0) {
+      console.log(chalk.gray('No items in the review queue.'));
+      console.log(chalk.gray('Run evaluation with --active-learning to populate the queue.'));
+      return;
+    }
+
+    console.log(chalk.blue(`${items.length} item(s) in queue:\n`));
+
+    for (const item of items) {
+      const statusColor = item.status === 'pending' ? chalk.yellow : chalk.gray;
+      console.log(`${statusColor(`[${item.status.toUpperCase()}]`)} ${chalk.bold(item.id.slice(0, 8))}...`);
+      console.log(`  Step: ${chalk.cyan(item.step)}`);
+      console.log(`  Test: ${item.testCaseId || 'N/A'}`);
+      console.log(`  Uncertainty: ${chalk.yellow((item.uncertainty.combinedUncertainty * 100).toFixed(0) + '%')}`);
+      console.log(`  Self-Confidence: ${(item.uncertainty.selfConfidence * 100).toFixed(0)}%`);
+      console.log(`  Novelty: ${(item.uncertainty.noveltyScore * 100).toFixed(0)}%`);
+      console.log(`  Created: ${item.created_at}`);
+      console.log('');
+    }
+  } catch (error: any) {
+    console.error(chalk.red(`Error: ${error.message}`));
+    process.exit(1);
+  }
+}
+
+/**
+ * Review show command - show details of a review item
+ */
+async function reviewShowCommand(id: string): Promise<void> {
+  try {
+    console.log(chalk.cyan.bold('\n═══ Review Item Details ═══\n'));
+
+    const item = await getReviewItem(id);
+
+    if (!item) {
+      console.log(chalk.red(`Review item not found: ${id}`));
+      process.exit(1);
+    }
+
+    console.log(chalk.bold(`ID: ${item.id}`));
+    console.log(`Status: ${item.status}`);
+    console.log(`Step: ${chalk.cyan(item.step)}`);
+    console.log(`Test Case: ${item.testCaseId || 'N/A'}`);
+    console.log(`Created: ${item.created_at}`);
+    console.log('');
+
+    console.log(chalk.green('Uncertainty Assessment:'));
+    console.log(`  Combined: ${chalk.yellow((item.uncertainty.combinedUncertainty * 100).toFixed(0) + '%')}`);
+    console.log(`  Self-Confidence: ${(item.uncertainty.selfConfidence * 100).toFixed(0)}%`);
+    console.log(`  Novelty: ${(item.uncertainty.noveltyScore * 100).toFixed(0)}%`);
+    console.log(`  Flag for Review: ${item.uncertainty.flagForReview}`);
+    console.log('');
+
+    if (item.uncertainty.reasons.length > 0) {
+      console.log(chalk.green('Reasons:'));
+      for (const reason of item.uncertainty.reasons) {
+        console.log(`  • ${reason}`);
+      }
+      console.log('');
+    }
+
+    console.log(chalk.green('Output:'));
+    console.log(JSON.stringify(item.output, null, 2).slice(0, 1000));
+
+    console.log('');
+    console.log(chalk.gray('Actions:'));
+    console.log(chalk.gray(`  approve: npm run cli review approve ${id}`));
+    console.log(chalk.gray(`  dismiss: npm run cli review dismiss ${id}`));
+  } catch (error: any) {
+    console.error(chalk.red(`Error: ${error.message}`));
+    process.exit(1);
+  }
+}
+
+/**
+ * Review approve command - mark item as correct
+ */
+async function reviewApproveCommand(id: string): Promise<void> {
+  try {
+    await approveReviewItem(id);
+    console.log(chalk.green(`✓ Review item ${id.slice(0, 8)}... approved (output was correct)`));
+  } catch (error: any) {
+    console.error(chalk.red(`Error: ${error.message}`));
+    process.exit(1);
+  }
+}
+
+/**
+ * Review dismiss command - dismiss item without action
+ */
+async function reviewDismissCommand(id: string): Promise<void> {
+  try {
+    await dismissReviewItem(id);
+    console.log(chalk.green(`✓ Review item ${id.slice(0, 8)}... dismissed`));
+  } catch (error: any) {
+    console.error(chalk.red(`Error: ${error.message}`));
+    process.exit(1);
+  }
+}
+
+/**
+ * Review stats command - show queue statistics
+ */
+async function reviewStatsCommand(): Promise<void> {
+  try {
+    console.log(chalk.cyan.bold('\n═══ Review Queue Statistics ═══\n'));
+
+    const stats = await getReviewQueueStats();
+
+    console.log(`Total Items: ${chalk.yellow(stats.total.toString())}`);
+    console.log(`  Pending: ${chalk.yellow(stats.pending.toString())}`);
+    console.log(`  Reviewed: ${chalk.green(stats.reviewed.toString())}`);
+    console.log(`  Dismissed: ${chalk.gray(stats.dismissed.toString())}`);
+    console.log('');
+
+    if (Object.keys(stats.byStep).length > 0) {
+      console.log(chalk.green('By Step:'));
+      for (const [step, count] of Object.entries(stats.byStep)) {
+        console.log(`  ${step}: ${count}`);
+      }
+    }
+  } catch (error: any) {
+    console.error(chalk.red(`Error: ${error.message}`));
+    process.exit(1);
+  }
+}
+
+/**
+ * Review clear command - clear the queue
+ */
+async function reviewClearCommand(): Promise<void> {
+  try {
+    await clearReviewQueue();
+    console.log(chalk.green('✓ Review queue cleared'));
+  } catch (error: any) {
+    console.error(chalk.red(`Error: ${error.message}`));
+    process.exit(1);
+  }
+}
+
+// =============================================================================
+// Corrections Cluster Command
+// =============================================================================
 
 /**
  * Corrections cluster command - group similar corrections

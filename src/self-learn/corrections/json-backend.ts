@@ -101,6 +101,7 @@ export class CorrectionsJsonBackend implements CorrectionsBackend {
       pattern_embedding: undefined, // Will be added in Phase 2 with embeddings
       times_applied: 0,
       success_rate: 0,
+      archived: false,
       created_at: now,
       updated_at: now,
     };
@@ -114,11 +115,16 @@ export class CorrectionsJsonBackend implements CorrectionsBackend {
     );
 
     if (existingIdx >= 0) {
-      // Update existing correction
-      correction.id = index.corrections[existingIdx].id;
-      correction.created_at = index.corrections[existingIdx].created_at;
-      correction.times_applied = index.corrections[existingIdx].times_applied;
-      correction.success_rate = index.corrections[existingIdx].success_rate;
+      // Update existing correction - preserve some fields
+      const existing = index.corrections[existingIdx];
+      correction.id = existing.id;
+      correction.created_at = existing.created_at;
+      correction.times_applied = existing.times_applied;
+      correction.success_rate = existing.success_rate;
+      correction.archived = existing.archived;
+      correction.archived_at = existing.archived_at;
+      correction.archived_reason = existing.archived_reason;
+      correction.last_maintained_at = existing.last_maintained_at;
       index.corrections[existingIdx] = correction;
     } else {
       // Add new correction
@@ -133,12 +139,15 @@ export class CorrectionsJsonBackend implements CorrectionsBackend {
    * Search for relevant corrections by query and step
    * Note: Full semantic search will be added in Phase 2 with embeddings
    * For now, uses simple keyword matching on pattern field
+   * Excludes archived corrections
    */
   async search(query: string, stepName: string, limit = 3): Promise<Correction[]> {
     const index = this.loadIndex();
 
-    // Filter by step first
-    const stepCorrections = index.corrections.filter((c) => c.step_name === stepName);
+    // Filter by step first, exclude archived
+    const stepCorrections = index.corrections.filter(
+      (c) => c.step_name === stepName && !c.archived
+    );
     if (stepCorrections.length === 0) return [];
 
     // If embeddings exist, use cosine similarity
@@ -272,5 +281,74 @@ export class CorrectionsJsonBackend implements CorrectionsBackend {
       byStep,
       updatedAt: index.updated_at,
     };
+  }
+
+  // =========================================================================
+  // Maintenance Methods (for correction lifecycle management)
+  // =========================================================================
+
+  /**
+   * Get a correction by ID
+   */
+  async getById(id: string): Promise<Correction | null> {
+    const index = this.loadIndex();
+    return index.corrections.find((c) => c.id === id) ?? null;
+  }
+
+  /**
+   * Archive a correction (mark as inactive)
+   */
+  async archiveCorrection(id: string, reason: string): Promise<void> {
+    const index = this.loadIndex();
+    const correction = index.corrections.find((c) => c.id === id);
+
+    if (correction) {
+      correction.archived = true;
+      correction.archived_at = new Date().toISOString();
+      correction.archived_reason = reason;
+      correction.last_maintained_at = new Date().toISOString();
+      correction.updated_at = new Date().toISOString();
+      this.saveIndex();
+    }
+  }
+
+  /**
+   * Restore an archived correction to active status
+   */
+  async restoreCorrection(id: string): Promise<void> {
+    const index = this.loadIndex();
+    const correction = index.corrections.find((c) => c.id === id);
+
+    if (correction) {
+      correction.archived = false;
+      correction.archived_at = undefined;
+      correction.archived_reason = undefined;
+      correction.last_maintained_at = new Date().toISOString();
+      correction.updated_at = new Date().toISOString();
+      this.saveIndex();
+    }
+  }
+
+  /**
+   * List all archived corrections
+   */
+  async listArchived(): Promise<Correction[]> {
+    const index = this.loadIndex();
+    return index.corrections.filter((c) => c.archived === true);
+  }
+
+  /**
+   * Update confidence value for a correction
+   */
+  async updateConfidence(id: string, newConfidence: number): Promise<void> {
+    const index = this.loadIndex();
+    const correction = index.corrections.find((c) => c.id === id);
+
+    if (correction) {
+      correction.confidence = newConfidence;
+      correction.last_maintained_at = new Date().toISOString();
+      correction.updated_at = new Date().toISOString();
+      this.saveIndex();
+    }
   }
 }

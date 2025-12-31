@@ -220,39 +220,71 @@ export interface GetCorrectionsContextOptions {
 }
 
 /**
- * Format a single correction as a few-shot example for the LLM
+ * Truncate text for prompt inclusion (avoid token bloat)
+ */
+function truncateForPrompt(text: string, maxChars: number = 800): string {
+  if (text.length <= maxChars) return text;
+  return text.slice(0, maxChars) + '\n... [truncated]';
+}
+
+/**
+ * Format a single correction as a contrastive few-shot example for the LLM
+ *
+ * Uses contrastive learning format showing both:
+ * - ❌ What NOT to do (incorrect output)
+ * - ✅ What TO do (correct output)
+ *
+ * This helps the LLM understand boundaries better than only showing correct examples.
  */
 export function formatCorrectionForPrompt(correction: Correction): string {
-  const lines = [
-    `## Learned Correction: ${correction.pattern}`,
-    '',
-    `**Issue Type:** ${correction.issue_type.replace('_', ' ')}`,
-    '',
-    `**When this occurs:**`,
-    correction.input_summary,
-    '',
-    `**Expected Behavior:**`,
-    correction.expected_behavior,
-    '',
-    `**How to Fix:**`,
-    correction.correction,
-  ];
+  const lines: string[] = [];
 
-  // Include example fix if available
-  if (correction.example_fix) {
-    lines.push('', `**Example Correct Output:**`);
-    if (typeof correction.example_fix === 'object') {
-      lines.push('```json', JSON.stringify(correction.example_fix, null, 2), '```');
-    } else {
-      lines.push(String(correction.example_fix));
-    }
+  // Header with criterion ID if available
+  const headerSuffix = correction.criteria_id ? ` (${correction.criteria_id})` : '';
+  lines.push(`## 🔧 Past Mistake: ${correction.pattern}${headerSuffix}`);
+  lines.push('');
+
+  // Context: when this occurs
+  lines.push(`**Scenario:** ${correction.input_summary}`);
+  lines.push('');
+
+  // Contrastive section: What NOT to do
+  if (correction.incorrect_output) {
+    lines.push('### ❌ INCORRECT OUTPUT (What NOT to do):');
+    const incorrectStr = typeof correction.incorrect_output === 'object'
+      ? JSON.stringify(correction.incorrect_output, null, 2)
+      : String(correction.incorrect_output);
+    lines.push('```json');
+    lines.push(truncateForPrompt(incorrectStr));
+    lines.push('```');
+    lines.push('');
   }
+
+  // Contrastive section: What TO do
+  if (correction.example_fix) {
+    lines.push('### ✅ CORRECT OUTPUT (What to produce):');
+    const correctStr = typeof correction.example_fix === 'object'
+      ? JSON.stringify(correction.example_fix, null, 2)
+      : String(correction.example_fix);
+    lines.push('```json');
+    lines.push(truncateForPrompt(correctStr));
+    lines.push('```');
+    lines.push('');
+  }
+
+  // Explanation: Why this matters
+  lines.push(`### 📝 Why This Matters:`);
+  lines.push(`**Issue Type:** ${correction.issue_type.replace(/_/g, ' ')}`);
+  lines.push('');
+  lines.push(`**Expected Behavior:** ${correction.expected_behavior}`);
+  lines.push('');
+  lines.push(`**Fix:** ${correction.correction}`);
 
   return lines.join('\n');
 }
 
 /**
- * Format multiple corrections as a prompt section
+ * Format multiple corrections as a prompt section with contrastive examples
  */
 export function formatCorrectionsSection(corrections: Correction[]): string {
   if (corrections.length === 0) {
@@ -261,10 +293,14 @@ export function formatCorrectionsSection(corrections: Correction[]): string {
 
   const header = [
     '---',
-    '# Learned Corrections',
+    '# 🎯 Learned Corrections (Contrastive Examples)',
     '',
-    'The following corrections were learned from previous evaluation failures.',
-    'Apply these patterns when you see similar inputs:',
+    'The following corrections show **past mistakes** to help you avoid them.',
+    'Each includes:',
+    '- ❌ **INCORRECT** - What NOT to produce',
+    '- ✅ **CORRECT** - What you SHOULD produce instead',
+    '',
+    'Study these patterns carefully to avoid repeating the same mistakes:',
     '',
   ];
 

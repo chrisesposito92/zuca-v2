@@ -168,6 +168,11 @@ CREATE TABLE IF NOT EXISTS corrections (
     confidence FLOAT DEFAULT 1.0,
     times_applied INTEGER DEFAULT 0,
     success_rate FLOAT DEFAULT 0.0,
+    -- Lifecycle management fields
+    archived BOOLEAN DEFAULT FALSE,
+    archived_at TIMESTAMPTZ,
+    archived_reason TEXT,
+    last_maintained_at TIMESTAMPTZ,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -190,6 +195,8 @@ CREATE INDEX IF NOT EXISTS idx_corrections_step_name ON corrections(step_name);
 CREATE INDEX IF NOT EXISTS idx_corrections_pattern ON corrections(pattern);
 CREATE INDEX IF NOT EXISTS idx_corrections_test_case ON corrections(test_case_id);
 CREATE UNIQUE INDEX IF NOT EXISTS idx_corrections_unique ON corrections(test_case_id, step_name, pattern);
+CREATE INDEX IF NOT EXISTS idx_corrections_archived ON corrections(archived);
+CREATE INDEX IF NOT EXISTS idx_corrections_active ON corrections(step_name) WHERE archived = FALSE;
 
 -- Vector similarity index for corrections embeddings
 CREATE INDEX IF NOT EXISTS idx_corrections_embedding ON corrections

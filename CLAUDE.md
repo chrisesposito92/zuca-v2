@@ -54,7 +54,9 @@ Automated feedback loop where the pipeline learns from evaluation failures:
 - **Evaluation Criteria** (`data/evaluation-criteria/*.yaml`) - Behavioral rules per step
 - **LLM Judge** (`src/self-learn/judge/`) - Evaluates outputs against criteria
 - **Corrections Store** - Dual backend: JSON (local dev) or Postgres (production)
-- **Injector** (`src/self-learn/injector/`) - Injects corrections as few-shot examples
+- **Injector** (`src/self-learn/injector/`) - Injects corrections as contrastive few-shot examples
+- **Maintenance** (`src/self-learn/corrections/maintenance.ts`) - Correction lifecycle: decay, archive, promote
+- **Active Learning** (`src/self-learn/active-learning/`) - Uncertainty sampling + review queue
 - **Evolution** (`src/self-learn/evolution/`) - Pattern analysis + prompt improvement suggestions (dual backend: JSON/Postgres)
 
 ### Key Files
@@ -91,6 +93,19 @@ npm run cli corrections list      # List stored corrections
 npm run cli corrections summary   # Show pattern statistics
 npm run cli corrections cluster <step>  # Cluster similar corrections
 npm run cli corrections cluster <step> --threshold 0.9  # Custom similarity
+npm run cli corrections maintain  # Run lifecycle maintenance (decay/archive/promote)
+npm run cli corrections maintain --dry-run  # Preview without changes
+npm run cli corrections archived  # List archived corrections
+npm run cli corrections restore <id>  # Restore an archived correction
+
+# Active Learning / Review Queue
+npm run cli review list           # List items flagged for review
+npm run cli review list --status pending  # Filter by status
+npm run cli review show <id>      # Show item details
+npm run cli review approve <id>   # Mark item as reviewed (correct output)
+npm run cli review dismiss <id>   # Dismiss item (not worth reviewing)
+npm run cli review stats          # Show queue statistics
+npm run cli review clear          # Clear all items from queue
 
 # Pattern Analysis & Prompt Evolution (Phase 4)
 npm run cli prompts analyze       # Analyze failure patterns
@@ -144,6 +159,63 @@ The self-learning system can export training data for fine-tuning small language
 ```
 
 Compatible with HuggingFace TRL/SFTTrainer and Unsloth.
+
+### Correction Lifecycle Management
+Corrections are automatically managed through decay, archiving, and promotion:
+
+**Decay**: Corrections that haven't been applied recently lose confidence over time
+- After 30 days without use + fewer than 3 applies → confidence × 0.9
+
+**Archive**: Low-performing corrections are archived (hidden from injection)
+- Requires 10+ applies with <20% success rate → moved to archive
+- Archived corrections can be restored with `npm run cli corrections restore <id>`
+
+**Promote**: High-performing corrections gain confidence
+- Requires 5+ applies with >80% success rate → confidence × 1.1 (max 1.0)
+
+Run maintenance manually with `npm run cli corrections maintain` or use `--dry-run` to preview changes.
+
+### Contrastive Examples
+Corrections are injected as contrastive examples showing both incorrect and correct outputs:
+
+```
+## 🔧 Past Mistake: Missing discount validation
+
+**Scenario:** Usage-based subscription with promotional discounts
+
+### ❌ INCORRECT OUTPUT (What NOT to do):
+Applied discount to usage charges without checking eligibility...
+
+### ✅ CORRECT OUTPUT (What to produce):
+Validated discount eligibility before application...
+
+**Lesson:** Always validate discount applicability for charge types
+```
+
+This format helps the LLM understand boundaries by showing both what to avoid and what to produce.
+
+### Active Learning / Uncertainty Sampling
+Outputs are assessed for uncertainty using two signals:
+
+1. **Self-Assessment**: LLM rates its own confidence (0-1)
+2. **Novelty Score**: How different from known patterns (0-1)
+
+Combined uncertainty = (1 - confidence) × 0.6 + novelty × 0.4
+
+When combined uncertainty exceeds threshold (default 0.6), items are added to the review queue for human evaluation.
+
+**Configuration:**
+```bash
+ENABLE_ACTIVE_LEARNING=true              # Enable uncertainty sampling
+ACTIVE_LEARNING_THRESHOLD=0.6            # Combined uncertainty threshold
+ACTIVE_LEARNING_NOVELTY_WEIGHT=0.4       # Weight for novelty score
+ACTIVE_LEARNING_CONFIDENCE_WEIGHT=0.6    # Weight for confidence
+ACTIVE_LEARNING_MODEL=gpt-4o-mini        # Model for self-assessment
+ACTIVE_LEARNING_SELF_ASSESSMENT=true     # Enable LLM self-assessment
+ACTIVE_LEARNING_NOVELTY=true             # Enable novelty scoring
+```
+
+**Review queue storage:** `data/review-queue.json` (local development)
 
 ### Adding New Criteria
 1. Create YAML file in `data/evaluation-criteria/<step-name>.yaml`

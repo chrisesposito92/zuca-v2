@@ -138,6 +138,12 @@ npm run cli corrections summary
 # Filter corrections by step
 npm run cli corrections list --step billings
 
+# Correction lifecycle maintenance (decay, archive, promote)
+npm run cli corrections maintain           # Run maintenance
+npm run cli corrections maintain --dry-run # Preview without changes
+npm run cli corrections archived           # List archived corrections
+npm run cli corrections restore <id>       # Restore archived correction
+
 # Analyze failure patterns for prompt improvement
 npm run cli prompts analyze
 npm run cli prompts analyze --step billings
@@ -158,6 +164,14 @@ npm run cli -- self-improve --suite advanced-scenarios
 
 # Build custom test suites from UC generator output (see "Generate Use Cases" above)
 npm run uc:to-suite -- generated-uc/ data/test-suites/real-world-scenarios.yaml
+
+# Active learning / Review queue (flag uncertain outputs for human review)
+npm run cli review list               # List items flagged for review
+npm run cli review list --status pending  # Filter by status
+npm run cli review show <id>          # Show item details
+npm run cli review approve <id>       # Mark as reviewed (correct)
+npm run cli review dismiss <id>       # Dismiss (not worth reviewing)
+npm run cli review stats              # Show queue statistics
 ```
 
 See `docs/FEATURE-SELF-LEARNING.md` for full architecture and implementation details.

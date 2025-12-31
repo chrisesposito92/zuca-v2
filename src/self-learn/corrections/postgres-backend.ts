@@ -132,6 +132,11 @@ interface CorrectionRow {
   confidence: number;
   times_applied: number;
   success_rate: number;
+  // Archive fields
+  archived: boolean | null;
+  archived_at: Date | null;
+  archived_reason: string | null;
+  last_maintained_at: Date | null;
   created_at: Date;
   updated_at: Date;
 }
@@ -155,6 +160,11 @@ function rowToCorrection(row: CorrectionRow): Correction {
     confidence: row.confidence,
     times_applied: row.times_applied,
     success_rate: row.success_rate,
+    // Archive fields
+    archived: row.archived ?? false,
+    archived_at: row.archived_at?.toISOString(),
+    archived_reason: row.archived_reason ?? undefined,
+    last_maintained_at: row.last_maintained_at?.toISOString(),
     created_at: row.created_at.toISOString(),
     updated_at: row.updated_at.toISOString(),
   };
@@ -228,6 +238,7 @@ export class CorrectionsPostgresBackend implements CorrectionsBackend {
 
   /**
    * Search for relevant corrections using vector similarity or keyword matching
+   * Excludes archived corrections by default
    */
   async search(query: string, stepName: string, limit = 3): Promise<Correction[]> {
     debugLog('Postgres: searching corrections', { query: query.substring(0, 50), stepName, limit });
@@ -244,6 +255,7 @@ export class CorrectionsPostgresBackend implements CorrectionsBackend {
           FROM corrections
           WHERE step_name = ${stepName}
             AND pattern_embedding IS NOT NULL
+            AND (archived IS NULL OR archived = false)
             AND 1 - (pattern_embedding <=> ${embeddingStr}::vector) >= 0.3
           ORDER BY pattern_embedding <=> ${embeddingStr}::vector
           LIMIT ${limit}
@@ -263,6 +275,7 @@ export class CorrectionsPostgresBackend implements CorrectionsBackend {
       SELECT *
       FROM corrections
       WHERE step_name = ${stepName}
+        AND (archived IS NULL OR archived = false)
         AND (
           pattern ILIKE ${'%' + query + '%'}
           OR input_summary ILIKE ${'%' + query + '%'}
@@ -403,5 +416,83 @@ export class CorrectionsPostgresBackend implements CorrectionsBackend {
       byStep,
       withEmbeddings: parseInt(embeddingsResult.rows[0]?.count ?? '0', 10),
     };
+  }
+
+  // =========================================================================
+  // Maintenance Methods (for correction lifecycle management)
+  // =========================================================================
+
+  /**
+   * Get a correction by ID
+   */
+  async getById(id: string): Promise<Correction | null> {
+    const result = await sql<CorrectionRow>`
+      SELECT * FROM corrections WHERE id = ${id}::uuid
+    `;
+    return result.rows[0] ? rowToCorrection(result.rows[0]) : null;
+  }
+
+  /**
+   * Archive a correction (mark as inactive)
+   */
+  async archiveCorrection(id: string, reason: string): Promise<void> {
+    debugLog('Postgres: archiving correction', { id, reason });
+
+    await sql`
+      UPDATE corrections
+      SET
+        archived = true,
+        archived_at = NOW(),
+        archived_reason = ${reason},
+        last_maintained_at = NOW(),
+        updated_at = NOW()
+      WHERE id = ${id}::uuid
+    `;
+  }
+
+  /**
+   * Restore an archived correction to active status
+   */
+  async restoreCorrection(id: string): Promise<void> {
+    debugLog('Postgres: restoring correction', { id });
+
+    await sql`
+      UPDATE corrections
+      SET
+        archived = false,
+        archived_at = NULL,
+        archived_reason = NULL,
+        last_maintained_at = NOW(),
+        updated_at = NOW()
+      WHERE id = ${id}::uuid
+    `;
+  }
+
+  /**
+   * List all archived corrections
+   */
+  async listArchived(): Promise<Correction[]> {
+    const result = await sql<CorrectionRow>`
+      SELECT * FROM corrections
+      WHERE archived = true
+      ORDER BY archived_at DESC
+    `;
+    return result.rows.map(rowToCorrection);
+  }
+
+  /**
+   * Update confidence value for a correction
+   */
+  async updateConfidence(id: string, newConfidence: number): Promise<void> {
+    debugLog('Postgres: updating confidence', { id, newConfidence });
+
+    await sql`
+      UPDATE corrections
+      SET
+        confidence = ${newConfidence},
+        last_maintained_at = NOW(),
+        updated_at = NOW()
+      WHERE id = ${id}::uuid
+    `;
   }
 }

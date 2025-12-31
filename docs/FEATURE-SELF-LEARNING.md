@@ -214,7 +214,7 @@ interface Correction {
 }
 ```
 
-## Database Schema (Postgres - Phase 4)
+## Database Schema (Postgres - Phase 5)
 
 ```sql
 -- Corrections table
@@ -234,7 +234,13 @@ CREATE TABLE corrections (
     confidence FLOAT DEFAULT 1.0,
     times_applied INT DEFAULT 0,
     success_rate FLOAT DEFAULT 0.0,
-    created_at TIMESTAMP DEFAULT NOW()
+    -- Lifecycle management fields (Phase 6)
+    archived BOOLEAN DEFAULT FALSE,
+    archived_at TIMESTAMPTZ,
+    archived_reason TEXT,
+    last_maintained_at TIMESTAMPTZ,
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NOW()
 );
 
 -- Prompt suggestions table
@@ -247,6 +253,24 @@ CREATE TABLE prompt_suggestions (
     status VARCHAR(20) DEFAULT 'pending',
     created_at TIMESTAMP DEFAULT NOW()
 );
+```
+
+### Migration for Existing Databases
+
+If you have an existing corrections table, run these ALTER statements:
+
+```sql
+-- Add lifecycle management fields to corrections table
+ALTER TABLE corrections
+ADD COLUMN IF NOT EXISTS archived BOOLEAN DEFAULT FALSE,
+ADD COLUMN IF NOT EXISTS archived_at TIMESTAMPTZ,
+ADD COLUMN IF NOT EXISTS archived_reason TEXT,
+ADD COLUMN IF NOT EXISTS last_maintained_at TIMESTAMPTZ,
+ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ DEFAULT NOW();
+
+-- Add indexes for efficient filtering
+CREATE INDEX IF NOT EXISTS idx_corrections_archived ON corrections(archived);
+CREATE INDEX IF NOT EXISTS idx_corrections_active ON corrections(step_name) WHERE archived = FALSE;
 ```
 
 ## Critical Files to Modify (Future Phases)

@@ -23,6 +23,16 @@ export {
   clusterAllCorrections,
 } from './clustering';
 
+// Re-export maintenance functions
+export {
+  runMaintenance,
+  listArchivedCorrections,
+  restoreArchivedCorrection,
+  getMaintenanceStats,
+  formatMaintenanceReport,
+  DEFAULT_THRESHOLDS,
+} from './maintenance';
+
 // Re-export cache utilities
 export { clearEmbeddingCache };
 
