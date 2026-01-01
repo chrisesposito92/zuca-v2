@@ -256,11 +256,21 @@ export async function evaluateOutput(
       return result.structured;
     }
 
-    // Fallback if structured output fails
+    // Throw error if structured output fails so ensemble can handle it properly
+    // This allows the ensemble to use other judges instead of counting a fallback as a valid result
     debugLog('Judge LLM failed to return structured output');
-    return createFallbackResult(criteriaToCheck, 'LLM failed to return structured evaluation');
+    throw new Error('LLM failed to return structured evaluation - no structured output received');
   } catch (error) {
     debugLog(`Judge LLM error: ${error}`);
+
+    // Re-throw structured output failures so ensemble can handle them properly
+    // (use the other judge instead of counting a fallback as valid)
+    if (error instanceof Error && error.message.includes('failed to return structured evaluation')) {
+      throw error;
+    }
+
+    // For other errors (API errors, network issues), return a fallback result
+    // This allows evaluation to continue even if there are transient issues
     return createFallbackResult(
       criteriaToCheck,
       `Evaluation error: ${error instanceof Error ? error.message : 'Unknown error'}`

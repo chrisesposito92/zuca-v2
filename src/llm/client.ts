@@ -860,7 +860,12 @@ async function completeGemini<T = unknown>(
                 structured = JSON.parse(text) as T;
               } catch (parseError) {
                 debugLog('Failed to parse Gemini structured output:', parseError);
+                debugLog('Gemini response text length:', text.length);
+                debugLog('Gemini response text preview:', text.substring(0, 500));
+                debugLog('Gemini response text end:', text.substring(Math.max(0, text.length - 200)));
               }
+            } else if (responseSchema && !text) {
+              debugLog('Gemini returned empty text with responseSchema. Parts:', JSON.stringify(parts?.map(p => Object.keys(p))));
             }
 
             const usage = response.usageMetadata
