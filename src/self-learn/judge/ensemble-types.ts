@@ -146,6 +146,8 @@ export function createEnsembleConfig(
     consensusThreshold: options.consensusThreshold ?? 0.66,
     parallel: options.parallel ?? true,
     tolerateFailures: options.tolerateFailures ?? true,
-    minJudgesRequired: options.minJudgesRequired ?? Math.max(2, Math.ceil(models.length / 2)),
+    // minJudgesRequired should never exceed the number of judges
+    // With 1 judge: require 1, with 2: require 2, with 3+: require majority
+    minJudgesRequired: options.minJudgesRequired ?? Math.min(models.length, Math.max(1, Math.ceil(models.length / 2))),
   };
 }

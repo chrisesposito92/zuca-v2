@@ -137,6 +137,36 @@ function formatCriteriaForPrompt(criteria: Criterion[]): string {
 }
 
 /**
+ * Maximum characters for output JSON in evaluation prompts.
+ * Very large outputs can cause LLM response truncation.
+ */
+const MAX_OUTPUT_CHARS = 75000;
+
+/**
+ * Truncate output for evaluation if too large
+ */
+function truncateOutputForEvaluation(output: unknown): string {
+  const fullJson = JSON.stringify(output, null, 2);
+
+  if (fullJson.length <= MAX_OUTPUT_CHARS) {
+    return fullJson;
+  }
+
+  // For large outputs, try to preserve structure while truncating content
+  debugLog(`Truncating large output for evaluation: ${fullJson.length} chars -> ${MAX_OUTPUT_CHARS} chars`);
+
+  // First, try compact JSON (no formatting)
+  const compactJson = JSON.stringify(output);
+  if (compactJson.length <= MAX_OUTPUT_CHARS) {
+    return compactJson;
+  }
+
+  // If still too large, truncate with indication
+  const truncated = compactJson.substring(0, MAX_OUTPUT_CHARS - 100);
+  return truncated + '\n... [OUTPUT TRUNCATED - original was ' + compactJson.length + ' chars]';
+}
+
+/**
  * Build the user message for evaluation
  */
 function buildUserMessage(
@@ -155,7 +185,7 @@ function buildUserMessage(
     '',
     '## Output to Evaluate',
     '```json',
-    JSON.stringify(output, null, 2),
+    truncateOutputForEvaluation(output),
     '```',
     '',
     '## Criteria to Check',
@@ -216,6 +246,9 @@ export async function evaluateOutput(
       responseSchema: judgeResultSchema,
       reasoningEffort: options.reasoningEffort ?? 'medium',
       model: options.model,
+      // Allow enough tokens for structured evaluation response
+      // Each criterion needs ~200-500 tokens for explanation + correction
+      maxTokens: 25000,
     });
 
     if (result.structured) {
