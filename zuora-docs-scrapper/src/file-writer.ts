@@ -1,8 +1,16 @@
 import fs from 'fs/promises';
 import path from 'path';
 import crypto from 'crypto';
-import { ScrapedPage, ScrapeProgress } from './types.js';
+import { ScrapedPage, ScrapeProgress, ProductType } from './types.js';
 import { MarkdownConverter } from './markdown-converter.js';
+
+// All product types for directory creation and scanning
+const ALL_PRODUCTS: ProductType[] = [
+  'zuora-billing',
+  'zuora-platform',
+  'zuora-revenue',
+  'zuora-developer',
+];
 
 const OUTPUT_DIR = path.join(process.cwd(), 'output');
 const LOGS_DIR = path.join(process.cwd(), 'logs');
@@ -21,22 +29,33 @@ export class FileWriter {
 
   async init(): Promise<void> {
     // Create output directories for each product
-    await fs.mkdir(path.join(OUTPUT_DIR, 'zuora-billing'), { recursive: true });
-    await fs.mkdir(path.join(OUTPUT_DIR, 'zuora-platform'), { recursive: true });
-    await fs.mkdir(path.join(OUTPUT_DIR, 'zuora-revenue'), { recursive: true });
+    for (const product of ALL_PRODUCTS) {
+      await fs.mkdir(path.join(OUTPUT_DIR, product), { recursive: true });
+    }
     await fs.mkdir(LOGS_DIR, { recursive: true });
   }
 
   generateFilename(url: string): string {
-    // Extract path from URL
-    // e.g., https://docs.zuora.com/en/zuora-billing/overview/zuora-billing-overview
-    // becomes: overview_zuora-billing-overview.md
-    const urlPath = new URL(url).pathname;
+    const parsedUrl = new URL(url);
+    const urlPath = parsedUrl.pathname;
     const segments = urlPath.split('/').filter(Boolean);
 
-    // Remove 'en' and product prefix
-    // ['en', 'zuora-billing', 'overview', 'zuora-billing-overview']
-    const relevantSegments = segments.slice(2); // Skip 'en' and product
+    // Check if this is a developer.zuora.com URL
+    const isDeveloperDocs = parsedUrl.hostname === 'developer.zuora.com';
+
+    let relevantSegments: string[];
+
+    if (isDeveloperDocs) {
+      // developer.zuora.com URLs don't have /en/product/ prefix
+      // e.g., /v1-api-reference/api/operation/POST_Account
+      // Use all segments for the filename
+      relevantSegments = segments;
+    } else {
+      // docs.zuora.com URLs have /en/product/ prefix
+      // e.g., /en/zuora-billing/overview/zuora-billing-overview
+      // Skip 'en' and product (first 2 segments)
+      relevantSegments = segments.slice(2);
+    }
 
     if (relevantSegments.length === 0) {
       return 'index.md';
@@ -112,7 +131,7 @@ export class FileWriter {
   async getCompletedUrls(): Promise<Set<string>> {
     const completed = new Set<string>();
 
-    for (const product of ['zuora-billing', 'zuora-platform', 'zuora-revenue']) {
+    for (const product of ALL_PRODUCTS) {
       const productDir = path.join(OUTPUT_DIR, product);
 
       try {
@@ -145,7 +164,7 @@ export class FileWriter {
   async getScrapedDates(): Promise<Map<string, Date>> {
     const scrapedDates = new Map<string, Date>();
 
-    for (const product of ['zuora-billing', 'zuora-platform', 'zuora-revenue']) {
+    for (const product of ALL_PRODUCTS) {
       const productDir = path.join(OUTPUT_DIR, product);
 
       try {

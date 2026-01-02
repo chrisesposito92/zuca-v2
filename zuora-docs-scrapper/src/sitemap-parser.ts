@@ -1,11 +1,26 @@
 import { parseStringPromise } from 'xml2js';
-import { SitemapEntry } from './types.js';
+import { SitemapEntry, ProductType } from './types.js';
 
-const SITEMAPS = [
-  { url: 'https://docs.zuora.com/en/zuora-billing/sitemap.xml', product: 'zuora-billing' as const },
-  { url: 'https://docs.zuora.com/en/zuora-platform/sitemap.xml', product: 'zuora-platform' as const },
-  { url: 'https://docs.zuora.com/en/zuora-revenue/sitemap.xml', product: 'zuora-revenue' as const },
+const SITEMAPS: Array<{ url: string; product: ProductType }> = [
+  { url: 'https://docs.zuora.com/en/zuora-billing/sitemap.xml', product: 'zuora-billing' },
+  { url: 'https://docs.zuora.com/en/zuora-platform/sitemap.xml', product: 'zuora-platform' },
+  { url: 'https://docs.zuora.com/en/zuora-revenue/sitemap.xml', product: 'zuora-revenue' },
+  { url: 'https://developer.zuora.com/sitemap.xml', product: 'zuora-developer' },
 ];
+
+// URL patterns to exclude from developer.zuora.com
+const EXCLUDED_URL_PATTERNS = [
+  '/blog',            // Blog index and posts - not technical docs
+  '/sdk-changelogs/', // Version-specific changelogs
+];
+
+function shouldIncludeUrl(url: string, product: ProductType): boolean {
+  // Only apply filtering to developer docs
+  if (product !== 'zuora-developer') {
+    return true;
+  }
+  return !EXCLUDED_URL_PATTERNS.some(pattern => url.includes(pattern));
+}
 
 interface SitemapXml {
   urlset: {
@@ -24,18 +39,20 @@ export async function fetchSitemap(sitemapUrl: string): Promise<string> {
   return response.text();
 }
 
-export async function parseSitemap(xml: string, product: SitemapEntry['product']): Promise<SitemapEntry[]> {
+export async function parseSitemap(xml: string, product: ProductType): Promise<SitemapEntry[]> {
   const result = await parseStringPromise(xml) as SitemapXml;
 
   if (!result.urlset?.url) {
     return [];
   }
 
-  return result.urlset.url.map((entry) => ({
-    url: entry.loc[0],
-    lastmod: entry.lastmod?.[0],
-    product,
-  }));
+  return result.urlset.url
+    .map((entry) => ({
+      url: entry.loc[0],
+      lastmod: entry.lastmod?.[0],
+      product,
+    }))
+    .filter((entry) => shouldIncludeUrl(entry.url, product));
 }
 
 export async function getAllUrls(productFilter?: string): Promise<SitemapEntry[]> {

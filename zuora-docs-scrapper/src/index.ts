@@ -3,7 +3,8 @@ import { PageScraper } from './page-scraper.js';
 import { FileWriter } from './file-writer.js';
 import { SitemapEntry, ScrapeProgress } from './types.js';
 
-const DELAY_MS = 100; // 100ms delay between requests (fast mode)
+const DELAY_MS = 100; // 100ms delay between batches
+const PARALLEL_BATCH_SIZE = 10; // Process 10 pages in parallel (conservative for scraping)
 
 interface CliOptions {
   product?: string;
@@ -160,51 +161,74 @@ async function main(): Promise<void> {
     skipped: 0,
   };
 
+  // Estimate based on batch processing (much faster than sequential)
+  const estimatedBatches = Math.ceil(urls.length / PARALLEL_BATCH_SIZE);
+  const estimatedTimeMs = estimatedBatches * (DELAY_MS + 3000); // ~3s per batch avg
+
   console.log('');
   console.log('═══════════════════════════════════════════════════════');
   console.log(`  Starting scrape of ${urls.length} pages`);
-  console.log(`  Estimated time: ${formatDuration(urls.length * (DELAY_MS + 2000))}`);
+  console.log(`  Batch size: ${PARALLEL_BATCH_SIZE} pages in parallel`);
+  console.log(`  Estimated time: ${formatDuration(estimatedTimeMs)}`);
   console.log('═══════════════════════════════════════════════════════');
   console.log('');
 
+  // Helper to process a single page
+  async function processPage(entry: SitemapEntry): Promise<{
+    entry: SitemapEntry;
+    success: boolean;
+    filepath?: string;
+    error?: string;
+  }> {
+    const result = await scraper.scrapePage(entry);
+    if (result.success && result.page) {
+      const filepath = await writer.savePage(result.page);
+      return { entry, success: true, filepath };
+    } else {
+      await writer.logFailed(entry.url, result.error || 'Unknown error');
+      return { entry, success: false, error: result.error };
+    }
+  }
+
   try {
-    for (let i = 0; i < urls.length; i++) {
-      const entry = urls[i];
+    // Process in parallel batches
+    for (let batchStart = 0; batchStart < urls.length; batchStart += PARALLEL_BATCH_SIZE) {
+      const batchEnd = Math.min(batchStart + PARALLEL_BATCH_SIZE, urls.length);
+      const batch = urls.slice(batchStart, batchEnd);
       const elapsed = Date.now() - startTime;
 
       // Progress display
-      const pct = ((i + 1) / urls.length * 100).toFixed(1);
-      const eta = estimateTimeRemaining(i, urls.length, elapsed);
-      console.log(`[${i + 1}/${urls.length}] (${pct}%) ETA: ${eta}`);
-      console.log(`   📄 ${entry.url}`);
+      const progressPct = ((batchEnd) / urls.length * 100).toFixed(1);
+      const eta = estimateTimeRemaining(batchEnd, urls.length, elapsed);
+      console.log(`\n[${batchStart + 1}-${batchEnd}/${urls.length}] (${progressPct}%) ETA: ${eta}`);
 
-      progress.currentUrl = entry.url;
+      // Process batch in parallel
+      const results = await Promise.all(batch.map(entry => processPage(entry)));
 
-      // Scrape the page
-      const result = await scraper.scrapePage(entry);
-
-      if (result.success && result.page) {
-        // Save to markdown file
-        const filepath = await writer.savePage(result.page);
-        console.log(`   ✅ Saved: ${filepath.split('/').slice(-2).join('/')}`);
-        progress.completed++;
-      } else {
-        console.log(`   ❌ Failed: ${result.error}`);
-        await writer.logFailed(entry.url, result.error || 'Unknown error');
-        progress.failed++;
+      // Report results
+      let batchSuccess = 0;
+      let batchFailed = 0;
+      for (const result of results) {
+        if (result.success) {
+          progress.completed++;
+          batchSuccess++;
+        } else {
+          progress.failed++;
+          batchFailed++;
+          console.log(`   ❌ ${result.entry.url.split('/').slice(-2).join('/')}: ${result.error}`);
+        }
       }
 
-      // Save progress periodically
-      if (i % 10 === 0) {
-        await writer.saveProgress(progress);
-      }
+      const errorSuffix = batchFailed > 0 ? `, ❌ ${batchFailed} failed` : '';
+      console.log(`   ✅ ${batchSuccess} saved${errorSuffix}`);
 
-      // Delay between requests
-      if (i < urls.length - 1) {
+      // Save progress after each batch
+      await writer.saveProgress(progress);
+
+      // Delay between batches
+      if (batchEnd < urls.length) {
         await new Promise((resolve) => setTimeout(resolve, DELAY_MS));
       }
-
-      console.log('');
     }
   } finally {
     // Always close browser

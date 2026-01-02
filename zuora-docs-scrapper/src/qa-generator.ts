@@ -25,7 +25,7 @@ config({ path: path.join(process.cwd(), '..', '.env') });
 interface DocMetadata {
   title: string;
   url: string;
-  product: 'zuora-billing' | 'zuora-platform' | 'zuora-revenue';
+  product: 'zuora-billing' | 'zuora-platform' | 'zuora-revenue' | 'zuora-developer';
   scraped_at: string;
 }
 
@@ -112,7 +112,7 @@ function parseFrontmatter(content: string): { metadata: DocMetadata; body: strin
 
 function loadAllDocs(products?: string[]): ParsedDoc[] {
   const docs: ParsedDoc[] = [];
-  const targetProducts = products || ['zuora-billing', 'zuora-platform', 'zuora-revenue'];
+  const targetProducts = products || ['zuora-billing', 'zuora-platform', 'zuora-revenue', 'zuora-developer'];
 
   for (const product of targetProducts) {
     const productDir = path.join(DOCS_DIR, product);
@@ -381,7 +381,7 @@ async function runGenerator(options: GeneratorOptions = {}): Promise<void> {
     clearErrorLog();
 
     // Only clear files for the products we're actually generating
-    const productsToClear = options.products || ['zuora-billing', 'zuora-platform', 'zuora-revenue'];
+    const productsToClear = options.products || ['zuora-billing', 'zuora-platform', 'zuora-revenue', 'zuora-developer'];
     for (const product of productsToClear) {
       const file = path.join(OUTPUT_DIR, `${product}.jsonl`);
       if (fs.existsSync(file)) {

@@ -1,0 +1,36 @@
+---
+title: "Introduction"
+url: "https://developer.zuora.com/v1-api-reference/introduction/"
+product: "zuora-developer"
+scraped_at: "2026-01-02T06:16:28.112Z"
+---
+
+#
+
+Introduction
+
+The Zuora v1 API provides a broad set of operations and resources that:
+
+-   Enable Web Storefront integration from your website.
+-   Support self-service subscriber sign-ups and account management.
+-   Process revenue schedules through custom revenue rule models.
+-   Enable manipulation of most objects in the Zuora object model.
+
+##
+
+Base URL
+
+All API requests occur in a test or production environment. For details on Zuora’s environments, see [Zuora Data Centers](https://knowledgecenter.zuora.com/Zuora_Environments/Zuora_Data_Centers) in the Knowledge Center.
+
+Each environment uses a different base URL. Select the appropriate base URL below that you need to use:
+
+| Environment | Base URL |
+| --- | --- |
+| US Developer & Central SandboxApplicable for Test Drive and trial access | https://rest.test.zuora.com |
+| US API Sandbox | https://rest.sandbox.na.zuora.com (Cloud 1)https://rest.apisandbox.zuora.com (Cloud 2) |
+| US Production | https://rest.na.zuora.com (Cloud 1)https://rest.zuora.com (Cloud 2) |
+| EU Developer & Central Sandbox | https://rest.test.eu.zuora.com |
+| EU API Sandbox | https://rest.sandbox.eu.zuora.com |
+| EU Production | https://rest.eu.zuora.com |
+| APAC Developer & Central Sandbox | https://rest.test.ap.zuora.com |
+| APAC Production | https://rest.ap.zuora.com |

@@ -1,7 +1,14 @@
+// All supported product types for scraping
+export type ProductType =
+  | 'zuora-billing'
+  | 'zuora-platform'
+  | 'zuora-revenue'
+  | 'zuora-developer';
+
 export interface SitemapEntry {
   url: string;
   lastmod?: string;
-  product: 'zuora-billing' | 'zuora-platform' | 'zuora-revenue';
+  product: ProductType;
 }
 
 export interface ScrapedPage {

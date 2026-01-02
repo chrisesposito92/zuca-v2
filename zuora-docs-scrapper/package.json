@@ -1,7 +1,7 @@
 {
   "name": "zuora-docs-scrapper",
   "version": "1.0.0",
-  "description": "Scraper for docs.zuora.com documentation pages",
+  "description": "Scraper for Zuora documentation (docs.zuora.com and developer.zuora.com)",
   "type": "module",
   "scripts": {
     "scrape": "npx tsx src/index.ts",
@@ -9,11 +9,14 @@
     "scrape:billing": "npx tsx src/index.ts --product billing",
     "scrape:platform": "npx tsx src/index.ts --product platform",
     "scrape:revenue": "npx tsx src/index.ts --product revenue",
+    "scrape:developer": "npx tsx src/index.ts --product developer",
     "test": "npx tsx src/index.ts --test",
+    "test:developer": "npx tsx src/index.ts --product developer --test",
     "qa:generate": "npx tsx src/qa-generator.ts",
     "qa:generate:billing": "npx tsx src/qa-generator.ts --product billing",
     "qa:generate:platform": "npx tsx src/qa-generator.ts --product platform",
     "qa:generate:revenue": "npx tsx src/qa-generator.ts --product revenue",
+    "qa:generate:developer": "npx tsx src/qa-generator.ts --product developer",
     "qa:resume": "npx tsx src/qa-generator.ts --resume",
     "qa:test": "npx tsx src/qa-generator.ts --test"
   },
