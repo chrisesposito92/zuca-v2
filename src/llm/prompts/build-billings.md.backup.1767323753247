@@ -32,32 +32,6 @@ Generate one billing row on the trigger date.
 
 ## Billing Date Calculation
 
-### Billing-Period Alignment Guardrail (BL-001)
-Before outputting `zb_billings`, enforce **cadence integrity** and **term boundaries** per charge:
-
-1) **Derive the billing periods first (the “period grid”)** from `serviceStart` → `serviceEnd` using the charge’s billing period (Monthly/Quarterly/Annual). Each row must have:
-   - `billingPeriodStart` = start of that period within the term
-   - `billingPeriodEnd` = end of that period within the term (do not extend past `serviceEnd`; prorate/short final period if needed)
-
-2) **Row count must match the cadence within the term**:
-   - Monthly over a 12‑month term ⇒ exactly 12 periods
-   - Annual over a 12‑month term ⇒ exactly 1 period
-   - Do **not** add an extra “post-term” period/invoice (e.g., no 13th month) unless the input explicitly allows billing beyond `serviceEnd`.
-
-3) **Invoice date must align to the period, not drift into the next period**:
-   - `InAdvance` ⇒ `invoiceDate = billingPeriodStart`
-   - `InArrears` ⇒ `invoiceDate = billingPeriodEnd`
-   - If consolidating multiple charges onto one monthly invoice date, you may choose a single invoice date per month, but **still keep each row’s service period fields on the correct month** and **never create additional invoice months**.
-
-4) **Usage and credits must not invent additional invoicing cadence**:
-   - Usage without explicit monthly usage invoicing: keep the schedule structure on the contract cadence and set amounts to `TBD/null`.
-   - Credits/discounts covering multiple months must either (a) use one row whose `billingPeriodStart/End` spans the covered months, or (b) be split into monthly rows aligned to the same period grid.
-
-5) **Validation step (must pass):** For each charge, confirm:
-   - All `billingPeriodStart/End` are contiguous and non-overlapping within `[serviceStart, serviceEnd]`
-   - No invoiceDate falls outside its associated service period (except a documented, explicit policy)
-   - Number of rows matches expected cadence for the term
-
 ### Billing Timing Rules
 
 | billingTiming | Billing Date | Service Covered |
