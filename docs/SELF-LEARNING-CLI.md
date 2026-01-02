@@ -286,6 +286,14 @@ List pending prompt suggestions.
 npm run cli -- prompts list
 ```
 
+##### show
+
+Show full details of a prompt suggestion.
+
+```bash
+npm run cli -- prompts show <id>
+```
+
 ##### approve
 
 Approve a suggestion for application.
@@ -336,10 +344,13 @@ npm run cli -- prompts analyze
 npm run cli -- prompts analyze --step contracts_orders
 
 # Generate suggestion for a pattern
-npm run cli -- prompts suggest billings "step-up pricing"
+npm run cli -- prompts suggest billings "BL-006: billing-timing-accuracy"
 
 # List pending suggestions
 npm run cli -- prompts list
+
+# View full suggestion details before approving
+npm run cli -- prompts show abc123
 
 # Approve and apply a suggestion
 npm run cli -- prompts approve abc123
@@ -359,7 +370,7 @@ npm run cli -- prompts backups billings
 1. Run evaluation with --corrections
 2. npm run cli -- prompts analyze
 3. npm run cli -- prompts suggest <step> "<pattern>"
-4. Review the suggestion
+4. npm run cli -- prompts show <id>     # Review full suggestion details
 5. npm run cli -- prompts approve <id>
 6. npm run cli -- prompts apply <id>
 7. Re-run evaluation to verify improvement

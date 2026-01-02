@@ -207,6 +207,11 @@ CREATE INDEX IF NOT EXISTS idx_corrections_embedding ON corrections
 CREATE INDEX IF NOT EXISTS idx_prompt_suggestions_step ON prompt_suggestions(step_name);
 CREATE INDEX IF NOT EXISTS idx_prompt_suggestions_status ON prompt_suggestions(status);
 
+-- Unique partial index for upsert on pending suggestions (required by ON CONFLICT clause)
+CREATE UNIQUE INDEX IF NOT EXISTS idx_prompt_suggestions_unique_pending
+    ON prompt_suggestions(step_name, pattern)
+    WHERE status = 'pending';
+
 -- Trigger for corrections updated_at
 DROP TRIGGER IF EXISTS update_corrections_updated_at ON corrections;
 CREATE TRIGGER update_corrections_updated_at

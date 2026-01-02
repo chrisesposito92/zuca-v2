@@ -41,6 +41,7 @@ import {
   analyzeAllPatterns,
   generatePromptSuggestion,
   getPendingSuggestions,
+  getSuggestion,
   approveSuggestion,
   rejectSuggestion,
   getPromptPath,
@@ -1428,13 +1429,62 @@ async function promptsListCommand(): Promise<void> {
     console.log('');
 
     suggestions.forEach((s: PromptSuggestion, i: number) => {
-      console.log(`${i + 1}. ${chalk.bold(s.id.substring(0, 8))}...`);
+      console.log(`${i + 1}. ${chalk.bold(s.id)}`);
       console.log(`   Step: ${s.step_name}`);
       console.log(`   Pattern: ${s.pattern}`);
       console.log(`   Occurrences: ${s.occurrence_count}`);
       console.log(`   Created: ${new Date(s.created_at).toLocaleDateString()}`);
+      console.log(`   ${chalk.gray(`Show: npm run cli -- prompts show ${s.id}`)}`);
       console.log('');
     });
+  } catch (error: any) {
+    console.error(chalk.red(`Error: ${error.message}`));
+    process.exit(1);
+  }
+}
+
+/**
+ * Prompts show command - display full suggestion details
+ */
+async function promptsShowCommand(id: string): Promise<void> {
+  try {
+    const suggestion = await getSuggestion(id);
+
+    if (!suggestion) {
+      console.log(chalk.red(`Suggestion not found: ${id}`));
+      console.log(chalk.gray('Use partial ID prefix - will match if unique.'));
+      return;
+    }
+
+    console.log(chalk.cyan.bold('\n═══ Prompt Suggestion Details ═══\n'));
+
+    console.log(`ID: ${chalk.bold(suggestion.id)}`);
+    console.log(`Step: ${suggestion.step_name}`);
+    console.log(`Pattern: ${suggestion.pattern}`);
+    console.log(`Occurrences: ${suggestion.occurrence_count}`);
+    console.log(`Status: ${suggestion.status}`);
+    console.log(`Created: ${new Date(suggestion.created_at).toLocaleString()}`);
+    if (suggestion.applied_at) {
+      console.log(`Applied: ${new Date(suggestion.applied_at).toLocaleString()}`);
+    }
+
+    console.log('');
+    console.log(chalk.yellow('Suggested Update:'));
+    console.log('─'.repeat(60));
+    console.log(suggestion.suggested_update);
+    console.log('─'.repeat(60));
+
+    console.log('');
+    console.log(`Target file: ${chalk.cyan(getPromptPath(suggestion.step_name) || 'unknown')}`);
+
+    if (suggestion.status === 'pending') {
+      console.log('');
+      console.log(`To approve: ${chalk.green(`npm run cli -- prompts approve ${suggestion.id}`)}`);
+      console.log(`To reject:  ${chalk.red(`npm run cli -- prompts reject ${suggestion.id}`)}`);
+    } else if (suggestion.status === 'approved') {
+      console.log('');
+      console.log(`To apply: ${chalk.green(`npm run cli -- prompts apply ${suggestion.id}`)}`);
+    }
   } catch (error: any) {
     console.error(chalk.red(`Error: ${error.message}`));
     process.exit(1);
@@ -1622,6 +1672,11 @@ prompts
   .command('list')
   .description('List pending prompt suggestions')
   .action(promptsListCommand);
+
+prompts
+  .command('show <id>')
+  .description('Show full details of a prompt suggestion')
+  .action(promptsShowCommand);
 
 prompts
   .command('approve <id>')
