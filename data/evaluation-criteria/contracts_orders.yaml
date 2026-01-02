@@ -96,11 +96,11 @@ criteria:
     name: charge-name-consistency
     description: Charge names must match subscription spec
     severity: medium
-    patterns: [charge name, product, service name]
+    patterns: [charge name, line item num, product, service name]
     check:
       type: behavioral
       rule: |
-        Charge Name in contracts/orders must match the
+        Line Item Num & POB Name in contracts/orders must match the
         chargeName from the subscription specification.
         For multi-segment charges, include segment identifier
         (e.g., "Service - Promo Period", "Service - Standard").
@@ -164,7 +164,8 @@ criteria:
     name: date-format-consistency
     description: Dates must use correct formats per field
     severity: high
-    patterns: [date format, Revenue Start Date, Revenue End Date, Sales Order Date]
+    patterns:
+      [date format, Revenue Start Date, Revenue End Date, Sales Order Date]
     check:
       type: behavioral
       rule: |
