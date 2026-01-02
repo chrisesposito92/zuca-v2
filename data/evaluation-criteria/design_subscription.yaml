@@ -117,12 +117,39 @@ criteria:
       rule: |
         In pob_mapping.charge_pob_map, each pob_identifier MUST be
         from the "Available ZR POB templates" list. Never invent identifiers.
-        Valid prefixes:
-        - "BK-" for release upon Booking
-        - "BL-" for release upon Billing
-        - "EVT-" for release upon Event
-        Common identifiers: BK-OT-RATABLE, BK-PIT-STARTDATE,
-        BL-OT-INVRATABLE, EVT-PIT-CONSUMP-USAGE
+
+        VALID POB IDENTIFIERS (exhaustive list):
+        Booking release (BK-):
+        - BK-OT-CONSUMP-RATABLE
+        - BK-OT-CONSUMP-RATABLE-VC
+        - BK-OT-RATABLE
+        - BK-OT-RATABLE-PM
+        - BK-PIT-CURRENT_PERIOD
+        - BK-PIT-STARTDATE
+
+        Billing release (BL-):
+        - BL-OT-INVRAT-PM
+        - BL-OT-INVRATABLE
+        - BL-PIT-CONSUMP-PAYGO
+        - BL-PIT-CURRENT_PERIOD
+        - BL-PIT-STARTDATE
+
+        Event release (EVT-):
+        - EVT-OT-RATABLE
+        - EVT-OT-RATABLE-GOLIVE
+        - EVT-PIT-ACCEPTAN
+        - EVT-PIT-AMOUNT
+        - EVT-PIT-COMPLETION
+        - EVT-PIT-CONSUMP-DELIVERY
+        - EVT-PIT-CONSUMP-PAYGO
+        - EVT-PIT-CONSUMP-USAGE
+        - EVT-PIT-CUMPERCENT
+        - EVT-PIT-HOURS
+        - EVT-PIT-POC
+        - EVT-PIT-QTY
+        - EVT-PIT-USAGE
+
+        Only flag as invalid if the identifier is NOT in this list.
 
   - id: DS-008
     name: sell-price-accuracy
