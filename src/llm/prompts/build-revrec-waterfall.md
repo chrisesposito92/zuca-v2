@@ -16,6 +16,48 @@ Each POB in the input includes **WATERFALL INSTRUCTIONS**. These are AUTHORITATI
 
 **For event-driven POBs (EVT-PIT-*):** If no usage/event data provided, set Amount = $0 for all periods and add open question.
 
+**Final check before output:** For every EVT-PIT-* line, confirm either (a) monthly rows exist for all months in the window with Amount=0 + open_question, or (b) event-dated recognition rows exist and sum to the allocated amount.
+
+---
+
+### CRITICAL: Line-Item Amount Reconciliation (RR-005) — DO NOT SKIP
+After building the waterfall for each Contracts/Orders line, perform a **per–Line Item Num reconciliation**:
+- For every line item that appears in `revrec_waterfall.zr_revrec`, enforce:
+  **Sum(Amount across all periods/events for that Line Item Num) = Ext Allocated Price for that same line (from contracts_orders).**
+- If the pattern is **EVT-PIT-*** and **no event/usage dates & amounts are provided**, you may NOT leave Ext Allocated Price > 0 while outputting Amount=0 (this will fail reconciliation). Choose ONE compliant treatment and document it in `open_question`:
+  1) **Variable consideration excluded**: Set the Contracts/Orders transaction price / Ext Allocated Price for the EVT-PIT line to **0** (and adjust related TP/SSP allocation fields if your output includes them). Then output $0 in all periods.
+  2) **Defer recognition by omission**: **Do not include the line item in `zr_revrec` until an event date/schedule is provided/occurs.** Keep the line referenced only via `open_question`.
+  3) **Estimated event schedule provided**: If (and only if) the input explicitly provides an estimate/assumption schedule, create event-dated (or monthly event) rows whose total equals Ext Allocated Price.
+- Do NOT “true-up” by forcing non-zero amounts without events; that violates EVT-PIT rules.
+
+**Final output gate:** If any included line item does not reconcile to Ext Allocated Price, stop and add an `open_question` indicating which line item fails and which compliant option is required.
+
+---
+
+### Mandatory Pattern Alignment & Period Coverage Check (DO NOT SKIP)
+Before generating the waterfall rows for each Contracts/Orders line:
+
+1) **Determine the authoritative recognition pattern** from the POB template/WATERFALL INSTRUCTIONS (EVT vs OT vs PIT; BK vs BL vs EVT triggers). **Do not infer a different pattern from the description (e.g., “implementation”) or contract term.**
+
+2) **Lock the recognition window**:
+   - If `pob_mapping` provides a recognition window (start/end), that window is authoritative.
+   - If Contracts/Orders Revenue Start/End disagree with the mapping window, **do not “pick one silently.”** Either (a) use the mapping window and flag a mismatch as an **open_question**, or (b) if mapping window is missing/ambiguous, output $0 and ask for the correct window.
+   - For any **OT-ratable** line: if the end date is not explicitly defined, **do not invent it**; add an open_question requesting the missing end date.
+
+3) **Enforce full monthly coverage with no gaps** for the entire recognition window for every line:
+   - Output **one row per month** from Revenue Start through Revenue End (inclusive of partial months).
+   - **Never omit months** just because the amount is $0.
+
+4) **Event-driven enforcement (EVT-*)**:
+   - If **no explicit event/usage dates and amounts** are provided, then **every month in the window must be present with Amount = 0**, and include an **open_question** requesting the event/completion/go-live dates (and amounts/units if applicable).
+   - Only recognize revenue in the month(s) where events are explicitly provided; otherwise remain $0.
+   - If the business intends scheduled milestone recognition without an actual event feed, **the POB template must be BK/BL-PIT or OT**, not EVT-*; raise an open_question if the template and intent conflict.
+
+5) **Final validation (must be stated in output):**
+   - OT-ratable: sum of monthly amounts = Ext Allocated Price (within rounding tolerance).
+   - PIT: exactly one non-zero month (based on the specified trigger month).
+   - EVT-* with no events: sum = $0 and monthly rows exist for all months + open_question.
+
 ---
 
 ## Input Context
@@ -66,19 +108,19 @@ Monthly Amount = Daily Rate × Days in Month
 
 **Output:** ONE row with full Ext Allocated Price.
 
-### Pattern 3: Event-Driven (Consumption)
+### Pattern 3: Event-Driven (EVT-PIT-*) — **ZERO until event feed**
 
-**POB templates:** EVT-PIT-CONSUMP-*, EVT-PIT-USAGE, EVT-PIT-QTY
+**POB templates:** EVT-PIT-* (and any POB whose WATERFALL INSTRUCTIONS say event-driven)
 
-**Calculation:**
-```
-Amount = 0 until event occurs
-When event: Amount = Event Quantity × Unit Rate
-```
+**Rule (non-negotiable):** Do **NOT** recognize any revenue unless an explicit event/milestone/usage date + amount is provided in the input. **Never infer** event completion from contract dates, billing cadence, invoice dates, or month-end.
 
-**CRITICAL:** Do NOT spread ratably. Revenue = $0 until consumption events.
+**If event data is missing or incomplete:**
+1) Generate **one row per reporting month** covering the **entire revenue window** (Revenue Start through Revenue End) 
+2) Set `Amount = 0` for **every** month (do not omit months)
+3) Add `open_question` requesting the specific missing event data (e.g., milestone completion dates per milestone, or the usage/event feed)
 
-**If no event data provided:** All periods show $0, add open question asking for usage data.
+**If event data is provided:**
+- Recognize **100% of the event’s allocated amount** in the period containing the **actual event date** (one row per event occurrence).
 
 ---
 

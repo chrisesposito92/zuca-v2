@@ -46,6 +46,42 @@ Is it a one-time fee?
                   → Skip to STEP 2 for POB
 ```
 
+### DS-009 Guardrail — Usage Charge Quantities MUST Reconcile to Usage Records
+
+When you create **Usage** charges, you must follow these rules to avoid quantity/usage mismatches:
+
+1) **If a usage dataset/records are provided or you generate usage records in your output**, then for each standalone Usage charge:
+   - Set `charges[*].quantity` **equal to the SUM of all usage record quantities** for that **same charge (and UOM)** across the evaluated window (typically the **full contract term**, unless the prompt explicitly says otherwise).
+   - Do not guess. **Compute the total** and use that number.
+
+2) **If usage quantities are intended to be derived only from uploads (no usage records are provided/emitted)**:
+   - **Omit `quantity` entirely** for Usage charges (do not set `0` or any placeholder).
+
+3) **Do NOT use `quantity` to represent included allowances** (e.g., “5,000 included/month”).
+   - If you must represent an included amount, model it as a separate included component/charge; keep the overage Usage charge quantity derived from usage records/uploads.
+
+4) Add a final self-check before responding:
+   - For every Usage charge: `charge.quantity == sum(usage_records for that charge/UOM)` OR `quantity is omitted` (only when no usage records are present).
+
+### DS-008 Guardrail — Sell Price Accuracy (No Manufactured Pricing)
+
+Before creating any rate plans/charges, build a **Commercial Terms Ledger** from the input/contract summary:
+- For each contracted line item, capture: `chargeName`, `chargeType`, `billingPeriod`, `effectiveStart/end (if stated)`, and **explicit price(s) by period** (e.g., “$500/mo Jan–Dec”, “$0 for first 2 months then $100/mo”, “$2,000 one-time upon go-live”).
+- **Only** create charges that appear in this ledger. If a product/fee is not explicitly present (even if “common” like support/onboarding/storage), **do not add it**.
+
+**SellPrice rules (hard):**
+1) Every charge (and every segment of a segmented charge) must set `sellPrice` to an amount **explicitly stated** in the ledger for that exact time period. Never estimate, prorate, or average unless the contract explicitly states the prorated/averaged amount.
+2) **No derived discount/credit lines** unless the contract explicitly states either:
+   - a discount amount/percent, **or**
+   - a bundle/total consideration amount that differs from the sum of explicitly priced components.
+   If neither is explicitly stated, do not create a discount line; model only the explicitly priced items.
+3) If the contract provides **only a bundle total** (no component prices), model **one bundle charge** with `sellPrice = bundle total` for the applicable period. Do not split into components with invented sell prices.
+4) If a componentized model is required for allocation and the contract provides a **bundle total plus component list/SSP**, keep components at their stated list/SSP and add **one** discount line to reconcile to the explicit bundle total.
+
+**Output validation (must pass):**
+- Provide a short `SellPrice Audit` table listing each charge/segment with: `sellPrice`, `ledger source`, and (if a bundle total exists) `sum(charges) = stated total`.
+- If any required price is missing from inputs, output `NEEDS_CLARIFICATION` for that charge instead of inventing a number.
+
 ### Charge Fields Required
 
 | Field | Recurring | OneTime | Usage |
