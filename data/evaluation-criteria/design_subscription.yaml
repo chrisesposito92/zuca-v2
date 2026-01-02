@@ -92,7 +92,11 @@ criteria:
         In pob_mapping.charge_pob_map, each entry's recognition_window
         (start_date, end_date) must match the actual service delivery
         period for that charge. For ratable revenue, this is typically
-        the charge's effective period from subscription_spec.
+        the charge's effective period from subscription_spec. An exception
+        exists for discount charges that have their start and end dates aligned to the
+        charge the discount is for (ex: 12 month ratable subscription with first 3 months free.
+        Depending on settings in tenant, the discount and the charge itself could both have the same
+        12 month recognition window)
 
   - id: DS-007
     name: ratable-method-accuracy
