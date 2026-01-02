@@ -96,7 +96,8 @@ criteria:
         exists for discount charges that have their start and end dates aligned to the
         charge the discount is for (ex: 12 month ratable subscription with first 3 months free.
         Depending on settings in tenant, the discount and the charge itself could both have the same
-        12 month recognition window)
+        12 month recognition window). Also, PIT lines can still have a recognition_window that aligns
+        with the service period.
 
   - id: DS-007
     name: ratable-method-accuracy
