@@ -1,0 +1,611 @@
+name: "waterfall-cases"
+version: "1.0"
+description: "Tests generated from revrec_waterfall failures"
+tests:
+  - id: "generated-07dab325-63893229"
+    name: "Quarterly billed, multi-step ramp with mid-term amendment (24 mo, EUR)"
+    description: "Validates RR-003 ramp-revenue-handling for a quarterly billed subscription with multiple step-ups.
+      Expected behavior: compute a single blended monthly recognition amount across the full 24-month service term (not
+      3k/4k/5k per month matching ramped billing)."
+    input:
+      customer_name: "Atlassian BV"
+      use_case_description: "Industry: SaaS (project management).
+
+        Contract start: 02/01/2026. Initial term: 24 months (through 01/31/2028). Billing: Quarterly in advance.
+
+
+        Initial subscription (02/01/2026):
+
+        - Product: Enterprise Cloud
+
+        - Ramp pricing billed quarterly:
+
+        \  - Quarters 1-4 (02/01/2026–01/31/2027): €9,000 per quarter (implied €3,000/month)
+
+        \  - Quarters 5-6 (02/01/2027–07/31/2027): €12,000 per quarter (implied €4,000/month)
+
+
+        Mid-term amendment (effective 08/01/2027; month 19):
+
+        - Step-up for remaining 2 quarters (08/01/2027–01/31/2028): €15,000 per quarter (implied €5,000/month)
+
+
+        Total contract value over 24 months = (4×9,000) + (2×12,000) + (2×15,000) = €90,000.
+
+        Expected revenue recognition: straight-line across 24 months at €3,750.00 per month (with no ramp-shaped
+        recognition mirroring billing). Validate Sum(monthly recognition) = €90,000 and no month uses
+        €3,000/€4,000/€5,000 recognition patterns."
+      terms_months: 24
+      billing_period: "Quarterly"
+      contract_start_date: "02/01/2026"
+      transaction_currency: "EUR"
+      is_allocations: true
+    focus_steps:
+      - "design_subscription"
+      - "billings"
+      - "revenue_schedule_validation"
+    expected_patterns:
+      - "07dab325-3bb3-4b17-898f-871351a82d4f"
+    tags:
+      - "RR-003"
+      - "ramp"
+      - "quarterly_billing"
+      - "mid_term_amendment"
+      - "straight_line_recognition"
+      - "generated"
+      - "adversarial"
+  - id: "generated-07dab325-e914a48f"
+    name: "Semi-annual billed 6-month term with partial months + mid-month ramp (GBP)"
+    description: "Validates RR-003 blended-rate logic when service term starts/ends mid-month and price changes mid-term.
+      Expected behavior: recognize using a single blended daily rate across the full service term (not separate
+      recognition schedules per ramp segment)."
+    input:
+      customer_name: "Philips Healthcare UK Ltd"
+      use_case_description: "Industry: Healthcare (software-enabled services).
+
+        Contract start: 11/15/2026. Term: 6 months (service through 05/14/2027). Billing: Semi-Annually in advance
+        (single invoice on 11/15/2026).
+
+
+        Subscription charge (single product, but with ramped pricing via amendment):
+
+        - Segment A: 11/15/2026–02/14/2027 priced at £20,000/month
+
+        - Segment B: 02/15/2027–05/14/2027 priced at £26,000/month (amendment effective 02/15/2027)
+
+
+        Total value = (3×20,000) + (3×26,000) = £138,000.
+
+        Service days: 11/15/2026–05/14/2027 = 181 days.
+
+        Expected revenue recognition: a single blended daily rate across the entire 181-day service term (138,000 / 181
+        = £762.430939... per day), producing monthly calendar-period recognition amounts that sum exactly to £138,000.
+        The system must NOT recognize £20k/month then £26k/month (or create two independent recognition patterns that
+        change at 02/15)."
+      terms_months: 6
+      billing_period: "Semi-Annually"
+      contract_start_date: "11/15/2026"
+      transaction_currency: "GBP"
+      is_allocations: false
+    focus_steps:
+      - "design_subscription"
+      - "billings"
+      - "revenue_schedule_validation"
+    expected_patterns:
+      - "07dab325-3bb3-4b17-898f-871351a82d4f"
+    tags:
+      - "RR-003"
+      - "ramp"
+      - "partial_months"
+      - "mid_month_effective_date"
+      - "blended_daily_rate"
+      - "generated"
+      - "adversarial"
+  - id: "generated-07dab325-2a15ebef"
+    name: "36-month annual billed yearly step-up ramp (USD)"
+    description: "Validates RR-003 for multi-year annual billing with year-by-year ramp pricing. Expected behavior: compute
+      a single blended monthly recognition amount across the full 36-month term (not recognizing 10k then 12.5k then 15k
+      per month by year)."
+    input:
+      customer_name: "Netflix, Inc."
+      use_case_description: "Industry: Media/streaming technology.
+
+        Contract start: 01/01/2026. Term: 36 months (through 12/31/2028). Billing: Annually in advance (invoice each
+        01/01).
+
+
+        Subscription ramp pricing:
+
+        - Year 1 (01/01/2026–12/31/2026): $120,000/year (=$10,000/month)
+
+        - Year 2 (01/01/2027–12/31/2027): $150,000/year (=$12,500/month)
+
+        - Year 3 (01/01/2028–12/31/2028): $180,000/year (=$15,000/month)
+
+
+        Total contract value = 120,000 + 150,000 + 180,000 = $450,000 over 36 months.
+
+        Expected revenue recognition: straight-line at $12,500.00 per month across all 36 months, regardless of annual
+        billing and yearly ramp pricing. Validate that each month in 2026, 2027, 2028 recognizes the same amount and
+        total recognized equals $450,000."
+      terms_months: 36
+      billing_period: "Annually"
+      contract_start_date: "01/01/2026"
+      transaction_currency: "USD"
+      is_allocations: true
+    focus_steps:
+      - "design_subscription"
+      - "billings"
+      - "revenue_schedule_validation"
+    expected_patterns:
+      - "07dab325-3bb3-4b17-898f-871351a82d4f"
+    tags:
+      - "RR-003"
+      - "ramp"
+      - "multi_year"
+      - "annual_billing"
+      - "straight_line_recognition"
+      - "generated"
+      - "adversarial"
+  - id: "generated-07dab325-0c216027"
+    name: "Hybrid fixed+usage with fixed-fee ramp over 18 months (JPY)"
+    description: "Validates RR-003 blending for the fixed (subscription) component only, while keeping usage revenue
+      recognized to actual usage/billing. Designed to catch systems that either (a) recognize fixed fee as ramped
+      amounts, or (b) incorrectly blend usage into the ramp average."
+    input:
+      customer_name: "Twilio Japan GK"
+      use_case_description: "Industry: Telecom/CPaaS.
+
+        Contract start: 04/01/2026. Term: 18 months (through 09/30/2027). Billing: Monthly (fixed fee billed in advance;
+        usage billed in arrears).
+
+
+        Charges:
+
+        1) Fixed platform subscription fee (ramped):
+
+        - Months 1-6 (04/01/2026–09/30/2026): ¥200,000/month
+
+        - Months 7-18 (10/01/2026–09/30/2027): ¥260,000/month (amendment effective 10/01/2026)
+
+        Fixed-fee total = (6×200,000) + (12×260,000) = ¥4,320,000.
+
+        Expected fixed-fee recognition: straight-line across all 18 months at ¥240,000/month (not ¥200k then ¥260k).
+
+
+        2) Usage charge (non-ramped):
+
+        - SMS usage at ¥6 per message, billed monthly in arrears based on actual consumption.
+
+        - Provide test usage inputs that vary significantly month-to-month (e.g., 10k msgs in Apr, 0 msgs in May, 200k
+        msgs in Jun, etc.).
+
+        Expected usage recognition: recognized based on actual usage/billed amounts per month (NOT averaged/blended
+        across the 18-month term and NOT combined into the fixed-fee blended rate)."
+      terms_months: 18
+      billing_period: "Monthly"
+      contract_start_date: "04/01/2026"
+      transaction_currency: "JPY"
+      is_allocations: false
+    focus_steps:
+      - "design_subscription"
+      - "billings"
+      - "revenue_schedule_validation"
+    expected_patterns:
+      - "07dab325-3bb3-4b17-898f-871351a82d4f"
+    tags:
+      - "RR-003"
+      - "ramp"
+      - "hybrid_pricing"
+      - "usage_not_blended"
+      - "monthly_billing"
+      - "generated"
+      - "adversarial"
+  - id: "generated-07dab325-ac443774"
+    name: "Seat-based tier + price ramp via multiple amendments with rounding true-up (12 mo, USD)"
+    description: "Validates RR-003 for multiple ramp events caused by both quantity and unit-price changes. Expected
+      behavior: one blended straight-line recognition amount across the full 12-month term, with correct penny
+      rounding/true-up, rather than recognizing per-ramp billed amounts."
+    input:
+      customer_name: "Shopify Inc."
+      use_case_description: "Industry: SaaS (e-commerce platform).
+
+        Contract start: 07/01/2026. Term: 12 months (through 06/30/2027). Billing: Monthly in advance.
+
+
+        Seat-based subscription with tier/price changes via amendments:
+
+        - Months 1-4 (07/01/2026–10/31/2026): 50 seats @ $40/seat = $2,000/month
+
+        - Amendment #1 effective 11/01/2026:
+
+        \  - Months 5-8 (11/01/2026–02/28/2027): 75 seats @ $42/seat = $3,150/month
+
+        - Amendment #2 effective 03/01/2027:
+
+        \  - Months 9-12 (03/01/2027–06/30/2027): 100 seats @ $45/seat = $4,500/month
+
+
+        Total contract value = (4×2,000) + (4×3,150) + (4×4,500) = $38,600 over 12 months.
+
+        Expected revenue recognition: straight-line blended rate = 38,600 / 12 = $3,216.666..., requiring rounding such
+        that 12 monthly amounts sum to exactly $38,600 (e.g., 8 months at $3,216.67 and 4 months at $3,216.66, or
+        equivalent true-up). The system must NOT recognize $2,000 then $3,150 then $4,500."
+      terms_months: 12
+      billing_period: "Monthly"
+      contract_start_date: "07/01/2026"
+      transaction_currency: "USD"
+      is_allocations: true
+    focus_steps:
+      - "design_subscription"
+      - "billings"
+      - "revenue_schedule_validation"
+    expected_patterns:
+      - "07dab325-3bb3-4b17-898f-871351a82d4f"
+    tags:
+      - "RR-003"
+      - "ramp"
+      - "seat_based"
+      - "multiple_amendments"
+      - "rounding_true_up"
+      - "generated"
+      - "adversarial"
+  - id: "generated-01d83318-6345e8e0"
+    name: "Fintech 3-year semi-annual bill with ramped prepay + empty EVT usage"
+    description: "Validates RR-003 by ensuring ramped multi-year commitments are recognized as a single averaged monthly
+      amount across the full 36-month service term (not three separate annual ratable schedules). Validates
+      RR-004/RR-007 by requiring EVT-PIT-* lines with no usage/events to still output $0 for every calendar month in the
+      term."
+    input:
+      customer_name: "Stripe"
+      use_case_description: "Stripe signs a 36-month Enterprise Payments Platform subscription starting 01/01/2026, billed
+        Semi-Annually in advance. Contract includes a ramped committed spend represented as three separate ramp lines in
+        Zuora: Line A (Year 1 commitment) USD 60,000; Line B (Year 2 commitment) USD 120,000; Line C (Year 3 commitment)
+        USD 240,000. Total commitment = USD 420,000 over 36 months, which must be recognized evenly across all months in
+        2026–2028 (average monthly = 420,000/36), regardless of the ramp lines and semi-annual invoicing. Add an
+        event-driven line 'EVT-PIT-APICalls' priced at $0.002 per API call with no usage data provided for the full
+        term; the system must still generate monthly revenue recognition/reporting rows for Jan-2026 through Dec-2028
+        with Amount = 0 for that EVT line and use consistent calendar-month periods."
+      terms_months: 36
+      billing_period: "Semi-Annually"
+      contract_start_date: "01/01/2026"
+      transaction_currency: "USD"
+      is_allocations: false
+    focus_steps:
+      - "design_subscription"
+      - "billings"
+      - "rev_recognition_reporting"
+    expected_patterns:
+      - "01d83318-5799-4920-9a94-93e3acd7d0d1"
+    tags:
+      - "RR-003"
+      - "RR-004"
+      - "RR-007"
+      - "ramp"
+      - "semi-annual-billing"
+      - "event-driven"
+      - "zero-usage"
+      - "generated"
+      - "adversarial"
+  - id: "generated-01d83318-d7cd986f"
+    name: "Telecom 24-month quarterly billing with mid-month start and step-up MRC + empty EVT activations"
+    description: "Adversarially tests RR-007 period consistency using a mid-month contract start requiring calendar-month
+      buckets (partial first/last month). Also tests RR-003 by forcing step-up pricing to be averaged across the full
+      24-month term in recognition, despite quarterly invoicing and a mid-month service window. Tests RR-004 by
+      requiring $0 monthly rows for EVT-PIT-* with no activation events."
+    input:
+      customer_name: "Vodafone"
+      use_case_description: "Vodafone signs a 24-month managed connectivity subscription starting 02/15/2026 (service ends
+        02/14/2028), billed Quarterly in arrears, currency EUR. Pricing is a step-up monthly recurring charge
+        represented as two separate subscription rate plans/charge segments: Months 1–12: EUR 10,000 per month; Months
+        13–24: EUR 20,000 per month. Total contract value for the 24 months = EUR 360,000, but recognition must be
+        averaged across the entire 24-month term (EUR 360,000/24 per month), allocated into calendar-month reporting
+        periods, including proration for Feb-2026 and Feb-2028 partial months if daily proration is used. Add
+        event-driven line 'EVT-PIT-SIMActivation' at EUR 3 per activation with no events/usage provided; the system must
+        output explicit monthly periods with Amount = 0 for every calendar month that intersects 02/15/2026–02/14/2028."
+      terms_months: 24
+      billing_period: "Quarterly"
+      contract_start_date: "02/15/2026"
+      transaction_currency: "EUR"
+      is_allocations: false
+    focus_steps:
+      - "design_subscription"
+      - "billings"
+      - "rev_recognition_reporting"
+    expected_patterns:
+      - "01d83318-5799-4920-9a94-93e3acd7d0d1"
+    tags:
+      - "RR-003"
+      - "RR-004"
+      - "RR-007"
+      - "step-up"
+      - "quarterly-billing"
+      - "mid-month-start"
+      - "event-driven"
+      - "zero-usage"
+      - "generated"
+      - "adversarial"
+  - id: "generated-01d83318-efae2948"
+    name: "Media 18-month monthly billing with 3-phase ramp + multiple empty EVT lines"
+    description: "Tests RR-003 by ensuring a 3-phase ramp (modeled as multiple charges) is recognized as a constant average
+      monthly amount across the entire 18-month term (not by phase). Tests RR-004/RR-007 by requiring a full set of
+      monthly $0 rows for multiple EVT-PIT-* lines with no events."
+    input:
+      customer_name: "Spotify"
+      use_case_description: "Spotify signs an 18-month advertising analytics SaaS subscription starting 07/01/2026, billed
+        Monthly, currency GBP. The subscription is configured as three ramp phases (often implemented as separate charge
+        segments): Months 1–6 at GBP 30,000/month, Months 7–12 at GBP 60,000/month, Months 13–18 at GBP 90,000/month.
+        Total = (30,000*6 + 60,000*6 + 90,000*6) = GBP 1,080,000, and recognition must allocate an even monthly total
+        across all 18 months (GBP 1,080,000/18) regardless of the ramp phases. Add two event-driven lines:
+        'EVT-PIT-AdImpressions' (GBP 0.0005 per impression) and 'EVT-PIT-ClickThroughs' (GBP 0.20 per click) with no
+        usage/events available. The system must still emit monthly reporting rows with Amount = 0 for both EVT lines for
+        each calendar month from Jul-2026 through Dec-2027, with no missing months and no non-calendar period grouping."
+      terms_months: 18
+      billing_period: "Monthly"
+      contract_start_date: "07/01/2026"
+      transaction_currency: "GBP"
+      is_allocations: false
+    focus_steps:
+      - "design_subscription"
+      - "billings"
+      - "rev_recognition_reporting"
+    expected_patterns:
+      - "01d83318-5799-4920-9a94-93e3acd7d0d1"
+    tags:
+      - "RR-003"
+      - "RR-004"
+      - "RR-007"
+      - "ramp"
+      - "monthly-billing"
+      - "multi-evt"
+      - "event-driven"
+      - "zero-usage"
+      - "generated"
+      - "adversarial"
+  - id: "generated-01d83318-66b18686"
+    name: "Healthcare 12-month annual billing with intra-year ramp and leap-year month mix + empty EVT sessions"
+    description: "Targets RR-003 by using an intra-year ramp (multiple segments within a 12-month term) that must still be
+      recognized as a single averaged monthly amount across the full term. Targets RR-007 by spanning months with
+      different day counts and requiring strict calendar-month periods. Targets RR-004 by requiring explicit monthly $0
+      outputs for an EVT-PIT-* line with no events."
+    input:
+      customer_name: "Olympus Corporation"
+      use_case_description: "Olympus Corporation signs a 12-month remote procedure support subscription starting 01/01/2028 (a
+        leap year), billed Annually in advance, currency JPY. Pricing is ramped within the year and implemented as three
+        segments: Months 1–3: JPY 1,000,000/month; Months 4–6: JPY 2,000,000/month; Months 7–12: JPY 4,000,000/month.
+        Total = (1,000,000*3 + 2,000,000*3 + 4,000,000*6) = JPY 33,000,000; recognition must allocate the averaged
+        monthly amount (33,000,000/12) across Jan–Dec 2028 calendar months (with only minor daily differences if using
+        daily proration). Add event-driven 'EVT-PIT-ClinicianSessions' at JPY 8,000 per session with no session events
+        provided; system must output monthly rows Jan-2028 through Dec-2028 with Amount = 0 for that EVT line and not
+        collapse into a single annual period."
+      terms_months: 12
+      billing_period: "Annually"
+      contract_start_date: "01/01/2028"
+      transaction_currency: "JPY"
+      is_allocations: false
+    focus_steps:
+      - "design_subscription"
+      - "billings"
+      - "rev_recognition_reporting"
+    expected_patterns:
+      - "01d83318-5799-4920-9a94-93e3acd7d0d1"
+    tags:
+      - "RR-003"
+      - "RR-004"
+      - "RR-007"
+      - "intra-term-ramp"
+      - "annual-billing"
+      - "leap-year"
+      - "event-driven"
+      - "zero-usage"
+      - "generated"
+      - "adversarial"
+  - id: "generated-01d83318-c1c6bb69"
+    name: "E-commerce 6-month quarterly billing with short-term ramped credits + empty EVT transactions"
+    description: "Short term designed to catch implementations that only handle averaging for multi-year ramps: RR-003
+      requires averaging across the entire 6-month term even when the ramp is modeled as separate short segments.
+      RR-004/RR-007 require monthly calendar periods with explicit $0 rows for EVT-PIT-* with no events, even though
+      billing is quarterly."
+    input:
+      customer_name: "Shopify"
+      use_case_description: "Shopify signs a 6-month fraud prevention subscription starting 03/01/2026, billed Quarterly in
+        advance, currency USD. The contract contains ramped platform credits modeled as three separate charge segments:
+        Months 1–2: USD 5,000/month; Months 3–4: USD 15,000/month; Months 5–6: USD 30,000/month. Total = USD 100,000
+        over 6 months; revenue recognition must allocate an even monthly total across Mar–Aug 2026 (100,000/6 per
+        month), not recognize by segment or by invoice quarter. Add event-driven line 'EVT-PIT-TransactionsScanned' at
+        USD 0.01 per transaction with no usage/events provided; system must still generate calendar-month rows for
+        Mar-2026 through Aug-2026 with Amount = 0 for every month for the EVT line, without missing months or switching
+        to quarterly periods."
+      terms_months: 6
+      billing_period: "Quarterly"
+      contract_start_date: "03/01/2026"
+      transaction_currency: "USD"
+      is_allocations: false
+    focus_steps:
+      - "design_subscription"
+      - "billings"
+      - "rev_recognition_reporting"
+    expected_patterns:
+      - "01d83318-5799-4920-9a94-93e3acd7d0d1"
+    tags:
+      - "RR-003"
+      - "RR-004"
+      - "RR-007"
+      - "short-term-ramp"
+      - "quarterly-billing"
+      - "event-driven"
+      - "zero-usage"
+      - "generated"
+      - "adversarial"
+  - id: "generated-e29b60d6-2975abb7"
+    name: "Quarterly SaaS + event POB with missing completion feed (needs $0 rows each month)"
+    description: "Validates RR-004/RR-007: An EVT-PIT implementation POB has no event data; system must output $0
+      recognition rows for every calendar month in the term (not just billed quarters) and keep revenue unreleased until
+      the completion event occurs. Also validates RR-001: revenue end date must be null/blank, not 'ongoing'."
+    input:
+      customer_name: "Asana"
+      use_case_description: "Contract start 02/01/2026 for 18 months. Asana purchases 300 seats of Enterprise at
+        $32/seat/month (= $9,600/month). Billing is quarterly in advance. Add-on: One-time 'Enterprise Onboarding &
+        Configuration' implementation fee of $45,000 tied to event-driven point-in-time POB (EVT-PIT-IMPL) recognized
+        only upon 'Implementation Complete' event. Event feed is not provided at contract inception (no completion date,
+        no milestone events). Expectation: For the EVT-PIT POB, revrec waterfall must include every calendar month from
+        Feb-26 through Jul-27 with Amount = 0 each month until the event occurs; do not collapse to quarterly periods.
+        Revenue End Date must be null/blank (not 'ongoing', 'TBD', or a text placeholder). Open question requesting
+        event completion date should remain."
+      terms_months: 18
+      billing_period: "Quarterly"
+      contract_start_date: "02/01/2026"
+      transaction_currency: "USD"
+      is_allocations: true
+    focus_steps:
+      - "design_subscription"
+      - "billings"
+    expected_patterns:
+      - "e29b60d6-995e-492e-bd89-2d5e86171860"
+    tags:
+      - "RR-004"
+      - "RR-007"
+      - "RR-001"
+      - "EVT-PIT"
+      - "missing_event_data"
+      - "quarterly_billing"
+      - "generated"
+      - "adversarial"
+  - id: "generated-e29b60d6-a2f1bafc"
+    name: "Semi-annual telecom contract with ramp + EVT-PIT installation POB (no event; monthly $0 needed)"
+    description: "Validates RR-007 period consistency under semi-annual billing and a ramp schedule: even if billing is
+      semi-annual and subscription ramps mid-term, the event-driven installation POB must still appear in every calendar
+      month with $0 until the event occurs, and keep end date null/blank (RR-001)."
+    input:
+      customer_name: "Vodafone"
+      use_case_description: "Contract start 03/15/2026 for 24 months. Telecom connectivity service: 'Managed SD-WAN' with
+        ramped sites: Months 1-6: 80 sites at £120/site/month; Months 7-24: 140 sites at £115/site/month. Billing
+        semi-annually in advance (two invoices per year) with proration from 03/15 start. Separate one-time 'Site
+        Installation & Turn-up' fee of £150,000 as EVT-PIT-INSTALL POB recognized on 'All sites turned up' event. No
+        event feed/milestone dates provided at booking. Expectation: Revrec output uses calendar-month periods aligned
+        across the full term (Mar-26 through Mar-28) and includes the EVT-PIT line each month with Amount = 0 until
+        event. Revenue End Date for EVT-PIT is null/blank (not 'until completion', 'ongoing', or an estimated month)."
+      terms_months: 24
+      billing_period: "Semi-Annually"
+      contract_start_date: "03/15/2026"
+      transaction_currency: "GBP"
+      is_allocations: true
+    focus_steps:
+      - "design_subscription"
+      - "billings"
+    expected_patterns:
+      - "e29b60d6-995e-492e-bd89-2d5e86171860"
+    tags:
+      - "RR-007"
+      - "RR-004"
+      - "RR-001"
+      - "telecom"
+      - "ramp_pricing"
+      - "semi_annual_billing"
+      - "mid_month_start"
+      - "generated"
+      - "adversarial"
+  - id: "generated-e29b60d6-d4ebc4af"
+    name: "Monthly fintech usage + EVT-PIT integration fee with unknown completion (null end date + $0 months)"
+    description: "Validates RR-001: do not set revenue end date to free-text like 'TBD/ongoing' for an event-driven POB;
+      keep null/blank when completion date is unknown. Also validates RR-004/RR-007: ensure $0 recognition rows exist
+      for every month, even though the rest of the contract is usage-based and billed monthly."
+    input:
+      customer_name: "Stripe"
+      use_case_description: "Contract start 01/01/2026 for 12 months. Fintech platform: Usage-based payment processing
+        analytics subscription. Pricing: $0 platform fee + $0.012 per API call over 2,000,000 calls/month (tiered
+        usage). Billed monthly in arrears based on actual usage. Additionally, a one-time 'Data Warehouse Integration'
+        professional service fee of $60,000 structured as EVT-PIT-INTEGRATION POB recognized upon 'Integration Live'
+        event. At contract inception, there is no completion date and no event payload is delivered. Expectation: For
+        EVT-PIT POB, revrec waterfall includes Jan-26 through Dec-26 with Amount = 0 each month until event. Revenue End
+        Date must be null/blank. System should not omit months because usage lines vary by month or because the EVT line
+        has no billed charge in those months."
+      terms_months: 12
+      billing_period: "Monthly"
+      contract_start_date: "01/01/2026"
+      transaction_currency: "USD"
+      is_allocations: true
+    focus_steps:
+      - "design_subscription"
+      - "billings"
+    expected_patterns:
+      - "e29b60d6-995e-492e-bd89-2d5e86171860"
+    tags:
+      - "RR-001"
+      - "RR-004"
+      - "RR-007"
+      - "fintech"
+      - "usage_based"
+      - "tiered_pricing"
+      - "missing_event_data"
+      - "generated"
+      - "adversarial"
+  - id: "generated-e29b60d6-ef5e026c"
+    name: "Annual media subscription in EUR with bundled content library + EVT-PIT launch event (term 36 months)"
+    description: "Validates RR-007/RR-004 over a long multi-year term: an event-driven 'Channel Launch' POB with missing
+      event data must still show $0 every calendar month across all 36 months (not only annual invoice periods). Also
+      validates RR-001: end date must be null/blank when unknown."
+    input:
+      customer_name: "Spotify"
+      use_case_description: "Contract start 04/01/2026 for 36 months. Media/streaming B2B licensing deal: 'Enterprise Podcast
+        Library Access' flat fee €240,000/year billed annually in advance. Add-on: One-time 'Branded Channel Launch' fee
+        €90,000 tied to EVT-PIT-LAUNCH POB recognized upon 'Channel Goes Live' event. At booking, legal approves the
+        contract but launch date is not scheduled and no event feed is integrated. Expectation: Revrec schedule uses
+        monthly calendar periods from Apr-26 through Mar-29. The EVT-PIT line must contain a row for each month with
+        Amount = 0 until the event occurs and revenue remains unreleased. Revenue End Date should be null/blank and not
+        'ongoing', 'pending launch', or similar text."
+      terms_months: 36
+      billing_period: "Annually"
+      contract_start_date: "04/01/2026"
+      transaction_currency: "EUR"
+      is_allocations: true
+    focus_steps:
+      - "design_subscription"
+      - "billings"
+    expected_patterns:
+      - "e29b60d6-995e-492e-bd89-2d5e86171860"
+    tags:
+      - "RR-004"
+      - "RR-007"
+      - "RR-001"
+      - "media"
+      - "multi_year"
+      - "annual_billing"
+      - "missing_event_data"
+      - "generated"
+      - "adversarial"
+  - id: "generated-e29b60d6-a5782151"
+    name: "Quarterly healthcare SaaS in JPY with tiered users + EVT-PIT go-live certification (6-month term)"
+    description: "Validates RR-004/RR-007 on a short term with tiered pricing and quarterly billing: EVT-PIT POB must still
+      produce $0 recognition rows for each month in the 6-month term when no event data exists. Validates RR-001:
+      recognition window end date must be null/blank when certification/go-live date unknown."
+    input:
+      customer_name: "Teladoc Health"
+      use_case_description: "Contract start 07/01/2026 for 6 months. Healthcare SaaS: 'Telehealth Care Coordination' with
+        tiered pricing billed quarterly in advance. Tiered users: first 500 clinicians at ¥6,800/clinician/month; next
+        300 at ¥5,900/clinician/month (total 800 clinicians). Separate one-time 'Clinical Workflow Certification' fee
+        ¥12,000,000 as EVT-PIT-CERT POB recognized upon 'Certification Approved' event. Event not provided and no target
+        date agreed. Expectation: Revrec waterfall includes monthly periods Jul-26 through Dec-26. EVT-PIT line must
+        have Jul-26..Dec-26 rows with Amount = 0 each month until event and revenue unreleased. Revenue End Date must be
+        null/blank (not 'pending', 'ongoing', 'after certification')."
+      terms_months: 6
+      billing_period: "Quarterly"
+      contract_start_date: "07/01/2026"
+      transaction_currency: "JPY"
+      is_allocations: true
+    focus_steps:
+      - "design_subscription"
+      - "billings"
+    expected_patterns:
+      - "e29b60d6-995e-492e-bd89-2d5e86171860"
+    tags:
+      - "RR-007"
+      - "RR-004"
+      - "RR-001"
+      - "healthcare"
+      - "tiered_pricing"
+      - "short_term"
+      - "quarterly_billing"
+      - "missing_event_data"
+      - "generated"
+      - "adversarial"
