@@ -6,6 +6,7 @@
  * Usage:
  *   npx tsx scripts/consolidate-training-data.ts [output-file]
  *   npx tsx scripts/consolidate-training-data.ts --stats
+ *   npx tsx scripts/consolidate-training-data.ts --shuffle  # Randomize order
  *
  * Output format (OpenAI/HuggingFace compatible):
  *   {"messages": [{"role": "system", "content": "..."}, {"role": "user", "content": "..."}, {"role": "assistant", "content": "..."}]}
@@ -140,86 +141,6 @@ async function countLines(filePath: string): Promise<number> {
   });
 }
 
-async function processInstructionResponse(
-  source: DataSource,
-  outputStream: fs.WriteStream,
-  includeMetadata: boolean
-): Promise<number> {
-  const filePath = path.join(ROOT, source.path);
-  if (!fs.existsSync(filePath)) {
-    console.warn(`  ⚠️  File not found: ${source.path}`);
-    return 0;
-  }
-
-  const stream = fs.createReadStream(filePath);
-  const rl = readline.createInterface({ input: stream, crlfDelay: Infinity });
-
-  let count = 0;
-  for await (const line of rl) {
-    if (!line.trim()) continue;
-    try {
-      const data = JSON.parse(line);
-      const instruction = data.instruction || data.question || data.prompt;
-      const response = data.response || data.answer || data.output;
-
-      if (!instruction || !response) continue;
-
-      const record: OutputRecord = {
-        messages: [
-          { role: 'system', content: source.systemPrompt || 'You are a helpful Zuora expert.' },
-          { role: 'user', content: instruction },
-          { role: 'assistant', content: response },
-        ],
-      };
-
-      if (includeMetadata) {
-        record.source = source.name;
-        record.category = source.category;
-      }
-
-      outputStream.write(JSON.stringify(record) + '\n');
-      count++;
-    } catch (e) {
-      // Skip malformed lines
-    }
-  }
-
-  return count;
-}
-
-async function processTrainingJson(
-  source: DataSource,
-  outputStream: fs.WriteStream,
-  includeMetadata: boolean
-): Promise<number> {
-  const filePath = path.join(ROOT, source.path);
-  if (!fs.existsSync(filePath)) {
-    console.warn(`  ⚠️  File not found: ${source.path}`);
-    return 0;
-  }
-
-  const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
-  const examples = data.examples || [];
-
-  let count = 0;
-  for (const example of examples) {
-    if (!example.messages || example.messages.length < 2) continue;
-
-    const record: OutputRecord = {
-      messages: example.messages,
-    };
-
-    if (includeMetadata) {
-      record.source = source.name;
-      record.category = source.category;
-    }
-
-    outputStream.write(JSON.stringify(record) + '\n');
-    count++;
-  }
-
-  return count;
-}
 
 async function showStats(): Promise<void> {
   console.log('\n📊 Training Data Statistics\n');
@@ -281,34 +202,103 @@ async function showStats(): Promise<void> {
   }
 }
 
-async function consolidate(outputPath: string, includeMetadata: boolean): Promise<void> {
+// Fisher-Yates shuffle for proper randomization
+function shuffleArray<T>(array: T[]): T[] {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
+async function collectRecords(
+  source: DataSource,
+  includeMetadata: boolean
+): Promise<OutputRecord[]> {
+  const filePath = path.join(ROOT, source.path);
+  if (!fs.existsSync(filePath)) {
+    console.warn(`  ⚠️  File not found: ${source.path}`);
+    return [];
+  }
+
+  const records: OutputRecord[] = [];
+
+  if (source.format === 'training-json') {
+    const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+    const examples = data.examples || [];
+    for (const example of examples) {
+      if (!example.messages || example.messages.length < 2) continue;
+      const record: OutputRecord = { messages: example.messages };
+      if (includeMetadata) {
+        record.source = source.name;
+        record.category = source.category;
+      }
+      records.push(record);
+    }
+  } else {
+    const stream = fs.createReadStream(filePath);
+    const rl = readline.createInterface({ input: stream, crlfDelay: Infinity });
+
+    for await (const line of rl) {
+      if (!line.trim()) continue;
+      try {
+        const data = JSON.parse(line);
+        const instruction = data.instruction || data.question || data.prompt;
+        const response = data.response || data.answer || data.output;
+        if (!instruction || !response) continue;
+
+        const record: OutputRecord = {
+          messages: [
+            { role: 'system', content: source.systemPrompt || 'You are a helpful Zuora expert.' },
+            { role: 'user', content: instruction },
+            { role: 'assistant', content: response },
+          ],
+        };
+        if (includeMetadata) {
+          record.source = source.name;
+          record.category = source.category;
+        }
+        records.push(record);
+      } catch (e) {
+        // Skip malformed lines
+      }
+    }
+  }
+
+  return records;
+}
+
+async function consolidate(outputPath: string, includeMetadata: boolean, shuffle: boolean): Promise<void> {
   console.log('\n🔄 Consolidating training data...\n');
 
-  const outputStream = fs.createWriteStream(outputPath);
   const stats: Stats[] = [];
-  let total = 0;
+  let allRecords: OutputRecord[] = [];
 
   for (const source of DATA_SOURCES) {
     process.stdout.write(`  Processing ${source.name}...`);
 
-    let count: number;
-    if (source.format === 'instruction-response') {
-      count = await processInstructionResponse(source, outputStream, includeMetadata);
-    } else if (source.format === 'training-json') {
-      count = await processTrainingJson(source, outputStream, includeMetadata);
-    } else {
-      count = 0;
-    }
+    const records = await collectRecords(source, includeMetadata);
+    console.log(` ${records.length.toLocaleString()} examples`);
 
-    console.log(` ${count.toLocaleString()} examples`);
-    stats.push({ source: source.name, count, category: source.category });
-    total += count;
+    stats.push({ source: source.name, count: records.length, category: source.category });
+    allRecords = allRecords.concat(records);
   }
 
+  if (shuffle) {
+    console.log('\n🔀 Shuffling records...');
+    allRecords = shuffleArray(allRecords);
+  }
+
+  // Write all records
+  const outputStream = fs.createWriteStream(outputPath);
+  for (const record of allRecords) {
+    outputStream.write(JSON.stringify(record) + '\n');
+  }
   outputStream.end();
 
   console.log('\n' + '═'.repeat(60));
-  console.log(`✅ Wrote ${total.toLocaleString()} examples to ${outputPath}`);
+  console.log(`✅ Wrote ${allRecords.length.toLocaleString()} examples to ${outputPath}${shuffle ? ' (shuffled)' : ''}`);
   console.log('═'.repeat(60));
 
   // Show file size
@@ -332,15 +322,18 @@ Usage:
 
 Options:
   --stats           Show statistics without consolidating
+  --shuffle         Randomize the order of training examples (recommended)
   --with-metadata   Include source/category in output records
   --help, -h        Show this help message
 
 Examples:
   npx tsx scripts/consolidate-training-data.ts data/consolidated-training.jsonl
+  npx tsx scripts/consolidate-training-data.ts data/consolidated-training.jsonl --shuffle
   npx tsx scripts/consolidate-training-data.ts --stats
 `);
 } else {
   const outputPath = args.find((a) => !a.startsWith('--')) || 'data/consolidated-training.jsonl';
   const includeMetadata = args.includes('--with-metadata');
-  consolidate(path.resolve(ROOT, outputPath), includeMetadata).catch(console.error);
+  const shuffle = args.includes('--shuffle');
+  consolidate(path.resolve(ROOT, outputPath), includeMetadata, shuffle).catch(console.error);
 }
