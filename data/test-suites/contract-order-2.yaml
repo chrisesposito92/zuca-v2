@@ -1,0 +1,229 @@
+name: "contract-order-2"
+version: "1.0"
+description: "Tests generated from contracts_orders failures"
+tests:
+  - id: "generated-contract-f6510d60"
+    name: "SaaS Seat Expansion Extended Price Validation"
+    description: "Validates CO-003 to ensure Ext Sell Price is strictly Unit Sell Price × Ordered Qty without multiplying by
+      term months for monthly recurring charges."
+    input:
+      customer_name: "Salesforce.com, Inc."
+      use_case_description: "An enterprise customer adds 500 'Sales Cloud' seats at $150 per seat per month on a 24-month
+        contract. The test validates that Ext Sell Price is recorded as $75,000 (150 * 500) rather than the 24-month
+        total of $1,800,000, while maintaining Terms Months at 24."
+      terms_months: 24
+      billing_period: "Monthly"
+      contract_start_date: "02/01/2026"
+      transaction_currency: "USD"
+      is_allocations: false
+    focus_steps:
+      - "billings"
+      - "contracts_orders"
+    tags:
+      - "CO-003"
+      - "recurring-billing"
+      - "seat-based"
+      - "generated"
+      - "variation"
+  - id: "generated-contract-26d02a3e"
+    name: "Ramp Pricing SSP Allocation Accuracy"
+    description: "Validates CO-009 ensuring Ext Allocated Price matches the weighted SSP Percent across a multi-year ramped
+      subscription."
+    input:
+      customer_name: "Netflix Entertainment"
+      use_case_description: "18-month content delivery contract with ramped pricing: Months 1-12 at $10,000/month and Months
+        13-18 at $15,000/month. Total Transaction Price is $210,000. Test ensures Ext Allocated Price for Line 1 is
+        exactly $120,000 and Line 2 is $90,000 based on SSP proportionality."
+      terms_months: 18
+      billing_period: "Monthly"
+      contract_start_date: "01/01/2025"
+      transaction_currency: "USD"
+      is_allocations: true
+    focus_steps:
+      - "contracts_orders"
+      - "revenue_schedules"
+    tags:
+      - "CO-009"
+      - "ramp-pricing"
+      - "ssp-allocation"
+      - "generated"
+      - "variation"
+  - id: "generated-contract-89f3ab7c"
+    name: "Usage-Based POB Identifier Exact Match"
+    description: "Validates CO-011 ensuring 'POB Template' matches the exact mapping code 'EVT-PIT-CONSUMP-USAGE' instead of
+      a descriptive string."
+    input:
+      customer_name: "Snowflake Inc."
+      use_case_description: "Data warehousing contract featuring a $5,000 monthly platform fee and variable usage credits at
+        $2.00/credit. Test validates that the usage line item's POB Template field contains the exact identifier code
+        required by the pob_mapping table."
+      terms_months: 12
+      billing_period: "Monthly"
+      contract_start_date: "03/15/2026"
+      transaction_currency: "USD"
+      is_allocations: false
+    focus_steps:
+      - "contracts_orders"
+      - "pob_mapping"
+    tags:
+      - "CO-011"
+      - "usage-billing"
+      - "pob-template"
+      - "generated"
+      - "variation"
+  - id: "generated-contract-e02efdec"
+    name: "Multi-Currency Tiered Pricing Extended Math"
+    description: "Validates CO-003 in EUR currency with tiered pricing to ensure unit-to-extended consistency."
+    input:
+      customer_name: "Stripe Payments Europe"
+      use_case_description: "A 12-month subscription for payment processing software. Pricing is tiered: First 1,000 units at
+        €10, next 4,000 at €8. For an order of 5,000 units, the Unit Sell Price is blended to €8.40. Test validates Ext
+        Sell Price is €42,000 (€8.40 * 5,000)."
+      terms_months: 12
+      billing_period: "Quarterly"
+      contract_start_date: "01/01/2026"
+      transaction_currency: "EUR"
+      is_allocations: false
+    focus_steps:
+      - "billings"
+      - "contracts_orders"
+    tags:
+      - "CO-003"
+      - "tiered-pricing"
+      - "multi-currency"
+      - "generated"
+      - "variation"
+  - id: "generated-contract-73a3421f"
+    name: "Bundled Services SSP Allocation Logic"
+    description: "Validates CO-009 for a bundle containing Software, Support, and Professional Services with different SSP values."
+    input:
+      customer_name: "Adobe Systems"
+      use_case_description: "Creative Cloud Bundle sold for $1,200 total. Components: Software (SSP $1,000), Support (SSP
+        $200), Training (SSP $300). Total SSP is $1,500. Test validates Ext Allocated Price for Software is $800
+        ($1,000/$1,500 * $1,200)."
+      terms_months: 12
+      billing_period: "Annually"
+      contract_start_date: "06/01/2025"
+      transaction_currency: "USD"
+      is_allocations: true
+    focus_steps:
+      - "contracts_orders"
+      - "revenue_schedules"
+    tags:
+      - "CO-009"
+      - "bundling"
+      - "ssp-allocation"
+      - "generated"
+      - "variation"
+  - id: "generated-contract-ce307fd1"
+    name: "One-Time Hardware POB Template Validation"
+    description: "Validates CO-011 for one-time hardware charges to ensure the POB Identifier matches the system-defined
+      'BK-OT-HARDWARE' code."
+    input:
+      customer_name: "Verizon Communications"
+      use_case_description: "5G Enterprise rollout including 100 routers ($500 each, one-time) and a 36-month service plan.
+        Test ensures the hardware line's POB Template is 'BK-OT-HARDWARE' and not 'One-Time Hardware Sale'."
+      terms_months: 36
+      billing_period: "Monthly"
+      contract_start_date: "04/01/2026"
+      transaction_currency: "USD"
+      is_allocations: false
+    focus_steps:
+      - "contracts_orders"
+      - "design_subscription"
+    tags:
+      - "CO-011"
+      - "hardware"
+      - "pob-template"
+      - "generated"
+      - "variation"
+  - id: "generated-contract-691a9d52"
+    name: "Semi-Annual Subscription Extended Price Check"
+    description: "Validates CO-003 for semi-annual billing cycles where unit price is monthly but extended price must remain
+      Unit x Qty."
+    input:
+      customer_name: "DocuSign, Inc."
+      use_case_description: "A 36-month contract for 5,000 envelopes at $2/envelope/month. Billing occurs Semi-Annually. Test
+        validates Ext Sell Price is $10,000 (2 * 5,000) and not the semi-annual invoice amount or the 3-year total."
+      terms_months: 36
+      billing_period: "Semi-Annually"
+      contract_start_date: "05/01/2026"
+      transaction_currency: "GBP"
+      is_allocations: false
+    focus_steps:
+      - "billings"
+      - "contracts_orders"
+    tags:
+      - "CO-003"
+      - "semi-annual"
+      - "extended-price"
+      - "generated"
+      - "variation"
+  - id: "generated-contract-6eb935bd"
+    name: "Discounted Subscription SSP Re-Allocation"
+    description: "Validates CO-009 when a manual discount is applied at the contract level, requiring proportional
+      allocation across all POBs."
+    input:
+      customer_name: "HubSpot Marketing"
+      use_case_description: "Marketing Hub Professional ($800/mo) and CMS Hub ($400/mo). A 20% discount is applied to the
+        total. Total Transaction Price = $11,520 for 12 months. Test validates Ext Allocated Price for Marketing Hub is
+        $7,680 based on SSP weight."
+      terms_months: 12
+      billing_period: "Monthly"
+      contract_start_date: "01/01/2026"
+      transaction_currency: "USD"
+      is_allocations: true
+    focus_steps:
+      - "contracts_orders"
+      - "revenue_schedules"
+    tags:
+      - "CO-009"
+      - "discounts"
+      - "ssp-allocation"
+      - "generated"
+      - "variation"
+  - id: "generated-contract-2bd042ec"
+    name: "Fintech Platform POB Identifier Consistency"
+    description: "Validates CO-011 to ensure that ratable revenue templates like 'BK-OT-CONSUMP-RATABLE' are used exactly as
+      defined in the mapping."
+    input:
+      customer_name: "Adyen N.V."
+      use_case_description: "Annual prepaid platform access fee of €12,000, recognized ratably over 12 months. Test ensures
+        the POB Template field is set to 'BK-OT-CONSUMP-RATABLE' to match the revenue recognition rule mapping."
+      terms_months: 12
+      billing_period: "Annually"
+      contract_start_date: "01/01/2026"
+      transaction_currency: "EUR"
+      is_allocations: false
+    focus_steps:
+      - "contracts_orders"
+      - "revenue_schedules"
+    tags:
+      - "CO-011"
+      - "ratable-revenue"
+      - "pob-template"
+      - "generated"
+      - "variation"
+  - id: "generated-contract-8ef93de4"
+    name: "High Volume JPY Extended Price Precision"
+    description: "Validates CO-003 with large integer values in JPY to ensure no rounding or term-multiplication errors
+      occur in extended fields."
+    input:
+      customer_name: "Toyota Motor Corp"
+      use_case_description: "Enterprise resource planning subscription for 10,000 users at ¥2,500 per user per month for 60
+        months. Test validates Ext Sell Price is ¥25,000,000 (2,500 * 10,000) and not the 60-month total of ¥1.5
+        Billion."
+      terms_months: 60
+      billing_period: "Quarterly"
+      contract_start_date: "07/01/2026"
+      transaction_currency: "JPY"
+      is_allocations: false
+    focus_steps:
+      - "billings"
+      - "contracts_orders"
+    tags:
+      - "CO-003"
+      - "high-volume"
+      - "jpy-currency"
+      - "generated"
+      - "variation"
