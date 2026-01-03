@@ -26,7 +26,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 // Default path for training data storage
-const DEFAULT_TRAINING_DATA_PATH = join(__dirname, '../../../data/training-data.json');
+const DEFAULT_TRAINING_DATA_PATH = join(__dirname, '../../../data/training-sources/pipeline-outputs.json');
 
 // Configurable path (set via setTrainingDataPath for tests)
 let trainingDataPath = DEFAULT_TRAINING_DATA_PATH;

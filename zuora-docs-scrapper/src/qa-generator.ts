@@ -54,7 +54,7 @@ interface GeneratorProgress {
 // Configuration
 // ============================================================================
 
-const OUTPUT_DIR = path.join(process.cwd(), 'qa-dataset');
+const OUTPUT_DIR = path.join(process.cwd(), '..', 'data', 'training-sources');
 const DOCS_DIR = path.join(process.cwd(), 'output');
 const LOGS_DIR = path.join(process.cwd(), 'logs');
 const PROGRESS_FILE = path.join(LOGS_DIR, 'qa-progress.json');

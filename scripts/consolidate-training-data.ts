@@ -33,28 +33,28 @@ const DATA_SOURCES: DataSource[] = [
   // Zuora docs scraper outputs
   {
     name: 'zuora-billing',
-    path: 'zuora-docs-scrapper/qa-dataset/zuora-billing.jsonl',
+    path: 'data/training-sources/zuora-billing.jsonl',
     format: 'instruction-response',
     systemPrompt: 'You are a Zuora Billing expert. Answer questions accurately based on Zuora Billing documentation and best practices.',
     category: 'docs',
   },
   {
     name: 'zuora-developer',
-    path: 'zuora-docs-scrapper/qa-dataset/zuora-developer.jsonl',
+    path: 'data/training-sources/zuora-developer.jsonl',
     format: 'instruction-response',
     systemPrompt: 'You are a Zuora API and developer expert. Answer questions about Zuora APIs, SDKs, and integration patterns.',
     category: 'docs',
   },
   {
     name: 'zuora-platform',
-    path: 'zuora-docs-scrapper/qa-dataset/zuora-platform.jsonl',
+    path: 'data/training-sources/zuora-platform.jsonl',
     format: 'instruction-response',
     systemPrompt: 'You are a Zuora Platform expert. Answer questions about Zuora platform features, configuration, and administration.',
     category: 'docs',
   },
   {
     name: 'zuora-revenue',
-    path: 'zuora-docs-scrapper/qa-dataset/zuora-revenue.jsonl',
+    path: 'data/training-sources/zuora-revenue.jsonl',
     format: 'instruction-response',
     systemPrompt: 'You are a Zuora Revenue expert. Answer questions about revenue recognition, ASC 606, POB templates, and Zuora Revenue configuration.',
     category: 'docs',
@@ -62,28 +62,28 @@ const DATA_SOURCES: DataSource[] = [
   // Internal knowledge sources
   {
     name: 'glean-qa',
-    path: 'docs/glean-qa.jsonl',
+    path: 'data/training-sources/glean-qa.jsonl',
     format: 'instruction-response',
     systemPrompt: 'You are a Zuora expert with deep internal knowledge. Answer questions based on internal documentation, runbooks, and tribal knowledge.',
     category: 'internal',
   },
   {
     name: 'slack-data',
-    path: 'docs/slack-data.jsonl',
+    path: 'data/training-sources/slack-data.jsonl',
     format: 'instruction-response',
     systemPrompt: 'You are a Zuora expert helping colleagues. Answer questions in a helpful, conversational manner based on real team discussions.',
     category: 'internal',
   },
   {
     name: 'zendesk-data',
-    path: 'docs/zendesk-data.jsonl',
+    path: 'data/training-sources/zendesk-data.jsonl',
     format: 'instruction-response',
     systemPrompt: 'You are a Zuora support expert. Help troubleshoot issues and explain solutions based on real customer support cases.',
     category: 'internal',
   },
   {
     name: 'tech-talks',
-    path: 'docs/tech-talks.jsonl',
+    path: 'data/training-sources/tech-talks.jsonl',
     format: 'instruction-response',
     systemPrompt: 'You are a Zuora expert explaining technical concepts. Provide clear, educational explanations based on internal tech talks and presentations.',
     category: 'internal',
@@ -91,14 +91,14 @@ const DATA_SOURCES: DataSource[] = [
   // Custom ZUCA sources
   {
     name: 'pob-templates',
-    path: 'docs/pob-templates-qa.jsonl',
+    path: 'data/training-sources/pob-templates-qa.jsonl',
     format: 'instruction-response',
     systemPrompt: 'You are a Zuora Revenue POB template expert. Help select and configure the correct Performance Obligation templates for revenue recognition scenarios. Note: These are custom templates configured in internal demo tenants.',
     category: 'custom',
   },
   {
     name: 'zuca-training',
-    path: 'docs/zuca-training-qa.jsonl',
+    path: 'data/training-sources/zuca-training-qa.jsonl',
     format: 'instruction-response',
     systemPrompt: 'You are ZUCA, the Zuora Use Case Architect. Help users understand and use ZUCA for generating Zuora Billing and Revenue configurations.',
     category: 'custom',
@@ -106,7 +106,7 @@ const DATA_SOURCES: DataSource[] = [
   // Pipeline training data
   {
     name: 'pipeline-outputs',
-    path: 'data/training-data.json',
+    path: 'data/training-sources/pipeline-outputs.json',
     format: 'training-json',
     category: 'pipeline',
   },
