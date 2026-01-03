@@ -20,6 +20,49 @@ Each POB in the input includes **WATERFALL INSTRUCTIONS**. These are AUTHORITATI
 
 ---
 
+### CRITICAL: Recognition-Pattern Alignment Gate (RR-010) — DO NOT INFER EVENTS
+Before generating amounts (and again before final output), run this gate for **each line item** using `pob_mapping.WATERFALL INSTRUCTIONS` and the POB template code (e.g., `EVT-PIT-*`, `EVT-OT-RATABLE-*`, `BL-PIT-*`, `OT-RATABLE-*`):
+
+1) **Classify the required pattern (authoritative):**
+   - `EVT-PIT-*` / event-driven PIT: **Recognize ONLY on explicit event dates/usage records provided in the input.**
+     - **Never assume** go-live/completion/milestone dates from Contract Start/End, term length, billing cadence, descriptions, or “expected” timelines.
+     - If no event/usage data is provided: output **monthly rows for every month in the revenue window with Amount = 0** and add an `open_question` requesting the missing event date(s)/usage details.
+   - `EVT-OT-RATABLE-*` / event-driven + ratable over time: require a **defined post-event ratable window with a concrete end date**.
+     - If the end date/window is not explicitly defined in mapping or input: **do not invent it**; add `open_question` and hold recognition at $0 (or omit per RR-005 treatment) until the window is clarified.
+   - `OT-RATABLE-*` / straight-line over time: spread evenly over the **mapped recognition window** only.
+   - `BL-PIT-*` / billed PIT: recognize **only when billing/invoice dates/amounts are provided**; otherwise $0 (or omit per RR-005) and ask for billing schedule.
+
+2) **Window consistency check (must pass):** Ensure `contracts_orders.Revenue Start/End`, `pob_mapping.recognition_window`, and the generated `revrec_waterfall` periods all reference the **same start/end window**. If inconsistent, fix dates (do not fabricate) or add `open_question`.
+
+3) **Monthly coverage rule (when output is monthly):** For any line with a defined monthly reporting window, output a row for **every month** in that window. For event-driven items without events, those months must be **present with Amount=0** (no gaps).
+
+4) **Pattern mismatch resolution:** If the business intent described conflicts with the template (e.g., intent is PIT at go-live but template is OT ratable, or vice versa), **do not silently change recognition behavior**. Instead:
+   - Follow the template instructions for the waterfall, and
+   - Add an `open_question` proposing the correct template/mapping change needed to match the intended model.
+  
+---
+
+### CRITICAL: RR-004 Event-Driven Zero-Rule (EVT-PIT-* WITH NO EVENTS) — OUTPUT FULL ZERO WATERFALL
+If a line item is `EVT-PIT-*` (event-driven point-in-time) and the input provides **no explicit event/usage records with dates**, you MUST:
+
+1) **Create a complete monthly skeleton** for the entire revenue window:
+   - Generate **one row per calendar month** from Revenue Start month through Revenue End month (inclusive).
+   - **Do not compress, omit, or summarize** zero months (even if long terms like 36 months).
+
+2) **Force Amount = 0** for every month in that window.
+   - **Do not** recognize any portion based on inferred milestones (term length, billing cadence, descriptions, “expected completion,” or month-ends).
+
+3) Add an `open_question` explicitly requesting the missing triggering data:
+   - e.g., “Provide actual completion/milestone event date(s) (or event feed/usage file) required to recognize EVT-PIT revenue.”
+
+4) **Completeness validation (mandatory before final output):**
+   - Confirm the number of output rows for this line equals the count of months in the revenue window.
+   - Confirm the sum of Amount across those rows = 0.
+
+(Use `code_interpreter` to generate the month list and validate row count/sums.)
+
+---
+
 ### CRITICAL: Line-Item Amount Reconciliation (RR-005) — DO NOT SKIP
 After building the waterfall for each Contracts/Orders line, perform a **per–Line Item Num reconciliation**:
 - For every line item that appears in `revrec_waterfall.zr_revrec`, enforce:
