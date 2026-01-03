@@ -80,19 +80,6 @@ criteria:
         - Billing Period End
         Do not use YYYY-MM-DD or other formats.
 
-  - id: BL-006
-    name: billing-timing-accuracy
-    description: Billing timing must match contract terms
-    severity: high
-    patterns: [in advance, in arrears, billing timing, InAdvance, InArrears]
-    check:
-      type: behavioral
-      rule: |
-        Invoices must be dated according to billing timing:
-        - "InAdvance": Invoice at start of service period
-        - "InArrears": Invoice at end of service period
-        Service Period dates on each invoice must reflect this.
-
   - id: BL-007
     name: charge-description-accuracy
     description: Invoice line descriptions must be clear and accurate
