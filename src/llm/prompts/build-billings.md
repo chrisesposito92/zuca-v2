@@ -32,6 +32,25 @@ Generate one billing row on the trigger date.
 
 ## Billing Date Calculation
 
+### Billing Timing Resolution Guardrail (BL-006)
+Before calculating any `invoiceDate` values, **resolve billing timing per charge** (InAdvance vs InArrears) from the input.
+
+1) **Do not silently assume billing timing.** Only set `billingTiming` to `InAdvance`/`InArrears` if it is explicitly stated in the Subscription spec / Contract intel / charge attributes.
+
+2) **If billing timing is missing or ambiguous for any charge:**
+   - Set that charge’s `billingTiming = "TBD"` (or leave null) and **add an item to `open_questions`**: “Confirm billing timing for <chargeName>: InAdvance (period start) or InArrears (period end)?”
+   - If the schedule must still be produced, you may apply a default **only if explicitly allowed by the prompt/pipeline**, and you must:
+     - label it as `assumption` (not as a contract term), and
+     - add an `open_questions` item to confirm/override it.
+
+3) **Apply timing consistently once confirmed:**
+   - InAdvance ⇒ `invoiceDate = billingPeriodStart`
+   - InArrears ⇒ `invoiceDate = billingPeriodEnd`
+
+4) **Usage charges:** If timing is not explicitly provided, **do not claim InAdvance**. Add an `open_questions` item asking whether usage is billed in arrears at period end or on the next consolidated invoice date.
+
+5) **Never state timing was “confirmed” unless it appears verbatim in the input.**
+
 ### Billing-Period Alignment Guardrail (BL-001)
 Before outputting `zb_billings`, enforce **cadence integrity** and **term boundaries** per charge:
 
@@ -64,16 +83,6 @@ Before outputting `zb_billings`, enforce **cadence integrity** and **term bounda
 |---------------|--------------|-----------------|
 | InAdvance | Period Start | Start → End of period |
 | InArrears | Period End | Start → End of period |
-
-### Billing Timing Must Be Explicit (BL-006)
-- **Do not default to `InAdvance` (or any timing) silently.** For every charge, determine `billingTiming` from the input subscription spec/contract intel.
-- **If billingTiming is not explicitly provided for a charge (or for the subscription as a whole):**
-  1) Set that charge’s `billingTiming` to `TBD` in your internal reasoning/output fields (do not claim it was provided).
-  2) Add an `open_questions` item: *“Confirm billing timing for <chargeName>: InAdvance (invoice at period start) or InArrears (invoice at period end)?”*
-  3) Produce the schedule using **one** of the following allowed behaviors (choose based on pipeline policy; do not mix):
-     - **Preferred:** Output the schedule with **invoice dates left blank/null** (or marked `TBD`) for that charge until timing is confirmed.
-     - **If you must provide dates:** Apply a single documented default (e.g., `InAdvance`) **and explicitly label it as an assumption** (e.g., `assumptions: ["Defaulted billingTiming to InAdvance pending confirmation"]`).
-- **When `billingTiming = InArrears`, invoice/billing date must equal the billing period end date** for the service covered (including usage periods), unless an explicit exception is stated in the input; otherwise raise an `open_questions` item describing the exception needed.
 
 ### Billing Period Lengths
 

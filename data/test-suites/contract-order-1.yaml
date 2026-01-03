@@ -1,0 +1,222 @@
+name: "contract-order-1"
+version: "1.0"
+description: "Tests generated from contracts_orders failures"
+tests:
+  - id: "generated-contract-682a32fc"
+    name: "Salesforce CRM Seat Expansion - CO-003"
+    description: "Validates that Ext Sell Price is calculated as Unit Sell Price × Ordered Qty without multiplying by the
+      12-month term length."
+    input:
+      customer_name: "Salesforce"
+      use_case_description: "A growing tech startup adds 50 Sales Cloud Lightning seats at $150/user/month. The test ensures
+        Ext Sell Price is $7,500 (50 * 150) rather than the annualized $90,000, maintaining consistency with CO-003
+        logic for recurring charges."
+      terms_months: 12
+      billing_period: "Monthly"
+      contract_start_date: "02/01/2026"
+      transaction_currency: "USD"
+      is_allocations: false
+    focus_steps:
+      - "contracts_orders"
+      - "design_subscription"
+    tags:
+      - "CO-003"
+      - "SaaS"
+      - "Recurring"
+      - "generated"
+      - "variation"
+  - id: "generated-contract-a9ae4bd1"
+    name: "Snowflake Data Ramp - CO-009"
+    description: "Validates that SSP Percent and Ext Allocated Price are computed correctly across a multi-year ramp where
+      year 1 and year 2 have different values."
+    input:
+      customer_name: "Snowflake Inc"
+      use_case_description: "A 24-month contract with a ramp: Year 1 at $5,000/month and Year 2 at $10,000/month. Total
+        Transaction Price is $180,000. Test ensures Ext Allocated Price for Line 1 is $60,000 and Line 2 is $120,000
+        based on SSP math."
+      terms_months: 24
+      billing_period: "Annually"
+      contract_start_date: "03/15/2026"
+      transaction_currency: "USD"
+      is_allocations: true
+    focus_steps:
+      - "contracts_orders"
+      - "revenue_allocation"
+    tags:
+      - "CO-009"
+      - "Ramp"
+      - "Data-Warehousing"
+      - "generated"
+      - "variation"
+  - id: "generated-contract-f8befd59"
+    name: "DocuSign Usage POB Alignment - CO-011"
+    description: "Validates that the POB Template exactly matches the identifier 'EVT-PIT-CONSUMP-USAGE' for usage-based
+      envelope consumption."
+    input:
+      customer_name: "DocuSign"
+      use_case_description: "Enterprise deal for 10,000 envelopes at €2.00 per envelope. The test validates that the 'POB
+        Template' field does not contain descriptive text like 'Envelope Usage' but matches the exact mapping code."
+      terms_months: 12
+      billing_period: "Monthly"
+      contract_start_date: "01/01/2026"
+      transaction_currency: "EUR"
+      is_allocations: false
+    focus_steps:
+      - "contracts_orders"
+      - "pob_mapping"
+    tags:
+      - "CO-011"
+      - "Usage"
+      - "Formatting"
+      - "generated"
+      - "variation"
+  - id: "generated-contract-a0b91f02"
+    name: "Slack Enterprise Grid Multi-Year - CO-003"
+    description: "Checks for term-month multiplication errors in Extended Price for a 36-month subscription billed quarterly."
+    input:
+      customer_name: "Slack Technologies"
+      use_case_description: "A 3-year contract for 500 users at £12.50 per user per month, billed quarterly. Test verifies Ext
+        Sell Price is £6,250 (500 * 12.50) per line, regardless of the 36-month term or quarterly billing frequency."
+      terms_months: 36
+      billing_period: "Quarterly"
+      contract_start_date: "04/01/2026"
+      transaction_currency: "GBP"
+      is_allocations: false
+    focus_steps:
+      - "contracts_orders"
+      - "billings"
+    tags:
+      - "CO-003"
+      - "Telecom"
+      - "Multi-Year"
+      - "generated"
+      - "variation"
+  - id: "generated-contract-53e492a5"
+    name: "Netflix B2B Hospitality POB Match - CO-011"
+    description: "Ensures the POB Identifier for a media streaming service matches the 'BK-OT-CONSUMP-RATABLE' template exactly."
+    input:
+      customer_name: "Netflix"
+      use_case_description: "A hospitality chain signs for 1,000 room licenses. The subscription is ratable. Test validates
+        that the system rejects 'Ratable Streaming' and requires the exact identifier from the POB mapping table."
+      terms_months: 6
+      billing_period: "Monthly"
+      contract_start_date: "06/01/2026"
+      transaction_currency: "JPY"
+      is_allocations: false
+    focus_steps:
+      - "contracts_orders"
+      - "pob_mapping"
+    tags:
+      - "CO-011"
+      - "Media"
+      - "Short-Term"
+      - "generated"
+      - "variation"
+  - id: "generated-contract-78d9a269"
+    name: "CrowdStrike Cybersecurity Tiered SSP - CO-009"
+    description: "Validates SSP allocation math when multiple security modules (Falcon Insight vs Falcon OverWatch) are
+      bundled at a discount."
+    input:
+      customer_name: "CrowdStrike"
+      use_case_description: "A $50,000 total transaction. Module A has an Ext SSP of $40,000 and Module B has an Ext SSP of
+        $20,000. Test verifies Ext Allocated Price is $33,333.33 and $16,666.67 respectively."
+      terms_months: 12
+      billing_period: "Annually"
+      contract_start_date: "01/01/2026"
+      transaction_currency: "USD"
+      is_allocations: true
+    focus_steps:
+      - "revenue_allocation"
+      - "contracts_orders"
+    tags:
+      - "CO-009"
+      - "Cybersecurity"
+      - "Bundling"
+      - "generated"
+      - "variation"
+  - id: "generated-contract-b0af898c"
+    name: "Adobe Creative Cloud Semi-Annual - CO-003"
+    description: "Verifies that Unit List Price * Qty = Ext List Price for semi-annual billing cycles in EUR."
+    input:
+      customer_name: "Adobe Systems"
+      use_case_description: "100 Creative Cloud licenses at €80.00/month, billed semi-annually. Test ensures Ext Sell Price
+        remains €8,000 (100 * 80) and does not incorrectly pull in the 6-month billing period or 12-month term into the
+        extension."
+      terms_months: 12
+      billing_period: "Semi-Annually"
+      contract_start_date: "05/01/2026"
+      transaction_currency: "EUR"
+      is_allocations: false
+    focus_steps:
+      - "contracts_orders"
+      - "billings"
+    tags:
+      - "CO-003"
+      - "SaaS"
+      - "Semi-Annual"
+      - "generated"
+      - "variation"
+  - id: "generated-contract-37e973fd"
+    name: "Stripe Connect Platform Fee POB - CO-011"
+    description: "Validates POB Template matching for a complex fintech usage fee structure."
+    input:
+      customer_name: "Stripe"
+      use_case_description: "Platform fee for payment processing. The POB Template must be 'FIN-PIT-TRANS-FEE'. Test checks
+        that any variation like 'Transaction Fee - Point in Time' causes a validation failure per CO-011."
+      terms_months: 12
+      billing_period: "Monthly"
+      contract_start_date: "07/01/2026"
+      transaction_currency: "USD"
+      is_allocations: false
+    focus_steps:
+      - "contracts_orders"
+      - "pob_mapping"
+    tags:
+      - "CO-011"
+      - "Fintech"
+      - "Usage"
+      - "generated"
+      - "variation"
+  - id: "generated-contract-6fab7171"
+    name: "HubSpot Marketing Hub Ramp - CO-009"
+    description: "Tests SSP allocation consistency when a customer ramps from Professional to Enterprise mid-term."
+    input:
+      customer_name: "HubSpot"
+      use_case_description: "18-month contract. Months 1-6 at $800/mo, Months 7-18 at $1,200/mo. Total contract $19,200. Test
+        ensures the SSP Percent weighting correctly allocates the $19,200 across the two line items based on their
+        standalone prices."
+      terms_months: 18
+      billing_period: "Monthly"
+      contract_start_date: "08/01/2026"
+      transaction_currency: "USD"
+      is_allocations: true
+    focus_steps:
+      - "revenue_allocation"
+      - "contracts_orders"
+    tags:
+      - "CO-009"
+      - "SaaS"
+      - "Ramp"
+      - "generated"
+      - "variation"
+  - id: "generated-contract-6be8dd9e"
+    name: "Epic Systems Implementation POB - CO-011"
+    description: "Validates that Professional Services line items use the correct POB Template string 'PRO-PIT-SERVICES'."
+    input:
+      customer_name: "Epic Systems"
+      use_case_description: "Healthcare software implementation. One-time fee of $500,000. Test ensures 'POB Template' and
+        'POB IDENTIFIER' are identical and match the system configuration for point-in-time service recognition."
+      terms_months: 24
+      billing_period: "Annually"
+      contract_start_date: "09/01/2026"
+      transaction_currency: "USD"
+      is_allocations: false
+    focus_steps:
+      - "contracts_orders"
+      - "pob_mapping"
+    tags:
+      - "CO-011"
+      - "Healthcare"
+      - "Implementation"
+      - "generated"
+      - "variation"
