@@ -1003,11 +1003,19 @@ export async function complete<T = unknown>(
     ...(requestedModel !== resolvedModel && { alias: requestedModel }),
   });
 
+  let result: CompletionResult<T>;
   if (provider === 'gemini') {
-    return completeGemini<T>({ ...options, model: resolvedModel, reasoningEffort });
+    result = await completeGemini<T>({ ...options, model: resolvedModel, reasoningEffort });
+  } else {
+    result = await completeOpenAI<T>({ ...options, model: resolvedModel, reasoningEffort });
   }
 
-  return completeOpenAI<T>({ ...options, model: resolvedModel, reasoningEffort });
+  // Accumulate token usage if accumulator is active
+  if (result.usage) {
+    accumulateTokens(result.usage);
+  }
+
+  return result;
 }
 
 /**
@@ -1130,4 +1138,73 @@ export function zodToJsonSchema(schema: z.ZodSchema): Record<string, unknown> {
   // This is a simplified implementation
   // For production, consider using zod-to-json-schema library
   return schema._def as Record<string, unknown>;
+}
+
+// =============================================================================
+// Token Accumulator
+// =============================================================================
+
+/**
+ * Token usage accumulator for tracking usage across multiple LLM calls.
+ * Used by the benchmark system to measure token costs per test/model.
+ */
+export interface TokenUsageStats {
+  promptTokens: number;
+  completionTokens: number;
+  totalTokens: number;
+  callCount: number;
+}
+
+let tokenAccumulator: TokenUsageStats | null = null;
+
+/**
+ * Start accumulating token usage.
+ * Call this before running a pipeline/test to track total tokens.
+ */
+export function startTokenAccumulator(): void {
+  tokenAccumulator = {
+    promptTokens: 0,
+    completionTokens: 0,
+    totalTokens: 0,
+    callCount: 0,
+  };
+  debugLog('Token accumulator started');
+}
+
+/**
+ * Stop accumulating and return the total usage.
+ */
+export function stopTokenAccumulator(): TokenUsageStats | null {
+  const result = tokenAccumulator;
+  tokenAccumulator = null;
+  if (result) {
+    debugLog('Token accumulator stopped:', result);
+  }
+  return result;
+}
+
+/**
+ * Get current accumulated token usage without stopping.
+ */
+export function getTokenAccumulator(): TokenUsageStats | null {
+  return tokenAccumulator ? { ...tokenAccumulator } : null;
+}
+
+/**
+ * Check if token accumulator is active.
+ */
+export function isTokenAccumulatorActive(): boolean {
+  return tokenAccumulator !== null;
+}
+
+/**
+ * Add token usage to the accumulator (called internally by complete()).
+ */
+function accumulateTokens(usage: { promptTokens: number; completionTokens: number; totalTokens: number }): void {
+  if (tokenAccumulator) {
+    tokenAccumulator.promptTokens += usage.promptTokens;
+    tokenAccumulator.completionTokens += usage.completionTokens;
+    tokenAccumulator.totalTokens += usage.totalTokens;
+    tokenAccumulator.callCount += 1;
+  }
 }

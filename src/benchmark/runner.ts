@@ -13,6 +13,7 @@ import { runPipeline } from '../pipeline/index';
 import { loadTestSuite, testCaseToZucaInput } from '../self-learn/evaluation/test-suites';
 import { evaluateOutput } from '../self-learn/judge';
 import { getCriteriaIfExists } from '../self-learn/criteria';
+import { startTokenAccumulator, stopTokenAccumulator } from '../llm/client';
 import type { TestCase, EvaluationCriteria, JudgeResult } from '../self-learn/types';
 import type { ZucaOutput } from '../types/output';
 import {
@@ -93,10 +94,24 @@ async function runSingleTest(
   let passed = true;
 
   try {
+    // Start token accumulator to track usage across pipeline
+    startTokenAccumulator();
+
     // Run pipeline
     const pipelineStartTime = Date.now();
     const pipelineResult = (await runPipeline(input, { model })) as ZucaOutput & Record<string, unknown>;
     const pipelineDuration = Date.now() - pipelineStartTime;
+
+    // Capture pipeline token usage
+    const pipelineTokens = stopTokenAccumulator();
+    if (pipelineTokens) {
+      tokenUsage = {
+        promptTokens: pipelineTokens.promptTokens,
+        completionTokens: pipelineTokens.completionTokens,
+        totalTokens: pipelineTokens.totalTokens,
+      };
+      debugLog(`Pipeline tokens: ${tokenUsage.totalTokens} (${pipelineTokens.callCount} calls)`);
+    }
 
     // Extract step timings from pipeline result if available
     // For now, we'll just track total pipeline time
@@ -158,12 +173,17 @@ async function runSingleTest(
       passed = allStepsPassed;
       judgeResult = lastJudgeResult;
     }
-
-    // Note: Token usage tracking would require changes to the LLM client
-    // to accumulate tokens across a pipeline run. For now, we leave it undefined
-    // and could enhance this in the future.
-
   } catch (e) {
+    // Ensure token accumulator is stopped even on error
+    const errorTokens = stopTokenAccumulator();
+    if (errorTokens) {
+      tokenUsage = {
+        promptTokens: errorTokens.promptTokens,
+        completionTokens: errorTokens.completionTokens,
+        totalTokens: errorTokens.totalTokens,
+      };
+    }
+
     completed = false;
     passed = false;
     error = e instanceof Error ? e.message : String(e);

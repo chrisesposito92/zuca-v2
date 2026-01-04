@@ -79,64 +79,78 @@ USE_CORRECTIONS_EMBEDDINGS=false
 ```
 
 ### CLI Commands
+
+> **Note:** When passing flags to CLI commands, use `--` to separate npm args from script args:
+> `npm run cli -- <command> --flag` (not `npm run cli <command> --flag`)
+
 ```bash
+# Benchmarking (cross-model comparison)
+npm run cli -- benchmark                    # Run with all models
+npm run cli -- benchmark -s golden-quick    # Specific test suite
+npm run cli -- benchmark --models gpt-5.2,zuca-gpt-nano  # Specific models
+npm run cli -- benchmark -o results.json    # Export JSON results
+npm run cli -- benchmark --markdown report.md  # Generate markdown report
+npm run cli -- benchmark --skip-evaluation  # Speed-only (no quality eval)
+npm run cli -- benchmark -v                 # Verbose progress output
+npm run cli -- benchmark --judge-model gpt-5.2  # Specific judge model
+
 # Evaluation
-npm run cli evaluate              # Run evaluation suite
-npm run cli evaluate --corrections # Generate corrections for failures
-npm run cli evaluate --capture-training  # Capture passing outputs as training data
-npm run cli evaluate -m gemini-3-flash-preview  # Use specific model
-npm run cli evaluate --ensemble   # Use multi-judge ensemble evaluation
-npm run cli evaluate --ensemble --ensemble-models gpt-5.2,gemini-3-pro-preview  # Custom judges
+npm run cli -- evaluate              # Run evaluation suite
+npm run cli -- evaluate --corrections # Generate corrections for failures
+npm run cli -- evaluate --capture-training  # Capture passing outputs as training data
+npm run cli -- evaluate -m gemini-3-flash-preview  # Use specific model
+npm run cli -- evaluate --ensemble   # Use multi-judge ensemble evaluation
+npm run cli -- evaluate --ensemble --ensemble-models gpt-5.2,gemini-3-pro-preview  # Custom judges
 
 # Corrections Management
-npm run cli corrections list      # List stored corrections
-npm run cli corrections summary   # Show pattern statistics
-npm run cli corrections cluster <step>  # Cluster similar corrections
-npm run cli corrections cluster <step> --threshold 0.9  # Custom similarity
-npm run cli corrections maintain  # Run lifecycle maintenance (decay/archive/promote)
-npm run cli corrections maintain --dry-run  # Preview without changes
-npm run cli corrections archived  # List archived corrections
-npm run cli corrections restore <id>  # Restore an archived correction
+npm run cli -- corrections list      # List stored corrections
+npm run cli -- corrections summary   # Show pattern statistics
+npm run cli -- corrections cluster <step>  # Cluster similar corrections
+npm run cli -- corrections cluster <step> --threshold 0.9  # Custom similarity
+npm run cli -- corrections maintain  # Run lifecycle maintenance (decay/archive/promote)
+npm run cli -- corrections maintain --dry-run  # Preview without changes
+npm run cli -- corrections archived  # List archived corrections
+npm run cli -- corrections restore <id>  # Restore an archived correction
 
 # Active Learning / Review Queue
-npm run cli review list           # List items flagged for review
-npm run cli review list --status pending  # Filter by status
-npm run cli review show <id>      # Show item details
-npm run cli review approve <id>   # Mark item as reviewed (correct output)
-npm run cli review dismiss <id>   # Dismiss item (not worth reviewing)
-npm run cli review stats          # Show queue statistics
-npm run cli review clear          # Clear all items from queue
+npm run cli -- review list           # List items flagged for review
+npm run cli -- review list --status pending  # Filter by status
+npm run cli -- review show <id>      # Show item details
+npm run cli -- review approve <id>   # Mark item as reviewed (correct output)
+npm run cli -- review dismiss <id>   # Dismiss item (not worth reviewing)
+npm run cli -- review stats          # Show queue statistics
+npm run cli -- review clear          # Clear all items from queue
 
 # Pattern Analysis & Prompt Evolution (Phase 4)
-npm run cli prompts analyze       # Analyze failure patterns
-npm run cli prompts suggest <step> "<pattern>"  # Generate suggestion
-npm run cli prompts list          # View pending suggestions
-npm run cli prompts approve <id>  # Approve a suggestion
-npm run cli prompts apply <id>    # Auto-apply approved suggestion
-npm run cli prompts rollback <id> <backupPath>  # Rollback to backup
-npm run cli prompts backups       # List all prompt backups
+npm run cli -- prompts analyze       # Analyze failure patterns
+npm run cli -- prompts suggest <step> "<pattern>"  # Generate suggestion
+npm run cli -- prompts list          # View pending suggestions
+npm run cli -- prompts approve <id>  # Approve a suggestion
+npm run cli -- prompts apply <id>    # Auto-apply approved suggestion
+npm run cli -- prompts rollback <id> <backupPath>  # Rollback to backup
+npm run cli -- prompts backups       # List all prompt backups
 
 # Self-Improvement Loop
-npm run cli self-improve          # Run evaluation + pattern analysis
-npm run cli self-improve --auto-suggest  # Auto-generate suggestions
+npm run cli -- self-improve          # Run evaluation + pattern analysis
+npm run cli -- self-improve --auto-suggest  # Auto-generate suggestions
 
 # Training Data Export (for SLM fine-tuning)
-npm run cli training stats        # Show training data statistics
-npm run cli training sync         # Sync corrections to training data
-npm run cli training list         # List training examples
-npm run cli training export data/zuora-training.jsonl  # Export to JSONL
-npm run cli training export data/zuora-training.jsonl --format huggingface  # HuggingFace format
+npm run cli -- training stats        # Show training data statistics
+npm run cli -- training sync         # Sync corrections to training data
+npm run cli -- training list         # List training examples
+npm run cli -- training export data/zuora-training.jsonl  # Export to JSONL
+npm run cli -- training export data/zuora-training.jsonl --format huggingface  # HuggingFace format
 
 # Synthetic Test Generation
-npm run cli testgen from-failures <step>  # Generate tests from step failures
-npm run cli testgen from-failures billings -c 5  # Generate 5 tests
-npm run cli testgen from-failures billings -a  # Adversarial edge cases
-npm run cli testgen from-failures billings -o generated-tests  # Write to suite
-npm run cli testgen from-failures billings -o generated-tests --append  # Append to existing
-npm run cli testgen from-pattern "<pattern>" <step>  # Generate from pattern
-npm run cli testgen from-correction <correctionId>  # Generate from correction
-npm run cli testgen stats         # Show generated test statistics
-npm run cli testgen list          # List suites with generated tests
+npm run cli -- testgen from-failures <step>  # Generate tests from step failures
+npm run cli -- testgen from-failures billings -c 5  # Generate 5 tests
+npm run cli -- testgen from-failures billings -a  # Adversarial edge cases
+npm run cli -- testgen from-failures billings -o generated-tests  # Write to suite
+npm run cli -- testgen from-failures billings -o generated-tests --append  # Append to existing
+npm run cli -- testgen from-pattern "<pattern>" <step>  # Generate from pattern
+npm run cli -- testgen from-correction <correctionId>  # Generate from correction
+npm run cli -- testgen stats         # Show generated test statistics
+npm run cli -- testgen list          # List suites with generated tests
 ```
 
 ### Training Data for SLM Fine-Tuning
@@ -147,11 +161,11 @@ The self-learning system can export training data for fine-tuning small language
 - `data/training-data.json` - Stored training examples
 
 **Workflow:**
-1. Run evaluations with training capture: `npm run cli evaluate --suite golden-scenarios --capture-training`
+1. Run evaluations with training capture: `npm run cli -- evaluate --suite golden-scenarios --capture-training`
    - Passing outputs are automatically saved as training examples
-2. Optionally sync corrections: `npm run cli training sync`
+2. Optionally sync corrections: `npm run cli -- training sync`
    - Corrections with `example_fix` become additional training examples
-3. Export for fine-tuning: `npm run cli training export ./output.jsonl`
+3. Export for fine-tuning: `npm run cli -- training export ./output.jsonl`
 
 **Output Format (JSONL):**
 ```json
@@ -168,12 +182,12 @@ Corrections are automatically managed through decay, archiving, and promotion:
 
 **Archive**: Low-performing corrections are archived (hidden from injection)
 - Requires 10+ applies with <20% success rate → moved to archive
-- Archived corrections can be restored with `npm run cli corrections restore <id>`
+- Archived corrections can be restored with `npm run cli -- corrections restore <id>`
 
 **Promote**: High-performing corrections gain confidence
 - Requires 5+ applies with >80% success rate → confidence × 1.1 (max 1.0)
 
-Run maintenance manually with `npm run cli corrections maintain` or use `--dry-run` to preview changes.
+Run maintenance manually with `npm run cli -- corrections maintain` or use `--dry-run` to preview changes.
 
 ### Contrastive Examples
 Corrections are injected as contrastive examples showing both incorrect and correct outputs:

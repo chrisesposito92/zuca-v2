@@ -11,7 +11,9 @@
 import { Command } from 'commander';
 import chalk from 'chalk';
 import { readFile, writeFile } from 'fs/promises';
+import { existsSync } from 'fs';
 import { createInterface } from 'readline';
+import * as yaml from 'yaml';
 import { ZucaInput } from '../types/input';
 import { LlmModelSchema, type LlmModel } from '../types/llm';
 import { UCGeneratorInput, NumUseCases } from '../types/uc-generator';
@@ -405,6 +407,180 @@ program
   .option('-m, --model <model>', 'LLM model (gpt-5.2 | gemini-3-pro-preview | gemini-3-flash-preview | zuca-gpt-nano)')
   .action(quickCommand);
 
+// =============================================================================
+// Test Suite Conversion Helpers (for --to-suite option)
+// =============================================================================
+
+interface TestSuiteCase {
+  id: string;
+  name: string;
+  description: string;
+  input: {
+    customer_name: string;
+    contract_start_date: string;
+    terms_months: number;
+    transaction_currency: string;
+    billing_period: string;
+    is_allocations: boolean;
+    allocation_method?: string;
+    rev_rec_notes?: string;
+    use_case_description: string;
+  };
+  focus_steps: string[];
+  tags: string[];
+}
+
+interface TestSuite {
+  name: string;
+  description: string;
+  version: string;
+  tests: TestSuiteCase[];
+}
+
+function slugify(text: string): string {
+  if (!text) return 'unknown';
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')
+    .substring(0, 50);
+}
+
+function detectTags(useCase: { label?: string; otr_workflow_inputs: { use_case?: string; is_allocations?: boolean; terms_months?: number } }): string[] {
+  const tags: string[] = ['generated'];
+  const desc = (useCase.otr_workflow_inputs.use_case || '').toLowerCase();
+  const label = (useCase.label || '').toLowerCase();
+  const combined = `${desc} ${label}`;
+
+  if (combined.includes('ramp') || combined.includes('step-up') || combined.includes('escalat')) tags.push('ramp');
+  if (combined.includes('usage') || combined.includes('consumption') || combined.includes('metered')) tags.push('usage');
+  if (combined.includes('bundle') || combined.includes('package')) tags.push('bundle');
+  if (combined.includes('discount')) tags.push('discount');
+  if (combined.includes('one-time') || combined.includes('implementation') || combined.includes('setup')) tags.push('one-time');
+  if (combined.includes('recurring') || combined.includes('subscription')) tags.push('recurring');
+  if (combined.includes('license') || combined.includes('platform') || combined.includes('saas')) tags.push('license');
+  if (combined.includes('credit')) tags.push('credits');
+  if (useCase.otr_workflow_inputs.is_allocations) tags.push('allocation');
+  if ((useCase.otr_workflow_inputs.terms_months || 0) >= 24) tags.push('multi-year');
+
+  return tags;
+}
+
+interface RevRecNote {
+  charge_group?: string;
+  likely_pob_type?: string;
+  release_pattern?: string;
+  notes?: string;
+}
+
+function serializeRevRecNotes(notes: RevRecNote[] | string | undefined): string | undefined {
+  if (!notes) return undefined;
+  if (typeof notes === 'string') return notes;
+  if (!Array.isArray(notes)) return undefined;
+
+  return notes
+    .map((note) => {
+      const parts: string[] = [];
+      if (note.charge_group) parts.push(`${note.charge_group}:`);
+      if (note.likely_pob_type) parts.push(`POB=${note.likely_pob_type}`);
+      if (note.release_pattern) parts.push(`release=${note.release_pattern}`);
+      if (note.notes) parts.push(`(${note.notes})`);
+      return parts.join(' ');
+    })
+    .join('; ');
+}
+
+function convertUCToTestCase(
+  useCase: { id: string; label?: string; otr_workflow_inputs: Record<string, unknown> },
+  companyName: string,
+  existingIds: Set<string>
+): TestSuiteCase {
+  const inputs = useCase.otr_workflow_inputs;
+  const slug = slugify(companyName);
+  const tags = detectTags(useCase as Parameters<typeof detectTags>[0]);
+
+  // Generate unique ID (append suffix if collision)
+  let baseId = `gen-${slug}`;
+  let id = baseId;
+  let suffix = 1;
+  while (existingIds.has(id)) {
+    id = `${baseId}-${suffix++}`;
+  }
+  existingIds.add(id);
+
+  const name = useCase.label
+    ? `${companyName} - ${useCase.label}`
+    : `${companyName} - Use Case`;
+
+  return {
+    id,
+    name,
+    description: useCase.label || `Generated use case for ${companyName}`,
+    input: {
+      customer_name: (inputs.customer_name as string) || companyName,
+      contract_start_date: inputs.contract_start_date as string,
+      terms_months: inputs.terms_months as number,
+      transaction_currency: inputs.transaction_currency as string,
+      billing_period: inputs.billing_period as string,
+      is_allocations: (inputs.is_allocations as boolean) ?? false,
+      allocation_method: inputs.allocation_method as string | undefined,
+      rev_rec_notes: serializeRevRecNotes(inputs.rev_rec_notes as RevRecNote[] | string | undefined),
+      use_case_description: inputs.use_case as string,
+    },
+    focus_steps: [
+      'analyze_contract',
+      'design_subscription',
+      'contracts_orders',
+      'billings',
+      'revrec_waterfall',
+    ],
+    tags,
+  };
+}
+
+async function appendToTestSuite(
+  suitePath: string,
+  newTests: TestSuiteCase[]
+): Promise<{ added: number; existing: number }> {
+  let suite: TestSuite;
+  let existingCount = 0;
+
+  if (existsSync(suitePath)) {
+    // Load existing suite
+    const content = await readFile(suitePath, 'utf-8');
+    suite = yaml.parse(content) as TestSuite;
+    existingCount = suite.tests?.length || 0;
+    suite.tests = suite.tests || [];
+  } else {
+    // Create new suite
+    const suiteName = suitePath.split('/').pop()?.replace('.yaml', '') || 'generated';
+    suite = {
+      name: suiteName,
+      description: `Generated from UC outputs - ${new Date().toISOString().split('T')[0]}`,
+      version: '1.0',
+      tests: [],
+    };
+  }
+
+  // Get existing IDs to avoid duplicates
+  const existingIds = new Set(suite.tests.map((t) => t.id));
+
+  // Only add tests that don't already exist
+  const testsToAdd = newTests.filter((t) => !existingIds.has(t.id));
+  suite.tests.push(...testsToAdd);
+
+  // Write YAML
+  const yamlContent = yaml.stringify(suite, {
+    lineWidth: 0,
+    defaultStringType: 'QUOTE_DOUBLE',
+    defaultKeyType: 'PLAIN',
+  });
+
+  await writeFile(suitePath, yamlContent);
+
+  return { added: testsToAdd.length, existing: existingCount };
+}
+
 /**
  * Generate command - generate use cases for a customer
  */
@@ -417,6 +593,7 @@ async function generateCommand(
     output?: string;
     local?: boolean;
     model?: string;
+    toSuite?: string;
   }
 ): Promise<void> {
   try {
@@ -462,6 +639,38 @@ async function generateCommand(
       await writeFile(options.output, JSON.stringify(result, null, 2));
       console.log('');
       console.log(chalk.green(`Results saved to ${options.output}`));
+    }
+
+    // Convert to test suite if requested
+    if (options.toSuite) {
+      const companyName = result.generated.customer_name;
+      const existingIds = new Set<string>();
+
+      // Convert each use case to test case format
+      const testCases = result.use_cases.map((uc) =>
+        convertUCToTestCase(
+          {
+            id: uc.id,
+            label: uc.label,
+            otr_workflow_inputs: uc.otr_workflow_inputs,
+          },
+          companyName,
+          existingIds
+        )
+      );
+
+      // Append to suite (creates if doesn't exist)
+      const { added, existing } = await appendToTestSuite(options.toSuite, testCases);
+
+      console.log('');
+      if (existing > 0) {
+        console.log(chalk.green(`Added ${added} test case(s) to ${options.toSuite} (${existing} existing)`));
+      } else {
+        console.log(chalk.green(`Created ${options.toSuite} with ${added} test case(s)`));
+      }
+
+      const suiteName = options.toSuite.split('/').pop()?.replace('.yaml', '') || 'suite';
+      console.log(chalk.gray(`Run with: npm run cli -- evaluate --suite ${suiteName}`));
     }
   } catch (error: any) {
     console.error(chalk.red(`Error: ${error.message}`));
@@ -571,6 +780,7 @@ program
   .option('-o, --output <file>', 'Save results to a JSON file')
   .option('-l, --local', 'Use local formatting (faster, no LLM for formatting)')
   .option('-m, --model <model>', 'LLM model (gpt-5.2 | gemini-3-pro-preview | gemini-3-flash-preview | zuca-gpt-nano)')
+  .option('-t, --to-suite <file>', 'Append to test suite YAML (creates if missing)')
   .action(generateCommand);
 
 program

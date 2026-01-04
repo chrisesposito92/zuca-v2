@@ -58,6 +58,19 @@ const STEP_OUTPUT_MAP: Record<string, string | string[]> = {
 };
 
 /**
+ * All steps that should be captured for training data.
+ * This is separate from STEP_OUTPUT_MAP because we may want
+ * different granularity for training vs evaluation.
+ */
+const TRAINING_CAPTURE_STEPS = [
+  'analyze_contract',
+  'design_subscription',
+  'contracts_orders',
+  'billings',
+  'revrec_waterfall',
+];
+
+/**
  * Get step output from pipeline result, handling combined outputs
  */
 function getStepOutput(stepName: string, pipelineResult: Record<string, unknown>): unknown {
@@ -76,6 +89,30 @@ function getStepOutput(stepName: string, pipelineResult: Record<string, unknown>
   }
 
   return outputField ? pipelineResult[outputField] : null;
+}
+
+/**
+ * Capture all pipeline outputs for training data.
+ *
+ * IMPORTANT: This captures ALL steps regardless of focus_steps to ensure
+ * fine-tuned models have training data for every pipeline step.
+ * The focus_steps filter is only for evaluation quality feedback, not training capture.
+ */
+async function captureAllStepsForTraining(
+  testCaseId: string,
+  input: Record<string, unknown>,
+  pipelineResult: Record<string, unknown>
+): Promise<void> {
+  const fullInputContext = JSON.stringify(input, null, 2);
+
+  for (const stepName of TRAINING_CAPTURE_STEPS) {
+    const stepOutput = getStepOutput(stepName, pipelineResult);
+
+    if (stepOutput) {
+      await captureSuccessfulOutput(testCaseId, stepName, fullInputContext, stepOutput);
+      debugLog(`Captured training example for ${stepName} from test ${testCaseId}`);
+    }
+  }
 }
 
 /**
@@ -185,6 +222,17 @@ async function runTestCase(
     const pipelineResult = await runPipeline(input, { model: options.model });
     result.pipelineOutput = pipelineResult;
 
+    // Capture ALL step outputs for training BEFORE evaluation filtering.
+    // This ensures fine-tuned models have training data for every step,
+    // not just the ones being evaluated (which are filtered by focus_steps).
+    if (options.captureTraining) {
+      await captureAllStepsForTraining(
+        testCase.id,
+        input as unknown as Record<string, unknown>,
+        pipelineResult as Record<string, unknown>
+      );
+    }
+
     // Evaluate each step that has criteria
     for (const [stepName, criteria] of criteriaByStep) {
       // Skip if we're filtering steps and this isn't in the list
@@ -253,15 +301,10 @@ async function runTestCase(
 
       result.stepResults.set(stepName, judgeResult);
 
-      if (judgeResult.overall_pass) {
-        // Capture successful output as training data if enabled
-        if (options.captureTraining) {
-          // Build full input context for training (more detailed than inputSummary)
-          const fullInputContext = JSON.stringify(input, null, 2);
-          await captureSuccessfulOutput(testCase.id, stepName, fullInputContext, stepOutput);
-          debugLog(`Captured training example for ${stepName} from test ${testCase.id}`);
-        }
-      } else {
+      // Note: Training capture now happens BEFORE evaluation (see captureAllStepsForTraining above)
+      // This ensures we capture ALL steps, not just ones in focus_steps that pass evaluation.
+
+      if (!judgeResult.overall_pass) {
         result.passed = false;
 
         // Generate corrections if enabled
