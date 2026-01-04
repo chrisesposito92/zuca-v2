@@ -88,7 +88,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     await addMessage(id, 'user', `[Applied change: ${changeDescription}]`);
 
     // Apply the patch
-    type LlmModel = 'gpt-5.2' | 'gemini-3-pro-preview' | 'gemini-3-flash-preview';
+    type LlmModel = 'gpt-5.2' | 'gemini-3-pro-preview' | 'gemini-3-flash-preview' | 'zuca-gpt-nano';
     const defaultModel: LlmModel = (process.env.LLM_MODEL || process.env.OPENAI_MODEL || 'gpt-5.2') as LlmModel;
     const selectedModel: LlmModel = (session.llm_model as LlmModel) || defaultModel;
 

@@ -3,6 +3,7 @@ import { z } from 'zod';
 
 import { config, debugLog } from '../config';
 import { getMcpClient } from './mcp-client';
+import { resolveModelId } from '../types/llm';
 
 /**
  * OpenAI client instance (lazy)
@@ -641,10 +642,18 @@ async function completeOpenAI<T = unknown>(
     reasoningEffort,
   } = options;
 
+  // Fine-tuned models (ft:*) don't support web_search, but DO support code_interpreter, function calling, and MCP
+  const isFineTunedModel = model.startsWith('ft:');
+  // Filter out web_search for fine-tuned models (it's not supported)
+  const filteredBuiltInTools = isFineTunedModel
+    ? tools?.filter(t => t !== 'web_search')
+    : tools;
+
   debugLog('OpenAI Request:', {
     model,
     reasoningEffort,
-    builtInTools: tools,
+    isFineTuned: isFineTunedModel,
+    builtInTools: filteredBuiltInTools,
     customToolCount: customTools?.length || 0,
     mcpToolCount: mcpTools?.length || 0,
     hasSchema: !!responseSchema,
@@ -656,7 +665,7 @@ async function completeOpenAI<T = unknown>(
   const requestParams: any = {
     model,
     input: buildMessages(systemPrompt, userMessage, previousMessages),
-    tools: buildTools(tools, customTools, mcpTools),
+    tools: buildTools(filteredBuiltInTools, customTools, mcpTools),
   };
 
   // Check if model supports reasoning (gpt-5.2 and reasoning models)
@@ -982,13 +991,16 @@ async function completeGemini<T = unknown>(
 export async function complete<T = unknown>(
   options: CompletionOptions
 ): Promise<CompletionResult<T>> {
-  const resolvedModel = options.model || config.openai.model;
+  const requestedModel = options.model || config.openai.model;
+  // Resolve friendly model names (e.g., 'zuca-gpt-nano') to actual API model IDs
+  const resolvedModel = resolveModelId(requestedModel);
   const reasoningEffort = options.reasoningEffort || config.openai.reasoningEffort;
   const provider = getProviderForModel(resolvedModel);
 
   debugLog('LLM Request:', {
     provider,
     model: resolvedModel,
+    ...(requestedModel !== resolvedModel && { alias: requestedModel }),
   });
 
   if (provider === 'gemini') {
