@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Textarea, Tooltip, addToast } from "@heroui/react";
+import { Button, Textarea, Tooltip, addToast, Chip } from "@heroui/react";
 import { useState } from "react";
 
 export type FeedbackTargetType =
@@ -11,6 +11,16 @@ export type FeedbackTargetType =
   | "revrec";
 export type FeedbackRating = "positive" | "negative";
 
+// Preset categories for negative feedback (Glean-style)
+const NEGATIVE_CATEGORIES = [
+  { id: "incomplete", label: "Incomplete or missing info" },
+  { id: "inaccurate", label: "Inaccurate response" },
+  { id: "outdated", label: "Outdated information" },
+  { id: "irrelevant", label: "Not relevant to my question" },
+  { id: "confusing", label: "Confusing or unclear" },
+  { id: "other", label: "Other" },
+] as const;
+
 interface FeedbackButtonsProps {
   sessionId: string;
   targetType: FeedbackTargetType;
@@ -19,7 +29,11 @@ interface FeedbackButtonsProps {
   /** Size variant */
   size?: "sm" | "md";
   /** Optional callback when feedback is submitted */
-  onFeedbackSubmitted?: (rating: FeedbackRating, comment?: string) => void;
+  onFeedbackSubmitted?: (
+    rating: FeedbackRating,
+    categories?: string[],
+    comment?: string
+  ) => void;
 }
 
 export function FeedbackButtons({
@@ -31,11 +45,15 @@ export function FeedbackButtons({
 }: FeedbackButtonsProps) {
   const [submitted, setSubmitted] = useState<FeedbackRating | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showCommentInput, setShowCommentInput] = useState(false);
+  const [expandedRating, setExpandedRating] = useState<FeedbackRating | null>(
+    null
+  );
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [comment, setComment] = useState("");
 
   const submitFeedback = async (
     rating: FeedbackRating,
+    categories?: string[],
     feedbackComment?: string
   ) => {
     setIsSubmitting(true);
@@ -47,7 +65,8 @@ export function FeedbackButtons({
           session_id: sessionId,
           target_type: targetType,
           rating,
-          comment: feedbackComment,
+          categories: categories?.length ? categories : undefined,
+          comment: feedbackComment || undefined,
         }),
       });
 
@@ -56,7 +75,8 @@ export function FeedbackButtons({
       }
 
       setSubmitted(rating);
-      setShowCommentInput(false);
+      setExpandedRating(null);
+      setSelectedCategories([]);
       setComment("");
 
       addToast({
@@ -65,7 +85,7 @@ export function FeedbackButtons({
         color: "success",
       });
 
-      onFeedbackSubmitted?.(rating, feedbackComment);
+      onFeedbackSubmitted?.(rating, categories, feedbackComment);
     } catch (error) {
       console.error("Feedback error:", error);
       addToast({
@@ -79,20 +99,31 @@ export function FeedbackButtons({
   };
 
   const handleThumbsUp = () => {
-    submitFeedback("positive");
+    setExpandedRating("positive");
   };
 
   const handleThumbsDown = () => {
-    setShowCommentInput(true);
+    setExpandedRating("negative");
   };
 
-  const handleSubmitNegativeFeedback = () => {
-    submitFeedback("negative", comment || undefined);
+  const handleSubmitFeedback = () => {
+    if (expandedRating) {
+      submitFeedback(expandedRating, selectedCategories, comment || undefined);
+    }
   };
 
-  const handleCancelComment = () => {
-    setShowCommentInput(false);
+  const handleCancel = () => {
+    setExpandedRating(null);
+    setSelectedCategories([]);
     setComment("");
+  };
+
+  const toggleCategory = (categoryId: string) => {
+    setSelectedCategories((prev) =>
+      prev.includes(categoryId)
+        ? prev.filter((c) => c !== categoryId)
+        : [...prev, categoryId]
+    );
   };
 
   // Already submitted - show thank you state
@@ -117,39 +148,106 @@ export function FeedbackButtons({
     );
   }
 
-  // Showing comment input for negative feedback
-  if (showCommentInput) {
+  // Expanded feedback form (for both positive and negative)
+  if (expandedRating) {
+    const isNegative = expandedRating === "negative";
+
     return (
-      <div className="space-y-3 max-w-md animate-fade-in-up">
-        <div className="flex items-center gap-2 text-default-500 text-sm">
-          <ThumbsDownIcon className="w-4 h-4 text-danger" />
-          <span>What could be improved?</span>
+      <div className="space-y-4 max-w-md animate-fade-in-up p-4 rounded-lg bg-default-100/50 border border-default-200">
+        {/* Header */}
+        <div className="space-y-1">
+          <h4 className="text-sm font-medium text-default-700">
+            Thanks for your feedback
+          </h4>
+          <div className="flex items-center gap-2 text-sm text-default-500">
+            {isNegative ? (
+              <>
+                <span>You found this</span>
+                <span className="inline-flex items-center gap-1">
+                  <ThumbsDownIcon className="w-4 h-4 text-danger" />
+                  <span className="font-medium text-danger">Not helpful</span>
+                </span>
+              </>
+            ) : (
+              <>
+                <span>You found this</span>
+                <span className="inline-flex items-center gap-1">
+                  <ThumbsUpIcon className="w-4 h-4 text-success" />
+                  <span className="font-medium text-success">Helpful</span>
+                </span>
+              </>
+            )}
+          </div>
         </div>
-        <Textarea
-          placeholder="Optional: Tell us what went wrong or how we can improve..."
-          value={comment}
-          onValueChange={setComment}
-          variant="bordered"
-          minRows={2}
-          maxRows={4}
-          classNames={{
-            inputWrapper: "bg-default-100/50 border-default-300",
-          }}
-        />
-        <div className="flex gap-2">
+
+        {/* Category chips (only for negative feedback) */}
+        {isNegative && (
+          <div className="space-y-2">
+            <p className="text-sm font-medium text-default-600">Tell us more</p>
+            <div className="flex flex-wrap gap-2">
+              {NEGATIVE_CATEGORIES.map((category) => (
+                <Chip
+                  key={category.id}
+                  variant={
+                    selectedCategories.includes(category.id)
+                      ? "solid"
+                      : "bordered"
+                  }
+                  color={
+                    selectedCategories.includes(category.id)
+                      ? "danger"
+                      : "default"
+                  }
+                  className="cursor-pointer transition-all hover:scale-105"
+                  onClick={() => toggleCategory(category.id)}
+                >
+                  {category.label}
+                </Chip>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Comment textarea */}
+        <div className="space-y-2">
+          <div className="flex items-center gap-2">
+            <p className="text-sm font-medium text-default-600">
+              {isNegative ? "Share additional details" : "What did you like?"}
+            </p>
+            <span className="text-xs text-default-400">Optional</span>
+          </div>
+          <Textarea
+            placeholder={
+              isNegative
+                ? "Tell us what went wrong or how we can improve..."
+                : "Tell us what was helpful or what you liked..."
+            }
+            value={comment}
+            onValueChange={setComment}
+            variant="bordered"
+            minRows={2}
+            maxRows={4}
+            classNames={{
+              inputWrapper: "bg-default-50 border-default-300",
+            }}
+          />
+        </div>
+
+        {/* Action buttons */}
+        <div className="flex gap-2 pt-1">
           <Button
             size="sm"
-            color="danger"
+            color={isNegative ? "danger" : "success"}
             variant="flat"
             isLoading={isSubmitting}
-            onPress={handleSubmitNegativeFeedback}
+            onPress={handleSubmitFeedback}
           >
             Submit Feedback
           </Button>
           <Button
             size="sm"
             variant="light"
-            onPress={handleCancelComment}
+            onPress={handleCancel}
             isDisabled={isSubmitting}
           >
             Cancel
@@ -165,9 +263,7 @@ export function FeedbackButtons({
 
   return (
     <div className="flex items-center gap-3">
-      {label && (
-        <span className="text-default-400 text-sm">{label}</span>
-      )}
+      {label && <span className="text-default-400 text-sm">{label}</span>}
       <div className="flex items-center gap-1">
         <Tooltip content="Helpful" delay={500}>
           <Button

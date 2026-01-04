@@ -61,9 +61,13 @@ CREATE TABLE IF NOT EXISTS feedback (
     user_id UUID REFERENCES auth_users(id) ON DELETE SET NULL,
     target_type VARCHAR(50) NOT NULL,     -- 'session' | 'summary' | 'contracts' | 'billings' | 'revrec'
     rating VARCHAR(10) NOT NULL,          -- 'positive' | 'negative'
-    comment TEXT,                         -- optional, typically for negative feedback
+    categories TEXT[],                    -- preset feedback categories (e.g., ['inaccurate', 'incomplete'])
+    comment TEXT,                         -- optional free-form details
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
+
+-- Migration: Add categories column if table already exists
+ALTER TABLE feedback ADD COLUMN IF NOT EXISTS categories TEXT[];
 
 -- Bug Reports table (user-submitted issues, auto-opened in GitHub)
 CREATE TABLE IF NOT EXISTS bug_reports (

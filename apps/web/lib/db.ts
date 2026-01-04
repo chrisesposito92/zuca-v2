@@ -505,6 +505,7 @@ export interface DbFeedback {
   user_id: string | null;
   target_type: FeedbackTargetType;
   rating: FeedbackRating;
+  categories: string[] | null;
   comment: string | null;
   created_at: Date;
 }
@@ -514,11 +515,17 @@ export async function createFeedback(
   targetType: FeedbackTargetType,
   rating: FeedbackRating,
   userId?: string,
+  categories?: string[],
   comment?: string
 ): Promise<DbFeedback> {
+  // Convert categories array to PostgreSQL array literal format
+  const categoriesValue = categories?.length
+    ? `{${categories.map(c => `"${c}"`).join(',')}}`
+    : null;
+
   const result = await sql<DbFeedback>`
-    INSERT INTO feedback (session_id, user_id, target_type, rating, comment)
-    VALUES (${sessionId}, ${userId ?? null}, ${targetType}, ${rating}, ${comment ?? null})
+    INSERT INTO feedback (session_id, user_id, target_type, rating, categories, comment)
+    VALUES (${sessionId}, ${userId ?? null}, ${targetType}, ${rating}, ${categoriesValue}::text[], ${comment ?? null})
     RETURNING *
   `;
   return result.rows[0];
