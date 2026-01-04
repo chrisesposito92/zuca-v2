@@ -1,0 +1,440 @@
+name: "telco-companies"
+description: "Generated from UC outputs - 2026-01-04"
+version: "1.0"
+tests:
+  - id: "gen-twilio"
+    name: "Twilio - Enterprise Flex Contact Center Deployment"
+    description: "Enterprise Flex Contact Center Deployment"
+    input:
+      customer_name: "Twilio"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Flex Named User provides continuous platform access over the 12-month contract.); Services: POB=point_in_time release=at_go_live (Implementation services are recognized once the contact center environment is live.); Other: POB=over_time release=ratable_over_term (Support plan represents a stand-ready obligation over the term.)"
+      use_case_description: "This scenario covers an enterprise customer deploying Twilio Flex for their global contact center. It includes a recurring 'Flex Named User' subscription for 100 agents at $150/user/month, billed annually. Additionally, it features a one-time 'Professional Services' implementation fee of $15,000 for solution architecture and a 'Production Support Plan' billed at a flat $250/month. The subscription and support are ratable over the 12-month term, while the professional services are recognized at go-live. A 10% bundle discount is applied across the subscription and services, requiring revenue allocation."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "allocation"
+  - id: "gen-twilio-1"
+    name: "Twilio - Segment CDP with Usage-Based MTU Scaling"
+    description: "Segment CDP with Usage-Based MTU Scaling"
+    input:
+      customer_name: "Twilio"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Base Segment subscription is recognized monthly as service is provided.); Usage: POB=consumption release=as_used (MTU overages are recognized in the period the tracking events occur.)"
+      use_case_description: "This use case focuses on Twilio Segment Connections for a growth-stage company. The contract includes a 'Segment Team Plan' subscription at $120/month base, which includes 10,000 Monthly Tracked Users (MTUs). Any volume exceeding the 10k limit is charged as an overage at $10 per 1,000 MTUs. The billing period is monthly to align with the variable MTU counts. Revenue for the base subscription is recognized ratably each month, while overage revenue is recognized as consumption occurs based on monthly usage reports."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+  - id: "gen-twilio-2"
+    name: "Twilio - High-Volume Programmable Messaging (CPaaS)"
+    description: "High-Volume Programmable Messaging (CPaaS)"
+    input:
+      customer_name: "Twilio"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      rev_rec_notes: "Usage: POB=consumption release=as_used (Messaging revenue is recognized upon successful delivery/processing of the SMS.); Other: POB=over_time release=as_billed (Support fee varies based on spend and is recognized in the period the support is available.)"
+      use_case_description: "A pure usage-based scenario for Programmable Messaging. The customer commits to a 12-month term to secure tiered pricing for SMS. The first 5 million messages are priced at $0.0079/SMS, and volume above 5 million drops to $0.0075/SMS. This is a pay-as-you-go model with no fixed recurring fee, but includes a 'Production Support' add-on calculated as 4% of the monthly messaging spend (minimum $250). Revenue for messaging is recognized as messages are sent (consumption), and the support fee is recognized monthly as billed."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+  - id: "gen-vonage"
+    name: "Vonage - Mid-Market UCaaS Expansion"
+    description: "Mid-Market UCaaS Expansion"
+    input:
+      customer_name: "Vonage"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (VBC Advanced licenses provide continuous access to communication services.); Onboarding: POB=point_in_time release=at_go_live (Professional services for setup are distinct and recognized upon completion.)"
+      use_case_description: "A mid-market professional services firm is adopting Vonage Business Communications (VBC) for 100 employees. They are selecting the 'Advanced Plan' at a discounted rate of $25.00 per line per month on a 12-month contract. The deal includes a one-time 'Gold Implementation' fee of $2,500.00 to handle number porting and admin training. Billing for the recurring lines is monthly in advance, while the implementation fee is billed upfront. Revenue for the VBC licenses should be recognized ratably over the 12-month term, while the implementation fee is recognized point-in-time upon completion of the go-live milestone."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "license"
+      - "allocation"
+  - id: "gen-vonage-1"
+    name: "Vonage - High-Volume CPaaS API Usage"
+    description: "High-Volume CPaaS API Usage"
+    input:
+      customer_name: "Vonage"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (The Platform Access Fee covers the availability of premium API features.); Usage: POB=consumption release=as_used (SMS and Voice API charges are recognized as the communication events occur.)"
+      use_case_description: "A logistics company is integrating Vonage Communications APIs for automated delivery notifications. The contract includes a flat monthly 'Platform Access Fee' of $500.00 for premium reporting and audit logs. Additionally, they will be billed in arrears for SMS and Voice usage at rates of $0.008 per message and $0.00798 per minute, respectively. The contract is set for 12 months with monthly billing. The platform fee is recognized ratably each month, while the API usage is recognized as consumed (consumption-based revenue)."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "license"
+  - id: "gen-vonage-2"
+    name: "Vonage - Enterprise Contact Center (CCaaS) Bundle"
+    description: "Enterprise Contact Center (CCaaS) Bundle"
+    input:
+      customer_name: "Vonage"
+      contract_start_date: "02/01/2026"
+      terms_months: 36
+      transaction_currency: "USD"
+      billing_period: "Quarterly"
+      is_allocations: true
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Both VCC and VBC licenses are treated as standing-ready obligations over the term.)"
+      use_case_description: "A global retailer is deploying Vonage Contact Center (VCC) for 250 agents alongside 500 VBC 'Premium' lines for corporate staff. The VCC agent licenses are priced at $110.00 per agent per month, and the VBC lines are $18.00 per line per month, representing a significant bundle discount. This is a 36-month multi-year agreement billed quarterly. Due to the bundled discount across multiple product lines, revenue allocation is required based on the standalone selling prices of each component. Revenue for all licenses will be recognized ratably over the 3-year term."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "license"
+      - "allocation"
+      - "multi-year"
+  - id: "gen-bandwidth"
+    name: "Bandwidth - Developer API Launch (PAYG)"
+    description: "Developer API Launch (PAYG)"
+    input:
+      customer_name: "Bandwidth"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Phone number hosting is a stand-ready obligation recognized monthly.); Usage: POB=consumption release=as_used (Messaging and Voice charges are recognized as the API calls are completed.)"
+      use_case_description: "A growing tech startup is integrating Bandwidth's APIs for their new application. The contract includes 'Phone Numbers (DID)' billed as a monthly recurring charge of $0.35 per number for 500 numbers. It also includes 'Programmable Messaging' and 'Programmable Voice' charges based on actual consumption, priced at $0.004 per SMS and $0.01 per minute respectively. The customer is billed monthly in arrears for usage and in advance for the number subscriptions. Revenue for the phone numbers is recognized ratably over each monthly period, while usage revenue is recognized as consumption occurs."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+  - id: "gen-bandwidth-1"
+    name: "Bandwidth - Enterprise UCaaS Migration with E911"
+    description: "Enterprise UCaaS Migration with E911"
+    input:
+      customer_name: "Bandwidth"
+      contract_start_date: "02/01/2026"
+      terms_months: 24
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Premium Support and E911 endpoints represent continuous access to service.); Usage: POB=consumption release=as_used (Tiered voice usage is recognized as minutes are consumed.)"
+      use_case_description: "A global enterprise is migrating its legacy telephony to a UCaaS model using Bandwidth's network. The 24-month agreement includes a 'Premium Support Plan' at a flat $2,500 monthly fee and 'Emergency Services (911 API)' at $0.50 per endpoint for 10,000 endpoints. 'Programmable Voice' is provided with volume-tiered pricing: $0.008 per minute for the first 1 million minutes and $0.006 thereafter. All recurring fees are billed monthly in advance. Revenue for Support and E911 services is recognized ratably, while Voice usage is recognized via consumption-based performance obligations."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+      - "multi-year"
+  - id: "gen-bandwidth-2"
+    name: "Bandwidth - SMS Campaign Bundle with Onboarding"
+    description: "SMS Campaign Bundle with Onboarding"
+    input:
+      customer_name: "Bandwidth"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Onboarding: POB=point_in_time release=at_go_live (Registry and setup services are distinct events completed before traffic begins.); Subscription: POB=over_time release=ratable_over_term (Short code hosting is a monthly recurring subscription.); Usage: POB=consumption release=as_used (High-volume SMS traffic is recognized as messages are sent.)"
+      use_case_description: "A retail brand is launching a large-scale SMS marketing campaign. The deal includes a one-time 'Dedicated Onboarding' fee of $5,000 for Short Code registration and 10DLC campaign registry. Recurring costs include 5 Short Code numbers at $1,000 per month total. 'Programmable Messaging' is billed at a discounted rate of $0.003 per SMS. Because the onboarding fee is bundled with a 12-month messaging commitment at a discount, revenue allocations are applied to ensure the $5,000 is recognized at the point of campaign go-live, while the subscription is ratable. Usage is recognized as billed based on volume."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "allocation"
+  - id: "gen-sinch"
+    name: "Sinch - Enterprise Engage Pro with Messaging Overages"
+    description: "Enterprise Engage Pro with Messaging Overages"
+    input:
+      customer_name: "Sinch"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (The Engage Pro platform fee represents a stand-ready obligation to provide software access.); Usage: POB=consumption release=as_used (SMS overages are discrete consumption events recognized when the messages are sent.)"
+      use_case_description: "A mid-market enterprise signs up for the Sinch Engage Pro plan to manage their omnichannel customer communication. The plan is billed at a recurring $249 per month and includes 10,000 SMS messages. Any messaging volume exceeding the 10,000 allowance is billed as an overage at a rate of $0.0075 per message. The platform fee provides access to the unified inbox and AI-generated campaign features. Revenue for the $249 base fee is recognized ratably over the monthly service period. Overage revenue is recognized as consumption occurs based on monthly usage reports."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+      - "license"
+  - id: "gen-sinch-1"
+    name: "Sinch - Developer-First PAYG SMS & Verification"
+    description: "Developer-First PAYG SMS & Verification"
+    input:
+      customer_name: "Sinch"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      rev_rec_notes: "Usage: POB=consumption release=as_used (Both SMS and Verification charges are event-based and recognized upon delivery/success.)"
+      use_case_description: "A high-growth startup integrates Sinch's SMS API and Verification API for user authentication and notifications. This is a pure pay-as-you-go (PAYG) model with no monthly recurring platform fee. SMS messages are billed at $0.0078 per outbound message. Successful 2FA verifications (SMS or Voice OTP) are billed at $0.05 per successful completion. Billing occurs monthly in arrears based on the total volume of messages and successful verifications recorded. All revenue is recognized as consumption occurs, mapping directly to the usage processed in the billing period."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+      - "license"
+  - id: "gen-sinch-2"
+    name: "Sinch - Global Email & Support Bundle with Onboarding"
+    description: "Global Email & Support Bundle with Onboarding"
+    input:
+      customer_name: "Sinch"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Mailgun platform access is a ratable service.); Services: POB=point_in_time release=at_go_live (Onboarding is treated as a distinct POB recognized when implementation is finished.); Other: POB=over_time release=ratable_over_term (Gold Support is a stand-ready obligation recognized over the 12-month term.)"
+      use_case_description: "An enterprise customer migrates to Mailgun for their global transactional email needs. The bundle includes the Mailgun Foundation plan at $35/month (50,000 emails included) and the Gold Premium Support Plan at $350/month for 24/7 coverage. Additionally, a one-time Professional Services fee of $1,500 is charged for initial implementation and deliverability optimization. A 10% discount is applied to the entire first-year contract. Because the bundle includes a mix of software, support, and services with a shared discount, revenue is allocated across these performance obligations based on their standalone selling prices. Subscription and Support are recognized ratably, while the Onboarding fee is recognized point-in-time upon completion of the setup."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "allocation"
+  - id: "gen-messagebird"
+    name: "MessageBird - Mid-Market Omnichannel Pro Bundle"
+    description: "Mid-Market Omnichannel Pro Bundle"
+    input:
+      customer_name: "MessageBird"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Platform seats and email base volume represent a right to access the service over the contract term.); Services: POB=over_time release=ratable_over_term (Pro Support is a stand-ready obligation provided throughout the duration of the subscription.)"
+      use_case_description: "A mid-market retail customer signs a 12-month contract for the Bird Pro Bundle to manage customer engagement. The deal includes 10 seats of the Bird Platform (CRM & Inbox) at $30 per seat per month and a Bird Email Premier plan with a base volume of 100,000 emails for $150 per month. Additionally, they have opted for Pro Support at a flat fee of $500 per month to ensure priority response times. All components are billed monthly. Revenue for the platform seats and support is recognized ratably over the 12-month term, while the email volume is treated as a monthly recurring service."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "recurring"
+      - "license"
+  - id: "gen-messagebird-1"
+    name: "MessageBird - Enterprise API & Usage Commitment"
+    description: "Enterprise API & Usage Commitment"
+    input:
+      customer_name: "MessageBird"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Platform Access and WhatsApp fees are ratable over the 12-month term.); Usage: POB=consumption release=as_used (SMS usage is recognized as messages are sent, satisfying the performance obligation at a point in time.)"
+      use_case_description: "A large logistics provider enters an enterprise agreement focused on high-volume Messaging APIs. The contract includes a $2,000 monthly Platform Access fee and a $1,000 monthly Enterprise Support plan with a dedicated Technical Account Manager. They have committed to a minimum of 500,000 SMS messages per month at a discounted rate of $0.007 per message. WhatsApp Business API is also enabled with a $500 monthly platform fee. While the platform and support fees are billed annually upfront, the SMS and WhatsApp usage charges are billed monthly in arrears based on actual consumption, with the 500k SMS commitment acting as a monthly floor."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "discount"
+      - "license"
+  - id: "gen-messagebird-2"
+    name: "MessageBird - Strategic Bundle with Implementation Services"
+    description: "Strategic Bundle with Implementation Services"
+    input:
+      customer_name: "MessageBird"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Platform and Email recurring fees receive a portion of the allocated discount and are recognized monthly.); Onboarding: POB=point_in_time release=at_go_live (Implementation fee is recognized once the customer is live on the platform, following the allocated price.)"
+      use_case_description: "A new fintech client purchases a strategic bundle including 20 Bird Platform seats ($600/mo), 500k Email volume ($750/mo), and a one-time Professional Services implementation package ($5,000). To win the deal, Bird has offered a 15% discount across the entire bundle. Because the implementation service is a distinct performance obligation and the total contract includes both recurring and one-time elements with a shared discount, revenue must be allocated based on the standalone selling prices (SSP) of each component. The subscription starts immediately, while the implementation is expected to be completed within the first 30 days."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "license"
+      - "allocation"
+  - id: "gen-plivo"
+    name: "Plivo - Mid-Market Team Subscription with Usage"
+    description: "Mid-Market Team Subscription with Usage"
+    input:
+      customer_name: "Plivo"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (The Team Plan platform fee provides access to tools over the subscription term.); Other: POB=over_time release=ratable_over_term (Phone number rentals are recurring monthly fees for maintaining ownership of the numbers.); Usage: POB=consumption release=as_used (SMS and Voice charges are recognized as discrete communication events occur.)"
+      use_case_description: "A mid-sized marketing agency signs up for the Plivo Team Plan to manage their client communications. The contract includes a $250 monthly platform fee and 10 local phone numbers at $0.50 each per month. Usage is billed monthly in arrears based on actual consumption, with SMS priced at $0.007 per message and Voice at $0.01 per minute. The subscription and phone number rentals are recurring charges recognized ratably over the monthly term. Usage charges are treated as consumption-based revenue recognized as the services are used. The contract is set for a 12-month term with monthly billing and no upfront discounts."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "discount"
+      - "recurring"
+      - "license"
+  - id: "gen-plivo-1"
+    name: "Plivo - Enterprise Short Code Bundle with Allocation"
+    description: "Enterprise Short Code Bundle with Allocation"
+    input:
+      customer_name: "Plivo"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Enterprise Plan and Support fees are ratable over the 12-month term.); Onboarding: POB=point_in_time release=at_go_live (Short Code Setup is a one-time activity recognized upon completion/activation.); Usage: POB=consumption release=as_used (Discounted Enterprise SMS usage recognized as consumed.)"
+      use_case_description: "An enterprise retailer signs a 12-month agreement for high-volume SMS campaigns. The deal includes the Enterprise Plan at $999/month, a Short Code Rental at $1,000/month, and Personalized Support at $2,500/month. There is a one-time Short Code Setup fee of $1,500 due at the start of the contract. A 10% bundle discount is applied to all recurring fees, requiring revenue allocation based on list prices. The setup fee is recognized at go-live, while the recurring platform and support fees are ratable over the term. SMS usage is billed monthly at a discounted rate of $0.005 per message and recognized as consumed."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "license"
+      - "allocation"
+  - id: "gen-plivo-2"
+    name: "Plivo - AI Agent Voice Deployment"
+    description: "AI Agent Voice Deployment"
+    input:
+      customer_name: "Plivo"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Quarterly"
+      is_allocations: false
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Quarterly platform fee recognized ratably over the 3-month billing periods.); Usage: POB=consumption release=as_used (Combined Voice and AI Execution usage recognized as the minutes are consumed.)"
+      use_case_description: "A tech startup implements an AI-driven support desk using Plivo's AI Agent Execution features. They subscribe to the Team Plan for $250 per month, billed quarterly. The primary costs are usage-driven: Voice API at $0.01 per minute and AI Agent Execution at $0.045 per minute. The contract is a 12-month commitment starting on the first of next month. Revenue for the platform fee is recognized ratably over each quarterly period. The AI and Voice usage charges are recognized as consumption-based performance obligations as the minutes are used. No discounts are applied to the standard list rates for this scenario."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "discount"
+      - "license"

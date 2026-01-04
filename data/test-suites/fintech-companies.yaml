@@ -1,0 +1,725 @@
+name: "fintech-companies"
+description: "Generated from UC outputs - 2026-01-04"
+version: "1.0"
+tests:
+  - id: "gen-stripe"
+    name: "Stripe - High-Growth SaaS Bundle"
+    description: "High-Growth SaaS Bundle"
+    input:
+      customer_name: "Stripe"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Fixed monthly and annual subscription fees for access to the platform.); Usage: POB=consumption release=as_used (Billing volume percentage recognized as transactions occur.); Onboarding: POB=point_in_time release=at_go_live (Implementation fee recognized when the account setup is completed.)"
+      use_case_description: "A mid-market SaaS provider signs up for an integrated stack including Stripe Billing and Stripe Revenue Recognition. The Stripe Billing component is charged as a recurring monthly fee of $500 plus a usage fee of 0.7% of billing volume. Stripe Revenue Recognition is billed as a flat annual subscription of $6,000. Additionally, a one-time onboarding fee of $2,500 is charged for the initial RevRec configuration. The contract is for 12 months, with the subscription fees recognized ratably over the term and the onboarding fee recognized upon completion of the setup."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "bundle"
+      - "one-time"
+      - "recurring"
+      - "license"
+      - "allocation"
+  - id: "gen-stripe-1"
+    name: "Stripe - Enterprise Transactional & Security"
+    description: "Enterprise Transactional & Security"
+    input:
+      customer_name: "Stripe"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      rev_rec_notes: "Usage: POB=point_in_time release=at_delivery (Payment fees and fraud screening fees are earned at the moment of the transaction.); Other: POB=point_in_time release=at_delivery (Stripe Tax calculations are recognized as the tax API service is utilized.)"
+      use_case_description: "An enterprise merchant utilizes Stripe Payments and Radar for Fraud Teams at scale. The merchant is on a custom plan with a negotiated payment processing rate of 2.5% + $0.20 per transaction. Radar for Fraud Teams is billed as a usage-based add-on at $0.05 per screened transaction. Stripe Tax is also enabled, charging 0.5% per calculated transaction in active jurisdictions. All charges are purely consumption-based with no fixed recurring fees. Revenue is recognized at the point in time each transaction is successfully processed or screened."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+  - id: "gen-stripe-2"
+    name: "Stripe - Multi-Year Enterprise OTR Automation"
+    description: "Multi-Year Enterprise OTR Automation"
+    input:
+      customer_name: "Stripe"
+      contract_start_date: "02/01/2026"
+      terms_months: 36
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Ramped platform fees recognized ratably within each contract year.); Services: POB=event_based release=at_go_live (Milestone-based recognition for professional services.)"
+      use_case_description: "A global enterprise signs a 3-year deal for the full OTR suite, including Stripe Payments, Billing, and Revenue Recognition. Year 1 features a discounted platform fee of $10,000, ramping to $20,000 in Year 2 and $30,000 in Year 3. The contract includes a bundled professional services package for $50,000, split into two milestones: $25,000 at initial go-live and $25,000 after 6 months of optimization. Revenue for the platform fee is recognized ratably each year, while the services are recognized at the point of milestone completion. Allocation is required to distribute the total contract value across the performance obligations using list prices."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "ramp"
+      - "bundle"
+      - "discount"
+      - "license"
+      - "allocation"
+      - "multi-year"
+  - id: "gen-square"
+    name: "Square - Restaurant Plus Bundle with Hardware"
+    description: "Restaurant Plus Bundle with Hardware"
+    input:
+      customer_name: "Square"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Software access for 3 locations is provided continuously over the term.); Hardware: POB=point_in_time release=at_delivery (Revenue is recognized when the Square Registers are shipped/delivered.); Usage: POB=consumption release=as_used (Processing fees are recognized at the moment of transaction execution.)"
+      use_case_description: "A multi-unit restaurant group signs up for Square for Restaurants Plus for 3 locations at $60 per location per month. They purchase 3 Square Register units for a one-time fee of $799 each to modernize their front-of-house. Payment processing is included as a usage-based charge with a standard rate of 2.6% plus $0.15 per transaction. To win the deal, a 10% discount is applied to both the software subscription and the hardware, requiring revenue allocation between the POBs. The software subscription is recognized ratably over the 12-month term, while the hardware revenue is recognized at the point of delivery. Payment processing revenue is recognized as transactions occur."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "allocation"
+  - id: "gen-square-1"
+    name: "Square - Enterprise Retail Premium Multi-Year"
+    description: "Enterprise Retail Premium Multi-Year"
+    input:
+      customer_name: "Square"
+      contract_start_date: "02/01/2026"
+      terms_months: 24
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Both the base platform fee and location licenses are ratable over the 24-month term.); Usage: POB=consumption release=as_used (Custom processing fees are recognized as transactions are processed.)"
+      use_case_description: "A high-volume retail chain signs a 24-month contract for the Square Premium tier. The agreement includes a custom base platform fee of $149 per month and 10 location licenses for Square for Retail at $89 per location per month. The merchant also receives a custom negotiated processing rate of 2.2% plus $0.10 per transaction due to their high annual volume. Software fees are billed annually in advance, while usage is billed monthly in arrears. Revenue for the platform and location licenses is recognized ratably over the 24-month term. This scenario demonstrates Zuora's ability to handle multi-year terms with annual billing cycles and custom usage pricing."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "license"
+      - "multi-year"
+  - id: "gen-square-2"
+    name: "Square - Appointments Plus with Professional Services"
+    description: "Appointments Plus with Professional Services"
+    input:
+      customer_name: "Square"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Monthly subscription for Appointments Plus.); Services: POB=point_in_time release=at_go_live (One-time setup and migration fee recognized when the service is completed.); Usage: POB=consumption release=as_used (Standard transaction processing fees.)"
+      use_case_description: "A boutique salon signs up for Square Appointments Plus at $29 per month. In addition to the subscription, they pay a one-time Professional Services fee of $500 for data migration and staff training. Payment processing is billed at the standard 2.6% plus $0.15 per transaction rate. The subscription is billed monthly. Revenue for the Appointments software is recognized ratably over the 12-month term. The Professional Services fee is recognized as a point-in-time POB upon completion of the training and migration (go-live). This scenario highlights the separation of recurring SaaS revenue from one-time service revenue."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "one-time"
+      - "recurring"
+      - "license"
+  - id: "gen-plaid"
+    name: "Plaid - Growth Plan - PFM Application"
+    description: "Growth Plan - PFM Application"
+    input:
+      customer_name: "Plaid"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Plaid Transactions provides continuous data syncing and is recognized ratably over the billing period.); Other: POB=event_based release=at_go_live (Plaid Auth is a one-time fee per account connection, recognized upon successful authentication.); Usage: POB=consumption release=as_used (Plaid Balance API calls are recognized as the calls are successfully executed.)"
+      use_case_description: "This scenario represents a typical mid-market 'Growth' plan for a personal finance management (PFM) application. The contract includes Plaid Auth as a one-time connection fee of $0.50 per account, Plaid Transactions as a recurring subscription at $1.50 per account per month, and Plaid Balance as a usage-based charge at $0.30 per API call. A monthly minimum commitment of $250 is established, where usage and recurring charges count towards the minimum. Revenue for the Transactions subscription is recognized ratably over the monthly term, while Auth is recognized at the moment of connection and Balance is recognized as consumed. The customer is billed monthly in advance for the recurring components and in arrears for usage that exceeds the minimum."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "one-time"
+      - "recurring"
+  - id: "gen-plaid-1"
+    name: "Plaid - Enterprise Scale - Multi-Year Bundle"
+    description: "Enterprise Scale - Multi-Year Bundle"
+    input:
+      customer_name: "Plaid"
+      contract_start_date: "02/01/2026"
+      terms_months: 36
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Transactions subscription is a performance obligation satisfied over time.); Services: POB=over_time release=ratable_over_term (Premium Support provides standing-ready assistance throughout the contract year.); Usage: POB=consumption release=as_used (Asset reports are distinct performance obligations recognized upon delivery of the report.)"
+      use_case_description: "A large digital bank signs a 3-year 'Scale' agreement for high-volume data access and dedicated support. The bundle consists of Plaid Transactions ($1.20/account/month), Plaid Assets ($2.50/report), and a Premium Support Package valued at $6,000 per year but discounted by 15% as part of the total contract value. The contract is billed annually in advance. Revenue allocation is required to distribute the bundle discount across the Transactions subscription and the Support package based on their standalone selling prices. Support and Transactions are recognized ratably over the annual term, whereas Asset reports are recognized as they are generated. Plaid Auth is also included at a discounted rate of $0.30 per connection, recognized at the point of connection."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "recurring"
+      - "allocation"
+      - "multi-year"
+  - id: "gen-plaid-2"
+    name: "Plaid - Lending & Underwriting - Quarterly Usage"
+    description: "Lending & Underwriting - Quarterly Usage"
+    input:
+      customer_name: "Plaid"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Quarterly"
+      is_allocations: false
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Usage: POB=consumption release=as_used (Both Assets and Balance are high-frequency usage charges recognized as the service is delivered.); Other: POB=event_based release=at_go_live (Auth connection fee is recognized at the moment the bank account is successfully linked.)"
+      use_case_description: "This use case focuses on a digital mortgage lender using Plaid to verify borrower assets and real-time balances. The agreement includes Plaid Assets billed at $5.00 per generated underwriting report and Plaid Balance at $0.35 per real-time balance check. Each borrower connection also incurs a one-time Plaid Auth fee of $0.80 for the initial link. The contract has a 12-month term with quarterly billing cycles for all usage. Revenue for the Assets and Balance products is recognized as consumed (point-in-time) upon successful API response. The Auth fee is recognized upon the initial account connection event, which is treated as a separate point-in-time performance obligation."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "one-time"
+  - id: "gen-brex"
+    name: "Brex - Standard Premium Growth"
+    description: "Standard Premium Growth"
+    input:
+      customer_name: "Brex"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Premium SaaS seat fees represent a stand-ready obligation to provide software access.); Hardware: POB=over_time release=ratable_over_term (Recurring card fees are treated as a subscription to the card program service.)"
+      use_case_description: "A mid-market customer is upgrading from the Essentials tier to Brex Premium to access advanced spend controls. The contract includes 50 user licenses for the Brex Premium Subscription at $12 per user per month. Additionally, the customer requires 10 active physical corporate cards beyond the free tier, priced at $5 per card per month. All charges are billed monthly in advance. The subscription revenue should be recognized ratably over the 12-month term. The card fees are also recurring and recognized ratably each month as the service is provided."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "recurring"
+      - "license"
+  - id: "gen-brex-1"
+    name: "Brex - Enterprise Global Expansion"
+    description: "Enterprise Global Expansion"
+    input:
+      customer_name: "Brex"
+      contract_start_date: "02/01/2026"
+      terms_months: 24
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Enterprise SaaS fees are recognized ratably over the 24-month contract term.); Services: POB=point_in_time release=at_go_live (Implementation is a distinct POB recognized when the setup is complete and the customer goes live.)"
+      use_case_description: "A global enterprise is implementing Brex across multiple entities with a 24-month contract. The deal includes 500 Enterprise user licenses at a discounted rate of $10 per user per month, billed annually. A one-time Enterprise Implementation Service fee of $15,000 is included for custom ERP integration and global entity setup. To win the deal, a 10% bundle discount was applied across both the subscription and the implementation fee. Because there are multiple performance obligations (SaaS and Professional Services) sold at a discount, revenue must be allocated based on list prices. The implementation fee should be recognized at go-live, while the subscription is recognized ratably over the 24-month term."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "license"
+      - "allocation"
+      - "multi-year"
+  - id: "gen-brex-2"
+    name: "Brex - Travel-Driven Consumption"
+    description: "Travel-Driven Consumption"
+    input:
+      customer_name: "Brex"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Standard ratable recognition for the monthly software platform access.); Usage: POB=consumption release=as_used (Trip fees are recognized when the travel is booked/consumed.)"
+      use_case_description: "A professional services firm with high travel requirements is adopting Brex Premium. The contract consists of 100 user licenses at $12 per user per month, billed monthly in advance. Additionally, the customer will be billed for 'Brex Travel Trip Fees' in arrears based on actual usage. We estimate 40 trips per month at a rate of $15 per trip. The subscription revenue is recognized ratably each month. The trip fees are recognized as consumption revenue in the month the booking occurs. This scenario demonstrates Zuora's ability to handle hybrid recurring and usage-based billing on a single invoice."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+      - "license"
+  - id: "gen-rippling"
+    name: "Rippling - Standard Domestic HR & Payroll"
+    description: "Standard Domestic HR & Payroll"
+    input:
+      customer_name: "Rippling"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Standard SaaS subscription for Unity Platform and Payroll modules.); Onboarding: POB=point_in_time release=at_go_live (Implementation fee recognized upon completion of setup and training.)"
+      use_case_description: "A US-based SMB with 50 employees signs up for the Domestic HR Essentials bundle. This includes the Rippling Unity Platform at $8 per employee per month (PEPM) and Full-Service Payroll at $8 PEPM, totaling $800 per month in recurring fees. A one-time Implementation & Onboarding fee of $1,000 is charged upfront to cover data migration and system configuration. The contract is for a 12-month term with monthly billing. Revenue for the Unity Platform and Payroll subscriptions is recognized ratably over the 12-month term. The implementation fee is recognized as a separate performance obligation at the point in time when the customer goes live."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "one-time"
+      - "recurring"
+      - "license"
+  - id: "gen-rippling-1"
+    name: "Rippling - International Expansion with EOR"
+    description: "International Expansion with EOR"
+    input:
+      customer_name: "Rippling"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Unity Platform access for all 25 employees.); Other: POB=over_time release=ratable_over_term (EOR services for international employees recognized monthly as the service is delivered.)"
+      use_case_description: "A scaling company uses Rippling to manage a mixed workforce of 20 US employees and 5 international employees in the UK via Employer of Record (EOR) services. The US employees are billed at $16 PEPM (Unity + Payroll). The UK employees are billed at the EOR rate of $599 PEPM plus the base Unity fee of $8 PEPM. Total monthly recurring revenue is $3,355. While the Unity Platform is on a 12-month commitment, the EOR service is treated as a monthly recurring service. Revenue for all components is recognized over time as the platform access and employment services are provided each month."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "recurring"
+      - "license"
+  - id: "gen-rippling-2"
+    name: "Rippling - Unified HR, IT, and Finance Suite"
+    description: "Unified HR, IT, and Finance Suite"
+    input:
+      customer_name: "Rippling"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Includes Unity, Payroll, MDM, and Spend Management as a single combined POB or separate ratable POBs.); Onboarding: POB=point_in_time release=at_go_live (Implementation fee subject to revenue allocation against the total contract value.)"
+      use_case_description: "A mid-market customer with 100 employees adopts the Total Workforce Automation suite. This includes Unity Platform ($8), Payroll ($8), Device Management ($5), and Spend Management ($11), totaling a list price of $32 PEPM. To secure the deal, Rippling offers a 15% bundle discount on the recurring fees, resulting in a net price of $27.20 PEPM. A $3,000 Implementation fee is also included. Because the discount is applied to the entire package, revenue allocation is performed between the subscription performance obligation and the implementation performance obligation using list prices as the basis for SSP. Subscription revenue is recognized over the 12-month term, and the allocated implementation revenue is recognized at go-live."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "license"
+      - "allocation"
+  - id: "gen-gusto"
+    name: "Gusto - Plus Plan Mid-Market Growth"
+    description: "Plus Plan Mid-Market Growth"
+    input:
+      customer_name: "Gusto"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Monthly base fee for platform access recognized ratably over the service period.); Usage: POB=consumption release=as_billed (Per-employee fees are recognized in the month employees are active and processed.)"
+      use_case_description: "A mid-sized company with 15 employees signs up for the Gusto Plus Plan to manage multi-state payroll. The contract includes a fixed recurring base fee of $80 per month and a variable per-person fee of $12 per employee per month. Billing is set to occur monthly. The base fee is treated as a subscription charge recognized ratably over the monthly term. The per-person headcount fees are treated as usage-based charges recognized in the month the payroll service is performed. This scenario represents Gusto's core growth segment requiring automated tax filing and time tracking."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+  - id: "gen-gusto-1"
+    name: "Gusto - Premium Plan with Global EOR"
+    description: "Premium Plan with Global EOR"
+    input:
+      customer_name: "Gusto"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Includes the $180 Premium base fee and $599 Global EOR recurring fees.); Usage: POB=consumption release=as_billed (The $22 per US employee fee is recognized as usage based on payroll activity.)"
+      use_case_description: "A scaling enterprise customer selects the Premium Plan for its dedicated support and compliance features. The contract consists of a $180 monthly base fee and $22 per person for 30 US-based employees. Additionally, the customer adds Gusto Global (Employer of Record) services for 2 international employees at a recurring rate of $599 per employee per month. The Premium base fee and Global EOR fees are recurring subscription charges recognized ratably. The US per-person fees are recognized as usage based on the active headcount each month. This scenario tests complex bundles with high-value international service add-ons."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "bundle"
+      - "recurring"
+  - id: "gen-gusto-2"
+    name: "Gusto - Simple Plan with International Contractors"
+    description: "Simple Plan with International Contractors"
+    input:
+      customer_name: "Gusto"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (The $49 Simple Plan base fee is recognized ratably over the month.); Usage: POB=consumption release=as_billed (Contractor fees ($30) and employee fees ($6) are recognized when the payroll event occurs.)"
+      use_case_description: "A small business uses the Simple Plan for 5 domestic employees and frequently pays 4 international contractors. The billing includes a $49 monthly base fee and $6 per domestic employee. International contractor payments are billed at $30 per contractor only in the months they are paid. The base fee is recognized ratably, while both the domestic employee fees and the international contractor fees are treated as consumption-based usage. This use case demonstrates Gusto's flexibility in handling varied worker types and purely usage-driven contractor fees alongside a base subscription."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+  - id: "gen-bill-com"
+    name: "Bill.com - Corporate AP & AR Automation with High-Volume Usage"
+    description: "Corporate AP & AR Automation with High-Volume Usage"
+    input:
+      customer_name: "Bill.com"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Standard SaaS access recognized monthly as the service is provided.); Usage: POB=point_in_time release=as_used (Transaction fees are distinct performance obligations satisfied upon payment execution.)"
+      use_case_description: "A mid-market company subscribes to the Corporate Plan for 20 users at $89 per user per month. The plan includes both Accounts Payable and Accounts Receivable automation features. In addition to the recurring SaaS fee, the customer processes an average of 300 ACH transactions per month at $0.59 per transaction and 40 paper checks at $1.69 per check. The subscription is billed monthly in advance, while the transaction usage is billed monthly in arrears. Revenue for the platform access is recognized ratably over the monthly term, whereas payment services are recognized at the point the transaction is executed."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+      - "license"
+  - id: "gen-bill-com-1"
+    name: "Bill.com - Enterprise ERP Integration with Bundled Discount"
+    description: "Enterprise ERP Integration with Bundled Discount"
+    input:
+      customer_name: "Bill.com"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Annual SaaS subscription recognized daily or monthly over the contract year.); Onboarding: POB=point_in_time release=at_go_live (Implementation is a separate POB recognized upon successful ERP sync completion.)"
+      use_case_description: "An enterprise-level customer signs a 12-month contract for the Enterprise Plan covering 100 users at a negotiated rate of $70 per user per month (List: $89). This deal includes a one-time Enterprise Implementation Service fee of $7,500 for a complex NetSuite ERP synchronization. Because the implementation and the subscription are sold together with a significant discount, revenue allocations are required to ensure the $7,500 and the $84,000 annual subscription are valued correctly relative to their standalone selling prices. The implementation fee is recognized as a point-in-time POB upon completion of the 'Go-Live' milestone, while the subscription revenue is recognized ratably over the 12-month term."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "allocation"
+  - id: "gen-bill-com-2"
+    name: "Bill.com - Essentials Plan with Spend & Expense Hybrid"
+    description: "Essentials Plan with Spend & Expense Hybrid"
+    input:
+      customer_name: "Bill.com"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Essentials plan SaaS fee recognized over the monthly service period.); Usage: POB=point_in_time release=as_used (International wire fees recognized when the transaction is completed.); Other: POB=unknown release=unknown (Spend & Expense software is $0; no revenue is recognized for the software itself.)"
+      use_case_description: "A small business adopts the Essentials Plan for 3 users at $49 per user per month to manage their Accounts Payable. Simultaneously, they implement the BILL Spend & Expense platform which has a $0 software fee. The customer also signs up for Standard Payment Services with a focus on International Wires, priced at $20 per wire. The billing occurs monthly. While the Spend & Expense software is free, it drives revenue through interchange (not captured in billing), but the associated AP subscription and wire usage are captured. Revenue for the AP subscription is recognized ratably, while the wire fees are recognized at the time the payment is processed."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+      - "license"
+  - id: "gen-affirm"
+    name: "Affirm - Standard SMB Merchant Integration"
+    description: "Standard SMB Merchant Integration"
+    input:
+      customer_name: "Affirm"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      rev_rec_notes: "Usage: POB=point_in_time release=as_billed (Merchant fees are recognized when the transaction is successfully processed.)"
+      use_case_description: "Affirm provides its Standard Merchant Plan to a mid-sized e-commerce retailer. The contract includes the Affirm Merchant Network Service, which is billed as a usage-based fee. The pricing is set at a 5.99% Merchant Discount Rate (MDR) plus a flat $0.30 per successful transaction. There are no recurring monthly fees or setup costs for this tier. Billing occurs monthly based on the previous month's transaction volume. Revenue for these transaction fees is recognized at the point in time when the sale is captured/processed."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "discount"
+      - "one-time"
+      - "recurring"
+  - id: "gen-affirm-1"
+    name: "Affirm - Enterprise 0% APR Promotion with Implementation"
+    description: "Enterprise 0% APR Promotion with Implementation"
+    input:
+      customer_name: "Affirm"
+      contract_start_date: "02/01/2026"
+      terms_months: 24
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Onboarding: POB=point_in_time release=at_go_live (Implementation fee recognized upon completion of integration.); Usage: POB=point_in_time release=as_billed (MDR and transaction fees recognized at the point of sale.)"
+      use_case_description: "A large national retailer signs up for the 0% APR Promotional Program to offer interest-free financing to their customers. This enterprise deal includes a one-time 'Enterprise Implementation Fee' of $10,000 for custom API integration and a higher Merchant Discount Rate (MDR) of 9% plus $0.50 per transaction to subsidize the consumer interest. The implementation fee is discounted by 20% as part of the deal, triggering revenue allocation requirements. The implementation revenue should be recognized upon go-live, while the usage fees are recognized as transactions occur. The contract is for a 24-month term with quarterly business reviews."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "discount"
+      - "one-time"
+      - "allocation"
+      - "multi-year"
+  - id: "gen-affirm-2"
+    name: "Affirm - Consumer Interest-Bearing Loan Portfolio"
+    description: "Consumer Interest-Bearing Loan Portfolio"
+    input:
+      customer_name: "Affirm"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Interest income is recognized over the life of the loan.)"
+      use_case_description: "This scenario models the revenue from a portfolio of Consumer Installment Loans. Each loan is treated as a 12-month contract with a fixed APR of 15%. For demo purposes, we are modeling a single $1,200 loan instance. The consumer pays $100 in principal plus interest monthly. The interest revenue is recognized over the 12-month term using a ratable pattern (simulating the effective interest method). There are no late fees or compounding interest, consistent with Affirm's product model. This allows for clear tracking of interest income vs. principal repayment in Zuora Revenue."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+  - id: "gen-klarna"
+    name: "Klarna - Merchant Checkout Integration"
+    description: "Merchant Checkout Integration"
+    input:
+      customer_name: "Klarna"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Onboarding: POB=point_in_time release=at_go_live (One-time setup fee for merchant integration is typically recognized when the merchant is successfully onboarded and live.); Subscription: POB=over_time release=ratable_over_term (Monthly platform membership provides access to the merchant portal and reporting over the billing period.); Usage: POB=point_in_time release=as_billed (Transaction fees are earned at the moment the payment is processed for a sale.)"
+      use_case_description: "The merchant signs up for the Klarna Checkout plan to enable Buy Now, Pay Later (BNPL) for their web store. This contract includes a one-time setup fee of $600.00 for integration services, a recurring Merchant Platform Membership fee of $50.00 billed monthly, and a usage-based Klarna Payments fee of 5.99% plus $0.30 per transaction. Revenue for the membership is recognized ratably over the month, the setup fee is recognized upon go-live, and transaction fees are recognized as they occur. This scenario exercises Zuora's ability to handle mixed charge models and one-time services on a single subscription."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "one-time"
+      - "recurring"
+      - "license"
+      - "allocation"
+  - id: "gen-klarna-1"
+    name: "Klarna - Klarna Plus Consumer Membership"
+    description: "Klarna Plus Consumer Membership"
+    input:
+      customer_name: "Klarna"
+      contract_start_date: "02/01/2026"
+      terms_months: 1
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Consumer subscription provides ongoing benefits (double points, waived fees) over the monthly term.)"
+      use_case_description: "A retail consumer subscribes to Klarna Plus via the mobile app to access premium rewards and waived service fees. The subscription is $7.99 per month, billed monthly on a recurring basis. To incentivize the sign-up, a one-time $8.00 'Welcome Discount' is applied to the first month's invoice as a credit. Revenue for the subscription is recognized ratably over the monthly service period. This use case demonstrates simple B2C recurring billing with a one-time discount component and a month-to-month term."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "credits"
+  - id: "gen-klarna-2"
+    name: "Klarna - Enterprise Retailer Strategic Partnership"
+    description: "Enterprise Retailer Strategic Partnership"
+    input:
+      customer_name: "Klarna"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      allocation_method: "Use Sell Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (The annual platform fee is recognized ratably over the 12-month contract term.); Usage: POB=consumption release=as_used (Transaction fees and marketing clicks are recognized in the month they occur based on volume.)"
+      use_case_description: "An enterprise-level merchant enters a strategic partnership with Klarna for a 12-month term. The deal includes an annual Merchant Platform Membership fee of $1,200.00 billed upfront. Transaction fees for 'Klarna Payments' are negotiated at a tiered rate: $0.25 per transaction for the first 10,000 transactions and $0.20 thereafter, plus a 4% volume commission. Additionally, the merchant utilizes 'Klarna Ads' performance marketing at a usage rate of $0.15 per click. Revenue for the platform fee is ratable over 12 months, while transaction and marketing fees are recognized based on consumption. This scenario highlights complex tiered usage and annual billing for platform access."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "license"
+      - "allocation"
+  - id: "gen-adyen"
+    name: "Adyen - Enterprise Unified Commerce with POS Hardware"
+    description: "Enterprise Unified Commerce with POS Hardware"
+    input:
+      customer_name: "Adyen"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      rev_rec_notes: "Usage: POB=consumption release=as_used (Processing and settlement fees are earned and recognized at the moment of transaction success.); Hardware: POB=point_in_time release=at_delivery (POS terminal revenue is recognized when the merchant takes possession of the physical devices.); Subscription: POB=over_time release=ratable_over_term (The minimum monthly invoice is a stand-ready obligation recognized over the billing period.)"
+      use_case_description: "A global retail merchant requires a unified solution for both online and in-store payments. This scenario includes a recurring Payment Processing Service at $0.12 per transaction and a Payment Method Settlement (Interchange++) fee with a 0.60% markup. To support physical stores, the customer is purchasing 50 POS Terminals (Hardware) at a one-time cost of $350 per device. The contract includes a minimum monthly invoice commitment of $120. Revenue for the hardware is recognized at the point of delivery, while processing and settlement fees are recognized as usage occurs. The minimum monthly fee is treated as a ratable recurring charge unless offset by usage."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "one-time"
+      - "recurring"
+  - id: "gen-adyen-1"
+    name: "Adyen - Marketplace & Platform Onboarding"
+    description: "Marketplace & Platform Onboarding"
+    input:
+      customer_name: "Adyen"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Monthly platform access is a standard ratable SaaS subscription.); Onboarding: POB=point_in_time release=at_go_live (Implementation services are recognized upon completion of the marketplace setup.); Usage: POB=consumption release=as_used (Platform transaction fees are recognized as usage occurs.)"
+      use_case_description: "A SaaS marketplace platform uses 'Adyen for Platforms' to manage complex payouts and sub-merchant KYC. The deal consists of a $2,500 monthly recurring Platform Fee and a one-time Onboarding/Setup fee of $5,000 for the initial implementation. Transactional processing is billed at $0.10 per transaction. Because the setup fee and the platform access are part of a single contract with a discount applied to the setup fee, revenue allocations are required to align the transaction price with the standalone selling price (SSP). Revenue for the platform fee is recognized ratably over the 12-month term, while the onboarding fee is recognized at the point of project completion (go-live)."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "license"
+      - "allocation"
+  - id: "gen-adyen-2"
+    name: "Adyen - High-Volume Digital Merchant Tiered Pricing"
+    description: "High-Volume Digital Merchant Tiered Pricing"
+    input:
+      customer_name: "Adyen"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      rev_rec_notes: "Usage: POB=consumption release=as_used (Tiered usage charges are recognized based on actual volume processed in the period.); Other: POB=consumption release=as_used (Interchange++ markup is recognized as a percentage of the processed volume at the time of settlement.)"
+      use_case_description: "A high-growth e-commerce merchant is moving to a volume-based pricing model to optimize costs. The Payment Processing Service is structured with tiered pricing: $0.12 per transaction for the first 100,000 transactions, and $0.08 per transaction for all volume exceeding that threshold. The Interchange++ markup is negotiated at a flat 0.50% of transaction value. There are no fixed monthly fees, making this a pure pay-as-you-go scenario. Revenue for all processing and settlement charges is recognized as the transactions occur. This model incentivizes the merchant to consolidate all traffic through the Adyen platform."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "license"

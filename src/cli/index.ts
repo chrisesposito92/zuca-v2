@@ -512,21 +512,35 @@ function convertUCToTestCase(
     ? `${companyName} - ${useCase.label}`
     : `${companyName} - Use Case`;
 
+  // Build input object, omitting allocation_method if not set
+  const allocationMethod = inputs.allocation_method as string | undefined;
+  const revRecNotes = serializeRevRecNotes(inputs.rev_rec_notes as RevRecNote[] | string | undefined);
+
+  const inputObj: TestSuiteCase['input'] = {
+    customer_name: (inputs.customer_name as string) || companyName,
+    contract_start_date: inputs.contract_start_date as string,
+    terms_months: inputs.terms_months as number,
+    transaction_currency: inputs.transaction_currency as string,
+    billing_period: inputs.billing_period as string,
+    is_allocations: (inputs.is_allocations as boolean) ?? false,
+    use_case_description: inputs.use_case as string,
+  };
+
+  // Only include allocation_method if it has a value
+  if (allocationMethod) {
+    inputObj.allocation_method = allocationMethod;
+  }
+
+  // Only include rev_rec_notes if it has a value
+  if (revRecNotes) {
+    inputObj.rev_rec_notes = revRecNotes;
+  }
+
   return {
     id,
     name,
     description: useCase.label || `Generated use case for ${companyName}`,
-    input: {
-      customer_name: (inputs.customer_name as string) || companyName,
-      contract_start_date: inputs.contract_start_date as string,
-      terms_months: inputs.terms_months as number,
-      transaction_currency: inputs.transaction_currency as string,
-      billing_period: inputs.billing_period as string,
-      is_allocations: (inputs.is_allocations as boolean) ?? false,
-      allocation_method: inputs.allocation_method as string | undefined,
-      rev_rec_notes: serializeRevRecNotes(inputs.rev_rec_notes as RevRecNote[] | string | undefined),
-      use_case_description: inputs.use_case as string,
-    },
+    input: inputObj,
     focus_steps: [
       'analyze_contract',
       'design_subscription',

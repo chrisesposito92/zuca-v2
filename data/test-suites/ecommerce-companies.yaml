@@ -1,0 +1,289 @@
+name: "ecommerce-companies"
+description: "Generated from UC outputs - 2026-01-04"
+version: "1.0"
+tests:
+  - id: "gen-shopify"
+    name: "Shopify - Mid-Market Retail Growth"
+    description: "Mid-Market Retail Growth"
+    input:
+      customer_name: "Shopify"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Shopify Advanced platform access is a stand-ready obligation.); Subscription: POB=over_time release=ratable_over_term (POS Pro subscription provides ongoing retail features.); Usage: POB=consumption release=as_used (Shopify Payments fees are earned as merchant transactions are processed.)"
+      use_case_description: "A scaling merchant upgrades to the Shopify Advanced plan to take advantage of lower transaction fees and advanced reporting. The merchant commits to an annual term to receive the 25% discount, resulting in a recurring charge of $299 per month billed annually. They also add one Shopify POS Pro location at the discounted annual rate of $79 per month. Shopify Payments usage is estimated based on a 2.4% + 30c transaction fee model. The subscription and POS Pro fees are recognized ratably over the 12-month term, while payment fees are recognized as transactions occur."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "discount"
+      - "recurring"
+  - id: "gen-shopify-1"
+    name: "Shopify - Enterprise Plus Migration"
+    description: "Enterprise Plus Migration"
+    input:
+      customer_name: "Shopify"
+      contract_start_date: "02/01/2026"
+      terms_months: 36
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Shopify Plus base fee is recognized over the 36-month term.); Hardware: POB=point_in_time release=at_delivery (POS Go hardware revenue is recognized upon shipment/delivery.); Usage: POB=consumption release=as_used (The 0.25% variable platform fee is recognized as GMV thresholds are met.)"
+      use_case_description: "A high-volume enterprise brand migrates to Shopify Plus on a 3-year multi-year agreement. The contract includes a base platform fee of $2,300 per month and a variable platform fee of 0.25% for monthly GMV exceeding $800,000. Additionally, the brand purchases 10 POS Go hardware devices at a one-time cost of $399 each ($3,990 total). The hardware is delivered at the start of the contract. This scenario involves a mix of ratable subscription revenue, point-in-time hardware revenue, and consumption-based variable fees. Performance obligation allocation is required between the hardware and the discounted multi-year subscription."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "license"
+      - "allocation"
+      - "multi-year"
+  - id: "gen-shopify-2"
+    name: "Shopify - SMB Boutique Starter"
+    description: "SMB Boutique Starter"
+    input:
+      customer_name: "Shopify"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Basic subscription is a monthly recurring service.); Subscription: POB=over_time release=ratable_over_term (POS Pro add-on is a monthly recurring service.); Usage: POB=consumption release=as_used (Transaction-based revenue is recognized as sales occur.)"
+      use_case_description: "A new boutique retailer signs up for the Shopify Basic plan on a month-to-month basis at $39 per month. They also subscribe to one Shopify POS Pro location at $89 per month to manage their physical storefront. The merchant uses Shopify Payments with a transaction rate of 2.9% + 30c. All recurring fees are billed monthly in advance. Revenue for the Basic plan and POS Pro is recognized monthly as the service is provided. Payment fees are recognized at the time of each sale."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "recurring"
+  - id: "gen-bigcommerce"
+    name: "BigCommerce - Essentials Plus Annual Subscription"
+    description: "Essentials Plus Annual Subscription"
+    input:
+      customer_name: "BigCommerce"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Standard SaaS access recognized monthly over the 12-month contract duration.)"
+      use_case_description: "A growing SMB merchant signs up for the BigCommerce Essentials Plus Plan on an annual commitment. The merchant is billed $79 per month, reflecting the 25% discount for annual billing compared to the $105 monthly rate. The contract includes one store instance with a $180,000 annual GMV limit. Revenue for the subscription is recognized ratably over the 12-month term. This scenario demonstrates a standard recurring SaaS subscription with an annual term and monthly billing frequency."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "discount"
+      - "recurring"
+      - "license"
+  - id: "gen-bigcommerce-1"
+    name: "BigCommerce - Pro Plan with GMV Usage Overages"
+    description: "Pro Plan with GMV Usage Overages"
+    input:
+      customer_name: "BigCommerce"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Base Pro Plan fee recognized ratably over the term.); Usage: POB=consumption release=as_billed (GMV overages recognized in the period the sales volume threshold is met.)"
+      use_case_description: "A high-growth retailer selects the Pro Plan to support scaling up to $400,000 in annual sales. The base subscription is $299 per month billed annually. However, the retailer expects to hit $800,000 in sales, triggering two 'GMV Overage Fee' increments of $150 each ($300 total overage) once the $400k baseline is exceeded. The base subscription is recognized ratably, while the overage fees are recognized as usage occurs/billed. This scenario tests Zuora's ability to handle hybrid recurring and usage-based models tied to business outcomes."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+  - id: "gen-bigcommerce-2"
+    name: "BigCommerce - Enterprise Commerce with Implementation Services"
+    description: "Enterprise Commerce with Implementation Services"
+    input:
+      customer_name: "BigCommerce"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Enterprise platform access recognized over the 1-year contract.); Services: POB=point_in_time release=at_go_live (Migration services recognized as a single POB upon completion of the project.)"
+      use_case_description: "A large-scale retailer enters an Enterprise Commerce agreement involving a custom platform fee and professional services for data migration. The platform fee is $1,500 per month, and a one-time 'Professional Services' fee of $5,000 is charged for the initial store migration. A 10% bundle discount is applied to the total contract value. Because the discount applies to both the ratable subscription and the point-in-time service, revenue allocation is required. The subscription revenue is recognized over the 12-month term, while the migration fee is recognized upon successful 'Go-Live'."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "license"
+      - "allocation"
+  - id: "gen-squarespace"
+    name: "Squarespace - Creative Professional Annual Bundle"
+    description: "Creative Professional Annual Bundle"
+    input:
+      customer_name: "Squarespace"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Standard SaaS subscription for website hosting and email campaign tools provided over the contract term.)"
+      use_case_description: "A creative professional signs up for a professional web presence using the Squarespace Core plan (formerly Business) at $23 per month, billed annually ($276 total). They also add the Email Campaigns Starter plan for $7 per month, also billed annually ($84 total), to handle their marketing outreach. The contract is for a standard 12-month term paid upfront. The Core plan includes a professional email address from Google Workspace, which is free for the first year. Revenue for both the website subscription and the email marketing add-on is recognized ratably over the 12-month service period."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "recurring"
+  - id: "gen-squarespace-1"
+    name: "Squarespace - Advanced E-commerce with Transaction Usage"
+    description: "Advanced E-commerce with Transaction Usage"
+    input:
+      customer_name: "Squarespace"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Advanced e-commerce platform access recognized over the 12-month term.); Usage: POB=point_in_time release=as_billed (Transaction fees are earned and recognized immediately upon the successful processing of a customer sale.)"
+      use_case_description: "A high-volume retailer subscribes to the Squarespace Advanced plan at $99 per month, billed annually ($1,188 total), to take advantage of $0 digital product fees and the lowest transaction rates. In addition to the recurring subscription, the retailer uses Squarespace Payments for their storefront. The processing fee is modeled as a usage charge at 2.5% plus $0.30 per transaction. For this scenario, we assume an average of 500 transactions per month. The subscription fee is recognized ratably over the year, while the transaction fees are recognized at the point in time the transaction occurs."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+  - id: "gen-squarespace-2"
+    name: "Squarespace - Enterprise Multi-Site Expansion"
+    description: "Enterprise Multi-Site Expansion"
+    input:
+      customer_name: "Squarespace"
+      contract_start_date: "02/01/2026"
+      terms_months: 36
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Enterprise site licenses recognized over the 36-month contract term.); Services: POB=point_in_time release=at_go_live (SEO and SSO setup services recognized upon completion of the implementation phase.)"
+      use_case_description: "A large organization signs a 3-year Enterprise agreement to manage 50 individual sites under a consolidated billing umbrella. The custom contract value is $20,000 per year for the site licenses ($60,000 total over 3 years). Additionally, the contract includes a one-time Professional Services fee of $5,000 for SEO consultation and SSO/SCIM setup. The subscription is billed annually, while the services fee is billed upfront. Because the services are sold at a discount alongside the multi-year subscription, revenue allocation is required between the subscription (ratable) and the services (point-in-time upon completion)."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "license"
+      - "allocation"
+      - "multi-year"
+  - id: "gen-wix"
+    name: "Wix - Standard Portfolio Annual Subscription"
+    description: "Standard Portfolio Annual Subscription"
+    input:
+      customer_name: "Wix"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Standard SaaS hosting access is a stand-ready obligation.); Other: POB=point_in_time release=at_delivery (Domain registration is fulfilled once the registry confirms the TLD assignment.)"
+      use_case_description: "A freelancer signs up for the Wix Light Plan to host a professional portfolio. The plan is priced at $17 per month but is billed annually as a single upfront payment of $204. This subscription includes a custom domain registration, which is offered for free for the first year (list price $14.95) via a voucher system. The site hosting is a recurring SaaS charge, while the domain registration is treated as a separate performance obligation. Revenue for the Light Plan is recognized ratably over the 12-month term, whereas the domain registration is recognized at the point in time the domain is secured."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "recurring"
+      - "license"
+      - "allocation"
+  - id: "gen-wix-1"
+    name: "Wix - E-commerce Growth Bundle (Monthly)"
+    description: "E-commerce Growth Bundle (Monthly)"
+    input:
+      customer_name: "Wix"
+      contract_start_date: "02/01/2026"
+      terms_months: 1
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Both the Business Plan and Email Marketing are recurring SaaS services recognized over the monthly term.)"
+      use_case_description: "A growing online retailer subscribes to the Wix Business Plan at $36 per month to unlock advanced eCommerce features and 100GB of storage. Additionally, they add the Wix Email Marketing standalone subscription for $10 per month to manage customer outreach. Both products are billed monthly on a recurring basis with no long-term commitment beyond the month. The Business Plan includes automated sales tax calculations for up to 100 transactions per month. Revenue for both the site plan and the email marketing tool is recognized ratably over each monthly billing period as the service is provided."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "recurring"
+  - id: "gen-wix-2"
+    name: "Wix - Wix Studio Agency Multi-Year Agreement"
+    description: "Wix Studio Agency Multi-Year Agreement"
+    input:
+      customer_name: "Wix"
+      contract_start_date: "02/01/2026"
+      terms_months: 24
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      allocation_method: "Use Sell Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Elite Plan platform access is a stand-ready obligation over the 2-year term.); Onboarding: POB=point_in_time release=at_go_live (Onboarding is a distinct service delivered at the start of the relationship.)"
+      use_case_description: "A digital agency signs a 24-month agreement for the Wix Studio Elite Plan to support a high-traffic client project. The plan is priced at $159 per month, billed annually at $1,908 per year. As part of this enterprise-style motion, Wix includes a one-time 'Priority Onboarding' service for a $500 fee to ensure custom integrations are configured correctly. The contract includes 15 site collaborators and unlimited storage. Revenue for the Elite Plan is recognized ratably over the 24-month term, while the priority onboarding fee is recognized as a point-in-time event upon completion of the setup phase."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "one-time"
+      - "allocation"
+      - "multi-year"

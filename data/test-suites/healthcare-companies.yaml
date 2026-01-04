@@ -1,0 +1,372 @@
+name: "healthcare-companies"
+description: "Generated from UC outputs - 2026-01-04"
+version: "1.0"
+tests:
+  - id: "gen-epic"
+    name: "Epic - Enterprise Health System Transformation"
+    description: "Enterprise Health System Transformation"
+    input:
+      customer_name: "Epic"
+      contract_start_date: "02/01/2026"
+      terms_months: 36
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Standard SaaS access for EpicCare and Specialty Modules.); Services: POB=point_in_time release=at_go_live (Implementation services tied to the system go-live milestone.)"
+      use_case_description: "A large regional health system signs a 3-year contract for the Enterprise Health System Suite. The deal includes a base recurring fee for EpicCare (Ambulatory & Inpatient) at $25,000 per month and two specialty modules, Beaker and Willow, priced at $5,000 each per month. To support the rollout, a one-time implementation and training service fee of $500,000 is billed upfront. The subscription fees are billed annually in advance, while the implementation fee is billed at the start of the contract. Revenue for the software is recognized ratably over the 36-month term, while the implementation fee is recognized at the 'Go-Live' milestone, estimated at month 6."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "one-time"
+      - "recurring"
+      - "allocation"
+      - "multi-year"
+  - id: "gen-epic-1"
+    name: "Epic - Garden Plot for Independent Practices"
+    description: "Garden Plot for Independent Practices"
+    input:
+      customer_name: "Epic"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Monthly recurring SaaS fee for Garden Plot bundle.); Usage: POB=consumption release=as_used (Cloud hosting fees based on actual data consumption.); Onboarding: POB=point_in_time release=at_go_live (Initial setup and configuration fee.)"
+      use_case_description: "A mid-sized independent physician group adopts the 'Garden Plot' SaaS offering. This is a 12-month subscription billed monthly at $5,000 per month, covering EpicCare and MyChart access. In addition to the base subscription, the clinic opts for Epic Hosting (Cloud Infrastructure) which is billed based on data volume, estimated at $0.10 per GB with a $500 monthly minimum. A small setup fee of $10,000 is charged at the start. Revenue for the base subscription is ratable, while hosting is recognized as consumption occurs (event-based)."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "one-time"
+      - "recurring"
+      - "license"
+  - id: "gen-epic-2"
+    name: "Epic - Community Connect Hub-and-Spoke"
+    description: "Community Connect Hub-and-Spoke"
+    input:
+      customer_name: "Epic"
+      contract_start_date: "02/01/2026"
+      terms_months: 24
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Per-provider fees for shared instance access.); Other: POB=over_time release=ratable_over_term (Add-on specialty module for the community hospital.)"
+      use_case_description: "A community hospital connects to a larger 'Hub' hospital's Epic instance via the Community Connect program. The contract is for 24 months, priced at $5,500 per provider per year for 20 providers ($110,000 total annual recurring). The billing is handled annually. Additionally, the hospital pays for specialized Radiant (Radiology) module access at $12,000 per year. Revenue for all components is recognized ratably over the 12-month annual periods. No significant implementation fee is charged to the 'Spoke' hospital as the 'Hub' handles the primary infrastructure."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "one-time"
+      - "recurring"
+      - "multi-year"
+  - id: "gen-cerner"
+    name: "Cerner - Cloud Ambulatory Starter Package"
+    description: "Cloud Ambulatory Starter Package"
+    input:
+      customer_name: "Cerner"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (EHR SaaS access is a standing obligation provided over the contract term.); Onboarding: POB=point_in_time release=at_go_live (Implementation services are considered complete at the point of system go-live.)"
+      use_case_description: "This scenario represents a small independent clinic adopting the Oracle Health EHR (Millennium) Cloud Ambulatory Starter plan. The deal includes 10 user licenses for the core EHR platform at $300 per user per month, billed monthly. Additionally, there is a one-time Implementation & Professional Services fee of $10,000 to cover data migration and system configuration. The contract is for a 12-month initial term. Revenue for the EHR subscription is recognized ratably over the 12-month term, while the implementation fee is recognized as a point-in-time event upon the clinical go-live date. This setup exercises a simple combination of recurring and one-time charges for a low-volume customer."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "one-time"
+      - "recurring"
+      - "license"
+  - id: "gen-cerner-1"
+    name: "Cerner - CommunityWorks Managed Hospital Suite"
+    description: "CommunityWorks Managed Hospital Suite"
+    input:
+      customer_name: "Cerner"
+      contract_start_date: "02/01/2026"
+      terms_months: 36
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Managed EHR services provided continuously over the 36-month term.); Other: POB=over_time release=ratable_over_term (Regulatory and update support is a standby obligation billed annually.); Services: POB=point_in_time release=at_go_live (Large-scale implementation is typically recognized at the final acceptance milestone.)"
+      use_case_description: "A rural community hospital is signing a 3-year agreement for the CommunityWorks Managed Suite. The package includes the Oracle Health Millennium EHR at a flat monthly fee of $20,000 and Regulatory & Update Support at $4,000 per month, both billed annually in advance. A significant upfront Implementation fee of $500,000 is required for the 50-bed facility setup. Because the hospital is receiving a 10% bundle discount across all items, revenue allocations are required to ensure the implementation and subscription portions are valued correctly for compliance. The EHR and Support services are recognized over time, while the implementation is recognized at the completion of the 6-month rollout project."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "allocation"
+      - "multi-year"
+  - id: "gen-cerner-2"
+    name: "Cerner - Enterprise Health System Transformation"
+    description: "Enterprise Health System Transformation"
+    input:
+      customer_name: "Cerner"
+      contract_start_date: "02/01/2026"
+      terms_months: 60
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      allocation_method: "Use Sell Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Core EHR and Analytics platforms are ratable SaaS subscriptions.); Services: POB=point_in_time release=at_go_live (Professional services for migration are recognized upon system acceptance.); Other: POB=over_time release=ratable_over_term (Ongoing regulatory support is recognized ratably over the term.)"
+      use_case_description: "This enterprise-grade deal for a large health system involves multiple products: Millennium EHR ($100,000/month), HealtheIntent Population Health Analytics ($50,000/month), and Regulatory Support ($30,000/month). The contract term is 60 months (5 years) with annual billing. A massive $2,000,000 Professional Services engagement covers a multi-site data migration and clinical workflow optimization. All software components are recognized ratably over the 5-year term. The professional services are recognized at point-in-time upon the successful migration of the primary data center. This scenario tests Zuora's ability to handle high-value recurring charges alongside large one-time service fees and complex revenue recognition patterns over a long-term contract."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "one-time"
+      - "recurring"
+      - "allocation"
+      - "multi-year"
+  - id: "gen-teladoc"
+    name: "Teladoc - Enterprise Access PEPM with Usage"
+    description: "Enterprise Access PEPM with Usage"
+    input:
+      customer_name: "Teladoc"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (PEPM access fee provides standing availability of the platform.); Usage: POB=point_in_time release=as_used (Medical visits are earned only when the consultation is completed.)"
+      use_case_description: "Teladoc provides an Enterprise Access Plan for a large corporate client covering 5,000 employees. The agreement includes a recurring access fee (PEPM) of $10.00 per employee per month, billed monthly. Additionally, the client is billed for General Medical Virtual Visits on a per-usage basis at a discounted rate of $45.00 per visit. The contract is for 12 months. Revenue for the PEPM access fee is recognized ratably over the month, while visit fees are recognized as the consultations occur."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "discount"
+      - "recurring"
+  - id: "gen-teladoc-1"
+    name: "Teladoc - Chronic Care Bundle with Hardware Allocation"
+    description: "Chronic Care Bundle with Hardware Allocation"
+    input:
+      customer_name: "Teladoc"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Chronic care coaching and monitoring services recognized over the member month.); Hardware: POB=point_in_time release=at_delivery (Allocated value for the glucose meter recognized when shipped to the member.)"
+      use_case_description: "A health plan enrolls 1,000 members in the Integrated Chronic Care Bundle (Livongo). The bundle is priced at $75.00 PMPM and includes both the Chronic Care Management subscription and a Remote Monitoring Hardware kit (cellular glucose meter). The hardware is shipped to members upon enrollment and has a standalone selling price of $50.00. Because the hardware is bundled into the monthly subscription price, revenue must be allocated between the device (point-in-time) and the service (over-time). The contract term is 12 months with monthly billing."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "recurring"
+      - "allocation"
+  - id: "gen-teladoc-2"
+    name: "Teladoc - Hospital Solo Platform & Implementation"
+    description: "Hospital Solo Platform & Implementation"
+    input:
+      customer_name: "Teladoc"
+      contract_start_date: "02/01/2026"
+      terms_months: 36
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Software platform access recognized ratably over the 3-year term.); Services: POB=point_in_time release=at_go_live (Implementation/Integration services recognized when the hospital goes live on the platform.)"
+      use_case_description: "A regional hospital system purchases the Solo Enterprise Platform to power their clinical virtual workflows. The deal consists of a $120,000 annual subscription for the platform and a one-time $25,000 Implementation and EHR Integration fee. The contract is a multi-year agreement for 36 months, with the subscription fee billed annually in advance. Revenue for the platform is recognized ratably over each 12-month period, while the implementation fee is recognized at the point of project completion/go-live."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "one-time"
+      - "recurring"
+      - "license"
+      - "multi-year"
+  - id: "gen-veeva"
+    name: "Veeva - Emerging Biotech Development Cloud Starter"
+    description: "Emerging Biotech Development Cloud Starter"
+    input:
+      customer_name: "Veeva"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Vault Quality and Clinical subscriptions are standard SaaS POBs recognized ratably.); Services: POB=point_in_time release=at_go_live (Implementation is tied to the completion of the Vault environment setup.)"
+      use_case_description: "An emerging biotech company, BioNext, is implementing the Veeva Development Cloud to manage clinical and quality operations. The deal includes 20 seats of Vault Quality and 20 seats of Vault Clinical, each priced at $150 per user per month. A one-time Implementation Service fee of $15,000 is included for system configuration and admin training. All software charges are recurring and billed annually in advance. The implementation fee is billed upfront and recognized upon completion of the environment setup. This scenario represents a standard entry-level package for the R&D segment."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "one-time"
+      - "recurring"
+  - id: "gen-veeva-1"
+    name: "Veeva - Enterprise Commercial Cloud Transformation"
+    description: "Enterprise Commercial Cloud Transformation"
+    input:
+      customer_name: "Veeva"
+      contract_start_date: "02/01/2026"
+      terms_months: 24
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (CRM and CLM subscriptions are ratable over the 24-month term.); Services: POB=point_in_time release=at_go_live (Services revenue is allocated based on list price and recognized at the point of go-live.)"
+      use_case_description: "GlobalMed is transitioning their sales force to Vault CRM as part of the Commercial Cloud suite. The contract covers 500 users for Vault CRM Multichannel at $200 per user per month and the CLM add-on at $50 per user per month. Due to the deal size, a 10% bundle discount is applied to the software licenses. Professional Services for data migration and global rollout are quoted at $100,000. Because the software and services are sold as a bundle with a shared discount, revenue allocation is required to ensure the services are not undervalued. Software is billed annually, while services are billed 50% upfront and 50% at go-live."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "license"
+      - "allocation"
+      - "multi-year"
+  - id: "gen-veeva-2"
+    name: "Veeva - Data Cloud Intelligence & Usage"
+    description: "Data Cloud Intelligence & Usage"
+    input:
+      customer_name: "Veeva"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Quarterly"
+      is_allocations: false
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Base platform and module fees are recognized ratably as the data service is available.); Usage: POB=consumption release=as_used (Compass record overages are recognized in the period the data is delivered/accessed.)"
+      use_case_description: "InsightPharma is subscribing to Veeva Link for KOL intelligence in the Oncology therapeutic area. The agreement includes a base platform fee of $5,000 per month and a $2,000 per month fee for the Oncology data module. Additionally, the contract includes a usage-based component for Veeva Compass patient data, where the first 10,000 records are included, and overages are charged at $0.50 per record. Billing for the base and module is quarterly in advance, while usage overages are billed quarterly in arrears. Revenue for the data feeds is recognized as the data is made available and consumed."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "license"
+  - id: "gen-health-catalyst"
+    name: "Health Catalyst - Ignite Foundation Bundle"
+    description: "Ignite Foundation Bundle"
+    input:
+      customer_name: "Health Catalyst"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Standard SaaS subscription for Ignite and Analytics Apps providing continuous access.); Onboarding: POB=point_in_time release=at_go_live (Implementation services are tied to the completion of the data integration milestone.)"
+      use_case_description: "A mid-sized regional health system signs an initial 12-month contract for the Health Catalyst Ignite platform and the Value Optimizer analytics application. The deal includes a core platform subscription priced at $500,000 per year and a modular application fee of $75,000 per year. To ensure successful data integration, a one-time Professional Implementation Services fee of $150,000 is charged upfront. The customer receives a $50,000 bundle discount applied across the subscription components. Revenue for the Ignite platform and Analytics App is recognized ratably over the 12-month term, while the implementation fee is recognized at the point of go-live. Billing is set to occur annually at the start of the term."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "license"
+      - "allocation"
+  - id: "gen-health-catalyst-1"
+    name: "Health Catalyst - Enterprise Multi-Year Expansion"
+    description: "Enterprise Multi-Year Expansion"
+    input:
+      customer_name: "Health Catalyst"
+      contract_start_date: "02/01/2026"
+      terms_months: 36
+      transaction_currency: "USD"
+      billing_period: "Quarterly"
+      is_allocations: false
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Multi-year subscription with tiered pricing recognized ratably as the service is provided.)"
+      use_case_description: "A large health system enters a 36-month strategic partnership starting with the Ignite platform and two analytics applications (Healthcare.AI and Revenue Cycle Integrity). The contract features a ramp-up structure: Year 1 is priced at $650,000, Year 2 increases to $750,000 with the addition of a third analytics app, and Year 3 reaches $850,000. Billing is performed quarterly in advance. The Ignite platform and modular apps are treated as a single recurring performance obligation recognized ratably. No significant implementation fee is charged in this scenario as it is rolled into the multi-year platform commitment. This use case demonstrates Zuora's ability to handle multi-year price ramps and quarterly billing cycles."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "ramp"
+      - "one-time"
+      - "recurring"
+      - "license"
+      - "multi-year"
+  - id: "gen-health-catalyst-2"
+    name: "Health Catalyst - Tech-Enabled Managed Services (TEMS)"
+    description: "Tech-Enabled Managed Services (TEMS)"
+    input:
+      customer_name: "Health Catalyst"
+      contract_start_date: "02/01/2026"
+      terms_months: 24
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      allocation_method: "Use Sell Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Ignite platform access recognized ratably over the 24-month term.); Services: POB=over_time release=as_billed (Managed services are recognized monthly as the staffing and operational support are delivered.)"
+      use_case_description: "A health system opts for the Enterprise Transformation Partnership, which includes the Ignite platform and Tech-Enabled Managed Services (TEMS) for their analytics department. The contract is for 24 months with a total annual value of $2,500,000. This is split into a $500,000 annual platform fee and a $2,000,000 annual managed services fee ($166,666.67 per month). Billing is processed monthly to align with the service delivery nature of TEMS. While the platform fee is ratable, the TEMS component may include service-level credits if performance outcomes are not met. This scenario tests the bundling of high-touch services with SaaS subscriptions and monthly billing frequency."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "recurring"
+      - "license"
+      - "credits"
+      - "allocation"
+      - "multi-year"

@@ -1,0 +1,714 @@
+name: "infrastructure-companies"
+description: "Generated from UC outputs - 2026-01-04"
+version: "1.0"
+tests:
+  - id: "gen-aws"
+    name: "AWS - Compute Savings Plan with On-Demand Usage"
+    description: "Compute Savings Plan with On-Demand Usage"
+    input:
+      customer_name: "AWS"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (The Savings Plan commitment represents a stand-ready obligation to provide discounted capacity over the term.); Usage: POB=consumption release=as_used (On-demand EC2 usage is recognized as the compute hours are actually consumed by the customer.)"
+      use_case_description: "The customer commits to a 12-month Compute Savings Plan at a rate of $10 per hour, billed monthly in a 'No Upfront' model. This commitment provides a discounted rate for compute usage across EC2, Fargate, and Lambda. In addition to the commitment, the customer incurs on-demand EC2 charges for usage exceeding the commitment, specifically t3.micro instances priced at $0.0116 per hour. The Savings Plan commitment is billed as a recurring monthly charge of $7,300 (based on 730 hours/month), while the overage usage is billed in arrears. Revenue for the Savings Plan is recognized ratably over the 12-month term as a stand-ready obligation. On-demand usage revenue is recognized as consumption occurs each month."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "discount"
+      - "recurring"
+  - id: "gen-aws-1"
+    name: "AWS - Enterprise Support with Minimum Spend"
+    description: "Enterprise Support with Minimum Spend"
+    input:
+      customer_name: "AWS"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Support is a stand-ready service provided throughout the month.); Usage: POB=consumption release=as_used (Infrastructure usage driving the support fee is recognized as consumption occurs.)"
+      use_case_description: "An enterprise customer signs up for AWS Enterprise Support, which features a complex billing model based on the greater of a $15,000 monthly minimum or a percentage of their total AWS usage. The usage percentage is tiered: 10% of the first $0-$150k in monthly spend, 7% of the next $150k-$500k, and so on. For this scenario, the customer has an expected monthly EC2 spend of $200,000. This results in a calculated support fee of $18,500 ($15,000 for the first tier + $3,500 for the 7% tier), which exceeds the $15,000 minimum. The support fee is recognized ratably over the month it covers, while the underlying infrastructure usage is recognized as consumed."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+  - id: "gen-aws-2"
+    name: "AWS - 3-Year Strategic Ramp with Professional Services"
+    description: "3-Year Strategic Ramp with Professional Services"
+    input:
+      customer_name: "AWS"
+      contract_start_date: "02/01/2026"
+      terms_months: 36
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Ramped commitment is recognized ratably based on the allocated value for each period.); Services: POB=point_in_time release=at_go_live (Migration services are recognized upon completion of the defined milestone.)"
+      use_case_description: "A strategic 3-year Private Offer includes a ramped Compute Savings Plan and a one-time Professional Services fee for migration. In Year 1, the commitment is $50/hour; Year 2 increases to $100/hour; Year 3 increases to $150/hour. A $50,000 Professional Services fee is charged upfront for the initial environment setup and migration. Because the Professional Services are sold at a discount alongside the long-term commitment, revenue allocation is required to ensure the total contract value is distributed based on standalone selling prices (SSP). The Savings Plan revenue is recognized ratably over each year's term, while the Professional Services revenue is recognized at a point-in-time upon completion of the migration (Go-Live)."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "ramp"
+      - "discount"
+      - "one-time"
+      - "allocation"
+      - "multi-year"
+  - id: "gen-google-cloud"
+    name: "Google Cloud - Enterprise Migration & Support Bundle"
+    description: "Enterprise Migration & Support Bundle"
+    input:
+      customer_name: "Google Cloud"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Premium Support and Compute Commitments are ratable over the term of the agreement.); Services: POB=point_in_time release=at_go_live (Professional services recognized upon milestone completion/project delivery.)"
+      use_case_description: "This scenario represents a large-scale enterprise migration to Google Cloud with a 12-month commitment. The deal includes a monthly recurring flat fee of $12,500 for Premium Support and a one-time Cloud Migration Professional Services engagement priced at $50,000. Additionally, the customer has a monthly Compute Engine commitment (CUD) of $20,000. Revenue for the support and compute commitment is recognized ratably over the 12-month term. The professional services fee is recognized at a point-in-time upon project completion, expected at the end of the second month. This use case exercises the bundling of recurring subscriptions with one-time services and requires revenue allocation between the performance obligations."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "one-time"
+      - "recurring"
+      - "allocation"
+  - id: "gen-google-cloud-1"
+    name: "Google Cloud - BigQuery & Storage Consumption Model"
+    description: "BigQuery & Storage Consumption Model"
+    input:
+      customer_name: "Google Cloud"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      rev_rec_notes: "Usage: POB=consumption release=as_used (Revenue for BigQuery and Storage is recognized as the customer consumes the resources.); Other: POB=event_based release=as_billed (Variable support fee (4% of spend) is recognized in the period the spend occurs.)"
+      use_case_description: "This use case focuses on a high-velocity data analytics scenario using BigQuery and Cloud Storage. The customer utilizes a pay-as-you-go model with a 12-month term. BigQuery is priced at $5 per TB scanned, with a 1 TiB monthly free tier applied before charges begin. Cloud Storage (Standard Class) is billed at $0.020 per GB per month based on average daily residency. The contract also includes the variable portion of Premium Support, which is calculated as 4% of the total monthly consumption spend. Revenue for all charges in this scenario is recognized as consumption occurs. This demonstrates Zuora's ability to process tiered usage, free-tier logic, and variable percentage-based fees."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+  - id: "gen-google-cloud-2"
+    name: "Google Cloud - Global Infrastructure 3-Year Ramp"
+    description: "Global Infrastructure 3-Year Ramp"
+    input:
+      customer_name: "Google Cloud"
+      contract_start_date: "02/01/2026"
+      terms_months: 36
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Both the ramped compute commitment and support are recognized ratably despite the price increases.)"
+      use_case_description: "A strategic 3-year partnership for global infrastructure rollout involving ramped commitments. The contract features a tiered commitment for Compute Engine: $10,000 per month in Year 1, $20,000 per month in Year 2, and $30,000 per month in Year 3. Premium Support is included at a constant $12,500 monthly flat fee for the duration of the 36-month term. Billing is performed annually in advance for the committed amounts to align with the customer's annual budget cycle. Revenue for both the compute commitment and the support subscription is recognized ratably over the 36-month contract term. This scenario highlights Zuora's capability to manage multi-year terms with stepped pricing and annual billing cycles."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "ramp"
+      - "recurring"
+      - "multi-year"
+  - id: "gen-azure"
+    name: "Azure - Pay-As-You-Go Consumption Model"
+    description: "Pay-As-You-Go Consumption Model"
+    input:
+      customer_name: "Azure"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      rev_rec_notes: "Usage: POB=consumption release=as_used (Usage for VMs and SQL databases is recognized in the period it occurs, aligned with monthly billing.)"
+      use_case_description: "A customer signs up for a standard Pay-As-You-Go (PAYG) plan with no upfront commitment. The contract includes Azure Virtual Machines priced at $0.096 per hour for D2s v3 instances and Azure SQL Database usage at $0.52 per vCore per hour. Billing occurs monthly in arrears based on actual consumption recorded via usage uploads. Revenue is recognized as the services are consumed each month, matching the billing cycle. This scenario demonstrates Zuora's ability to handle high-volume, granular usage data and automate the rating process for cloud infrastructure services."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+  - id: "gen-azure-1"
+    name: "Azure - Enterprise Support & Provisioned Database Bundle"
+    description: "Enterprise Support & Provisioned Database Bundle"
+    input:
+      customer_name: "Azure"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Support and provisioned DB capacity are stand-ready obligations recognized over the monthly term.)"
+      use_case_description: "This scenario represents a mid-market customer opting for a predictable monthly spend. The bundle includes Azure Professional Direct Support at a flat $1,000 per month and a provisioned Azure SQL Database instance at $500 per month. A 10% bundle discount is applied to both recurring charges to incentivize the combined purchase. Both charges are billed monthly in advance. Revenue for both the support plan and the provisioned database is recognized ratably over the monthly service period as they represent 'stand-ready' obligations."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "recurring"
+      - "allocation"
+  - id: "gen-azure-2"
+    name: "Azure - Azure Savings Plan for Compute (Annual Commitment)"
+    description: "Azure Savings Plan for Compute (Annual Commitment)"
+    input:
+      customer_name: "Azure"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (The savings plan commitment is treated as a stand-ready obligation recognized ratably over the 1-year term.); Usage: POB=consumption release=as_used (Usage exceeding the commitment would be recognized as consumption in the period it occurs.)"
+      use_case_description: "An enterprise customer signs a 12-month Azure Savings Plan for Compute, committing to a fixed spend of $50,000 for the year. In exchange for this commitment, they receive a significant discount (modeled as a 65% reduction from retail rates) on their Virtual Machine usage. The $50,000 commitment is billed annually upfront. Revenue is recognized ratably over the 12-month term, reflecting the customer's right to access discounted compute capacity. This tests Zuora's ability to manage annual prepayments and track drawdown against a monetary commitment."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "discount"
+  - id: "gen-digitalocean"
+    name: "DigitalOcean - Standard Developer Entry"
+    description: "Standard Developer Entry"
+    input:
+      customer_name: "DigitalOcean"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Developer Support Plan is a fixed fee for access to support services over the month.); Usage: POB=consumption release=as_used (Basic Droplet usage is billed based on hourly consumption up to a monthly cap.)"
+      use_case_description: "This scenario represents a standard developer entry point on DigitalOcean. It includes a Basic Droplet ($4/month) billed on a usage basis with a monthly cap of 672 hours and a Developer Support Plan ($24/month) billed as a flat recurring fee. The Droplet is billed hourly, but the monthly cap ensures the customer never pays more than $4 for the instance in a billing cycle. The Developer Support plan provides faster response times and is billed monthly in advance. Revenue for the support plan is recognized ratably over the month, while the Droplet revenue is recognized as consumption occurs during the billing period."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+  - id: "gen-digitalocean-1"
+    name: "DigitalOcean - Scaling App Platform & Storage"
+    description: "Scaling App Platform & Storage"
+    input:
+      customer_name: "DigitalOcean"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (App Platform Professional and Spaces Base Fee are recurring subscriptions.); Usage: POB=consumption release=as_used (Spaces Overage ($0.02/GiB) is recognized as the storage is consumed beyond the 250 GiB limit.)"
+      use_case_description: "This scenario models a scaling startup using the App Platform Professional tier and Spaces Object Storage. The App Platform is billed at $12 per instance per month as a recurring fee. Spaces Object Storage includes a $5 base fee for 250 GiB and an overage charge of $0.02 per GiB for usage exceeding the bundle. In this scenario, the customer is also receiving a 10% bundle discount across all services for the first 12 months. This requires revenue allocation to ensure the discount is distributed proportionally across the recurring and usage-based performance obligations. Revenue for the App Platform and Spaces base fee is ratable, while Spaces overage is recognized as consumed."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "bundle"
+      - "discount"
+      - "recurring"
+      - "license"
+      - "allocation"
+  - id: "gen-digitalocean-2"
+    name: "DigitalOcean - Enterprise Infrastructure & Business Support"
+    description: "Enterprise Infrastructure & Business Support"
+    input:
+      customer_name: "DigitalOcean"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Business Support ($300/mo) is recognized ratably as the service is available.); Usage: POB=consumption release=as_used (General Purpose Droplets are billed based on actual hourly usage.)"
+      use_case_description: "This scenario features an enterprise-level customer utilizing high-performance General Purpose Droplets and the Business Support plan. The customer has committed to a 12-month term for infrastructure reliability. General Purpose Droplets are billed based on consumption (e.g., $40/month per instance list price). The Business Support plan is billed at a flat $300/month recurring fee. This scenario demonstrates DigitalOcean's transition from pure PLG to enterprise-style commitments. Revenue for the infrastructure is recognized as usage occurs, while the Business Support fee is recognized ratably over each monthly billing period."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+  - id: "gen-cloudflare"
+    name: "Cloudflare - Mid-Market Web Performance & Serverless"
+    description: "Mid-Market Web Performance & Serverless"
+    input:
+      customer_name: "Cloudflare"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Standard SaaS subscription for Application Services and Workers base fee.); Usage: POB=consumption release=as_used (Workers overages billed in arrears based on actual request volume.)"
+      use_case_description: "A mid-market customer signs a 12-month contract for the Application Services Business Plan covering 5 domains at $200 per domain per month. The deal includes Cloudflare Workers (Paid) with a $5 monthly base fee and usage-based charges for requests exceeding the 10 million included tier, priced at $0.30 per million requests. Billing is set to occur monthly in advance for recurring fees and monthly in arrears for usage overages. This scenario exercises a mix of fixed recurring charges and high-volume usage-based billing. Revenue for the Business Plan and Workers base fee is recognized ratably over the 12-month term, while Workers overage revenue is recognized as consumption occurs."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+  - id: "gen-cloudflare-1"
+    name: "Cloudflare - Enterprise Zero Trust & Implementation"
+    description: "Enterprise Zero Trust & Implementation"
+    input:
+      customer_name: "Cloudflare"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Zero Trust per-user fees recognized over the service period.); Services: POB=point_in_time release=at_go_live (Implementation fee recognized when the service is fully deployed.)"
+      use_case_description: "An enterprise customer deploys the Zero Trust Secure Workforce solution for 1,000 users at a negotiated rate of $6 per user per month (discounted from the $7 list price). To ensure a successful rollout, the contract includes a one-time Professional Services implementation fee of $5,000. The total contract value is subject to a 10% bundle discount, requiring revenue allocation between the recurring subscription and the point-in-time service fee. The subscription is billed annually in advance, while the implementation fee is billed upon contract signature. Revenue for the Zero Trust seats is recognized over the 12-month term, and the implementation fee is recognized upon completion of the go-live milestone."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "allocation"
+  - id: "gen-cloudflare-2"
+    name: "Cloudflare - Serverless Data Stack (R2 & Workers)"
+    description: "Serverless Data Stack (R2 & Workers)"
+    input:
+      customer_name: "Cloudflare"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Quarterly"
+      is_allocations: false
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Workers base fee recognized quarterly over the term.); Usage: POB=consumption release=as_used (R2 storage and operations recognized based on monthly usage reports.)"
+      use_case_description: "A high-growth startup adopts the Serverless Developer Stack, combining Cloudflare Workers (Paid) and R2 Object Storage. The Workers component includes the $5 base fee, while R2 is billed entirely on usage: $0.015 per GB of storage, $4.50 per million Class A operations, and $0.36 per million Class B operations. The customer commits to a 12-month term with quarterly billing for the Workers base fee and monthly arrears billing for all R2 usage. This scenario focuses on complex usage-based models with multiple activity types (storage vs. operations). Revenue for the base fee is ratable, whereas all R2 charges are recognized as the storage is consumed and operations are performed."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+  - id: "gen-fastly"
+    name: "Fastly - Enterprise Advantage Bundle with Global Usage"
+    description: "Enterprise Advantage Bundle with Global Usage"
+    input:
+      customer_name: "Fastly"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (The Advantage Package platform fee provides continuous access to the CDN network and is recognized ratably.); Usage: POB=consumption release=as_used (Bandwidth charges are based on actual data delivery and recognized in the period the usage occurs.)"
+      use_case_description: "A global media enterprise signs up for the Fastly Advantage Package to handle high-traffic event streaming. The package includes a recurring platform fee of $6,000 per month, which covers 500 million requests. Any bandwidth consumed is charged as a variable usage fee at $0.12 per GB for North American traffic and $0.19 per GB for international traffic. The contract is set for a 12-month term with the platform fee billed annually in advance and usage billed monthly in arrears. Revenue for the Advantage Package is recognized ratably over the 12-month term, while the bandwidth usage is recognized as consumption occurs each month."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "bundle"
+      - "recurring"
+      - "license"
+  - id: "gen-fastly-1"
+    name: "Fastly - Edge Compute Startup Launch"
+    description: "Edge Compute Startup Launch"
+    input:
+      customer_name: "Fastly"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      rev_rec_notes: "Services: POB=point_in_time release=at_go_live (Architecture review is a distinct service recognized once the delivery is complete.); Subscription: POB=over_time release=ratable_over_term (The $50 monthly minimum is a recurring commitment recognized ratably each month.); Usage: POB=consumption release=as_used (Compute requests and duration are recognized as the resources are consumed at the edge.)"
+      use_case_description: "A fintech startup adopts Fastly's Compute platform for low-latency transaction processing. They enter a 12-month agreement with a $50 monthly minimum commitment. The actual usage is calculated based on $0.50 per 1 million requests and $0.000035 per GB-second of memory duration. Additionally, they pay a one-time $1,500 Professional Services fee for initial architecture review and configuration. The minimum commitment is billed monthly, while compute resources are billed based on actual monthly consumption. Revenue for the professional services is recognized at point-in-time upon completion of the setup, while the compute fees follow a consumption model."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "one-time"
+      - "license"
+  - id: "gen-fastly-2"
+    name: "Fastly - Next-Gen WAF Security Bundle with Allocation"
+    description: "Next-Gen WAF Security Bundle with Allocation"
+    input:
+      customer_name: "Fastly"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (WAF security subscription is a stand-ready obligation recognized over the contract term.); Onboarding: POB=point_in_time release=at_go_live (Security onboarding is recognized as a separate POB upon completion of the implementation.)"
+      use_case_description: "An e-commerce retailer purchases the Next-Gen WAF (Signal Sciences) Professional tier along with a Security Onboarding package. The WAF subscription is priced at $2,000 per month, and the onboarding service is a one-time fee of $5,000. To win the deal, Fastly provides a 20% bundle discount on the total contract value. Because the discount applies to both the recurring subscription and the one-time service, revenue must be allocated between the two performance obligations based on their standalone selling prices. The WAF subscription revenue is recognized ratably over the 12-month term, while the onboarding revenue is recognized at the point the service is finished."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "allocation"
+  - id: "gen-akamai"
+    name: "Akamai - Enterprise Web Performance & Security Bundle"
+    description: "Enterprise Web Performance & Security Bundle"
+    input:
+      customer_name: "Akamai"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (App & API Protector provides continuous security monitoring and is recognized ratably.); Usage: POB=consumption release=as_used (CDN overages are recognized based on actual GBs delivered each month.); Onboarding: POB=point_in_time release=at_go_live (Implementation support is recognized once the customer is successfully configured and live.)"
+      use_case_description: "An enterprise retail customer is purchasing the Web Performance & Security Bundle to protect and accelerate their global storefront. The deal includes 10 units of App & API Protector at $1,400 per unit per month and Edge Delivery (CDN) with a monthly minimum commitment of $2,000. CDN usage beyond the commitment is billed at $0.045 per GB. A one-time Implementation Support fee of $5,000 is charged at the start. To win the deal, a 15% bundle discount is applied to all recurring charges. Subscription and commitment revenue is recognized ratably over the 12-month term, while the implementation fee is recognized point-in-time at go-live."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "allocation"
+  - id: "gen-akamai-1"
+    name: "Akamai - Connected Cloud Developer Scale-up"
+    description: "Connected Cloud Developer Scale-up"
+    input:
+      customer_name: "Akamai"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Compute instances and support plans are fixed monthly recurring charges recognized ratably.); Usage: POB=consumption release=as_used (Egress overages represent consumption-based revenue recognized in the month the traffic occurs.)"
+      use_case_description: "A technology startup is scaling their infrastructure on Akamai Connected Cloud (Compute). They are committing to 20 Dedicated CPU instances at $100 per instance per month for a 12-month term. Each instance includes a 5TB global egress allowance; any egress beyond this pooled total is billed at a flat overage rate of $0.005 per GB. They have also opted for a Premium Support plan at $100 per month. The customer is billed monthly in arrears for usage and in advance for the compute instances. Revenue for compute and support is recognized ratably, while egress overages are recognized as incurred."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+  - id: "gen-akamai-2"
+    name: "Akamai - High-Volume Media Streaming (Tiered CDN)"
+    description: "High-Volume Media Streaming (Tiered CDN)"
+    input:
+      customer_name: "Akamai"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      allocation_method: "Use Sell Price"
+      rev_rec_notes: "Usage: POB=consumption release=as_used (Tiered CDN usage is recognized as data is delivered to end-users.); Services: POB=point_in_time release=at_delivery (The Architecture Assessment is a distinct POB recognized upon completion of the service.)"
+      use_case_description: "A global media broadcaster uses Akamai Edge Delivery for high-definition video streaming. This contract uses a tiered usage model: the first 100TB are billed at $0.040/GB, and all usage above 100TB is billed at $0.030/GB. The contract includes a mandatory $4,000 monthly minimum spend. Additionally, the broadcaster has purchased a one-time 'Architecture Assessment' for $3,000 to optimize their origin shield configuration. The term is 12 months with monthly billing. Revenue for the assessment is recognized upon delivery of the final report, while CDN revenue follows the consumption pattern."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "one-time"
+      - "allocation"
+  - id: "gen-vercel"
+    name: "Vercel - Pro Team with Security Add-on"
+    description: "Pro Team with Security Add-on"
+    input:
+      customer_name: "Vercel"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Fixed monthly fees for seats and SSO represent a stand-ready obligation.); Usage: POB=consumption release=as_used (Infrastructure usage like data transfer is recognized as the customer consumes the resources.)"
+      use_case_description: "A growing startup subscribes to the Vercel Pro plan to support their frontend development team. The contract includes 10 Vercel Pro Seats at $20 per seat per month and the SAML SSO Security Add-on at a flat fee of $300 per month. They also anticipate Managed Infrastructure Usage, specifically Fast Data Transfer billed in arrears at $0.15 per GB once the 1TB included allotment is exceeded. The customer is billed monthly for all recurring charges and usage overages. Revenue for the seats and SSO add-on is recognized ratably over the 12-month term, while usage revenue is recognized as consumption occurs."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+  - id: "gen-vercel-1"
+    name: "Vercel - Enterprise Platform Land with Services"
+    description: "Enterprise Platform Land with Services"
+    input:
+      customer_name: "Vercel"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Platform commitment and HIPAA compliance are continuous services.); Services: POB=point_in_time release=at_go_live (Onboarding is a distinct service satisfied upon delivery of the configured environment.)"
+      use_case_description: "A healthcare enterprise signs a high-touch agreement for the Vercel Enterprise Platform. The deal includes an Enterprise Platform Commitment at $3,500 per month, a HIPAA Compliance Add-on at $350 per month, and a one-time Enterprise Onboarding fee of $5,000 for environment configuration. The customer receives a 10% total contract discount, which must be allocated across the performance obligations using list prices as the SSP. The contract is billed annually upfront. Revenue for the platform and HIPAA add-on is recognized ratably over the 12-month term, while the onboarding fee is recognized at a point-in-time upon completion of the go-live phase."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "discount"
+      - "one-time"
+      - "license"
+      - "allocation"
+  - id: "gen-vercel-2"
+    name: "Vercel - Multi-Year Expansion & Ramp"
+    description: "Multi-Year Expansion & Ramp"
+    input:
+      customer_name: "Vercel"
+      contract_start_date: "02/01/2026"
+      terms_months: 24
+      transaction_currency: "USD"
+      billing_period: "Quarterly"
+      is_allocations: false
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Ramped seat counts and security add-ons are recognized over the months they are active.); Usage: POB=consumption release=as_used (Edge requests are consumption-based and recognized as the traffic occurs.)"
+      use_case_description: "An e-commerce giant signs a 24-month agreement to scale their frontend infrastructure. In Year 1, they commit to 50 Vercel Pro Seats at $20 per month. In Year 2, the seat count ramps to 100 seats at a discounted rate of $18 per month, and they add Advanced WAF Rulesets at $500 per month. They also have a quarterly usage component for Edge Requests, billed at $2 per million requests in arrears. The billing period is quarterly. Revenue for the seats and WAF is recognized ratably over their respective active periods, while edge request usage is recognized as consumption occurs each quarter."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "ramp"
+      - "usage"
+      - "discount"
+      - "multi-year"
+  - id: "gen-netlify"
+    name: "Netlify - Pro Plan Agency Growth"
+    description: "Pro Plan Agency Growth"
+    input:
+      customer_name: "Netlify"
+      contract_start_date: "02/01/2026"
+      terms_months: 1
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Core platform and build seats are recurring services delivered over the monthly term.); Usage: POB=consumption release=as_used (Credits are consumed by specific events like bandwidth and build minutes.)"
+      use_case_description: "A digital agency signs up for the Pro Plan with 5 team members to manage client sites. The subscription includes the Netlify Core Platform at $20 per member per month and 2 additional Concurrent Build Seats at $40 per month each to speed up deployment pipelines. They also use the standard allotment of 3,000 usage credits, with any overages billed at $20 per 1,000 credits. The contract is a standard month-to-month agreement. Revenue for the platform and build seats is recognized ratably over the month, while usage credits are recognized as consumed based on bandwidth and build activity."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+      - "license"
+      - "credits"
+  - id: "gen-netlify-1"
+    name: "Netlify - Enterprise Data Unification (Netlify Connect)"
+    description: "Enterprise Data Unification (Netlify Connect)"
+    input:
+      customer_name: "Netlify"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Enterprise seats and Connect access are ratable over the 12-month term.); Usage: POB=consumption release=as_used (Prepaid credits represent a POB that is satisfied as consumption occurs.)"
+      use_case_description: "A large retail enterprise enters a 12-month agreement for Netlify Connect to unify their headless CMS and commerce data. The deal includes 50 Enterprise Core Platform seats ($1,000/month total), the Netlify Connect data layer ($2,000/month), and a prepaid annual block of 5,000,000 Usage Credits priced at $10,000. A 15% bundle discount is applied across the total contract value. Due to the discount applied to a bundle of recurring seats and a prepaid usage block, revenue allocation is required to ensure each POB is valued correctly. The platform and Connect services are recognized ratably, while the credit block is recognized as the data layers consume them."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "bundle"
+      - "discount"
+      - "recurring"
+      - "license"
+      - "credits"
+      - "allocation"
+  - id: "gen-netlify-2"
+    name: "Netlify - AI Startup Usage-Based Scaling"
+    description: "AI Startup Usage-Based Scaling"
+    input:
+      customer_name: "Netlify"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Monthly seat fees are recognized ratably.); Usage: POB=event_based release=as_billed (Ad-hoc credit block purchases may be recognized at the time of purchase if they are non-refundable and immediate.)"
+      use_case_description: "An AI startup uses Netlify to host their inference-heavy web application. They subscribe to 10 Pro Plan seats ($200/month) and rely heavily on the credit-based model for serverless function execution. In addition to their monthly subscription, they purchase supplemental 'Auto-recharge' credit blocks of 10,000 credits for $200 whenever their balance hits zero. This scenario demonstrates a hybrid of fixed recurring fees and unpredictable, event-driven usage purchases. Revenue for the subscription is ratable, while the on-demand credit blocks are recognized as 'point-in-time' upon purchase or deferred and recognized as used."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+      - "credits"
+  - id: "gen-heroku"
+    name: "Heroku - Self-Serve Developer Starter"
+    description: "Self-Serve Developer Starter"
+    input:
+      customer_name: "Heroku"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Eco Plan and Postgres Essential are flat recurring fees for platform access.)"
+      use_case_description: "An individual developer signs up for the Developer Starter plan to host a personal project. The subscription includes the Eco Dynos Plan at a flat $5.00 per month and the Heroku Postgres Essential database tier at $5.00 per month. Both charges are recurring monthly fees with no usage-based overages in this tier. The contract is set for a 12-month term to reflect a standard commitment, although billing occurs monthly. Revenue for both the platform access and the database service is recognized ratably over the monthly service period. This scenario demonstrates Zuora's ability to handle low-dollar, high-volume recurring subscriptions efficiently."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+      - "license"
+  - id: "gen-heroku-1"
+    name: "Heroku - Production App Scaling with Usage"
+    description: "Production App Scaling with Usage"
+    input:
+      customer_name: "Heroku"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Fixed database and Redis fees are recognized over the monthly term.); Usage: POB=consumption release=as_used (Dyno compute is recognized based on metered uptime.)"
+      use_case_description: "A growing startup migrates their production environment to Heroku, requiring dedicated resources. The contract includes a recurring Heroku Postgres Standard-0 database at $50.00 per month and a Heroku Redis Premium-0 instance at $15.00 per month. Additionally, they deploy four Standard 1X Dynos, which are billed based on consumption at $25.00 per dyno per month ($100.00 total estimated). The dyno charges are metered and prorated based on actual uptime. The customer is billed monthly in arrears for the usage and in advance for the recurring database fees. Revenue for the fixed subscriptions is ratable, while the dyno usage is recognized as the compute hours are consumed."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+  - id: "gen-heroku-2"
+    name: "Heroku - Enterprise Shield Compliance Bundle"
+    description: "Enterprise Shield Compliance Bundle"
+    input:
+      customer_name: "Heroku"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Enterprise platform and Connect services are ratable subscriptions.); Onboarding: POB=point_in_time release=at_go_live (Security review and setup is recognized upon milestone completion.)"
+      use_case_description: "A healthcare provider signs a multi-year Heroku Enterprise agreement for high-compliance workloads. The bundle includes the Heroku Enterprise Platform fee at $12,000.00 per year, Heroku Connect Starter for Salesforce synchronization at $12,000.00 per year, and a Shield Private Space at $3,000.00 per month ($36,000.00 per year). A one-time Enterprise Onboarding and Security Review fee of $5,000.00 is charged at the start. The customer receives a 15% bundle discount across all recurring line items. Because the discount applies to both the platform and the sync services, revenue allocation is required to ensure proper POB valuation. Revenue for the subscriptions is ratable over the 12-month term, while the onboarding fee is recognized upon completion of the security review."
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "license"
+      - "allocation"
