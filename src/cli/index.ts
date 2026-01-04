@@ -90,6 +90,15 @@ import {
   getReviewQueueStats,
   clearReviewQueue,
 } from '../self-learn/active-learning';
+import {
+  runBenchmark,
+  printConsoleSummary,
+  generateMarkdownReport,
+  serializeToJson,
+  createConsoleProgressCallback,
+  type BenchmarkOptions,
+} from '../benchmark';
+import { LLM_MODELS } from '../types/llm';
 
 const program = new Command();
 
@@ -2372,6 +2381,117 @@ testgen
   .command('list')
   .description('List test suites with generated tests')
   .action(testgenListCommand);
+
+// ==============================================================================
+// Benchmark command
+// ==============================================================================
+
+/**
+ * Benchmark command - cross-model performance comparison
+ */
+async function benchmarkCommand(options: {
+  suite?: string;
+  models?: string;
+  output?: string;
+  markdown?: string;
+  verbose?: boolean;
+  testIds?: string;
+  steps?: string;
+  skipEvaluation?: boolean;
+  judgeModel?: string;
+}): Promise<void> {
+  try {
+    console.log(chalk.cyan.bold('\n▶ ZUCA Benchmark\n'));
+
+    // Parse models
+    const modelList: LlmModel[] = options.models
+      ? (options.models.split(',').map((m) => m.trim()) as LlmModel[])
+      : [...LLM_MODELS];
+
+    // Validate models
+    for (const model of modelList) {
+      const parsed = LlmModelSchema.safeParse(model);
+      if (!parsed.success) {
+        console.error(chalk.red(`Invalid model: ${model}`));
+        console.error(chalk.gray(`Available models: ${LLM_MODELS.join(', ')}`));
+        process.exit(1);
+      }
+    }
+
+    // Validate judge model if specified
+    let judgeModel: LlmModel | undefined;
+    if (options.judgeModel) {
+      const parsed = LlmModelSchema.safeParse(options.judgeModel);
+      if (!parsed.success) {
+        console.error(chalk.red(`Invalid judge model: ${options.judgeModel}`));
+        process.exit(1);
+      }
+      judgeModel = parsed.data;
+    }
+
+    const benchmarkOptions: BenchmarkOptions = {
+      models: modelList,
+      suite: options.suite || 'golden-quick',
+      testIds: options.testIds ? options.testIds.split(',') : undefined,
+      steps: options.steps ? options.steps.split(',') : undefined,
+      outputFile: options.output,
+      markdownFile: options.markdown,
+      verbose: options.verbose ?? false,
+      skipEvaluation: options.skipEvaluation ?? false,
+      judgeModel,
+    };
+
+    console.log(chalk.blue(`Suite:  ${benchmarkOptions.suite}`));
+    console.log(chalk.blue(`Models: ${modelList.join(', ')}`));
+    if (judgeModel) {
+      console.log(chalk.blue(`Judge:  ${judgeModel}`));
+    }
+    if (benchmarkOptions.skipEvaluation) {
+      console.log(chalk.yellow('Quality evaluation: SKIPPED (speed-only mode)'));
+    }
+
+    // Create progress callback
+    const progressCallback = createConsoleProgressCallback(options.verbose);
+
+    // Run benchmark
+    const results = await runBenchmark(benchmarkOptions, progressCallback);
+
+    // Print console summary
+    printConsoleSummary(results, options.verbose);
+
+    // Write JSON output
+    if (options.output) {
+      const json = serializeToJson(results);
+      await writeFile(options.output, json);
+      console.log(chalk.green(`\n✓ JSON results saved to ${options.output}`));
+    }
+
+    // Write markdown report
+    if (options.markdown) {
+      const markdown = generateMarkdownReport(results);
+      await writeFile(options.markdown, markdown);
+      console.log(chalk.green(`✓ Markdown report saved to ${options.markdown}`));
+    }
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    console.error(chalk.red(`\nBenchmark failed: ${message}`));
+    process.exit(1);
+  }
+}
+
+program
+  .command('benchmark')
+  .description('Run cross-model benchmark comparison')
+  .option('-s, --suite <name>', 'Test suite name (default: golden-quick)')
+  .option('--models <list>', 'Comma-separated models to benchmark (default: all)')
+  .option('-o, --output <file>', 'Save JSON results to file')
+  .option('--markdown <file>', 'Generate markdown report')
+  .option('-v, --verbose', 'Show detailed progress')
+  .option('--test-ids <list>', 'Comma-separated test IDs to run')
+  .option('--steps <list>', 'Comma-separated steps to evaluate')
+  .option('--skip-evaluation', 'Skip quality evaluation (speed-only benchmark)')
+  .option('--judge-model <model>', 'Model to use for quality evaluation judge')
+  .action(benchmarkCommand);
 
 // Parse and execute
 program.parse();

@@ -1,0 +1,324 @@
+name: "ramp-waterwall"
+version: "1.0"
+description: "Tests generated from pattern: RR-003: ramp-revenue-handling"
+tests:
+  - id: "generated-RR-003: -0e02840b"
+    name: "36-Month Strategic Enterprise Ramp"
+    description: "Validates that a multi-year ramp with annual step-ups recognizes revenue as a single flat monthly average
+      across the entire 3-year term, rather than increasing annually."
+    input:
+      customer_name: "Salesforce.com, Inc."
+      use_case_description: "36-month contract starting 01/01/2026. Year 1: $10,000/month. Year 2: $12,000/month. Year 3:
+        $14,000/month. Total Contract Value (TCV): $432,000. Expected: $12,000 recognized monthly for 36 months."
+      terms_months: 36
+      billing_period: "Annual"
+      contract_start_date: "01/01/2026"
+      transaction_currency: "USD"
+      is_allocations: true
+    focus_steps:
+      - "revenue_recognition"
+      - "billings"
+    tags:
+      - "ramp-pricing"
+      - "multi-year"
+      - "enterprise"
+      - "generated"
+      - "variation"
+  - id: "generated-RR-003: -e90c32d1"
+    name: "12-Month Creative Cloud Promo"
+    description: "Validates that a 'First 3 Months Free' promotional offer is straight-lined over the full 12-month service
+      period, preventing $0 revenue recognition in the first quarter."
+    input:
+      customer_name: "Adobe Systems"
+      use_case_description: "12-month subscription. Months 1-3: €0/month. Months 4-12: €50/month. TCV: €450. Expected: €37.50
+        recognized monthly from month 1 through 12."
+      terms_months: 12
+      billing_period: "Monthly"
+      contract_start_date: "02/01/2026"
+      transaction_currency: "EUR"
+      is_allocations: false
+    focus_steps:
+      - "revenue_recognition"
+    tags:
+      - "promotion"
+      - "straight-line"
+      - "euro"
+      - "generated"
+      - "variation"
+  - id: "generated-RR-003: -8c0b3a11"
+    name: "6-Month Short-Term Step-Up"
+    description: "Validates that even short-term contracts with price increases at the midpoint are smoothed across all
+      months to avoid behavioral violations of revenue matching."
+    input:
+      customer_name: "Netflix UK"
+      use_case_description: "6-month term. Months 1-3: £10/month. Months 4-6: £15/month. TCV: £75. Expected: £12.50 recognized
+        monthly for 6 months."
+      terms_months: 6
+      billing_period: "Monthly"
+      contract_start_date: "03/01/2026"
+      transaction_currency: "GBP"
+      is_allocations: false
+    focus_steps:
+      - "billings"
+      - "revenue_recognition"
+    tags:
+      - "short-term"
+      - "step-up"
+      - "gbp"
+      - "generated"
+      - "variation"
+  - id: "generated-RR-003: -fb0786a7"
+    name: "24-Month Data Warehouse Ramp"
+    description: "Validates revenue smoothing for a quarterly billed contract where the price increases every 6 months."
+    input:
+      customer_name: "Snowflake Inc."
+      use_case_description: "24-month term. Q1-Q2: $5,000/quarter. Q3-Q4: $7,000/quarter. Q5-Q8: $10,000/quarter. TCV:
+        $64,000. Expected: $2,666.67 monthly (with rounding adjustment in month 24)."
+      terms_months: 24
+      billing_period: "Quarterly"
+      contract_start_date: "01/01/2026"
+      transaction_currency: "USD"
+      is_allocations: true
+    focus_steps:
+      - "revenue_recognition"
+      - "rounding_normalization"
+    tags:
+      - "quarterly-billing"
+      - "ramp-pricing"
+      - "data-warehouse"
+      - "generated"
+      - "variation"
+  - id: "generated-RR-003: -54bfb328"
+    name: "18-Month Mid-Term Upgrade & Extension"
+    description: "Validates that a mid-term modification (upgrade and term extension) triggers a re-calculation of the
+      blended rate for the remaining term, per RR-003 logic."
+    input:
+      customer_name: "Zoom Video Communications"
+      use_case_description: "Original: 12 months @ ¥100,000/mo. At Month 7, upgrade to ¥150,000/mo and extend by 6 months.
+        Total months: 18. TCV: (6 * 100k) + (12 * 150k) = ¥2,400,000. Expected: ¥133,333.33/mo."
+      terms_months: 18
+      billing_period: "Monthly"
+      contract_start_date: "04/01/2026"
+      transaction_currency: "JPY"
+      is_allocations: true
+    focus_steps:
+      - "mid_term_modification"
+      - "revenue_recognition"
+    tags:
+      - "upgrade"
+      - "extension"
+      - "jpy"
+      - "generated"
+      - "variation"
+  - id: "generated-RR-003: -e80d37d2"
+    name: "12-Month Tiered Monitoring Ramp"
+    description: "Validates that tiered pricing structures that ramp up based on volume commitments are recognized as a flat
+      average monthly amount."
+    input:
+      customer_name: "Datadog"
+      use_case_description: "12-month term. H1 (Months 1-6): $2,000/month. H2 (Months 7-12): $4,000/month. TCV: $36,000.
+        Expected: $3,000 recognized monthly."
+      terms_months: 12
+      billing_period: "Monthly"
+      contract_start_date: "05/01/2026"
+      transaction_currency: "USD"
+      is_allocations: false
+    focus_steps:
+      - "revenue_recognition"
+    tags:
+      - "tiered-pricing"
+      - "monitoring"
+      - "saas"
+      - "generated"
+      - "variation"
+  - id: "generated-RR-003: -0fab9226"
+    name: "24-Month Semi-Annual Collaboration Ramp"
+    description: "Validates that revenue is recognized monthly even when billing occurs semi-annually with a price increase
+      in the second year."
+    input:
+      customer_name: "Slack Technologies"
+      use_case_description: "24-month term. Year 1: $5,000 billed every 6 months ($10k total). Year 2: $7,000 billed every 6
+        months ($14k total). TCV: $24,000. Expected: $1,000 monthly recognition."
+      terms_months: 24
+      billing_period: "Semi-Annually"
+      contract_start_date: "01/01/2026"
+      transaction_currency: "USD"
+      is_allocations: true
+    focus_steps:
+      - "billings"
+      - "revenue_recognition"
+    tags:
+      - "semi-annual"
+      - "collaboration"
+      - "ramp"
+      - "generated"
+      - "variation"
+  - id: "generated-RR-003: -d71f1045"
+    name: "12-Month E-commerce 'Launch' Special"
+    description: "Validates that a contract with 2 months free at the start results in a lower, flat monthly revenue rate
+      for all 12 months."
+    input:
+      customer_name: "Shopify"
+      use_case_description: "12-month term. Months 1-2: $0. Months 3-12: $120/month. TCV: $1,200. Expected: $100 recognized
+        monthly from Jan to Dec."
+      terms_months: 12
+      billing_period: "Monthly"
+      contract_start_date: "01/01/2026"
+      transaction_currency: "USD"
+      is_allocations: false
+    focus_steps:
+      - "revenue_recognition"
+    tags:
+      - "promotion"
+      - "e-commerce"
+      - "straight-line"
+      - "generated"
+      - "variation"
+  - id: "generated-RR-003: -77e10fa2"
+    name: "18-Month Quarterly Step-Up"
+    description: "Validates revenue recognition for an 18-month term where pricing increases every quarter."
+    input:
+      customer_name: "DocuSign"
+      use_case_description: "18-month term. Q1-Q2: £2,000/qtr. Q3-Q4: £3,000/qtr. Q5-Q6: £4,000/qtr. TCV: £18,000. Expected:
+        £1,000 recognized monthly for 18 months."
+      terms_months: 18
+      billing_period: "Quarterly"
+      contract_start_date: "07/01/2026"
+      transaction_currency: "GBP"
+      is_allocations: true
+    focus_steps:
+      - "revenue_recognition"
+      - "billings"
+    tags:
+      - "quarterly-billing"
+      - "signature-services"
+      - "gbp"
+      - "generated"
+      - "variation"
+  - id: "generated-RR-003: -415aba83"
+    name: "36-Month Annual Step-Up Jira Subscription"
+    description: "Validates that annual billing for a 3-year ramp does not cause revenue spikes in the months where billing occurs."
+    input:
+      customer_name: "Atlassian"
+      use_case_description: "36-month term. Year 1: $12,000. Year 2: $18,000. Year 3: $24,000. TCV: $54,000. Expected: $1,500
+        monthly recognition regardless of the $12k/$18k/$24k annual invoices."
+      terms_months: 36
+      billing_period: "Annually"
+      contract_start_date: "01/01/2026"
+      transaction_currency: "USD"
+      is_allocations: true
+    focus_steps:
+      - "billings"
+      - "revenue_recognition"
+    tags:
+      - "annual-billing"
+      - "devops"
+      - "ramp"
+      - "generated"
+      - "variation"
+  - id: "generated-RR-003: -1df88b1b"
+    name: "12-Month Marketing Expansion Scenario"
+    description: "Validates that a mid-term expansion (adding seats/modules) results in a blended straight-line rate for the
+      remainder of the contract."
+    input:
+      customer_name: "HubSpot"
+      use_case_description: "12-month term starting 01/01/2026. Months 1-3: €1,000/mo. At Month 4, customer adds a module
+        (+€500/mo). TCV: (3 * 1000) + (9 * 1500) = €16,500. Expected: €1,375 monthly for 12 months."
+      terms_months: 12
+      billing_period: "Monthly"
+      contract_start_date: "01/01/2026"
+      transaction_currency: "EUR"
+      is_allocations: true
+    focus_steps:
+      - "mid_term_modification"
+      - "revenue_recognition"
+    tags:
+      - "expansion"
+      - "marketing-automation"
+      - "euro"
+      - "generated"
+      - "variation"
+  - id: "generated-RR-003: -5f340b14"
+    name: "24-Month CyberSecurity Semi-Annual Ramp"
+    description: "Validates that revenue is smoothed for a 2-year security contract with semi-annual billing and price increases."
+    input:
+      customer_name: "CrowdStrike"
+      use_case_description: "24-month term. H1-H2: $20,000/half. H3-H4: $30,000/half. TCV: $100,000. Expected: $4,166.67
+        monthly (with penny adjustment in month 24)."
+      terms_months: 24
+      billing_period: "Semi-Annually"
+      contract_start_date: "01/01/2026"
+      transaction_currency: "USD"
+      is_allocations: true
+    focus_steps:
+      - "revenue_recognition"
+      - "rounding_normalization"
+    tags:
+      - "security"
+      - "semi-annual"
+      - "ramp"
+      - "generated"
+      - "variation"
+  - id: "generated-RR-003: -7c720687"
+    name: "12-Month API Usage Minimum Ramp"
+    description: "Validates that a ramp in minimum monthly commitments is recognized as a flat monthly average in JPY."
+    input:
+      customer_name: "Twilio"
+      use_case_description: "12-month term. Months 1-6: ¥50,000/mo min. Months 7-12: ¥80,000/mo min. TCV: ¥780,000. Expected:
+        ¥65,000 monthly recognition."
+      terms_months: 12
+      billing_period: "Monthly"
+      contract_start_date: "01/01/2026"
+      transaction_currency: "JPY"
+      is_allocations: false
+    focus_steps:
+      - "revenue_recognition"
+    tags:
+      - "usage-minimum"
+      - "api"
+      - "jpy"
+      - "generated"
+      - "variation"
+  - id: "generated-RR-003: -d9e7b0ce"
+    name: "18-Month Gaming Engine Quarterly Ramp"
+    description: "Validates smoothing for an 18-month term with quarterly billing where the final two quarters have a
+      significantly higher rate."
+    input:
+      customer_name: "Unity Technologies"
+      use_case_description: "18-month term. Q1-Q4: $5,000/qtr. Q5-Q6: $10,000/qtr. TCV: $40,000. Expected: $2,222.22 monthly recognition."
+      terms_months: 18
+      billing_period: "Quarterly"
+      contract_start_date: "06/01/2026"
+      transaction_currency: "USD"
+      is_allocations: true
+    focus_steps:
+      - "revenue_recognition"
+      - "billings"
+    tags:
+      - "gaming"
+      - "quarterly-billing"
+      - "ramp"
+      - "generated"
+      - "variation"
+  - id: "generated-RR-003: -5ff37a3b"
+    name: "36-Month Analytics Complex Step-Up"
+    description: "Validates that a high-value, 3-year contract with multiple step-ups and annual billing is recognized as a
+      single flat monthly stream."
+    input:
+      customer_name: "Palantir Technologies"
+      use_case_description: "36-month term. Year 1: $1.2M. Year 2: $1.8M. Year 3: $2.4M. TCV: $5.4M. Expected: $150,000
+        monthly recognition for 36 months."
+      terms_months: 36
+      billing_period: "Annually"
+      contract_start_date: "01/01/2026"
+      transaction_currency: "USD"
+      is_allocations: true
+    focus_steps:
+      - "revenue_recognition"
+      - "billings"
+    tags:
+      - "big-data"
+      - "annual-billing"
+      - "complex-ramp"
+      - "generated"
+      - "variation"
