@@ -65,6 +65,7 @@ const analyzeModelOptions = [
   { key: "gemini-3-pro-preview", label: "Gemini 3 Pro", time: "~4-5 min", description: "Balanced quality and speed" },
   { key: "gemini-3-flash-preview", label: "Gemini 3 Flash", time: "~1.5-2 min", description: "Fastest, good for interactive use" },
   { key: "zuca-gpt-nano", label: "ZUCA-GPT Nano", time: "~1-2 min", description: "Zuora-specialized, fast and cheap" },
+  { key: "zuca-gpt-mini", label: "ZUCA-GPT Mini", time: "~2-3 min", description: "Zuora-specialized, balanced quality" },
 ];
 
 const ucGeneratorModelOptions = [

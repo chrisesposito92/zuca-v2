@@ -70,7 +70,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       conversationHistory,
     };
 
-    type LlmModel = 'gpt-5.2' | 'gemini-3-pro-preview' | 'gemini-3-flash-preview' | 'zuca-gpt-nano';
+    type LlmModel = 'gpt-5.2' | 'gemini-3-pro-preview' | 'gemini-3-flash-preview' | 'zuca-gpt-nano' | 'zuca-gpt-mini';
     const defaultModel: LlmModel = (process.env.LLM_MODEL || process.env.OPENAI_MODEL || 'gpt-5.2') as LlmModel;
     const selectedModel: LlmModel = modelResult?.data || (session.llm_model as LlmModel) || defaultModel;
     const response = await processFollowUp(query, context, selectedModel);

@@ -282,6 +282,13 @@ export const MODEL_CAPABILITIES: Record<LlmModel, ModelCapabilities> = {
     isFineTuned: true,
     pricing: { inputPer1k: 0.0002, outputPer1k: 0.0008 },
   },
+  'zuca-gpt-mini': {
+    supportsWebSearch: false,
+    supportsCodeInterpreter: true,
+    supportsMcp: true,
+    isFineTuned: true,
+    pricing: { inputPer1k: 0.0004, outputPer1k: 0.0016 },
+  },
 };
 
 // =============================================================================

@@ -5,6 +5,7 @@ export const LLM_MODELS = [
   'gemini-3-pro-preview',
   'gemini-3-flash-preview',
   'zuca-gpt-nano',
+  'zuca-gpt-mini',
 ] as const;
 
 /**
@@ -13,6 +14,7 @@ export const LLM_MODELS = [
  */
 export const MODEL_ID_MAP: Record<string, string> = {
   'zuca-gpt-nano': 'ft:gpt-4.1-nano-2025-04-14:personal:zuca:Cu3RhczG',
+  'zuca-gpt-mini': 'ft:gpt-4.1-mini-2025-04-14:personal:zuca-mini:CuBZwHVI',
 };
 
 /**
