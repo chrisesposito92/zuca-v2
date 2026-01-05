@@ -1,0 +1,903 @@
+name: "media-companies-3"
+description: "Generated from UC outputs - 2026-01-05"
+version: "1.0"
+tests:
+  - id: "gen-apple-tv"
+    name: "Apple TV+ - Standard Monthly D2C Subscription"
+    description: "Standard Monthly D2C Subscription"
+    input:
+      customer_name: "Apple TV+"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A retail customer signs up for the standard Apple TV+ subscription via the web portal. The product is configured as a recurring monthly charge of $12.99. There are no setup fees or hardware components in this scenario. The subscription is month-to-month but modeled here as a 12-month evergreen contract for billing continuity. Revenue for the streaming service is recognized ratably over each monthly service period as the customer consumes content."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Standard SaaS subscription for digital content access; recognized daily over the billing month.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "one-time"
+      - "recurring"
+  - id: "gen-apple-tv-1"
+    name: "Apple TV+ - Apple One Premier Family Bundle"
+    description: "Apple One Premier Family Bundle"
+    input:
+      customer_name: "Apple TV+"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A household subscribes to the Apple One Premier bundle to consolidate multiple services including TV+, Music, Arcade, and iCloud+ (2TB). The bundle is priced at a flat monthly recurring rate of $37.95. This scenario exercises Zuora's ability to handle bundled products where multiple sub-services are represented by a single billing line item. Revenue is recognized ratably over the month for the entire bundle. The contract is set for 12 months with monthly billing cycles."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (The bundle is treated as a single performance obligation for access to the suite of services.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "recurring"
+  - id: "gen-apple-tv-2"
+    name: "Apple TV+ - Hardware Purchase with Service Trial"
+    description: "Hardware Purchase with Service Trial"
+    input:
+      customer_name: "Apple TV+"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      use_case_description: "A customer purchases an Apple TV 4K device for $129.00, which includes a 3-month free trial of Apple TV+. The hardware is a one-time charge, while the subscription is a recurring charge that starts at $0 for the first 3 months and then rolls into $12.99/month. This scenario uses revenue allocations to shift a portion of the $129.00 transaction price from the hardware to the service trial POB based on their relative standalone selling prices (SSP). Revenue for the hardware is recognized at the point of delivery, while the service portion is recognized ratably over the 3-month trial period."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Hardware: POB=point_in_time release=at_delivery (Revenue recognized when the physical Apple TV 4K unit is shipped/delivered.); Subscription: POB=over_time release=ratable_over_term (The allocated value for the 3-month trial is recognized ratably over those 90 days.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "one-time"
+      - "recurring"
+      - "allocation"
+  - id: "gen-apple-tv-3"
+    name: "Apple TV+ - Sports Add-on with Cross-Product Discount"
+    description: "Sports Add-on with Cross-Product Discount"
+    input:
+      customer_name: "Apple TV+"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "An existing Apple TV+ subscriber adds the MLS Season Pass to their account. Because they are already a TV+ subscriber, they receive a discounted rate of $12.99/month for the sports pass instead of the $14.99/month standalone price. This scenario features two recurring charges: the base TV+ subscription ($12.99) and the discounted MLS Pass ($12.99). Both charges are billed monthly and recognized ratably. This demonstrates Zuora's ability to handle conditional discounts based on active base products."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Both the base entertainment and the sports pass are ratable services.); Usage: POB=over_time release=ratable_over_term (Although labeled 'Usage' in catalog, the MLS Pass behaves as a recurring subscription during the season.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "discount"
+      - "recurring"
+  - id: "gen-apple-tv-4"
+    name: "Apple TV+ - Annual Plan with Extended Support"
+    description: "Annual Plan with Extended Support"
+    input:
+      customer_name: "Apple TV+"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "A customer opts for the Apple TV+ Annual Plan to save on costs, paying $99.99 upfront for the year. Simultaneously, they purchase AppleCare+ for their existing Apple TV device for a one-time fee of $29.00. The annual subscription revenue is recognized ratably over the 12-month term. Although AppleCare+ is paid as a one-time fee, it represents a stand-ready obligation to provide support and is therefore recognized ratably over the 2-year coverage period (modeled here within the 12-month contract window for the demo)."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Annual payment recognized monthly ($8.33/mo) over the year.); Other: POB=over_time release=ratable_over_term (AppleCare+ is a stand-ready service recognized over the coverage duration.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "one-time"
+      - "recurring"
+  - id: "gen-amazon-prime-video"
+    name: "Amazon Prime Video - Standard Monthly Standalone with Ad-Free Upsell"
+    description: "Standard Monthly Standalone with Ad-Free Upsell"
+    input:
+      customer_name: "Amazon Prime Video"
+      contract_start_date: "02/01/2026"
+      terms_months: 1
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A new customer signs up for the Prime Video Standalone subscription at $8.99 per month. During the signup flow, they opt for the Ad-Free Upgrade for an additional $2.99 per month to remove commercials and enable Dolby Atmos support. Both charges are recurring and billed monthly in advance. The contract is month-to-month with no fixed long-term commitment. Revenue for both the base streaming access and the ad-free entitlement should be recognized ratably over the monthly service period. This scenario represents the high-volume B2C entry point for digital-only users."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Standard monthly subscription recognized over the billing cycle.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "recurring"
+  - id: "gen-amazon-prime-video-1"
+    name: "Amazon Prime Video - Annual Prime Bundle with Mid-Term Channel Add-on"
+    description: "Annual Prime Bundle with Mid-Term Channel Add-on"
+    input:
+      customer_name: "Amazon Prime Video"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "A customer purchases a full Amazon Prime Annual Membership for $139 per year, which includes Video, Music, and Shipping perks. Three months into their annual term, they decide to add the 'Max' (formerly HBO Max) Channel for $9.99 per month. The base membership is billed annually upfront, while the Channel add-on is billed monthly. This demonstrates Zuora's ability to manage multiple billing frequencies on a single account. Revenue for the annual membership is recognized ratably over the 12-month term. The Channel revenue is recognized ratably over each monthly period as the service is consumed."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Annual membership recognized over 365 days.); Other: POB=over_time release=ratable_over_term (Third-party channel subscription recognized over its monthly term.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+  - id: "gen-amazon-prime-video-2"
+    name: "Amazon Prime Video - Hybrid Subscription and Transactional VOD Marketplace"
+    description: "Hybrid Subscription and Transactional VOD Marketplace"
+    input:
+      customer_name: "Amazon Prime Video"
+      contract_start_date: "02/01/2026"
+      terms_months: 1
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A subscriber on the $14.99 monthly Prime plan engages with the transactional marketplace. In a single month, they rent a new release movie for $5.99 and purchase a digital copy of a film for $19.99. The $14.99 is a recurring subscription fee, while the rental and purchase are one-time charges. The rental provides a 48-hour viewing window, and the purchase provides indefinite access. Revenue for the subscription is ratable. Revenue for the $19.99 purchase is recognized at the point of delivery. Revenue for the $5.99 rental is recognized at the point of transaction or upon the start of the viewing event."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Monthly base fee recognized over the month.); Other: POB=point_in_time release=at_delivery (Digital purchase (Buy) recognized when the asset is added to the library.); Usage: POB=event_based release=as_used (Rental recognized upon viewing or expiration of the rental window.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "one-time"
+      - "recurring"
+  - id: "gen-amazon-prime-video-3"
+    name: "Amazon Prime Video - Prime Student Trial to Paid Ramp"
+    description: "Prime Student Trial to Paid Ramp"
+    input:
+      customer_name: "Amazon Prime Video"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A student signs up for the Prime Student plan, which features a 6-month free trial followed by a discounted rate of $7.49 per month. This scenario uses a ramp deal structure where the first 6 months have a $0 price point, and the subsequent months trigger the recurring charge. The total contract term is 12 months. Zuora manages the transition from the trial period to the paid period automatically. Revenue recognition during the trial period is typically $0, with ratable recognition beginning once the paid service starts at $7.49. This exercises Zuora's ability to handle multi-period contracts with price changes."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Revenue recognized based on the billed amount in each period (0 for trial, 7.49 for paid).)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "ramp"
+      - "discount"
+      - "recurring"
+  - id: "gen-amazon-prime-video-4"
+    name: "Amazon Prime Video - Multi-Channel Bundle with Promotional Allocation"
+    description: "Multi-Channel Bundle with Promotional Allocation"
+    input:
+      customer_name: "Amazon Prime Video"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      use_case_description: "To drive adoption of Channels, Amazon offers a 'Entertainment Bundle' where a user gets Amazon Prime ($14.99), Paramount+ ($11.99), and Starz ($9.99) for a total discounted price of $29.97 per month (a $7 savings). Because multiple products are sold at a bundled discount, revenue must be allocated across the performance obligations based on their standalone selling prices (SSP). This scenario uses Zuora Revenue's allocation engine to ensure each service (Prime, Paramount+, Starz) is credited with its fair share of the $29.97 transaction price. All services are recurring and recognized ratably over the monthly term."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Allocated bundle revenue recognized ratably over the month for each POB.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "recurring"
+      - "credits"
+      - "allocation"
+  - id: "gen-tidal"
+    name: "Tidal - Standard Individual Hi-Res Subscription"
+    description: "Standard Individual Hi-Res Subscription"
+    input:
+      customer_name: "Tidal"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A single user signs up for the TIDAL Individual plan to access high-fidelity audio features. The subscription is priced at $10.99 per month on a recurring basis. This is a standard B2C offering with no setup fees or hardware components. The customer is billed monthly in advance. Revenue should be recognized ratably over each monthly service period as the streaming service is provided."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Standard SaaS subscription recognized over the monthly service interval.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "one-time"
+      - "recurring"
+  - id: "gen-tidal-1"
+    name: "Tidal - Family Plan Household Enrollment"
+    description: "Family Plan Household Enrollment"
+    input:
+      customer_name: "Tidal"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A household account is created under the TIDAL Family plan, which supports up to 6 individual profiles. The plan is priced at $16.99 per month, billed as a single recurring charge to the primary account holder. This scenario exercises the higher-tier recurring billing model designed for multi-user access. Revenue is treated as a single performance obligation for the family access, recognized ratably over the monthly term. There are no per-profile usage fees in this scenario."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Monthly recurring revenue for the family bundle, recognized over the term.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+  - id: "gen-tidal-2"
+    name: "Tidal - Verified Student Discount Plan"
+    description: "Verified Student Discount Plan"
+    input:
+      customer_name: "Tidal"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "An eligible student signs up for the TIDAL Student plan at a discounted rate of $5.49 per month. This plan provides the full features of the Individual tier at approximately 50% of the cost. The subscription requires annual re-verification through a third-party service (SheerID). For the OTR workflow, this is modeled as a standard recurring charge with a specific price point. Revenue is recognized ratably over the monthly billing period."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Discounted subscription revenue recognized over the term.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "discount"
+      - "recurring"
+  - id: "gen-tidal-3"
+    name: "Tidal - Professional DJ Performance Bundle"
+    description: "Professional DJ Performance Bundle"
+    input:
+      customer_name: "Tidal"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A professional DJ subscribes to a bundle consisting of the TIDAL Individual plan ($10.99) and the DJ Extension add-on ($9.00). The total monthly recurring charge is $19.99. The DJ Extension enables integration with professional hardware and software like Serato. Both components are billed monthly in advance. Revenue for both the base subscription and the extension is recognized ratably over the monthly service period as they constitute ongoing access to the library and integration features."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Base Individual subscription recognized ratably.); Usage: POB=over_time release=ratable_over_term (DJ Extension is a recurring add-on recognized ratably as a service access fee.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "recurring"
+  - id: "gen-tidal-4"
+    name: "Tidal - Promotional Power-User Bundle with Allocation"
+    description: "Promotional Power-User Bundle with Allocation"
+    input:
+      customer_name: "Tidal"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      use_case_description: "To drive adoption of the DJ Extension, Tidal offers a 'Power-User Bundle' that includes TIDAL Individual and the DJ Extension at a discounted total price of $17.99 per month (a $2.00 discount from the $19.99 list price). Because this involves multiple products sold at a combined discount, revenue must be allocated between the core subscription and the extension based on their standalone selling prices (List Prices). Both charges are recurring and recognized ratably. This scenario demonstrates Zuora's ability to handle multi-element arrangements and revenue allocations."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Allocated portion of the bundle price recognized ratably for the core service.); Usage: POB=over_time release=ratable_over_term (Allocated portion of the bundle price recognized ratably for the DJ Extension.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "recurring"
+      - "allocation"
+  - id: "gen-deezer"
+    name: "Deezer - B2C Individual Premium Monthly"
+    description: "B2C Individual Premium Monthly"
+    input:
+      customer_name: "Deezer"
+      contract_start_date: "02/01/2026"
+      terms_months: 1
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "Standard B2C subscription for an individual user signing up for Deezer Premium. The customer pays $11.99 per month on a recurring basis with no long-term commitment. The rate plan contains a single recurring flat-fee charge. Revenue is recognized ratably over each monthly service period as the music streaming service is provided. This scenario represents the core high-volume transaction type for Deezer's self-serve platform."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Standard SaaS subscription revenue recognized daily over the monthly billing cycle.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "recurring"
+      - "license"
+  - id: "gen-deezer-1"
+    name: "Deezer - B2C Premium Annual Upfront"
+    description: "B2C Premium Annual Upfront"
+    input:
+      customer_name: "Deezer"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "An individual user opts for the Deezer Premium Annual plan to take advantage of the 25% discount. The customer is billed a single upfront payment of $107.91 for a 12-month term. The product rate plan includes a one-year recurring charge billed annually. Although payment is collected at the start, revenue must be deferred and recognized ratably over the 12-month term. This scenario tests Zuora's ability to handle annual billing frequencies with daily revenue recognition."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Upfront payment is deferred and recognized monthly/daily over the 12-month term.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "discount"
+      - "recurring"
+  - id: "gen-deezer-2"
+    name: "Deezer - B2B Business Box Bundle"
+    description: "B2B Business Box Bundle"
+    input:
+      customer_name: "Deezer"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "EUR"
+      billing_period: "Quarterly"
+      is_allocations: true
+      use_case_description: "A retail store signs up for the Deezer Business Box offer, which includes physical hardware and a commercial music subscription. The deal consists of a one-time 39€ fee for the Business Box (hardware) and a 39€ monthly subscription for the streaming service, billed quarterly (117€). The hardware is treated as a separate performance obligation recognized at the point of delivery. The subscription is recognized ratably over the 12-month commitment period. Revenue allocation is applied based on list prices to ensure the hardware and service are valued correctly."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Hardware: POB=point_in_time release=at_delivery (Revenue for the physical box is recognized when control transfers to the customer.); Subscription: POB=over_time release=ratable_over_term (Commercial license fee recognized ratably over the 12-month contract.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "one-time"
+      - "recurring"
+      - "allocation"
+  - id: "gen-deezer-3"
+    name: "Deezer - B2C Student Verification Discount"
+    description: "B2C Student Verification Discount"
+    input:
+      customer_name: "Deezer"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A verified student signs up for the Deezer Student plan at a discounted rate of $5.99 per month. This is a monthly recurring subscription that offers the same features as Premium but at a 50% discount. The rate plan charge is configured as a recurring flat fee. Revenue is recognized ratably over the monthly service period. This scenario highlights the management of specialized B2C segments and discounted pricing models."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Monthly subscription revenue recognized ratably regardless of the discount level.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "discount"
+      - "recurring"
+  - id: "gen-deezer-4"
+    name: "Deezer - B2B Multi-Zone Business Expansion"
+    description: "B2B Multi-Zone Business Expansion"
+    input:
+      customer_name: "Deezer"
+      contract_start_date: "02/01/2026"
+      terms_months: 6
+      transaction_currency: "EUR"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A gym franchise signs up for the Deezer Business App-only plan for 10 different music zones across their facilities. Each music zone is priced at 30€ per month, resulting in a total recurring charge of 300€ per month. The contract has a 6-month minimum commitment period. Billing is performed monthly. Revenue is recognized ratably over the term for each active music zone. This scenario demonstrates per-unit (per-zone) pricing for B2B commercial licensing."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Revenue for all 10 zones is recognized ratably over the monthly service period.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "recurring"
+  - id: "gen-crunchyroll"
+    name: "Crunchyroll - Standard Monthly Fan Subscription"
+    description: "Standard Monthly Fan Subscription"
+    input:
+      customer_name: "Crunchyroll"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A new customer signs up for the Fan Membership at $7.99 per month. This is a recurring monthly subscription providing ad-free streaming and simulcast access. The contract is month-to-month, but for demo purposes, we will model a 12-month term that auto-renews. Billing occurs at the start of each monthly period. Revenue is recognized ratably over each month of service."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Standard SaaS streaming access recognized monthly as the service is provided.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "recurring"
+  - id: "gen-crunchyroll-1"
+    name: "Crunchyroll - Mega Fan Annual Discount Plan"
+    description: "Mega Fan Annual Discount Plan"
+    input:
+      customer_name: "Crunchyroll"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "A dedicated customer selects the Mega Fan Annual plan for $99.99 per year. This plan includes 4 concurrent streams, offline viewing, and access to the Game Vault. By paying annually, the customer receives a discount compared to the $11.99 monthly rate. The full $99.99 is billed upfront at the start of the 12-month term. Revenue is recognized ratably over the 12-month contract period."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Annual upfront payment recognized over the 12-month service term.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "discount"
+  - id: "gen-crunchyroll-2"
+    name: "Crunchyroll - Ultimate Fan Bundle with Loyalty Reward"
+    description: "Ultimate Fan Bundle with Loyalty Reward"
+    input:
+      customer_name: "Crunchyroll"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      use_case_description: "The Ultimate Fan Membership is priced at $15.99 per month and includes a recurring streaming subscription plus an 'Annual Swag Bag' earned after 12 consecutive months of membership. We will model this as a bundled offering where a portion of the monthly fee is allocated to the future delivery of the physical swag bag. The streaming portion ($13.49 allocated) is recognized ratably each month, while the swag bag portion ($2.50 allocated) is deferred and recognized as a point-in-time event upon shipment after month 12. This scenario demonstrates Zuora Revenue's ability to handle multi-element arrangements with physical and digital components."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Streaming access portion of the Ultimate tier recognized monthly.); Hardware: POB=point_in_time release=at_delivery (The Swag Bag is a separate POB recognized only when control of the physical goods is transferred.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "recurring"
+      - "allocation"
+  - id: "gen-crunchyroll-3"
+    name: "Crunchyroll - Prepaid Gift Card Purchase and Redemption"
+    description: "Prepaid Gift Card Purchase and Redemption"
+    input:
+      customer_name: "Crunchyroll"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "A customer purchases a 12-month 'Digital Gift Card' for $79.99. At the time of purchase, this is a one-time charge and the revenue is recorded as a liability (Deferred Revenue). Three months later, the customer redeems the code to start a 12-month Fan Membership. Upon redemption, the liability begins to clear, and revenue is recognized ratably over the subsequent 12 months of streaming service. This scenario highlights the transition from a non-subscription liability to a subscription-based revenue stream."
+      rev_rec_notes: "Other: POB=event_based release=as_used (Gift card purchase is a liability until redemption triggers the service period.); Subscription: POB=over_time release=ratable_over_term (Once redeemed, revenue follows the standard ratable pattern for a 12-month term.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "one-time"
+      - "recurring"
+  - id: "gen-crunchyroll-4"
+    name: "Crunchyroll - Storefront Merchandise Transaction"
+    description: "Storefront Merchandise Transaction"
+    input:
+      customer_name: "Crunchyroll"
+      contract_start_date: "02/01/2026"
+      terms_months: 1
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "An existing 'Mega Fan' subscriber uses their 10% member discount to purchase a Limited Edition Anime Figure for $225.00 (originally $250.00). This is a one-time transaction processed through the Crunchyroll Store. The charge is billed immediately at the time of order. However, revenue is not recognized until the item is shipped, following a point-in-time recognition pattern. This demonstrates the integration of one-time hardware sales alongside recurring subscription management."
+      rev_rec_notes: "Hardware: POB=point_in_time release=at_delivery (Revenue recognized upon shipment/delivery of the physical figure.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "discount"
+      - "one-time"
+      - "recurring"
+  - id: "gen-funimation"
+    name: "Funimation - Standard Monthly Streaming Subscription"
+    description: "Standard Monthly Streaming Subscription"
+    input:
+      customer_name: "Funimation"
+      contract_start_date: "02/01/2026"
+      terms_months: 1
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A new customer signs up for the Funimation Premium plan via the website for $5.99 per month. This is a standard B2C recurring subscription with no fixed term, billed monthly in advance. The service provides ad-free access to the streaming library and allows for 2 concurrent streams. Revenue for the streaming service is recognized ratably over the monthly service period. The customer expects immediate access upon successful payment processing."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Standard SaaS-style streaming access recognized over the monthly billing cycle.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "recurring"
+  - id: "gen-funimation-1"
+    name: "Funimation - Premium Plus Ultra Annual Collector Bundle"
+    description: "Premium Plus Ultra Annual Collector Bundle"
+    input:
+      customer_name: "Funimation"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "A 'super-fan' subscribes to the Premium Plus Ultra plan for $99.99 per year. This bundle includes an annual streaming subscription, an anniversary gift (physical merchandise) valued at $25.00, and two Pay-Per-View (PPV) rental credits. The streaming portion is recognized over the 12-month term, while the anniversary gift is recognized when shipped. The PPV credits are recognized when the user redeems them for a specific title. Because the bundle contains both a service and a physical good, revenue allocation is required between the subscription and the gift."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Annual streaming access recognized monthly over 12 months.); Other: POB=point_in_time release=at_delivery (Anniversary gift recognized upon shipment to the customer.); Other: POB=point_in_time release=at_delivery (PPV credits recognized upon redemption of the digital title.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "recurring"
+      - "credits"
+      - "allocation"
+  - id: "gen-funimation-2"
+    name: "Funimation - Mid-Month Plan Upgrade with Pro-Ration"
+    description: "Mid-Month Plan Upgrade with Pro-Ration"
+    input:
+      customer_name: "Funimation"
+      contract_start_date: "02/01/2026"
+      terms_months: 1
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A customer on the Premium Monthly plan ($5.99) decides to upgrade to the Premium Plus Monthly plan ($7.99) exactly 15 days into their billing cycle. The goal is to provide immediate access to the higher tier, which includes mobile downloads and 5 streams. Zuora should calculate a pro-rated credit for the remaining 15 days of the Premium plan and a pro-rated charge for the remaining 15 days of the Premium Plus plan. The net difference is charged to the customer's payment method immediately. Revenue recognition for both charges is ratable over their respective active durations within the month."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Pro-rated amounts recognized over the specific days the service was active.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "credits"
+  - id: "gen-funimation-3"
+    name: "Funimation - Subscription and Physical Merchandise Purchase"
+    description: "Subscription and Physical Merchandise Purchase"
+    input:
+      customer_name: "Funimation"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A customer signs up for a Premium Plus subscription ($7.99/mo) and simultaneously purchases a 'Limited Edition Blu-ray Set' from the Funimation Shop for $45.00. The subscription is a recurring charge, while the Blu-ray is a one-time charge. The subscription provides a 'Free Shipping' benefit for the Blu-ray purchase. Revenue for the subscription is recognized ratably each month. Revenue for the Blu-ray set is recognized at a point-in-time when the item is shipped. This scenario tests the ability to handle mixed recurring and one-time charges on a single order."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Monthly recurring subscription fee.); Other: POB=point_in_time release=at_delivery (Physical merchandise recognized upon fulfillment/shipment.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "one-time"
+      - "recurring"
+  - id: "gen-funimation-4"
+    name: "Funimation - Multi-Year Migration Retention Plan"
+    description: "Multi-Year Migration Retention Plan"
+    input:
+      customer_name: "Funimation"
+      contract_start_date: "02/01/2026"
+      terms_months: 24
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "As part of the Crunchyroll transition, Funimation offers legacy users a 24-month 'Loyalty Lock-in' on the Premium Plus annual plan. The customer commits to two years at a discounted rate of $59.99 per year (standard is $79.99). The contract has a 24-month term with annual billing. This scenario involves a multi-year commitment with a recurring annual charge. Revenue is recognized ratably over each 12-month period. This tests long-term contract management and annual renewal logic within a multi-year term."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Revenue for each year's payment is recognized monthly over that specific year.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "discount"
+      - "recurring"
+      - "multi-year"
+  - id: "gen-espn"
+    name: "ESPN+ - Basic Sports & Event Add-on"
+    description: "Basic Sports & Event Add-on"
+    input:
+      customer_name: "ESPN+"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A consumer subscribes to the ESPN Select plan for $12.99 per month to access supplemental live sports and the '30 for 30' library. During the first month, the user also purchases a UFC Pay-Per-View (PPV) event for a one-time fee of $79.99. The ESPN Select subscription is a recurring monthly charge, while the UFC PPV is a one-time event-based charge. Revenue for the subscription is recognized ratably over the monthly term, whereas the PPV revenue is recognized at the point in time when the event occurs. This scenario demonstrates Zuora's ability to handle mixed recurring and one-time charges on a single account."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Standard SaaS subscription for streaming access.); Other: POB=point_in_time release=at_delivery (PPV event is a distinct performance obligation delivered at a specific time.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "one-time"
+      - "recurring"
+  - id: "gen-espn-1"
+    name: "ESPN+ - DTC Flagship Annual Commitment"
+    description: "DTC Flagship Annual Commitment"
+    input:
+      customer_name: "ESPN+"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "A sports 'super-fan' signs up for the new ESPN Unlimited flagship service on an annual plan. The customer pays $299.99 upfront for 12 months of access, which includes all linear ESPN cable channels and multi-view functionality. This is a single recurring charge billed annually in advance. The revenue should be recognized ratably over the 12-month contract period. This use case highlights Zuora's management of annual billing cycles and long-term deferred revenue schedules for high-value DTC subscribers."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Annual subscription recognized monthly over the 12-month term.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "recurring"
+  - id: "gen-espn-2"
+    name: "ESPN+ - Premium Sports Bundle Allocation"
+    description: "Premium Sports Bundle Allocation"
+    input:
+      customer_name: "ESPN+"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      use_case_description: "A customer purchases the 'ESPN Unlimited + NFL+ Premium' bundle for $39.99 per month. This bundle includes two distinct products: ESPN's flagship streaming service (standalone list price $29.99) and the NFL+ Premium add-on (standalone list price $10.00). Because the bundle price equals the sum of the components in this specific case, allocation is straightforward, but the system must still track the two separate performance obligations. Both services are delivered ratably over the month. This scenario tests Zuora's ability to handle multi-product bundles and maintain distinct POBs for reporting."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (ESPN Unlimited component of the bundle.); Subscription: POB=over_time release=ratable_over_term (NFL+ Premium component of the bundle.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "allocation"
+  - id: "gen-espn-3"
+    name: "ESPN+ - Promotional Flagship Bundle"
+    description: "Promotional Flagship Bundle"
+    input:
+      customer_name: "ESPN+"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A new subscriber takes advantage of the introductory promotion for the ESPN Unlimited Bundle (includes ESPN Unlimited, Disney+, and Hulu). The promotional price is $29.99 per month for the first 12 months, after which the price automatically steps up to the standard rate of $35.99 per month. The contract is set for an initial 12-month term. Revenue is recognized monthly based on the actual billed amount ($29.99). This use case demonstrates Zuora's 'Ramp' or 'Discount' functionality to handle time-based pricing changes."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Revenue recognized as billed monthly ($29.99) unless accounting policy requires straight-lining the total contract value including the step-up.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "ramp"
+      - "bundle"
+      - "discount"
+  - id: "gen-espn-4"
+    name: "ESPN+ - Mid-Term Flagship Upgrade"
+    description: "Mid-Term Flagship Upgrade"
+    input:
+      customer_name: "ESPN+"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A subscriber currently on the ESPN Select plan ($12.99/mo) decides to upgrade to ESPN Unlimited ($29.99/mo) mid-month to watch a specific live linear broadcast. The upgrade occurs exactly halfway through the billing cycle. Zuora must calculate the pro-rated credit for the remaining half of the ESPN Select month and the pro-rated charge for the first half of the ESPN Unlimited month. The subscription then continues at the higher rate. This scenario exercises Zuora's Order Actions for amendments and pro-ration logic, ensuring revenue is accurately shifted between the two product tiers."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Revenue schedule for ESPN Select is truncated; new schedule for ESPN Unlimited is created starting mid-month.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "recurring"
+      - "credits"
+  - id: "gen-discovery"
+    name: "Discovery+ - US Ad-Free Monthly Subscription"
+    description: "US Ad-Free Monthly Subscription"
+    input:
+      customer_name: "Discovery+"
+      contract_start_date: "02/01/2026"
+      terms_months: 1
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A retail customer signs up for the Discovery+ Ad-Free monthly plan via the website. This plan offers uninterrupted streaming, 4K UHD content, and offline downloads for a recurring fee of $9.99 per month. The subscription is month-to-month with no long-term commitment. Billing occurs in advance at the start of each monthly cycle. Revenue for the subscription charge is recognized ratably over the one-month service period. This scenario represents the standard premium direct-to-consumer offering."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Subscription revenue is earned as the streaming service is provided over the monthly term.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "recurring"
+  - id: "gen-discovery-1"
+    name: "Discovery+ - US Ad-Supported Annual Commitment"
+    description: "US Ad-Supported Annual Commitment"
+    input:
+      customer_name: "Discovery+"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "A customer chooses the Discovery+ Ad-Supported Annual Plan to benefit from a discounted yearly rate. The customer pays an upfront fee of $49.99 for a 12-month term, which provides access to the full content library with limited commercial interruptions. This plan is billed annually in advance. The contract is set for an initial 12-month term. Revenue is recognized ratably over the 12-month duration of the subscription. This scenario demonstrates the management of annual billing cycles and long-term POBs."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Annual upfront payment is recognized evenly over the 12-month service period.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "discount"
+      - "recurring"
+  - id: "gen-discovery-2"
+    name: "Discovery+ - UK TNT Sports & Entertainment Bundle"
+    description: "UK TNT Sports & Entertainment Bundle"
+    input:
+      customer_name: "Discovery+"
+      contract_start_date: "02/01/2026"
+      terms_months: 1
+      transaction_currency: "other"
+      billing_period: "Monthly"
+      is_allocations: true
+      use_case_description: "A UK-based subscriber signs up for the 'TNT Sports & Entertainment' bundle at a price of £33.99 per month. This bundle includes the Entertainment tier (list price £3.99) and the TNT Sports tier (list price £30.99). By bundling, the customer receives a small discount compared to purchasing separately. Billing is recurring monthly in GBP. Because the bundle contains two distinct performance obligations (Sports and Entertainment), revenue must be allocated between them based on their relative standalone selling prices. Both allocated amounts are recognized ratably over the monthly term."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Revenue is allocated between Sports and Entertainment components and recognized over the month.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "recurring"
+      - "allocation"
+  - id: "gen-discovery-3"
+    name: "Discovery+ - B2B Telco Partner Bulk License Sale"
+    description: "B2B Telco Partner Bulk License Sale"
+    input:
+      customer_name: "Discovery+"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Quarterly"
+      is_allocations: false
+      use_case_description: "Discovery+ enters a B2B agreement with a telecommunications partner (e.g., Sky or BT) to provide 1,000 licenses of the 'Ad-Supported' tier for their broadband customers. The negotiated bulk rate is $4.00 per user per month, resulting in a total quarterly bill of $12,000. The contract has a 12-month term and is billed quarterly in advance. This scenario models a partner-led growth strategy with volume-based pricing. Revenue is recognized ratably over each quarterly billing period as the licenses are made available to the partner for distribution."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Bulk license revenue is recognized ratably over the contract term.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "license"
+  - id: "gen-discovery-4"
+    name: "Discovery+ - Premium Experience Bundle with Setup Service"
+    description: "Premium Experience Bundle with Setup Service"
+    input:
+      customer_name: "Discovery+"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "A high-end 'Premium Experience' bundle is sold for $99.99, consisting of an Ad-Free Annual subscription (list price $83.99) and a one-time 'Personalized Discovery & Setup Session' (list price $25.00). The total bundle price of $99.99 represents a discount from the $108.99 total list price. The customer is billed the full amount upfront. This scenario requires revenue allocation between the subscription (recognized ratably over 12 months) and the setup service (recognized point-in-time upon completion of the session). This exercises mixed POB types and allocation logic."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Allocated portion of the annual fee is recognized over 12 months.); Services: POB=point_in_time release=at_go_live (Allocated portion for the setup session is recognized when the service is delivered (assumed at go-live).)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "allocation"

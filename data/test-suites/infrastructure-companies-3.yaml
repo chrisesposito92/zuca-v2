@@ -1,0 +1,1152 @@
+name: "infrastructure-companies-3"
+description: "Generated from UC outputs - 2026-01-05"
+version: "1.0"
+tests:
+  - id: "gen-render"
+    name: "Render - Professional Team Onboarding"
+    description: "Professional Team Onboarding"
+    input:
+      customer_name: "Render"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A standard development team of 5 engineers is onboarding to the Render Professional plan. The subscription includes 5 'Professional' user seats at $19/user/month and 3 'Starter' Compute Instances at $7/instance/month. The user seats are billed monthly in advance, while the compute instances are billed as recurring monthly charges. Revenue for both the platform seats and the compute resources is recognized ratably over the monthly billing period as the service is provided. This scenario demonstrates the core seat-based and instance-based recurring revenue model."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Professional seat fees and Starter instances are standard recurring services recognized over the month.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "recurring"
+      - "license"
+  - id: "gen-render-1"
+    name: "Render - Managed Database Scaling"
+    description: "Managed Database Scaling"
+    input:
+      customer_name: "Render"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A scaling startup on the Organization plan ($29/user/month) for 10 users requires a robust database setup. They are subscribing to a 'Standard' Managed PostgreSQL instance at $20/month plus a recurring storage charge of $30/month for 100GB of disk space ($0.30/GB). The total monthly recurring revenue (MRR) includes the platform fees, the database compute, and the fixed storage allocation. Revenue is recognized ratably over the 12-month term for all components. This use case highlights the bundling of compute and storage for managed services."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Organization seats and PostgreSQL compute/storage are recurring and recognized over time.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "one-time"
+      - "recurring"
+      - "license"
+  - id: "gen-render-2"
+    name: "Render - Usage-Based Overage Scenario"
+    description: "Usage-Based Overage Scenario"
+    input:
+      customer_name: "Render"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "This scenario focuses on a high-traffic customer on the Professional plan with 3 users. In addition to their base $57 monthly seat fee, they regularly exceed their included 500GB bandwidth and 500 build minutes. This month, they consumed an additional 200GB of 'Outbound Bandwidth' at $15 per 100GB block ($30 total) and 1,000 extra 'Build Pipeline Minutes' at an estimated $0.05 per minute ($50 total). The seat fees are recognized ratably, while the bandwidth and build overages are recognized as consumption-based revenue in the month they occur."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Base Professional seats are recognized ratably.); Usage: POB=consumption release=as_used (Bandwidth and build minutes are recognized as the usage is consumed/billed.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+  - id: "gen-render-3"
+    name: "Render - Enterprise Multi-Year Agreement"
+    description: "Enterprise Multi-Year Agreement"
+    input:
+      customer_name: "Render"
+      contract_start_date: "02/01/2026"
+      terms_months: 24
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "A large enterprise signs a 24-month contract for 100 users on a custom 'Enterprise' tier priced at $25/user/month. The deal includes a 'Dedicated Support & SLA' package at $1,000/month and a commit for 5 'Ultra' Compute Instances at $450/instance/month. To win the deal, a 10% discount was applied across the entire bundle. Because the discount applies to both the subscription seats and the support services, revenue allocation is required to ensure each performance obligation (POB) reflects its fair value. Revenue is recognized ratably over the 24-month term for all components."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Enterprise seats and Ultra instances are ratable over the 2-year term.); Services: POB=over_time release=ratable_over_term (Dedicated support is a stand-ready obligation recognized monthly.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "recurring"
+      - "allocation"
+      - "multi-year"
+  - id: "gen-render-4"
+    name: "Render - High-Availability Redis Bundle"
+    description: "High-Availability Redis Bundle"
+    input:
+      customer_name: "Render"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A fintech customer requires high-availability caching. They subscribe to the Professional plan for 2 users ($38/mo) and add two 'Managed Redis' instances (1GB RAM) at $32/instance/month. One instance is for production with High Availability (HA) enabled, and one is for staging. The HA feature is treated as a premium add-on within the Redis rate plan. All charges are recurring and billed monthly. Revenue is recognized ratably, providing a clear view of the recurring margin for managed data services alongside the platform fee."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Redis instances and platform seats are standard recurring subscription POBs.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "recurring"
+      - "license"
+  - id: "gen-railway"
+    name: "Railway - Pro Plan Monthly Subscription"
+    description: "Pro Plan Monthly Subscription"
+    input:
+      customer_name: "Railway"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A professional developer signs up for the Pro Plan to host a production application. The plan has a $20 per month recurring fee, which includes $20 worth of usage credits. Usage for Compute (vCPU at $20/unit and RAM at $10/unit) and Network Egress ($0.05/GB) is metered and billed monthly in arrears if it exceeds the $20 credit. The subscription is set for a 12-month term with monthly billing. Revenue for the base fee is recognized ratably over the month, while overage usage is recognized as consumed."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (The $20 Pro Plan platform fee provides continuous access and is recognized monthly.); Usage: POB=consumption release=as_used (Compute and Egress charges exceeding the credit are recognized as the resources are consumed.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+      - "credits"
+  - id: "gen-railway-1"
+    name: "Railway - Enterprise Annual Commitment"
+    description: "Enterprise Annual Commitment"
+    input:
+      customer_name: "Railway"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "A mid-sized company enters an Enterprise agreement for platform stability and SSO. They commit to a $12,000 annual platform fee billed upfront. This fee includes Priority Support and access to Enterprise-only features like Audit Logs. Compute usage is billed monthly at a discounted rate of $18 per vCPU and $9 per GB of RAM. The contract is a standard 12-month term. Revenue for the platform fee is recognized ratably over the year."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Annual platform fee recognized over the 12-month service period.); Usage: POB=consumption release=as_used (Metered compute usage recognized monthly as billed.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "discount"
+      - "license"
+  - id: "gen-railway-2"
+    name: "Railway - Stateful App with Heavy Storage"
+    description: "Stateful App with Heavy Storage"
+    input:
+      customer_name: "Railway"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A customer deploys a data-intensive application requiring significant Persistent Volumes. They are on the Pro Plan ($20/mo). They provision 2TB of Persistent Volume storage at $0.15/GB per month, totaling $300/mo in storage charges. Additionally, they anticipate high Network Egress of 1,000GB per month at $0.05/GB ($50/mo). All charges are billed monthly. Storage is billed based on provisioned size, not actual data stored."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Pro Plan fee recognized ratably.); Usage: POB=over_time release=ratable_over_term (Persistent Volumes are billed on provisioned capacity; treated as a recurring service for the month provisioned.); Usage: POB=consumption release=as_used (Network egress recognized as data is transferred.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+  - id: "gen-railway-3"
+    name: "Railway - 2-Year Enterprise Ramp Contract"
+    description: "2-Year Enterprise Ramp Contract"
+    input:
+      customer_name: "Railway"
+      contract_start_date: "02/01/2026"
+      terms_months: 24
+      transaction_currency: "USD"
+      billing_period: "Quarterly"
+      is_allocations: false
+      use_case_description: "An enterprise customer signs a 24-month contract with a price ramp to account for their migration schedule. Year 1 platform fee is $2,000/month, and Year 2 increases to $3,500/month. The contract includes Priority Support and custom Compute pricing ($15/vCPU). Billing occurs quarterly in advance for the platform fee. Revenue is recognized ratably based on the specific monthly fee in effect for each period."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Ramped subscription fees recognized ratably over the 24-month term.); Usage: POB=consumption release=as_used (Custom compute usage recognized as consumed.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "ramp"
+      - "license"
+      - "multi-year"
+  - id: "gen-railway-4"
+    name: "Railway - Enterprise Plan with Implementation Services"
+    description: "Enterprise Plan with Implementation Services"
+    input:
+      customer_name: "Railway"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      use_case_description: "A healthcare company requires a HIPAA-compliant environment and migration assistance. The deal includes a $5,000 one-time Implementation Service fee and a $2,000/month Enterprise Plan. A 10% discount is applied to the total contract value, requiring revenue allocation between the services and the subscription. The implementation is expected to be completed in the first month. The subscription runs for 12 months with monthly billing."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Services: POB=point_in_time release=at_go_live (Implementation fee recognized upon completion of the migration setup.); Subscription: POB=over_time release=ratable_over_term (Enterprise subscription recognized ratably over the 12-month term.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "allocation"
+  - id: "gen-fly-io"
+    name: "Fly.io - Standard Developer Support & Usage"
+    description: "Standard Developer Support & Usage"
+    input:
+      customer_name: "Fly.io"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A developer team on the Pay-As-You-Go model adds a Standard Support subscription for $29/month to access technical guidance. They utilize Fly Machines compute, billed at approximately $0.0027/hour for shared-cpu-1x instances, and Fly Volumes for persistent storage at $0.15/GB/month. Usage is metered by the second for compute and pro-rated to the hour for storage, with billing occurring monthly in arrears. The support fee is a recurring charge billed at the start of each month. Revenue for support is recognized ratably over the monthly term, while compute and storage revenue is recognized as consumption occurs."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Standard Support provides access to service over a time period.); Usage: POB=consumption release=as_used (Compute and storage are billed based on actual per-second or per-hour usage.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+  - id: "gen-fly-io-1"
+    name: "Fly.io - Enterprise Compliance Bundle"
+    description: "Enterprise Compliance Bundle"
+    input:
+      customer_name: "Fly.io"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      use_case_description: "A large corporate customer signs an Enterprise Plan starting at a base fee of $2,500/month. This fee bundles Enterprise Support (24/7 emergency access) and the Compliance Package (HIPAA/SOC2 access). The customer also incurs high-volume compute usage for Fly Machines and outbound data transfer. Because the base fee covers multiple distinct services (Support and Compliance), revenue is allocated between these performance obligations using list prices as the basis. Compute usage is billed separately in arrears based on actual consumption. All billing occurs monthly."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (The $2,500 base fee covers ongoing support and compliance access.); Usage: POB=consumption release=as_used (Enterprise compute usage is recognized as the infrastructure is consumed.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "bundle"
+      - "allocation"
+  - id: "gen-fly-io-2"
+    name: "Fly.io - Prepaid Compute Reservation"
+    description: "Prepaid Compute Reservation"
+    input:
+      customer_name: "Fly.io"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A cost-conscious startup purchases a Machine Reservation for $36 upfront, which grants them $60 in compute credits to be used over the term. This one-time payment is modeled as a credit-based charge where revenue is deferred initially. As the customer runs Fly Machines, the compute usage (normally $0.0027/hour) draws down the $60 credit balance. Revenue is recognized from the deferred balance as these credits are consumed (event-based). The customer also pays a $29/month recurring fee for Standard Support, which is recognized ratably."
+      rev_rec_notes: "Other: POB=consumption release=as_used (Reservation revenue is released from the prepaid balance as compute credits are spent.); Subscription: POB=over_time release=ratable_over_term (Support fee remains a standard ratable recurring charge.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "one-time"
+      - "recurring"
+      - "credits"
+  - id: "gen-fly-io-3"
+    name: "Fly.io - Premium Production Scale-up"
+    description: "Premium Production Scale-up"
+    input:
+      customer_name: "Fly.io"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A scaling SaaS company moves to the Premium Plan for $199/month to obtain faster support response times. Their infrastructure requirements involve high-memory Fly Machines, where they pay for the base compute (shared-cpu-1x) plus an additional $5/GB/month for extra RAM. This use case utilizes a recurring subscription fee ($199) and a complex metered usage model that combines per-second CPU runtime and per-GB storage/RAM capacity. Revenue for the Premium Plan is recognized ratably, while all compute and RAM usage revenue is recognized as consumption."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Premium Plan fee is ratable over the monthly billing cycle.); Usage: POB=consumption release=as_used (Both CPU and RAM usage are recognized as the resources are consumed.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+      - "license"
+  - id: "gen-fly-io-4"
+    name: "Fly.io - HealthTech HIPAA Compliance"
+    description: "HealthTech HIPAA Compliance"
+    input:
+      customer_name: "Fly.io"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A healthcare startup requiring HIPAA-readiness subscribes to both the Compliance Package ($99/month) and Standard Support ($29/month). They run a fleet of small Fly Machines to host their API, incurring per-second compute charges. This scenario involves two distinct monthly recurring subscriptions and one metered usage stream. Revenue for both the Compliance and Support subscriptions is recognized ratably over the month. Compute usage revenue is recognized based on the actual seconds of runtime reported by the Fly.io platform."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Both compliance access and support access are over-time performance obligations.); Usage: POB=consumption release=as_used (Compute usage is recognized as consumption occurs.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "bundle"
+      - "recurring"
+      - "license"
+  - id: "gen-supabase"
+    name: "Supabase - Standard Pro Plan Subscription"
+    description: "Standard Pro Plan Subscription"
+    input:
+      customer_name: "Supabase"
+      contract_start_date: "02/01/2026"
+      terms_months: 1
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A developer signs up for the Supabase Pro Plan for a single production project. The contract includes a $25 recurring monthly platform fee which grants access to daily backups and 7-day log retention. The customer is also billed for usage overages: Database Storage exceeding 8GB is charged at $0.125 per GB, and monthly active users (MAU) exceeding 100,000 are charged at $0.00325 per user. The base subscription fee is recognized ratably over the monthly term. Usage charges are recognized as consumption occurs in arrears. This scenario demonstrates a standard self-serve B2C/B2B entry point."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Monthly platform access fee recognized linearly over the billing period.); Usage: POB=consumption release=as_used (Storage and MAU overages recognized as the service is consumed.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+      - "license"
+  - id: "gen-supabase-1"
+    name: "Supabase - Team Tier Organization Migration"
+    description: "Team Tier Organization Migration"
+    input:
+      customer_name: "Supabase"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A growing startup migrates from Pro to the Team Tier to leverage organization-wide billing and SSO support. The base fee is $599 per month, which covers all projects within the organization. In addition to the base fee, the customer utilizes a 'Micro' Compute instance billed at approximately $10 per month. They also enable a Log Drain add-on for $60 per month to export logs to an external provider. Revenue for the $599 base fee and the $60 add-on is recognized ratably. Compute usage is recognized based on hourly consumption reported at month-end."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Team tier base fee and Log Drain add-on are recurring and ratable.); Usage: POB=consumption release=as_used (Hourly compute instances are billed based on duration of activity.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+  - id: "gen-supabase-2"
+    name: "Supabase - Enterprise Multi-Year with Allocation"
+    description: "Enterprise Multi-Year with Allocation"
+    input:
+      customer_name: "Supabase"
+      contract_start_date: "02/01/2026"
+      terms_months: 24
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "A large enterprise signs a 24-month contract for a custom Enterprise tier. The deal includes a $5,000 monthly platform fee and a one-time $2,000 implementation and training fee. A 10% discount is applied to the total contract value, including both the recurring subscription and the one-time services. Because the discount applies to multiple performance obligations, revenue allocation is required. The subscription revenue is recognized ratably over 24 months, while the implementation fee is recognized at the point in time when training is completed. This scenario tests Zuora's ability to handle complex allocations and multi-year terms."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Allocated portion of the platform fee recognized over the 24-month term.); Onboarding: POB=point_in_time release=at_go_live (Allocated portion of the implementation fee recognized upon completion of training.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "license"
+      - "allocation"
+      - "multi-year"
+  - id: "gen-supabase-3"
+    name: "Supabase - High-Scale Usage Expansion"
+    description: "High-Scale Usage Expansion"
+    input:
+      customer_name: "Supabase"
+      contract_start_date: "02/01/2026"
+      terms_months: 1
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A mobile gaming company uses Supabase for their backend and experiences a massive surge in users. They are on a Pro Plan with a $25 base fee. During the month, they scale their compute to an 'XL' instance billed at $1.12 per hour (approx $800/mo). Their Auth usage reaches 1,100,000 MAUs, resulting in 1,000,000 users over the 100k free tier, charged at $0.00325 per user ($3,250). Additionally, they use 500GB of File Storage at $0.021/GB. All usage is billed in arrears. This case focuses on high-volume metered billing and revenue recognition for consumption-based charges."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Base Pro fee remains ratable.); Usage: POB=consumption release=as_used (High-volume MAU and Compute usage recognized as consumption occurs.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+  - id: "gen-supabase-4"
+    name: "Supabase - Developer Add-on Bundle"
+    description: "Developer Add-on Bundle"
+    input:
+      customer_name: "Supabase"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "An agency client sets up a project and requires several developer-focused add-ons. They subscribe to the Pro Plan ($25/mo) and add a Custom Domain ($10/mo), a Dedicated Static IPv4 ($4/mo), and two Log Drains ($60/mo each). The total monthly recurring revenue (MRR) is $159. All components are subscription-based and billed monthly. Revenue for all items is recognized ratably over the monthly service period. This scenario tests the management of multiple recurring add-on charges on a single subscription."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (All charges in this bundle are recurring subscriptions recognized over the monthly term.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "recurring"
+  - id: "gen-planetscale"
+    name: "PlanetScale - Scaler Pro Security Foundation"
+    description: "Scaler Pro Security Foundation"
+    input:
+      customer_name: "PlanetScale"
+      contract_start_date: "02/01/2026"
+      terms_months: 1
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A growing startup requires a production-ready database environment with enhanced security. This scenario includes a single PS-20 Scaler Pro Compute Instance at $59/month and the SSO Add-on for SAML integration at $199/month. The customer is billed monthly on a month-to-month basis. Database storage is included up to 10GB, with overages expected at $0.50 per GB billed in arrears. Revenue for the compute and SSO components is recognized ratably over the monthly service period, while storage overage is recognized as the consumption occurs."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Compute and SSO provide continuous access to the platform services.); Usage: POB=consumption release=as_used (Storage overages are recognized based on monthly consumption of GBs.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+  - id: "gen-planetscale-1"
+    name: "PlanetScale - Production HA Cluster with Annual Commitment"
+    description: "Production HA Cluster with Annual Commitment"
+    input:
+      customer_name: "PlanetScale"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "A mid-market customer is moving their primary production workload to PlanetScale using a High Availability (HA) configuration. This requires 3 PS-20 Compute Instances at $59 each ($177/month total) and Business Support at $400/month. The customer is committing to a 12-month term to qualify for a 10% upfront payment discount. The total contract value is paid annually in advance. Revenue for all components is recognized ratably over the 12-month term. This scenario tests Zuora's ability to handle multi-unit recurring charges with a global contract discount."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Annual subscription for HA compute nodes recognized over 12 months.); Other: POB=over_time release=ratable_over_term (Business Support is a stand-ready obligation recognized over the contract term.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "discount"
+      - "recurring"
+      - "allocation"
+  - id: "gen-planetscale-2"
+    name: "PlanetScale - Enterprise Migration & Sharding Launch"
+    description: "Enterprise Migration & Sharding Launch"
+    input:
+      customer_name: "PlanetScale"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "An Enterprise customer is migrating a massive legacy database requiring horizontal sharding. The deal includes a high-performance PS-320 instance at $699/month, Business Support at $400/month, and a one-time Professional Services fee for migration assistance and sharding design at $15,000. The subscription is for 12 months, billed annually. The Professional Services fee is billed upfront and recognized upon the completion of the migration (Go-Live). This scenario exercises the combination of recurring SaaS fees and milestone-based service revenue."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (PS-320 instance access recognized over the 12-month term.); Services: POB=point_in_time release=at_go_live (Migration services recognized when the customer goes live on the sharded cluster.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "one-time"
+      - "recurring"
+      - "license"
+      - "allocation"
+  - id: "gen-planetscale-3"
+    name: "PlanetScale - High-Growth Usage-Based Scaler"
+    description: "High-Growth Usage-Based Scaler"
+    input:
+      customer_name: "PlanetScale"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A data-intensive application uses the Scaler Pro plan with a focus on high storage consumption. They utilize two PS-40 instances ($99/month each) for their production branches. While the base subscription is $198/month, their primary cost driver is database storage, averaging 1,200 GB per month. After the initial 10 GB free per instance, they are billed for 1,180 GB of overage at $0.50/GB ($590/month). Billing is handled monthly in arrears for both the subscription and the usage to simplify the customer's reconciliation process."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Fixed compute fees recognized over the monthly billing period.); Usage: POB=consumption release=as_used (Storage revenue recognized in the month the storage was utilized.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+  - id: "gen-planetscale-4"
+    name: "PlanetScale - Enterprise Multi-Year BYOC Strategy"
+    description: "Enterprise Multi-Year BYOC Strategy"
+    input:
+      customer_name: "PlanetScale"
+      contract_start_date: "02/01/2026"
+      terms_months: 36
+      transaction_currency: "USD"
+      billing_period: "Quarterly"
+      is_allocations: true
+      use_case_description: "A global enterprise signs a 3-year deal for a 'Bring Your Own Cloud' (Managed) deployment. They require 10 PS-40 instances across multiple regions ($990/month), the SSO Add-on ($199/month), and Business Support ($400/month). To secure their budget, they negotiate a flat 5% discount on the total list price for the duration of the 36-month term. Billing is performed quarterly in advance. Revenue is recognized ratably over the 3-year term. This scenario tests long-term contract management and multi-year renewals in Zuora."
+      allocation_method: "Use Sell Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (All recurring components recognized ratably over the 36-month term.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "discount"
+      - "allocation"
+      - "multi-year"
+  - id: "gen-neon"
+    name: "Neon - Launch Plan Self-Serve Growth"
+    description: "Launch Plan Self-Serve Growth"
+    input:
+      customer_name: "Neon"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A growing startup signs up for the Neon Launch plan to support their initial production release. The scenario features pure usage-based billing with no monthly minimum. Charges include Serverless Compute at $0.106 per CU-hour and Database Storage at $0.35 per GB-month. The customer also incurs Data Transfer egress overages at $0.10 per GB for usage exceeding the 100 GB monthly allowance. Additionally, they utilize 15 database branches, where the first 10 are included and the remaining 5 are billed at $1.50 per branch-month. All revenue is recognized based on actual consumption metered hourly."
+      rev_rec_notes: "Usage: POB=consumption release=as_used (Compute, storage, and egress are metered based on hourly consumption and recognized as delivered.); Other: POB=point_in_time release=as_billed (Additional branch fees are billed based on the peak or average count in the period.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+  - id: "gen-neon-1"
+    name: "Neon - Enterprise Annual Commitment"
+    description: "Enterprise Annual Commitment"
+    input:
+      customer_name: "Neon"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "A fintech enterprise signs a 12-month contract for the Neon Enterprise tier. The deal includes a fixed $15,000 annual Platform & Support fee and a $50,000 pre-paid usage credit pool. The platform fee is billed annually upfront, while the usage credits are drawn down at negotiated rates: $0.18 per CU-hour and $0.30 per GB-month of storage. Because the platform fee and support are bundled, revenue is allocated between the platform access (ratable) and the support component. Usage is recognized as the credits are consumed."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Platform and Support fees are recognized monthly over the 12-month term.); Usage: POB=consumption release=as_used (Pre-paid credits are recognized as 'revenue earned' upon compute/storage consumption.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "bundle"
+      - "license"
+      - "credits"
+      - "allocation"
+  - id: "gen-neon-2"
+    name: "Neon - Scale Plan with Private Networking"
+    description: "Scale Plan with Private Networking"
+    input:
+      customer_name: "Neon"
+      contract_start_date: "02/01/2026"
+      terms_months: 1
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A SaaS provider migrates to the Neon Scale plan to leverage higher compute limits (up to 56 CU) and AWS PrivateLink. They are billed monthly for Serverless Compute at $0.222 per CU-hour and Database Storage at $0.35 per GB-month. A specific charge for Private Networking (AWS PrivateLink) is applied at $0.01 per GB of data transferred. This plan also includes 25 branches; any additional branches are billed at $1.50 each. The contract is month-to-month but with an expected long-term duration."
+      rev_rec_notes: "Usage: POB=consumption release=as_used (All charges, including PrivateLink egress, are consumption-based and recognized as used.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "license"
+  - id: "gen-neon-3"
+    name: "Neon - AI Agent Platform (Agent Plan)"
+    description: "AI Agent Platform (Agent Plan)"
+    input:
+      customer_name: "Neon"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "AutoDev, an AI agent platform, utilizes the Neon Agent Plan to provision 5,000 ephemeral database branches for their automated agents. The pricing model is optimized for high-concurrency, short-lived instances. They pay a flat monthly platform fee of $2,000 plus a discounted rate of $1.00 per branch-month (prorated hourly). Compute is billed at $0.10 per CU-hour. This scenario demonstrates Zuora's ability to handle high-volume, high-frequency usage events and hourly proration for thousands of unique identifiers (branches)."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Platform fee for the Agent Plan is recognized ratably.); Usage: POB=consumption release=as_used (High-volume branch and compute usage are recognized as agents provision and utilize resources.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "discount"
+      - "license"
+  - id: "gen-neon-4"
+    name: "Neon - Enterprise Multi-Year Ramp"
+    description: "Enterprise Multi-Year Ramp"
+    input:
+      customer_name: "Neon"
+      contract_start_date: "02/01/2026"
+      terms_months: 24
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "A global retailer enters a 2-year Enterprise agreement with Neon to migrate their legacy PostgreSQL workloads. Year 1 includes a $20,000 Platform Fee and a commitment of $100,000 in usage. Year 2 ramps up to a $40,000 Platform Fee and a $250,000 usage commitment as more regions are migrated. The Platform Fee is billed annually, while usage overages (if any) are billed quarterly. Revenue for the platform fee is recognized ratably, while the usage commitment is recognized based on actual consumption, with a true-up at the end of each year."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Platform fees for each year are recognized ratably over their respective 12-month periods.); Usage: POB=consumption release=as_used (Usage is recognized as consumed; the commitment acts as a minimum revenue guarantee.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "ramp"
+      - "usage"
+      - "license"
+      - "multi-year"
+  - id: "gen-upstash"
+    name: "Upstash - Developer Growth with Prod Pack"
+    description: "Developer Growth with Prod Pack"
+    input:
+      customer_name: "Upstash"
+      contract_start_date: "02/01/2026"
+      terms_months: 1
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A growing developer team starts with the Serverless Redis PAYG plan, priced at $0.20 per 100,000 commands. To ensure production-grade reliability and SOC-2 compliance, they add the Prod Pack as a recurring monthly add-on at $200 per month. The subscription is month-to-month with no long-term commitment. Billing occurs monthly in arrears for usage and monthly in advance for the Prod Pack. Revenue for the Prod Pack is recognized ratably over the monthly term, while Redis usage is recognized as consumed."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Prod Pack fee provides standing ready access to enterprise features over the month.); Usage: POB=consumption release=as_used (Redis commands are recognized as the service is consumed by the application.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+  - id: "gen-upstash-1"
+    name: "Upstash - AI Startup Predictable Capacity"
+    description: "AI Startup Predictable Capacity"
+    input:
+      customer_name: "Upstash"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "An AI startup requires predictable costs for their vector database and caching layer. They opt for the Serverless Redis Fixed plan (250MB tier) at $10 per month and the Serverless Vector Fixed plan at $60 per month. The contract is signed for a 12-month term to lock in pricing, billed annually upfront. Both plans provide a fixed capacity of storage and requests. Revenue is recognized ratably over the 12-month contract period for both products as they represent a single POB for standing ready-to-serve capacity."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Fixed plans are subscription-based capacity recognized over the annual term.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+  - id: "gen-upstash-2"
+    name: "Upstash - Event-Driven Infrastructure Stack"
+    description: "Event-Driven Infrastructure Stack"
+    input:
+      customer_name: "Upstash"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A logistics company implements a serverless event-driven architecture using Kafka and QStash. They utilize Serverless Kafka (Multi-zone/Production) at $0.60 per 100,000 messages and QStash at $1.00 per 100,000 messages. Additionally, they incur Kafka storage costs at $0.25 per GB. This is a pure usage-based model with monthly billing in arrears based on actual consumption. Revenue is recognized as messages are processed and data is stored (consumption-based)."
+      rev_rec_notes: "Usage: POB=consumption release=as_used (Kafka and QStash messages are recognized as they are sent/received.); Other: POB=consumption release=as_used (Storage is recognized based on daily average GB volume held.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+  - id: "gen-upstash-3"
+    name: "Upstash - Enterprise Compliance Bundle"
+    description: "Enterprise Compliance Bundle"
+    input:
+      customer_name: "Upstash"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "A financial services firm enters an Enterprise agreement for high-scale Redis and compliance. The bundle includes a Serverless Redis Fixed 500GB plan at $1,500/month and 5 Prod Packs at $200/month each ($1,000/month total). They also pay a one-time $5,000 Implementation and Onboarding fee. A 20% discount is applied to the recurring subscription components. Because the onboarding is distinct from the ongoing service, revenue must be allocated between the subscription (ratable) and onboarding (point-in-time) based on their relative list prices."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Redis and Prod Pack recurring fees are recognized over the 12-month term.); Onboarding: POB=point_in_time release=at_go_live (Onboarding fee recognized upon completion of environment setup and security review.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "allocation"
+  - id: "gen-upstash-4"
+    name: "Upstash - High-Volume Workflow & QStash"
+    description: "High-Volume Workflow & QStash"
+    input:
+      customer_name: "Upstash"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A media company uses Upstash Workflow to orchestrate video processing. They subscribe to a Fixed Workflow plan at $180 per month, which includes 1 million message steps. Any steps beyond the first million are billed as usage at $1.00 per 100,000 steps. The subscription is billed monthly in advance, and overages are billed monthly in arrears. The base fee is recognized ratably, while overage revenue is recognized as the additional steps are consumed."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Fixed Workflow base fee provides access to the orchestration engine.); Usage: POB=consumption release=as_used (Steps exceeding the 1M inclusion are recognized as consumption.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+  - id: "gen-deno"
+    name: "Deno - Standard Pro Subscription with Usage"
+    description: "Standard Pro Subscription with Usage"
+    input:
+      customer_name: "Deno"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A developer team signs up for the Deno Deploy Pro plan to host their web application. The contract includes a $20 recurring monthly base fee which provides 5M requests and 200GB of bandwidth. Any requests beyond the 5M limit are charged at $2.00 per million, and bandwidth overages are billed at $0.50 per GB. Additionally, the customer uses Deno KV for state management, billed at $0.75 per GiB of storage per month. The subscription is billed monthly on a 12-month commitment. Revenue for the base fee is recognized ratably over the month, while usage charges for requests, bandwidth, and KV storage are recognized as consumption occurs."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Base Pro plan fee represents a right to access the platform.); Usage: POB=consumption release=as_used (Overage charges and KV storage fees are recognized based on actual monthly consumption.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+  - id: "gen-deno-1"
+    name: "Deno - Subhosting Builder for SaaS Platform"
+    description: "Subhosting Builder for SaaS Platform"
+    input:
+      customer_name: "Deno"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Quarterly"
+      is_allocations: false
+      use_case_description: "A SaaS company uses Deno Subhosting to allow their end-users to run custom scripts. They subscribe to the Subhosting Builder plan at $200 per month. This plan includes 20M requests and 300GB of bandwidth, with overages priced at $2.00 per million requests and $0.50 per GB of bandwidth. The customer also utilizes the Subhosting REST API for automated management of their multi-tenant isolates. The contract is set for a 12-month term with quarterly billing for the base fee and monthly billing for usage overages. Revenue for the $200 monthly base is recognized ratably, while the overages are recognized as the compute resources are consumed."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Subhosting base fee is a recurring subscription recognized over the service period.); Usage: POB=consumption release=as_used (High-volume request overages are typical for subhosting and recognized upon consumption.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "license"
+  - id: "gen-deno-2"
+    name: "Deno - Enterprise Bundle with Support & Allocation"
+    description: "Enterprise Bundle with Support & Allocation"
+    input:
+      customer_name: "Deno"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "A large enterprise signs a custom deal for Deno Enterprise, bundling Deno Deploy, Deno Subhosting, and Enterprise Support. The total contract value is $24,000 per year, consisting of $18,000 for the platform subscription and $6,000 for a dedicated Slack support channel and architectural guidance. To win the deal, Deno provides a 15% discount on the total bundle. Because the support and the platform are distinct performance obligations with different list prices, revenue must be allocated across the charges. The platform fee is recognized ratably over 12 months, and the support fee is also recognized ratably as a stand-ready obligation. Billing occurs annually in advance."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Enterprise platform access is recognized ratably over the 12-month term.); Other: POB=over_time release=ratable_over_term (Enterprise Support is a stand-ready obligation recognized ratably.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "recurring"
+      - "license"
+      - "allocation"
+  - id: "gen-deno-3"
+    name: "Deno - Runtime Support & Migration Services"
+    description: "Runtime Support & Migration Services"
+    input:
+      customer_name: "Deno"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "A company using the open-source Deno runtime in their own data center purchases the Deno Runtime Support Plan for $10,000 per year. In addition to the recurring support, they engage Deno for a one-time Migration Assistance project to move their legacy Node.js workloads to Deno. The professional services fee is a fixed $5,000, billed upfront. The support plan is billed annually and recognized ratably over the 12-month term. The professional services revenue is recognized point-in-time upon the successful completion of the migration (Go-Live)."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Runtime support is a recurring service recognized over the annual term.); Services: POB=point_in_time release=at_go_live (Migration services are recognized when the migration project is completed.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "one-time"
+      - "recurring"
+  - id: "gen-deno-4"
+    name: "Deno - Enterprise Ramp for Global Deployment"
+    description: "Enterprise Ramp for Global Deployment"
+    input:
+      customer_name: "Deno"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A global financial services firm adopts Deno Deploy Enterprise with a ramp structure to match their phased rollout. For the first 6 months, they pay a base fee of $2,000 per month for limited staging environments. For the remaining 6 months of the year, the fee increases to $5,000 per month as they move to production globally. The contract includes 100M requests per month in the production phase. Revenue is recognized ratably based on the monthly fee active at the time. Billing is monthly. This scenario tests Zuora's ability to handle multi-period price changes (ramps) within a single 12-month term."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Subscription revenue follows the stepped pricing of the ramp, recognized monthly.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "ramp"
+  - id: "gen-bun"
+    name: "Bun - Individual Pro Subscription"
+    description: "Individual Pro Subscription"
+    input:
+      customer_name: "Bun"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "An individual developer signs up for the Claude Code Pro (Powered by Bun) plan to access the Bun-powered CLI and agentic coding features. The subscription is priced at $20.00 per month, billed monthly on a recurring basis. There is no setup fee, and the contract is a month-to-month commitment, though modeled here as a 12-month term for visibility. The revenue for this subscription is recognized ratably over each monthly billing period. This represents the high-volume, low-friction entry point for the Bun and Anthropic ecosystem."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Standard SaaS subscription recognized monthly as the service is provided.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "one-time"
+      - "recurring"
+  - id: "gen-bun-1"
+    name: "Bun - Small Team Collaboration Bundle"
+    description: "Small Team Collaboration Bundle"
+    input:
+      customer_name: "Bun"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      use_case_description: "A small engineering team of 10 developers adopts the Claude Team Plan. This plan is priced at $30.00 per user per month, which includes both Claude Code Pro and Bun Premium Support. The total monthly recurring revenue is $300.00, billed monthly. Because the bundle includes a support component alongside the software access, the revenue is treated as a single POB recognized ratably over the term. This scenario tests Zuora's ability to handle minimum seat requirements and bundled support services."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Both the software and support are delivered over time; revenue is ratable.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "recurring"
+      - "allocation"
+  - id: "gen-bun-2"
+    name: "Bun - Enterprise Support and CI/CD Usage"
+    description: "Enterprise Support and CI/CD Usage"
+    input:
+      customer_name: "Bun"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "A large enterprise signs a contract for Bun Premium Support and Bun CI/CD Pipeline usage. The support component is a fixed annual fee of $5,000.00, billed annually in advance. The CI/CD Pipeline is billed in arrears based on actual usage at a rate of $0.008 per build minute. This scenario demonstrates a hybrid billing model combining a recurring subscription with high-frequency consumption. Revenue for support is recognized ratably, while CI/CD revenue is recognized as usage occurs each month."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Premium support is a stand-ready obligation recognized over the 12-month term.); Usage: POB=consumption release=as_used (CI/CD minutes are recognized as the builds are executed.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+  - id: "gen-bun-3"
+    name: "Bun - Power User Max Plan with Hosting"
+    description: "Power User Max Plan with Hosting"
+    input:
+      customer_name: "Bun"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "An AI-native startup subscribes to 5 seats of Claude Code Max (20x Usage) at $200.00 per user per month. Additionally, they utilize Oven Serverless Hosting for their production environment, billed at $0.60 per million requests. The subscription portion totals $1,000.00 per month, billed monthly. Hosting usage is calculated and billed at the end of each month based on actual traffic. This use case highlights the monetization of Bun's core runtime performance alongside the Claude AI capabilities."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Max plan subscription recognized monthly.); Usage: POB=consumption release=as_used (Serverless hosting recognized as requests are processed.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+  - id: "gen-bun-4"
+    name: "Bun - Bun Enterprise Multi-Year Bundle"
+    description: "Bun Enterprise Multi-Year Bundle"
+    input:
+      customer_name: "Bun"
+      contract_start_date: "02/01/2026"
+      terms_months: 24
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "A Global 2000 organization signs a 24-month Bun Enterprise Bundle for $50,000.00 per year. The bundle includes unlimited Premium Support, 100 seats of Claude Code Max, and a credit for Bun CI/CD Pipeline usage. To win the deal, a 10% discount was applied to the total contract value. This requires revenue allocation across the support (over-time) and the software (over-time) components based on their relative standalone selling prices. This scenario tests complex multi-year contract management and ASC 606 revenue allocation logic."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Software access and support are both ratable; allocation ensures correct POB valuation.); Usage: POB=consumption release=as_used (CI/CD credits are recognized as they are drawn down by usage.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "bundle"
+      - "discount"
+      - "credits"
+      - "allocation"
+      - "multi-year"
+  - id: "gen-turso"
+    name: "Turso - Committed Developer Annual Plan"
+    description: "Committed Developer Annual Plan"
+    input:
+      customer_name: "Turso"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "An individual developer signs up for the Turso Developer Plan on an annual basis to lock in the discounted rate of $4.99 per month. The plan includes 2.5 billion rows read and 10GB of embedded replica syncs. The subscription is billed upfront for the full year ($59.88). Any usage exceeding the included quotas, such as additional storage at $0.75 per GB, will be billed monthly in arrears. Revenue for the base subscription is recognized ratably over the 12-month term, while usage overages are recognized as they occur."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Standard SaaS subscription for platform access.); Usage: POB=consumption release=as_used (Overage charges for storage and rows read.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "discount"
+      - "recurring"
+  - id: "gen-turso-1"
+    name: "Turso - High-Growth Scaler Monthly Usage"
+    description: "High-Growth Scaler Monthly Usage"
+    input:
+      customer_name: "Turso"
+      contract_start_date: "02/01/2026"
+      terms_months: 1
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A fast-growing startup subscribes to the Turso Scaler Plan at $29 per month on a month-to-month basis. The plan includes 100 billion rows read and 100 million rows written. Due to a viral launch, the customer expects to exceed these limits, incurring overage charges of $0.80 per billion rows read and $0.80 per million rows written. The $29 base fee is billed in advance each month, and overages are calculated and billed at the end of the month. Revenue for the base fee is recognized over the month, and overages are recognized as consumed."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Base Scaler plan fee recognized over the monthly term.); Usage: POB=consumption release=as_used (High-volume row reads and writes billed in arrears.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+  - id: "gen-turso-2"
+    name: "Turso - Pro Plan Compliance & Onboarding Bundle"
+    description: "Pro Plan Compliance & Onboarding Bundle"
+    input:
+      customer_name: "Turso"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "A fintech company requires the Turso Pro Plan for SOC2 and HIPAA compliance, priced at $499 per month billed annually. To facilitate the migration and compliance setup, Turso includes a one-time 'Professional Services: Compliance Onboarding' fee of $2,000. A 10% bundle discount is applied to both the annual subscription and the onboarding fee. Because the discount is shared across multiple performance obligations, revenue allocation is required. The subscription revenue is recognized ratably over 12 months, and the onboarding fee is recognized upon completion of the setup."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Pro plan subscription for a 12-month term.); Services: POB=point_in_time release=at_go_live (One-time onboarding fee for compliance setup.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "allocation"
+  - id: "gen-turso-3"
+    name: "Turso - Enterprise Dedicated Infrastructure Deal"
+    description: "Enterprise Dedicated Infrastructure Deal"
+    input:
+      customer_name: "Turso"
+      contract_start_date: "02/01/2026"
+      terms_months: 24
+      transaction_currency: "USD"
+      billing_period: "Quarterly"
+      is_allocations: false
+      use_case_description: "A large enterprise signs a 24-month contract for a custom Enterprise Plan. The deal includes dedicated infrastructure and 'White Glove Support' at a total cost of $2,500 per month, billed quarterly. The plan includes custom high-limit quotas: 1 trillion rows read and 1 billion rows written per month. Overage rates are negotiated at a flat $0.50 per billion/million units. Revenue for the dedicated infrastructure and support is recognized ratably over the 24-month term as a single performance obligation, as the support is bundled into the platform access."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Dedicated infrastructure and support combined into a single POB.); Usage: POB=consumption release=as_used (Custom overage rates for high-volume enterprise traffic.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "license"
+      - "multi-year"
+  - id: "gen-turso-4"
+    name: "Turso - Multi-Year Expansion Ramp"
+    description: "Multi-Year Expansion Ramp"
+    input:
+      customer_name: "Turso"
+      contract_start_date: "02/01/2026"
+      terms_months: 36
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "To support a multi-phase migration, a customer signs a 3-year deal with a price ramp. Year 1 is on the Scaler Plan at $29 per month to support development. Year 2 and Year 3 ramp up to the Pro Plan at $499 per month as the application moves to production and requires HIPAA compliance. The contract is billed annually at the start of each year ($348 in Year 1, $5,988 in Years 2 and 3). Revenue is recognized ratably based on the specific contract value of each 12-month period. Any usage overages are billed monthly in arrears throughout the 3-year term."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Ramping subscription fee recognized over the 36-month duration.); Usage: POB=consumption release=as_used (Usage overages billed based on the active plan tier in each year.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "ramp"
+      - "usage"
+      - "multi-year"

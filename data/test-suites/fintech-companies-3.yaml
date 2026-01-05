@@ -1,0 +1,1161 @@
+name: "fintech-companies-3"
+description: "Generated from UC outputs - 2026-01-05"
+version: "1.0"
+tests:
+  - id: "gen-marqeta"
+    name: "Marqeta - Standard Enterprise Card Launch"
+    description: "Standard Enterprise Card Launch"
+    input:
+      customer_name: "Marqeta"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A new fintech customer is launching a debit card program. The contract includes a recurring Platform Access Fee of $10,000 per month and a one-time Implementation & Professional Services fee of $50,000 for program setup and bank integration. Core Card Issuing & Processing is billed as usage at a rate of 0.15% of total transaction volume. The contract has a 12-month term with monthly billing. Revenue for the platform fee is recognized ratably over the 12 months, while the implementation fee is recognized at the point of go-live. Processing fees are recognized as the transactions occur."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Platform Access Fee represents a stand-ready obligation to provide API access.); Services: POB=point_in_time release=at_go_live (Implementation is a distinct service completed prior to transaction processing.); Usage: POB=consumption release=as_used (Processing fees earned as transaction volume is processed through the Marqeta platform.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "one-time"
+      - "recurring"
+      - "license"
+  - id: "gen-marqeta-1"
+    name: "Marqeta - Digital Wallet & Tokenization Expansion"
+    description: "Digital Wallet & Tokenization Expansion"
+    input:
+      customer_name: "Marqeta"
+      contract_start_date: "02/01/2026"
+      terms_months: 24
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "An existing customer expands their program to support Apple Pay and Google Pay. This adds Tokenization-as-a-Service (TaaS) billed at $0.05 per tokenized card event. The Platform Access Fee is increased to $12,000 per month to cover the expanded API scope. Core Processing fees remain at 0.12% of volume. The expansion is signed for a 24-month term. Revenue for TaaS is recognized upon the tokenization event, while the platform fee remains ratable."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Increased platform fee for TaaS API access.); Usage: POB=consumption release=as_used (TaaS fees are event-based and recognized as cards are tokenized.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "license"
+      - "multi-year"
+  - id: "gen-marqeta-2"
+    name: "Marqeta - Physical Card Fulfillment Ramp"
+    description: "Physical Card Fulfillment Ramp"
+    input:
+      customer_name: "Marqeta"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A digital bank is launching its first physical card program. They require 20,000 physical cards shipped in the first quarter. Physical Card Fulfillment is priced at $5.00 per card, billed upon shipment. The Platform Access Fee is $15,000 per month. Core Issuing & Processing is billed at a flat $0.10 per authorization. The contract is for 12 months. Revenue for physical cards is recognized at the point of delivery/shipment, while the subscription is ratable."
+      rev_rec_notes: "Hardware: POB=point_in_time release=at_delivery (Physical card fulfillment is recognized when the card is shipped/delivered to the end user.); Subscription: POB=over_time release=ratable_over_term (Standard monthly platform fee.); Usage: POB=consumption release=as_used (Per-authorization fees are recognized as the events occur.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "ramp"
+      - "recurring"
+      - "license"
+  - id: "gen-marqeta-3"
+    name: "Marqeta - Discounted Enterprise Bundle with Allocation"
+    description: "Discounted Enterprise Bundle with Allocation"
+    input:
+      customer_name: "Marqeta"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "An enterprise customer signs a multi-product deal including Platform Access ($15,000/mo list), Implementation ($75,000 list), and a dedicated Technical Account Manager ($5,000/mo list). Marqeta provides a 20% discount across the total bundle. For revenue purposes, the discount must be allocated across the three distinct performance obligations based on their standalone selling prices (list prices). The contract term is 12 months, billed annually upfront. Subscription and TAM fees are recognized ratably, while Implementation is recognized at go-live."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Platform fee POB with allocated discount.); Services: POB=over_time release=ratable_over_term (Technical Account Manager (TAM) service recognized ratably over the support term.); Other: POB=point_in_time release=at_go_live (Implementation fee POB with allocated discount.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "license"
+      - "allocation"
+  - id: "gen-marqeta-4"
+    name: "Marqeta - High-Volume Processing with Tiered Pricing"
+    description: "High-Volume Processing with Tiered Pricing"
+    input:
+      customer_name: "Marqeta"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A high-growth marketplace utilizes Marqeta for seller payouts. They have a 12-month contract with tiered Core Processing fees: 0.50% for the first $10M in monthly volume, 0.40% for the next $40M, and 0.30% for volume above $50M. The Platform Access Fee is $5,000 per month. Billing occurs monthly in arrears for usage. Revenue for processing is recognized as usage occurs, applying the tier rates applicable to that month's volume."
+      rev_rec_notes: "Usage: POB=consumption release=as_used (Tiered processing fees are recognized based on the actual volume processed each month.); Subscription: POB=over_time release=ratable_over_term (Fixed platform fee recognized ratably.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "license"
+  - id: "gen-checkout-com"
+    name: "Checkout.com - Enterprise Global Processing and Fraud Protection"
+    description: "Enterprise Global Processing and Fraud Protection"
+    input:
+      customer_name: "Checkout.com"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A global enterprise retailer signs a 12-month agreement for Global Payment Processing and Fraudfree protection. The contract includes a recurring $1,000 monthly Platform Fee for Fraudfree and a transaction-based fee for processing at $0.20 plus a 0.15% markup. Additionally, a Minimum Billing Fee of $500 per month applies if processing volume falls below a specific threshold. Revenue for the Fraudfree platform fee is recognized ratably over the 12-month term, while processing and fraud screening fees are recognized as consumption occurs. The setup for this scenario reflects a standard high-volume merchant profile with monthly billing cycles."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Fraudfree platform fee and minimum billing fees provide access to the infrastructure over the contract term.); Usage: POB=consumption release=as_used (Transaction-based processing and fraud screening fees are recognized at the point of processing.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "one-time"
+      - "recurring"
+      - "license"
+  - id: "gen-checkout-com-1"
+    name: "Checkout.com - Identity Verification with Annual Commitment"
+    description: "Identity Verification with Annual Commitment"
+    input:
+      customer_name: "Checkout.com"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "A cryptocurrency exchange implements Checkout.com's Identity Verification (IDV) solution to automate KYC. The deal includes a one-time $5,000 Implementation Fee and an annual commitment of 10,000 verification checks at $1.50 per check ($15,000 total commitment), paid upfront. Any checks exceeding the 10,000 limit are billed monthly at an overage rate of $2.00 per check. The implementation fee is recognized at the point of completion (go-live), while the committed volume fee is recognized ratably over the 12-month term. This scenario uses revenue allocation to distribute the total contract value between the professional services and the subscription component based on list prices."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Onboarding: POB=point_in_time release=at_go_live (Implementation fee recognized upon completion of the technical setup.); Subscription: POB=over_time release=ratable_over_term (The 10,000 check commitment is treated as a stand-ready obligation to provide verification services.); Usage: POB=consumption release=as_used (Overage fees are recognized in the month the verification checks occur.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "one-time"
+      - "recurring"
+      - "allocation"
+  - id: "gen-checkout-com-2"
+    name: "Checkout.com - Marketplace Payouts and Global Acquiring"
+    description: "Marketplace Payouts and Global Acquiring"
+    input:
+      customer_name: "Checkout.com"
+      contract_start_date: "02/01/2026"
+      terms_months: 24
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A global gig-economy marketplace uses Checkout.com for both collecting payments from customers and paying out service providers. The agreement features Global Payment Processing at $0.25 per transaction and Payouts at $0.60 per payout event. There is no fixed monthly fee, but a 24-month term is required to secure these volume-based rates. Billing occurs monthly in arrears based on actual usage. All revenue is recognized as consumption-based (point-in-time) because the performance obligation is satisfied at the moment the transaction or payout is successfully processed. This use case highlights the high-volume, low-margin nature of marketplace payment flows."
+      rev_rec_notes: "Usage: POB=consumption release=as_used (Both processing and payout fees are recognized at the time of the transaction event.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "multi-year"
+  - id: "gen-checkout-com-3"
+    name: "Checkout.com - Fintech Card Issuing Program"
+    description: "Fintech Card Issuing Program"
+    input:
+      customer_name: "Checkout.com"
+      contract_start_date: "02/01/2026"
+      terms_months: 24
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A neobank launches a card program using Checkout.com's Card Issuing platform. The contract includes a $2,500 monthly Issuing Platform Fee for access to the API and card management tools. Physical cards are billed at $5.00 per card at the time of order, while virtual cards are billed at $0.50 per card created. Revenue for the platform fee is recognized ratably over the 24-month contract term. Physical card revenue is recognized at the point of delivery/shipment, and virtual card revenue is recognized immediately upon creation. This scenario demonstrates a mix of recurring SaaS fees and point-in-time product fees."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Monthly issuing platform fee provides continuous access to the card management infrastructure.); Hardware: POB=point_in_time release=at_delivery (Physical card fees are recognized when the card is shipped to the end user.); Other: POB=point_in_time release=at_go_live (Virtual card fees are recognized at the moment of digital issuance.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "recurring"
+      - "license"
+      - "multi-year"
+  - id: "gen-checkout-com-4"
+    name: "Checkout.com - Multi-Year Growth Ramp for Fraud Detection"
+    description: "Multi-Year Growth Ramp for Fraud Detection"
+    input:
+      customer_name: "Checkout.com"
+      contract_start_date: "02/01/2026"
+      terms_months: 36
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A fast-growing SaaS company signs a 3-year deal for the Fraudfree risk engine. To accommodate the customer's growth, the monthly platform fee ramps up: $500/month in Year 1, $1,500/month in Year 2, and $3,000/month in Year 3. Additionally, every screened transaction costs $0.10. Revenue for the ramped platform fees is straight-lined over the 36-month term for accounting purposes, while the transaction screening fees are recognized as usage occurs. This use case tests the ability to handle multi-year step-up pricing and the associated revenue smoothing requirements."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (The total value of the ramped platform fees ($60,000) is recognized ratably over the 36-month term.); Usage: POB=consumption release=as_used (Per-transaction fraud screening fees are recognized as the screening events occur.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "ramp"
+      - "usage"
+      - "license"
+      - "multi-year"
+  - id: "gen-wise"
+    name: "Wise - Wise Business Advanced - SMB Onboarding"
+    description: "Wise Business Advanced - SMB Onboarding"
+    input:
+      customer_name: "Wise"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A new small business signs up for the Wise Business Advanced plan to manage international payroll. They pay a one-time setup fee of $31 to unlock local bank details in over 20 currencies and enable batch payment features. For their ongoing international transfers, they are charged a variable fee of 0.45% per transaction amount. The setup fee is a one-time charge recognized upon account activation. Transaction fees are billed monthly based on actual usage and recognized as consumption revenue at the time of transfer completion."
+      rev_rec_notes: "Onboarding: POB=point_in_time release=at_go_live (The $31 business setup fee is recognized when the account is fully activated and bank details are provided.); Usage: POB=consumption release=as_used (International transfer fees are recognized as the performance obligation (the money transfer) is satisfied.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "one-time"
+  - id: "gen-wise-1"
+    name: "Wise - Wise Platform API - Enterprise Integration"
+    description: "Wise Platform API - Enterprise Integration"
+    input:
+      customer_name: "Wise"
+      contract_start_date: "02/01/2026"
+      terms_months: 24
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A regional bank integrates the Wise Platform API to offer its customers low-cost international transfers directly from their banking app. The bank enters a 24-month agreement with tiered usage pricing. They are charged $0.20 per transaction for the first 50,000 transactions per month, and $0.12 for any transactions beyond that. There is no recurring subscription fee, but there is a custom implementation fee of $5,000 for technical support during the sandbox integration phase. Revenue for the implementation is recognized upon go-live, while transaction fees are recognized as the API calls are processed."
+      rev_rec_notes: "Services: POB=point_in_time release=at_go_live (Implementation fee for API integration is recognized once the production environment is live.); Usage: POB=consumption release=as_used (API transaction fees are recognized as each cross-border payment is executed.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "one-time"
+      - "recurring"
+      - "license"
+      - "multi-year"
+  - id: "gen-wise-2"
+    name: "Wise - Wise Personal - Global Traveler Package"
+    description: "Wise Personal - Global Traveler Package"
+    input:
+      customer_name: "Wise"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "An individual traveler opens a Wise Personal account and orders a physical Multi-Currency Card for a one-time fee of $9. Throughout their 12-month term, they use the card for international spending and ATM withdrawals. Conversion fees are charged at approximately 0.41% per transaction. The $9 card fee is a one-time hardware charge recognized upon shipment. Transaction fees are recognized as they occur. This scenario demonstrates the high-volume, low-value nature of Wise's personal segment where the primary revenue is event-based."
+      rev_rec_notes: "Hardware: POB=point_in_time release=at_delivery (The card order fee is recognized when the physical card is dispatched to the customer.); Usage: POB=consumption release=as_used (Conversion and withdrawal fees are recognized at the moment of the financial transaction.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "one-time"
+  - id: "gen-wise-3"
+    name: "Wise - Wise Assets - Wealth Management Service"
+    description: "Wise Assets - Wealth Management Service"
+    input:
+      customer_name: "Wise"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A high-net-worth individual uses the Wise Assets feature to invest their idle USD balance into a government-backed interest-earning fund. Wise charges an annual service fee of 0.56% of the Assets Under Management (AUM). This fee is accrued daily based on the fund balance and billed to the customer monthly. Unlike transaction fees, this service fee is recognized over-time as Wise provides the asset management service. The customer maintains an average balance of $100,000, resulting in a predictable recurring revenue stream for Wise."
+      rev_rec_notes: "Other: POB=over_time release=ratable_over_term (The 0.56% management fee is earned ratably as the assets are managed throughout the month.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "recurring"
+  - id: "gen-wise-4"
+    name: "Wise - Wise Corporate - Multi-User Bundle"
+    description: "Wise Corporate - Multi-User Bundle"
+    input:
+      customer_name: "Wise"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      use_case_description: "A corporate client signs up for a Wise Business account with 50 physical cards for their international sales team. They receive a bundle discount where the $31 setup fee is waived, and the card fees are reduced from $9 to $7 per card. Because there are multiple performance obligations (Account Setup and Hardware) with a shared discount, revenue must be allocated. The setup obligation is satisfied at go-live, while the cards are recognized as they are delivered to employees. Transactional usage remains at standard rates with volume tiers starting at $100,000 monthly conversion volume."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Onboarding: POB=point_in_time release=at_go_live (Allocated portion of the bundle price for account setup is recognized at activation.); Hardware: POB=point_in_time release=at_delivery (Allocated portion of the bundle price for 50 cards is recognized upon shipment.); Usage: POB=consumption release=as_used (High-volume FX conversion fees are recognized as transactions are processed.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "allocation"
+  - id: "gen-revolut"
+    name: "Revolut - Premium Personal Subscription with FX Usage"
+    description: "Premium Personal Subscription with FX Usage"
+    input:
+      customer_name: "Revolut"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A retail customer signs up for the Premium Personal plan to access higher FX limits and travel insurance. The plan is priced at $9.99 per month, billed monthly on a 12-month evergreen-style contract. In addition to the recurring fee, the customer is subject to a 0.5% usage fee for any currency exchanges exceeding $10,000 in a monthly cycle. The recurring subscription revenue is recognized ratably over the monthly service period. Any usage fees incurred for FX overages are recognized at the point the transaction occurs. This scenario demonstrates a standard consumer upgrade path with hybrid recurring and usage billing."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Monthly membership fee providing continuous access to Premium features.); Usage: POB=consumption release=as_used (FX overage fees recognized upon the execution of the triggering transaction.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+  - id: "gen-revolut-1"
+    name: "Revolut - Metal Personal Bundle with Hardware Fulfillment"
+    description: "Metal Personal Bundle with Hardware Fulfillment"
+    input:
+      customer_name: "Revolut"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      use_case_description: "A customer subscribes to the Metal Personal plan at $16.99 per month. This bundle includes the monthly subscription service and a one-time fulfillment of a physical Metal Card, which has a standalone list price of $40. Because the card is included in the subscription fee, revenue must be allocated between the hardware (Point-in-Time) and the subscription (Over-Time). The physical card is recognized upon delivery/shipment, while the subscription fee is recognized ratably. The customer is also charged a $0.10 fee per ATM withdrawal after exceeding their $800 monthly limit. This use case highlights POB allocation for a hardware/software bundle."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Allocated portion of the $16.99 monthly fee recognized over the service month.); Hardware: POB=point_in_time release=at_delivery (Allocated value of the Metal card recognized when the card is shipped to the user.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "one-time"
+      - "recurring"
+      - "allocation"
+  - id: "gen-revolut-2"
+    name: "Revolut - Business Grow Annual Plan with Transfer Credits"
+    description: "Business Grow Annual Plan with Transfer Credits"
+    input:
+      customer_name: "Revolut"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "A small business client opts for the Business Grow plan, choosing annual billing to receive a 22% discount. The total contract value is $360 for the year ($30/month effective). The plan includes 100 free local transfers and 5 free international transfers per month. Any transfers beyond these allowances are billed as usage at $0.20 per local transfer and $3.00 per international transfer. Revenue for the annual subscription is recognized ratably over the 12-month term. Usage revenue is recognized in the month the transfers occur. This scenario tests annual billing cycles and monthly usage allowance resets."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Annual upfront payment recognized $30/month over the 12-month contract.); Usage: POB=consumption release=as_used (Overage transfer fees recognized as the business exceeds their monthly allowance.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "discount"
+      - "recurring"
+      - "credits"
+  - id: "gen-revolut-3"
+    name: "Revolut - Enterprise Custom Integration & Subscription"
+    description: "Enterprise Custom Integration & Subscription"
+    input:
+      customer_name: "Revolut"
+      contract_start_date: "02/01/2026"
+      terms_months: 24
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      use_case_description: "A large corporation signs a custom Enterprise deal for 500 employee accounts. The deal includes a recurring platform fee of $2,500 per month and a one-time API Integration/Onboarding fee of $10,000. The contract term is 24 months. The onboarding fee is recognized as a separate POB upon completion of the integration (Go-Live). The platform fee is recognized ratably over the 24-month term. This deal involves custom pricing not found in the standard catalog and requires revenue allocation between the services and the subscription to ensure fair value reporting. This scenario focuses on B2B sales-led workflows and professional services revenue."
+      allocation_method: "Use Sell Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Platform fee recognized over the 24-month committed term.); Onboarding: POB=point_in_time release=at_go_live (API integration fee recognized once the customer successfully connects their systems.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "one-time"
+      - "recurring"
+      - "license"
+      - "allocation"
+      - "multi-year"
+  - id: "gen-revolut-4"
+    name: "Revolut - Ultra Personal with Crypto Trading & Perks"
+    description: "Ultra Personal with Crypto Trading & Perks"
+    input:
+      customer_name: "Revolut"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A high-net-worth individual subscribes to the Ultra Personal plan at $70 per month. The plan includes unlimited FX and access to various partner perks (e.g., Financial Times subscription, lounge access). Additionally, the user actively trades cryptocurrency, incurring a 1.49% commission per trade. The monthly subscription fee is recognized ratably. The crypto commissions are recognized as 'Other' revenue at the point of trade execution. This use case exercises high-frequency usage charges alongside a premium high-value subscription and demonstrates how Revolut handles non-banking service revenue like trading commissions."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (High-tier monthly membership fee recognized over the service month.); Other: POB=event_based release=as_billed (Crypto commissions recognized immediately upon trade completion.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+  - id: "gen-chime"
+    name: "Chime - Chime+ Premium Subscription (Direct-to-Consumer)"
+    description: "Chime+ Premium Subscription (Direct-to-Consumer)"
+    input:
+      customer_name: "Chime"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "This scenario models a hypothetical paid version of the Chime+ tier for users who do not meet the $200 direct deposit threshold but want premium benefits. The customer signs up for a 'Chime+ Premium' recurring subscription at $9.99 per month. This plan includes higher savings APY and cashback entitlements. The billing is set to monthly recurring, and revenue is recognized ratably over each month of service. This allows Chime to monetize its premium feature set directly via Zuora Billing."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Standard SaaS-style monthly subscription recognized over the service period.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "recurring"
+  - id: "gen-chime-1"
+    name: "Chime - High-Velocity Liquidity Usage (MyPay & OIT)"
+    description: "High-Velocity Liquidity Usage (MyPay & OIT)"
+    input:
+      customer_name: "Chime"
+      contract_start_date: "02/01/2026"
+      terms_months: 1
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "This use case focuses on a high-activity user utilizing Chime's liquidity products: MyPay Instant Advance and Outbound Instant Transfers (OIT). The user performs four MyPay advances at a flat $2.00 fee each and executes two $500 external transfers with a 1.75% variable fee ($8.75 per transfer). These are modeled as usage-based charges in Zuora. Revenue is recognized at the point of transaction (point-in-time) as the service is delivered instantly upon the user's request."
+      rev_rec_notes: "Usage: POB=point_in_time release=as_billed (Transaction fees are recognized immediately upon the execution of the transfer or advance.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+  - id: "gen-chime-2"
+    name: "Chime - Employer-Sponsored Financial Wellness (B2B)"
+    description: "Employer-Sponsored Financial Wellness (B2B)"
+    input:
+      customer_name: "Chime"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "Chime partners with a corporate entity to provide 'Chime+ Member Status' as a subsidized employee benefit. The employer pays a recurring fee of $5.00 per employee per month for a block of 1,000 employees. This is a B2B subscription model within Zuora, billed annually in advance ($60,000 total). Revenue is recognized ratably over the 12-month contract term. This scenario demonstrates Chime's potential expansion into the enterprise 'financial wellness' market."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Enterprise subscription recognized monthly over the 1-year term.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "recurring"
+  - id: "gen-chime-3"
+    name: "Chime - Traveler's ATM & Transfer Bundle"
+    description: "Traveler's ATM & Transfer Bundle"
+    input:
+      customer_name: "Chime"
+      contract_start_date: "02/01/2026"
+      terms_months: 6
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      use_case_description: "A user on a long-term trip utilizes out-of-network ATMs frequently. This scenario includes a recurring monthly base fee of $4.99 for a 'Traveler's Bundle' which provides two 'free' out-of-network ATM withdrawals, with subsequent withdrawals charged at $2.50 each. Additionally, it includes OIT usage at 1.75%. This hybrid model uses a recurring charge for the bundle and usage charges for overages. Revenue for the base fee is ratable, while overages are recognized as they occur."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (The $4.99 bundle fee is recognized over the month of service.); Usage: POB=point_in_time release=as_used (Overage ATM fees and OIT fees are recognized when the transaction occurs.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "bundle"
+      - "recurring"
+      - "allocation"
+  - id: "gen-chime-4"
+    name: "Chime - Credit Builder Plus with Professional Monitoring"
+    description: "Credit Builder Plus with Professional Monitoring"
+    input:
+      customer_name: "Chime"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      use_case_description: "This scenario introduces 'Credit Builder Plus,' a premium version of Chime's Credit Builder account. It carries a $14.99 monthly fee and includes a one-time 'Account Setup & Credit Consultation' fee of $50.00. The setup fee is recognized at a point-in-time upon completion of the consultation, while the monthly fee is recognized ratably. Because both the service and the subscription are sold together with a discount, revenue allocation is required between the one-time service and the recurring subscription."
+      allocation_method: "Use Sell Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Monthly recurring fee for credit monitoring and reporting.); Services: POB=point_in_time release=at_go_live (Consultation fee recognized once the initial session is completed.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "credits"
+      - "allocation"
+  - id: "gen-n26"
+    name: "N26 - Standard Plan with Physical Card Purchase"
+    description: "Standard Plan with Physical Card Purchase"
+    input:
+      customer_name: "N26"
+      contract_start_date: "02/01/2026"
+      terms_months: 1
+      transaction_currency: "EUR"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A customer signs up for the N26 Standard plan, which has a €0.00 recurring monthly fee. To receive a physical card, the customer pays a one-time Physical Card Delivery fee of €10.00. The subscription is open-ended (month-to-month) and provides access to virtual banking services. Revenue for the €0 subscription is nominal, while the €10 card fee is recognized at the point of delivery. This scenario tests the ability to handle zero-dollar subscriptions alongside one-time hardware-related fees."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Standard plan access is a stand-ready obligation.); Hardware: POB=point_in_time release=at_delivery (Physical card fee is recognized when the customer receives the asset.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "one-time"
+      - "recurring"
+  - id: "gen-n26-1"
+    name: "N26 - N26 Metal Annual Commitment with Express Delivery"
+    description: "N26 Metal Annual Commitment with Express Delivery"
+    input:
+      customer_name: "N26"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "EUR"
+      billing_period: "Monthly"
+      is_allocations: true
+      use_case_description: "A premium customer subscribes to N26 Metal at €16.90 per month with a mandatory 12-month commitment. The customer also requests Express Card Delivery for a one-time fee of €25.00 to receive their metal card quickly. The subscription fee is billed monthly, but the revenue is recognized ratably over the 12-month term. The express delivery service is a separate performance obligation recognized upon completion of the delivery service. This scenario demonstrates contract term enforcement and bundled service fees."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Metal membership provides continuous benefits over the 12-month term.); Services: POB=point_in_time release=at_go_live (Express delivery is recognized once the delivery service is fulfilled.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "one-time"
+      - "recurring"
+      - "allocation"
+  - id: "gen-n26-2"
+    name: "N26 - N26 Smart with ATM Overage Usage"
+    description: "N26 Smart with ATM Overage Usage"
+    input:
+      customer_name: "N26"
+      contract_start_date: "02/01/2026"
+      terms_months: 1
+      transaction_currency: "EUR"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A customer on the N26 Smart plan pays €4.90 per month, which includes 5 free ATM withdrawals. During the first month, the customer performs 8 total withdrawals, resulting in 3 overage charges at €2.00 each. The recurring subscription fee is recognized ratably, while the usage charges for ATM overages are recognized as they occur (point-in-time). This use case exercises Zuora's usage-based billing engine and the ability to handle 'included units' before triggering charges."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Monthly Smart plan fee recognized over the billing cycle.); Usage: POB=consumption release=as_used (ATM overages are recognized as the transactions are processed.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+  - id: "gen-n26-3"
+    name: "N26 - Business Metal with CASH26 Deposit Fees"
+    description: "Business Metal with CASH26 Deposit Fees"
+    input:
+      customer_name: "N26"
+      contract_start_date: "02/01/2026"
+      terms_months: 1
+      transaction_currency: "EUR"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A freelancer uses N26 Business Metal (€16.90/mo) and utilizes the CASH26 service to deposit cash at retail locations. The plan allows for €100 in free deposits per month, with a 1.5% fee on any amount exceeding that threshold. In this scenario, the customer deposits €1,100, resulting in a taxable deposit amount of €1,000 and a fee of €15.00. This tests percentage-of-volume usage pricing and complex usage-based revenue recognition."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Business Metal subscription is ratable.); Usage: POB=consumption release=as_used (CASH26 fees are recognized at the time the deposit is processed.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+  - id: "gen-n26-4"
+    name: "N26 - Mid-Month Upgrade from Smart to Go"
+    description: "Mid-Month Upgrade from Smart to Go"
+    input:
+      customer_name: "N26"
+      contract_start_date: "02/01/2026"
+      terms_months: 1
+      transaction_currency: "EUR"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A customer starts the month on the N26 Smart plan (€4.90/mo). On the 15th of the month, they decide to upgrade to the N26 Go plan (€9.90/mo) to take advantage of travel insurance. Zuora must calculate the pro-rated credit for the remaining half of the Smart plan and the pro-rated charge for the new Go plan. This scenario demonstrates mid-term subscription changes, pro-ration logic, and revenue adjustments for plan migrations."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Revenue is re-calculated based on the pro-rated dates for each plan.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "recurring"
+      - "credits"
+  - id: "gen-robinhood"
+    name: "Robinhood - Retail Gold Subscriber (Monthly)"
+    description: "Retail Gold Subscriber (Monthly)"
+    input:
+      customer_name: "Robinhood"
+      contract_start_date: "02/01/2026"
+      terms_months: 1
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A standard retail customer subscribes to the Robinhood Gold plan on a month-to-month basis to access premium features like higher interest on cash and 3% IRA matching. The subscription is priced at $5 per month, billed in advance. This scenario represents the high-volume, self-serve subscription core of the business. Revenue for the Gold membership is recognized ratably over the monthly service period. There are no additional usage fees in this simple scenario."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Subscription fee provides access to premium services; recognized linearly over the monthly term.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+  - id: "gen-robinhood-1"
+    name: "Robinhood - Margin Investor (Annual Gold + Usage)"
+    description: "Margin Investor (Annual Gold + Usage)"
+    input:
+      customer_name: "Robinhood"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "An active investor opts for the Robinhood Gold Annual plan at $50 per year to save on subscription costs while utilizing margin for larger trades. The annual fee is billed upfront. Additionally, the customer utilizes $10,000 in margin; the first $1,000 is interest-free as a Gold benefit, while the remaining $9,000 incurs interest at a 6.75% APR. Interest is calculated daily and billed monthly in arrears. Revenue for the annual fee is ratable over 12 months, while margin interest is recognized as it is earned/billed each month."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Annual Gold fee recognized over the 12-month contract period.); Usage: POB=over_time release=as_billed (Margin interest accrues daily and is recognized as the service (lending) is provided.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+  - id: "gen-robinhood-2"
+    name: "Robinhood - Active Index Options Trader"
+    description: "Active Index Options Trader"
+    input:
+      customer_name: "Robinhood"
+      contract_start_date: "02/01/2026"
+      terms_months: 1
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A high-frequency trader maintains a Robinhood Gold subscription ($5/month) specifically to access discounted Index Options trading. Instead of the standard $0.75 per contract, the Gold member pays $0.50 per contract. In a typical month, the user trades 200 contracts. The monthly subscription is billed in advance, and the contract fees are billed in arrears based on actual trading volume. Revenue for the option fees is recognized at the point in time the trade is executed."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Gold fee recognized ratably over the month.); Usage: POB=point_in_time release=as_used (Per-contract fees are recognized immediately upon trade execution.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "discount"
+      - "recurring"
+  - id: "gen-robinhood-3"
+    name: "Robinhood - Crypto Whale (Smart Routing Tiers)"
+    description: "Crypto Whale (Smart Routing Tiers)"
+    input:
+      customer_name: "Robinhood"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A large-scale crypto trader utilizes Robinhood's 'Smart Exchange Routing' for high-volume transactions. This service uses a tiered usage model where the first $50,000 in monthly volume is charged at 0.85%, and volumes above $10M drop to 0.03%. In this scenario, the trader moves $1,000,000 in volume in a single month. This is a pure usage-based scenario with no base subscription fee. Revenue is recognized as trades occur, typically aggregated on a monthly invoice."
+      rev_rec_notes: "Usage: POB=point_in_time release=as_used (Revenue is recognized at the transaction event based on the percentage of volume.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+  - id: "gen-robinhood-4"
+    name: "Robinhood - Wealth Builder Bundle (Gold + Staking)"
+    description: "Wealth Builder Bundle (Gold + Staking)"
+    input:
+      customer_name: "Robinhood"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "A long-term saver uses Robinhood Gold ($50/year) and participates in Crypto Staking for SOL and ETH. The Gold membership provides the base platform benefits, while the Staking service is billed as a 25% commission on all earned rewards. Because the Gold membership is a prerequisite for certain higher-tier staking benefits or IRA matches, this scenario explores the potential for revenue allocation if the Gold fee is discounted as part of a bundle. However, for this demo, we treat them as separate POBs: one ratable subscription and one event-based commission."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Annual Gold fee recognized ratably.); Other: POB=event_based release=unknown (Staking commission is recognized when rewards are distributed by the protocol.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "recurring"
+      - "license"
+      - "allocation"
+  - id: "gen-coinbase"
+    name: "Coinbase - Coinbase One Preferred Annual"
+    description: "Coinbase One Preferred Annual"
+    input:
+      customer_name: "Coinbase"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "A retail customer signs up for the Coinbase One Preferred annual plan. This plan includes zero trading fees up to $10,000 per month, priority support, and boosted staking rewards. The customer is charged a flat fee of $299.99 upfront for a 12-month term. This scenario demonstrates a simple recurring subscription with a single annual charge. Revenue is recognized ratably over the 12-month contract period. The billing period is set to annual to capture the full payment at the start of the subscription."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Standard SaaS subscription providing access to platform benefits over the term.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "recurring"
+  - id: "gen-coinbase-1"
+    name: "Coinbase - Prime Institutional Bundle"
+    description: "Prime Institutional Bundle"
+    input:
+      customer_name: "Coinbase"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      use_case_description: "An institutional client onboarded to Coinbase Prime with a bundle including Institutional Custody and a one-time Implementation fee. The agreement includes a $5,000 implementation fee and a recurring monthly custody minimum of $200. A 10% bundle discount is applied to the total contract value. This use case exercises Zuora's ability to handle multiple performance obligations (POBs) and revenue allocations. The implementation fee is recognized at go-live, while the custody fee is recognized ratably over the 12-month term. Allocations are performed using list prices to ensure compliance with ASC 606."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Services: POB=point_in_time release=at_go_live (Implementation/onboarding is a distinct service delivered at the start.); Subscription: POB=over_time release=ratable_over_term (Custody services are provided continuously over the contract term.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "allocation"
+  - id: "gen-coinbase-2"
+    name: "Coinbase - Cloud Infrastructure & Staking"
+    description: "Cloud Infrastructure & Staking"
+    input:
+      customer_name: "Coinbase"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A blockchain developer deploys 5 Dedicated Validators through Coinbase Cloud. Each node has a fixed recurring fee of $500 per month. In addition to the infrastructure fee, Coinbase charges a 10% commission on all staking rewards generated by these nodes. This scenario combines a recurring SaaS charge with a consumption-based usage charge. The node fees are billed monthly in advance and recognized ratably. The staking commissions are billed monthly in arrears and recognized as usage occurs. This demonstrates Zuora's hybrid billing capabilities for infrastructure providers."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Node infrastructure is a stand-ready obligation.); Usage: POB=consumption release=as_used (Staking commissions are recognized as rewards are distributed by the network.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+      - "license"
+  - id: "gen-coinbase-3"
+    name: "Coinbase - Enterprise Advanced Trading"
+    description: "Enterprise Advanced Trading"
+    input:
+      customer_name: "Coinbase"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A high-frequency trading firm utilizes Coinbase Advanced Trading with a volume-based tiering model. The firm is billed monthly in arrears based on their total 'Taker' volume. The pricing follows a tiered structure: 0.60% for the first $10k, 0.40% for the next $40k, and 0.20% for volume above $50k. For this scenario, we assume a monthly volume of $1,000,000. Revenue is recognized at the point in time each trade is executed. This use case highlights Zuora's ability to manage complex usage-based pricing and volume tiers for high-transaction environments."
+      rev_rec_notes: "Usage: POB=point_in_time release=at_delivery (Trading fees are earned and recognized upon execution of the trade.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+  - id: "gen-coinbase-4"
+    name: "Coinbase - Multi-Year Custody Ramp"
+    description: "Multi-Year Custody Ramp"
+    input:
+      customer_name: "Coinbase"
+      contract_start_date: "02/01/2026"
+      terms_months: 24
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A corporate treasury enters a 24-month agreement for Institutional Custody to secure their digital asset holdings. To support the client's scaling, the contract includes a ramped pricing structure: Year 1 is billed at a discounted minimum of $1,000 per month, while Year 2 increases to $2,000 per month. This use case exercises Zuora's multi-year contract management and ramp deal capabilities. Revenue is recognized ratably within each year based on the active price. This scenario is typical for large enterprise deals where commitment increases over time."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Custody service is recognized ratably over the 24-month term, following the ramped price schedule.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "ramp"
+      - "discount"
+      - "multi-year"
+  - id: "gen-sofi"
+    name: "SoFi - Standard Plus Membership with Robo-Advisory"
+    description: "Standard Plus Membership with Robo-Advisory"
+    input:
+      customer_name: "SoFi"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A new customer signs up for the SoFi Plus membership at $10.00 per month to access premium banking benefits. Simultaneously, they enroll in Automated Investing Management with an initial deposit of $50,000, which carries an advisory fee of 0.25% AUM annually, billed monthly based on the average daily balance. The subscription is set for a 12-month term with monthly billing. The membership fee is recognized ratably over the month, while the AUM fee is recognized as consumption revenue. This scenario tests the combination of a flat recurring fee and a percentage-based usage charge."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (SoFi Plus membership provides continuous access to benefits, requiring straight-line recognition.); Usage: POB=consumption release=as_used (Advisory fees are calculated based on assets under management and recognized as the service is provided.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+  - id: "gen-sofi-1"
+    name: "SoFi - Personal Loan Origination & Funding"
+    description: "Personal Loan Origination & Funding"
+    input:
+      customer_name: "SoFi"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A customer is approved for a $20,000 personal loan. The agreement includes a one-time Loan Origination Fee of 5% ($1,000.00), which is deducted from the loan proceeds at the time of funding. This is a non-recurring service charge mapped to a 'Service' product in Zuora. The revenue for the origination fee is recognized at a point-in-time when the loan is funded (the 'Go-Live' event). This scenario demonstrates Zuora's ability to handle one-time service fees associated with financial product onboarding."
+      rev_rec_notes: "Services: POB=point_in_time release=at_go_live (Origination fees represent a completed service at the time of loan funding.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "one-time"
+      - "recurring"
+  - id: "gen-sofi-2"
+    name: "SoFi - Plus Membership with Direct Deposit Waiver"
+    description: "Plus Membership with Direct Deposit Waiver"
+    input:
+      customer_name: "SoFi"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A customer subscribes to SoFi Plus ($10.00/month). Because they have set up a qualifying direct deposit, they receive a 100% discount on the membership fee, bringing the net monthly cost to $0.00. In Zuora, this is modeled as a recurring product charge with an associated discount charge. Revenue recognition must still track the gross value or handle the zero-dollar net impact correctly. This scenario highlights SoFi's core 'Plus' value proposition and conditional discounting logic."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Revenue is $0 net, but the POB remains active over the term.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "discount"
+      - "recurring"
+  - id: "gen-sofi-3"
+    name: "SoFi - Wealth Management Bundle with Financial Planning"
+    description: "Wealth Management Bundle with Financial Planning"
+    input:
+      customer_name: "SoFi"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "A high-net-worth customer signs up for an annual SoFi Plus plan ($120.00 upfront) which includes one 'Free' Financial Planning Session valued at $250.00. This creates a multi-element arrangement where the $120.00 transaction price must be allocated between the 12-month membership and the one-time planning session. The membership revenue is released ratably, while the allocated portion for the session is released upon completion of the 1:1 consultation. This scenario tests Zuora Revenue's allocation engine using Standalone Selling Prices (SSP)."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Allocated portion of the $120 is recognized over 12 months.); Services: POB=point_in_time release=at_go_live (Allocated portion of the $120 is recognized when the planning session occurs.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "one-time"
+      - "allocation"
+  - id: "gen-sofi-4"
+    name: "SoFi - Investment Account Exit & Transfer Fee"
+    description: "Investment Account Exit & Transfer Fee"
+    input:
+      customer_name: "SoFi"
+      contract_start_date: "02/01/2026"
+      terms_months: 1
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A customer decides to move their investment portfolio to another brokerage. SoFi charges a $100.00 'Account Transfer (ACAT Out)' fee to process the administrative exit. This is a one-time 'Other' charge in Zuora. Revenue is recognized immediately upon the execution of the transfer. This scenario demonstrates the handling of administrative/incidental fees that are not part of a recurring subscription but are triggered by specific customer actions."
+      rev_rec_notes: "Other: POB=point_in_time release=at_delivery (The transfer fee is recognized once the administrative task of moving assets is completed.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "one-time"
+      - "recurring"
+  - id: "gen-navan"
+    name: "Navan - SMB Self-Serve Starter"
+    description: "SMB Self-Serve Starter"
+    input:
+      customer_name: "Navan"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A small business signs up for the Navan Business plan to manage employee expenses. They have 25 active expensing users. Per the standard pricing, the first 5 users are free ($0), and the remaining 20 users are charged at $15 per user per month. This is a month-to-month subscription with recurring billing. Revenue for the Expense subscription is recognized ratably over the monthly period. Navan Travel features are included at no additional platform cost, generating revenue for Navan via commissions which are out of scope for this billing contract."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Monthly recurring SaaS fee for Navan Expense is recognized ratably over the month of service.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "recurring"
+      - "license"
+  - id: "gen-navan-1"
+    name: "Navan - Mid-Market BYOC Expansion"
+    description: "Mid-Market BYOC Expansion"
+    input:
+      customer_name: "Navan"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Quarterly"
+      is_allocations: true
+      use_case_description: "A mid-sized company with 150 employees wants to use Navan Connect to link their existing corporate credit cards. They subscribe to Navan Connect at $15 per user per month and Navan Expense at a discounted rate of $10 per user per month for the same 150-user base. This is an annual contract with quarterly billing. The discount is applied as a bundle incentive for taking both products. Revenue for both SaaS components is recognized ratably over the 12-month term."
+      allocation_method: "Use Sell Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Both Connect and Expense are recurring SaaS services recognized over the 12-month contract term.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "license"
+      - "credits"
+      - "allocation"
+  - id: "gen-navan-2"
+    name: "Navan - Enterprise Global Rollout"
+    description: "Enterprise Global Rollout"
+    input:
+      customer_name: "Navan"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "A large enterprise signs a global agreement for Navan Travel and Expense. The contract includes a $20,000 annual Platform Fee for Travel and a $12 per user per month fee for 1,000 committed Expense users. A one-time Professional Services fee of $15,000 is charged for custom ERP integration and global configuration. The entire contract is billed annually upfront. Revenue for the Platform and Expense fees is recognized ratably over 12 months, while the Professional Services fee is recognized as a point-in-time event upon successful go-live."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Platform and user fees represent a stand-ready obligation.); Services: POB=point_in_time release=at_go_live (Implementation services are distinct and recognized upon completion of the setup milestone.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "one-time"
+      - "license"
+      - "allocation"
+  - id: "gen-navan-3"
+    name: "Navan - High-Growth Multi-Year Ramp"
+    description: "High-Growth Multi-Year Ramp"
+    input:
+      customer_name: "Navan"
+      contract_start_date: "02/01/2026"
+      terms_months: 24
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "A fast-growing technology company commits to a 24-month contract with Navan. In Year 1, they subscribe for 500 Expense users at $15 per user per month. In Year 2, the commitment increases to 1,000 users at the same price point. They also include a Premium Success Bundle at a flat fee of $10,000 per year for dedicated support. Billing occurs annually at the start of each contract year. Revenue for all components is recognized ratably over the respective 12-month periods within the 24-month term."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Expense fees and Success Bundle are recognized ratably as the service is provided.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "ramp"
+      - "bundle"
+      - "multi-year"
+  - id: "gen-navan-4"
+    name: "Navan - Enterprise Connect & Expense Bundle"
+    description: "Enterprise Connect & Expense Bundle"
+    input:
+      customer_name: "Navan"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "An enterprise customer opts for a hybrid model, using Navan Corporate Cards for executives and Navan Connect for the broader employee base. The contract includes 200 Expense users (with Navan Cards) at $12/user/month and 800 Connect users at $12/user/month. They also pay a $10,000 implementation fee. To win the deal, a 15% discount was applied to all recurring charges. Billing is annual. Revenue for the software is ratable, while the implementation fee is recognized upon completion of the card linkage and ERP setup."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (SaaS recurring fees for both user types.); Services: POB=point_in_time release=at_go_live (Implementation fee recognized when the system is ready for transactions.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "allocation"
