@@ -53,7 +53,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     // Add regeneration message to conversation history
     await addMessage(id, 'user', '[Requested full regeneration]');
 
-    type LlmModel = 'gpt-5.2' | 'gemini-3-pro-preview' | 'gemini-3-flash-preview' | 'zuca-gpt-nano' | 'zuca-gpt-mini';
+    type LlmModel = 'gpt-5.2' | 'gpt-4.1' | 'gemini-3-pro-preview' | 'gemini-3-flash-preview' | 'zuca-gpt-nano' | 'zuca-gpt-mini';
 
     try {
       if (session.session_type === 'analyze') {
