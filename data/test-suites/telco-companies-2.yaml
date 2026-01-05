@@ -1,0 +1,434 @@
+name: "telco-companies-2"
+description: "Generated from UC outputs - 2026-01-05"
+version: "1.0"
+tests:
+  - id: "gen-telnyx"
+    name: "Telnyx - Enterprise Global Voice & Messaging"
+    description: "Enterprise Global Voice & Messaging"
+    input:
+      customer_name: "Telnyx"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "An enterprise customer is migrating their global telephony to Telnyx using Elastic SIP Trunking and Programmable SMS. The contract includes 300 concurrent SIP channels with tiered pricing: the first 10 channels at $12.00 each, the next 240 at $10.00 each, and any above 250 at $8.00 each. Additionally, the customer is billed for outbound voice usage at $0.005 per minute and SMS at $0.0025 per message part. The subscription for channels is billed monthly in advance, while usage is billed monthly in arrears. Revenue for the SIP channels is recognized ratably over the monthly service period, and usage revenue is recognized as consumed."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (SIP channels represent a stand-ready obligation to provide network capacity.); Usage: POB=consumption release=as_used (Voice minutes and SMS segments are recognized as the communication services are delivered.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+  - id: "gen-telnyx-1"
+    name: "Telnyx - IoT Fleet Deployment with Hardware"
+    description: "IoT Fleet Deployment with Hardware"
+    input:
+      customer_name: "Telnyx"
+      contract_start_date: "02/01/2026"
+      terms_months: 24
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      use_case_description: "A logistics company is deploying 5,000 IoT trackers using Telnyx physical SIM cards. The deal consists of a one-time hardware charge of $1.00 per SIM, a monthly recurring 'Active SIM' fee of $2.00 per SIM, and data usage billed at $0.01 per MB. To win the deal, Telnyx offered a 20% discount on the hardware SIMs, contingent on a 24-month service commitment. Because the hardware is sold at a discount alongside a service contract, revenue allocation is required to ensure the SIM revenue is recognized at the point of delivery while the service revenue is recognized over time. Billing for the SIMs occurs upon shipment, while service fees are billed monthly."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Hardware: POB=point_in_time release=at_delivery (Physical SIM cards are distinct goods recognized when control transfers to the customer.); Subscription: POB=over_time release=ratable_over_term (Monthly active SIM fees are recognized ratably as the connectivity service is provided.); Usage: POB=consumption release=as_used (Data usage is recognized as MBs are consumed by the devices.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "allocation"
+      - "multi-year"
+  - id: "gen-telnyx-2"
+    name: "Telnyx - Cloud Storage & AI Infrastructure Bundle"
+    description: "Cloud Storage & AI Infrastructure Bundle"
+    input:
+      customer_name: "Telnyx"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A tech startup is leveraging Telnyx for both S3-compatible Cloud Storage and AI Inference APIs. The contract specifies a $1,000 monthly minimum commitment (MMC). Storage is billed at $0.006 per GiB per month based on average daily balance, and AI Inference is billed at $0.01 per 1,000 tokens. If the combined usage of storage and AI tokens falls below $1,000 in a month, the customer is billed the difference as a 'Commitment Shortfall' charge. Revenue for the actual usage is recognized as consumed, while any shortfall is recognized at the end of the monthly period. This is a 12-month agreement billed monthly in arrears."
+      rev_rec_notes: "Usage: POB=consumption release=as_used (Storage and AI tokens are recognized as the customer utilizes the infrastructure.); Other: POB=event_based release=as_billed (Commitment shortfall is an 'unused service' or breakage-style charge recognized when the monthly period ends.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "bundle"
+  - id: "gen-infobip"
+    name: "Infobip - SMB Omnichannel Support Starter"
+    description: "SMB Omnichannel Support Starter"
+    input:
+      customer_name: "Infobip"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A small business customer signs up for the Infobip Conversations Start plan to manage customer support. The contract includes 5 user seats at $29 per seat per month, billed monthly on a 12-month term. Additionally, the customer is enabled for SMS Messaging at a pay-as-you-go rate of $0.0083 per message segment. Revenue for the Conversations subscription is recognized ratably over the 12-month term as a stand-ready obligation. SMS usage revenue is recognized as consumption occurs based on monthly billing of actual message segments delivered."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Conversations platform access is a stand-ready POB recognized monthly.); Usage: POB=consumption release=as_used (SMS messages are distinct services recognized upon delivery.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+  - id: "gen-infobip-1"
+    name: "Infobip - Mid-Market Marketing Automation with Onboarding"
+    description: "Mid-Market Marketing Automation with Onboarding"
+    input:
+      customer_name: "Infobip"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      use_case_description: "A mid-sized retail company adopts the Moments Grow plan for marketing automation. The deal includes a $499 monthly platform fee and a one-time Implementation & Onboarding fee of $1,500. The customer also pays for usage based on Monthly Engaged Persons (MEP) at $0.01 per MEP, billed in arrears. This scenario includes a 10% discount on the first year of the platform fee, requiring revenue allocation between the discounted subscription and the professional services. The subscription is recognized ratably, while the onboarding fee is recognized at go-live."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Moments platform fee is a ratable SaaS POB.); Onboarding: POB=point_in_time release=at_go_live (Implementation is a separate POB recognized upon completion/go-live.); Usage: POB=consumption release=as_used (MEP usage is recognized as engagement events occur.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "license"
+      - "allocation"
+  - id: "gen-infobip-2"
+    name: "Infobip - Enterprise Global Messaging Commitment"
+    description: "Enterprise Global Messaging Commitment"
+    input:
+      customer_name: "Infobip"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Quarterly"
+      is_allocations: true
+      use_case_description: "A global enterprise signs a custom contract for high-volume SMS and Contact Center services. The contract includes 100 Conversations Scale seats at $49 per seat per month and a committed SMS volume of 1,000,000 messages per month at a discounted rate of $0.007 per message. A $10,000 Enterprise Implementation fee is charged upfront. Billing is performed quarterly in advance for the seats and the SMS commitment, with any overage billed monthly in arrears. Revenue for seats is ratable, implementation is point-in-time, and SMS commitment is recognized as used or at period end."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Conversations Scale seats recognized ratably over the quarterly billing period.); Usage: POB=consumption release=as_used (SMS commitment revenue recognized as messages are sent; unused commitment recognized at period end.); Services: POB=point_in_time release=at_go_live (Enterprise setup fee recognized when the solution design and training are delivered.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "discount"
+      - "one-time"
+      - "allocation"
+  - id: "gen-telesign"
+    name: "Telesign - Enterprise Identity & Fraud Prevention Bundle"
+    description: "Enterprise Identity & Fraud Prevention Bundle"
+    input:
+      customer_name: "Telesign"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A large financial institution is implementing Telesign for secure user onboarding and login verification. The contract includes a recurring Advanced Support Plan at $1,500 per month and a subscription for 5 Dedicated Phone Numbers (Sender IDs) at $2.00 each per month. Usage-based charges include PhoneID lookups at a flat rate of $0.01 per transaction and Intelligence risk assessments at $0.12 per transaction. The customer is billed monthly in arrears for usage, while support and numbers are billed monthly in advance. Revenue for the support and numbers is recognized ratably over the monthly service period, while identity lookups are recognized as consumption occurs."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Covers Advanced Support and Phone Number rentals.); Usage: POB=consumption release=as_used (Identity lookups (PhoneID) and Fraud scores (Intelligence) are recognized upon API execution.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "bundle"
+      - "recurring"
+  - id: "gen-telesign-1"
+    name: "Telesign - Global SMS Verify with Volume Tiers"
+    description: "Global SMS Verify with Volume Tiers"
+    input:
+      customer_name: "Telesign"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A global e-commerce platform uses Telesign SMS Verify for two-factor authentication across multiple regions. This enterprise deal features a Premier Support Plan at $5,000 per month. The core SMS Verify usage is configured with volume-based tiers: $0.0072 per message for the first 1M messages, dropping to $0.0065 for the next 4M messages, and $0.0055 for anything above 5M messages per month. Billing occurs monthly, with the support fee prepaid and the SMS usage post-paid. Revenue for the SMS messages is recognized as they are delivered (consumption), while the support fee is recognized ratably."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Premier Support provides 24/7 access and is recognized monthly.); Usage: POB=consumption release=as_used (SMS delivery revenue is recognized at the time the message is sent.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "license"
+  - id: "gen-telesign-2"
+    name: "Telesign - Strategic Enterprise Expansion with Implementation"
+    description: "Strategic Enterprise Expansion with Implementation"
+    input:
+      customer_name: "Telesign"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      use_case_description: "A new enterprise customer is onboarding with a complex setup involving Short Code registration and custom API integration. The contract includes a one-time Implementation & Setup Fee of $10,000. The recurring components include an Advanced Support Plan discounted to $1,200 per month (from $1,500) for the first year. Usage includes SMS Verify and PhoneID at standard rates. Because the implementation fee and the discounted support are part of a single negotiated package, revenue allocations are applied. The implementation fee is recognized at go-live (point-in-time), the support is recognized ratably, and the API usage is recognized as consumed."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Services: POB=point_in_time release=at_go_live (Implementation fee recognized once the customer is live on the platform.); Subscription: POB=over_time release=ratable_over_term (Discounted support plan recognized over the 12-month term.); Usage: POB=consumption release=as_used (Standard API usage recognized upon transaction.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "allocation"
+  - id: "gen-8x8"
+    name: "8x8 - Mid-Market UCaaS with Hardware and Implementation"
+    description: "Mid-Market UCaaS with Hardware and Implementation"
+    input:
+      customer_name: "8x8"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "A mid-sized logistics firm is transitioning to 8x8 X4 Series for 150 users at a rate of $44 per user per month. The deal includes a one-time Premier Implementation fee of $5,000 and the purchase of 75 Poly desk phones at $200 each. The contract is for 12 months, billed annually upfront for the subscription and one-time for hardware and services. Revenue for the X4 subscription is recognized ratably over the 12-month term. The implementation fee is recognized at go-live, and the hardware revenue is recognized upon delivery. Allocation is required between the subscription and hardware to ensure fair value recognition."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Standard SaaS subscription for X4 UCaaS licenses.); Services: POB=point_in_time release=at_go_live (Premier implementation services recognized upon system configuration and training completion.); Hardware: POB=point_in_time release=at_delivery (Physical desk phones recognized when control is transferred at shipping.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "one-time"
+      - "recurring"
+      - "allocation"
+  - id: "gen-8x8-1"
+    name: "8x8 - Enterprise Contact Center with CPaaS Usage Ramp"
+    description: "Enterprise Contact Center with CPaaS Usage Ramp"
+    input:
+      customer_name: "8x8"
+      contract_start_date: "02/01/2026"
+      terms_months: 24
+      transaction_currency: "USD"
+      billing_period: "Quarterly"
+      is_allocations: false
+      use_case_description: "A global retail brand is deploying 8x8 X8 Contact Center for 200 agents, priced at $140 per agent per month. The contract includes a 24-month term with a ramp-up: 100 agents in Year 1 and 200 agents in Year 2. Additionally, the customer will use 8x8 SMS APIs for customer notifications, billed monthly in arrears at $0.01 per SMS. Subscription fees are billed quarterly. Revenue for the X8 licenses is recognized ratably based on the active seat count each month. SMS usage revenue is recognized as consumption occurs. No hardware is included in this digital-first deployment."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (X8 Contact Center licenses recognized ratably; ramp schedule affects monthly revenue volume.); Usage: POB=consumption release=as_used (SMS API usage recognized in the month the messages are sent.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "ramp"
+      - "usage"
+      - "recurring"
+      - "license"
+      - "multi-year"
+  - id: "gen-8x8-2"
+    name: "8x8 - Microsoft Teams Integration Add-on for SMB"
+    description: "Microsoft Teams Integration Add-on for SMB"
+    input:
+      customer_name: "8x8"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A professional services firm with 50 employees wants to use 8x8 for Microsoft Teams. They are purchasing 50 X2 Series licenses at $24 per user per month, plus the 8x8 for Microsoft Teams add-on at $15 per user per month. This is a 12-month agreement billed monthly to align with their cash flow preferences. Both the core X2 license and the Teams add-on are recurring subscription charges recognized ratably over the 12-month term. No professional services were required as the customer opted for self-service onboarding."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Both X2 licenses and Teams add-ons are bundled into a single POB or treated as separate ratable POBs.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "recurring"
+      - "license"
+  - id: "gen-ringcentral"
+    name: "RingCentral - Mid-Market RingEX Advanced Deployment"
+    description: "Mid-Market RingEX Advanced Deployment"
+    input:
+      customer_name: "RingCentral"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "A mid-market customer signs a 12-month contract for 100 users on the RingEX Advanced plan. The deal includes a recurring subscription fee of $25 per user per month, billed annually in advance. To ensure a smooth transition, a one-time Professional Implementation Services fee of $2,500 is charged at the start. The subscription revenue is recognized ratably over the 12-month term, while the implementation fee is recognized at the point of go-live. This scenario tests the handling of bundled services with different revenue recognition patterns."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Standard SaaS access for RingEX Advanced is provided over the contract duration.); Services: POB=point_in_time release=at_go_live (Implementation is a distinct service recognized upon completion of account setup.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "one-time"
+      - "recurring"
+      - "allocation"
+  - id: "gen-ringcentral-1"
+    name: "RingCentral - Enterprise Contact Center with AI Add-on"
+    description: "Enterprise Contact Center with AI Add-on"
+    input:
+      customer_name: "RingCentral"
+      contract_start_date: "02/01/2026"
+      terms_months: 24
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "An enterprise customer adopts RingCX for 50 agents at $65 per agent per month, alongside the RingSense for Sales AI add-on for 20 users at $60 per user per month. The contract is for 24 months with annual billing. Additionally, the customer anticipates high-volume SMS usage, which is billed in arrears at $0.0085 per message once the base allotment is exceeded. Revenue for RingCX and RingSense is recognized ratably, whereas SMS usage is recognized as consumption occurs. This use case exercises complex multi-product subscriptions and usage-based overages."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Recurring fees for RingCX and RingSense are ratable over the 24-month term.); Usage: POB=consumption release=as_used (SMS overages are recognized in the month the activity occurs.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+      - "multi-year"
+  - id: "gen-ringcentral-2"
+    name: "RingCentral - SMB Starter Bundle with Monthly Flex"
+    description: "SMB Starter Bundle with Monthly Flex"
+    input:
+      customer_name: "RingCentral"
+      contract_start_date: "02/01/2026"
+      terms_months: 1
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A small business signs up for the RingEX Core plan for 10 users on a month-to-month basis. Because it is not an annual commitment, the price is $30 per user per month (compared to the $20 annual rate). The customer also pays a one-time setup fee of $500. All billing is monthly. Revenue for the monthly subscription is recognized over the course of each month, and the setup fee is recognized immediately upon activation. This scenario demonstrates Zuora's ability to handle month-to-month flexibility and higher non-commitment pricing."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Monthly recurring revenue recognized over the 1-month service period.); Onboarding: POB=point_in_time release=at_go_live (Small business setup fee recognized at the start of the subscription.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "one-time"
+      - "recurring"
+  - id: "gen-dialpad"
+    name: "Dialpad - Standard SMB Expansion with Usage"
+    description: "Standard SMB Expansion with Usage"
+    input:
+      customer_name: "Dialpad"
+      contract_start_date: "02/01/2026"
+      terms_months: 1
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A small business customer signs up for the Dialpad Connect Pro plan for 20 users at $27 per user per month on a monthly billing cycle. The deal includes a $250 one-time setup fee for initial configuration and admin training. Additionally, the customer expects to use international calling and toll-free minutes, which are handled via Usage-Based Calling Credits at a rate of $0.02 per minute. The subscription is ratable over the monthly term, while the setup fee is recognized at go-live. Usage is recognized as consumed each month."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Dialpad Connect recurring seat fees recognized over the monthly term.); Services: POB=point_in_time release=at_go_live (Setup fee recognized once the admin portal is configured and training is complete.); Usage: POB=consumption release=as_used (International and toll-free minutes recognized as the calling activity occurs.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "one-time"
+      - "recurring"
+      - "credits"
+  - id: "gen-dialpad-1"
+    name: "Dialpad - Enterprise AI Contact Center Bundle"
+    description: "Enterprise AI Contact Center Bundle"
+    input:
+      customer_name: "Dialpad"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "An enterprise customer purchases the AI Contact Center Premium plan for 50 agents at $150 per agent per month, billed annually. To support the office staff, they also include 100 Dialpad Connect Enterprise seats at a discounted rate of $30 per user per month. The deal includes a professional services package for $5,000 to handle complex IVR mapping and CRM integration. Because the bundle includes a significant discount on the Connect seats, revenue allocation is required between the subscription services and the professional services based on list prices. Subscriptions are ratable over the 12-month term, and services are recognized upon project completion."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Both AI Support and Connect seats are ratable over the 12-month contract period.); Services: POB=point_in_time release=at_go_live (Professional services for IVR and CRM setup recognized upon completion of the SOW.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "recurring"
+      - "allocation"
+  - id: "gen-dialpad-2"
+    name: "Dialpad - AI Sales Outreach with Hardware"
+    description: "AI Sales Outreach with Hardware"
+    input:
+      customer_name: "Dialpad"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "A sales organization deploys Dialpad AI Sales Advanced for 30 users at $95 per user per month, billed annually. To equip their new office, they purchase 30 physical VoIP desk phones at $120 each and 30 headsets at $80 each. The hardware is a one-time charge of $6,000 total. The software subscription revenue is recognized ratably over the 12-month term. The hardware revenue is recognized at a point in time when the devices are delivered to the customer's site. This scenario tests the ability to manage both recurring SaaS and one-time physical goods on a single order."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (AI Sales Advanced subscription recognized over the 12-month term.); Hardware: POB=point_in_time release=at_delivery (Desk phones and headsets recognized upon shipment/delivery to the customer.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "one-time"
+      - "recurring"
+      - "license"

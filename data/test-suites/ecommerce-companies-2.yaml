@@ -1,0 +1,575 @@
+name: "ecommerce-companies-2"
+description: "Generated from UC outputs - 2026-01-05"
+version: "1.0"
+tests:
+  - id: "gen-woocommerce"
+    name: "WooCommerce - Scaling Merchant Bundle"
+    description: "Scaling Merchant Bundle"
+    input:
+      customer_name: "WooCommerce"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "A growing merchant upgrades to the Woo Express Performance plan to support higher traffic volumes. The plan is priced at $45 per month, billed annually at $540. Additionally, the merchant adds two marketplace extensions: WooCommerce Subscriptions ($279/year) and WooCommerce Bookings ($249/year) to enable new business capabilities. All charges are recurring and billed upfront for a 12-month term. Revenue for the hosting and software extensions is recognized ratably over the 12-month contract period. This scenario tests the ability to manage a bundle of multiple recurring SaaS products with synchronized annual billing cycles."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Woo Express and Marketplace Extensions provide continuous access to software and support.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "recurring"
+      - "license"
+  - id: "gen-woocommerce-1"
+    name: "WooCommerce - Omnichannel Retailer Setup"
+    description: "Omnichannel Retailer Setup"
+    input:
+      customer_name: "WooCommerce"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A boutique retailer launches an online store using Woo Express Essential at $25 per month, billed monthly. To support their physical pop-up locations, they purchase 3 M2 Card Readers at a one-time cost of $59 each. They also enable WooPayments for integrated transaction processing, which carries a usage-based fee of 2.9% + $0.30 per transaction. This scenario illustrates a hybrid billing model involving recurring SaaS, one-time hardware sales, and pay-as-you-go usage. Revenue for the hardware is recognized at the point of delivery, while the subscription is ratable and usage is recognized as billed."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Monthly hosting fee for Woo Express.); Hardware: POB=point_in_time release=at_delivery (Card reader revenue recognized upon shipment/delivery.); Usage: POB=consumption release=as_used (WooPayments fees recognized as transactions occur.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "one-time"
+      - "recurring"
+      - "license"
+  - id: "gen-woocommerce-2"
+    name: "WooCommerce - Enterprise Migration & Platform"
+    description: "Enterprise Migration & Platform"
+    input:
+      customer_name: "WooCommerce"
+      contract_start_date: "02/01/2026"
+      terms_months: 24
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "A large-scale retailer signs a 24-month Woo Enterprise agreement. The deal includes a $5,000 monthly platform fee for high-performance infrastructure and a one-time $10,000 implementation and migration fee. The customer receives a custom WooPayments rate of 2.2% + $0.20 due to their high volume. To secure the multi-year commitment, WooCommerce provides a 15% discount on the total contract value. This requires revenue allocation between the implementation service (recognized at go-live) and the platform subscription (recognized ratably over 24 months). This use case demonstrates complex contract terms, professional services, and multi-element revenue allocation."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Enterprise platform fee recognized over the 24-month term.); Services: POB=point_in_time release=at_go_live (Migration and setup fees recognized upon successful store launch.); Usage: POB=consumption release=as_used (Custom-rate transaction fees recognized as they occur.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "license"
+      - "allocation"
+      - "multi-year"
+  - id: "gen-magento"
+    name: "Magento - Mid-Market Commerce Pro Bundle"
+    description: "Mid-Market Commerce Pro Bundle"
+    input:
+      customer_name: "Magento"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "This scenario involves a mid-market retailer launching on Adobe Commerce Cloud Pro. The contract includes an annual subscription for the Cloud PaaS platform at $40,000 and a one-time Implementation & Onboarding fee of $30,000. A 10% bundle discount is applied to the total contract value, requiring revenue allocation between the ratable subscription and the point-in-time implementation service. Revenue for the Cloud PaaS is recognized ratably over the 12-month term, while the implementation fee is recognized upon successful site go-live. This represents a typical entry-level enterprise deployment for merchants with moderate GMV."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Adobe Commerce Cloud PaaS provides continuous access to the platform and infrastructure.); Onboarding: POB=point_in_time release=at_go_live (Implementation services are tied to the completion of site setup and migration.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "license"
+      - "allocation"
+  - id: "gen-magento-1"
+    name: "Magento - Enterprise Managed Services Expansion"
+    description: "Enterprise Managed Services Expansion"
+    input:
+      customer_name: "Magento"
+      contract_start_date: "02/01/2026"
+      terms_months: 36
+      transaction_currency: "USD"
+      billing_period: "Quarterly"
+      is_allocations: false
+      use_case_description: "This enterprise use case features a high-volume global brand utilizing Adobe Commerce Managed Services. The deal includes the Cloud PaaS platform ($120,000/year), Premium Managed Services ($125,000/year), and the Adobe Commerce Optimizer ($15,000/year) for a total annual recurring revenue of $260,000. The contract is a 3-year (36-month) commitment billed quarterly to align with the customer's budget cycles. All three components are recurring subscriptions recognized ratably over the term of the contract as they represent 'stand-ready' obligations for hosting, support, and merchandising tools. This scenario demonstrates a high-tier, mission-critical infrastructure commitment."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Cloud PaaS and Optimizer modules are standard SaaS subscriptions.); Services: POB=over_time release=ratable_over_term (Managed Services represent a stand-ready support obligation throughout the term.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "recurring"
+      - "license"
+      - "multi-year"
+  - id: "gen-magento-2"
+    name: "Magento - Headless On-Premise Migration"
+    description: "Headless On-Premise Migration"
+    input:
+      customer_name: "Magento"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "This scenario covers a merchant opting for a self-hosted 'On-Premise' license while adopting a modern headless architecture via Adobe Commerce Optimizer. The Adobe Commerce License is priced at $22,000 per year, and the Optimizer module for AI-powered merchandising is $10,000 per year. Billing is set to monthly to accommodate the merchant's preference for operational expense smoothing. Both charges are recurring and will be recognized ratably over the 12-month contract period. This use case highlights the flexibility of Adobe's licensing for customers who manage their own infrastructure but want Adobe's advanced commerce logic and headless capabilities."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Both the core license and the Optimizer module are treated as ratable subscriptions.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "recurring"
+      - "license"
+  - id: "gen-prestashop"
+    name: "PrestaShop - SMB Hosted Bundle with Marketplace Theme"
+    description: "SMB Hosted Bundle with Marketplace Theme"
+    input:
+      customer_name: "PrestaShop"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "EUR"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "A new merchant signs up for the PrestaShop Hosted Edition to launch their online store. The contract includes an annual subscription for the platform at €24 per month, billed upfront for the year (€288 total). Additionally, the merchant purchases a professional Marketplace Theme for a one-time fee of €150 and an 'Easy' 3-hour Technical Support block for €300. The platform subscription is recognized ratably over the 12-month term. The Marketplace Theme is recognized as a point-in-time performance obligation upon delivery. The support block is treated as a consumption-based obligation, though for this demo, we will model it as ratable over the 12-month validity period to ensure consistent revenue coverage."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Hosted platform access provides value over the full contract term.); Other: POB=point_in_time release=at_delivery (Marketplace themes are digital downloads delivered immediately.); Services: POB=over_time release=ratable_over_term (Support blocks are valid for one year; ratable release is a common conservative approach.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "bundle"
+      - "one-time"
+      - "recurring"
+      - "license"
+      - "allocation"
+  - id: "gen-prestashop-1"
+    name: "PrestaShop - Enterprise Multi-Year with Transaction Usage"
+    description: "Enterprise Multi-Year with Transaction Usage"
+    input:
+      customer_name: "PrestaShop"
+      contract_start_date: "02/01/2026"
+      terms_months: 24
+      transaction_currency: "EUR"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A high-volume retailer enters a 24-month PrestaShop Enterprise agreement. The platform fee is €2,115 per month, billed monthly. The deal includes PrestaShop Checkout, which carries a usage fee of 2.9% plus €0.35 per transaction; for demo purposes, we estimate a monthly usage volume of €500. A 'Premium' 12-hour support block is also included for a one-time fee of €1,200. Revenue for the Enterprise subscription is recognized ratably over 24 months. Checkout fees are recognized as event-based revenue in the month the transactions occur. The support block is recognized over the first 12 months of the contract, reflecting its typical validity period."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Enterprise PaaS subscription recognized monthly over 24 months.); Usage: POB=event_based release=as_billed (Checkout fees are earned and recognized as transactions are processed.); Services: POB=over_time release=ratable_over_term (Premium support hours recognized over the 12-month validity window.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "one-time"
+      - "recurring"
+      - "license"
+      - "multi-year"
+  - id: "gen-prestashop-2"
+    name: "PrestaShop - Migration Ramp and Diagnostic Services"
+    description: "Migration Ramp and Diagnostic Services"
+    input:
+      customer_name: "PrestaShop"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "EUR"
+      billing_period: "Monthly"
+      is_allocations: true
+      use_case_description: "A merchant migrating from the open-source Classic version to Enterprise requires a ramp-up period. The 12-month contract features a 'Migration Phase' for the first 3 months at a discounted rate of €1,000 per month, stepping up to the standard €2,115 per month for the remaining 9 months. To initiate the project, a mandatory €300 Diagnostic Ticket is billed as a one-time fee, followed by an 'Essential' 6-hour support block for €600. Revenue for the Enterprise subscription is aggregated and recognized ratably over the full 12-month term (straight-line). The Diagnostic Ticket is recognized point-in-time upon completion of the assessment, and the support block is recognized ratably over the year."
+      allocation_method: "Use Sell Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Total contract value for the subscription is smoothed over the 12-month term.); Other: POB=point_in_time release=at_go_live (Diagnostic Ticket recognized once the initial store assessment is delivered.); Services: POB=over_time release=ratable_over_term (Support hours released ratably to match the availability of the service.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "ramp"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "allocation"
+  - id: "gen-ecwid"
+    name: "Ecwid - Annual Business Plan with Integration Services"
+    description: "Annual Business Plan with Integration Services"
+    input:
+      customer_name: "Ecwid"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "A mid-sized merchant signs a 12-month contract for the Ecwid Business Plan to support up to 2,500 products. The core platform subscription is priced at $39 per month, billed annually as a single $468 payment. Because this is an annual plan, it includes 2 hours of Custom Development Services at no extra charge. The merchant also purchases an additional 3 hours of Custom Development for API integration at a rate of $200 per hour ($600 total). The platform subscription revenue is recognized ratably over the 12-month term. The custom development services (both the included and purchased hours) are treated as a single performance obligation recognized at a point-in-time upon completion of the integration."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Standard SaaS platform access recognized over the annual contract duration.); Services: POB=point_in_time release=at_go_live (Custom development hours recognized upon delivery/acceptance of the integration work.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "recurring"
+      - "license"
+      - "allocation"
+  - id: "gen-ecwid-1"
+    name: "Ecwid - Unlimited Omnichannel Bundle with ShopApp"
+    description: "Unlimited Omnichannel Bundle with ShopApp"
+    input:
+      customer_name: "Ecwid"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "A large retailer selects the Ecwid Unlimited Plan to facilitate unlimited product listings and omnichannel selling. The annual subscription is priced at $1,068 ($89/month equivalent) and includes the Branded Mobile Shopping App (ShopApp). While the ShopApp is included in the bundle, it is valued at $395/year for internal allocation. Additionally, the merchant adds a premium Marketing Automation app from the Ecwid App Market, billed as a recurring monthly add-on of $30. The core platform and the ShopApp maintenance are recognized ratably over the 12-month term. The App Market recurring fee is recognized monthly as billed."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Core Unlimited platform access recognized ratably.); Other: POB=over_time release=ratable_over_term (ShopApp is a distinct SaaS component recognized over the term of the mobile app availability.); Usage: POB=consumption release=as_billed (App Market recurring fees recognized in the month they are billed/consumed.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "recurring"
+      - "license"
+      - "allocation"
+  - id: "gen-ecwid-2"
+    name: "Ecwid - Venture SMB Self-Serve Monthly"
+    description: "Venture SMB Self-Serve Monthly"
+    input:
+      customer_name: "Ecwid"
+      contract_start_date: "02/01/2026"
+      terms_months: 1
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A new small business signs up for the Ecwid Venture Plan on a month-to-month basis to start selling on social media. The monthly recurring charge is $25. During the second month, the merchant realizes they need help with their initial store configuration and purchases 4 hours of Store Setup Assistance at $200 per hour. This is a one-time service charge of $800. The $25 subscription fee is recognized ratably over each monthly billing cycle. The $800 setup fee is recognized as a point-in-time event once the Ecwid support team completes the store configuration."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Monthly subscription recognized over the 1-month service period.); Services: POB=point_in_time release=at_go_live (One-time setup assistance recognized upon completion of the task.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "one-time"
+      - "recurring"
+  - id: "gen-sellfy"
+    name: "Sellfy - Standard Growth (Monthly)"
+    description: "Standard Growth (Monthly)"
+    input:
+      customer_name: "Sellfy"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "The customer is a growing creator signing up for the Sellfy Business Plan to access advanced marketing features. They have opted for monthly billing at $79 per month for a 12-month commitment. The plan includes 10,000 email credits per month, but the customer expects to purchase additional credits at a rate of $2 per 1,000 credits as needed. Revenue for the subscription is recognized ratably over the monthly period, while email credit usage is recognized as consumed. This scenario tests recurring billing with an attached usage-based add-on."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (SaaS access is provided continuously over the monthly billing cycle.); Usage: POB=consumption release=as_used (Additional email credits are recognized as they are consumed by the customer.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+      - "credits"
+  - id: "gen-sellfy-1"
+    name: "Sellfy - High Volume Premium (Annual)"
+    description: "High Volume Premium (Annual)"
+    input:
+      customer_name: "Sellfy"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "A high-volume merchant is moving to the Sellfy Premium Plan with an annual commitment billed upfront at $1,428. This plan supports up to $200,000 in annual sales volume (GMV). A Sales Volume Overage Fee of 2% is applied to any revenue exceeding this threshold. The subscription revenue is recognized ratably over the 12-month term. The overage fees are treated as consumption-based revenue and recognized when the sales threshold is exceeded and billed. This case demonstrates annual upfront billing with a contingent usage penalty."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Annual subscription fee recognized ratably over the 12-month term.); Usage: POB=consumption release=as_used (Overage fees are recognized upon the merchant exceeding the $200k GMV limit.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+  - id: "gen-sellfy-2"
+    name: "Sellfy - Multi-Year Bundle with Migration"
+    description: "Multi-Year Bundle with Migration"
+    input:
+      customer_name: "Sellfy"
+      contract_start_date: "02/01/2026"
+      terms_months: 24
+      transaction_currency: "USD"
+      billing_period: "Quarterly"
+      is_allocations: true
+      use_case_description: "A new user is committing to a 24-month term on the Sellfy Starter Plan to lock in the $19 per month rate, billed quarterly. To assist with their setup, they are purchasing a one-time Store Design Migration service for $300. A 10% promotional discount is applied to the entire order, totaling $680.40 after discount. Because the discount applies to both the subscription and the migration service, revenue allocation is required to distribute the transaction price based on list prices. The subscription is recognized ratably over 24 months, while the migration service is recognized point-in-time upon completion."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Starter plan subscription recognized ratably over the 24-month term.); Services: POB=point_in_time release=at_go_live (Migration service is a distinct POB recognized upon completion of the store setup.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "allocation"
+      - "multi-year"
+  - id: "gen-gumroad"
+    name: "Gumroad - Standard Digital Product Sales"
+    description: "Standard Digital Product Sales"
+    input:
+      customer_name: "Gumroad"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "An independent software developer sells a digital license for $100.00 using the Gumroad Platform Service. Gumroad acts as the Merchant of Record and charges a flat 10% transaction fee ($10.00) per sale. This is modeled as a usage-based charge where the 'units' are the gross sales volume or individual transactions. Billing occurs monthly in arrears based on the total successful transactions processed. Revenue is recognized at the point of sale (point-in-time) as the digital product is delivered immediately to the buyer."
+      rev_rec_notes: "Usage: POB=point_in_time release=as_billed (Transaction fees are earned and recognized at the moment the digital good is delivered to the end customer.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "license"
+  - id: "gen-gumroad-1"
+    name: "Gumroad - Marketplace Discovery Boost"
+    description: "Marketplace Discovery Boost"
+    input:
+      customer_name: "Gumroad"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A digital artist utilizes both direct storefront sales and the Gumroad Discover marketplace. Direct sales are billed at the standard 10% ($1.00 on a $10 sale), while sales generated through the Discover recommendation engine are billed at a 30% fee ($3.00 on a $10 sale). This scenario uses two distinct usage charges on the 'Discover Boost' rate plan to differentiate fee structures based on the lead source. The creator is billed monthly for the aggregate of both usage types. Revenue for both charges is recognized as 'point-in-time' upon successful transaction and delivery."
+      rev_rec_notes: "Usage: POB=point_in_time release=as_billed (Both standard and discovery fees are transaction-linked and recognized at the time of sale.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+  - id: "gen-gumroad-2"
+    name: "Gumroad - Recurring Membership Community"
+    description: "Recurring Membership Community"
+    input:
+      customer_name: "Gumroad"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A creator runs a private community with a $20.00 monthly membership fee. Gumroad provides the 'Gumroad Memberships' service, charging the creator 10% of the recurring revenue ($2.00 per subscriber per month). This is modeled as a recurring charge per active subscriber unit, billed monthly to the creator. With 1,000 active subscribers, Gumroad generates $2,000.00 in monthly recurring revenue. Because this fee covers the ongoing provision of membership hosting and subscriber management, the revenue is recognized ratably over the monthly service period."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Since the fee facilitates an ongoing service (membership access), revenue is recognized over the subscription month.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "recurring"
+  - id: "gen-lemonsqueezy"
+    name: "Lemonsqueezy - Standard Storefront Launch"
+    description: "Standard Storefront Launch"
+    input:
+      customer_name: "Lemonsqueezy"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A digital artist launches a new storefront for selling design assets. They utilize the Merchant of Record Checkout product which has a $0 monthly base fee. The pricing is strictly usage-based at 5% of the transaction value plus a $0.50 flat fee per sale. Billing is processed monthly in arrears based on the total transaction volume processed. Revenue for these transaction fees is recognized at the point in time the sale occurs, effectively as billed. This scenario demonstrates a pure pay-as-you-go model with no upfront commitments."
+      rev_rec_notes: "Usage: POB=point_in_time release=as_billed (Transaction fees are earned and recognized at the moment the merchant's customer completes a purchase.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+  - id: "gen-lemonsqueezy-1"
+    name: "Lemonsqueezy - Creator Growth Bundle"
+    description: "Creator Growth Bundle"
+    input:
+      customer_name: "Lemonsqueezy"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "An established creator with a growing audience signs up for the Creator Growth Bundle. This package combines the Merchant of Record Checkout (5% + $0.50 per sale) with a tiered SaaS subscription for Lemon Squeezy Email. With 2,000 subscribers, the merchant pays a recurring $10 per month fee for the email platform. The email subscription is billed monthly in advance and recognized ratably over the month. The checkout usage fees are billed in arrears and recognized point-in-time. This case highlights a hybrid model of recurring SaaS revenue and transactional usage revenue."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Email platform access is a standard SaaS subscription recognized over the monthly term.); Usage: POB=point_in_time release=as_billed (Checkout fees are recognized as the underlying merchant sales occur.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "bundle"
+      - "recurring"
+      - "license"
+  - id: "gen-lemonsqueezy-2"
+    name: "Lemonsqueezy - SaaS Scaling with Affiliates"
+    description: "SaaS Scaling with Affiliates"
+    input:
+      customer_name: "Lemonsqueezy"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A mature SaaS company adopts the Scaling Plan to manage global compliance and an external affiliate network. The solution includes MoR Checkout, the Affiliate Hub, and a high-volume Email tier for 10,000 subscribers at $70 per month. Transactions generated via affiliates incur a total fee of 8% (5% base + 3% affiliate surcharge) plus $0.50. Non-affiliate sales remain at the 5% + $0.50 rate. The $70 email subscription is billed monthly and recognized ratably. All usage-based transaction and affiliate fees are recognized point-in-time as sales are processed. This scenario tests complex usage logic with multiple fee layers."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (High-tier email subscription for 10k subscribers is recognized over the term.); Usage: POB=point_in_time release=as_billed (Standard checkout fees and the 3% affiliate surcharge are both recognized at the time of sale.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+      - "license"
+  - id: "gen-paddle"
+    name: "Paddle - Standard Pay-as-you-go Startup"
+    description: "Standard Pay-as-you-go Startup"
+    input:
+      customer_name: "Paddle"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A high-growth startup signs up for the Standard Pay-as-you-go plan. This scenario involves a usage-based charge model with a transaction fee of 5% plus a $0.50 flat fee per transaction. There is no recurring monthly platform fee, making the entire revenue stream consumption-based. Revenue is recognized at the point in time each transaction is processed. This represents the core Merchant of Record model where Paddle assumes tax and compliance liability as part of the transaction fee."
+      rev_rec_notes: "Usage: POB=point_in_time release=as_billed (Transaction fees are earned and recognized immediately upon successful payment processing.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+      - "license"
+  - id: "gen-paddle-1"
+    name: "Paddle - Enterprise Custom Plan with Retain"
+    description: "Enterprise Custom Plan with Retain"
+    input:
+      customer_name: "Paddle"
+      contract_start_date: "02/01/2026"
+      terms_months: 24
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      use_case_description: "An enterprise SaaS company signs a custom multi-year deal. The package includes a discounted transaction fee of 3.5% + $0.30, a recurring monthly fee for Paddle Retain at $500/month, and an annual Paddle Advisory & Success fee of $12,000. This scenario tests a mix of usage-based, monthly recurring, and annual recurring charges. Revenue for the subscription components (Retain and Advisory) is recognized ratably over their respective terms, while transaction fees remain point-in-time."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Retain and Advisory services provide continuous value and are recognized monthly.); Usage: POB=point_in_time release=as_billed (Custom transaction fees are recognized as transactions occur.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "bundle"
+      - "discount"
+      - "recurring"
+      - "license"
+      - "allocation"
+      - "multi-year"
+  - id: "gen-paddle-2"
+    name: "Paddle - Performance-Based Retention Recovery"
+    description: "Performance-Based Retention Recovery"
+    input:
+      customer_name: "Paddle"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A mid-market customer adds Paddle Retain on a performance-based model. Instead of a flat fee, Paddle charges 10% of all recovered revenue (churn prevented). This is modeled as a 'consumption' charge where the 'usage' is the dollar amount of recovered revenue identified by the Retain algorithms. Revenue is recognized as it is billed, which coincides with the successful recovery of the customer's end-user payments. This scenario highlights Paddle's specialized performance-based pricing logic."
+      rev_rec_notes: "Usage: POB=consumption release=as_used (Revenue is recognized as the recovery 'event' occurs and the value is realized by the customer.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"

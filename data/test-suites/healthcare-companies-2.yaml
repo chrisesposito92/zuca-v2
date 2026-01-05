@@ -1,0 +1,573 @@
+name: "healthcare-companies-2"
+description: "Generated from UC outputs - 2026-01-05"
+version: "1.0"
+tests:
+  - id: "gen-athenahealth"
+    name: "Athenahealth - Small Practice Onboarding"
+    description: "Small Practice Onboarding"
+    input:
+      customer_name: "Athenahealth"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A small medical practice with 5 providers is signing up for the 'athenaOne for Small Practices' bundle. This plan includes the athenaOne SaaS platform at a recurring rate of $140 per provider per month, totaling $700 monthly. Additionally, the customer is enrolled in athenaCollector for revenue cycle management, which is priced as a variable usage charge equal to 5% of their monthly collections. To lower the barrier to entry, the standard $10,000 implementation and data migration fee is waived (discounted to $0). The contract is set for a 12-month term with monthly billing. Revenue for the subscription will be recognized ratably over the term, while the RCM usage fees are recognized as billed based on actual collections."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (SaaS license for athenaOne platform.); Usage: POB=consumption release=as_billed (RCM fees based on a percentage of successful medical bill collections.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "license"
+  - id: "gen-athenahealth-1"
+    name: "Athenahealth - Specialty Care Expansion"
+    description: "Specialty Care Expansion"
+    input:
+      customer_name: "Athenahealth"
+      contract_start_date: "02/01/2026"
+      terms_months: 24
+      transaction_currency: "USD"
+      billing_period: "Quarterly"
+      is_allocations: true
+      use_case_description: "A mid-sized specialty clinic with 15 providers is implementing 'athenaOne for Specialty Care'. The subscription fee is $160 per provider per month, billed quarterly in advance. The agreement includes a one-time implementation and data migration project priced at $25,000, recognized upon go-live. Revenue cycle management (athenaCollector) is charged at 6% of collections, billed monthly in arrears. The clinic also added Order Transmission Services, which consists of a $150 monthly platform fee and a usage fee of $0.50 per lab order. Because the implementation fee and subscription are bundled with a global discount, revenue allocation is required to ensure the implementation is not undervalued. The total contract term is 24 months."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Quarterly subscription for specialty-configured athenaOne.); Onboarding: POB=point_in_time release=at_go_live (Implementation fee recognized when the clinic begins clinical operations.); Usage: POB=consumption release=as_billed (Includes both RCM percentage and per-order lab transmission fees.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "license"
+      - "allocation"
+      - "multi-year"
+  - id: "gen-athenahealth-2"
+    name: "Athenahealth - Enterprise Health System"
+    description: "Enterprise Health System"
+    input:
+      customer_name: "Athenahealth"
+      contract_start_date: "02/01/2026"
+      terms_months: 36
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "An enterprise health system with 200 providers is consolidating multiple legacy EHRs onto athenaOne. They have negotiated an enterprise subscription rate of $120 per provider per month, billed annually. A large-scale implementation and data migration project is priced at $100,000, to be paid in two installments but recognized at the final go-live event. The RCM fee is set at a competitive 4% of collections due to the high volume of claims. The contract includes a 36-month term with a 5% price uplift on the subscription fee starting in month 25. Revenue for the implementation is a separate performance obligation from the ratable subscription. This scenario requires allocation between the discounted enterprise subscription and the professional services."
+      allocation_method: "Use Sell Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Enterprise SaaS fees with a scheduled price increase in year 3.); Onboarding: POB=point_in_time release=at_go_live (High-value implementation recognized at the completion of the system-wide rollout.); Usage: POB=consumption release=as_billed (Contingency-based RCM fees for high-volume enterprise collections.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "allocation"
+      - "multi-year"
+  - id: "gen-medidata"
+    name: "Medidata - Standard Enterprise Clinical Trial Launch"
+    description: "Standard Enterprise Clinical Trial Launch"
+    input:
+      customer_name: "Medidata"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "A biopharma customer is launching a new phase III clinical trial and requires the core Rave EDC platform bundled with professional Study Build Services. The Rave EDC subscription is priced at $150,000 per year, billed annually in advance. To support the trial setup, Medidata provides a one-time Study Build Service for a flat fee of $25,000, which includes eCRF design and validation. The contract is for a 12-month initial term. Revenue for the EDC subscription should be recognized ratably over the 12-month term, while the Study Build Services are recognized at a point-in-time once the study environment is validated and goes live."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Rave EDC platform access provided continuously over the contract term.); Services: POB=point_in_time release=at_go_live (Study Build Services are distinct professional services that conclude upon environment validation.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "one-time"
+      - "recurring"
+      - "license"
+      - "allocation"
+  - id: "gen-medidata-1"
+    name: "Medidata - Decentralized Trial with Patient-Based Usage"
+    description: "Decentralized Trial with Patient-Based Usage"
+    input:
+      customer_name: "Medidata"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "This scenario focuses on a decentralized trial utilizing the Patient Cloud (eCOA/ePRO) module. The customer pays a base platform fee of $5,000 per month plus a usage-based fee of $10 per active patient per month. This allows for scaling as patient recruitment ramps up throughout the study. Billing is performed monthly in arrears for the usage and monthly in advance for the base fee. Revenue for the base fee is recognized ratably each month, while the patient usage fees are recognized as consumption occurs based on the number of active participants recorded in the system."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Base platform fee for Patient Cloud access.); Usage: POB=consumption release=as_used (Patient-based fees recognized as activity is recorded.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "ramp"
+      - "usage"
+      - "license"
+  - id: "gen-medidata-2"
+    name: "Medidata - Automated Site Payments with Transactional Fees"
+    description: "Automated Site Payments with Transactional Fees"
+    input:
+      customer_name: "Medidata"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "An enterprise customer manages global investigator payments using Medidata Site Payments. The agreement includes an annual platform subscription of $40,000 for the Site Payments module and a transactional fee of $50 per disbursement processed. The annual fee is billed upfront, while disbursements are billed quarterly based on actual volume. Revenue for the subscription is ratable over the year. Revenue for the disbursement fees is recognized when the payment is processed (event-based), matching the financial activity of the clinical trial sites."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Annual site payment platform fee.); Usage: POB=event_based release=as_billed (Transactional disbursement fees recognized upon processing.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "recurring"
+      - "license"
+  - id: "gen-flatiron-health"
+    name: "Flatiron Health - OncoEMR Foundation for Small Practice"
+    description: "OncoEMR Foundation for Small Practice"
+    input:
+      customer_name: "Flatiron Health"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      use_case_description: "A small oncology clinic with 5 providers signs up for the OncoEMR Foundation package. The agreement includes OncoEMR subscription at $300 per provider per month and a one-time Implementation & Training fee of $5,000. Flatiron offers a 10% bundle discount on the total contract value, which requires revenue allocation between the subscription and the service. The implementation fee is recognized point-in-time upon go-live, while the OncoEMR subscription is recognized ratably over the 12-month term. Billing for the subscription is monthly, while the implementation fee is invoiced upfront."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Standard SaaS recurring revenue for OncoEMR recognized over the 12-month term.); Onboarding: POB=point_in_time release=at_go_live (One-time implementation fee recognized when the practice goes live on the platform.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "allocation"
+  - id: "gen-flatiron-health-1"
+    name: "Flatiron Health - OncoCloud Suite Enterprise Expansion"
+    description: "OncoCloud Suite Enterprise Expansion"
+    input:
+      customer_name: "Flatiron Health"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A mid-sized oncology network with 25 providers upgrades to the full OncoCloud Suite. This includes OncoEMR ($250/user/mo), OncoBilling ($1,200/month flat fee), and Flatiron Assist ($50/user/mo). All charges are recurring and billed monthly on a 12-month contract. There are no one-time fees in this expansion scenario as they are an existing customer. Revenue for all components is recognized ratably over the term as these are integrated cloud services provided continuously."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (All suite components (EMR, Billing, Assist) are SaaS subscriptions recognized ratably.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "one-time"
+      - "recurring"
+  - id: "gen-flatiron-health-2"
+    name: "Flatiron Health - Horizon RWE Data Licensing (Biopharma)"
+    description: "Horizon RWE Data Licensing (Biopharma)"
+    input:
+      customer_name: "Flatiron Health"
+      contract_start_date: "02/01/2026"
+      terms_months: 36
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "A global biopharmaceutical company enters a multi-year agreement for Flatiron Horizon RWE Data access. The contract term is 36 months with a total contract value of $1,500,000. Flatiron bills the customer $500,000 annually in advance. The license provides continuous access to de-identified patient datasets and ML-curated evidence. Revenue is recognized ratably over the 36-month term, as the performance obligation is to provide standing access to the data platform throughout the period."
+      rev_rec_notes: "Other: POB=over_time release=ratable_over_term (Data licensing for Horizon is treated as a right-to-access POB recognized over the 3-year term.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "license"
+      - "multi-year"
+  - id: "gen-oscar-health"
+    name: "Oscar Health - Cigna + Oscar Small Group Enrollment"
+    description: "Cigna + Oscar Small Group Enrollment"
+    input:
+      customer_name: "Oscar Health"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A small business with 25 employees enrolls in the Cigna + Oscar Small Group Plan (Oscar Classic Silver). The pricing is set at $611 per employee per month, resulting in a total monthly recurring revenue (MRR) of $15,275. The contract is for a 12-month term with monthly billing. This scenario represents a standard B2B2C insurance premium model where the employer pays for a fixed number of seats (employees). Revenue for the monthly premiums is recognized ratably over each monthly service period."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Insurance premiums represent a promise to provide coverage over the service period.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "recurring"
+  - id: "gen-oscar-health-1"
+    name: "Oscar Health - +Oscar Enterprise Platform & Implementation"
+    description: "+Oscar Enterprise Platform & Implementation"
+    input:
+      customer_name: "Oscar Health"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "A regional health plan licenses the +Oscar Campaign Builder suite to manage their member engagement. The deal includes a $50,000 annual platform fee (billed annually), a variable usage fee of $2.50 per member per month (PMPM) for an estimated 10,000 members, and a one-time $150,000 implementation fee. To secure the partnership, a 15% discount is applied to the total contract value. This use case requires revenue allocation between the point-in-time implementation service and the over-time platform subscription. Implementation is recognized upon go-live, while the platform fee is ratable over the 12-month term."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Annual platform fee for the Campaign Builder SaaS access.); Onboarding: POB=point_in_time release=at_go_live (Implementation services are distinct from the software access and recognized at completion.); Usage: POB=consumption release=as_billed (PMPM fees are based on actual member counts processed through the platform.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "license"
+      - "allocation"
+  - id: "gen-oscar-health-2"
+    name: "Oscar Health - Individual Plan with Mid-Term Expansion"
+    description: "Individual Plan with Mid-Term Expansion"
+    input:
+      customer_name: "Oscar Health"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "An individual signs up for the Silver Simple Plan at $520 per month. After four months of coverage, the subscriber adds a family member (spouse) to the plan. This adds a second 'Individual & Family Health Plan' charge at a slightly discounted rate of $480 per month, bringing the total monthly premium to $1,000. This scenario demonstrates Zuora's ability to handle mid-term amendments, pro-rated billing for the new member, and the management of B2C subscriptions that evolve over time. Revenue continues to be recognized ratably for both active members."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (B2C premiums recognized daily/monthly over the term of coverage.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "discount"
+      - "recurring"
+  - id: "gen-ro"
+    name: "Ro - Ro Body Weight Loss Program"
+    description: "Ro Body Weight Loss Program"
+    input:
+      customer_name: "Ro"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A new patient signs up for the Ro Body Program. This includes a recurring 'Ro Body Membership' at $145/month, with an introductory discount of $100 applied to the first month (net $45). Additionally, the patient is prescribed a GLP-1 medication (e.g., Zepbound) billed at a recurring rate of $550/month. The membership provides continuous access to coaching and providers, while the medication is a physical good shipped monthly. Revenue for the membership is recognized ratably over the month, while medication revenue is recognized at the point of shipment."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Ro Body Membership provides continuous access to services.); Other: POB=point_in_time release=at_delivery (GLP-1 Medication is a physical product recognized upon shipment.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "discount"
+      - "recurring"
+  - id: "gen-ro-1"
+    name: "Ro - Roman Quarterly Men's Health Plan"
+    description: "Roman Quarterly Men's Health Plan"
+    input:
+      customer_name: "Ro"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Quarterly"
+      is_allocations: false
+      use_case_description: "A customer selects a Roman Quarterly Treatment Plan for Sildenafil (Generic Viagra). The plan consists of 10 doses per month, priced at $6 per dose, totaling $60/month. By choosing the Quarterly plan, the customer receives a $20 discount on the total 3-month bill. The customer is billed $160 upfront every 3 months ($180 list - $20 discount). Revenue should be recognized point-in-time for each monthly shipment of the medication, even though billing occurs quarterly."
+      rev_rec_notes: "Other: POB=point_in_time release=at_delivery (Medication is recognized as physical goods are delivered.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "discount"
+  - id: "gen-ro-2"
+    name: "Ro - Ro Derm Bundle & Fertility Kit"
+    description: "Ro Derm Bundle & Fertility Kit"
+    input:
+      customer_name: "Ro"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      use_case_description: "A customer purchases a 'Ro Derm Skincare Routine' bundle and a one-time 'Modern Fertility Hormone Test'. The Ro Derm bundle includes a Custom Rx Skincare ($58) and Enriching Cream ($16), billed and shipped every 2 months ($74 total). The Fertility kit is a one-time charge of $179. A 25% 'First Order' discount is applied to the entire initial transaction. Because the discount applies to both the recurring skincare and the one-time kit, revenue allocation is required to ensure the discount is spread across the performance obligations based on list prices."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Other: POB=point_in_time release=at_delivery (Both the skincare bundle and the fertility kit are physical goods recognized at shipment.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "allocation"
+  - id: "gen-hims-hers"
+    name: "Hims & Hers - Mental Health 3-Month Commitment"
+    description: "Mental Health 3-Month Commitment"
+    input:
+      customer_name: "Hims & Hers"
+      contract_start_date: "02/01/2026"
+      terms_months: 3
+      transaction_currency: "USD"
+      billing_period: "Quarterly"
+      is_allocations: false
+      use_case_description: "The customer signs up for a Mental Health Psychiatry plan which requires a 3-month commitment to access the discounted rate. This is modeled as a single Recurring Flat Fee charge of $147.00 billed every three months (equivalent to $49/month). The subscription includes ongoing 24/7 messaging support and medication management. Revenue for the $147 fee is recognized ratably over the 3-month service period. This scenario demonstrates Zuora's ability to handle multi-month billing cycles and ratable revenue recognition for telehealth services."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Telehealth platform access and messaging support are delivered continuously over the 3-month term.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "discount"
+      - "recurring"
+  - id: "gen-hims-hers-1"
+    name: "Hims & Hers - Weight Loss GLP-1 Program with Consultation"
+    description: "Weight Loss GLP-1 Program with Consultation"
+    input:
+      customer_name: "Hims & Hers"
+      contract_start_date: "02/01/2026"
+      terms_months: 6
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "A patient enrolls in the Compounded GLP-1 Weight Loss Program which requires a 6-month upfront commitment. The transaction includes a one-time Medical Consultation fee of $50.00 and a recurring Subscription fee of $199.00 per month, billed as a lump sum of $1,194.00 for the 6-month term. Because the consultation fee is discounted when bundled with the subscription, revenue allocation is required between the two performance obligations. The consultation fee is recognized at a point-in-time upon completion, while the subscription revenue is recognized ratably over 6 months."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Recurring GLP-1 program access and medication fulfillment.); Onboarding: POB=point_in_time release=at_go_live (Initial medical consultation fee recognized upon completion of the review.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "allocation"
+  - id: "gen-hims-hers-2"
+    name: "Hims & Hers - Total Wellness: Hair Loss & Labs Bundle"
+    description: "Total Wellness: Hair Loss & Labs Bundle"
+    input:
+      customer_name: "Hims & Hers"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "This scenario covers a 'Total Wellness' bundle consisting of a monthly Hair Loss Treatment subscription and an annual Labs by Hims & Hers membership. The Hair Loss Treatment is $20.00 per month, billed monthly. The Labs membership is $199.00 per year, billed annually. This use case demonstrates Zuora's ability to manage multiple products with different billing frequencies (Monthly and Annually) within a single customer subscription. Revenue for both items is recognized ratably over their respective service periods."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Hair loss subscription recognized monthly.); Other: POB=over_time release=ratable_over_term (Annual Labs membership provides access to testing and insights throughout the year.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "recurring"
+  - id: "gen-zocdoc"
+    name: "Zocdoc - Standard Solo Practitioner Marketplace Entry"
+    description: "Standard Solo Practitioner Marketplace Entry"
+    input:
+      customer_name: "Zocdoc"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "This scenario represents a standard onboarding for a solo practitioner joining the Zocdoc Marketplace. The contract includes a Zocdoc Marketplace Listing recurring charge of $299 per year, billed annually in advance. Additionally, New Patient Booking Fees are configured as a usage-based charge at a rate of $35 per new patient booking, which are billed monthly in arrears. The practitioner also receives access to the Zocdoc Practice Solutions suite at no additional cost. Revenue for the annual listing is recognized ratably over the 12-month term. Revenue for booking fees is recognized as the usage occurs based on successful appointment events."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Annual license fee for marketplace visibility is recognized monthly over the contract year.); Usage: POB=event_based release=as_used (Booking fees are recognized at the time the appointment event occurs.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+  - id: "gen-zocdoc-1"
+    name: "Zocdoc - Enterprise Health System with AI Automation"
+    description: "Enterprise Health System with AI Automation"
+    input:
+      customer_name: "Zocdoc"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "This enterprise scenario covers a multi-specialty group with 50 providers. The group is billed a negotiated Zocdoc Marketplace Listing fee of $12,500 annually ($250 per provider), representing a volume discount. They are also deploying the Zo AI Phone Assistant which carries a usage charge of $2 per successful booking. Standard New Patient Booking Fees are applied at a flat enterprise rate of $70 per booking. Because the agreement includes a bundled discount across both the listing and the AI service, revenue allocations are applied to ensure compliance. The listing revenue is ratable over the term, while the AI and booking fees are recognized upon the booking event."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Enterprise license fee is allocated based on list price and recognized over the 12-month term.); Usage: POB=event_based release=as_used (Zo AI and booking fees are recognized as usage occurs, subject to allocation if bundled.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "bundle"
+      - "discount"
+      - "allocation"
+  - id: "gen-zocdoc-2"
+    name: "Zocdoc - Growth-Focused Clinic with Sponsored Results"
+    description: "Growth-Focused Clinic with Sponsored Results"
+    input:
+      customer_name: "Zocdoc"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "This use case focuses on a high-growth clinic utilizing Zocdoc's premium marketing tools. The clinic pays the standard $299 annual Zocdoc Marketplace Listing fee. To maximize patient acquisition, they utilize Sponsored Results with a bid-based usage fee of $60 per booking generated via ads. They also incur the standard New Patient Booking Fee of $90 for each new patient acquired. Billing for the listing is annual, while all usage-based marketing fees (both standard and sponsored) are billed monthly in arrears. Revenue for the listing is recognized over time, while both the sponsored results and booking fees are recognized at the point of delivery."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Standard marketplace listing recognized ratably.); Other: POB=event_based release=at_delivery (Sponsored results are recognized at the moment the ad-driven booking is confirmed.); Usage: POB=event_based release=as_used (Standard booking fees recognized upon appointment scheduling.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+  - id: "gen-mdclone"
+    name: "MDClone - Enterprise Health System Onboarding"
+    description: "Enterprise Health System Onboarding"
+    input:
+      customer_name: "MDClone"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "A large regional health system is purchasing the MDClone ADAMS Platform and the Synthetic Data Suite. The agreement includes the ADAMS Center Experience for implementation and data engineering advisory. The ADAMS Platform is priced at $250,000 annually, and the Synthetic Data Suite is $75,000 annually. A one-time implementation fee of $100,000 is charged. To secure the deal, a 10% discount is applied to the total contract value, requiring revenue allocation between the software and the services. Software revenue is recognized ratably over the 12-month term, while the implementation is recognized upon completion of the go-live milestone."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Standard SaaS subscription for ADAMS platform and Synthetic Data Suite.); Services: POB=point_in_time release=at_go_live (Implementation services recognized upon completion of setup.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "discount"
+      - "one-time"
+      - "license"
+      - "allocation"
+  - id: "gen-mdclone-1"
+    name: "MDClone - Life Sciences Multi-Year Expansion"
+    description: "Life Sciences Multi-Year Expansion"
+    input:
+      customer_name: "MDClone"
+      contract_start_date: "02/01/2026"
+      terms_months: 36
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "A pharmaceutical company is signing a 3-year contract for the Life Sciences Collaboration Plan. The first year includes the ADAMS Platform at $300,000 per year. In year 2, the customer will add the ADAMS Copilot add-on for an additional $30,000 per year to support AI-driven research. The contract is billed annually in advance. Revenue for the platform and the Copilot add-on will be recognized ratably over the respective 12-month service periods. This scenario tests Zuora's ability to handle multi-year ramp deals with mid-term product additions."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Recurring platform and AI add-on fees recognized over the term of service.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "ramp"
+      - "license"
+      - "multi-year"
+  - id: "gen-mdclone-2"
+    name: "MDClone - Academic Research Site License"
+    description: "Academic Research Site License"
+    input:
+      customer_name: "MDClone"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A university research department has purchased an Academic Research Plan on a monthly billing cycle to align with grant funding. The initial subscription includes the ADAMS Platform at $12,500 per month. Four months into the 12-month term, the department adds the Synthetic Data Suite for an additional $6,250 per month to enable privacy-safe data sharing with external partners. All charges are recurring and billed at the start of each month. Revenue is recognized as the service is provided, ratably each month."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Monthly recurring revenue recognized in the month of service.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "recurring"
+      - "license"
