@@ -28,6 +28,45 @@ Create exactly ONE row for each charge from the subscription spec:
 | "Platform License - Year 2" | Line 2: Platform License - Year 2 |
 | "Implementation Fee" | Line 3: Implementation Fee |
 
+### CO-007 Guardrail: Charge Name Consistency (MUST PASS)
+Before generating any RC_LINE rows, create a **canonical charge list** from the **Subscription spec** (and its segmentation, if any). Then enforce:
+
+1) **No invented charges**: Output lines may only be created for chargeName values that appear in the Subscription spec. If a charge is not explicitly present, **do not add it** (even if it is common, implied, or mentioned in narrative text).
+
+2) **Exact name match**: For each line, set the following fields to the **exact** Subscription spec `chargeName` string (character-for-character):
+   - `Line Item Num`
+   - `POB Name`
+   - `RPC Segment`
+
+3) **Segmentation rule**: Only append a segment qualifier (e.g., " - Segment 1", " - 2026", " - Jan") **if and only if** the Subscription spec explicitly defines multiple segments for that same charge. Otherwise, the name must be unmodified.
+
+4) **Mapping consistency check**: `POB Template` and `POB IDENTIFIER` must be pulled from the POB mapping entry whose `chargeName` exactly matches the canonical chargeName. If no exact mapping exists, **do not rename the charge** to fit the mapping; instead, keep the Subscription spec name and flag the mismatch in an `Exceptions/Notes` field (or a final "Validation Notes" section).
+
+5) **Pre-output validation** (silent or in notes): Verify that the set of output `POB Name` values == the set of Subscription spec `chargeName` values (accounting for explicit segments only).
+
+### CO-001 Guardrail: Ramp / Price Step-Up Segmentation (MUST PASS)
+If the Subscription spec indicates **ramp pricing / step-ups** (any change in unit price, quantity, discount, or service period across time for the same charge), you MUST model each ramp period as its own RC_LINE row **only when the Subscription spec explicitly provides those segments**.
+
+For each ramp segment row:
+1) **Segment-specific service dates (no overlap):**
+   - `Revenue Start Date` and `Revenue End Date` must cover **only that segment’s service period** (e.g., Year 1 only, Q1 only, Jan–Jun only).
+   - Segments for the same charge must be **contiguous and non-overlapping**.
+
+2) **Unit price must match the billing period rate (no period mixing):**
+   - Set `Unit List Price` / `Unit Sell Price` to the **price-per-billing-period** stated or implied by the billing frequency (e.g., monthly rate if billing is monthly; annual rate if billing is annual).
+   - Do **not** convert an annual total into a monthly unit price (or vice versa) unless the Subscription spec explicitly provides that converted rate.
+
+3) **Extended amount must represent ONLY that segment’s total:**
+   - If your load convention enforces `Ext = Unit × Ordered Qty`, then set `Ordered Qty` to the **number of billing periods in the segment** (e.g., 12 for one year of monthly billing; 3 for a quarter; 6 for Jan–Jun) so `Ext Sell Price` equals the segment total.
+   - Never let a segment row’s `Ext Sell Price` include amounts from other segments.
+
+4) **Optional alignment field:** If present/required, set `Term Months` (or equivalent) to the **segment length**, not the full contract length.
+
+**Pre-output validation checklist (run mentally or via code_interpreter):**
+- Sum of segment `Ext Sell Price` equals the charge’s total contract value.
+- Segment revenue dates partition the overall charge period with no gaps/overlap.
+- Each segment’s unit price is in the correct pricing period (monthly vs annual).
+
 ### Line Item Fields
 
 For each line, populate:
@@ -81,6 +120,37 @@ For each line, populate:
 - `Product Family`: Infer from charge/product name
 
 ---
+
+### Extended Price Calculation (CO-003 Guardrail)
+
+**Do not guess/mix “per-period” vs “full-term” pricing. Choose ONE consistent interpretation per charge and make all extended fields align.**
+
+1) **Determine the pricing basis (required):**
+- If the subscription spec/unit price is stated or implied as **per billing period** (e.g., Monthly/Quarterly/Annual pricing), treat `Unit List Price`/`Unit Sell Price` as **price per period**.
+- If the subscription spec explicitly indicates the price is **for the full service term** (e.g., “annual upfront total”, “term price”, “one-time total”), treat unit prices as **full-term unit prices**.
+
+2) **Compute number of periods (`Num Periods`) from Revenue Start/End + Billing Period:**
+- Monthly: count whole months in the service window
+- Quarterly: count whole quarters
+- Annual: count whole years
+(If dates don’t align perfectly, prorate by day-count only if the input explicitly says prorate; otherwise use whole periods.)
+
+3) **Set Extended prices using exactly one of these modes:**
+- **Mode A (Per-period unit pricing; default for recurring):**
+  - `Ext List Price = Unit List Price × Ordered Qty × Num Periods`
+  - `Ext Sell Price = Unit Sell Price × Ordered Qty × Num Periods`
+- **Mode B (Full-term unit pricing):**
+  - `Ext List Price = Unit List Price × Ordered Qty`
+  - `Ext Sell Price = Unit Sell Price × Ordered Qty`
+
+4) **Hard consistency rule:**
+Once `Ext Sell Price`/`Ext List Price` are set, **all dependent “extended” fields must mirror the same basis** (e.g., `Ext SSP Price`, `Ext Allocated Price`, `Unreleased Revenue`, SSP weighting if computed). **Never multiply by term months in some extended fields but not others.**
+
+5) **Validation step (must do before final output):**
+- Recompute `Ext Sell Price` from the chosen mode and confirm it matches.
+- If Mode A is used, confirm `Ext Sell Price ÷ Num Periods = Unit Sell Price × Qty`.
+- If Mode B is used, confirm `Ext Sell Price ÷ (Unit Sell Price × Qty) = 1`.
+- Keep `Terms Months` as the contractual duration; **do not use it as a multiplier unless it equals `Num Periods` for the selected Billing Period.**
 
 ## Allocation Calculations
 

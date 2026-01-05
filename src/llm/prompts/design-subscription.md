@@ -63,6 +63,27 @@ When you create **Usage** charges, you must follow these rules to avoid quantity
 4) Add a final self-check before responding:
    - For every Usage charge: `charge.quantity == sum(usage_records for that charge/UOM)` OR `quantity is omitted` (only when no usage records are present).
 
+### DS-006 Guardrail — Recognition Window MUST Align to Charge Service Window
+
+When creating **Zuora Revenue POB Mappings**, you MUST set `charge_pob_map[*].recognition_window` to match the **actual service delivery / consumption eligibility** represented by the mapped charge.
+
+**Rules (apply in order):**
+1) **Over-time (ratable) charges (most Recurring; term-bound Usage eligibility):**
+   - Set `recognition_window.start = charge.effectiveStartDate`
+   - Set `recognition_window.end   = charge.effectiveEndDate`
+   - If the subscription is segmented (promo months, partial months, mid-month start/cancel), each segment’s recognition window must match that segment’s effective dates (e.g., 01/15–02/14 cadence).
+
+2) **Point-in-time (PIT) charges (e.g., setup/implementation delivered on a date):**
+   - Set `recognition_window.start = recognition_window.end = delivery date`
+   - Ensure the charge effectiveStartDate/effectiveEndDate also reflect PIT delivery (same day) OR explicitly model as over-time if delivery is over a period.
+
+3) **Do NOT use recognition_window to “force” smoothing across a different period than the charge represents.**
+   - If the business requirement is to recognize over a broader/narrower window than the revenue-bearing charge’s service period, you must **change the subscription modeling** (e.g., split charges, add discounts/credits, correct effective dates) so the charge service window matches the intended recognition window.
+
+**Required validation before final output:**
+- For every `charge_pob_map` entry, assert: `recognition_window.start/end` equals the mapped charge’s `effectiveStartDate/effectiveEndDate` (ratable) or equals the PIT delivery date.
+- If any mismatch exists, fix the charge dates/segmentation or update the recognition_window so they match, and briefly note the correction in an internal reasoning step (not in the final JSON).
+
 ### DS-008 Guardrail — Sell Price Accuracy (No Manufactured Pricing)
 
 Before creating any rate plans/charges, build a **Commercial Terms Ledger** from the input/contract summary:

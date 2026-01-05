@@ -69,6 +69,33 @@ You will receive two dictionaries:
    - **billing_caps** = Billing-oriented (charge models, billing timing, proration, usage, commitment)
    - **revenue_caps** = Revenue-oriented (POB, release events, allocation, VC, ramp)
 
+### Billing Caps Detection (Completeness + Non‑Hallucination: AC-005)
+When populating `detected_capabilities.billing_caps`, you MUST do a two-step check:
+
+1) **Completeness scan (include all that apply)** — Scan the source text for each trigger below and add the corresponding billing cap label(s):
+- **MIN COMMIT**: any explicit *commitment / minimum spend / minimum annual/monthly commitment / committed amount* (e.g., “$X minimum”, “annual commitment”, “commit to Y”).
+- **VOLUME**: any *volume blocks, bundles, packs, tiers, per‑X blocks* (e.g., “50,000 contacts included”, “blocks of 10,000”, “tiered pricing”, “first N units then…”).
+- **DISCOUNT**: only if the text explicitly states a discount (e.g., “10% discount”, “discounted rate”, “promo”).
+- **ONE-TIME**: only if the text explicitly states a one-time charge (e.g., “setup fee”, “implementation fee”, “one-time”).
+
+2) **Explicitness gate (do not invent)** — If a trigger is not explicitly present in the provided contract text, DO NOT include that billing cap. If none are supported, output an empty array `[]`.
+
+**Output requirement:** `billing_caps` must reflect **all** supported caps found in the text (not just one), and must not include unsupported caps.
+
+### Revenue Caps Completeness (Zuora Revenue: AC-006)
+When populating `detected_capabilities.revenue_caps`, **always include the revenue recognition method(s) implied by the commercial model**, even if the text does not explicitly say “revenue recognition”. Use the following rules and output **canonical labels only**:
+
+**Canonical revenue_caps values:** `OVER_TIME`, `POINT_IN_TIME`, `BUNDLE`
+
+**Inclusion rules (apply all that match):**
+- If the deal includes a **subscription/SaaS term** (e.g., term_months stated or service_start/end defined), include `OVER_TIME` (ratable recognition over the service period).
+- If the deal includes **usage-based/transaction-based fees** (per API call, per transaction, overages, consumption), include `POINT_IN_TIME`.
+- If the deal includes **multiple distinct deliverables** (e.g., subscription + onboarding/implementation + usage/support add-ons) or is described as a **bundle/package**, include `BUNDLE` **in addition to** the underlying methods above.
+
+**Normalization:** If you detect variants like `OVER-TIME`, `OVER_TIME_RECOGNITION`, or `OVER_TIME_RECOGNITION_METHOD`, normalize them to `OVER_TIME`.
+
+**Validation:** `revenue_caps` must not be empty when any revenue-bearing component is present; ensure it includes at least one of the canonical values above.
+
 ### Common Pattern → Capability Mappings
 
 **Billing:**
@@ -98,20 +125,6 @@ You will receive two dictionaries:
 | "amend", "modify mid-term" | Contract mod |
 | "over time", "ratable" | Over-time recognition |
 | "point-in-time", "immediately" | Point-in-time recognition |
-
-### Revenue Caps Completeness (Zuora Revenue)
-When populating `detected_capabilities.revenue_caps`, **always include the revenue recognition method(s) implied by the commercial model**, even if the text does not explicitly say “revenue recognition”. Use the following rules and output **canonical labels only**:
-
-**Canonical revenue_caps values:** `OVER_TIME`, `POINT_IN_TIME`, `BUNDLE`
-
-**Inclusion rules (apply all that match):**
-- If the deal includes a **subscription/SaaS term** (e.g., term_months stated or service_start/end defined), include `OVER_TIME` (ratable recognition over the service period).
-- If the deal includes **usage-based/transaction-based fees** (per API call, per transaction, overages, consumption), include `POINT_IN_TIME`.
-- If the deal includes **multiple distinct deliverables** (e.g., subscription + onboarding/implementation + usage/support add-ons) or is described as a **bundle/package**, include `BUNDLE` **in addition to** the underlying methods above.
-
-**Normalization:** If you detect variants like `OVER-TIME`, `OVER_TIME_RECOGNITION`, or `OVER_TIME_RECOGNITION_METHOD`, normalize them to `OVER_TIME`.
-
-**Validation:** `revenue_caps` must not be empty when any revenue-bearing component is present; ensure it includes at least one of the canonical values above.
 
 **Special Patterns:**
 - "first X months at $Y, then $Z" → Ramp (requires charge segments)

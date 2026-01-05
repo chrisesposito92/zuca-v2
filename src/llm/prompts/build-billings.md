@@ -28,6 +28,22 @@ Generate one billing row on the trigger date.
 - If usage records provided: Calculate billing per usage period
 - If no usage: Note in open_questions that usage billing is TBD
 
+### Usage Charge Guardrail (BL-009)
+When generating the billing schedule for **Usage** charges:
+
+1) **Only compute Quantity/Amount if usage inputs exist.** You may calculate usage billings **only** when at least one of the following is provided in the input:
+   - usage records by period (actuals), or
+   - an explicit contractual estimate/forecast/committed minimum quantity, or
+   - an explicit instruction to model usage using an assumption.
+
+2) **If no usage records/estimate/commit are provided:**
+   - **Do not create $0 (or Quantity=0) usage invoice rows** and do not include usage in totals.
+   - Prefer to **omit usage rows entirely** from `zb_billings`.
+   - If your downstream system requires a row, include **placeholder usage rows** with `quantity=null` and `amount=null` (or blank), clearly marked `status="TBD"`, and **exclude them from totals**.
+   - Add to `open_questions`: "Provide usage volumes (or contracted estimate/commit) and confirm usage invoicing cadence/timing before amounts can be billed."
+
+3) **Never invent usage quantities, unit prices, or amounts.** If rate-card/pricing inputs are incomplete, treat the usage charge as TBD and ask for the missing rate/metric definition.
+
 ---
 
 ## Billing Date Calculation
