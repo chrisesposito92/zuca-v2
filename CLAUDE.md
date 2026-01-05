@@ -141,6 +141,14 @@ npm run cli -- training list         # List training examples
 npm run cli -- training export data/zuora-training.jsonl  # Export to JSONL
 npm run cli -- training export data/zuora-training.jsonl --format huggingface  # HuggingFace format
 
+# Training Data Consolidation (combine sources for fine-tuning)
+npx tsx scripts/consolidate-training-data.ts --stats  # Show all source stats
+npx tsx scripts/consolidate-training-data.ts output.jsonl --shuffle  # Consolidate all
+npx tsx scripts/consolidate-training-data.ts output.jsonl --only pipeline-outputs --shuffle  # Pipeline only
+npx tsx scripts/consolidate-training-data.ts output.jsonl --only pipeline-outputs,zuora-revenue --shuffle
+npx tsx scripts/consolidate-training-data.ts output.jsonl --exclude slack-data,zendesk-data --shuffle
+npx tsx scripts/consolidate-training-data.ts output.jsonl --only-category pipeline --shuffle
+
 # Synthetic Test Generation
 npm run cli -- testgen from-failures <step>  # Generate tests from step failures
 npm run cli -- testgen from-failures billings -c 5  # Generate 5 tests
@@ -159,13 +167,24 @@ The self-learning system can export training data for fine-tuning small language
 **Key Files:**
 - `src/self-learn/training/` - Training data module
 - `data/training-data.json` - Stored training examples
+- `data/training-sources/` - All training data sources
+- `scripts/consolidate-training-data.ts` - Consolidation script
+
+**Training Sources (in `data/training-sources/`):**
+- `pipeline-outputs.json` - Task-specific pipeline input→output pairs (recommended for task-specific fine-tuning)
+- `zuora-*.jsonl` - Zuora documentation Q&A (billing, developer, platform, revenue)
+- `glean-qa.jsonl`, `slack-data.jsonl`, `zendesk-data.jsonl` - Internal knowledge
+- `pob-templates-qa.jsonl`, `zuca-training-qa.jsonl` - Custom ZUCA training
 
 **Workflow:**
 1. Run evaluations with training capture: `npm run cli -- evaluate --suite golden-scenarios --capture-training`
    - Passing outputs are automatically saved as training examples
 2. Optionally sync corrections: `npm run cli -- training sync`
    - Corrections with `example_fix` become additional training examples
-3. Export for fine-tuning: `npm run cli -- training export ./output.jsonl`
+3. Consolidate sources for fine-tuning: `npx tsx scripts/consolidate-training-data.ts output.jsonl --only pipeline-outputs --shuffle`
+   - Use `--only` to select specific sources (recommended: start with `pipeline-outputs` only)
+   - Use `--exclude` to remove noisy sources like `slack-data`
+   - Use `--stats` to see example counts per source
 
 **Output Format (JSONL):**
 ```json

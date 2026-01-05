@@ -7,6 +7,11 @@
  *   npx tsx scripts/consolidate-training-data.ts [output-file]
  *   npx tsx scripts/consolidate-training-data.ts --stats
  *   npx tsx scripts/consolidate-training-data.ts --shuffle  # Randomize order
+ *   npx tsx scripts/consolidate-training-data.ts --only pipeline-outputs
+ *   npx tsx scripts/consolidate-training-data.ts --only pipeline-outputs,zuora-revenue
+ *   npx tsx scripts/consolidate-training-data.ts --exclude slack-data,zendesk-data
+ *   npx tsx scripts/consolidate-training-data.ts --only-category pipeline
+ *   npx tsx scripts/consolidate-training-data.ts --exclude-category internal
  *
  * Output format (OpenAI/HuggingFace compatible):
  *   {"messages": [{"role": "system", "content": "..."}, {"role": "user", "content": "..."}, {"role": "assistant", "content": "..."}]}
@@ -119,6 +124,70 @@ interface Stats {
   category: string;
 }
 
+interface FilterOptions {
+  only?: string[];
+  exclude?: string[];
+  onlyCategory?: string[];
+  excludeCategory?: string[];
+}
+
+function parseFilterArgs(args: string[]): FilterOptions {
+  const options: FilterOptions = {};
+
+  const getArgValue = (flag: string): string | undefined => {
+    const idx = args.indexOf(flag);
+    if (idx !== -1 && idx + 1 < args.length) {
+      return args[idx + 1];
+    }
+    return undefined;
+  };
+
+  const only = getArgValue('--only');
+  if (only) options.only = only.split(',').map((s) => s.trim());
+
+  const exclude = getArgValue('--exclude');
+  if (exclude) options.exclude = exclude.split(',').map((s) => s.trim());
+
+  const onlyCategory = getArgValue('--only-category');
+  if (onlyCategory) options.onlyCategory = onlyCategory.split(',').map((s) => s.trim());
+
+  const excludeCategory = getArgValue('--exclude-category');
+  if (excludeCategory) options.excludeCategory = excludeCategory.split(',').map((s) => s.trim());
+
+  return options;
+}
+
+function filterSources(sources: DataSource[], filters: FilterOptions): DataSource[] {
+  let filtered = [...sources];
+
+  // Apply category filters first
+  if (filters.onlyCategory?.length) {
+    filtered = filtered.filter((s) => filters.onlyCategory!.includes(s.category));
+  }
+  if (filters.excludeCategory?.length) {
+    filtered = filtered.filter((s) => !filters.excludeCategory!.includes(s.category));
+  }
+
+  // Then apply source-level filters
+  if (filters.only?.length) {
+    filtered = filtered.filter((s) => filters.only!.includes(s.name));
+  }
+  if (filters.exclude?.length) {
+    filtered = filtered.filter((s) => !filters.exclude!.includes(s.name));
+  }
+
+  return filtered;
+}
+
+function describeFilters(filters: FilterOptions): string {
+  const parts: string[] = [];
+  if (filters.only?.length) parts.push(`only: ${filters.only.join(', ')}`);
+  if (filters.exclude?.length) parts.push(`exclude: ${filters.exclude.join(', ')}`);
+  if (filters.onlyCategory?.length) parts.push(`only-category: ${filters.onlyCategory.join(', ')}`);
+  if (filters.excludeCategory?.length) parts.push(`exclude-category: ${filters.excludeCategory.join(', ')}`);
+  return parts.length ? `(${parts.join('; ')})` : '(all sources)';
+}
+
 interface Message {
   role: 'system' | 'user' | 'assistant';
   content: string;
@@ -142,14 +211,17 @@ async function countLines(filePath: string): Promise<number> {
 }
 
 
-async function showStats(): Promise<void> {
+async function showStats(filters: FilterOptions): Promise<void> {
+  const sources = filterSources(DATA_SOURCES, filters);
+
   console.log('\n📊 Training Data Statistics\n');
+  console.log(`Filters: ${describeFilters(filters)}`);
   console.log('═'.repeat(60));
 
   const stats: Stats[] = [];
   let total = 0;
 
-  for (const source of DATA_SOURCES) {
+  for (const source of sources) {
     const filePath = path.join(ROOT, source.path);
     if (!fs.existsSync(filePath)) {
       stats.push({ source: source.name, count: 0, category: source.category });
@@ -269,13 +341,31 @@ async function collectRecords(
   return records;
 }
 
-async function consolidate(outputPath: string, includeMetadata: boolean, shuffle: boolean): Promise<void> {
+async function consolidate(
+  outputPath: string,
+  includeMetadata: boolean,
+  shuffle: boolean,
+  filters: FilterOptions
+): Promise<void> {
+  const sources = filterSources(DATA_SOURCES, filters);
+
   console.log('\n🔄 Consolidating training data...\n');
+  console.log(`Filters: ${describeFilters(filters)}`);
+  console.log(`Sources: ${sources.map((s) => s.name).join(', ')}\n`);
+
+  if (sources.length === 0) {
+    console.error('❌ No sources selected. Check your filter options.');
+    console.log('\nAvailable sources:');
+    for (const s of DATA_SOURCES) {
+      console.log(`  - ${s.name} (${s.category})`);
+    }
+    process.exit(1);
+  }
 
   const stats: Stats[] = [];
   let allRecords: OutputRecord[] = [];
 
-  for (const source of DATA_SOURCES) {
+  for (const source of sources) {
     process.stdout.write(`  Processing ${source.name}...`);
 
     const records = await collectRecords(source, includeMetadata);
@@ -295,7 +385,13 @@ async function consolidate(outputPath: string, includeMetadata: boolean, shuffle
   for (const record of allRecords) {
     outputStream.write(JSON.stringify(record) + '\n');
   }
-  outputStream.end();
+
+  // Wait for stream to finish
+  await new Promise<void>((resolve, reject) => {
+    outputStream.on('finish', resolve);
+    outputStream.on('error', reject);
+    outputStream.end();
+  });
 
   console.log('\n' + '═'.repeat(60));
   console.log(`✅ Wrote ${allRecords.length.toLocaleString()} examples to ${outputPath}${shuffle ? ' (shuffled)' : ''}`);
@@ -309,9 +405,10 @@ async function consolidate(outputPath: string, includeMetadata: boolean, shuffle
 
 // Main
 const args = process.argv.slice(2);
+const filters = parseFilterArgs(args);
 
 if (args.includes('--stats')) {
-  showStats().catch(console.error);
+  showStats(filters).catch(console.error);
 } else if (args.includes('--help') || args.includes('-h')) {
   console.log(`
 Consolidate Training Data
@@ -320,20 +417,57 @@ Usage:
   npx tsx scripts/consolidate-training-data.ts [output-file] [options]
   npx tsx scripts/consolidate-training-data.ts --stats
 
-Options:
+Source Filtering:
+  --only <sources>          Only include these sources (comma-separated)
+  --exclude <sources>       Exclude these sources (comma-separated)
+  --only-category <cats>    Only include sources from these categories
+  --exclude-category <cats> Exclude sources from these categories
+
+Other Options:
   --stats           Show statistics without consolidating
   --shuffle         Randomize the order of training examples (recommended)
   --with-metadata   Include source/category in output records
   --help, -h        Show this help message
 
+Available Sources:
+  docs:     zuora-billing, zuora-developer, zuora-platform, zuora-revenue
+  internal: glean-qa, slack-data, zendesk-data, tech-talks
+  custom:   pob-templates, zuca-training
+  pipeline: pipeline-outputs
+
 Examples:
-  npx tsx scripts/consolidate-training-data.ts data/consolidated-training.jsonl
-  npx tsx scripts/consolidate-training-data.ts data/consolidated-training.jsonl --shuffle
-  npx tsx scripts/consolidate-training-data.ts --stats
+  # Pipeline outputs only (recommended for task-specific fine-tuning)
+  npx tsx scripts/consolidate-training-data.ts output.jsonl --only pipeline-outputs --shuffle
+
+  # Pipeline + revenue docs
+  npx tsx scripts/consolidate-training-data.ts output.jsonl --only pipeline-outputs,zuora-revenue --shuffle
+
+  # Everything except noisy internal sources
+  npx tsx scripts/consolidate-training-data.ts output.jsonl --exclude slack-data,zendesk-data --shuffle
+
+  # Only pipeline category
+  npx tsx scripts/consolidate-training-data.ts output.jsonl --only-category pipeline --shuffle
+
+  # Show stats for specific sources
+  npx tsx scripts/consolidate-training-data.ts --stats --only pipeline-outputs
 `);
 } else {
-  const outputPath = args.find((a) => !a.startsWith('--')) || 'data/consolidated-training.jsonl';
+  // Find output path (first arg that doesn't start with -- and isn't after a flag that takes a value)
+  const flagsWithValues = ['--only', '--exclude', '--only-category', '--exclude-category'];
+  let outputPath = 'data/consolidated-training.jsonl';
+  for (let i = 0; i < args.length; i++) {
+    const arg = args[i];
+    if (flagsWithValues.includes(arg)) {
+      i++; // Skip the next arg (it's the value)
+      continue;
+    }
+    if (!arg.startsWith('--')) {
+      outputPath = arg;
+      break;
+    }
+  }
+
   const includeMetadata = args.includes('--with-metadata');
   const shuffle = args.includes('--shuffle');
-  consolidate(path.resolve(ROOT, outputPath), includeMetadata, shuffle).catch(console.error);
+  consolidate(path.resolve(ROOT, outputPath), includeMetadata, shuffle, filters).catch(console.error);
 }

@@ -12,6 +12,7 @@ Complete reference for all self-learning CLI commands, options, and workflows.
    - [corrections](#corrections)
    - [prompts](#prompts)
    - [training](#training)
+   - [consolidate](#consolidate)
    - [testgen](#testgen)
 4. [Workflows](#workflows)
 5. [Configuration](#configuration)
@@ -463,6 +464,83 @@ npm run cli -- training export data/passes.jsonl --source evaluation_pass
 
 ---
 
+### consolidate
+
+Consolidate multiple training data sources into a single JSONL file for fine-tuning. This is a standalone script (not part of the CLI) that combines various training sources.
+
+```bash
+npx tsx scripts/consolidate-training-data.ts [output-file] [options]
+```
+
+#### Options
+
+| Option | Description | Default |
+|--------|-------------|---------|
+| `--only <sources>` | Only include these sources (comma-separated) | (all) |
+| `--exclude <sources>` | Exclude these sources (comma-separated) | (none) |
+| `--only-category <cats>` | Only include sources from these categories | (all) |
+| `--exclude-category <cats>` | Exclude sources from these categories | (none) |
+| `--stats` | Show statistics without consolidating | false |
+| `--shuffle` | Randomize the order of training examples | false |
+| `--with-metadata` | Include source/category in output records | false |
+
+#### Available Sources
+
+| Category | Source Name | Description |
+|----------|-------------|-------------|
+| `pipeline` | `pipeline-outputs` | Task-specific pipeline input→output pairs |
+| `docs` | `zuora-billing` | Zuora Billing documentation Q&A |
+| `docs` | `zuora-developer` | Zuora API/developer documentation Q&A |
+| `docs` | `zuora-platform` | Zuora Platform documentation Q&A |
+| `docs` | `zuora-revenue` | Zuora Revenue (rev rec) documentation Q&A |
+| `internal` | `glean-qa` | Internal knowledge base Q&A |
+| `internal` | `slack-data` | Slack conversation extracts |
+| `internal` | `zendesk-data` | Support ticket extracts |
+| `internal` | `tech-talks` | Tech talk transcript Q&A |
+| `custom` | `pob-templates` | POB template selection Q&A |
+| `custom` | `zuca-training` | Custom ZUCA usage Q&A |
+
+#### Examples
+
+```bash
+# Show all source statistics
+npx tsx scripts/consolidate-training-data.ts --stats
+
+# Show stats for specific sources
+npx tsx scripts/consolidate-training-data.ts --stats --only pipeline-outputs
+
+# Pipeline outputs only (recommended for task-specific fine-tuning)
+npx tsx scripts/consolidate-training-data.ts data/gpt-4.1-training.jsonl --only pipeline-outputs --shuffle
+
+# Pipeline + revenue docs
+npx tsx scripts/consolidate-training-data.ts data/training.jsonl --only pipeline-outputs,zuora-revenue --shuffle
+
+# All sources except noisy internal data
+npx tsx scripts/consolidate-training-data.ts data/training.jsonl --exclude slack-data,zendesk-data --shuffle
+
+# Only pipeline category
+npx tsx scripts/consolidate-training-data.ts data/training.jsonl --only-category pipeline --shuffle
+
+# All docs, no internal
+npx tsx scripts/consolidate-training-data.ts data/training.jsonl --only-category docs,pipeline --shuffle
+```
+
+#### When to Use
+
+- **`--only pipeline-outputs`**: Task-specific fine-tuning (recommended starting point)
+- **Adding `zuora-revenue`**: When model makes factual errors about rev rec concepts
+- **`--exclude slack-data,zendesk-data`**: When you want docs but not noisy conversational data
+- **`--stats`**: Before consolidating, to see what you're working with
+
+#### Recommendations
+
+1. **Start with pipeline-outputs only** - These are actual pipeline input→output pairs, perfectly matched to your task
+2. **Avoid mixing task types** - General Q&A (docs) can dilute task-specific learning
+3. **GPT-4.1 already knows Zuora** - You're teaching format/reasoning, not Zuora concepts
+4. **Use `--shuffle`** - Always shuffle to prevent ordering bias in training
+
+---
+
 ### testgen
 
 Generate synthetic test cases from corrections and failure patterns.
@@ -604,6 +682,43 @@ npm run cli -- training stats
 # 4. Export for fine-tuning
 npm run cli -- training export data/zuora-training.jsonl
 ```
+
+### Consolidating Training Sources for Fine-Tuning
+
+Use `scripts/consolidate-training-data.ts` to combine multiple training sources into a single JSONL file for fine-tuning. This is separate from the `training export` command which exports from `pipeline-outputs.json` only.
+
+```bash
+# Show all available sources and their example counts
+npx tsx scripts/consolidate-training-data.ts --stats
+
+# Pipeline outputs only (recommended for task-specific fine-tuning)
+npx tsx scripts/consolidate-training-data.ts data/gpt-4.1-training.jsonl --only pipeline-outputs --shuffle
+
+# Pipeline + revenue docs (if model needs Zuora concepts)
+npx tsx scripts/consolidate-training-data.ts data/training.jsonl --only pipeline-outputs,zuora-revenue --shuffle
+
+# All docs except noisy internal sources
+npx tsx scripts/consolidate-training-data.ts data/training.jsonl --exclude slack-data,zendesk-data --shuffle
+
+# Only pipeline category
+npx tsx scripts/consolidate-training-data.ts data/training.jsonl --only-category pipeline --shuffle
+
+# Check filtered stats before consolidating
+npx tsx scripts/consolidate-training-data.ts --stats --only pipeline-outputs
+```
+
+**Available Sources:**
+| Category | Sources | Description |
+|----------|---------|-------------|
+| `pipeline` | `pipeline-outputs` | Task-specific input→output pairs (recommended) |
+| `docs` | `zuora-billing`, `zuora-developer`, `zuora-platform`, `zuora-revenue` | Zuora documentation Q&A |
+| `internal` | `glean-qa`, `slack-data`, `zendesk-data`, `tech-talks` | Internal knowledge (may be noisy) |
+| `custom` | `pob-templates`, `zuca-training` | Custom ZUCA-specific training |
+
+**Recommendations:**
+- **Task-specific fine-tuning**: Start with `--only pipeline-outputs` (3K+ examples)
+- **If model makes factual errors**: Add `zuora-revenue` for rev rec concepts
+- **Avoid**: `slack-data`, `zendesk-data` unless you need conversational style
 
 ### Expanding Test Coverage
 
