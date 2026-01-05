@@ -99,7 +99,7 @@ npm run cli -- generate "Datadog" -w "https://www.datadoghq.com" -c 3 -o generat
 
 # Options:
 #   -w, --website <url>     Customer website URL (required)
-#   -c, --count <number>    Number of use cases to generate (1-3, default: 1)
+#   -c, --count <number>    Number of use cases to generate (1-5, default: 1)
 #   -n, --notes <text>      Additional notes to guide generation
 #   -o, --output <file>     Save results to a JSON file
 #   -l, --local             Use local formatting (faster, no LLM for formatting)

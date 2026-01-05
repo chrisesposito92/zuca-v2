@@ -327,7 +327,7 @@ export default function UCGeneratePage() {
               onSelectionChange={(keys) =>
                 setUcInput((prev) => ({
                   ...prev,
-                  num_use_cases: parseInt(Array.from(keys)[0] as string, 10) as 1 | 2 | 3,
+                  num_use_cases: parseInt(Array.from(keys)[0] as string, 10) as 1 | 2 | 3 | 4 | 5,
                 }))
               }
               labelPlacement="outside"
@@ -341,6 +341,8 @@ export default function UCGeneratePage() {
               <SelectItem key="1">1 Use Case</SelectItem>
               <SelectItem key="2">2 Use Cases</SelectItem>
               <SelectItem key="3">3 Use Cases</SelectItem>
+              <SelectItem key="4">4 Use Cases</SelectItem>
+              <SelectItem key="5">5 Use Cases</SelectItem>
             </Select>
 
             <Select

@@ -1,7 +1,7 @@
 /**
  * UC Generator Step 2: Generate Structured Use Cases
  *
- * Takes customer research and generates 1-3 structured use cases
+ * Takes customer research and generates 1-5 structured use cases
  * with otr_workflow_inputs ready for the main ZUCA pipeline.
  */
 

@@ -244,7 +244,7 @@ ACTIVE_LEARNING_NOVELTY=true             # Enable novelty scoring
 ### Building Test Suites from UC Generator
 ```bash
 # Generate use cases from real companies
-npm run cli -- generate "Salesforce" -w "https://www.salesforce.com" -c 3 -o /tmp/uc/salesforce.json
+npm run cli -- generate "Salesforce" -w "https://www.salesforce.com" -c 5 -o /tmp/uc/salesforce.json
 
 # Convert to test suite YAML
 npm run uc:to-suite -- /tmp/uc/ data/test-suites/real-world-scenarios.yaml

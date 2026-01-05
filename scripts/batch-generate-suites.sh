@@ -71,7 +71,7 @@ generate_company() {
 
 # Category: SaaS
 run_saas() {
-  local suite_file="$SUITE_DIR/saas-companies-2.yaml"
+  local suite_file="$SUITE_DIR/saas-companies-3.yaml"
   log_info "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
   log_info "Category: saas → $suite_file"
   log_info "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
@@ -95,7 +95,7 @@ run_saas() {
 
 # Category: FinTech
 run_fintech() {
-  local suite_file="$SUITE_DIR/fintech-companies-2.yaml"
+  local suite_file="$SUITE_DIR/fintech-companies-3.yaml"
   log_info "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
   log_info "Category: fintech → $suite_file"
   log_info "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
@@ -114,7 +114,7 @@ run_fintech() {
 
 # Category: Telco/CPaaS
 run_telco() {
-  local suite_file="$SUITE_DIR/telco-companies-2.yaml"
+  local suite_file="$SUITE_DIR/telco-companies-3.yaml"
   log_info "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
   log_info "Category: telco → $suite_file"
   log_info "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
@@ -129,7 +129,7 @@ run_telco() {
 
 # Category: Infrastructure/Cloud
 run_infrastructure() {
-  local suite_file="$SUITE_DIR/infrastructure-companies-2.yaml"
+  local suite_file="$SUITE_DIR/infrastructure-companies-3.yaml"
   log_info "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
   log_info "Category: infrastructure → $suite_file"
   log_info "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
@@ -148,7 +148,7 @@ run_infrastructure() {
 
 # Category: Media/Streaming
 run_media() {
-  local suite_file="$SUITE_DIR/media-companies-2.yaml"
+  local suite_file="$SUITE_DIR/media-companies-3.yaml"
   log_info "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
   log_info "Category: media → $suite_file"
   log_info "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
@@ -165,7 +165,7 @@ run_media() {
 
 # Category: E-commerce
 run_ecommerce() {
-  local suite_file="$SUITE_DIR/ecommerce-companies-2.yaml"
+  local suite_file="$SUITE_DIR/ecommerce-companies-3.yaml"
   log_info "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
   log_info "Category: ecommerce → $suite_file"
   log_info "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
@@ -182,7 +182,7 @@ run_ecommerce() {
 
 # Category: Healthcare
 run_healthcare() {
-  local suite_file="$SUITE_DIR/healthcare-companies-2.yaml"
+  local suite_file="$SUITE_DIR/healthcare-companies-3.yaml"
   log_info "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
   log_info "Category: healthcare → $suite_file"
   log_info "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"

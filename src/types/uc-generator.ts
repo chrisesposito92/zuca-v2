@@ -5,9 +5,9 @@ import { z } from 'zod';
 // ============================================================================
 
 /**
- * Number of use cases to generate (1-3)
+ * Number of use cases to generate (1-5)
  */
-export const NumUseCasesSchema = z.union([z.literal(1), z.literal(2), z.literal(3)]);
+export const NumUseCasesSchema = z.union([z.literal(1), z.literal(2), z.literal(3), z.literal(4), z.literal(5)]);
 export type NumUseCases = z.infer<typeof NumUseCasesSchema>;
 
 /**

@@ -612,8 +612,8 @@ async function generateCommand(
 ): Promise<void> {
   try {
     const numUseCases = (options.count ? parseInt(options.count, 10) : 1) as NumUseCases;
-    if (numUseCases < 1 || numUseCases > 3) {
-      console.error(chalk.red('Error: count must be 1, 2, or 3'));
+    if (numUseCases < 1 || numUseCases > 5) {
+      console.error(chalk.red('Error: count must be between 1 and 5'));
       process.exit(1);
     }
 
@@ -717,12 +717,12 @@ async function generateInteractiveCommand(options: { model?: string } = {}): Pro
 
     const customerName = await prompt(chalk.white('Customer Name: '));
     const customerWebsite = await prompt(chalk.white('Customer Website: '));
-    const numUseCasesStr = await prompt(chalk.white('Number of Use Cases (1-3): '));
+    const numUseCasesStr = await prompt(chalk.white('Number of Use Cases (1-5): '));
     const userNotes = await prompt(chalk.white('Additional Notes (optional, press Enter to skip): '));
 
     const numUseCases = (parseInt(numUseCasesStr, 10) || 1) as NumUseCases;
-    if (numUseCases < 1 || numUseCases > 3) {
-      console.error(chalk.red('Error: count must be 1, 2, or 3'));
+    if (numUseCases < 1 || numUseCases > 5) {
+      console.error(chalk.red('Error: count must be between 1 and 5'));
       rl.close();
       process.exit(1);
     }
@@ -789,7 +789,7 @@ program
   .command('generate <customer_name>')
   .description('Generate use cases for a customer based on web research')
   .requiredOption('-w, --website <url>', 'Customer website URL')
-  .option('-c, --count <number>', 'Number of use cases to generate (1-3)', '1')
+  .option('-c, --count <number>', 'Number of use cases to generate (1-5)', '1')
   .option('-n, --notes <text>', 'Additional notes to guide generation')
   .option('-o, --output <file>', 'Save results to a JSON file')
   .option('-l, --local', 'Use local formatting (faster, no LLM for formatting)')
