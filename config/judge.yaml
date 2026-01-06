@@ -16,7 +16,7 @@ defaults:
   confidence_threshold: 0.9
 
   # Timeout in milliseconds
-  timeout_ms: 30000
+  timeout_ms: 150000
 
   # Reasoning effort for the judge model
   reasoning_effort: "low"

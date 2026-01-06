@@ -26,7 +26,7 @@ criteria:
     check:
       type: numeric
       rule: |
-        For daily-prorated ratable revenue:
+        For daily-prorated ratable revenue (no '-PM' at the end of the POB Template):
         Monthly Amount = (Annual Amount / Total Days) × Days in Month
         Account for varying days per month (28-31 days).
       threshold: 0.01
@@ -61,7 +61,7 @@ criteria:
     check:
       type: behavioral
       rule: |
-        For event-driven POB templates (EVT-PIT-*):
+        For event-driven, point-in-time POB templates (EVT-PIT-*):
         - If no usage/event data is provided, Amount = $0 for ALL periods
         - Add open_question asking for usage/consumption data
         - Do NOT spread ratably or invent amounts
@@ -115,7 +115,7 @@ criteria:
     check:
       type: behavioral
       rule: |
-        If allocation is required (multiple elements):
+        If allocation is required (multiple elements have Allocation Eligible Flag set to true):
         - Calculate SSP ratios
         - Apply ratios to total transaction price
         - Recognize based on allocated amounts, not list prices

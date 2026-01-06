@@ -243,7 +243,7 @@ Return JSON with complete billing schedule:
 ```
 
 **Date formats:**
-- All dates in output: `MM/DD/YYYY`
+- All dates in output: `YYYY-MM-DD`
 
 **Validation before returning:**
 1. Every charge from subscription spec has billing rows

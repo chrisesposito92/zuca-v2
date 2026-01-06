@@ -113,7 +113,7 @@ criteria:
       type: behavioral
       rule: |
         Sales Order Date should be the contract effective date in
-        MM/DD/YYYY format, representing when the order was placed.
+        YYYY-MM-DD format, representing when the order was placed.
         All line items in the same contract share the same Sales Order Date.
 
   - id: CO-009
@@ -158,18 +158,3 @@ criteria:
         contracts_orders.zr_contracts_orders must exactly match
         pob_identifier values from pob_mapping.charge_pob_map.
         No invented identifiers allowed.
-
-  - id: CO-012
-    name: date-format-consistency
-    description: Dates must use correct formats per field
-    severity: high
-    patterns:
-      [date format, Revenue Start Date, Revenue End Date, Sales Order Date]
-    check:
-      type: behavioral
-      rule: |
-        Different date fields require different formats:
-        - Revenue Start Date: YYYY-MM-DD format
-        - Revenue End Date: YYYY-MM-DD format
-        - Sales Order Date: MM/DD/YYYY format
-        Do not mix formats between these fields.

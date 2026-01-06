@@ -91,7 +91,7 @@ For each line, populate:
 **Revenue Window:**
 - `Revenue Start Date`: From charge effectiveStartDate (YYYY-MM-DD format)
 - `Revenue End Date`: From charge effectiveEndDate (YYYY-MM-DD format)
-- `Sales Order Date`: Contract effective date (MM/DD/YYYY format)
+- `Sales Order Date`: Contract effective date (YYYY-MM-DD format)
 
 **Pricing:**
 - `Ordered Qty`: From charge quantity (default 1)

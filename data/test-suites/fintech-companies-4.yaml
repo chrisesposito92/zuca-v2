@@ -1,0 +1,710 @@
+name: "fintech-companies-4"
+description: "Generated from UC outputs - 2026-01-06"
+version: "1.0"
+tests:
+  - id: "gen-mercury"
+    name: "Mercury - Scaling Startup Workflow Plus"
+    description: "Scaling Startup Workflow Plus"
+    input:
+      customer_name: "Mercury"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A seed-stage startup scales into the Financial Workflows - Plus plan to automate their invoicing. The plan costs $35 per month and includes 20 free bill payments. Any bill payments exceeding the 20-count threshold are charged at a usage rate of $2 per bill. The $35 recurring charge is recognized ratably over the monthly billing period. Overage charges are recognized in the month they occur, following a consumption-based revenue model. This use case demonstrates a hybrid of recurring and usage-based billing on a standard 12-month contract."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Subscription fee for platform access is recognized monthly.); Usage: POB=consumption release=as_used (Bill pay overages are recognized as the transactions are processed.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+  - id: "gen-mercury-1"
+    name: "Mercury - Mid-Market Pro & Treasury Bundle"
+    description: "Mid-Market Pro & Treasury Bundle"
+    input:
+      customer_name: "Mercury"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "This scenario features a mid-market client utilizing the Financial Workflows - Pro plan alongside Mercury Treasury services. The Pro subscription is billed at $350 per month, providing NetSuite sync and priority support. Additionally, the client maintains a significant balance, triggering Mercury Treasury fees estimated at 15 basis points (0.15% annualized) of the average monthly AUM. The subscription fee is recognized ratably over the 12-month term. Treasury fees are recognized as consumption-based revenue as the service is provided each month. Billing for the subscription occurs monthly in advance, while Treasury fees are billed monthly in arrears based on calculated AUM."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Pro plan recurring fee recognized over the monthly service period.); Usage: POB=consumption release=as_used (Treasury AUM fees are calculated daily and recognized as earned monthly.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "bundle"
+      - "recurring"
+  - id: "gen-mercury-2"
+    name: "Mercury - Enterprise NetSuite Expansion"
+    description: "Enterprise NetSuite Expansion"
+    input:
+      customer_name: "Mercury"
+      contract_start_date: "02/01/2026"
+      terms_months: 24
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "Mercury Pro for a growth-stage company requiring NetSuite automation and high-volume international payments. The contract includes a 24-month subscription to Financial Workflows - Pro at a discounted rate of $300 per month (List $350). A one-time NetSuite Integration & Onboarding fee of $1,000 is charged at the start. Revenue for the subscription is recognized ratably over the 24-month term. The onboarding fee is recognized as a point-in-time obligation upon completion of the setup. This scenario requires allocation of the total contract value across the subscription and professional services based on list prices to ensure compliance with ASC 606."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Allocated transaction price for the Pro sub recognized over 24 months.); Onboarding: POB=point_in_time release=at_go_live (Allocated transaction price for setup recognized when integration is live.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "allocation"
+      - "multi-year"
+  - id: "gen-deel"
+    name: "Deel - Global Expansion EOR Bundle"
+    description: "Global Expansion EOR Bundle"
+    input:
+      customer_name: "Deel"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "A mid-market customer is expanding into three new countries and requires Deel's Employer of Record (EOR) services for 10 initial employees. The deal includes the EOR Plan at $599 per employee per month and access to Deel HR, which is bundled at no additional cost for this headcount. The contract is set for a 12-month initial term with annual upfront billing to secure a 5% multi-country discount. Revenue for the EOR subscription is recognized ratably over the 12-month service period. This scenario demonstrates Zuora's ability to handle per-unit recurring charges with volume-based contract terms."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (EOR platform fees and management services are delivered continuously over the contract term.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "recurring"
+  - id: "gen-deel-1"
+    name: "Deel - Agile Contractor Management"
+    description: "Agile Contractor Management"
+    input:
+      customer_name: "Deel"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A fast-growing tech startup needs to manage a fluctuating workforce of international freelancers using the Contractor Management product. They are billed $49 per active contract per month, with 'active' defined as any contract where work was submitted or a payment was processed. This is a pure usage-based model with monthly billing and no long-term commitment (month-to-month). Revenue is recognized in the month the usage occurs (consumption-based). This use case highlights Zuora's usage rating engine and its ability to handle high-frequency subscription changes."
+      rev_rec_notes: "Usage: POB=consumption release=as_used (Revenue is recognized based on the number of active contractors processed in the billing cycle.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+  - id: "gen-deel-2"
+    name: "Deel - Enterprise Global Payroll & IT Bundle"
+    description: "Enterprise Global Payroll & IT Bundle"
+    input:
+      customer_name: "Deel"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Quarterly"
+      is_allocations: true
+      use_case_description: "An enterprise customer is consolidating their global operations, moving 500 employees onto Deel Global Payroll ($29/employee/month) and leasing 50 laptops via Deel IT ($18/device/month). The deal includes a one-time $5,000 implementation and global entity setup fee. To win the business, Deel has offered a 10% discount across the entire bundle, requiring revenue allocation between the ratable payroll services, the device leases, and the point-in-time setup fee. The contract is for 12 months with quarterly billing. This scenario exercises Zuora Revenue's allocation engine and multi-product bundling capabilities."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Global Payroll fees are recognized ratably over the 12-month term.); Onboarding: POB=point_in_time release=at_go_live (Implementation fee recognized upon completion of the global entity setup.); Hardware: POB=over_time release=ratable_over_term (Device management/leasing fees are recognized monthly as the equipment service is provided.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "allocation"
+  - id: "gen-remote"
+    name: "Remote - Startup EOR Launch with Equity Add-on"
+    description: "Startup EOR Launch with Equity Add-on"
+    input:
+      customer_name: "Remote"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "A fast-growing startup is hiring its first international employee in the UK using Remote's Employer of Record (EOR) service. They are opting for the annual billing plan at $599 per month to save costs. To incentivize the deal, Remote is applying a '50% off for the 1st employee' discount for the first 12 months. Additionally, the customer is purchasing the Equity Management add-on for $999 per year to manage global stock options. The subscription is a 12-month term, billed annually upfront. Revenue for both the EOR service and the Equity Management platform is recognized ratably over the 12-month term."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (EOR recurring fee and Equity Management fee are provided over the duration of the contract.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "discount"
+      - "recurring"
+      - "license"
+      - "allocation"
+  - id: "gen-remote-1"
+    name: "Remote - Enterprise Global Payroll & Contractor Plus"
+    description: "Enterprise Global Payroll & Contractor Plus"
+    input:
+      customer_name: "Remote"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "An enterprise customer with existing entities in Canada and the US is consolidating their payroll onto Remote’s Global Payroll platform for 50 employees at $50 per employee per month. Simultaneously, they are managing 10 high-level international consultants using the Contractor Management Plus plan at $99 per contractor per month, which includes misclassification indemnity. This agreement is billed monthly to allow for headcount fluctuations. Both products are recurring SaaS subscriptions. Revenue is recognized monthly as the payroll is processed and the indemnity coverage is provided."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Payroll and Contractor Management Plus are monthly recurring services recognized as the service period elapses.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "recurring"
+      - "license"
+  - id: "gen-remote-2"
+    name: "Remote - High-Volume Contractor Fleet Management"
+    description: "High-Volume Contractor Fleet Management"
+    input:
+      customer_name: "Remote"
+      contract_start_date: "02/01/2026"
+      terms_months: 1
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A marketing agency manages a fluctuating workforce of approximately 100 international contractors. They use the standard Contractor Management plan at $29 per contractor per month. This is a month-to-month arrangement with no long-term commitment, billed in arrears based on the number of active contractors managed during the billing cycle. Remote also charges a small $5 fee per contractor for expedited local currency payments (FX/Usage). Revenue for the management fee is recognized over the month of service, while the expedited payment fees are recognized as they occur."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Standard management fee is recognized over the month the contractor is active.); Usage: POB=consumption release=as_used (Expedited payment fees are recognized at the point the transaction is processed.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+  - id: "gen-ramp"
+    name: "Ramp - Ramp Plus Annual with Transactional Bill Pay"
+    description: "Ramp Plus Annual with Transactional Bill Pay"
+    input:
+      customer_name: "Ramp"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "A mid-market company subscribes to Ramp Plus for 100 users to automate their financial operations. The subscription is priced at $12 per user per month, billed annually upfront, totaling $14,400. In addition to the recurring subscription, the customer utilizes Bill Pay services for domestic wires and same-day ACH. Domestic wires are charged at $15 per transaction and same-day ACH at $10 per transaction, both billed monthly in arrears based on actual usage. The contract has a 12-month term. Revenue for the Ramp Plus subscription is recognized ratably over the 12-month term. Transaction fees for Bill Pay are recognized in the month the service is consumed."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Standard SaaS subscription for platform access.); Usage: POB=consumption release=as_used (Bill Pay fees are triggered by specific transaction events.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "ramp"
+      - "usage"
+      - "recurring"
+  - id: "gen-ramp-1"
+    name: "Ramp - Enterprise Bundle with Implementation and Procurement"
+    description: "Enterprise Bundle with Implementation and Procurement"
+    input:
+      customer_name: "Ramp"
+      contract_start_date: "02/01/2026"
+      terms_months: 24
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "A large enterprise customer signs a multi-year deal for 500 users on the Ramp Enterprise plan. The bundle includes the Ramp Plus Subscription at a discounted volume rate of $10 per user per month and the Procurement Add-on for a flat $500 per month. A one-time Enterprise Implementation Service fee of $7,500 is included for ERP integration setup. The implementation fee is discounted by 50% in the contract, and because the subscription and services are sold together, revenue allocation is required to ensure compliance. The subscription and add-on are billed annually, while the implementation fee is billed one-time at the start. Subscription and add-on revenue are recognized ratably, while the implementation fee is recognized upon completion of the ERP sync setup."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Includes both the core user seats and the Procurement add-on.); Services: POB=point_in_time release=at_go_live (Implementation is tied to the completion of the ERP integration.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "ramp"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "allocation"
+      - "multi-year"
+  - id: "gen-ramp-2"
+    name: "Ramp - Monthly Flexible Growth with International Wires"
+    description: "Monthly Flexible Growth with International Wires"
+    input:
+      customer_name: "Ramp"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A fast-growing startup chooses the flexible Ramp Plus monthly plan. They begin with 30 users at $15 per user per month. The customer frequently executes international SWIFT payments, which carry a $20 fee per transaction. Billing for both the user subscription and the transaction fees occurs monthly on a recurring basis. Two months into the contract, the customer expands their team and adds 20 additional users, which requires proration for the remainder of the billing period. All subscription revenue is recognized ratably over the monthly service period. International wire fees are recognized as the transaction events occur."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Monthly subscription recognized over the 1-month service interval.); Usage: POB=event_based release=as_billed (International wire fees recognized upon payment execution.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "ramp"
+      - "recurring"
+  - id: "gen-melio"
+    name: "Melio - Melio Core SMB Annual Bundle"
+    description: "Melio Core SMB Annual Bundle"
+    input:
+      customer_name: "Melio"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "A small business signs up for the Melio Core Subscription on an annual term to receive the discounted rate of $20 per month, billed annually ($240 upfront). The plan includes a recurring allowance of 20 ACH transfers per month. Any ACH transfers exceeding the 20-transfer monthly allowance are billed in arrears at $0.50 per transfer. The subscription revenue is recognized ratably over the 12-month term, while the overage usage fees are recognized in the month they occur. This scenario demonstrates a simple annual subscription with a recurring monthly usage allowance and overage component."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Standard SaaS subscription providing platform access over the 12-month contract period.); Usage: POB=consumption release=as_used (Overage ACH transfers are recognized as the transactions are processed each month.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "bundle"
+      - "discount"
+      - "recurring"
+  - id: "gen-melio-1"
+    name: "Melio - Boost Plan with Premium Processing"
+    description: "Boost Plan with Premium Processing"
+    input:
+      customer_name: "Melio"
+      contract_start_date: "02/01/2026"
+      terms_months: 1
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A mid-sized business opts for the Melio Boost Subscription at $55 per month on a month-to-month basis. In addition to the base subscription, the customer frequently utilizes Premium Payment Processing to pay vendors via credit card (2.9% transaction fee) to extend their cash flow. The subscription fee is billed at the start of each month. The 2.9% transaction fees are calculated based on the total dollar volume of credit card payments processed during the billing cycle and billed in arrears. Revenue for the subscription is ratable monthly, while the processing fees are recognized at the point of transaction delivery."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Monthly recurring subscription for the Boost tier features.); Usage: POB=point_in_time release=at_delivery (Processing fees are earned and recognized immediately upon successful payment execution.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "recurring"
+      - "credits"
+  - id: "gen-melio-2"
+    name: "Melio - Platinum Enterprise with Expedited Services"
+    description: "Platinum Enterprise with Expedited Services"
+    input:
+      customer_name: "Melio"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      use_case_description: "An enterprise partner signs a custom Melio Platinum agreement with a $500 monthly platform fee and discounted transaction rates. The contract includes access to Expedited Delivery Services, such as 'Fast Checks' at a flat $20 per check and 'Overnight Checks' at 2.9% + $50. Because the contract includes a discounted platform fee alongside premium usage services, the company performs revenue allocation to ensure each POB reflects its standalone selling price. The platform fee is recognized over time, while the expedited check fees are recognized as 'event-based' revenue upon the specific request and fulfillment of the delivery service."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Platinum platform access fee.); Other: POB=event_based release=as_billed (Expedited delivery fees are distinct events triggered by user selection during the payment workflow.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "discount"
+      - "license"
+      - "allocation"
+  - id: "gen-payoneer"
+    name: "Payoneer - Freelancer Standard Account with Usage"
+    description: "Freelancer Standard Account with Usage"
+    input:
+      customer_name: "Payoneer"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "A freelancer signs up for a Standard SMB Account which carries a $29.95 annual account fee. The scenario includes usage-based charges for Global Receiving Accounts (1% for ACH transfers) and Request a Payment (3% for credit card transactions). The annual account fee is billed upfront and recognized ratably over the 12-month term. Usage fees are processed monthly in arrears and recognized at the point in time the transaction occurs. This case demonstrates the mix of a low-frequency recurring fee with high-frequency transactional usage."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Annual account fee provides access to the platform for a year.); Usage: POB=point_in_time release=as_billed (Transaction fees are earned and recognized when the payment is processed.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+      - "credits"
+  - id: "gen-payoneer-1"
+    name: "Payoneer - eCommerce Merchant Checkout & Cards"
+    description: "eCommerce Merchant Checkout & Cards"
+    input:
+      customer_name: "Payoneer"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      use_case_description: "An eCommerce merchant utilizes Payoneer Checkout for webstore payments and orders 5 Payoneer Commercial Cards for business expenses. The setup includes a one-time implementation fee of $500 for Checkout integration, a recurring platform fee of $100 per month, and annual card fees of $29.95 per card. Transactional usage for Checkout is modeled at a tiered rate (e.g., 2.9% + $0.30 per transaction). Revenue for the setup fee is recognized at go-live, while the platform and card fees are recognized ratably. This scenario tests bundled recurring fees and one-time service charges."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Onboarding: POB=point_in_time release=at_go_live (Implementation fee for Checkout integration recognized upon completion.); Subscription: POB=over_time release=ratable_over_term (Monthly platform and annual card fees are ratable.); Usage: POB=point_in_time release=as_billed (Checkout processing fees recognized as transactions occur.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "bundle"
+      - "one-time"
+      - "recurring"
+      - "license"
+      - "allocation"
+  - id: "gen-payoneer-2"
+    name: "Payoneer - Enterprise Marketplace Mass Payouts"
+    description: "Enterprise Marketplace Mass Payouts"
+    input:
+      customer_name: "Payoneer"
+      contract_start_date: "02/01/2026"
+      terms_months: 24
+      transaction_currency: "USD"
+      billing_period: "Quarterly"
+      is_allocations: false
+      use_case_description: "A large marketplace platform uses Payoneer for Mass Payouts to 1,000+ global vendors. The contract features a $2,500 quarterly platform fee and a per-payout usage fee of $0.50. Additionally, the marketplace facilitates 'Capital Advances' for its sellers, where Payoneer charges a 2% fixed fee on the advance amount (e.g., $10,000 advance = $200 fee). The platform fee is recognized ratably over each quarter. The payout fees are recognized point-in-time, and the Capital Advance fee is recognized as an event-based charge upon the funding of the advance. This scenario highlights complex fintech products and enterprise billing."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Quarterly platform fee for Mass Payouts API access.); Usage: POB=point_in_time release=as_billed (Per-payout fees recognized upon transaction.); Other: POB=event_based release=as_used (Capital Advance fees recognized when the advance is triggered/funded.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "license"
+      - "multi-year"
+  - id: "gen-razorpay"
+    name: "Razorpay - SME Payroll and Operations Bundle"
+    description: "SME Payroll and Operations Bundle"
+    input:
+      customer_name: "Razorpay"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "other"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A growing startup adopts the RazorpayX ecosystem to manage their internal operations. The agreement includes RazorpayX Payroll for 50 employees at a recurring rate of ₹150 per employee per month, billed monthly. Additionally, the customer uses RazorpayX Payouts for vendor management and salary disbursements, with an estimated volume of 500 payouts per month at a usage rate of ₹5 per payout. The contract is set for a 12-month term. Revenue for the Payroll subscription is recognized ratably over the monthly service period, while Payout fees are recognized at the point of transaction (consumption)."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (RazorpayX Payroll fees are earned as the software service is provided over the monthly term.); Usage: POB=consumption release=as_used (Payout fees are recognized as each individual transaction is successfully processed.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "bundle"
+      - "recurring"
+  - id: "gen-razorpay-1"
+    name: "Razorpay - Omni-channel Retail POS Deployment"
+    description: "Omni-channel Retail POS Deployment"
+    input:
+      customer_name: "Razorpay"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "other"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A retail merchant expands their physical presence by deploying 10 Razorpay POS Smart terminals. The deal includes a one-time setup and delivery fee of ₹1,000 per device and a monthly recurring rental fee of ₹299 per device. All transactions processed through these devices incur a 2% Payment Gateway transaction fee, billed monthly based on actual usage. The contract is for 12 months. Revenue for the setup fee is recognized upon delivery/installation, rental fees are recognized ratably each month, and transaction fees are recognized at the point of sale."
+      rev_rec_notes: "Hardware: POB=point_in_time release=at_delivery (One-time setup and delivery fees for POS terminals are recognized when the hardware is delivered.); Subscription: POB=over_time release=ratable_over_term (Monthly rental fees for the POS hardware are recognized ratably over the billing period.); Usage: POB=point_in_time release=at_delivery (Payment Gateway usage fees are recognized as transactions occur.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "one-time"
+      - "recurring"
+  - id: "gen-razorpay-2"
+    name: "Razorpay - Enterprise D2C Magic Checkout Bundle"
+    description: "Enterprise D2C Magic Checkout Bundle"
+    input:
+      customer_name: "Razorpay"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "other"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "A high-volume D2C brand signs an Enterprise agreement for Magic Checkout and Priority Support. The bundle includes an Annual Platform Fee of ₹500,000 (discounted from ₹600,000) and Enterprise Support at ₹100,000 (discounted from ₹120,000). Usage charges are negotiated at a flat 1.5% for the Payment Gateway and an additional 0.5% for Magic Checkout services, both billed monthly in arrears. Because the Platform Fee and Support are bundled with a shared discount, revenue allocation is performed using List Prices. The platform and support fees are recognized ratably over the 12-month term, while usage is recognized as processed."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Platform and Support fees are performance obligations satisfied over the 12-month term.); Usage: POB=point_in_time release=at_delivery (Magic Checkout and PG usage fees are recognized as the conversion/payment events occur.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "bundle"
+      - "discount"
+      - "license"
+      - "allocation"
+  - id: "gen-wealthfront"
+    name: "Wealthfront - Standard Automated Index Investing Portfolio"
+    description: "Standard Automated Index Investing Portfolio"
+    input:
+      customer_name: "Wealthfront"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A retail investor opens a taxable brokerage account with an initial deposit of $50,000 into the Automated Index Investing product. Wealthfront charges a standard annual advisory fee of 0.25%, which is calculated daily based on the account's net value. In Zuora, this is represented as a recurring monthly subscription charge of $10.42 ($50,000 * 0.0025 / 12). There are no setup or trading fees, adhering to Wealthfront's transparent pricing model. The subscription is set for a 12-month term with monthly billing. Revenue for the advisory service is recognized ratably over each monthly service period as the management obligation is fulfilled."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Advisory fees are for ongoing asset management and should be recognized monthly as the service is provided.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "one-time"
+      - "recurring"
+  - id: "gen-wealthfront-1"
+    name: "Wealthfront - High-Net-Worth Direct Indexing Portfolio"
+    description: "High-Net-Worth Direct Indexing Portfolio"
+    input:
+      customer_name: "Wealthfront"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A high-net-worth individual migrates $250,000 into a Direct Indexing Portfolio (S&P 500 Direct). This specialized plan carries a lower annual advisory fee of 0.09% compared to the standard robo-advisor offering. The Zuora subscription includes a single recurring charge of $18.75 per month ($250,000 * 0.0009 / 12). This scenario demonstrates Wealthfront's ability to offer tiered or product-specific pricing for sophisticated investment strategies. The billing is recurring monthly on a 12-month term. Revenue is recognized over time, ratably across the term, reflecting the continuous nature of the automated rebalancing and tax-loss harvesting services."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Direct indexing management is a continuous service recognized ratably over the contract term.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "recurring"
+  - id: "gen-wealthfront-2"
+    name: "Wealthfront - Automated Bond Ladder with Premium Advisory Bundle"
+    description: "Automated Bond Ladder with Premium Advisory Bundle"
+    input:
+      customer_name: "Wealthfront"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      use_case_description: "A customer allocates $100,000 to an Automated Bond Ladder and opts for a one-time 'Premium Wealth Strategy Session' to customize their yield targets. The Bond Ladder carries a 0.15% annual advisory fee, resulting in a $12.50 monthly recurring charge. The one-time strategy session is priced at $300. This use case exercises Zuora's revenue allocation capabilities by bundling a recurring service with a one-time professional service. The total contract value is allocated between the POBs based on their standalone selling prices. The recurring fee is recognized ratably over the 12-month term, while the strategy session fee is recognized point-in-time upon the session's completion."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Bond ladder management is an ongoing advisory service.); Services: POB=point_in_time release=at_go_live (The one-time strategy session is a distinct POB recognized when the service is delivered.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "one-time"
+      - "recurring"
+      - "allocation"
+  - id: "gen-betterment"
+    name: "Betterment - Betterment at Work - Essential 401(k) Rollout"
+    description: "Betterment at Work - Essential 401(k) Rollout"
+    input:
+      customer_name: "Acme Corp"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "A mid-sized technology company, Acme Corp, is implementing the Betterment at Work Essential 401(k) plan for their 150 employees. The contract includes a recurring Annual Base Compliance Fee of $1,200 and a recurring Monthly Participant Fee of $5 per employee ($750/month). Additionally, a one-time Implementation Fee of $1,000 is charged at the start of the contract. Betterment provides a 10% discount on the first year's base fee and implementation fee as a bundle incentive. Revenue for the base and participant fees is recognized ratably over the 12-month term, while the implementation fee is recognized at go-live. This scenario tests Zuora's ability to handle mixed billing frequencies (Annual and Monthly) and revenue allocations across multiple performance obligations."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Annual base compliance fee and monthly participant fees represent a stand-ready obligation to provide platform access.); Onboarding: POB=point_in_time release=at_go_live (Implementation fee for 401(k) setup is typically recognized upon completion of the onboarding phase.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "allocation"
+  - id: "gen-betterment-1"
+    name: "Betterment - Retail Digital Plan with Financial Advice Package"
+    description: "Retail Digital Plan with Financial Advice Package"
+    input:
+      customer_name: "Jane Doe"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "An individual retail investor signs up for the Digital Investing plan with a balance of $15,000. Because the balance is below the $24,000 threshold and they have not set up $250/month in recurring deposits, they are charged a flat $5 monthly subscription fee. Alongside the subscription, the customer purchases a 'Marriage & Planning' Financial Advice Package for a one-time fee of $299. The $5 monthly fee is recognized ratably each month, while the $299 service fee is recognized as a point-in-time event once the CFP consultation is completed. This use case demonstrates the coexistence of low-cost recurring subscriptions and high-value one-time professional services."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Monthly flat fee for digital wealth management services.); Services: POB=point_in_time release=at_go_live (Advice packages are distinct performance obligations recognized when the consultation occurs.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "one-time"
+      - "recurring"
+  - id: "gen-betterment-2"
+    name: "Betterment - Betterment for Advisors - RIA Platform Fee"
+    description: "Betterment for Advisors - RIA Platform Fee"
+    input:
+      customer_name: "Summit Wealth Management"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "Summit Wealth Management, a Registered Investment Advisor (RIA), joins the Betterment for Advisors platform to manage $50,000,000 in client assets. Betterment charges a 0.25% annual platform fee, which is billed monthly based on the average daily balance of assets under management (AUM). This results in an estimated monthly charge of approximately $10,416. The revenue is recognized as usage-based (consumption) because the service is provided continuously as the assets are managed. This scenario highlights Zuora's usage-based billing capabilities for asset-based fees common in FinTech."
+      rev_rec_notes: "Usage: POB=consumption release=as_used (AUM fees are recognized as the management service is rendered, typically aligned with the monthly billing cycle.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "license"
+  - id: "gen-acorns"
+    name: "Acorns - Bronze Monthly Individual Plan"
+    description: "Bronze Monthly Individual Plan"
+    input:
+      customer_name: "Acorns"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A new customer signs up for the Acorns Bronze plan to begin their micro-investing journey. The subscription includes Acorns Invest, Acorns Later, and Acorns Banking for a flat fee of $3.00 per month. This plan is billed monthly in advance on a month-to-month basis. Per the catalog notes, the fee is internally split between an Advisory Fee ($0.10) and a Program Fee ($2.90). Revenue for both components is recognized ratably over the monthly service period as the platform access is provided."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Flat fee subscription for platform access and advisory services recognized monthly.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "recurring"
+      - "license"
+  - id: "gen-acorns-1"
+    name: "Acorns - Gold Family Annual Plan with Asset Transfer"
+    description: "Gold Family Annual Plan with Asset Transfer"
+    input:
+      customer_name: "Acorns"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "A family signs up for the Acorns Gold plan to utilize the Acorns Early custodial accounts for their children. They choose the annual billing option at $99.00 per year, which represents a discount over the monthly rate. Additionally, the customer initiates an outbound transfer of an existing ETF portfolio, which triggers a one-time ETF Transfer Fee of $35.00 per ETF (assuming 1 ETF for this scenario). The subscription fee is recognized ratably over the 12-month term. The ETF Transfer Fee is recognized at a point-in-time once the transfer service is completed."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Annual Gold subscription recognized over the 12-month contract term.); Other: POB=point_in_time release=at_delivery (ETF Transfer Fee recognized upon completion of the transfer service.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "allocation"
+  - id: "gen-acorns-2"
+    name: "Acorns - Silver Tier with Promotional Discount"
+    description: "Silver Tier with Promotional Discount"
+    input:
+      customer_name: "Acorns"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Quarterly"
+      is_allocations: false
+      use_case_description: "An investor upgrades to the Acorns Silver plan to take advantage of the 1% IRA matching and 4.29% APY on emergency savings. The standard price is $6.00 per month, but the customer receives a 'First 3 Months 50% Off' promotional discount. The subscription is billed quarterly to reduce transaction frequency. Revenue is recognized ratably over the term, with the total contract value (including the discount) spread across the 12-month duration or recognized based on the discounted monthly values."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Ratable recognition, though the promotional discount impact on monthly revenue needs to be aligned with Acorns' accounting policy (straight-line vs. as-billed).)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "discount"
+      - "recurring"

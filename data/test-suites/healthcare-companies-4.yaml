@@ -1,0 +1,571 @@
+name: "healthcare-companies-4"
+description: "Generated from UC outputs - 2026-01-06"
+version: "1.0"
+tests:
+  - id: "gen-one-medical"
+    name: "One Medical - Amazon Prime Family Bundle"
+    description: "Amazon Prime Family Bundle"
+    input:
+      customer_name: "One Medical"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "A primary Amazon Prime member subscribes to One Medical at the discounted rate of $99/year, with a first-year promotional price of $69. They also add two Family Add-on Memberships for their children at $66/year each. All three charges are recurring annual subscriptions. The contract is for 12 months, billed upfront. Revenue for all membership fees is recognized ratably over the 12-month term as the performance obligation is to provide access to care over time."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Membership fees provide 24/7 access to services and are recognized monthly over the annual term.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "recurring"
+  - id: "gen-one-medical-1"
+    name: "One Medical - Enterprise B2B PEPM Agreement"
+    description: "Enterprise B2B PEPM Agreement"
+    input:
+      customer_name: "One Medical"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A mid-market business client, 'TechCorp', signs an agreement to provide One Medical as a benefit for 250 employees. The pricing is an 'Enterprise Sponsored Membership' at $12 per employee per month (PEPM). This is a recurring monthly charge based on the total eligible headcount. The contract is for 12 months with monthly billing. Revenue is recognized monthly as the service is delivered to the employee base."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (PEPM fees are recognized in the month the coverage is provided.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "recurring"
+  - id: "gen-one-medical-2"
+    name: "One Medical - Standard Individual with On-Demand Visit"
+    description: "Standard Individual with On-Demand Visit"
+    input:
+      customer_name: "One Medical"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "An individual without Amazon Prime signs up for the 'Standard Personal Membership' at $199/year. In the same month, they utilize a 'Pay-per-visit Virtual Care' session for a specialized condition not covered by the standard membership, which carries a one-time fee of $49. The membership is a recurring annual charge billed upfront, while the virtual visit is a one-time usage-based charge. Revenue for the membership is ratable over 12 months, and revenue for the virtual visit is recognized at the point in time the consultation occurs."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Annual membership recognized over the 12-month term.); Usage: POB=point_in_time release=at_go_live (The virtual visit fee is recognized upon completion of the medical session.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "one-time"
+      - "recurring"
+  - id: "gen-headspace"
+    name: "Headspace - Enterprise Corporate Rollout"
+    description: "Enterprise Corporate Rollout"
+    input:
+      customer_name: "Headspace"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "A mid-sized corporate client, Zenith Tech, is purchasing Headspace for Work for their 500 employees. The deal includes a recurring subscription for 500 licenses priced at a discounted rate of $6.00 per user per month, billed annually in advance. To ensure a successful rollout, the package includes a one-time Professional Services and Onboarding fee of $2,500 for SSO integration and admin training. The total contract value is $38,500 for the first year. Revenue for the subscription will be recognized ratably over the 12-month term, while the onboarding fee is recognized at the point of project completion (go-live)."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Standard SaaS access for employees recognized monthly over the 1-year term.); Onboarding: POB=point_in_time release=at_go_live (One-time setup and training fee recognized once the service is delivered.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "license"
+      - "allocation"
+  - id: "gen-headspace-1"
+    name: "Headspace - Premium Individual Coaching Bundle"
+    description: "Premium Individual Coaching Bundle"
+    input:
+      customer_name: "Headspace"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "An individual consumer signs up for a high-touch wellness package through the Headspace app. This bundle combines the Annual Individual Membership at $69.99 per year with the Mental Health Coaching add-on at $99.99 per month. The customer is billed monthly to align with the coaching service cadence. The coaching service includes up to 3 text-based sessions per month. Revenue for the core subscription component is recognized ratably over the year, while the coaching fee is recognized as a monthly service obligation. No professional services are required for this self-serve consumer motion."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Core app access recognized over the 12-month membership duration.); Services: POB=over_time release=ratable_over_term (Monthly coaching access recognized over the month the service is active.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "recurring"
+  - id: "gen-headspace-2"
+    name: "Headspace - Multi-Year Enterprise Growth Ramp"
+    description: "Multi-Year Enterprise Growth Ramp"
+    input:
+      customer_name: "Headspace"
+      contract_start_date: "02/01/2026"
+      terms_months: 24
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "Global Health Corp enters a 24-month strategic partnership with Headspace to provide wellness benefits to an expanding workforce. Year 1 includes 1,000 seats at $5.50 per user per month. Year 2 ramps up to 2,000 seats at a further discounted rate of $5.00 per user per month to reflect the increased volume. The contract includes a $5,000 custom workshop and implementation fee billed at the start of Year 1. Billing occurs annually at the start of each contract year. Revenue for the licenses is recognized ratably based on the specific seat count and rate active during each period, while the implementation fee is recognized upon completion of the initial workshops."
+      allocation_method: "Use Sell Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Subscription revenue follows the ramp schedule, recognized monthly for the duration of the 24-month term.); Onboarding: POB=point_in_time release=at_go_live (One-time implementation fee recognized at the start of the contract once workshops are held.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "ramp"
+      - "discount"
+      - "one-time"
+      - "license"
+      - "allocation"
+      - "multi-year"
+  - id: "gen-calm"
+    name: "Calm - Calm for Teams - Annual Seat Expansion"
+    description: "Calm for Teams - Annual Seat Expansion"
+    input:
+      customer_name: "Calm"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "A mid-sized technology company purchases a 'Calm for Teams' subscription for 100 employees to support mental wellness. The deal is structured as an annual recurring subscription with a tiered pricing model, where the first 50 seats are $60 each and the next 50 seats are $50 each. Billing occurs annually in advance at the start of the contract. The subscription provides full access to the Calm app library and the Partner Portal for HR analytics. Revenue for the subscription charge should be recognized ratably over the 12-month term. This scenario demonstrates Zuora's ability to handle tiered pricing and annual advance billing for B2B self-serve or sales-led deals."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Standard SaaS subscription for 100 seats recognized over the 12-month contract period.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "recurring"
+  - id: "gen-calm-1"
+    name: "Calm - Calm Enterprise - Multi-POB Bundle with Services"
+    description: "Calm Enterprise - Multi-POB Bundle with Services"
+    input:
+      customer_name: "Calm"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "A global professional services firm signs a large-scale 'Calm Enterprise' agreement for 1,000 employees. The contract includes a recurring subscription charge of $40,000 per year and a one-time 'Implementation and Integration' fee of $5,000 to sync Calm with their internal HRIS system. To close the deal, a 10% bundle discount is applied to the total contract value. Because the discount applies to both the subscription and the one-time services, revenue allocation is required between the two performance obligations. The subscription revenue is recognized ratably over 12 months, while the implementation fee is recognized upon completion of the integration (point-in-time). This scenario tests Zuora's revenue allocation engine and multi-POB management."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Allocated portion of the subscription fee recognized over the 12-month term.); Services: POB=point_in_time release=at_go_live (Implementation fee recognized once the HRIS integration is verified as complete.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "allocation"
+  - id: "gen-calm-2"
+    name: "Calm - Calm Health - Payer Consumption Model"
+    description: "Calm Health - Payer Consumption Model"
+    input:
+      customer_name: "Calm"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A regional health insurance payer partners with Calm to offer 'Calm Health' as a clinical benefit to its members. The pricing consists of a flat monthly platform access fee of $1,000 and a consumption-based charge of $0.50 per 'covered life' per month. The number of covered lives is reported via a monthly file transfer from the payer to Calm. Billing for the platform fee is in advance, while the consumption fee is billed monthly in arrears based on actual eligibility counts. Revenue for the platform fee is ratable, and revenue for the consumption fee is recognized in the month the service is provided (as used). This scenario showcases Zuora's usage-based billing and hybrid pricing capabilities."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Fixed monthly platform fee recognized over the month of service.); Usage: POB=consumption release=as_used (Per-member fees recognized in the month the 'covered life' was eligible for the service.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "license"
+  - id: "gen-noom"
+    name: "Noom - The Integrated Wellness Starter Kit"
+    description: "The Integrated Wellness Starter Kit"
+    input:
+      customer_name: "Noom"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "A new customer signs up for a comprehensive weight loss journey starting with the Noom Weight Annual subscription priced at $209.00 per year. To enhance their experience, they purchase a Withings Body Smart Scale for a one-time fee of $99.00 and a Custom Meal & Exercise Plan for an additional $80.00. The subscription is billed annually in advance, while the hardware and custom plan are billed immediately upon purchase. This scenario exercises multiple performance obligations with different revenue recognition patterns: the subscription is ratable over the 12-month term, and the hardware and digital service are recognized at the point of delivery. Total contract value is $388.00. We assume the scale and digital plan are delivered within the first month of the contract."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Noom Weight access is a standard SaaS subscription recognized daily over the contract year.); Hardware: POB=point_in_time release=at_delivery (Revenue for the Withings scale is recognized once the physical device is shipped/delivered.); Services: POB=point_in_time release=at_delivery (The custom meal plan is a discrete digital deliverable provided shortly after the quiz completion.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "one-time"
+      - "recurring"
+      - "allocation"
+  - id: "gen-noom-1"
+    name: "Noom - Noom Med Clinical Intervention Program"
+    description: "Noom Med Clinical Intervention Program"
+    input:
+      customer_name: "Noom"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Quarterly"
+      is_allocations: false
+      use_case_description: "A patient enrolls in the Noom Med GLP-1 Rx Program to receive clinical weight loss support. The pricing structure follows a promotional first month at $69.00, followed by quarterly recurring charges of $297.00 for the remainder of the 12-month term. This program includes access to the Noom Weight digital platform and telehealth consultations with clinicians. The billing is set to Quarterly, with the first invoice reflecting the initial discounted month and the subsequent invoices reflecting the standard quarterly rate. Revenue for the clinical services and platform access is recognized ratably over the 12-month term, treating the ramped pricing as a single performance obligation. The total contract value for the first year is $960.00 ($69 + $297 * 3)."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Combined digital and clinical access is recognized ratably; the promotional first month is smoothed over the term for revenue purposes.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "ramp"
+      - "discount"
+      - "recurring"
+      - "license"
+  - id: "gen-noom-2"
+    name: "Noom - Holistic Monthly Wellness Bundle"
+    description: "Holistic Monthly Wellness Bundle"
+    input:
+      customer_name: "Noom"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A user seeks a flexible, month-to-month holistic health plan combining mental and physical wellness. They subscribe to Noom Weight at the standard monthly rate of $70.00 and add Noom Mood for an estimated monthly rate of $15.00. This multi-product subscription is billed monthly in advance with no long-term commitment, though for demo purposes, we will model a 12-month term to show projected revenue. Both products are SaaS-based and recognized ratably over each monthly service period. This scenario demonstrates Zuora's ability to manage multiple recurring rate plans on a single subscription. The total monthly recurring revenue (MRR) is $85.00."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Both Noom Weight and Noom Mood are recognized monthly as the service is provided.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "recurring"
+      - "license"
+  - id: "gen-capsule"
+    name: "Capsule - Enterprise Employer Pharmacy Benefit"
+    description: "Enterprise Employer Pharmacy Benefit"
+    input:
+      customer_name: "Capsule"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      use_case_description: "A large corporate client, Morgan Stanley, signs a 12-month contract to provide the Employer Pharmacy Benefit Platform to 2,500 employees. The commercial agreement includes a recurring platform fee of $1.50 per employee per month (PEPM), totaling $3,750 monthly. Additionally, a one-time Implementation and Integration fee of $5,000 is charged at the start of the contract to handle HR system syncing. The Smart Refill Management service is bundled at $0.00 to encourage employee adherence. Revenue for the platform fee is recognized ratably over the 12-month term, while the implementation fee is recognized at go-live. This scenario demonstrates a B2B SaaS model with a one-time professional services component requiring revenue allocation."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Employer platform fees are standard SaaS subscriptions recognized over the contract term.); Onboarding: POB=point_in_time release=at_go_live (Implementation fees are recognized once the HR system integration is complete and the service is live.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "one-time"
+      - "recurring"
+      - "license"
+      - "allocation"
+  - id: "gen-capsule-1"
+    name: "Capsule - B2C Family Care & OTC Upsell"
+    description: "B2C Family Care & OTC Upsell"
+    input:
+      customer_name: "Capsule"
+      contract_start_date: "02/01/2026"
+      terms_months: 1
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "An individual patient signs up for the Capsule Family Management plan to manage prescriptions for four family members. The subscription includes the Smart Refill Management service at $0.00 per month. During the first month, the customer fulfills three prescriptions with a standard insurance copay of $15.00 each, billed as one-time charges. Additionally, the customer purchases Over-the-Counter (OTC) products including Vitamin D for $12.00 and Ibuprofen for $8.00. Revenue for all physical products (prescriptions and OTC) is recognized at the point of delivery. The $0 subscription serves as the anchor for the customer relationship in Zuora. This case highlights high-volume B2C transactions with mixed physical goods and free recurring services."
+      rev_rec_notes: "Other: POB=point_in_time release=at_delivery (Prescription copays and OTC items are recognized as revenue only upon successful delivery to the patient.); Subscription: POB=over_time release=ratable_over_term (The $0 service is technically a subscription but has no financial impact on revenue recognition.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "one-time"
+      - "recurring"
+  - id: "gen-capsule-2"
+    name: "Capsule - Health System Tiered Integration"
+    description: "Health System Tiered Integration"
+    input:
+      customer_name: "Capsule"
+      contract_start_date: "02/01/2026"
+      terms_months: 24
+      transaction_currency: "USD"
+      billing_period: "Quarterly"
+      is_allocations: true
+      use_case_description: "A regional health system enters a 24-month partnership with Capsule for adherence tracking and predictive inventory services. The contract features a base Platform Fee of $1,000 per month billed quarterly. In addition to the base fee, Capsule charges a tiered usage fee based on the volume of digital prescriptions processed: the first 500 fills are included at $0, while fills 501-2,000 are billed at $0.50 per fill. A professional services engagement for API integration is billed as a one-time fee of $10,000. Revenue for the base fee is ratable, usage is recognized as consumed, and integration is recognized upon completion. This scenario exercises tiered pricing models and multi-year contract management."
+      allocation_method: "Use Sell Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (The $1,000 base fee is recognized ratably over each quarterly billing period.); Usage: POB=consumption release=as_used (Tiered prescription volume is recognized in the period the prescriptions are filled.); Services: POB=point_in_time release=at_go_live (API integration is a distinct POB recognized upon system acceptance.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "one-time"
+      - "license"
+      - "allocation"
+      - "multi-year"
+  - id: "gen-alto-pharmacy"
+    name: "Alto Pharmacy - B2B Telehealth Partner Integration"
+    description: "B2B Telehealth Partner Integration"
+    input:
+      customer_name: "Alto Pharmacy"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      use_case_description: "A telehealth provider partners with Alto to use the Pharmacy as a Service (PaaS) platform. The contract includes a recurring monthly platform fee of $2,500 for API access and a one-time API implementation fee of $1,500. Additionally, the partner is billed $5.00 per prescription fulfillment as a usage-based charge. This scenario tests the combination of recurring access fees, one-time professional services, and high-volume transactional usage. Revenue for the platform fee is recognized ratably over the 12-month term, while the implementation fee is recognized upon integration completion."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Monthly PaaS platform fee represents a standing ready obligation to provide API access.); Onboarding: POB=point_in_time release=at_go_live (API implementation is a distinct service recognized once the integration is functional.); Usage: POB=consumption release=as_used (Fulfillment fees are recognized as prescriptions are successfully delivered.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "one-time"
+      - "recurring"
+      - "license"
+      - "allocation"
+  - id: "gen-alto-pharmacy-1"
+    name: "Alto Pharmacy - Enterprise Health System Multi-Year Ramp"
+    description: "Enterprise Health System Multi-Year Ramp"
+    input:
+      customer_name: "Alto Pharmacy"
+      contract_start_date: "02/01/2026"
+      terms_months: 36
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A large regional health system signs a 3-year agreement for Alto's PaaS platform to manage pharmacy logistics for their outpatient clinics. To support the health system's rollout, the platform fee ramps annually: $1,500/month in Year 1, $2,500/month in Year 2, and $3,500/month in Year 3. Fulfillment fees are structured in tiers to reward volume: $10.00 per script for the first 1,000 scripts per month, and $7.00 per script for all volume above that. This use case exercises multi-year ramp contracts and tiered usage pricing models in Zuora."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Ramped platform fees are typically smoothed or recognized based on the specific period fee depending on contract structure.); Usage: POB=consumption release=as_used (Tiered usage recognized as fulfillment occurs.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "ramp"
+      - "usage"
+      - "license"
+      - "multi-year"
+  - id: "gen-alto-pharmacy-2"
+    name: "Alto Pharmacy - Consumer Wellness & Essentials Bundle"
+    description: "Consumer Wellness & Essentials Bundle"
+    input:
+      customer_name: "Alto Pharmacy"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      use_case_description: "Alto introduces a 'Wellness Essentials' subscription for individual patients. For a flat fee of $29.00 per month, patients receive a recurring delivery of curated OTC items (vitamins, first aid) and access to premium 24/7 pharmacist support. Prescription medications are added to the monthly delivery as one-time charges based on the patient's insurance copay or cash price (e.g., $15.00 copay). This scenario demonstrates the bundling of recurring physical goods (SaaS-like subscription for OTC) with transactional healthcare services."
+      allocation_method: "Use Sell Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (The $29 fee covers both goods (OTC) and services (support), usually recognized ratably if delivered monthly.); Other: POB=point_in_time release=at_delivery (Prescription copays are recognized at the point the patient receives the medication.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "one-time"
+      - "recurring"
+      - "license"
+      - "allocation"
+  - id: "gen-carbon-health"
+    name: "Carbon Health - Enterprise Health Solution for Employers"
+    description: "Enterprise Health Solution for Employers"
+    input:
+      customer_name: "Carbon Health"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "Carbon Health provides an Enterprise Health Solution to a corporate client with 500 employees. The deal includes a base Workplace Health Program fee of $10 per employee per month, billed monthly. Additionally, the client is billed for Virtual Care Visits at a discounted rate of $85 per visit, which is tracked and billed as usage. The contract has a 12-month term. Revenue for the PEPM subscription is recognized ratably over the term, while the virtual visit fees are recognized as usage occurs."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (PEPM fee for platform access and occupational health services.); Usage: POB=consumption release=as_used (Virtual care visits billed based on actual employee consumption.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "discount"
+      - "recurring"
+  - id: "gen-carbon-health-1"
+    name: "Carbon Health - CarbyOS SaaS Licensing and Implementation"
+    description: "CarbyOS SaaS Licensing and Implementation"
+    input:
+      customer_name: "Carbon Health"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "An independent medical group licenses the CarbyOS Platform for 10 providers. The license fee is $300 per provider per month, totaling $3,000 per month, billed annually in advance ($36,000). A one-time Implementation and Training fee of $5,000 is charged upfront. The implementation is expected to take 30 days. Revenue for the SaaS license is recognized ratably over the 12-month term, and the implementation fee is recognized point-in-time upon completion of the go-live. A 10% bundle discount is applied to the total contract value, requiring revenue allocation between the license and services."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (CarbyOS platform license for 10 providers.); Onboarding: POB=point_in_time release=at_go_live (Implementation and training services recognized upon clinic go-live.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "license"
+      - "allocation"
+  - id: "gen-carbon-health-2"
+    name: "Carbon Health - Direct-to-Consumer Chronic Care Program"
+    description: "Direct-to-Consumer Chronic Care Program"
+    input:
+      customer_name: "Carbon Health"
+      contract_start_date: "02/01/2026"
+      terms_months: 6
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A patient enrolls in a 6-month specialized care program for hypertension management. The program costs $50 per month for remote monitoring and app access, plus a $225 initial in-person comprehensive evaluation. The evaluation fee is billed once at the start of the program. The monthly monitoring fee is billed at the start of each month. Revenue for the evaluation is recognized at the time of the visit, while the monitoring fee is recognized ratably over each monthly service period."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Monthly health monitoring subscription.); Other: POB=point_in_time release=at_delivery (One-time initial clinical visit fee.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+  - id: "gen-talkspace"
+    name: "Talkspace - B2C Video + Messaging Subscription"
+    description: "B2C Video + Messaging Subscription"
+    input:
+      customer_name: "Talkspace"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A direct-to-consumer member signs up for the Video + Messaging Therapy plan. The plan is priced at $396 per month, which includes unlimited asynchronous messaging and four live video sessions. This is a standard recurring subscription with a 12-month commitment term, though it is billed on a monthly basis. Revenue for the subscription is recognized ratably over the monthly service period as the member has continuous access to the platform and their therapist. This scenario represents the core B2C revenue stream for Talkspace."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Standard SaaS subscription providing access to the therapist network; recognized monthly.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "recurring"
+      - "license"
+  - id: "gen-talkspace-1"
+    name: "Talkspace - B2B SMB Employer Plan"
+    description: "B2B SMB Employer Plan"
+    input:
+      customer_name: "Talkspace"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "An SMB client contracts with Talkspace to provide mental health benefits for 50 employees using the Talkspace for Business (SMB) product. The pricing is set at $20 per employee per month (PEPM), totaling $1,000 per month. The contract is for a 12-month term with an annual upfront billing requirement. Revenue is recognized ratably over the 12-month term as the benefit is made available to the employee population. This use case demonstrates the B2B employer-sponsored model which is a key growth driver for the company."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Employer-sponsored access is a stand-ready obligation recognized over the contract term.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+  - id: "gen-talkspace-2"
+    name: "Talkspace - Psychiatry Starter Bundle (Allocations)"
+    description: "Psychiatry Starter Bundle (Allocations)"
+    input:
+      customer_name: "Talkspace"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      use_case_description: "A patient purchases a 'Psychiatry Starter Bundle' for $435. This bundle includes one 'Psychiatry Evaluation' (List Price: $299) and one 'Psychiatry Follow-up' (List Price: $175). Because the total transaction price of $435 is less than the sum of the standalone selling prices ($474), revenue must be allocated across the two performance obligations based on their relative standalone selling prices. Revenue for each session is recognized as a point-in-time event upon the completion of the specific clinical visit. This scenario tests Zuora's ability to handle complex allocations for bundled professional services."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Services: POB=point_in_time release=at_go_live (Revenue for the Evaluation POB is recognized when the first session is completed.); Services: POB=point_in_time release=at_go_live (Revenue for the Follow-up POB is recognized when the second session is completed.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "allocation"

@@ -1,0 +1,439 @@
+name: "telco-companies-4"
+description: "Generated from UC outputs - 2026-01-06"
+version: "1.0"
+tests:
+  - id: "gen-aircall"
+    name: "Aircall - SMB Essentials with AI Add-on"
+    description: "SMB Essentials with AI Add-on"
+    input:
+      customer_name: "Aircall"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "A small support team of 5 users signs up for the Essentials Subscription at $30 per user per month, billed annually. They also opt for the AI Assist add-on for all 5 users at $9 per user per month to enable sentiment analysis and call summaries. Additionally, they require 2 extra phone numbers beyond the one included in the plan, priced at $6 per number per month. International calling usage is enabled and will be billed monthly in arrears based on consumption. The subscription and AI add-on are recognized ratably over the 12-month term, while the additional numbers are also ratable and usage is recognized as billed."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Essentials and AI Assist licenses are standard SaaS subscriptions recognized over the contract term.); Other: POB=over_time release=ratable_over_term (Additional phone numbers represent a recurring right to access a specific resource, recognized ratably.); Usage: POB=consumption release=as_used (International calling is recognized as minutes are consumed and billed in arrears.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+  - id: "gen-aircall-1"
+    name: "Aircall - Mid-Market Professional with Implementation"
+    description: "Mid-Market Professional with Implementation"
+    input:
+      customer_name: "Aircall"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "A mid-market sales organization purchases 20 Professional Subscription licenses at $50 per user per month, billed annually, to leverage the Salesforce CTI integration. To ensure a smooth rollout, they purchase two 5-hour blocks of Professional Services for $1,500 total ($150/hr). A 10% discount is applied to the Professional Subscription as part of a promotional bundle. Because the discount applies to both the subscription and the services, revenue allocation is required. The subscription revenue is recognized ratably, while the professional services are recognized at a point-in-time upon completion of the implementation project."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Professional subscription recognized over the 12-month term.); Services: POB=point_in_time release=at_go_live (Professional services blocks are recognized upon completion of the implementation milestones.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "license"
+      - "allocation"
+  - id: "gen-aircall-2"
+    name: "Aircall - Enterprise Custom Multi-Year Deal"
+    description: "Enterprise Custom Multi-Year Deal"
+    input:
+      customer_name: "Aircall"
+      contract_start_date: "02/01/2026"
+      terms_months: 24
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "An enterprise customer signs a 24-month agreement for 100 users on the Custom Subscription plan at $80 per user per month, billed annually. This custom tier includes unlimited international calling to specific zones and SAML SSO. The deal includes 4 blocks (20 hours) of Professional Services for complex API work and custom onboarding, priced at $3,000 total. The customer is granted a volume discount, bringing the total contract value for the 24 months to $195,000. Revenue for the subscription is recognized ratably over 24 months. Professional services are recognized as the hours are delivered (event-based)."
+      allocation_method: "Use Sell Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Custom subscription fees recognized ratably over the 24-month multi-year term.); Services: POB=event_based release=as_used (Services hours are recognized as the 5-hour blocks are consumed/delivered.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "discount"
+      - "recurring"
+      - "allocation"
+      - "multi-year"
+  - id: "gen-five9"
+    name: "Five9 - Enterprise Plus Bundle with Professional Services"
+    description: "Enterprise Plus Bundle with Professional Services"
+    input:
+      customer_name: "Five9"
+      contract_start_date: "02/01/2026"
+      terms_months: 36
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      use_case_description: "A large enterprise customer signs a 36-month contract for the 'Plus Bundle', which integrates Core Voice, Digital Engagement, and IVA. The deal covers 100 concurrent users at a bundled rate of $185 per user per month. A one-time Professional Services fee of $10,000 is charged for implementation and workflow configuration. Telephony usage is billed monthly in arrears based on actual minutes consumed at an estimated rate of $0.02 per minute. Revenue for the subscription bundle is recognized ratably over the 36-month term, while the implementation fee is recognized as a point-in-time event upon go-live. This scenario tests bundled pricing, multi-year terms, and mixed revenue recognition triggers."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (The Plus Bundle subscription provides continuous access to the platform and is recognized ratably.); Onboarding: POB=point_in_time release=at_go_live (Professional services are tied to the initial setup and configuration, recognized when the customer goes live.); Usage: POB=consumption release=as_used (Telephony usage is recognized in the period the minutes are actually consumed by the contact center.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "bundle"
+      - "one-time"
+      - "recurring"
+      - "allocation"
+      - "multi-year"
+  - id: "gen-five9-1"
+    name: "Five9 - Core Voice with Ramped User Growth"
+    description: "Core Voice with Ramped User Growth"
+    input:
+      customer_name: "Five9"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A mid-market customer subscribes to 'Core Voice' for a 12-month term. The contract starts with 50 concurrent users at $159 per user per month for the first 6 months, then automatically ramps to 80 users for the remaining 6 months to support seasonal demand. A $2,500 implementation fee is charged upfront. Telephony usage is billed monthly in arrears. This scenario exercises Zuora's ability to handle ramped quantities within a single subscription and the associated ratable revenue adjustments as the user count increases."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Core Voice license revenue is recognized ratably based on the active user count in each period.); Onboarding: POB=point_in_time release=at_go_live (Standard setup fee recognized upon completion of account activation.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "ramp"
+      - "usage"
+      - "one-time"
+      - "recurring"
+  - id: "gen-five9-2"
+    name: "Five9 - Digital Engagement with IVA Overage Model"
+    description: "Digital Engagement with IVA Overage Model"
+    input:
+      customer_name: "Five9"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A digital-first contact center subscribes to 'Digital Engagement' for 40 users at $119 per user per month. They also add the 'Intelligent Virtual Agent' (IVA) service, which includes a monthly recurring base fee of $1,000 covering 5,000 minutes of AI interaction. Any usage beyond the 5,000-minute threshold is billed as an overage at $0.10 per minute. The contract is for 12 months. This scenario demonstrates a mixed recurring and usage model (included units + overage) and how revenue is partitioned between the fixed subscription and the variable consumption."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Digital Engagement seats are recognized ratably over the 12-month term.); Other: POB=over_time release=ratable_over_term (The IVA base fee ($1,000) is recognized ratably as it provides the 'right to access' the AI platform.); Usage: POB=consumption release=as_used (IVA overage minutes are recognized in the month they are consumed by the virtual agent.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+  - id: "gen-genesys-cloud"
+    name: "Genesys Cloud - Mid-Market Omnichannel Onboarding"
+    description: "Mid-Market Omnichannel Onboarding"
+    input:
+      customer_name: "Genesys Cloud"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "This scenario covers a standard mid-market sale of the Genesys Cloud CX 2 plan for 50 users at $115/month each. The deal includes a one-time Professional Services 'Essential Jumpstart' fee of $5,000. The contract has a 12-month term with the subscription billed annually upfront. A 10% bundle discount is applied across all charges, necessitating revenue allocation between the recurring subscription and the one-time service fee. Subscription revenue is treated as an over-time POB recognized ratably over the 12-month term. Professional services are treated as a point-in-time POB recognized upon go-live completion."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Standard SaaS subscription for CX 2 platform access recognized over the 12-month contract.); Onboarding: POB=point_in_time release=at_go_live (Professional services fee for the Essential Jumpstart package recognized when the environment is configured.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "allocation"
+  - id: "gen-genesys-cloud-1"
+    name: "Genesys Cloud - Enterprise AI & Consumption"
+    description: "Enterprise AI & Consumption"
+    input:
+      customer_name: "Genesys Cloud"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "This enterprise scenario features 200 users on the Genesys Cloud CX 3 plan at $155/month, focusing on AI and WEM features. The subscription is billed annually for a 12-month term. The contract also includes AI Experience Tokens for usage-based billing of Agent Copilot features. Usage is tracked and billed monthly in arrears at $0.05 per token for any consumption exceeding the base tier allotment. Subscription revenue is recognized ratably over the 12-month term. Usage revenue is recognized as consumption occurs each month (as used). No significant discounts are applied, so revenue allocation is not required."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (High-tier CX 3 subscription recognized ratably over the annual term.); Usage: POB=consumption release=as_used (AI Experience tokens billed in arrears and recognized as the service is consumed.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "discount"
+      - "recurring"
+  - id: "gen-genesys-cloud-2"
+    name: "Genesys Cloud - Multi-Year Strategic Ramp"
+    description: "Multi-Year Strategic Ramp"
+    input:
+      customer_name: "Genesys Cloud"
+      contract_start_date: "02/01/2026"
+      terms_months: 24
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "This use case demonstrates a 24-month ramp deal for a customer migrating from legacy systems. Year 1 includes 100 seats of Genesys Cloud CX 1 at $75/user/month. Year 2 ramps to 100 seats of Genesys Cloud CX 2 at $115/user/month. An upfront $10,000 'Enterprise Jumpstart' fee is included for implementation services. Subscription charges are billed annually at the start of each contract year. Revenue for the subscription is recognized ratably over the 24-month term based on the active service period of each tier. The service fee is recognized as a point-in-time event at the end of the onboarding phase."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Ramp deal with two distinct phases; revenue recognized based on the value delivered in each 12-month period.); Services: POB=point_in_time release=at_go_live (Implementation fee recognized upon completion of the Enterprise Jumpstart program.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "ramp"
+      - "one-time"
+      - "recurring"
+      - "multi-year"
+  - id: "gen-talkdesk"
+    name: "Talkdesk - Mid-Market Omnichannel Deployment"
+    description: "Mid-Market Omnichannel Deployment"
+    input:
+      customer_name: "Talkdesk"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "This scenario covers a mid-market customer subscribing to the Talkdesk CX Cloud Elevate plan for 50 named users. The Elevate plan is priced at $115 per user per month, billed annually on a 12-month term. The deal includes a one-time Implementation & Professional Services fee of $10,000 for solution design and IVR flow configuration. Additionally, Telecom & Connectivity usage is estimated at $500 per month, billed in arrears based on actual minutes and SMS consumption. Revenue for the subscription is recognized ratably over the 12-month term, while the implementation fee is recognized at go-live. Usage revenue is recognized as consumed each month."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Standard SaaS subscription for CX Cloud Elevate seats.); Services: POB=point_in_time release=at_go_live (Implementation services recognized upon completion of setup.); Usage: POB=consumption release=as_used (Telecom minutes and SMS recognized as consumed.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "one-time"
+      - "recurring"
+  - id: "gen-talkdesk-1"
+    name: "Talkdesk - Enterprise AI Transformation Bundle"
+    description: "Enterprise AI Transformation Bundle"
+    input:
+      customer_name: "Talkdesk"
+      contract_start_date: "02/01/2026"
+      terms_months: 36
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "An enterprise-level deal featuring the Talkdesk CX Cloud Elite plan for 200 users at a list price of $145 per user per month. This package includes the AI & Automation Suite as a core component. To support the rollout, a $45,000 'Premium Implementation' project is included, covering custom CRM integrations and AI Trainer setup. The customer is on a 36-month multi-year term with annual billing. A 15% bundle discount is applied across the entire contract, triggering the need for revenue allocation between the subscription and the professional services. The subscription revenue is ratable, while the services are recognized at the point of delivery."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Elite plan subscription including AI suite, recognized over 36 months.); Services: POB=point_in_time release=at_go_live (Premium implementation fee allocated based on standalone selling price.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "allocation"
+      - "multi-year"
+  - id: "gen-talkdesk-2"
+    name: "Talkdesk - Digital-First Support Expansion"
+    description: "Digital-First Support Expansion"
+    input:
+      customer_name: "Talkdesk"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "This use case focuses on a digital-first support team utilizing 'CX Cloud Digital Essentials' for 75 users. The pricing is $85 per user per month, but the customer has elected for monthly billing rather than annual. The scenario includes a high volume of SMS and social messaging, with usage billed at $0.01 per message. A $5,000 agent training package is included as a one-time charge. Subscription revenue is recognized ratably each month. The training revenue is recognized upon the completion of the training sessions. Usage is recognized as billed/consumed each month, reflecting the high-frequency nature of digital interactions."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Digital Essentials seats recognized monthly.); Other: POB=point_in_time release=at_go_live (Agent training package recognized upon completion of the training sessions.); Usage: POB=consumption release=as_used (SMS and messaging usage recognized as consumed.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "bundle"
+      - "one-time"
+      - "recurring"
+  - id: "gen-nextiva"
+    name: "Nextiva - Mid-Market NextOS Power Suite Expansion"
+    description: "Mid-Market NextOS Power Suite Expansion"
+    input:
+      customer_name: "Nextiva"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A mid-market professional services firm is deploying the Nextiva NextOS Power Suite for 25 users to consolidate their voice, video, and CRM integrations. The contract is for a 12-month term with a recurring seat price of $60.00 per user per month, billed monthly. This plan includes advanced IVR and 10,000 toll-free minutes as part of the base subscription. Revenue for the subscription seats will be recognized ratably over the 12-month service period. No physical hardware is included in this specific scenario as the customer is using the Nextiva desktop and mobile apps exclusively."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Standard SaaS subscription for NextOS Power Suite recognized monthly over the contract term.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "recurring"
+  - id: "gen-nextiva-1"
+    name: "Nextiva - Enterprise Contact Center with Hardware Bundle"
+    description: "Enterprise Contact Center with Hardware Bundle"
+    input:
+      customer_name: "Nextiva"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Quarterly"
+      is_allocations: true
+      use_case_description: "A large enterprise is implementing Nextiva Contact Center Premium for 50 agents at $199.00 per agent per month on a 12-month term. The deal includes 50 Poly desk phones at a one-time cost of $150.00 per device and a one-time Enterprise Onboarding fee of $2,500.00. The customer is receiving a 10% discount on the total contract value, which requires revenue allocation across the hardware, onboarding services, and the subscription. Billing is set to Quarterly. Revenue for hardware is recognized upon delivery, onboarding is recognized at go-live, and the subscription is recognized ratably over the term."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Contact Center Premium licenses recognized over the 12-month term.); Hardware: POB=point_in_time release=at_delivery (Desk phones are distinct performance obligations recognized when the customer takes possession.); Services: POB=point_in_time release=at_go_live (Onboarding fee recognized once the contact center environment is fully activated.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "allocation"
+  - id: "gen-nextiva-2"
+    name: "Nextiva - Hybrid SMB Core with SIP Trunking Usage"
+    description: "Hybrid SMB Core with SIP Trunking Usage"
+    input:
+      customer_name: "Nextiva"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "An SMB customer is using the Nextiva Small Business Core Plan for 10 users at $18.95 per user per month. Additionally, they are maintaining an on-premise PBX and require 2 Nextiva SIP Trunks at $25.00 per trunk per month. The contract also includes usage-based charges for toll-free minute consumption, billed in arrears at a rate of $0.03 per minute. This is a 12-month contract billed monthly. The recurring seat and trunk fees are recognized ratably, while the toll-free usage is recognized as consumption occurs based on monthly CDR (Call Detail Record) imports."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Includes both the Core Plan seats and the fixed SIP Trunk monthly fees.); Usage: POB=consumption release=as_used (Toll-free minutes recognized in the month the calls are made.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+  - id: "gen-goto-connect"
+    name: "GoTo Connect - Mid-Market Connect CX with Managed Implementation"
+    description: "Mid-Market Connect CX with Managed Implementation"
+    input:
+      customer_name: "GoTo Connect"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "A mid-market customer signs a 12-month contract for 50 seats of the GoTo Connect CX Plan. The subscription is priced at $34 per user per month, billed annually upfront. In addition to the recurring seats, the deal includes a one-time 'Managed Implementation Services' fee of $2,500 for account configuration and number porting. Revenue for the subscription seats is recognized ratably over the 12-month term, while the implementation fee is recognized at the point of go-live. This scenario tests the ability to combine recurring SaaS seats with a distinct professional services performance obligation."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Standard SaaS seat-based subscription recognized over the 12-month contract duration.); Services: POB=point_in_time release=at_go_live (Implementation services are typically considered a separate POB recognized upon completion of setup.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "one-time"
+      - "recurring"
+      - "license"
+  - id: "gen-goto-connect-1"
+    name: "GoTo Connect - Enterprise Contact Center Bundle with Hardware"
+    description: "Enterprise Contact Center Bundle with Hardware"
+    input:
+      customer_name: "GoTo Connect"
+      contract_start_date: "02/01/2026"
+      terms_months: 24
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "An enterprise customer purchases 25 agents for the GoTo Contact Center Plan at $80 per agent per month, along with 25 VoIP Desk Phones (hardware) at $150 per device. The contract is for 24 months, billed annually for the software and one-time for the hardware. To win the deal, a 15% discount is applied to the total contract value, requiring revenue allocation between the hardware (delivered at start) and the subscription (delivered over 24 months). The hardware revenue should be recognized upon delivery, while the subscription revenue is ratable. This scenario exercises multi-element arrangements with discounts and physical goods."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Contact Center agents are a recurring SaaS POB recognized over the 24-month term.); Hardware: POB=point_in_time release=at_delivery (Physical desk phones are a separate POB recognized when control transfers to the customer.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "allocation"
+      - "multi-year"
+  - id: "gen-goto-connect-2"
+    name: "GoTo Connect - SMB Phone System with International Usage"
+    description: "SMB Phone System with International Usage"
+    input:
+      customer_name: "GoTo Connect"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A small business customer selects the GoTo Connect Phone System Plan for 10 users. They opt for monthly billing at $29 per user per month. In addition to the base subscription, the account is configured for international usage overages to cover calls to countries not included in the standard 50-country list. These usage charges are billed in arrears at a rate of $0.05 per minute. Revenue for the base seats is recognized ratably each month, while the usage revenue is recognized as consumption occurs. This scenario demonstrates recurring billing combined with metered usage in a high-velocity SMB model."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Monthly recurring revenue recognized in the month of service.); Usage: POB=consumption release=as_used (Variable international calling revenue recognized as minutes are consumed.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"

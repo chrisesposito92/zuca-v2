@@ -26,8 +26,8 @@ export const billingsJsonSchema = {
       items: {
         type: 'object',
         properties: {
-          'Invoice Date': { type: 'string', description: 'Date the invoice is generated (MM/DD/YYYY)' },
-          'Billing Date': { type: 'string', description: 'Target billing date per charge schedule (MM/DD/YYYY)' },
+          'Invoice Date': { type: 'string', description: 'Date the invoice is generated (YYYY-MM-DD)' },
+          'Billing Date': { type: 'string', description: 'Target billing date per charge schedule (YYYY-MM-DD)' },
           'Charge Name': { type: 'string' },
           'Rate Plan': { type: 'string' },
           'Product': { type: 'string' },

@@ -67,18 +67,18 @@ criteria:
 
   - id: BL-005
     name: date-format-consistency
-    description: All dates must use MM/DD/YYYY format
+    description: All dates must use YYYY-MM-DD format
     severity: high
     patterns: [date format, invoice date, billing date]
     check:
       type: behavioral
       rule: |
-        All dates in the billing output must use MM/DD/YYYY format:
+        All dates in the billing output must use YYYY-MM-DD format:
         - Invoice Date
         - Billing Date
         - Billing Period Start
         - Billing Period End
-        Do not use YYYY-MM-DD or other formats.
+        Do not use MM/DD/YYYY or other formats.
 
   - id: BL-007
     name: charge-description-accuracy
