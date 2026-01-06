@@ -14,7 +14,7 @@ criteria:
       rule: |
         Contract start and end dates must be correctly extracted.
         If the contract specifies dates in any format, they must be
-        converted to YYYY-MM-DD format accurately.
+        converted to MM/DD/YYYY format accurately.
 
   - id: AC-002
     name: term-calculation

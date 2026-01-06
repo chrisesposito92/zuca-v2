@@ -31,7 +31,7 @@ By analyzing both together, you can cross-validate findings and maintain consist
 | `renewal_term_months` | Renewal term in text | 12 |
 
 ### Date Format
-All dates MUST be `YYYY-MM-DD`. Convert any other format.
+All dates MUST be `MM/DD/YYYY`. Convert any other format.
 
 ### Billing Period Mapping
 
@@ -161,14 +161,14 @@ Return JSON with ALL fields:
 
 ```json
 {
-  "service_start_mdy": "YYYY-MM-DD",
-  "service_end_mdy": "YYYY-MM-DD or null",
+  "service_start_mdy": "MM/DD/YYYY",
+  "service_end_mdy": "MM/DD/YYYY or null",
   "term_months": 12,
   "billing_period": "Month",
   "billing_timing": "InAdvance",
   "trigger_event": "ContractEffective",
-  "go_live_mdy": "YYYY-MM-DD",
-  "booking_mdy": "YYYY-MM-DD",
+  "go_live_mdy": "MM/DD/YYYY",
+  "booking_mdy": "MM/DD/YYYY",
   "renewal_term_months": 12,
   "billing_caps": ["RECURRING", "PRORATION"],
   "revenue_caps": ["ALLOCATION"],

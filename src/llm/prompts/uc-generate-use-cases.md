@@ -71,7 +71,7 @@ Use the provided customer_name.
 
 ### otr_workflow_inputs.contract_start_date
 - Assume the contract starts on the first day of the next full month from "today".
-- Format as YYYY-MM-DD.
+- Format as MM/DD/YYYY.
 - This is an assumption; mention it in assumptions for each use case.
 
 ### otr_workflow_inputs.terms_months
@@ -117,7 +117,7 @@ Return ONLY one valid JSON object, no commentary, with this exact structure:
       "otr_workflow_inputs": {
         "use_case": "<narrative description tailored to Zuora, 4-10 sentences>",
         "customer_name": "<string>",
-        "contract_start_date": "<YYYY-MM-DD>",
+        "contract_start_date": "<MM/DD/YYYY>",
         "terms_months": <integer>,
         "transaction_currency": "USD | EUR | CAD | other",
         "billing_period": "Monthly | Quarterly | Annually",

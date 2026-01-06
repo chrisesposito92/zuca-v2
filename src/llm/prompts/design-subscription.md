@@ -116,8 +116,8 @@ Before creating any rate plans/charges, build a **Commercial Terms Ledger** from
 | quantity | number or null | number or null | null (from usage) |
 | listPrice | $ | $ | $ per unit |
 | sellPrice | $ | $ | $ per unit |
-| effectiveStartDate | YYYY-MM-DD | YYYY-MM-DD | YYYY-MM-DD |
-| effectiveEndDate | YYYY-MM-DD or null | null | YYYY-MM-DD or null |
+| effectiveStartDate | MM/DD/YYYY | MM/DD/YYYY | MM/DD/YYYY |
+| effectiveEndDate | MM/DD/YYYY or null | null | MM/DD/YYYY or null |
 
 ### Usage Records Generation
 
@@ -266,11 +266,11 @@ Return JSON with complete structure. Every charge MUST have a corresponding POB 
     "termType": "TERMED",
     "status": "Active",
     "currency": "USD",
-    "contractEffectiveDate": "YYYY-MM-DD",
-    "serviceActivationDate": "YYYY-MM-DD",
-    "customerAcceptanceDate": "YYYY-MM-DD",
-    "subscriptionStartDate": "YYYY-MM-DD",
-    "subscriptionEndDate": "YYYY-MM-DD or null",
+    "contractEffectiveDate": "MM/DD/YYYY",
+    "serviceActivationDate": "MM/DD/YYYY",
+    "customerAcceptanceDate": "MM/DD/YYYY",
+    "subscriptionStartDate": "MM/DD/YYYY",
+    "subscriptionEndDate": "MM/DD/YYYY or null",
     "initialTerm": 12,
     "initialTermPeriodType": "Month",
     "renewalTerm": 12,
@@ -300,8 +300,8 @@ Return JSON with complete structure. Every charge MUST have a corresponding POB 
           "listPrice": 100,
           "sellPrice": 100,
           "price": 100,
-          "effectiveStartDate": "YYYY-MM-DD",
-          "effectiveEndDate": "YYYY-MM-DD or null",
+          "effectiveStartDate": "MM/DD/YYYY",
+          "effectiveEndDate": "MM/DD/YYYY or null",
           "chargeFunction": null,
           "isAllocationEligible": true,
           "drawdownType": null,

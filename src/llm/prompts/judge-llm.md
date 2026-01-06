@@ -104,7 +104,7 @@ You must return a JSON object with this exact structure:
 ## Step-Specific Guidance
 
 ### analyze_contract
-- **Dates must be YYYY-MM-DD format** (e.g., 2026-02-01)
+- **Dates must be MM/DD/YYYY format** (e.g., 02/01/2026)
 - Check that term_months is positive and reasonable
 - Ensure billing_period is a valid enum value (e.g., "MONTHLY", "ANNUAL")
 - Confirm service dates align with contract terms
@@ -122,9 +122,10 @@ You must return a JSON object with this exact structure:
 - Check that Extended Sell Price = Unit Sell Price × Quantity (NOT multiplied by term)
 - Check allocation percentages sum to 100%
 - Ensure charge references are consistent
+- Revenue Start Date and Revenue End Date are in `YYYY-MM-DD` format, but anything else is `MM/DD/YYYY`
 
 ### billings
-- **All dates must be YYYY-MM-DD format** (e.g., 2026-02-01)
+- **All dates must be MM/DD/YYYY format** (e.g., 02/01/2026)
 - Verify invoice dates fall on correct billing cycles
 - Check that amounts match contracted values
 - Ensure proration calculations are correct
