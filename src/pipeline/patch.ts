@@ -299,7 +299,7 @@ const INCREMENTAL_REVREC_SCHEMA = {
       items: {
         type: 'object',
         properties: {
-          'Line Item Num': { type: 'number' },
+          'Line Item Num': { type: 'string' },
           'POB Name': { type: 'string' },
           'Event Name': { type: 'string' },
           'Revenue Start Date': { type: 'string' },

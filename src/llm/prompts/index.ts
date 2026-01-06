@@ -63,6 +63,8 @@ export const PROMPTS = {
   HTML_TEMPLATE_DESIGN: 'html-template-design',
   // Self-learning system prompts
   SELF_LEARN_JUDGE: 'self-learn-judge',
+  // Judge LLM validation prompts
+  JUDGE_LLM: 'judge-llm',
 } as const;
 
 export type PromptName = typeof PROMPTS[keyof typeof PROMPTS];

@@ -298,7 +298,7 @@ Generate one row per Line Item per Period:
 {
   "zr_revrec": [
     {
-      "Line Item Num": 1,
+      "Line Item Num": "Platform License",
       "POB Name": "Platform License",
       "Event Name": "Upon Booking",
       "Revenue Start Date": "2026-01-01",
@@ -308,7 +308,7 @@ Generate one row per Line Item per Period:
       "Amount": 1019.18
     },
     {
-      "Line Item Num": 1,
+      "Line Item Num": "Platform License",
       "POB Name": "Platform License",
       "Event Name": "Upon Booking",
       "Revenue Start Date": "2026-01-01",

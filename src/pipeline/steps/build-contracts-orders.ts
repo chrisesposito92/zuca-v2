@@ -18,8 +18,9 @@ import { getCorrectionsContext } from '../../self-learn';
 
 /**
  * JSON schema for Contracts/Orders structured output
+ * Exported for use by judge validation
  */
-const contractsOrdersJsonSchema = {
+export const contractsOrdersJsonSchema = {
   type: 'object',
   properties: {
     zr_contracts_orders: {
@@ -37,7 +38,7 @@ const contractsOrdersJsonSchema = {
           'Trigger Event': { type: 'string' },
           'Lead Line': { type: 'boolean' },
           'Ordered Qty': { type: 'number' },
-          'Line Item Num': { type: 'number' },
+          'Line Item Num': { type: 'string' },
           'Subscription Name': { type: 'string' },
           'Subscription Version': { type: 'number' },
           'Sales Order Date': { type: 'string' },

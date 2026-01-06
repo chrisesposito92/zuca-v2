@@ -62,8 +62,7 @@ criteria:
     check:
       type: behavioral
       rule: |
-        Line Item Num identifies the charge/POB, typically using
-        sequential numbering (1, 2, 3...) for each distinct charge.
+        Line Item Num identifies the charge/POB. It is equal to the chargeName. Simple.
         Each charge from the subscription spec gets its own Line Item Num.
         For ramp segments of the same service, each segment is a separate line.
 

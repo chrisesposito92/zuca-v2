@@ -26,9 +26,10 @@ export interface ContractAnalysisOutput {
 }
 
 /**
- * JSON schema for combined contract analysis structured output
+ * JSON schema for combined contract analysis structured output (FLAT)
+ * Used for LLM structured output - the model returns all fields at root level
  */
-const contractAnalysisJsonSchema = {
+export const contractAnalysisJsonSchema = {
   type: 'object',
   properties: {
     // Contract Intel fields
@@ -87,6 +88,79 @@ const contractAnalysisJsonSchema = {
     'hints',
     'confidence',
   ],
+  additionalProperties: false,
+};
+
+/**
+ * JSON schema for contract analysis NESTED output (for judge validation)
+ * Used by the Judge LLM to validate the transformed ContractAnalysisOutput
+ * This matches the actual return type of analyzeContract()
+ */
+export const contractAnalysisNestedJsonSchema = {
+  type: 'object',
+  properties: {
+    contractIntel: {
+      type: 'object',
+      properties: {
+        service_start_mdy: { type: 'string' },
+        service_end_mdy: { type: ['string', 'null'] },
+        term_months: { type: 'number' },
+        billing_period: {
+          type: ['string', 'null'],
+          enum: ['Month', 'Quarter', 'Year', 'Semi-Annual', null],
+        },
+        billing_timing: {
+          type: ['string', 'null'],
+          enum: ['InAdvance', 'InArrears', null],
+        },
+        trigger_event: { type: 'string' },
+        go_live_mdy: { type: 'string' },
+        booking_mdy: { type: 'string' },
+        renewal_term_months: { type: 'number' },
+      },
+      required: [
+        'service_start_mdy',
+        'service_end_mdy',
+        'term_months',
+        'billing_period',
+        'billing_timing',
+        'trigger_event',
+        'go_live_mdy',
+        'booking_mdy',
+        'renewal_term_months',
+      ],
+      additionalProperties: false,
+    },
+    detectedCapabilities: {
+      type: 'object',
+      properties: {
+        billing_caps: {
+          type: 'array',
+          items: { type: 'string' },
+          description: 'Exact capability labels for Zuora Billing',
+        },
+        revenue_caps: {
+          type: 'array',
+          items: { type: 'string' },
+          description: 'Exact capability labels for Zuora Revenue',
+        },
+        hints: {
+          type: 'array',
+          items: { type: 'string' },
+          description: 'Short reasons that justify matches',
+        },
+        confidence: {
+          type: 'number',
+          minimum: 0,
+          maximum: 1,
+          description: 'Confidence score based on how explicit the text is',
+        },
+      },
+      required: ['billing_caps', 'revenue_caps', 'hints', 'confidence'],
+      additionalProperties: false,
+    },
+  },
+  required: ['contractIntel', 'detectedCapabilities'],
   additionalProperties: false,
 };
 

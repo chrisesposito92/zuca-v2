@@ -39,7 +39,17 @@ import {
   summarizeResults,
   expertAssistant,
   type ExpertResponse,
+  // JSON schemas for judge validation
+  // NOTE: Use NESTED schemas for judge validation (match actual output types)
+  contractAnalysisNestedJsonSchema,
+  buildSubscriptionDesignNestedJsonSchema,
+  contractsOrdersJsonSchema,
+  billingsJsonSchema,
+  revRecWaterfallJsonSchema,
 } from './steps/index';
+
+// Import judge module
+import { withJudge, buildInputContext } from './judge';
 
 /**
  * Pipeline execution options
@@ -155,9 +165,22 @@ export async function runPipeline(
           selectedModel
         )
       );
-      result.contract_intel = step.data.contractIntel;
-      result.detected_capabilities = step.data.detectedCapabilities;
-      stepTimings.analyze_contract = step.durationMs;
+
+      // Apply judge validation (using NESTED schema that matches ContractAnalysisOutput)
+      const judgeResult = await withJudge(
+        'analyze_contract',
+        step.data,
+        contractAnalysisNestedJsonSchema,
+        buildInputContext(validatedInput)
+      );
+
+      result.contract_intel = judgeResult.output.contractIntel;
+      result.detected_capabilities = judgeResult.output.detectedCapabilities;
+      stepTimings.analyze_contract = step.durationMs + judgeResult.judgeDurationMs;
+
+      if (judgeResult.judgeApplied) {
+        debugLog('Judge applied corrections to analyze_contract', judgeResult.judgeDetails);
+      }
     }
 
     // Step 2: Match Golden Use Cases (Pure Code - No LLM)
@@ -194,9 +217,23 @@ export async function runPipeline(
           selectedModel
         )
       );
-      result.subscription_spec = step.data.subscriptionSpec;
-      result.pob_mapping = step.data.pobMapping;
-      stepTimings.design_subscription = step.durationMs;
+
+      // Build dynamic NESTED schema with POB templates for judge validation
+      const designNestedSchema = buildSubscriptionDesignNestedJsonSchema(goldenData.pobTemplates);
+      const judgeResult = await withJudge(
+        'design_subscription',
+        step.data,
+        designNestedSchema,
+        buildInputContext(validatedInput, `Contract: ${result.contract_intel?.term_months} months, Start: ${result.contract_intel?.service_start_mdy}`)
+      );
+
+      result.subscription_spec = judgeResult.output.subscriptionSpec;
+      result.pob_mapping = judgeResult.output.pobMapping;
+      stepTimings.design_subscription = step.durationMs + judgeResult.judgeDurationMs;
+
+      if (judgeResult.judgeApplied) {
+        debugLog('Judge applied corrections to design_subscription', judgeResult.judgeDetails);
+      }
     }
 
     // Step 4: Build Contracts/Orders AND Billings (PARALLEL)
@@ -215,9 +252,19 @@ export async function runPipeline(
             undefined,
             selectedModel
           )
-        ).then((step) => {
-          result.contracts_orders = step.data;
-          stepTimings.contracts_orders = step.durationMs;
+        ).then(async (step) => {
+          // Apply judge validation
+          const judgeResult = await withJudge(
+            'contracts_orders',
+            step.data,
+            contractsOrdersJsonSchema,
+            buildInputContext(validatedInput, `Subscription: ${result.subscription_spec?.rate_plans?.length || 0} rate plans`)
+          );
+          result.contracts_orders = judgeResult.output;
+          stepTimings.contracts_orders = step.durationMs + judgeResult.judgeDurationMs;
+          if (judgeResult.judgeApplied) {
+            debugLog('Judge applied corrections to contracts_orders', judgeResult.judgeDetails);
+          }
         })
       );
     }
@@ -233,9 +280,19 @@ export async function runPipeline(
             undefined,
             selectedModel
           )
-        ).then((step) => {
-          result.billings = step.data;
-          stepTimings.billings = step.durationMs;
+        ).then(async (step) => {
+          // Apply judge validation
+          const judgeResult = await withJudge(
+            'billings',
+            step.data,
+            billingsJsonSchema,
+            buildInputContext(validatedInput, `Billing period: ${result.contract_intel?.billing_period}`)
+          );
+          result.billings = judgeResult.output;
+          stepTimings.billings = step.durationMs + judgeResult.judgeDurationMs;
+          if (judgeResult.judgeApplied) {
+            debugLog('Judge applied corrections to billings', judgeResult.judgeDetails);
+          }
         })
       );
     }
@@ -259,8 +316,21 @@ export async function runPipeline(
           selectedModel
         )
       );
-      result.revrec_waterfall = step.data;
-      stepTimings.revrec_waterfall = step.durationMs;
+
+      // Apply judge validation
+      const judgeResult = await withJudge(
+        'revrec_waterfall',
+        step.data,
+        revRecWaterfallJsonSchema,
+        buildInputContext(validatedInput, `Orders: ${result.contracts_orders?.zr_contracts_orders?.length || 0} line items`)
+      );
+
+      result.revrec_waterfall = judgeResult.output;
+      stepTimings.revrec_waterfall = step.durationMs + judgeResult.judgeDurationMs;
+
+      if (judgeResult.judgeApplied) {
+        debugLog('Judge applied corrections to revrec_waterfall', judgeResult.judgeDetails);
+      }
     }
 
     // Step 6: Summarize

@@ -16,8 +16,9 @@ import { getCorrectionsContext } from '../../self-learn';
 
 /**
  * JSON schema for Billings structured output
+ * Exported for use by judge validation
  */
-const billingsJsonSchema = {
+export const billingsJsonSchema = {
   type: 'object',
   properties: {
     zb_billings: {

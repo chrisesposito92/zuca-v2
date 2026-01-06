@@ -150,3 +150,5 @@ vite.config.ts.timestamp-*
 # RAG index files (too large for git, rebuild with `npm run rag:build`)
 data/zuora-docs-index.json
 data/rag-progress.json
+data/training-sources/*
+data/training-sources/pipeline-outputs.json

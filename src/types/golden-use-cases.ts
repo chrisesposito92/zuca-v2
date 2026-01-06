@@ -163,7 +163,7 @@ export type GoldenRatePlanChargesDoc = z.infer<typeof GoldenRatePlanChargesDocSc
 
 export const GoldenZRTableRowSchema = z.object({
   'Use Case Id': z.string(),
-  'Line Item Num': z.number().optional(),
+  'Line Item Num': z.string().optional(),
   'POB Name': z.string().optional(),
   'POB Template': z.string().optional(),
   'Release Event': z.string().optional(),

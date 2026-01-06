@@ -35,8 +35,9 @@ export interface SubscriptionDesignOutput {
 
 /**
  * Build JSON schema for combined subscription design with dynamic POB identifiers
+ * Exported for use by judge validation
  */
-function buildSubscriptionDesignJsonSchema(pobTemplates: PobTemplate[]) {
+export function buildSubscriptionDesignJsonSchema(pobTemplates: PobTemplate[]) {
   const validPobIdentifiers = pobTemplates.map(p => p['POB Identifier']);
 
   debugLog('Building subscription design schema with valid POB identifiers:', validPobIdentifiers);
@@ -213,6 +214,46 @@ function buildSubscriptionDesignJsonSchema(pobTemplates: PobTemplate[]) {
       mapping_notes: { type: 'array', items: { type: 'string' } },
     },
     required: ['subscription', 'rate_plans', 'usage', 'charge_pob_map', 'assumptions', 'open_questions', 'mapping_notes'],
+    additionalProperties: false,
+  };
+}
+
+/**
+ * Build NESTED JSON schema for judge validation (matches SubscriptionDesignOutput)
+ * Used by the Judge LLM to validate the transformed output structure
+ */
+export function buildSubscriptionDesignNestedJsonSchema(pobTemplates: PobTemplate[]) {
+  // Get the flat schema components first
+  const flatSchema = buildSubscriptionDesignJsonSchema(pobTemplates);
+  const flatProps = flatSchema.properties as Record<string, unknown>;
+
+  // Build nested structure matching SubscriptionDesignOutput
+  return {
+    type: 'object',
+    properties: {
+      subscriptionSpec: {
+        type: 'object',
+        properties: {
+          subscription: flatProps.subscription,
+          rate_plans: flatProps.rate_plans,
+          usage: flatProps.usage,
+          assumptions: flatProps.assumptions,
+          open_questions: flatProps.open_questions,
+        },
+        required: ['subscription', 'rate_plans', 'usage', 'assumptions', 'open_questions'],
+        additionalProperties: false,
+      },
+      pobMapping: {
+        type: 'object',
+        properties: {
+          charge_pob_map: flatProps.charge_pob_map,
+          mapping_notes: flatProps.mapping_notes,
+        },
+        required: ['charge_pob_map', 'mapping_notes'],
+        additionalProperties: false,
+      },
+    },
+    required: ['subscriptionSpec', 'pobMapping'],
     additionalProperties: false,
   };
 }

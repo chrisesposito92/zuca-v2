@@ -260,7 +260,7 @@ export const ContractsOrdersRowSchema = z.object({
   'Trigger Event': z.string(),
   'Lead Line': z.boolean(),
   'Ordered Qty': z.number(),
-  'Line Item Num': z.number(),
+  'Line Item Num': z.string(),
   'Subscription Name': z.string(),
   'Subscription Version': z.number(),
   'Sales Order Date': z.string(),
@@ -338,7 +338,7 @@ export type BillingsOutput = z.infer<typeof BillingsOutputSchema>;
 // ============================================================================
 
 export const RevRecWaterfallRowSchema = z.object({
-  'Line Item Num': z.number(),
+  'Line Item Num': z.string(),
   'POB Name': z.string(),
   'Event Name': z.string(),
   'Revenue Start Date': z.string(),

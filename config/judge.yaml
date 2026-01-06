@@ -1,0 +1,46 @@
+# Judge LLM Configuration
+# See docs/FEATURE-JUDGE-LLM.md for full documentation
+
+version: "1.0"
+
+# Master switch - can be overridden by JUDGE_ENABLED env var
+enabled: true
+
+# Default settings applied to all steps
+defaults:
+  # Model to use for judge validation (fast model recommended)
+  model: "gemini-3-flash-preview"
+
+  # Minimum confidence to apply corrections (0-1)
+  # Changes below this threshold are logged but not applied
+  confidence_threshold: 0.9
+
+  # Timeout in milliseconds
+  timeout_ms: 30000
+
+  # Reasoning effort for the judge model
+  reasoning_effort: "low"
+
+# Per-step configuration (overrides defaults)
+steps:
+  # Contract analysis - slightly more lenient threshold
+  analyze_contract:
+    enabled: true
+    confidence_threshold: 0.85
+
+  # Subscription design
+  design_subscription:
+    enabled: true
+
+  # Orders table - extra conservative
+  contracts_orders:
+    enabled: true
+    confidence_threshold: 0.95
+
+  # Billing schedule
+  billings:
+    enabled: true
+
+  # Revenue recognition waterfall
+  revrec_waterfall:
+    enabled: true

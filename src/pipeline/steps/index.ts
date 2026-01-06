@@ -22,7 +22,12 @@
 export { routeQuery, quickRouteCheck, smartRoute, type RouterResult } from './router';
 
 // Step 2: Analyze Contract (COMBINED - replaces contract-intel + detect-capabilities)
-export { analyzeContract, type ContractAnalysisOutput } from './analyze-contract';
+export {
+  analyzeContract,
+  contractAnalysisJsonSchema,           // Flat schema for LLM output
+  contractAnalysisNestedJsonSchema,     // Nested schema for judge validation
+  type ContractAnalysisOutput,
+} from './analyze-contract';
 
 // Step 2 Legacy: Contract Intel (helper function only - LLM step deprecated)
 export { formatContractIntelForContext } from './contract-intel';
@@ -40,7 +45,12 @@ export {
 } from './match-golden-use-cases';
 
 // Step 4: Design Subscription (COMBINED - replaces generate-subscription + assign-pob-templates)
-export { designSubscription, type SubscriptionDesignOutput } from './design-subscription';
+export {
+  designSubscription,
+  buildSubscriptionDesignJsonSchema,          // Flat schema for LLM output
+  buildSubscriptionDesignNestedJsonSchema,    // Nested schema for judge validation
+  type SubscriptionDesignOutput,
+} from './design-subscription';
 
 // Step 4 Legacy: Generate Subscription (helper function only - LLM step deprecated)
 export { formatSubscriptionSpecForContext } from './generate-subscription';
@@ -49,14 +59,15 @@ export { formatSubscriptionSpecForContext } from './generate-subscription';
 export { formatPobMappingForContext } from './assign-pob-templates';
 
 // Step 5a: Build Contracts/Orders (runs in PARALLEL with billings)
-export { buildContractsOrders, formatContractsOrdersForContext } from './build-contracts-orders';
+export { buildContractsOrders, contractsOrdersJsonSchema, formatContractsOrdersForContext } from './build-contracts-orders';
 
 // Step 5b: Build Billings (runs in PARALLEL with contracts/orders)
-export { buildBillings, formatBillingsForContext } from './build-billings';
+export { buildBillings, billingsJsonSchema, formatBillingsForContext } from './build-billings';
 
 // Step 6: Build Rev Rec Waterfall
 export {
   buildRevRecWaterfall,
+  revRecWaterfallJsonSchema,
   formatRevRecWaterfallForContext,
   pivotWaterfallForDisplay,
 } from './build-revrec-waterfall';

@@ -16,6 +16,41 @@ The Judge LLM is a validation layer inserted after each LLM step in the analyze 
 
 ---
 
+## Schema Design (Important!)
+
+The pipeline uses two types of JSON schemas:
+
+1. **Flat Schemas** - Used for LLM structured output. Fields are at the root level.
+2. **Nested Schemas** - Used for judge validation. Match the actual TypeScript types.
+
+### Why Two Schemas?
+
+Combined steps like `analyzeContract` and `designSubscription` receive flat LLM output but transform it into nested structures before returning:
+
+```typescript
+// LLM returns flat structure
+{ service_start_mdy, billing_caps, ... }
+
+// Step transforms to nested
+{ contractIntel: {...}, detectedCapabilities: {...} }
+```
+
+The judge must validate the **transformed output**, not the raw LLM output. Using the flat schema would corrupt the nested structure.
+
+### Schema Exports
+
+| Step | Flat Schema (LLM) | Nested Schema (Judge) |
+|------|-------------------|----------------------|
+| analyze-contract | `contractAnalysisJsonSchema` | `contractAnalysisNestedJsonSchema` |
+| design-subscription | `buildSubscriptionDesignJsonSchema()` | `buildSubscriptionDesignNestedJsonSchema()` |
+| build-contracts-orders | `contractsOrdersJsonSchema` | Same (already flat) |
+| build-billings | `billingsJsonSchema` | Same (already flat) |
+| build-revrec-waterfall | `revRecWaterfallJsonSchema` | Same (already flat) |
+
+**Note:** Steps that don't transform their output (contracts-orders, billings, revrec-waterfall) use the same schema for both.
+
+---
+
 ## Architecture
 
 ```

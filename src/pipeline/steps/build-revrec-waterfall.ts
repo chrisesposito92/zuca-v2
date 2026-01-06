@@ -17,8 +17,9 @@ import { getCorrectionsContext } from '../../self-learn';
 
 /**
  * JSON schema for Rev Rec Waterfall structured output
+ * Exported for use by judge validation
  */
-const revRecWaterfallJsonSchema = {
+export const revRecWaterfallJsonSchema = {
   type: 'object',
   properties: {
     zr_revrec: {
@@ -26,7 +27,7 @@ const revRecWaterfallJsonSchema = {
       items: {
         type: 'object',
         properties: {
-          'Line Item Num': { type: 'number' },
+          'Line Item Num': { type: 'string' },
           'POB Name': { type: 'string' },
           'Event Name': { type: 'string' },
           'Revenue Start Date': { type: 'string' },
@@ -224,8 +225,8 @@ export async function buildRevRecWaterfall(
  * Format Rev Rec Waterfall for downstream prompts or display
  */
 export function formatRevRecWaterfallForContext(output: RevRecWaterfallOutput): string {
-  // Group by Line Item Num
-  const byLineItem = new Map<number, typeof output.zr_revrec>();
+  // Group by Line Item Num (which is the charge name, a string)
+  const byLineItem = new Map<string, typeof output.zr_revrec>();
   for (const row of output.zr_revrec) {
     const existing = byLineItem.get(row['Line Item Num']) || [];
     existing.push(row);
@@ -255,8 +256,8 @@ export function pivotWaterfallForDisplay(
   // Get unique periods in order
   const periods = [...new Set(output.zr_revrec.map((r) => r.Period))].sort();
 
-  // Get unique line items
-  const lineItems = [...new Set(output.zr_revrec.map((r) => r['Line Item Num']))].sort((a, b) => a - b);
+  // Get unique line items (charge names)
+  const lineItems = [...new Set(output.zr_revrec.map((r) => r['Line Item Num']))].sort((a, b) => a.localeCompare(b));
 
   // Build header row
   const headers = ['Line Item', 'POB Name', 'Total', ...periods];

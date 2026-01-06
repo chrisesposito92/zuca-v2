@@ -238,7 +238,7 @@ When one billing charge creates multiple revenue lines:
 | 3 | Training (from Bundle) | GO-LIVE-PIT | 5,000 | 5,000 |
 
 **Key rules:**
-- Each child component gets its own Line Item Num
+- Each child component gets its own Line Item Num (Charge Name)
 - SSP comes from bundle configuration
 - Allocate across components based on relative SSP
 - Sum of child Ext Allocated Price = Original bundle price
@@ -287,7 +287,7 @@ Return JSON with ALL fields populated:
       "Trigger Event": "ContractEffective",
       "Lead Line": true,
       "Ordered Qty": 1,
-      "Line Item Num": 1,
+      "Line Item Num": "Platform License",
       "Subscription Name": "Acme Corp - Subscription",
       "Subscription Version": 1,
       "Sales Order Date": "01/01/2026",
