@@ -1,0 +1,586 @@
+name: "ecommerce-companies-5"
+description: "Generated from UC outputs - 2026-01-06"
+version: "1.0"
+tests:
+  - id: "gen-chargebee"
+    name: "Chargebee - Performance Plan with Revenue Overage"
+    description: "Performance Plan with Revenue Overage"
+    input:
+      customer_name: "Chargebee"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "A growth-stage company subscribes to the Chargebee Performance Plan. The contract includes a recurring platform fee of $599 per month, billed annually in advance ($7,188 total). This base fee covers up to $100,000 in monthly billing volume. Any transaction volume exceeding this threshold is charged a 0.75% overage fee, calculated and billed monthly in arrears. The subscription is a 12-month commitment. Revenue for the base fee is recognized ratably over the 12-month term, while overage fees are recognized in the month they occur as consumption-based revenue."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Standard SaaS access recognized monthly over the 12-month contract period.); Usage: POB=consumption release=as_billed (Overage fees (0.75%) are recognized as the billing volume is processed each month.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+      - "license"
+  - id: "gen-chargebee-1"
+    name: "Chargebee - Enterprise Bundle with Professional Services"
+    description: "Enterprise Bundle with Professional Services"
+    input:
+      customer_name: "Chargebee"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Quarterly"
+      is_allocations: true
+      use_case_description: "An enterprise customer signs a deal for a bundle including Chargebee Billing ($2,000/month) and Chargebee RevRec ($500/month). The contract also includes a one-time Professional Implementation fee of $5,000 for data migration and gateway setup. All recurring fees are billed quarterly. A 10% discount is applied across both the Billing and RevRec recurring charges. Because the bundle contains both SaaS subscriptions (ratable) and a service component (point-in-time), revenue allocation is required to ensure the discount is spread appropriately across all performance obligations. The implementation revenue is recognized upon the 'Go-Live' milestone."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Billing and RevRec modules are recognized ratably over the 12-month term.); Onboarding: POB=point_in_time release=at_go_live (Implementation fee recognized fully once the setup milestone is achieved.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "license"
+      - "allocation"
+  - id: "gen-chargebee-2"
+    name: "Chargebee - Retention Module Standalone Subscription"
+    description: "Retention Module Standalone Subscription"
+    input:
+      customer_name: "Chargebee"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A customer opts for a standalone subscription to Chargebee Retention to optimize their churn management. The pricing is set at a fixed $250 per month, which covers up to 149 deflection sessions (canceled sessions where the user is presented with a retention offer). This is billed monthly in advance. The contract is for a 12-month term. Revenue for this subscription is recognized ratably each month, as the customer has continuous access to the retention analytics and offer management platform."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Monthly subscription fee for the Retention platform access.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "recurring"
+      - "license"
+  - id: "gen-recurly"
+    name: "Recurly - Starter Plan SMB Launch"
+    description: "Starter Plan SMB Launch"
+    input:
+      customer_name: "Recurly"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A high-growth SMB customer signs up for the Recurly Starter plan to automate their billing. The deal includes a recurring Platform Fee of $249 per month and a usage-based Transaction & Volume Fee (TPV) set at 0.9% for all volume exceeding a $40,000 monthly threshold. To incentivize the signup, the first 3 months of the Platform Fee are discounted by 100%. Revenue for the platform fee is recognized ratably over each monthly service period, while the TPV usage fee is recognized as consumption occurs. This scenario demonstrates Zuora's ability to handle base recurring fees alongside threshold-based usage charges and introductory promotional periods."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Base platform fee recognized monthly as the service is provided to the customer.); Usage: POB=consumption release=as_used (TPV fees are recognized in the period the transaction volume is processed.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "discount"
+      - "recurring"
+      - "license"
+  - id: "gen-recurly-1"
+    name: "Recurly - Professional Tier with RevRec Add-on"
+    description: "Professional Tier with RevRec Add-on"
+    input:
+      customer_name: "Recurly"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      use_case_description: "A mid-market SaaS company upgrades to the Recurly Professional tier to gain advanced automation capabilities. The contract includes a $1,200 monthly Platform Fee and the Revenue Recognition Add-on, priced at a fixed $5,000 annual fee. TPV is charged at a flat rate of 0.7% on all processed volume with no minimum threshold. Both the Platform Fee and the RevRec Add-on are considered distinct performance obligations recognized ratably over the 12-month term. This use case highlights bundled SaaS products with different billing frequencies (monthly vs. annual) on a single contract."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Both the platform and RevRec add-on are SaaS subscriptions recognized ratably.); Usage: POB=consumption release=as_used (TPV usage recognized as billed based on actual monthly volume.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "license"
+      - "allocation"
+  - id: "gen-recurly-2"
+    name: "Recurly - Elite Enterprise Migration"
+    description: "Elite Enterprise Migration"
+    input:
+      customer_name: "Recurly"
+      contract_start_date: "02/01/2026"
+      terms_months: 24
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "A global enterprise customer signs a 24-month Elite contract for a full-scale migration to Recurly. The deal includes a $5,000 monthly Platform Fee, a $10,000 annual Revenue Recognition Advanced fee, and a one-time Professional Services fee of $25,000 for data migration. TPV is structured with tiered pricing: 0.5% for the first $1M in monthly volume and 0.3% for any volume above that. Revenue for the Professional Services is recognized at a point-in-time upon successful migration (Go-Live), while SaaS fees are ratable. This complex scenario exercises multi-year terms, tiered usage, and professional services integration."
+      allocation_method: "Use Sell Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Platform and Advanced RevRec fees recognized over the 24-month term.); Onboarding: POB=point_in_time release=at_go_live (Migration services recognized when the customer successfully launches on the platform.); Usage: POB=consumption release=as_used (Tiered TPV volume recognized monthly as processed.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "one-time"
+      - "license"
+      - "allocation"
+      - "multi-year"
+  - id: "gen-fastspring"
+    name: "FastSpring - Enterprise Hybrid SaaS & Migration"
+    description: "Enterprise Hybrid SaaS & Migration"
+    input:
+      customer_name: "FastSpring"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      use_case_description: "FastSpring provides a comprehensive e-commerce solution for a global SaaS provider. The deal includes a fixed annual platform fee of $3,000 for the Subscription Management module and a usage-based transaction fee of 5.9% plus $0.95 per transaction for the Core Platform. Additionally, a Managed Migration Service is included to move legacy data, valued at $1,500 but discounted to $0 as part of the enterprise bundle. The platform fee is billed annually in advance, while transaction fees are billed monthly in arrears based on actual volume. Revenue for the platform fee is recognized ratably over the 12-month term, and the migration service is recognized at the point of completion. This scenario exercises Zuora's ability to handle hybrid recurring and usage models alongside professional services."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Subscription Management platform fee recognized monthly over the 12-month contract.); Usage: POB=point_in_time release=as_billed (Core Platform transaction fees are recognized at the moment the sale is processed.); Services: POB=point_in_time release=at_go_live (Migration services are recognized upon successful data import and verification.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "bundle"
+      - "discount"
+      - "recurring"
+      - "license"
+      - "allocation"
+  - id: "gen-fastspring-1"
+    name: "FastSpring - B2B Sales Suite & Digital Invoicing"
+    description: "B2B Sales Suite & Digital Invoicing"
+    input:
+      customer_name: "FastSpring"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "This scenario focuses on a B2B software company utilizing FastSpring's B2B Sales Suite for interactive quoting and digital invoicing. The customer pays an annual recurring fee of $12,000 for the Premium B2B Sales Suite, which includes advanced CRM integrations. They are also charged a custom enterprise transaction rate of 4% flat on total sales volume processed through the Core Platform. Billing for the B2B Suite is handled annually upfront, while the transaction fees are reconciled and billed monthly. Revenue for the B2B Suite is recognized ratably over the annual term. Transaction fees are recognized as consumption-based revenue at the point in time the transactions occur. This demonstrates Zuora's support for specialized sales-led B2B modules."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (B2B Sales Suite premium fee recognized ratably over 12 months.); Usage: POB=point_in_time release=as_billed (Custom 4% transaction fee recognized as sales occur.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+      - "license"
+  - id: "gen-fastspring-2"
+    name: "FastSpring - Tiered Volume Revenue Share"
+    description: "Tiered Volume Revenue Share"
+    input:
+      customer_name: "FastSpring"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A digital goods merchant signs up for the FastSpring Core Platform using a tiered pricing structure to incentivize high transaction volume. The first $50,000 in monthly transaction volume is charged at a rate of 8.9%, and any volume exceeding that threshold within the same month is charged at a reduced rate of 7.0%. There is no fixed monthly platform fee, making this a pure usage-based contract aimed at high-growth startups. Billing occurs monthly in arrears based on the total processed volume across all tiers. Revenue is recognized as usage occurs and is released as billed at the end of each period. This use case highlights Zuora's Tiered Pricing model and usage-based revenue recognition."
+      rev_rec_notes: "Usage: POB=consumption release=as_used (Tiered transaction fees recognized as consumption occurs throughout the month.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "license"
+  - id: "gen-podia"
+    name: "Podia - The Growing Creator (Mover Plan with Transaction Fees)"
+    description: "The Growing Creator (Mover Plan with Transaction Fees)"
+    input:
+      customer_name: "Podia"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "This scenario represents a new creator signing up for the Podia Mover plan to launch their first digital course. The Mover plan has a recurring fee of $39 per month and includes a 5% transaction fee on all sales, which is modeled as a usage-based charge. Additionally, the customer adds the Podia Email add-on for up to 500 subscribers at $9 per month. The contract is set for a 12-month term with monthly billing. Revenue for the subscription components is recognized ratably over the month, while transaction fees are recognized as they are billed (event-based). This use case demonstrates Zuora's ability to handle hybrid recurring and transaction-based pricing models."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Mover base plan and Email add-on are standard SaaS subscriptions.); Usage: POB=event_based release=as_billed (5% transaction fees are triggered by sales events on the platform.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+  - id: "gen-podia-1"
+    name: "Podia - The Scaling Agency (Shaker Plan with Annual Ramp)"
+    description: "The Scaling Agency (Shaker Plan with Annual Ramp)"
+    input:
+      customer_name: "Podia"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "An established creator agency migrates to the Shaker plan to take advantage of 0% transaction fees and community features. They opt for annual billing at $900 per year ($75/month equivalent). To support their growing team, they purchase 5 'Additional Teammate' seats at a discounted volume rate of $50 per month, also billed annually. The contract reflects a total annual upfront payment of $1,500. Revenue for both the platform access and the teammate seats is recognized ratably over the 12-month term. This scenario highlights annual upfront billing and seat-based subscription management."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Shaker plan and teammate seats provide continuous access over the annual term.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "ramp"
+      - "discount"
+      - "recurring"
+      - "license"
+  - id: "gen-podia-2"
+    name: "Podia - Enterprise Creator Bundle (Multi-Product with Allocation)"
+    description: "Enterprise Creator Bundle (Multi-Product with Allocation)"
+    input:
+      customer_name: "Podia"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Quarterly"
+      is_allocations: true
+      use_case_description: "This use case involves a high-volume creator purchasing a bundled package including the Shaker Plan, Podia Email (10k subscriber tier), and 2 Teammate seats. The total list price is $1,344 annually, but Podia offers a 15% 'Early Adopter' discount on the entire bundle, bringing the total contract value to $1,142.40. Because the bundle contains different services (Platform vs. Email Marketing), revenue must be allocated across these performance obligations based on their standalone selling prices. The contract is billed quarterly. This demonstrates Zuora's ability to handle complex discounts and revenue allocations across multiple product lines."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Platform access (Shaker) and Email are separate POBs requiring allocation of the 15% discount.); Other: POB=over_time release=ratable_over_term (Teammate seats are treated as a third POB in the allocation pool.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "license"
+      - "allocation"
+  - id: "gen-teachable"
+    name: "Teachable - Scaling Creator - Annual Growth & BackOffice"
+    description: "Scaling Creator - Annual Growth & BackOffice"
+    input:
+      customer_name: "Teachable"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "The customer is upgrading to the Growth Plan to remove standard transaction fees and unlock white-labeling features. They are opting for an annual commitment priced at $139 per month, billed annually as a single $1,668 payment. Additionally, they have enabled the Teachable BackOffice add-on to automate affiliate payouts and tax form collection, which carries a 2.8% fee on their course sales (GMV). The subscription is billed upfront, while BackOffice fees are calculated and billed monthly based on actual transaction volume. Revenue for the platform fee is recognized ratably over the 12-month term, and BackOffice fees are recognized at the point in time the transactions occur."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (SaaS platform access for the Growth Plan is a stand-ready obligation recognized over the 12-month contract.); Usage: POB=point_in_time release=as_billed (BackOffice 2.8% fees are triggered by specific sales events and recognized when the sale is processed.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "recurring"
+      - "license"
+  - id: "gen-teachable-1"
+    name: "Teachable - New Creator - Monthly Starter & Transaction Fees"
+    description: "New Creator - Monthly Starter & Transaction Fees"
+    input:
+      customer_name: "Teachable"
+      contract_start_date: "02/01/2026"
+      terms_months: 1
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A new course creator is joining Teachable on the Starter Plan, choosing a monthly billing cycle at $39 per month. This plan includes a 7.5% transaction fee on every course sale made through the Teachable:pay gateway. The $39 recurring subscription fee is billed at the start of each monthly period. The transaction fees are variable and are recognized as revenue at the point in time each student purchase is completed. This scenario tests the handling of high-frequency, low-value usage charges alongside a standard monthly recurring charge."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Monthly platform fee recognized over the 1-month service period.); Usage: POB=point_in_time release=as_billed (The 7.5% transaction fee is recognized at the moment of the student transaction.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+  - id: "gen-teachable-2"
+    name: "Teachable - Enterprise Academy - Custom Platform & Onboarding"
+    description: "Enterprise Academy - Custom Platform & Onboarding"
+    input:
+      customer_name: "Teachable"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "A large corporate training academy is signing a custom Business contract for a total of $10,000 for the first year. The deal includes the Advanced Platform subscription ($7,500), a one-time Implementation/Onboarding fee ($1,500), and a year of Dedicated Priority Support ($1,000). A 10% global discount was applied to the total package, and the customer requires revenue to be allocated across these three performance obligations based on their standalone selling prices. The platform and support fees are recognized ratably over the 12-month term, while the onboarding fee is recognized as a point-in-time event once the initial school setup is confirmed as complete."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Advanced Platform fee recognized over the 12-month term.); Onboarding: POB=point_in_time release=at_go_live (Implementation fee recognized upon completion of the onboarding milestone.); Services: POB=over_time release=ratable_over_term (Dedicated support is a stand-ready obligation recognized over the contract term.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "license"
+      - "allocation"
+  - id: "gen-thinkific"
+    name: "Thinkific - Mid-Market Growth with Usage"
+    description: "Mid-Market Growth with Usage"
+    input:
+      customer_name: "Thinkific"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "An established training business is subscribing to the Thinkific Grow plan on a 12-month term. They are billed annually for the platform access at a discounted rate of $1,788 ($149/month equivalent). The customer also utilizes Thinkific Payments (TCommerce) for course sales, which carries an inferred transaction fee of 2.9% plus $0.30 per sale billed monthly in arrears. Revenue for the Grow subscription is recognized ratably over the 12-month contract term. Transaction fees from TCommerce are recognized at the point in time the usage occurs. This scenario illustrates a hybrid of annual recurring revenue and monthly usage-based fees."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Platform access for the Grow plan is a continuous service provided over the 12-month term.); Usage: POB=point_in_time release=as_billed (TCommerce fees are earned and recognized at the moment of each course transaction.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "discount"
+      - "recurring"
+      - "license"
+  - id: "gen-thinkific-1"
+    name: "Thinkific - Enterprise Plus with Onboarding"
+    description: "Enterprise Plus with Onboarding"
+    input:
+      customer_name: "Thinkific"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "A large enterprise institution is moving to the Thinkific Plus tier to support extensive internal training. The deal includes a 12-month subscription for the Plus Platform at $2,500 per month and a $5,000 one-time fee for Plus Onboarding & Support. Both the subscription and the onboarding fee are subject to a bundled discount, requiring revenue allocation. The platform subscription is billed annually in advance, while the onboarding service is billed as a one-time fee at the start of the contract. Subscription revenue is recognized ratably over the 12-month term. Onboarding revenue is recognized at a point in time upon the completion of the dedicated launch review."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Thinkific Plus access is a stand-ready obligation recognized over the contract term.); Onboarding: POB=point_in_time release=at_go_live (Onboarding is a distinct professional service recognized upon completion of the launch review.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "license"
+      - "allocation"
+  - id: "gen-thinkific-2"
+    name: "Thinkific - Expand Plan Monthly Commitment"
+    description: "Expand Plan Monthly Commitment"
+    input:
+      customer_name: "Thinkific"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A digital marketing agency is signing up for the Thinkific Expand plan to manage multiple client course sites. They have committed to a 12-month term but have selected a monthly billing cycle at $499 per month. This plan includes 5 site admins and priority support services. Revenue for the subscription is recognized ratably each month as the service is delivered. There are no additional one-time or usage fees in this scenario. This use case demonstrates a standard recurring SaaS model with a fixed term but monthly cash flow."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (The Expand plan subscription is recognized monthly as the customer maintains access to the platform.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "one-time"
+      - "recurring"
+      - "license"
+  - id: "gen-kajabi"
+    name: "Kajabi - Annual Growth Plan with Premium Support"
+    description: "Annual Growth Plan with Premium Support"
+    input:
+      customer_name: "Kajabi"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "This scenario represents a high-growth creator moving to Kajabi's Growth Plan on an annual contract to leverage the 20% discount. The package includes the core All-in-One Platform at $199/month ($2,388/year) and the Kajabi Access premium support add-on at $99/month ($1,188/year). Both charges are recurring and billed annually upfront on a 12-month term. Revenue for both the platform access and the premium support is recognized ratably over the 12-month contract period. This use case demonstrates standard SaaS annual billing with a secondary support-based recurring charge."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Standard SaaS subscription for the Growth Plan platform access.); Services: POB=over_time release=ratable_over_term (Kajabi Access provides ongoing premium support and coaching throughout the year.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "recurring"
+      - "license"
+  - id: "gen-kajabi-1"
+    name: "Kajabi - Enterprise Multi-Year Ramp with Onboarding"
+    description: "Enterprise Multi-Year Ramp with Onboarding"
+    input:
+      customer_name: "Kajabi"
+      contract_start_date: "02/01/2026"
+      terms_months: 24
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "An enterprise-level brand is onboarding for a multi-year digital academy initiative. The contract includes the Enterprise Platform and the Branded Mobile App with a ramped pricing structure: $12,000 for Year 1 and $18,000 for Year 2. A one-time Onboarding & Migration fee of $5,000 is charged at the start. The recurring platform and app fees are billed annually, while the onboarding fee is billed on the first invoice. Revenue for the subscription components is recognized ratably over each year. The onboarding fee is recognized at a point-in-time upon completion of the migration services, estimated 30 days after the contract start date."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Enterprise platform access recognized over the 24-month term with ramped amounts.); Onboarding: POB=point_in_time release=at_go_live (Migration and setup services recognized when the creator's site goes live.); Other: POB=over_time release=ratable_over_term (Branded Mobile App subscription recognized ratably over the term.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "ramp"
+      - "one-time"
+      - "recurring"
+      - "license"
+      - "multi-year"
+  - id: "gen-kajabi-2"
+    name: "Kajabi - Pro Creator Bundle with Revenue Allocation"
+    description: "Pro Creator Bundle with Revenue Allocation"
+    input:
+      customer_name: "Kajabi"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      use_case_description: "This scenario features a bundled 'Pro Creator' package for established influencers. The bundle includes the Pro Platform (List $399/mo), the Branded Mobile App (List $199/mo), and Kajabi Access (List $99/mo), sold together at a discounted total of $550/month billed monthly. Because the bundle is sold at a 20%+ discount compared to standalone list prices, revenue allocation is required to distribute the $550 transaction price across the three performance obligations based on their relative standalone selling prices (SSP). All three components are recurring subscriptions recognized ratably over the monthly service period. This use case highlights Zuora's automated revenue allocation for multi-element arrangements."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Pro Platform POB receiving a portion of the bundled discount.); Other: POB=over_time release=ratable_over_term (Branded Mobile App POB receiving a portion of the bundled discount.); Services: POB=over_time release=ratable_over_term (Kajabi Access POB receiving a portion of the bundled discount.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "recurring"
+      - "license"
+      - "allocation"
+  - id: "gen-webflow"
+    name: "Webflow - Professional Agency Bundle"
+    description: "Professional Agency Bundle"
+    input:
+      customer_name: "Webflow"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "A design agency signs up for a professional bundle to manage their primary business site and team collaboration. The contract includes one CMS Site Plan priced at $23 per month billed annually ($276 total) and a Growth Workspace Plan for 3 seats at $49 per seat per month billed annually ($1,764 total). Both products are recurring subscriptions with a 12-month term. Revenue for both the site hosting and the workspace collaboration features should be recognized ratably over the 12-month service period. There are no setup fees or usage components in this specific scenario. The billing is consolidated into a single annual invoice at the start of the term."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Both Site and Workspace plans provide continuous access to the platform and hosting services over the contract year.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "bundle"
+      - "one-time"
+      - "recurring"
+  - id: "gen-webflow-1"
+    name: "Webflow - Enterprise Expansion with Localization"
+    description: "Enterprise Expansion with Localization"
+    input:
+      customer_name: "Webflow"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "An enterprise customer is migrating 10 corporate sites to Webflow with multi-language requirements. The deal includes 10 Enterprise Site Plans at $1,200 per site per year and an Enterprise Workspace for 50 users at $60 per seat per year. Additionally, they are purchasing the Localization Essential add-on for 5 locales at $9 per locale per month ($540 total annually). To support the migration, a one-time Professional Services onboarding fee of $5,000 is included. A 15% bundle discount is applied to the entire transaction. Because the onboarding fee is a distinct performance obligation and the discount applies to the total contract value, revenue allocation is required between the ratable subscriptions and the point-in-time onboarding service."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Enterprise sites, workspace seats, and localization locales are ratable over the 12-month term.); Onboarding: POB=point_in_time release=at_go_live (Professional services for migration are recognized upon completion/go-live of the sites.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "allocation"
+  - id: "gen-webflow-2"
+    name: "Webflow - Ecommerce Growth & Optimization"
+    description: "Ecommerce Growth & Optimization"
+    input:
+      customer_name: "Webflow"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A high-growth retail brand utilizes the Ecommerce Plus plan for $74 per month and the Webflow Optimize add-on for $299 per month. This scenario is billed monthly to allow for flexibility as the brand scales. The Ecommerce plan includes a transaction fee component (modeled as 0% for Plus, but with potential for bandwidth usage fees). Webflow Optimize is treated as a recurring subscription for the tool access, while any AI-driven personalization overages are treated as consumption-based usage. The customer expects to be billed at the end of each month for the base subscriptions plus any usage incurred during the period. Revenue for the base plans is ratable monthly, while usage is recognized as consumed."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Monthly base fees for Ecommerce Plus and Optimize are recognized over the monthly service period.); Usage: POB=consumption release=as_used (Bandwidth overages or transaction-based fees are recognized in the period they occur.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"

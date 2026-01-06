@@ -1,0 +1,1080 @@
+name: "saas-companies-5"
+description: "Generated from UC outputs - 2026-01-06"
+version: "1.0"
+tests:
+  - id: "gen-loom"
+    name: "Loom - Standard Business + AI Bundle"
+    description: "Standard Business + AI Bundle"
+    input:
+      customer_name: "Loom"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "A marketing agency subscribes to 25 seats of the Loom 'Business + AI' bundle. The plan is priced at $20 per user per month, resulting in a total annual contract value of $6,000. Billing is set to occur annually upfront for the 12-month term. This subscription includes core video messaging and AI features like auto-summaries and filler word removal. Revenue is recognized ratably over the 12-month contract period. This scenario demonstrates a standard bundled SaaS offering with a single recurring charge per user."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Standard SaaS subscription providing continuous access to the Loom platform and AI features.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "recurring"
+      - "license"
+  - id: "gen-loom-1"
+    name: "Loom - Enterprise Deal with Professional Services"
+    description: "Enterprise Deal with Professional Services"
+    input:
+      customer_name: "Loom"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "A global enterprise customer signs a 12-month agreement for 500 seats of Loom Enterprise at a negotiated rate of $35 per user per month. The deal includes a one-time 'Enterprise Onboarding & Training' fee of $5,000 to cover admin setup and change management. To secure the deal, a 10% bundle discount is applied to the total transaction price. Revenue must be allocated between the subscription (Performance Obligation 1) and the onboarding service (Performance Obligation 2) using list prices as the basis for SSP. Subscription revenue is recognized ratably over the term, while the onboarding fee is recognized at a point-in-time upon completion of the training sessions."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Enterprise subscription provides access to SSO, SCIM, and advanced admin controls.); Onboarding: POB=point_in_time release=at_go_live (One-time service fee recognized when the initial onboarding and training engagement is complete.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "allocation"
+  - id: "gen-loom-2"
+    name: "Loom - Multi-Year Expansion and AI Add-on"
+    description: "Multi-Year Expansion and AI Add-on"
+    input:
+      customer_name: "Loom"
+      contract_start_date: "02/01/2026"
+      terms_months: 24
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A technology company commits to a 24-month expansion agreement for Loom Business. The contract starts with 100 seats at $12.50 per user per month in the first year, ramping up to 200 seats in the second year. Additionally, the customer elects to add the 'Loom AI' add-on for all active seats starting in Month 7 of the contract at an additional $5 per user per month. Billing is processed monthly to accommodate the changing seat counts and the mid-term add-on. Revenue for both the base subscription and the AI add-on is recognized ratably over the specific periods they are active. This scenario highlights multi-year ramp pricing and mid-term subscription amendments."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Revenue is recognized ratably for the base seats and the AI add-on based on their respective service periods.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "ramp"
+      - "recurring"
+      - "multi-year"
+  - id: "gen-clickup"
+    name: "ClickUp - Business Plan with AI Add-on"
+    description: "Business Plan with AI Add-on"
+    input:
+      customer_name: "ClickUp"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "A mid-sized marketing agency is upgrading from a free tool to the ClickUp Business Plan. They are purchasing 75 seats at $12 per user per month, billed annually. They have also decided to include the ClickUp Brain AI add-on for all 75 users at a rate of $7 per user per month. The total contract value for the year is $17,100. The contract has a 12-month term starting next month. Both the core platform and the AI add-on are recurring charges that should be recognized ratably over the 12-month term. No professional services are included in this self-serve expansion scenario."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Core Business Plan subscription recognized over the 12-month term.); Subscription: POB=over_time release=ratable_over_term (ClickUp Brain AI add-on recognized over the 12-month term.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "recurring"
+      - "license"
+  - id: "gen-clickup-1"
+    name: "ClickUp - Enterprise Bundle with Professional Services"
+    description: "Enterprise Bundle with Professional Services"
+    input:
+      customer_name: "ClickUp"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "A large enterprise is consolidating their project management onto ClickUp Enterprise. This deal includes 500 seats at a negotiated rate of $30 per user per month and ClickUp Assist support for a flat fee of $1,000 per month. Additionally, a one-time Professional Onboarding & Deployment fee of $15,000 is charged for initial workspace configuration and data migration. The customer is receiving a 10% bundle discount on the total list price, necessitating revenue allocations. The contract term is 12 months with annual upfront billing. The subscription and support fees are recognized ratably, while the onboarding fee is recognized at the point of project completion (go-live)."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Enterprise seats recognized ratably over the 12-month term.); Services: POB=over_time release=ratable_over_term (ClickUp Assist recurring support recognized ratably.); Onboarding: POB=point_in_time release=at_go_live (Professional services recognized upon completion of the onboarding phase.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "allocation"
+  - id: "gen-clickup-2"
+    name: "ClickUp - Multi-Year Growth Ramp"
+    description: "Multi-Year Growth Ramp"
+    input:
+      customer_name: "ClickUp"
+      contract_start_date: "02/01/2026"
+      terms_months: 24
+      transaction_currency: "USD"
+      billing_period: "Quarterly"
+      is_allocations: false
+      use_case_description: "A fast-growing technology startup has signed a 24-month agreement for the ClickUp Unlimited Plan. The contract features a seat ramp to match their hiring plan: Year 1 includes 100 seats at $7 per user per month, and Year 2 increases to 250 seats at the same rate. The customer has requested Quarterly billing to better manage their cash flow. The total contract value over two years is $29,400. Revenue should be recognized ratably based on the active seat count and pricing during each respective month of the 24-month term. This scenario tests Zuora's ability to handle multi-year ramp structures with non-annual billing frequencies."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Ramping subscription recognized ratably over the 24-month contract term.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "ramp"
+      - "multi-year"
+  - id: "gen-amplitude"
+    name: "Amplitude - Growth Plan Mid-Market Bundle"
+    description: "Growth Plan Mid-Market Bundle"
+    input:
+      customer_name: "Amplitude"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "A mid-market SaaS company signs for the Amplitude Growth Plan to unify their product data and experimentation. The deal includes Amplitude Analytics ($25,000/year), Amplitude Experiment ($12,000/year), and Amplitude CDP ($10,000/year). A one-time Onboarding & Success Services fee of $7,500 is applied for technical instrumentation and data governance setup. The contract is billed annually upfront. Revenue for the three platform subscriptions is recognized ratably over the 12-month term, while the implementation fee is recognized upon successful go-live (point-in-time)."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Core platform access for Analytics, Experiment, and CDP is provided continuously over the term.); Services: POB=point_in_time release=at_go_live (Implementation services are tied to initial setup and technical go-live.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "one-time"
+      - "recurring"
+      - "license"
+  - id: "gen-amplitude-1"
+    name: "Amplitude - Plus Plan with Usage-Based Session Replay"
+    description: "Plus Plan with Usage-Based Session Replay"
+    input:
+      customer_name: "Amplitude"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "A mobile app startup signs up for the self-service Plus Plan. They pay a base fee of $49/month (billed annually at $588) for Amplitude Analytics, which includes 1,000 Monthly Tracked Users (MTUs). Additionally, they opt for the Session Replay add-on, which includes 10,000 sessions per month for a flat annual fee of $1,200, plus a usage-based overage charge of $0.05 per session for any volume exceeding the monthly allowance. The base subscriptions are recognized ratably over the 12-month term. Usage revenue for Session Replay overages is recognized as consumed (consumption-based) in the month the activity occurs."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Base Plus Plan and Session Replay base fees are ratable.); Usage: POB=consumption release=as_used (Session Replay overages are recognized based on actual volume tracked each month.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+  - id: "gen-amplitude-2"
+    name: "Amplitude - Enterprise Transformation with Bundle Allocations"
+    description: "Enterprise Transformation with Bundle Allocations"
+    input:
+      customer_name: "Amplitude"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "A large retail organization enters a strategic partnership on an Enterprise Plan. The bundle includes Analytics, Experiment, CDP, and Session Replay for a total discounted annual price of $135,000 (List Price $150,000). A $15,000 Professional Services package for data strategy is included. Because the bundle discount is applied across both the recurring software and the one-time services, revenue must be allocated based on the Standalone Selling Price (SSP) of each component. The platform access is recognized ratably over 12 months, while the services are recognized point-in-time upon completion of the training milestones."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Allocated revenue for platform components is recognized ratably.); Services: POB=point_in_time release=at_go_live (Allocated revenue for services is recognized when the obligation is satisfied.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "license"
+      - "allocation"
+  - id: "gen-mixpanel"
+    name: "Mixpanel - Growth Plan Self-Serve"
+    description: "Growth Plan Self-Serve"
+    input:
+      customer_name: "Mixpanel"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "Standard Growth Plan for a mid-sized startup seeking product-market fit. This includes a recurring monthly charge of $24 for the Mixpanel Analytics Subscription. The plan includes a 1 million event monthly allowance, with overages for 'Event Volume (Usage)' billed monthly in arrears at $0.00028 per event. Revenue for the base fee is recognized ratably over the month, while usage is recognized as consumed. This scenario demonstrates the self-serve product-led growth motion. The customer is billed via credit card on a month-to-month basis. No implementation services are included in this tier."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Base platform fee for Growth tier provides continuous access to analytics tools.); Usage: POB=consumption release=as_used (Event overages are recognized as the events are tracked and billed.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "one-time"
+      - "recurring"
+      - "credits"
+  - id: "gen-mixpanel-1"
+    name: "Mixpanel - Enterprise Sales-Led Engagement"
+    description: "Enterprise Sales-Led Engagement"
+    input:
+      customer_name: "Mixpanel"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "Enterprise-level agreement for a global organization with complex security requirements. The contract includes an annual 'Mixpanel Analytics Subscription' fee of $27,000 and a one-time 'Professional Services & Onboarding' engagement priced at $15,000. The onboarding fee is intended for an initial implementation audit and team training. Due to the bundle discount applied at the contract level, revenue allocations are required between the software and the services. Subscription revenue is recognized over the 12-month term, and services are recognized upon completion of the onboarding phase. This highlights the sales-led enterprise motion with high-touch services. The transaction currency is USD and billing occurs annually."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Annual enterprise platform fee recognized ratably over the 12-month term.); Onboarding: POB=point_in_time release=at_go_live (Professional services recognized upon completion of the implementation audit.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "allocation"
+  - id: "gen-mixpanel-2"
+    name: "Mixpanel - B2B Enterprise Data Bundle"
+    description: "B2B Enterprise Data Bundle"
+    input:
+      customer_name: "Mixpanel"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "The 'B2B Enterprise Bundle' tailored for a SaaS provider needing deep account-level insights and data warehouse integration. This package includes the core 'Mixpanel Analytics Subscription' ($20,000), the 'Group Analytics Add-on' ($10,000), and 'Data Pipelines' for BigQuery sync ($15,000). All components are billed annually upfront for a total contract value of $45,000. The term is 12 months. All three products represent performance obligations that are satisfied over time as the customer has continuous access to the analytics and data export capabilities. This scenario exercises multi-product bundling within the Zuora product catalog. Revenue is released ratably for all elements."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Core analytics, group analytics, and data pipeline fees are all ratable over the annual term.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "recurring"
+      - "license"
+  - id: "gen-launchdarkly"
+    name: "LaunchDarkly - Foundation Tier for Growing Teams"
+    description: "Foundation Tier for Growing Teams"
+    input:
+      customer_name: "LaunchDarkly"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "A mid-market customer subscribes to the Foundation plan for a 12-month term. The deal includes a base platform fee for 10 service connections at $12/connection/month ($1,440 annually) and a pre-paid block of 50,000 Client-side MAUs at $10 per 1k MAUs ($6,000 annually). The platform fee and MAU block are billed annually upfront. Any MAU usage exceeding the 50k block will be billed monthly in arrears at a rate of $12 per 1k MAUs. Revenue for the platform and pre-paid block is recognized ratably over the 12-month term, while overages are recognized as they occur."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Base platform fee for service connections provides continuous access.); Usage: POB=over_time release=ratable_over_term (Pre-paid MAU blocks are typically treated as a stand-ready obligation over the term.); Usage: POB=consumption release=as_used (Overage usage billed in arrears is recognized as consumption occurs.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "license"
+  - id: "gen-launchdarkly-1"
+    name: "LaunchDarkly - Enterprise Expansion with Experimentation & Services"
+    description: "Enterprise Expansion with Experimentation & Services"
+    input:
+      customer_name: "LaunchDarkly"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "An enterprise customer signs a 1-year deal for high-scale feature management. The package includes an Enterprise Platform Fee of $25,000 annually and a large volume of 1,000,000 Client-side MAUs priced at $8 per 1k MAUs ($80,000 annually). They also add the Experimentation Add-on for 500,000 Experimentation MAUs at $3 per 1k MAUs ($18,000 annually). To ensure a successful rollout, a one-time Professional Services implementation package is included for $15,000. All fees are billed annually upfront, except for the services which are billed upon contract signature. A 10% bundle discount is applied across all recurring line items, requiring revenue allocation."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Enterprise platform and experimentation access are ratable.); Services: POB=point_in_time release=at_go_live (Implementation services recognized upon completion of the onboarding phase.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "license"
+      - "allocation"
+  - id: "gen-launchdarkly-2"
+    name: "LaunchDarkly - Observability Suite Consumption Model"
+    description: "Observability Suite Consumption Model"
+    input:
+      customer_name: "LaunchDarkly"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A developer-centric customer uses LaunchDarkly specifically for its 'Guarded Releases' capabilities. This scenario features a low monthly base subscription of $50 for platform access, but high volume usage of the Observability Suite. Usage is billed monthly in arrears based on actual consumption: Session Replays at $3.50 per 1k sessions, Error tracking at $0.30 per 1k errors, and Traces at $1.50 per 1M traces. This use case tests Zuora's ability to handle multi-metric metered usage and monthly variable billing. Revenue for the usage components is recognized as the events are processed each month."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Small base fee recognized monthly.); Usage: POB=consumption release=as_used (Observability metrics (sessions, errors, traces) are recognized as consumed.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+      - "license"
+  - id: "gen-postman"
+    name: "Postman - Professional Team with AI Productivity"
+    description: "Professional Team with AI Productivity"
+    input:
+      customer_name: "Postman"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "A growing engineering team of 25 users is moving from the Free tier to the Professional plan to leverage RBAC and SSO. The contract includes the Postman API Platform Subscription at $29 per user per month and the Postbot AI Assistant add-on for all 25 users at $9 per user per month. Both products are billed annually upfront for a 12-month term. The core platform subscription and the AI add-on are considered distinct over-time performance obligations. Total annual contract value is $11,400."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Core platform access is a standard SaaS subscription recognized ratably over the 12-month term.); Other: POB=over_time release=ratable_over_term (Postbot AI Assistant provides continuous access to AI features, recognized ratably alongside the main subscription.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "recurring"
+      - "license"
+  - id: "gen-postman-1"
+    name: "Postman - Enterprise Governance and Implementation"
+    description: "Enterprise Governance and Implementation"
+    input:
+      customer_name: "Postman"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "A large enterprise organization is standardizing on Postman for 200 users on the Enterprise plan at $49 per user per month. To support their AI-driven testing strategy, they are also licensing Postbot Enterprise for all users at $19 per user per month. The deal includes a one-time 'Enterprise Success Package' (Onboarding) for $5,000 to assist with SCIM setup and Private API Network configuration. A 10% bundle discount is applied to the total subscription value, requiring revenue allocation between the subscription and the onboarding services. The subscriptions are recognized ratably, while the onboarding fee is recognized at go-live."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Enterprise platform and Postbot Enterprise subscriptions recognized ratably over the 12-month term.); Onboarding: POB=point_in_time release=at_go_live (Success package recognized upon completion of the implementation/setup phase.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "allocation"
+  - id: "gen-postman-2"
+    name: "Postman - Basic Plan with Usage-Based Scaling"
+    description: "Basic Plan with Usage-Based Scaling"
+    input:
+      customer_name: "Postman"
+      contract_start_date: "02/01/2026"
+      terms_months: 1
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A startup is using the Postman Basic plan for 10 users on a monthly billing cycle at $19 per user per month. In addition to the base subscription, they are pre-purchasing 5 blocks of 'Monitoring & Mock Server' requests (50,000 requests per block) at $20 per block to handle a high-volume API launch. The subscription fee is billed monthly and recognized ratably. The usage blocks are treated as consumption-based revenue, recognized as the monitoring requests are actually used by the system. The total initial monthly bill is $290."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Basic plan subscription recognized monthly.); Usage: POB=consumption release=as_used (Monitoring blocks are recognized as the 50k request increments are consumed by the platform.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+  - id: "gen-gitlab"
+    name: "GitLab - Enterprise Security & AI Expansion"
+    description: "Enterprise Security & AI Expansion"
+    input:
+      customer_name: "GitLab"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "A global enterprise is standardizing on GitLab Ultimate for its security and compliance features. They are purchasing 150 seats of GitLab Ultimate at the list price of $1,188 per user per year. Additionally, they are adding 75 seats of GitLab Duo Pro at $228 per user per year to enable AI-powered development. A 10% multi-product discount is applied across the entire order. The contract is for 12 months, billed annually upfront. Revenue for both the Ultimate subscription and the Duo Pro add-on is recognized ratably over the 12-month term. This scenario demonstrates Zuora's ability to handle seat-based subscriptions with add-ons and cross-product discounting."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (GitLab Ultimate and Duo Pro provide continuous access to the SaaS platform and AI features over the contract term.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "discount"
+      - "recurring"
+      - "allocation"
+  - id: "gen-gitlab-1"
+    name: "GitLab - High-Growth Startup Bundle"
+    description: "High-Growth Startup Bundle"
+    input:
+      customer_name: "GitLab"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "A fast-growing startup is onboarding with 50 GitLab Premium seats at $348 per user per year. To support their heavy CI/CD requirements, they are purchasing 10 'Compute Minutes Packs' (10,000 extra minutes) for a total of $100 as a one-time purchase. Furthermore, they have requested a 'GitLab with Git Fundamentals' training session for 10 team members at $499 per person. The subscription and compute packs are billed immediately, while the training is billed as a one-time fee. Revenue for the Premium seats is recognized ratably over 12 months. The training revenue is recognized point-in-time upon completion of the session. Compute minutes are treated as consumption-based revenue recognized as the minutes are used."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Premium subscription recognized ratably over the 12-month term.); Usage: POB=consumption release=as_used (Compute minutes are prepaid but recognized as the usage occurs due to the rollover nature.); Services: POB=point_in_time release=at_delivery (Professional training is recognized once the session is delivered to the participants.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "bundle"
+      - "one-time"
+      - "recurring"
+      - "allocation"
+  - id: "gen-gitlab-2"
+    name: "GitLab - GitLab Dedicated Multi-Year Ramp"
+    description: "GitLab Dedicated Multi-Year Ramp"
+    input:
+      customer_name: "GitLab"
+      contract_start_date: "02/01/2026"
+      terms_months: 36
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "A large financial institution requires a single-tenant instance via GitLab Dedicated. This 3-year agreement features a seat ramp: 2,000 Ultimate seats in Year 1, 2,500 seats in Year 2, and 3,000 seats in Year 3, all priced at $1,188 per user per year. Additionally, a recurring annual 'Infrastructure Management Fee' of $150,000 is charged to cover the single-tenant hosting and maintenance. Billing occurs annually at the start of each year. Revenue for both the seats and the management fee is recognized ratably over each 12-month period. This scenario tests Zuora's ability to manage multi-year ramp contracts and fixed recurring service fees alongside high-volume seat subscriptions."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Ultimate seats are recognized ratably over each year of the 3-year term.); Other: POB=over_time release=ratable_over_term (The Infrastructure Management Fee is a recurring service recognized ratably over the period it covers.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "ramp"
+      - "recurring"
+      - "multi-year"
+  - id: "gen-contentful"
+    name: "Contentful - Mid-Market Growth with Usage Overages"
+    description: "Mid-Market Growth with Usage Overages"
+    input:
+      customer_name: "Contentful"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A growing digital agency signs up for the Contentful Lite plan to manage a new client project. The plan includes a recurring $300 monthly fee for the platform access, which includes 20 users and 1M API calls. However, due to high traffic during a launch event, the agency incurs overage charges for API calls and CDN bandwidth. API overages are billed at $5 per 1M additional calls, and bandwidth is billed at $65 per 1TB. The subscription is set for a 12-month term with monthly billing. Revenue for the base platform is recognized ratably, while overages are recognized as they are consumed and billed."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Base Lite plan access is a standing ready obligation.); Usage: POB=consumption release=as_used (API and Bandwidth overages are recognized in the period they occur.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+      - "license"
+  - id: "gen-contentful-1"
+    name: "Contentful - Enterprise Digital Transformation Bundle"
+    description: "Enterprise Digital Transformation Bundle"
+    input:
+      customer_name: "Contentful"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "A global retailer enters into a 12-month Enterprise agreement for the Contentful Premium Platform. The deal includes the core Platform ($75,000/year), the Contentful Studio add-on for visual assembly ($15,000/year), and a Quickstart Onboarding package ($10,000 one-time fee). To secure the deal, a 15% bundle discount is applied to the total contract value. Because the discount applies to both the recurring SaaS and the one-time professional services, revenue allocation is required to ensure the discount is spread across the performance obligations based on list prices. The platform and studio fees are billed annually upfront, while onboarding is recognized upon completion of the workshops."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Premium Platform and Studio are ratable over the 12-month term.); Onboarding: POB=point_in_time release=at_go_live (Quickstart services are recognized upon delivery of the final workshop.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "license"
+      - "allocation"
+  - id: "gen-contentful-2"
+    name: "Contentful - Multi-Year Personalization Scale-Up"
+    description: "Multi-Year Personalization Scale-Up"
+    input:
+      customer_name: "Contentful"
+      contract_start_date: "02/01/2026"
+      terms_months: 24
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "A media company signs a 24-month contract to power its AI-driven personalization strategy. This includes the Premium Platform ($50,000/year) and the Contentful Personalization add-on ($25,000/year). The Personalization add-on includes a base of 100K Monthly Active Profiles (MAPs). Due to expected growth, the customer also prepays for an additional 400K MAPs per month at a rate of $10,000/year. The contract features a 5% price ramp in the second year for all recurring components. Billing occurs annually at the start of each year. Revenue for the platform and personalization access is recognized ratably over the 24-month term, accounting for the total contract value including the year-two increase."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Total contract value including the 5% ramp is recognized ratably over 24 months.); Other: POB=over_time release=ratable_over_term (Prepaid MAP capacity is treated as a recurring subscription component.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "ramp"
+      - "recurring"
+      - "license"
+      - "multi-year"
+  - id: "gen-calendly"
+    name: "Calendly - Standard Annual Team Subscription"
+    description: "Standard Annual Team Subscription"
+    input:
+      customer_name: "Calendly"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "A small professional services firm signs a 12-month contract for the Calendly Standard plan to manage their client bookings. The agreement covers 10 seats at a rate of $10 per seat per month, billed annually upfront. This scenario utilizes the Scheduling Automation Subscription product with a recurring rate plan charge. The customer selected annual billing to take advantage of the 16% discount compared to monthly rates. Revenue for the subscription is recognized ratably over the 12-month term. No professional services or onboarding fees are included in this self-serve motion."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Standard SaaS subscription recognized linearly over the 12-month contract period.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "discount"
+      - "recurring"
+  - id: "gen-calendly-1"
+    name: "Calendly - Enterprise Platform with Implementation"
+    description: "Enterprise Platform with Implementation"
+    input:
+      customer_name: "Calendly"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "A mid-market enterprise customer adopts the Calendly Enterprise Platform to consolidate scheduling across their sales and success departments. The contract includes the Enterprise Platform base fee of $15,000 per year, which covers the first 30 users and advanced security features like SAML SSO. Additionally, the deal includes a one-time Enterprise Onboarding & Support fee of $2,500 for implementation assistance and admin training. Because the onboarding fee was discounted from a list price of $3,500, revenue allocations are required to ensure compliance. The platform fee is recognized ratably over the year, while the onboarding fee is recognized as a point-in-time obligation upon completion of the setup. This scenario demonstrates Zuora's ability to handle bundled SaaS and professional services with SSP allocations."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Enterprise platform access recognized over the 12-month term.); Onboarding: POB=point_in_time release=at_go_live (One-time implementation services recognized upon successful go-live/completion.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "license"
+      - "allocation"
+  - id: "gen-calendly-2"
+    name: "Calendly - Teams Plan Monthly Expansion"
+    description: "Teams Plan Monthly Expansion"
+    input:
+      customer_name: "Calendly"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A high-growth marketing agency chooses the Calendly Teams plan for its collaborative features like round-robin scheduling. They start with 5 seats at the monthly rate of $20 per seat, resulting in a $100 monthly recurring charge. The agency expects to add 2 new seats every month as they scale their team, requiring a flexible billing system that handles pro-rated mid-month additions. This scenario focuses on the Scheduling Automation Subscription with a monthly billing frequency to maintain maximum flexibility. Revenue is recognized monthly as the service is delivered. This highlights Zuora's capability to manage high-frequency subscription changes and pro-ration accuracy."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Monthly recurring subscription revenue recognized within each billing period.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "recurring"
+  - id: "gen-zapier"
+    name: "Zapier - Standard Team Collaboration Bundle"
+    description: "Standard Team Collaboration Bundle"
+    input:
+      customer_name: "Zapier"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "The customer is a mid-sized marketing agency subscribing to the Zapier Team Plan to enable collaboration across multiple team members. This plan includes the Zapier Automation Platform (Zaps) and the Zapier Tables & Interfaces Premium add-on for building custom internal tools. The subscription is billed annually at $69 per month for the base platform and $20 per month for the Tables add-on. Task usage is included up to a base limit, with overage charges applied if they exceed their monthly quota. Revenue for the subscription components is recognized ratably over the 12-month term. Usage-based overages, if any, are recognized in the month they occur based on consumption."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Base Team Plan and Tables add-on provide continuous access to the platform services.); Usage: POB=consumption release=as_used (Task overages are recognized as the automation tasks are executed.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "bundle"
+      - "recurring"
+      - "license"
+  - id: "gen-zapier-1"
+    name: "Zapier - Enterprise Governance & Implementation"
+    description: "Enterprise Governance & Implementation"
+    input:
+      customer_name: "Zapier"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "A large financial services firm is moving to the Zapier Enterprise Plan to utilize advanced security features like SAML SSO and SCIM provisioning. The deal includes a custom annual platform fee of $30,000 and a one-time 'Enterprise Onboarding & Governance Setup' fee of $5,000. Because a 15% discount was applied to the total package, revenue must be allocated between the subscription and the professional services based on their standalone selling prices. The subscription revenue is recognized ratably over the 12-month term. The onboarding fee is recognized as a point-in-time performance obligation upon the completion of the security configuration and admin training."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Enterprise platform access and governance tools are delivered over the contract term.); Services: POB=point_in_time release=at_go_live (Onboarding services are considered distinct and recognized upon completion of the setup phase.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "license"
+      - "allocation"
+  - id: "gen-zapier-2"
+    name: "Zapier - High-Volume Professional Scaling"
+    description: "High-Volume Professional Scaling"
+    input:
+      customer_name: "Zapier"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "An individual power user is on the Zapier Professional Plan, billed monthly to maintain flexibility. The base plan is $29.99 per month and includes 750 tasks. However, this user frequently runs high-volume data migrations, resulting in significant task overages. The overages are billed at a tiered rate, starting at $0.04 per task for the first 2,000 tasks over the limit. This scenario exercises Zuora's ability to handle monthly recurring subscriptions alongside high-frequency usage charges. Revenue for the base plan is recognized ratably each month, while the task usage is recognized as the tasks are consumed within the billing cycle."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Monthly Professional plan fee recognized over the monthly service period.); Usage: POB=consumption release=as_used (Tiered task usage is recognized as consumption occurs.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+  - id: "gen-grammarly"
+    name: "Grammarly - Standard Grammarly Pro Team Subscription"
+    description: "Standard Grammarly Pro Team Subscription"
+    input:
+      customer_name: "Grammarly"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "A marketing agency signs up for a 10-user Grammarly Pro team subscription on an annual contract. The pricing is $12 per user per month, resulting in an annual recurring charge of $1,440. This plan includes 2,000 AI prompts per user per month and full-sentence rewrites. The customer pays upfront for the year. Revenue for the subscription is recognized ratably over the 12-month term."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Standard SaaS subscription recognized monthly over the 12-month contract period.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "recurring"
+  - id: "gen-grammarly-1"
+    name: "Grammarly - Enterprise Agreement with Implementation Services"
+    description: "Enterprise Agreement with Implementation Services"
+    input:
+      customer_name: "Grammarly"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "A large enterprise customer enters a 12-month agreement for 500 Grammarly Enterprise seats at $20 per user per month, totaling $120,000 annually. The deal includes a required 'Implementation & Training' package for a one-time fee of $5,000. The implementation includes admin training and style guide configuration. Subscription revenue is recognized ratably over the year, while the implementation fee is recognized at the point in time when the onboarding is completed (assumed at go-live)."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Enterprise SaaS subscription recognized over the 12-month term.); Services: POB=point_in_time release=at_go_live (Implementation fee recognized upon completion of the success planning and training.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "one-time"
+      - "recurring"
+      - "allocation"
+  - id: "gen-grammarly-2"
+    name: "Grammarly - Multi-Year Enterprise Ramp with Tiered Pricing"
+    description: "Multi-Year Enterprise Ramp with Tiered Pricing"
+    input:
+      customer_name: "Grammarly"
+      contract_start_date: "02/01/2026"
+      terms_months: 24
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "A global corporation signs a 24-month Enterprise agreement using a tiered pricing model to support their rollout. For the first 1,000 users, the rate is $18 per user per month; for any users above 1,000, the rate drops to $15 per user per month. The initial order is for 1,500 users. Billing occurs annually. This scenario exercises Zuora's tiered pricing and multi-year contract management. Revenue is recognized ratably over the 24-month term for the active subscription period."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Multi-year subscription recognized ratably. Tiered pricing affects the transaction price but not the POB structure.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "ramp"
+      - "recurring"
+      - "multi-year"
+  - id: "gen-1password"
+    name: "1Password - Enterprise Business Land"
+    description: "Enterprise Business Land"
+    input:
+      customer_name: "1Password"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "A mid-sized technology company purchases 500 licenses of 1Password Business to secure their employee credentials and enable SSO integration. The pricing is set at the standard $7.99 per user per month, billed annually for a total contract value of $47,940. This plan includes the 'Free Family Accounts' benefit for all 500 employees, which is treated as a non-monetary value-add for the users. The contract is a standard 12-month term. Revenue for the subscription is recognized ratably over the 12-month service period."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Standard SaaS subscription recognized monthly over the 1-year term.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "recurring"
+      - "license"
+  - id: "gen-1password-1"
+    name: "1Password - Strategic Enterprise with Services"
+    description: "Strategic Enterprise with Services"
+    input:
+      customer_name: "1Password"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "A global financial services firm signs a multi-year deal for 2,500 1Password Enterprise seats at a discounted rate of $7.00 per user per month. Additionally, the deal includes a one-time 'Enterprise Implementation & Training' package valued at $15,000 to facilitate a global rollout and SCIM provisioning setup. The total first-year contract value is $225,000. Because the implementation services are sold alongside the subscription at a discount, revenue allocation is required between the software (ratable) and the professional services (point-in-time). The implementation is expected to be completed within the first 30 days."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Software component recognized over the 12-month term.); Services: POB=point_in_time release=at_go_live (Implementation fee recognized upon completion of the setup/training phase.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "allocation"
+  - id: "gen-1password-2"
+    name: "1Password - Families Plan with Expansion"
+    description: "Families Plan with Expansion"
+    input:
+      customer_name: "1Password"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "A prosumer customer subscribes to '1Password Families' for their household. The base plan covers 5 users for $4.99 per month, billed annually ($59.88). During the setup, the customer adds 3 additional family members (beyond the base 5) at the incremental cost of $1.00 per user per month, also billed annually ($36.00 for the 3 extra users). The total annual invoice is $95.88. All charges are recurring and the service is provided over a 12-month term. Revenue is recognized ratably for both the base plan and the additional member add-ons."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Both the base family plan and the extra user charges are ratable over the annual term.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "one-time"
+      - "recurring"
+  - id: "gen-coda"
+    name: "Coda - Team Plan Annual Subscription"
+    description: "Team Plan Annual Subscription"
+    input:
+      customer_name: "Coda"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "A mid-sized marketing agency signs up for the Coda Team plan for 25 Doc Makers. The contract is for 12 months, billed annually at $30 per Doc Maker per month, totaling $9,000. This plan includes 5,000 AI credits per month as a bundled allotment within the subscription. Editors and viewers remain free under Coda's unique Maker Billing model. Revenue for the subscription is recognized ratably over the 12-month term. This scenario tests standard annual recurring revenue with a seat-based model."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Standard SaaS subscription recognized monthly over the 12-month term.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "recurring"
+      - "credits"
+  - id: "gen-coda-1"
+    name: "Coda - Enterprise Bundle with Implementation"
+    description: "Enterprise Bundle with Implementation"
+    input:
+      customer_name: "Coda"
+      contract_start_date: "02/01/2026"
+      terms_months: 24
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "A large enterprise customer purchases a 24-month subscription for 100 Doc Makers at a custom rate of $45 per maker per month. The subscription is billed annually, and the deal includes a $5,000 one-time fee for Enterprise Implementation Services. A 10% bundle discount is applied to both the seats and the services, necessitating revenue allocation. The subscription revenue is recognized ratably over the 24-month term. The implementation service is treated as a separate performance obligation recognized upon completion at go-live. This case exercises multi-year terms and complex revenue allocation between distinct charge types."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Enterprise seats recognized ratably over the 24-month contract term.); Services: POB=point_in_time release=at_go_live (Implementation services recognized once the workspace setup is complete.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "allocation"
+      - "multi-year"
+  - id: "gen-coda-2"
+    name: "Coda - Pro Plan with AI Usage Overage"
+    description: "Pro Plan with AI Usage Overage"
+    input:
+      customer_name: "Coda"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A software development team starts with the Coda Pro plan on a monthly billing cycle for 10 Doc Makers. The base rate is $12 per maker per month, billed in advance. To support heavy automation needs, they also agree to a usage-based fee for AI Credit Blocks at $50 per 1,000 credits. These AI overages are billed monthly in arrears based on actual consumption recorded in the workspace. Subscription revenue is recognized ratably each month, while AI credit revenue is recognized as the usage occurs. This scenario demonstrates the flexibility of combining recurring fees with consumption-based components."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Pro plan subscription recognized monthly.); Usage: POB=consumption release=as_used (AI overage credits recognized in the month they are consumed.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+      - "credits"
+  - id: "gen-typeform"
+    name: "Typeform - Standard Annual Business Plan"
+    description: "Standard Annual Business Plan"
+    input:
+      customer_name: "Typeform"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "This scenario represents a standard annual subscription for a mid-sized marketing agency using the Typeform Business Plan. The customer commits to a 12-month term for the Core Subscription, priced at $83 per month but billed as a single annual payment of $996. This plan provides access to 10,000 responses per month and up to 5 user seats. Billing occurs upfront at the start of the contract. Revenue for the subscription charge is recognized ratably over the 12-month term. No professional services or usage-based components are included in this specific agreement."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (SaaS subscription providing continuous access to the platform over the contract term.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+  - id: "gen-typeform-1"
+    name: "Typeform - Growth Pro with Consumption Credits"
+    description: "Growth Pro with Consumption Credits"
+    input:
+      customer_name: "Typeform"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "This scenario features the Growth Pro Plan targeted at a high-volume lead generation team. The agreement includes a monthly recurring subscription fee of $349. In addition to the base features, the plan includes 1,500 lead enrichment credits per month, with any additional consumption billed as usage at a rate of $0.20 per credit. Billing for the base subscription is performed monthly in advance, while usage-based enrichment credits are billed monthly in arrears based on actual consumption. Subscription revenue is recognized ratably over each monthly period. Usage revenue is recognized as the lead enrichment services are performed, following a consumption-based pattern."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Monthly recurring fee recognized over the month of service.); Usage: POB=consumption release=as_used (Lead enrichment credits recognized as consumption occurs.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+      - "credits"
+  - id: "gen-typeform-2"
+    name: "Typeform - Enterprise Bundle with Onboarding"
+    description: "Enterprise Bundle with Onboarding"
+    input:
+      customer_name: "Typeform"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "This Enterprise Custom deal is designed for a large corporation requiring HIPAA compliance and VIP support. The bundle consists of an Enterprise Core Subscription priced at $1,000 per month and a one-time Enterprise Professional Services fee of $3,000 for VIP Onboarding and custom training. The total contract value is $15,000 for the first year, representing a $3,000 discount from the combined list price of $18,000. Billing for both the annual subscription and the onboarding fee occurs upfront. Because the deal involves a bundled discount across distinct performance obligations, revenue allocation is required. Subscription revenue is recognized ratably over the 12-month term, while onboarding revenue is recognized at the point in time when the 'go-live' milestone is reached."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Enterprise SaaS subscription recognized ratably over the 12-month term.); Onboarding: POB=point_in_time release=at_go_live (One-time onboarding service recognized upon completion of setup.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "allocation"
+  - id: "gen-airtable"
+    name: "Airtable - SMB Team Expansion with Guest Access"
+    description: "SMB Team Expansion with Guest Access"
+    input:
+      customer_name: "Airtable"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "A marketing agency signs up for the Airtable Team Plan to manage client campaigns. They purchase 25 user seats at the standard list price of $20 per seat per month, billed annually. Additionally, they require the Portals add-on to provide external access for 15 guest users at $120 per month, also billed annually. The contract is a standard 12-month term. Both the seat subscription and the Portals add-on are considered recurring services. Revenue for both components should be recognized ratably over the 12-month term. This scenario demonstrates a straightforward annual subscription with a fixed-fee recurring add-on."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Standard Team Plan seats providing continuous platform access.); Subscription: POB=over_time release=ratable_over_term (Portals add-on providing continuous guest access over the term.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "recurring"
+  - id: "gen-airtable-1"
+    name: "Airtable - Business Plan with AI Usage and Implementation"
+    description: "Business Plan with AI Usage and Implementation"
+    input:
+      customer_name: "Airtable"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: true
+      use_case_description: "A mid-market manufacturing company adopts the Airtable Business Plan for 50 users at $45 per seat per month. To support their automation needs, they include one AI Credit Pack (10,000 credits) for $120 per month. They also purchase a one-time Professional Services Package for $10,000 to assist with base architecture and workflow discovery. The customer receives a 10% bundle discount across all items. The subscription and AI credits are billed monthly, while the services are billed upfront. Because the discount applies to both the subscription and the one-time service, revenue allocation is required. The subscription is recognized ratably, services at go-live, and AI credits based on monthly reset or usage."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Business Plan seats recognized over the 12-month term.); Usage: POB=consumption release=as_used (AI Credit Pack recognized as credits are consumed or as the monthly allowance expires.); Services: POB=point_in_time release=at_go_live (Professional services recognized upon completion of the implementation project.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "credits"
+      - "allocation"
+  - id: "gen-airtable-2"
+    name: "Airtable - Enterprise Scale Multi-Year Ramp"
+    description: "Enterprise Scale Multi-Year Ramp"
+    input:
+      customer_name: "Airtable"
+      contract_start_date: "02/01/2026"
+      terms_months: 36
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "A global enterprise signs a 3-year agreement for Airtable Enterprise Scale to standardize their digital operations. The deal features a seat ramp: 500 seats in Year 1, 750 seats in Year 2, and 1,000 seats in Year 3. The negotiated price is $50 per seat per month ($600 per seat per year). Billing occurs annually at the start of each contract year based on the ramped quantity. The contract includes Enterprise Hub and advanced governance features. Revenue is recognized ratably over each 12-month period based on the active seat count. This scenario highlights Zuora's ability to handle multi-year contracts with scheduled quantity increases and annual billing cycles."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Enterprise Scale subscription recognized ratably over the 36-month term, following the ramp schedule.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "ramp"
+      - "multi-year"

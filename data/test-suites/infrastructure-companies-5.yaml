@@ -1,0 +1,729 @@
+name: "infrastructure-companies-5"
+description: "Generated from UC outputs - 2026-01-06"
+version: "1.0"
+tests:
+  - id: "gen-cockroachdb"
+    name: "CockroachDB - Enterprise Advanced Dedicated Migration"
+    description: "Enterprise Advanced Dedicated Migration"
+    input:
+      customer_name: "CockroachDB"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "An enterprise customer is migrating a mission-critical SQL workload to CockroachDB Advanced. The deal includes a 12-month commitment for 16 dedicated vCPUs priced at $0.60 per vCPU hour ($6,912 monthly recurring) and a 'Quick Start' Professional Services package for $15,000 to assist with architecture review and deployment validation. The subscription is billed annually in advance, while the services are billed upfront but recognized upon completion. A 10% bundle discount is applied to the total contract value, requiring revenue allocation across the subscription and the service performance obligations. The subscription is ratable over the 12-month term, and the services are recognized at the point of go-live."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Dedicated vCPU capacity is provisioned and available over the 12-month term.); Services: POB=point_in_time release=at_go_live (Quick Start engagement is a distinct POB recognized upon project completion.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "recurring"
+      - "allocation"
+  - id: "gen-cockroachdb-1"
+    name: "CockroachDB - Standard Cloud Growth Plan"
+    description: "Standard Cloud Growth Plan"
+    input:
+      customer_name: "CockroachDB"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A mid-market growth company signs up for the Standard Cloud Plan to power their production application. The contract specifies 4 provisioned vCPUs at $0.18 per vCPU hour ($518.40 monthly) billed monthly in arrears to allow for mid-month scaling. Additionally, storage is billed on-demand at $0.0008 per GiB-hour (approx. $0.58 per GiB/month). For this scenario, we assume a baseline of 500 GiB of storage ($290 monthly). The vCPU charge is treated as a recurring subscription fee ratable over the month, while the storage is treated as usage-based consumption recognized as used. No professional services are included in this self-service growth tier."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Provisioned vCPU capacity billed monthly.); Usage: POB=consumption release=as_used (On-demand storage billed based on actual GiB-hours consumed.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+  - id: "gen-cockroachdb-2"
+    name: "CockroachDB - Serverless Consumption with Overage"
+    description: "Serverless Consumption with Overage"
+    input:
+      customer_name: "CockroachDB"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A developer-led startup utilizes CockroachDB Basic (Serverless) for their application backend. This is a pure consumption model with no base fee. The pricing is $0.20 per 1M Request Units (RUs) after the first 50M free RUs, and $0.50 per GiB for storage after the first 10 GiB. The customer expects to consume 250M RUs and 100 GiB of storage per month. Billing occurs monthly based on actual usage. Revenue is recognized as consumption occurs. This scenario demonstrates Zuora's ability to handle high-volume usage records, apply free monthly credits (entitlements), and bill for the overage amounts accurately."
+      rev_rec_notes: "Usage: POB=consumption release=as_used (Request Units and Storage are billed based on actual monthly consumption.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "credits"
+  - id: "gen-timescaledb"
+    name: "TimescaleDB - Scale Plan Consumption"
+    description: "Scale Plan Consumption"
+    input:
+      customer_name: "TimescaleDB"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "The customer is adopting the Timescale Cloud Scale Plan for a high-traffic IoT application. This scenario focuses on pure consumption-based billing for Timescale Cloud Compute and Timescale Cloud Storage. Compute is billed in arrears at $0.04 per compute hour (vCPU/RAM configuration), and Storage is billed at $0.001212 per GB-hour (approximately $0.90 per GB per month). There is no fixed recurring fee, but the contract is established for a 12-month term to lock in these rates. Revenue for both charges is recognized as consumption occurs each month."
+      rev_rec_notes: "Usage: POB=consumption release=as_used (Compute and Storage are metered hourly and recognized as the service is consumed.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+  - id: "gen-timescaledb-1"
+    name: "TimescaleDB - Enterprise Bundle with Support & Services"
+    description: "Enterprise Bundle with Support & Services"
+    input:
+      customer_name: "TimescaleDB"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "An enterprise customer is migrating a mission-critical PostgreSQL workload to Timescale Cloud. The deal includes a 12-month subscription to Production Support at $20,000 per year and a one-time Professional Services engagement for an 'Architectural Review' priced at $7,500. Additionally, the customer will be billed for Compute and Storage usage monthly. A 10% bundle discount is applied to both the Support and Professional Services fees, requiring revenue allocation between the two performance obligations. Support is recognized ratably over the year, while the Architectural Review is recognized upon completion."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Production Support is a stand-ready obligation recognized over the 12-month term.); Services: POB=point_in_time release=at_delivery (Architectural Review is recognized when the final report is delivered to the customer.); Usage: POB=consumption release=as_used (Cloud usage is recognized as consumed and is excluded from the fixed-fee allocation.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "allocation"
+  - id: "gen-timescaledb-2"
+    name: "TimescaleDB - Multi-Year Enterprise Growth Ramp"
+    description: "Multi-Year Enterprise Growth Ramp"
+    input:
+      customer_name: "TimescaleDB"
+      contract_start_date: "02/01/2026"
+      terms_months: 24
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "A global financial services firm is signing a 24-month Enterprise agreement. The contract includes a ramp in Production Support: $25,000 in Year 1 and $35,000 in Year 2 as they scale their footprint. It also includes a $15,000 Professional Services fee for 'Migration Assistance' recognized at go-live. Usage for Compute and Storage is billed monthly with a 15% volume discount on standard list prices. This scenario demonstrates a multi-year term with stepping recurring fees and non-recurring migration services."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Support fees are recognized ratably based on the respective annual fee for each period.); Services: POB=point_in_time release=at_go_live (Migration Assistance is recognized once the customer successfully goes live on the platform.); Usage: POB=consumption release=as_used (Usage is recognized as billed monthly in arrears.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "ramp"
+      - "usage"
+      - "discount"
+      - "recurring"
+      - "multi-year"
+  - id: "gen-singlestore"
+    name: "SingleStore - Helios Enterprise Cloud Commitment"
+    description: "Helios Enterprise Cloud Commitment"
+    input:
+      customer_name: "SingleStore"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "The customer is subscribing to SingleStore Helios Enterprise to support a real-time analytics application. They are committing to an annual compute credit pool of $60,000, billed annually in advance. In addition to compute, they will be billed monthly in arrears for data storage at a rate of $0.05 per GB-month based on actual consumption. To ensure high availability, they have added the Silver Support plan, priced at 10% of the annual compute commitment ($6,000). The subscription is for a 12-month term, with the compute and support fees recognized ratably over the term, while storage usage is recognized as consumed."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Annual compute credit commitment represents a stand-ready obligation to provide cloud database access.); Usage: POB=consumption release=as_used (Storage charges are variable based on actual monthly data volume and recognized in the period incurred.); Other: POB=over_time release=ratable_over_term (Silver Support provides 24x7 technical assistance throughout the subscription period.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+      - "credits"
+      - "allocation"
+  - id: "gen-singlestore-1"
+    name: "SingleStore - Self-Managed Enterprise with Implementation"
+    description: "Self-Managed Enterprise with Implementation"
+    input:
+      customer_name: "SingleStore"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "A financial services client requires SingleStore Self-Managed for deployment within their own VPC to meet strict data sovereignty requirements. They are purchasing 4 Enterprise License units (each covering 32 vCPU) at $15,000 per unit per year, totaling $60,000. To ensure a successful deployment, they have included the 'Advanced' Go-Live Acceleration bundle for a one-time fee of $25,000. The software license is billed annually in advance, while the professional services bundle is billed upfront but recognized upon completion of the implementation milestones. This scenario requires allocation between the software license and the professional services."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Self-managed licenses are typically recognized ratably as the customer has a right to use the software over the term.); Services: POB=point_in_time release=at_go_live (The Go-Live bundle is a distinct service POB recognized when the implementation is completed.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "one-time"
+      - "license"
+      - "allocation"
+  - id: "gen-singlestore-2"
+    name: "SingleStore - AI Startup Vector Search Expansion"
+    description: "AI Startup Vector Search Expansion"
+    input:
+      customer_name: "SingleStore"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "An AI startup is leveraging SingleStore's vector search capabilities for their LLM application. They are starting with a Helios Standard subscription featuring a $12,000 annual compute commit. Because their growth is unpredictable, they expect to exceed this commit and have agreed to a $4.00 per credit overage rate. They have also purchased the 'Ultimate' Go-Live Acceleration bundle ($50,000) to assist with complex vector indexing and performance tuning. Platinum Support is included for a flat annual fee of $15,000. All recurring fees are billed annually, while the services bundle is billed 50% upfront and 50% at completion."
+      allocation_method: "Use Sell Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Base compute commitment is recognized linearly over the 12-month term.); Usage: POB=consumption release=as_used (Overage credits are recognized in the month they are consumed by the application.); Services: POB=point_in_time release=at_go_live (The Ultimate bundle involves significant architect time, recognized upon final sign-off.); Other: POB=over_time release=ratable_over_term (Platinum Support (TAM services) is a stand-ready obligation over the contract term.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "recurring"
+      - "credits"
+      - "allocation"
+  - id: "gen-redis-enterprise"
+    name: "Redis Enterprise - Enterprise Cloud Annual Bundle"
+    description: "Enterprise Cloud Annual Bundle"
+    input:
+      customer_name: "Redis Enterprise"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "A large fintech customer signs a 12-month contract for Redis Cloud Annual. The package includes the Redis Cloud Pro platform fee at a committed rate of $50,000 per year and a one-time 'Architecture Review & Migration' service package for $10,000. To win the deal, a 15% discount is applied across the entire bundle. The subscription fee is billed upfront and recognized ratably over the 12-month term. The professional services are recognized as a single performance obligation upon completion of the workshop, expected in the second month of the contract."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Redis Cloud Pro provides continuous access to the managed database service.); Services: POB=point_in_time release=at_delivery (Architecture reviews are distinct services recognized upon delivery of the final report.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "license"
+      - "allocation"
+  - id: "gen-redis-enterprise-1"
+    name: "Redis Enterprise - Hybrid Cloud Usage with Minimum Floor"
+    description: "Hybrid Cloud Usage with Minimum Floor"
+    input:
+      customer_name: "Redis Enterprise"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A mid-market SaaS provider opts for Redis Cloud Pro on a month-to-month basis. The agreement specifies a $200 monthly minimum platform floor, which includes unlimited databases and 24/7 support. In addition to the floor, the customer is billed for actual consumption at a rate of $0.043 per hour for high-availability shards. The monthly floor is billed in advance, while usage overages are billed in arrears. Revenue for the floor is ratable over the month, and usage revenue is recognized as consumed."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (The $200 monthly floor represents the stand-ready obligation for platform access.); Usage: POB=consumption release=as_used (Hourly shard usage is recognized in the period the consumption occurs.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "license"
+  - id: "gen-redis-enterprise-2"
+    name: "Redis Enterprise - Multi-Year Software Ramp (On-Prem)"
+    description: "Multi-Year Software Ramp (On-Prem)"
+    input:
+      customer_name: "Redis Enterprise"
+      contract_start_date: "02/01/2026"
+      terms_months: 36
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "An enterprise customer signs a 3-year deal for Redis Software Subscription to be deployed in their private cloud. The deal features a 'ramp' structure to account for their phased global rollout. Year 1 includes 20 shards at $2,500/shard ($50,000 total). Year 2 ramps to 40 shards ($100,000 total). Year 3 ramps to 80 shards ($200,000 total). The customer also purchases 50 'Services Credits' at $500 each for flexible training and health checks throughout the term. Subscription charges are billed annually in advance, while credits are billed upfront."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Software subscription is recognized ratably over each 12-month period of the ramp.); Other: POB=event_based release=as_used (Services credits are recognized as they are redeemed for training or health checks.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "ramp"
+      - "recurring"
+      - "credits"
+      - "multi-year"
+  - id: "gen-confluent"
+    name: "Confluent - Enterprise Cloud Commitment with Support Bundle"
+    description: "Enterprise Cloud Commitment with Support Bundle"
+    input:
+      customer_name: "Confluent"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "An enterprise customer signs a 12-month commitment for Confluent Cloud. The contract includes a $120,000 annual commitment for cloud consumption (billed upfront) and a 'Premier Support' plan priced at a flat $2,000 per month. The cloud commitment is modeled as a recurring charge that grants the customer access to the managed Kafka service. A 10% bundle discount is applied across both the cloud commitment and the support plan, requiring revenue allocation. Revenue for both the cloud service and the support is recognized ratably over the 12-month term as the services are provided concurrently."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (The cloud commitment represents a stand-ready obligation to provide the platform service over the contract year.); Services: POB=over_time release=ratable_over_term (Premier Support provides continuous access to technical resources and is recognized monthly.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "bundle"
+      - "discount"
+      - "recurring"
+      - "allocation"
+  - id: "gen-confluent-1"
+    name: "Confluent - Self-Managed Platform Node Subscription"
+    description: "Self-Managed Platform Node Subscription"
+    input:
+      customer_name: "Confluent"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "A financial services client requires a self-managed deployment using Confluent Platform. The deal consists of a subscription for 20 'Nodes' (brokers) priced at $400 per node per month, totaling $96,000 annually. Additionally, a one-time 'Implementation Success' package is included for $15,000 to assist with the initial cluster setup and RBAC configuration. The node subscription is billed annually in advance. Revenue for the software nodes is recognized ratably over the 12-month term, while the implementation service is recognized at a point-in-time upon completion of the setup."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Software license nodes provide right-to-access over the term.); Onboarding: POB=point_in_time release=at_go_live (Implementation services are typically recognized when the setup is validated and handed over.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "one-time"
+      - "recurring"
+      - "license"
+  - id: "gen-confluent-2"
+    name: "Confluent - Cloud Pay-As-You-Go with Consumption Metering"
+    description: "Cloud Pay-As-You-Go with Consumption Metering"
+    input:
+      customer_name: "Confluent"
+      contract_start_date: "02/01/2026"
+      terms_months: 1
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A high-growth technology startup signs up for Confluent Cloud on a monthly Pay-As-You-Go plan. There is no fixed term or annual commitment. The customer is billed monthly in arrears based on three usage dimensions: Elastic Confluent Units (eCKUs) at $1.50 per hour, Storage at $0.11 per GB, and Data Transfer at $0.06 per GB. For the first month, the customer also receives a one-time $400 service credit. Revenue is recognized as consumption occurs each month, matching the billed amount for that period."
+      rev_rec_notes: "Usage: POB=consumption release=as_used (Revenue is recognized as the customer consumes Kafka resources (compute, storage, transfer).)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "one-time"
+      - "credits"
+  - id: "gen-grafana-labs"
+    name: "Grafana Labs - Cloud Pro Self-Serve Growth"
+    description: "Cloud Pro Self-Serve Growth"
+    input:
+      customer_name: "Grafana Labs"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A growing technology team signs up for the Grafana Cloud Pro plan to centralize their observability. The deal includes a recurring $19 monthly platform fee and metered usage for Cloud Metrics priced at $6.50 per 1,000 active series. The first 10,000 series are included for free as a recurring allowance. Billing occurs monthly in arrears for usage and in advance for the platform fee. Revenue for the platform fee is recognized ratably over each monthly period, while metrics usage is recognized as consumed."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (The $19 platform fee provides standing access to the Grafana instance.); Usage: POB=consumption release=as_used (Metrics ingestion is recognized as the data is processed by the cloud stack.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+      - "license"
+  - id: "gen-grafana-labs-1"
+    name: "Grafana Labs - Cloud Advanced Enterprise Bundle"
+    description: "Cloud Advanced Enterprise Bundle"
+    input:
+      customer_name: "Grafana Labs"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "A mid-market enterprise commits to Grafana Cloud Advanced with a $30,000 annual minimum spend. The bundle includes a $10,000 annual Platform Fee, a $15,000 committed usage credit for Metrics/Logs, and a $5,000 one-time Implementation Consulting package. The total contract value reflects a 10% discount off list prices, requiring revenue allocation across the performance obligations. The implementation service is recognized upon completion (Go-Live), while the platform fee is ratable over 12 months. Usage credits are recognized as consumed or at the end of the term if unused (use-it-or-lose-it)."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Annual platform fee for the Advanced tier instance.); Services: POB=point_in_time release=at_go_live (Implementation consulting recognized upon sign-off of the initial dashboard setup.); Usage: POB=consumption release=as_used (Committed spend for metrics is drawn down as ingestion occurs.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "license"
+      - "credits"
+      - "allocation"
+  - id: "gen-grafana-labs-2"
+    name: "Grafana Labs - Enterprise Scale Self-Managed"
+    description: "Enterprise Scale Self-Managed"
+    input:
+      customer_name: "Grafana Labs"
+      contract_start_date: "02/01/2026"
+      terms_months: 24
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "A financial services firm opts for Grafana Enterprise Software for a self-managed deployment due to strict data sovereignty requirements. The 24-month contract includes a $40,000 annual recurring license fee (total $80,000) and a $10,000 'Observability Architecture' workshop delivered in the first quarter. The software license includes Enterprise Plugins and 24/7 support. Revenue for the software license is recognized ratably over the 2-year term as it includes right-to-access and ongoing support. The workshop is recognized as a point-in-time event upon delivery of the final architecture document."
+      allocation_method: "Use Sell Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Enterprise software license and support recognized over the 24-month term.); Other: POB=point_in_time release=at_go_live (Architecture workshop recognized upon delivery of the consulting engagement.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "recurring"
+      - "license"
+      - "allocation"
+      - "multi-year"
+  - id: "gen-hasura"
+    name: "Hasura - Cloud Professional Production Launch"
+    description: "Cloud Professional Production Launch"
+    input:
+      customer_name: "Hasura"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A growth-stage startup is launching two production projects on Hasura Cloud Professional. The deal includes a recurring fee of $99 per month per project. Additionally, the customer is billed for Data Passthrough at a rate of $0.13 per GB, with an estimated volume of 500GB per month. The subscription fee is recognized ratably over the monthly billing period, while the data passthrough is recognized as consumption occurs. This scenario demonstrates a hybrid of fixed recurring and volume-based usage billing for a standard developer-led motion."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Fixed monthly project fee for access to Cloud Professional features.); Usage: POB=consumption release=as_used (Data passthrough fees recognized based on actual GB volume processed.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+  - id: "gen-hasura-1"
+    name: "Hasura - DDN Advanced Supergraph Deployment"
+    description: "DDN Advanced Supergraph Deployment"
+    input:
+      customer_name: "Hasura"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "An enterprise team is migrating to the Hasura Data Delivery Network (v3) architecture using the DDN Advanced Plan. They are committing to 20 'Active Models' at a rate of $30 per model per month. To meet strict security requirements, they have added a Private DDN Availability Zone for $1,000 per month. The model-based pricing is contingent on models receiving 1,000+ hits per month, which we will treat as a recurring usage-based charge for this demo. Revenue for the Availability Zone is ratable, and the models are recognized as the activity threshold is met."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (The Private DDN Availability Zone is a fixed infrastructure add-on.); Usage: POB=consumption release=as_billed (Active models are billed based on monthly hit thresholds; revenue follows the billing trigger.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+  - id: "gen-hasura-2"
+    name: "Hasura - Enterprise Hybrid License and Services"
+    description: "Enterprise Hybrid License and Services"
+    input:
+      customer_name: "Hasura"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "A large financial institution is purchasing Hasura Enterprise Edition for a self-hosted deployment. The deal includes a $50,000 annual platform license, a $15,000 annual Premium Support package (24/7), and a $10,000 one-time Onboarding/Implementation fee. A 10% bundle discount has been applied to the total contract value. Because the discount applies to both the over-time services and the point-in-time onboarding, revenue allocation is required. The platform and support fees are recognized ratably over the 12-month term, while onboarding is recognized upon completion of the go-live milestone."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Enterprise platform license recognized ratably over the annual term.); Services: POB=over_time release=ratable_over_term (Premium Support represents a stand-ready obligation.); Onboarding: POB=point_in_time release=at_go_live (One-time implementation fee recognized upon project completion.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "license"
+      - "allocation"
+  - id: "gen-prisma"
+    name: "Prisma - Scaling Startup Pro Plan"
+    description: "Scaling Startup Pro Plan"
+    input:
+      customer_name: "Prisma"
+      contract_start_date: "02/01/2026"
+      terms_months: 1
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A scaling startup upgrades to the Prisma Pro plan to support their growing application. The plan consists of a $49 monthly recurring base fee which includes an allowance of 10 million database operations and 50GB of storage. Operations exceeding the 10 million limit are charged as usage at a rate of $0.008 per 1,000 operations. The base subscription fee is recognized ratably over the monthly term, while any overage charges are recognized as the usage occurs. This scenario demonstrates the transition from a free tier to a paid, usage-inclusive model."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (The $49 base fee represents a stand-ready obligation to provide platform access.); Usage: POB=consumption release=as_used (Operations overages are recognized as the customer consumes the database resources.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+  - id: "gen-prisma-1"
+    name: "Prisma - Enterprise Modernization Agreement"
+    description: "Enterprise Modernization Agreement"
+    input:
+      customer_name: "Prisma"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "A large enterprise signs a 12-month custom contract for Prisma Enterprise to secure their database infrastructure. The contract includes a $30,000 annual recurring fee for the Enterprise platform, which provides SSO/SAML integration and enhanced security features. Additionally, the contract includes a $5,000 one-time fee for Premium Onboarding and architectural review. Because the customer received a 10% bundle discount across the entire deal, revenue must be allocated between the SaaS subscription and the professional services based on their standalone selling prices. The subscription is recognized ratably over 12 months, and the onboarding fee is recognized upon completion of the service."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Enterprise platform access is a recurring obligation over the 12-month term.); Services: POB=point_in_time release=at_go_live (Onboarding services are recognized once the architectural review and setup are completed.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "license"
+      - "allocation"
+  - id: "gen-prisma-2"
+    name: "Prisma - AI-Powered Performance Stack"
+    description: "AI-Powered Performance Stack"
+    input:
+      customer_name: "Prisma"
+      contract_start_date: "02/01/2026"
+      terms_months: 1
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A mid-market company adopts the Prisma Business plan for $129/month and adds Prisma Optimize for AI-driven query analysis. The Business plan includes 50 million operations per month. Prisma Optimize is billed as a separate usage-based charge at $5 per 100 AI recommendations, with the first 5 recommendations provided for free each month as a trial incentive. This scenario highlights a multi-product deployment where one product has a high recurring base and another is purely consumption-driven with a 'freemium' usage tier. Revenue for the Business plan is ratable, while Optimize revenue is recognized as recommendations are generated."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Business plan base fee is recognized monthly.); Usage: POB=consumption release=as_used (AI recommendations are recognized as consumption-based revenue.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+  - id: "gen-pulumi"
+    name: "Pulumi - Enterprise Growth Plan"
+    description: "Enterprise Growth Plan"
+    input:
+      customer_name: "Pulumi"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "Standard Pulumi Enterprise Edition for a mid-sized engineering organization. The contract includes a recurring Pulumi Cloud Platform fee of $400 per month, which is billed annually in advance. This platform fee includes an entitlement of 2,000 Resources Under Management (RUM). Any resources exceeding the 2,000 limit are treated as overage usage charges, billed at $0.365 per resource per month. Usage is calculated based on hourly resource counts and invoiced monthly in arrears. The platform fee revenue is recognized ratably over the 12-month term, while the usage overages are recognized as consumption occurs."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Platform fee represents a stand-ready obligation to provide cloud access.); Usage: POB=consumption release=as_used (RUM overages are recognized based on actual hourly consumption reported.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+      - "license"
+  - id: "gen-pulumi-1"
+    name: "Pulumi - Business Critical Transformation"
+    description: "Business Critical Transformation"
+    input:
+      customer_name: "Pulumi"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "A high-touch Business Critical bundle for a global enterprise requiring self-hosting (Cloud Anywhere) and dedicated support. The deal includes a custom Platform Fee of $2,500 per month and a Premium Support charge of $1,000 per month, both billed annually. A one-time Professional Services fee of $15,000 is included for initial environment configuration and OIDC integration, billed upfront. A 15% discount is applied to the total bundle, requiring revenue allocation across the platform, support, and services components. Revenue for the platform and support is recognized ratably over the 12-month term, while the professional services fee is recognized at a point-in-time upon completion of the onboarding phase."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Platform fee for Business Critical tier.); Services: POB=point_in_time release=at_go_live (Professional services for onboarding recognized upon milestone completion.); Other: POB=over_time release=ratable_over_term (Premium Support is a stand-ready obligation over the term.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "license"
+      - "allocation"
+  - id: "gen-pulumi-2"
+    name: "Pulumi - Usage-Centric Developer Platform"
+    description: "Usage-Centric Developer Platform"
+    input:
+      customer_name: "Pulumi"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A developer-focused scenario for a startup using the Pulumi Team Edition with heavy adoption of Pulumi ESC and Pulumi Deployments. The contract features a $40 per month platform fee billed monthly. Beyond the included free tiers, the customer is billed $0.50 per secret per month for Pulumi ESC and $0.01 per minute for Pulumi Deployments. All usage charges are calculated hourly and invoiced monthly in arrears. This scenario highlights the flexibility of Zuora's usage engine to handle multiple high-volume consumption metrics (secrets and deployment minutes) alongside a recurring base fee. Revenue for the platform fee is ratable, while all usage is recognized as consumed."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Team Edition platform fee.); Usage: POB=consumption release=as_used (Covers both Pulumi ESC (secrets) and Pulumi Deployments (minutes).)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+      - "license"
+  - id: "gen-terraform-cloud"
+    name: "Terraform Cloud - HCP Terraform Standard Usage"
+    description: "HCP Terraform Standard Usage"
+    input:
+      customer_name: "Terraform Cloud"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Monthly"
+      is_allocations: false
+      use_case_description: "A mid-market DevOps team subscribes to the HCP Terraform Standard plan to manage their cloud infrastructure. The plan includes a recurring monthly platform fee of $495 for advanced governance features like Policy-as-Code. Additionally, they are billed for 'Resources Under Management' (RUM) at a rate of $0.0006 per resource per hour for any resources beyond the initial 500 free units. Usage is calculated based on the peak resource count within each hour and billed monthly in arrears. The platform fee is billed monthly in advance. Revenue for the platform fee is recognized ratably over the month, while usage revenue is recognized as consumption occurs."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (The monthly platform fee provides continuous access to governance features.); Usage: POB=consumption release=as_used (RUM charges are based on hourly peaks and recognized as the service is consumed.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "usage"
+      - "recurring"
+      - "license"
+  - id: "gen-terraform-cloud-1"
+    name: "Terraform Cloud - Enterprise License & Implementation Bundle"
+    description: "Enterprise License & Implementation Bundle"
+    input:
+      customer_name: "Terraform Cloud"
+      contract_start_date: "02/01/2026"
+      terms_months: 12
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: true
+      use_case_description: "A large financial institution requires a self-hosted environment and purchases a Terraform Enterprise license for $60,000 per year. To ensure a successful rollout in their air-gapped environment, they also purchase a 'HashiCorp Implementation Services' package for a one-time fee of $15,000. The customer receives a 15% bundle discount on the total contract value, bringing the total to $63,750. Because the discount applies to both the recurring license and the professional services, revenue must be allocated based on the standalone selling price (list price) of each component. The license fee is recognized ratably over the 12-month term, while the implementation fee is recognized at a point-in-time upon completion of the architecture review."
+      allocation_method: "Use List Price"
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (Self-hosted license provides right-to-use over the annual term.); Services: POB=point_in_time release=at_go_live (Implementation services are recognized upon milestone completion/go-live.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "bundle"
+      - "discount"
+      - "one-time"
+      - "recurring"
+      - "license"
+      - "allocation"
+  - id: "gen-terraform-cloud-2"
+    name: "Terraform Cloud - Multi-year Enterprise Expansion Ramp"
+    description: "Multi-year Enterprise Expansion Ramp"
+    input:
+      customer_name: "Terraform Cloud"
+      contract_start_date: "02/01/2026"
+      terms_months: 36
+      transaction_currency: "USD"
+      billing_period: "Annually"
+      is_allocations: false
+      use_case_description: "An enterprise customer signs a 3-year commitment for Terraform Enterprise to support their global cloud migration. The contract is structured with a price ramp to account for increasing adoption: Year 1 is priced at $50,000, Year 2 at $75,000, and Year 3 at $100,000. All fees are billed annually in advance. Revenue for the entire contract is recognized ratably over the 36-month term, resulting in a straight-line revenue recognition of approximately $6,250 per month despite the increasing annual billings. This scenario demonstrates Zuora's ability to handle multi-year ramps and the resulting unbilled receivables/contract assets."
+      rev_rec_notes: "Subscription: POB=over_time release=ratable_over_term (The ramped subscription is treated as a single POB recognized straight-line over 36 months.)"
+    focus_steps:
+      - "analyze_contract"
+      - "design_subscription"
+      - "contracts_orders"
+      - "billings"
+      - "revrec_waterfall"
+    tags:
+      - "generated"
+      - "ramp"
+      - "multi-year"
