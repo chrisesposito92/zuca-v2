@@ -14,6 +14,8 @@ Complete reference for all self-learning CLI commands, options, and workflows.
    - [training](#training)
    - [consolidate](#consolidate)
    - [testgen](#testgen)
+   - [ft-eval](#ft-eval)
+   - [benchmark](#benchmark)
 4. [Workflows](#workflows)
 5. [Configuration](#configuration)
 
@@ -648,6 +650,176 @@ npm run cli -- testgen list
 
 ---
 
+### ft-eval
+
+Compare baseline models against fine-tuned models to validate whether fine-tuning improved pipeline quality.
+
+```bash
+npm run cli -- ft-eval <subcommand> [options]
+```
+
+**Why use this instead of OpenAI Evals?** OpenAI's hosted Evals API calls models directly, bypassing your pipeline. Since fine-tuned models are trained on pipeline prompts (system message + context), they need to be tested **through** the pipeline to get meaningful results.
+
+#### Subcommands
+
+##### run
+
+Run evaluation on a model and save results for comparison.
+
+```bash
+npm run cli -- ft-eval run <name> --model <model> [options]
+```
+
+| Option | Short | Description | Default |
+|--------|-------|-------------|---------|
+| `--model <model>` | `-m` | Model to evaluate (required) | - |
+| `--suite <name>` | `-s` | Test suite to use | golden-scenarios |
+| `--judge-model <model>` | | Model for evaluation judging | gpt-5.2 |
+| `--steps <list>` | | Comma-separated steps to evaluate | (all) |
+| `--test-ids <list>` | | Comma-separated test IDs to run | (all) |
+| `--ensemble` | | Use ensemble evaluation | false |
+| `--verbose` | `-v` | Show detailed progress | false |
+
+##### quick
+
+Run a quick evaluation with just a few test cases (useful for sanity checks).
+
+```bash
+npm run cli -- ft-eval quick <model> [options]
+```
+
+| Option | Short | Description | Default |
+|--------|-------|-------------|---------|
+| `--suite <name>` | `-s` | Test suite to use | golden-scenarios |
+| `--count <n>` | `-c` | Number of test cases | 5 |
+| `--verbose` | `-v` | Show detailed progress | false |
+
+##### list
+
+List all saved evaluation runs.
+
+```bash
+npm run cli -- ft-eval list
+```
+
+##### show
+
+Show details of a specific evaluation run.
+
+```bash
+npm run cli -- ft-eval show <name-or-id>
+```
+
+##### compare
+
+Compare two evaluation runs (baseline vs candidate).
+
+```bash
+npm run cli -- ft-eval compare <baseline> <candidate> [options]
+```
+
+| Option | Description | Default |
+|--------|-------------|---------|
+| `--markdown <file>` | Save comparison as markdown report | (console only) |
+| `--verbose` | `-v` | Show detailed output | false |
+
+**Comparison produces a recommendation:**
+- ✅ **ship**: Pass rate improved ≥5% with no regressions
+- 🔍 **investigate**: Mixed results (some improvement but with regressions, or minimal change)
+- ❌ **reject**: Significant regression (≥5% worse)
+
+#### Examples
+
+```bash
+# Quick sanity check with a model
+npm run cli -- ft-eval quick gpt-4.1 -v
+
+# Quick check with fine-tuned model
+npm run cli -- ft-eval quick ft:gpt-4.1-nano:personal:my-tuned:abc123 -v
+
+# Run full baseline evaluation
+npm run cli -- ft-eval run baseline-gpt4.1 --model gpt-4.1 -v
+
+# Run full evaluation on fine-tuned model
+npm run cli -- ft-eval run ft-nano-v1 --model ft:gpt-4.1-nano:personal:my-tuned:abc123 -v
+
+# List saved runs
+npm run cli -- ft-eval list
+
+# Show details of a run
+npm run cli -- ft-eval show baseline-gpt4.1
+
+# Compare baseline vs fine-tuned
+npm run cli -- ft-eval compare baseline-gpt4.1 ft-nano-v1
+
+# Export comparison as markdown
+npm run cli -- ft-eval compare baseline-gpt4.1 ft-nano-v1 --markdown comparison-report.md
+```
+
+#### Model Support
+
+- **Standard models**: `gpt-5.2`, `gpt-4.1`, `gemini-3-pro-preview`, `gemini-3-flash-preview`, `zuca-gpt-nano`, `zuca-gpt-mini`
+- **Fine-tuned models**: Any OpenAI fine-tuned model ID (e.g., `ft:gpt-4.1-nano:personal:my-tuned:abc123`)
+- **Unknown models**: Will show a warning but proceed (OpenAI API validates)
+
+#### File Locations
+
+| File/Directory | Purpose |
+|----------------|---------|
+| `data/ft-evals/` | Saved evaluation results |
+| `data/ft-evals/index.json` | Index of all runs |
+
+---
+
+### benchmark
+
+Run cross-model benchmark comparison. Tests multiple models on the same test suite and compares speed + quality.
+
+```bash
+npm run cli -- benchmark [options]
+```
+
+#### Options
+
+| Option | Description | Default |
+|--------|-------------|---------|
+| `--suite <name>` | `-s` | Test suite name | golden-quick |
+| `--models <list>` | Comma-separated models to benchmark | (all models) |
+| `-o, --output <file>` | Save JSON results to file | (none) |
+| `--markdown <file>` | Generate markdown report | (none) |
+| `--verbose` | `-v` | Show detailed progress | false |
+| `--test-ids <list>` | Comma-separated test IDs to run | (all) |
+| `--steps <list>` | Comma-separated steps to evaluate | (all) |
+| `--skip-evaluation` | Skip quality evaluation (speed-only) | false |
+| `--judge-model <model>` | Model for quality evaluation | gpt-5.2 |
+
+#### Examples
+
+```bash
+# Run benchmark with all models
+npm run cli -- benchmark
+
+# Benchmark specific models
+npm run cli -- benchmark --models gpt-5.2,gpt-4.1
+
+# Use specific test suite
+npm run cli -- benchmark -s golden-scenarios
+
+# Export results
+npm run cli -- benchmark -o results.json --markdown report.md
+
+# Speed-only benchmark (no quality evaluation)
+npm run cli -- benchmark --skip-evaluation
+```
+
+#### When to Use
+
+- **Comparing model performance**: See which model is fastest/most accurate
+- **Before choosing a model**: Benchmark candidates on your test suite
+- **After fine-tuning**: Compare fine-tuned model against base models
+
+---
+
 ## Workflows
 
 ### Daily Improvement Cycle
@@ -748,6 +920,71 @@ npm run cli -- evaluate --suite golden-scenarios --ensemble --ensemble-models gp
 # Ensemble in self-improve loop
 npm run cli -- self-improve --ensemble --auto-suggest
 ```
+
+### Fine-Tuning Validation Workflow
+
+Complete workflow for validating whether fine-tuning improved your model.
+
+```bash
+# ═══════════════════════════════════════════════════════════════════════════════
+# STEP 1: Prepare Training Data
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# Check how much training data you have
+npx tsx scripts/consolidate-training-data.ts --stats
+
+# Export training data (pipeline-outputs only recommended)
+npx tsx scripts/consolidate-training-data.ts data/ft-training.jsonl --only pipeline-outputs --shuffle
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# STEP 2: Run Baseline Evaluation (BEFORE fine-tuning)
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# Quick sanity check
+npm run cli -- ft-eval quick gpt-4.1 -v
+
+# Full baseline evaluation (save for comparison)
+npm run cli -- ft-eval run baseline-gpt4.1 --model gpt-4.1 -v
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# STEP 3: Fine-tune on OpenAI (done externally)
+# ═══════════════════════════════════════════════════════════════════════════════
+# Upload ft-training.jsonl to OpenAI and create fine-tuning job
+# Note your fine-tuned model ID: ft:gpt-4.1-nano:personal:my-tuned:abc123
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# STEP 4: Evaluate Fine-Tuned Model
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# Quick sanity check on fine-tuned model
+npm run cli -- ft-eval quick ft:gpt-4.1-nano:personal:my-tuned:abc123 -v
+
+# Full evaluation on fine-tuned model
+npm run cli -- ft-eval run ft-nano-v1 --model ft:gpt-4.1-nano:personal:my-tuned:abc123 -v
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# STEP 5: Compare Results
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# Compare baseline vs fine-tuned
+npm run cli -- ft-eval compare baseline-gpt4.1 ft-nano-v1
+
+# Export comparison report
+npm run cli -- ft-eval compare baseline-gpt4.1 ft-nano-v1 --markdown comparison.md
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# STEP 6: Interpret Results
+# ═══════════════════════════════════════════════════════════════════════════════
+# ✅ ship       → Pass rate improved ≥5% with no regressions. Deploy it!
+# 🔍 investigate → Mixed results. Review regressions before deploying.
+# ❌ reject     → Significant regression. Don't deploy. Review training data.
+```
+
+**Tips:**
+- Always save baseline evaluation BEFORE fine-tuning
+- Use meaningful names for runs (e.g., `baseline-gpt4.1`, `ft-nano-v1-pipeline-only`)
+- If you get ❌ reject, try fine-tuning with different data mix or hyperparameters
+- Use `ft-eval list` to see all your saved runs
 
 ---
 

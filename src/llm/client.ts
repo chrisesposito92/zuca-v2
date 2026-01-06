@@ -642,17 +642,24 @@ async function completeOpenAI<T = unknown>(
     reasoningEffort,
   } = options;
 
-  // Fine-tuned models (ft:*) don't support web_search, but DO support code_interpreter, function calling, and MCP
+  // Some models don't support web_search:
+  // - Fine-tuned models (ft:*)
+  // - Nano/mini models (gpt-4.1-nano, gpt-4.1-mini, etc.)
   const isFineTunedModel = model.startsWith('ft:');
-  // Filter out web_search for fine-tuned models (it's not supported)
-  const filteredBuiltInTools = isFineTunedModel
-    ? tools?.filter(t => t !== 'web_search')
-    : tools;
+  const isSmallModel = model.includes('nano') || model.includes('mini');
+  const supportsWebSearch = !isFineTunedModel && !isSmallModel;
+
+  // Filter out web_search for models that don't support it
+  const filteredBuiltInTools = supportsWebSearch
+    ? tools
+    : tools?.filter(t => t !== 'web_search');
 
   debugLog('OpenAI Request:', {
     model,
     reasoningEffort,
     isFineTuned: isFineTunedModel,
+    isSmallModel,
+    supportsWebSearch,
     builtInTools: filteredBuiltInTools,
     customToolCount: customTools?.length || 0,
     mcpToolCount: mcpTools?.length || 0,

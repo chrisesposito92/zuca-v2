@@ -101,6 +101,16 @@ import {
   type BenchmarkOptions,
 } from '../benchmark';
 import { LLM_MODELS } from '../types/llm';
+import {
+  runFTEval,
+  runQuickEval,
+  listRuns,
+  loadResult,
+  compareRuns,
+  formatComparisonConsole,
+  formatComparisonMarkdown,
+  type FTEvalConfig,
+} from '../evals';
 
 const program = new Command();
 
@@ -2716,6 +2726,312 @@ program
   .option('--skip-evaluation', 'Skip quality evaluation (speed-only benchmark)')
   .option('--judge-model <model>', 'Model to use for quality evaluation judge')
   .action(benchmarkCommand);
+
+// ==============================================================================
+// Fine-Tune Eval commands
+// ==============================================================================
+
+/**
+ * ft-eval run - Run a fine-tune evaluation
+ */
+async function ftEvalRunCommand(
+  name: string,
+  options: {
+    model: string;
+    suite?: string;
+    judgeModel?: string;
+    steps?: string;
+    testIds?: string;
+    ensemble?: boolean;
+    verbose?: boolean;
+  }
+): Promise<void> {
+  try {
+    // ft-eval accepts any model string (including fine-tuned model IDs like ft:gpt-4.1-nano:...)
+    // Show a warning for non-standard models (but don't block)
+    const modelParsed = LlmModelSchema.safeParse(options.model);
+    if (!modelParsed.success && !options.model.startsWith('ft:')) {
+      console.log(
+        chalk.yellow(`⚠ Model "${options.model}" not in standard list. Proceeding anyway...`)
+      );
+      console.log(chalk.gray(`  Standard models: ${LLM_MODELS.join(', ')}\n`));
+    }
+
+    const config: FTEvalConfig = {
+      name,
+      model: options.model,
+      suite: options.suite || 'golden-scenarios',
+      judge_model: options.judgeModel,
+      steps: options.steps?.split(','),
+      test_ids: options.testIds?.split(','),
+      ensemble: options.ensemble,
+    };
+
+    console.log(chalk.cyan.bold('\n▶ Fine-Tune Evaluation\n'));
+    console.log(chalk.blue(`Name:   ${name}`));
+    console.log(chalk.blue(`Model:  ${options.model}`));
+    console.log(chalk.blue(`Suite:  ${config.suite}`));
+    if (config.steps?.length) {
+      console.log(chalk.blue(`Steps:  ${config.steps.join(', ')}`));
+    }
+    console.log('');
+
+    // Progress callback
+    const onProgress = (current: number, total: number, testId: string) => {
+      if (options.verbose) {
+        console.log(chalk.gray(`  [${current}/${total}] ${testId}`));
+      } else {
+        process.stdout.write(
+          `\r${chalk.blue(`Progress: ${current}/${total}`)} ${chalk.gray(`(${testId})`)}`
+        );
+      }
+    };
+
+    const result = await runFTEval(config, { onProgress, verbose: options.verbose });
+
+    if (!options.verbose) {
+      process.stdout.write('\r' + ' '.repeat(80) + '\r'); // Clear progress line
+    }
+
+    console.log(chalk.green.bold('\n✓ Evaluation complete!\n'));
+    console.log(`Pass rate: ${chalk.yellow((result.overall.pass_rate * 100).toFixed(1) + '%')}`);
+    console.log(`Passed:    ${chalk.green(result.overall.passed)} / ${result.overall.total}`);
+    console.log(`Failed:    ${chalk.red(result.overall.failed)}`);
+    console.log(`Duration:  ${(result.duration_ms / 1000).toFixed(1)}s`);
+    console.log(`Run ID:    ${chalk.gray(result.run_id)}`);
+    console.log('');
+
+    // Show per-step breakdown
+    if (Object.keys(result.by_step).length > 0) {
+      console.log(chalk.cyan('By Step:'));
+      for (const [step, stats] of Object.entries(result.by_step)) {
+        const passRate = (stats.pass_rate * 100).toFixed(1);
+        const color = stats.pass_rate >= 0.8 ? chalk.green : stats.pass_rate >= 0.5 ? chalk.yellow : chalk.red;
+        console.log(`  ${step.padEnd(22)} ${color(passRate + '%')} (${stats.passed}/${stats.total})`);
+      }
+      console.log('');
+    }
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    console.error(chalk.red(`\nFT-eval failed: ${message}`));
+    process.exit(1);
+  }
+}
+
+/**
+ * ft-eval quick - Run a quick evaluation with just a few test cases
+ */
+async function ftEvalQuickCommand(
+  model: string,
+  options: {
+    suite?: string;
+    count?: string;
+    verbose?: boolean;
+  }
+): Promise<void> {
+  try {
+    // ft-eval accepts any model string (including fine-tuned model IDs like ft:gpt-4.1-nano:...)
+    // Show a warning for non-standard models (but don't block)
+    const modelParsed = LlmModelSchema.safeParse(model);
+    if (!modelParsed.success && !model.startsWith('ft:')) {
+      console.log(
+        chalk.yellow(`⚠ Model "${model}" not in standard list. Proceeding anyway...`)
+      );
+      console.log(chalk.gray(`  Standard models: ${LLM_MODELS.join(', ')}\n`));
+    }
+
+    const maxCases = options.count ? parseInt(options.count, 10) : 5;
+
+    console.log(chalk.cyan.bold('\n▶ Quick Fine-Tune Evaluation\n'));
+    console.log(chalk.blue(`Model:  ${model}`));
+    console.log(chalk.blue(`Cases:  ${maxCases}`));
+    console.log('');
+
+    const result = await runQuickEval(model, {
+      suite: options.suite,
+      maxCases,
+      verbose: options.verbose,
+    });
+
+    console.log(chalk.green.bold('✓ Quick eval complete!\n'));
+    console.log(`Pass rate: ${chalk.yellow((result.overall.pass_rate * 100).toFixed(1) + '%')}`);
+    console.log(`Passed:    ${chalk.green(result.overall.passed)} / ${result.overall.total}`);
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    console.error(chalk.red(`\nQuick eval failed: ${message}`));
+    process.exit(1);
+  }
+}
+
+/**
+ * ft-eval list - List all saved eval runs
+ */
+async function ftEvalListCommand(): Promise<void> {
+  const runs = listRuns();
+
+  if (runs.length === 0) {
+    console.log(chalk.yellow('\nNo eval runs found.'));
+    console.log(chalk.gray('Run: npm run cli -- ft-eval run <name> --model <model>'));
+    return;
+  }
+
+  console.log(chalk.cyan.bold('\n▶ Saved Eval Runs\n'));
+  console.log(
+    chalk.gray(
+      'Name'.padEnd(30) +
+        'Model'.padEnd(25) +
+        'Pass Rate'.padEnd(12) +
+        'Date'
+    )
+  );
+  console.log(chalk.gray('─'.repeat(80)));
+
+  for (const run of runs.sort((a, b) => b.created_at.localeCompare(a.created_at))) {
+    const passRate = (run.pass_rate * 100).toFixed(1) + '%';
+    const date = new Date(run.created_at).toLocaleDateString();
+    const color = run.pass_rate >= 0.8 ? chalk.green : run.pass_rate >= 0.5 ? chalk.yellow : chalk.red;
+
+    console.log(
+      run.name.substring(0, 28).padEnd(30) +
+        run.model.substring(0, 23).padEnd(25) +
+        color(passRate.padEnd(12)) +
+        chalk.gray(date)
+    );
+  }
+
+  console.log('');
+}
+
+/**
+ * ft-eval compare - Compare two eval runs
+ */
+async function ftEvalCompareCommand(
+  baseline: string,
+  candidate: string,
+  options: {
+    markdown?: string;
+    verbose?: boolean;
+  }
+): Promise<void> {
+  try {
+    const comparison = compareRuns(baseline, candidate);
+
+    // Console output
+    console.log(formatComparisonConsole(comparison));
+
+    // Markdown output if requested
+    if (options.markdown) {
+      const markdown = formatComparisonMarkdown(comparison);
+      await writeFile(options.markdown, markdown);
+      console.log(chalk.green(`✓ Markdown report saved to ${options.markdown}\n`));
+    }
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    console.error(chalk.red(`\nComparison failed: ${message}`));
+    process.exit(1);
+  }
+}
+
+/**
+ * ft-eval show - Show details of a specific run
+ */
+async function ftEvalShowCommand(idOrName: string): Promise<void> {
+  const result = loadResult(idOrName);
+
+  if (!result) {
+    console.error(chalk.red(`\nRun not found: ${idOrName}`));
+    console.log(chalk.gray('Use: npm run cli -- ft-eval list'));
+    process.exit(1);
+  }
+
+  console.log(chalk.cyan.bold('\n▶ Eval Run Details\n'));
+  console.log(`Run ID:    ${chalk.gray(result.run_id)}`);
+  console.log(`Name:      ${result.config.name}`);
+  console.log(`Model:     ${result.config.model}`);
+  console.log(`Suite:     ${result.config.suite}`);
+  console.log(`Date:      ${new Date(result.started_at).toLocaleString()}`);
+  console.log(`Duration:  ${(result.duration_ms / 1000).toFixed(1)}s`);
+  console.log('');
+
+  // Overall stats
+  console.log(chalk.cyan('Overall:'));
+  const passRate = (result.overall.pass_rate * 100).toFixed(1);
+  const color = result.overall.pass_rate >= 0.8 ? chalk.green : result.overall.pass_rate >= 0.5 ? chalk.yellow : chalk.red;
+  console.log(`  Pass rate: ${color(passRate + '%')}`);
+  console.log(`  Passed:    ${chalk.green(result.overall.passed)} / ${result.overall.total}`);
+  console.log(`  Failed:    ${chalk.red(result.overall.failed)}`);
+  console.log('');
+
+  // Per-step stats
+  if (Object.keys(result.by_step).length > 0) {
+    console.log(chalk.cyan('By Step:'));
+    for (const [step, stats] of Object.entries(result.by_step)) {
+      const stepRate = (stats.pass_rate * 100).toFixed(1);
+      const stepColor = stats.pass_rate >= 0.8 ? chalk.green : stats.pass_rate >= 0.5 ? chalk.yellow : chalk.red;
+      console.log(`  ${step.padEnd(22)} ${stepColor(stepRate + '%')} (${stats.passed}/${stats.total})`);
+    }
+    console.log('');
+  }
+
+  // Failed test cases
+  const failedTests = result.test_results.filter((t) => !t.passed);
+  if (failedTests.length > 0) {
+    console.log(chalk.red(`Failed Tests (${failedTests.length}):`));
+    for (const test of failedTests.slice(0, 10)) {
+      console.log(`  • ${test.test_id}`);
+      for (const step of test.step_results.filter((s) => !s.passed)) {
+        const failedCriteria = step.criteria_results.filter((c) => !c.passed);
+        console.log(chalk.gray(`    ${step.step}: ${failedCriteria.map((c) => c.criterion_id).join(', ')}`));
+      }
+    }
+    if (failedTests.length > 10) {
+      console.log(chalk.gray(`    ... and ${failedTests.length - 10} more`));
+    }
+    console.log('');
+  }
+}
+
+// Fine-tune eval subcommand group
+const ftEval = program
+  .command('ft-eval')
+  .description('Fine-tune evaluation: compare base vs fine-tuned models');
+
+ftEval
+  .command('run <name>')
+  .description('Run evaluation and save results')
+  .requiredOption('-m, --model <model>', 'Model to evaluate (e.g., gpt-4.1-nano, ft:gpt-4.1-nano:...)')
+  .option('-s, --suite <name>', 'Test suite (default: golden-scenarios)')
+  .option('--judge-model <model>', 'Model for evaluation judging')
+  .option('--steps <list>', 'Comma-separated steps to evaluate')
+  .option('--test-ids <list>', 'Comma-separated test IDs to run')
+  .option('--ensemble', 'Use ensemble evaluation')
+  .option('-v, --verbose', 'Show detailed progress')
+  .action(ftEvalRunCommand);
+
+ftEval
+  .command('quick <model>')
+  .description('Quick evaluation with a few test cases')
+  .option('-s, --suite <name>', 'Test suite (default: golden-scenarios)')
+  .option('-c, --count <n>', 'Number of test cases (default: 5)')
+  .option('-v, --verbose', 'Show detailed progress')
+  .action(ftEvalQuickCommand);
+
+ftEval
+  .command('list')
+  .description('List all saved eval runs')
+  .action(ftEvalListCommand);
+
+ftEval
+  .command('compare <baseline> <candidate>')
+  .description('Compare two eval runs (by name or run ID)')
+  .option('--markdown <file>', 'Save comparison as markdown report')
+  .option('-v, --verbose', 'Show detailed output')
+  .action(ftEvalCompareCommand);
+
+ftEval
+  .command('show <id>')
+  .description('Show details of a specific eval run')
+  .action(ftEvalShowCommand);
 
 // Parse and execute
 program.parse();

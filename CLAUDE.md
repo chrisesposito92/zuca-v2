@@ -134,6 +134,16 @@ npm run cli -- prompts backups       # List all prompt backups
 npm run cli -- self-improve          # Run evaluation + pattern analysis
 npm run cli -- self-improve --auto-suggest  # Auto-generate suggestions
 
+# Fine-Tune Evaluation (compare base vs fine-tuned models)
+npm run cli -- ft-eval run baseline-gpt4.1 --model gpt-4.1 -v  # Run baseline eval
+npm run cli -- ft-eval run ft-nano-v1 --model ft:gpt-4.1-nano:personal:... -v  # Eval fine-tuned model
+npm run cli -- ft-eval quick gpt-4.1 -v         # Quick eval (5 test cases)
+npm run cli -- ft-eval quick ft:gpt-4.1-nano:... -c 3  # Quick eval with custom count
+npm run cli -- ft-eval list                      # List all saved runs
+npm run cli -- ft-eval show <name-or-id>         # Show details of a run
+npm run cli -- ft-eval compare baseline-gpt4.1 ft-nano-v1  # Compare two runs
+npm run cli -- ft-eval compare baseline ft-v1 --markdown report.md  # Export comparison
+
 # Training Data Export (for SLM fine-tuning)
 npm run cli -- training stats        # Show training data statistics
 npm run cli -- training sync         # Sync corrections to training data
@@ -249,6 +259,18 @@ ACTIVE_LEARNING_NOVELTY=true             # Enable novelty scoring
 ```
 
 **Review queue storage:** `data/review-queue.json` (local development)
+
+### Fine-Tune Evaluation
+Compares baseline models vs fine-tuned models. See `docs/SELF-LEARNING-CLI.md` for full documentation.
+
+**Key Files:** `src/evals/`, `data/ft-evals/`
+
+**Quick Reference:**
+```bash
+npm run cli -- ft-eval run baseline --model gpt-4.1 -v    # Baseline eval
+npm run cli -- ft-eval run ft-v1 --model ft:gpt-4.1-nano:... -v  # Fine-tuned eval
+npm run cli -- ft-eval compare baseline ft-v1             # Compare results
+```
 
 ### Adding New Criteria
 1. Create YAML file in `data/evaluation-criteria/<step-name>.yaml`
