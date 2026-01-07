@@ -46,27 +46,132 @@ function createJudgeSchema(originalSchema: Record<string, unknown>): Record<stri
 // Message Builder
 // ============================================================================
 
+type EnumConstraint = {
+  path: string;
+  values: unknown[];
+};
+
+export function collectEnumConstraints(schema: Record<string, unknown>, path = ''): EnumConstraint[] {
+  const constraints: EnumConstraint[] = [];
+
+  if (!schema || typeof schema !== 'object') {
+    return constraints;
+  }
+
+  const record = schema as Record<string, unknown>;
+
+  if (Array.isArray(record.enum)) {
+    constraints.push({
+      path: path || '(root)',
+      values: record.enum as unknown[],
+    });
+  }
+
+  const properties = record.properties;
+  if (properties && typeof properties === 'object' && !Array.isArray(properties)) {
+    for (const [key, value] of Object.entries(properties as Record<string, unknown>)) {
+      const childPath = path ? `${path}.${key}` : key;
+      if (value && typeof value === 'object') {
+        constraints.push(...collectEnumConstraints(value as Record<string, unknown>, childPath));
+      }
+    }
+  }
+
+  const items = record.items;
+  if (items && typeof items === 'object') {
+    if (Array.isArray(items)) {
+      items.forEach((item, index) => {
+        const childPath = path ? `${path}[${index}]` : `[${index}]`;
+        if (item && typeof item === 'object') {
+          constraints.push(...collectEnumConstraints(item as Record<string, unknown>, childPath));
+        }
+      });
+    } else {
+      const childPath = path ? `${path}[]` : '[]';
+      constraints.push(...collectEnumConstraints(items as Record<string, unknown>, childPath));
+    }
+  }
+
+  const oneOf = record.oneOf;
+  if (Array.isArray(oneOf)) {
+    oneOf.forEach((entry) => {
+      if (entry && typeof entry === 'object') {
+        constraints.push(...collectEnumConstraints(entry as Record<string, unknown>, path));
+      }
+    });
+  }
+
+  const anyOf = record.anyOf;
+  if (Array.isArray(anyOf)) {
+    anyOf.forEach((entry) => {
+      if (entry && typeof entry === 'object') {
+        constraints.push(...collectEnumConstraints(entry as Record<string, unknown>, path));
+      }
+    });
+  }
+
+  const allOf = record.allOf;
+  if (Array.isArray(allOf)) {
+    allOf.forEach((entry) => {
+      if (entry && typeof entry === 'object') {
+        constraints.push(...collectEnumConstraints(entry as Record<string, unknown>, path));
+      }
+    });
+  }
+
+  return constraints;
+}
+
+export function formatEnumConstraints(schema: Record<string, unknown>): string | undefined {
+  const constraints = collectEnumConstraints(schema);
+  if (constraints.length === 0) {
+    return undefined;
+  }
+
+  const lines = constraints.map((constraint) =>
+    `- ${constraint.path}: ${JSON.stringify(constraint.values)}`
+  );
+
+  return ['## Enum Constraints', ...lines].join('\n');
+}
+
 /**
  * Build the user message for the judge
  */
-function buildJudgeUserMessage(stepName: string, inputContext: string, output: unknown): string {
-  return [
+function buildJudgeUserMessage(
+  stepName: string,
+  inputContext: string,
+  output: unknown,
+  originalSchema: Record<string, unknown>
+): string {
+  const enumSection = formatEnumConstraints(originalSchema);
+  const parts = [
     `## Step Being Validated`,
     `**Step Name:** ${stepName}`,
     '',
     `## Input Context`,
     inputContext,
     '',
+  ];
+
+  if (enumSection) {
+    parts.push(enumSection, '');
+  }
+
+  parts.push(
     `## Output to Validate`,
     '```json',
     JSON.stringify(output, null, 2),
     '```',
     '',
     `## Instructions`,
-    `Review the output above for errors, inconsistencies, or quality issues.`,
+    `Review the output above for errors, inconsistencies, or quality issues. If you are changing`,
+    `an ENUM field, IT MUST BE A VALID VALUE.`,
     `If you find issues with HIGH CONFIDENCE corrections, apply them to corrected_output.`,
-    `If no changes needed, return the original output unchanged with made_changes: false.`,
-  ].join('\n');
+    `If no changes needed, return the original output unchanged with made_changes: false.`
+  );
+
+  return parts.join('\n');
 }
 
 // ============================================================================
@@ -132,7 +237,7 @@ export async function withJudge<T>(
 
     // Load the judge system prompt
     const systemPrompt = await loadPrompt(PROMPTS.JUDGE_LLM);
-    const userMessage = buildJudgeUserMessage(stepName, inputContext, output);
+    const userMessage = buildJudgeUserMessage(stepName, inputContext, output, originalSchema);
     const judgeSchema = createJudgeSchema(originalSchema);
 
     // Run the judge with timeout
