@@ -3033,5 +3033,518 @@ ftEval
   .description('Show details of a specific eval run')
   .action(ftEvalShowCommand);
 
+// ============================================================================
+// RFT (Reinforcement Fine-Tuning) Commands
+// ============================================================================
+
+import {
+  convertSFTtoRFT,
+  convertTestSuiteToRFT,
+  splitRFTData,
+  RFTClient,
+  runRFTWorkflow,
+} from '../rft';
+
+const rft = program
+  .command('rft')
+  .description('Reinforcement Fine-Tuning: train with custom graders (o4-mini)');
+
+rft
+  .command('convert-sft <input> <output>')
+  .description('Convert SFT JSONL to RFT format')
+  .option('--no-reference', 'Exclude reference answers')
+  .option('-n, --max <count>', 'Maximum examples to convert')
+  .action(async (input: string, output: string, options: { reference: boolean; max?: string }) => {
+    try {
+      console.log(chalk.blue('\n▶ Converting SFT to RFT format\n'));
+
+      const result = await convertSFTtoRFT(input, output, {
+        includeReference: options.reference,
+        maxExamples: options.max ? parseInt(options.max) : undefined,
+      });
+
+      console.log(chalk.green('✅ Conversion complete'));
+      console.log(`   Converted: ${result.converted}`);
+      console.log(`   Skipped:   ${result.skipped}`);
+      console.log(`   Output:    ${output}`);
+    } catch (error) {
+      console.error(chalk.red('Error:'), error);
+      process.exit(1);
+    }
+  });
+
+rft
+  .command('convert-suite <suite> <output>')
+  .description('Convert test suite YAML to RFT format')
+  .option('--system-prompt <file>', 'System prompt file to include')
+  .option('--references <dir>', 'Directory with reference outputs')
+  .action(async (suite: string, output: string, options: { systemPrompt?: string; references?: string }) => {
+    try {
+      console.log(chalk.blue('\n▶ Converting test suite to RFT format\n'));
+
+      let systemPrompt: string | undefined;
+      if (options.systemPrompt && existsSync(options.systemPrompt)) {
+        systemPrompt = await readFile(options.systemPrompt, 'utf-8');
+      }
+
+      const result = await convertTestSuiteToRFT(suite, output, {
+        systemPrompt,
+        referenceOutputsDir: options.references,
+      });
+
+      console.log(chalk.green('✅ Conversion complete'));
+      console.log(`   Converted: ${result.converted} test cases`);
+      console.log(`   Skipped:   ${result.skipped}`);
+      console.log(`   Output:    ${output}`);
+    } catch (error) {
+      console.error(chalk.red('Error:'), error);
+      process.exit(1);
+    }
+  });
+
+rft
+  .command('split <input>')
+  .description('Split RFT data into train/validation sets')
+  .option('-r, --ratio <percent>', 'Validation ratio (default: 15)', '15')
+  .option('-o, --output <prefix>', 'Output file prefix (default: rft)')
+  .action(async (input: string, options: { ratio: string; output?: string }) => {
+    try {
+      console.log(chalk.blue('\n▶ Splitting RFT data\n'));
+
+      const prefix = options.output || 'rft';
+      const ratio = parseInt(options.ratio) / 100;
+
+      const trainPath = `data/${prefix}-train.jsonl`;
+      const validPath = `data/${prefix}-validation.jsonl`;
+
+      const result = splitRFTData(input, trainPath, validPath, ratio);
+
+      console.log(chalk.green('✅ Split complete'));
+      console.log(`   Training:   ${result.train} examples -> ${trainPath}`);
+      console.log(`   Validation: ${result.valid} examples -> ${validPath}`);
+    } catch (error) {
+      console.error(chalk.red('Error:'), error);
+      process.exit(1);
+    }
+  });
+
+rft
+  .command('create')
+  .description('Create an RFT job on OpenAI')
+  .requiredOption('-t, --train <file>', 'Training data file (RFT JSONL)')
+  .requiredOption('-v, --valid <file>', 'Validation data file (RFT JSONL)')
+  .option('-s, --suffix <name>', 'Model suffix for identification')
+  .option('-e, --epochs <n>', 'Number of epochs (default: 3)', '3')
+  .option('-b, --batch <n>', 'Batch size (default: 4)', '4')
+  .option('--reasoning <level>', 'Reasoning effort: low, medium, high (default: medium)', 'medium')
+  .action(async (options: {
+    train: string;
+    valid: string;
+    suffix?: string;
+    epochs: string;
+    batch: string;
+    reasoning: string;
+  }) => {
+    try {
+      console.log(chalk.blue('\n▶ Creating RFT Job\n'));
+      console.log(chalk.yellow('⚠ Note: RFT currently only supports o4-mini\n'));
+
+      const client = new RFTClient();
+
+      // Upload files
+      console.log('Uploading training file...');
+      const trainFileId = await client.uploadFile(options.train);
+
+      console.log('Uploading validation file...');
+      const validFileId = await client.uploadFile(options.valid);
+
+      // Create job
+      console.log('Creating RFT job...');
+      const jobId = await client.createJob({
+        trainingFileId: trainFileId,
+        validationFileId: validFileId,
+        suffix: options.suffix,
+        epochs: parseInt(options.epochs),
+        batchSize: parseInt(options.batch),
+        reasoningEffort: options.reasoning as 'low' | 'medium' | 'high',
+      });
+
+      console.log(chalk.green('\n✅ RFT job created!'));
+      console.log(`   Job ID: ${jobId}`);
+      console.log(`\nMonitor with: npm run cli -- rft status ${jobId}`);
+    } catch (error) {
+      console.error(chalk.red('Error:'), error);
+      process.exit(1);
+    }
+  });
+
+rft
+  .command('status [jobId]')
+  .description('Check RFT job status')
+  .action(async (jobId?: string) => {
+    try {
+      const client = new RFTClient();
+
+      if (jobId) {
+        // Show specific job
+        const status = await client.getJobStatus(jobId);
+        console.log(chalk.blue('\n▶ RFT Job Status\n'));
+        console.log(`   ID:        ${status.id}`);
+        console.log(`   Status:    ${formatStatus(status.status)}`);
+        console.log(`   Model:     ${status.model}`);
+        console.log(`   Created:   ${status.createdAt}`);
+        if (status.finishedAt) {
+          console.log(`   Finished:  ${status.finishedAt}`);
+        }
+        if (status.trainedTokens) {
+          console.log(`   Tokens:    ${status.trainedTokens.toLocaleString()}`);
+        }
+        if (status.error) {
+          console.log(chalk.red(`   Error:     ${status.error}`));
+        }
+      } else {
+        // List recent jobs
+        console.log(chalk.blue('\n▶ Recent RFT Jobs\n'));
+        const jobs = await client.listJobs(10);
+
+        if (jobs.length === 0) {
+          console.log(chalk.gray('No RFT jobs found'));
+          return;
+        }
+
+        for (const job of jobs) {
+          const statusIcon = getStatusIcon(job.status);
+          console.log(`${statusIcon} ${job.id}`);
+          console.log(chalk.gray(`   ${job.model} | ${job.createdAt}`));
+          if (job.error) {
+            console.log(chalk.red(`   Error: ${job.error}`));
+          }
+          console.log('');
+        }
+      }
+    } catch (error) {
+      console.error(chalk.red('Error:'), error);
+      process.exit(1);
+    }
+  });
+
+rft
+  .command('cancel <jobId>')
+  .description('Cancel a running RFT job')
+  .action(async (jobId: string) => {
+    try {
+      const client = new RFTClient();
+      await client.cancelJob(jobId);
+      console.log(chalk.green(`✅ Cancelled job: ${jobId}`));
+    } catch (error) {
+      console.error(chalk.red('Error:'), error);
+      process.exit(1);
+    }
+  });
+
+rft
+  .command('run')
+  .description('Run complete RFT workflow (convert + upload + train)')
+  .requiredOption('-i, --input <file>', 'SFT training data to convert')
+  .option('-s, --suffix <name>', 'Model suffix for identification')
+  .option('-e, --epochs <n>', 'Number of epochs (default: 3)', '3')
+  .option('-v, --verbose', 'Show detailed progress')
+  .action(async (options: {
+    input: string;
+    suffix?: string;
+    epochs: string;
+    verbose?: boolean;
+  }) => {
+    try {
+      console.log(chalk.blue('\n▶ Complete RFT Workflow\n'));
+      console.log(chalk.yellow('⚠ Note: RFT currently only supports o4-mini\n'));
+
+      // Step 1: Convert SFT to RFT
+      console.log('Step 1: Converting SFT to RFT format...');
+      const rftPath = 'data/rft-converted.jsonl';
+      await convertSFTtoRFT(options.input, rftPath, { includeReference: true });
+
+      // Step 2: Split into train/valid
+      console.log('Step 2: Splitting into train/validation...');
+      const trainPath = 'data/rft-train.jsonl';
+      const validPath = 'data/rft-validation.jsonl';
+      const split = splitRFTData(rftPath, trainPath, validPath, 0.15);
+      console.log(`   Train: ${split.train}, Valid: ${split.valid}`);
+
+      // Step 3: Run RFT
+      console.log('Step 3: Creating and running RFT job...');
+      const result = await runRFTWorkflow({
+        trainFile: trainPath,
+        validFile: validPath,
+        suffix: options.suffix,
+        epochs: parseInt(options.epochs),
+        verbose: options.verbose,
+      });
+
+      console.log(chalk.green('\n✅ RFT workflow complete!'));
+      console.log(`   Job ID: ${result.jobId}`);
+      console.log(`   Status: ${formatStatus(result.status.status)}`);
+      if (result.status.error) {
+        console.log(chalk.red(`   Error: ${result.status.error}`));
+      }
+    } catch (error) {
+      console.error(chalk.red('Error:'), error);
+      process.exit(1);
+    }
+  });
+
+function formatStatus(status: string): string {
+  const colors: Record<string, (s: string) => string> = {
+    succeeded: chalk.green,
+    failed: chalk.red,
+    cancelled: chalk.yellow,
+    running: chalk.blue,
+    queued: chalk.gray,
+    validating_files: chalk.gray,
+  };
+  return (colors[status] || chalk.white)(status);
+}
+
+function getStatusIcon(status: string): string {
+  const icons: Record<string, string> = {
+    succeeded: chalk.green('✅'),
+    failed: chalk.red('❌'),
+    cancelled: chalk.yellow('⚠'),
+    running: chalk.blue('🔄'),
+    queued: chalk.gray('⏳'),
+    validating_files: chalk.gray('📋'),
+  };
+  return icons[status] || '•';
+}
+
+// ============================================================================
+// OpenRLHF Commands (Open-source alternative to OpenAI RFT)
+// ============================================================================
+
+import {
+  convertSFTtoOpenRLHF,
+  splitOpenRLHFData,
+  validateOpenRLHFData,
+  generateConfig,
+  writeConfigFiles,
+  validateConfig,
+  listPresets,
+} from '../openrlhf';
+
+const openrlhf = program
+  .command('openrlhf')
+  .description('OpenRLHF: Open-source RLHF training with RunPod');
+
+openrlhf
+  .command('convert <input> <output>')
+  .description('Convert SFT JSONL to OpenRLHF format')
+  .option('--no-reference', 'Exclude reference answers')
+  .option('-n, --max <count>', 'Maximum examples to convert')
+  .action(async (input: string, output: string, options: { reference: boolean; max?: string }) => {
+    try {
+      console.log(chalk.blue('\n▶ Converting SFT to OpenRLHF format\n'));
+
+      const result = await convertSFTtoOpenRLHF(input, output, {
+        includeReference: options.reference,
+        maxExamples: options.max ? parseInt(options.max) : undefined,
+      });
+
+      console.log(chalk.green('✅ Conversion complete'));
+      console.log(`   Converted: ${result.converted}`);
+      console.log(`   Skipped:   ${result.skipped}`);
+      console.log(`   Output:    ${output}`);
+    } catch (error) {
+      console.error(chalk.red('Error:'), error);
+      process.exit(1);
+    }
+  });
+
+openrlhf
+  .command('split <input>')
+  .description('Split OpenRLHF data into train/validation sets')
+  .option('-r, --ratio <percent>', 'Validation ratio (default: 10)', '10')
+  .option('-o, --output <prefix>', 'Output file prefix (default: openrlhf)', 'openrlhf')
+  .action(async (input: string, options: { ratio: string; output: string }) => {
+    try {
+      console.log(chalk.blue('\n▶ Splitting OpenRLHF data\n'));
+
+      const prefix = options.output;
+      const ratio = parseInt(options.ratio) / 100;
+
+      const trainPath = `data/${prefix}-train.jsonl`;
+      const validPath = `data/${prefix}-validation.jsonl`;
+
+      const result = splitOpenRLHFData(input, trainPath, validPath, ratio);
+
+      console.log(chalk.green('✅ Split complete'));
+      console.log(`   Training:   ${result.train} examples -> ${trainPath}`);
+      console.log(`   Validation: ${result.valid} examples -> ${validPath}`);
+    } catch (error) {
+      console.error(chalk.red('Error:'), error);
+      process.exit(1);
+    }
+  });
+
+openrlhf
+  .command('validate <file>')
+  .description('Validate OpenRLHF data format')
+  .action(async (file: string) => {
+    try {
+      console.log(chalk.blue('\n▶ Validating OpenRLHF data\n'));
+
+      const result = validateOpenRLHFData(file);
+
+      console.log(`Valid examples:   ${chalk.green(result.valid.toString())}`);
+      console.log(`Invalid examples: ${chalk.red(result.invalid.toString())}`);
+
+      if (result.errors.length > 0) {
+        console.log('\nErrors:');
+        result.errors.forEach((err) => console.log(`  ${chalk.yellow('!')} ${err}`));
+      }
+
+      if (result.invalid === 0) {
+        console.log(chalk.green('\n✅ Data is valid'));
+      } else {
+        console.log(chalk.yellow(`\n⚠ ${result.invalid} invalid examples found`));
+        process.exit(1);
+      }
+    } catch (error) {
+      console.error(chalk.red('Error:'), error);
+      process.exit(1);
+    }
+  });
+
+openrlhf
+  .command('config')
+  .description('Generate training configuration for RunPod')
+  .option('-p, --preset <name>', 'Configuration preset: quick | standard | grpo | production', 'standard')
+  .option('-m, --model <model>', 'Base model to fine-tune')
+  .option('-a, --algorithm <algo>', 'Training algorithm: ppo | grpo | reinforce_baseline | rloo')
+  .option('-d, --data <path>', 'Training data path', '/workspace/data/train.jsonl')
+  .option('-o, --output <dir>', 'Output directory for config files', 'data/openrlhf-config')
+  .option('--wandb <project>', 'WandB project name', 'zuca-rlhf')
+  .option('--gpus <count>', 'Number of GPUs')
+  .option('--gpu-type <type>', 'GPU type: A100-40GB | A100-80GB | H100')
+  .action(async (options: {
+    preset: string;
+    model?: string;
+    algorithm?: string;
+    data: string;
+    output: string;
+    wandb: string;
+    gpus?: string;
+    gpuType?: string;
+  }) => {
+    try {
+      console.log(chalk.blue('\n▶ Generating OpenRLHF configuration\n'));
+
+      const config = generateConfig({
+        preset: options.preset as 'quick' | 'standard' | 'grpo' | 'production',
+        baseModel: options.model,
+        algorithm: options.algorithm as any,
+        dataPath: options.data,
+        outputDir: '/workspace/checkpoints/zuca-rlhf',
+        wandbProject: options.wandb,
+        numGpus: options.gpus ? parseInt(options.gpus) : undefined,
+        gpuType: options.gpuType as any,
+      });
+
+      // Validate config
+      const validation = validateConfig(config);
+      if (!validation.valid) {
+        console.log(chalk.red('\n❌ Configuration errors:'));
+        validation.errors.forEach((err) => console.log(`   ${err}`));
+        process.exit(1);
+      }
+
+      if (validation.warnings.length > 0) {
+        console.log(chalk.yellow('\n⚠ Warnings:'));
+        validation.warnings.forEach((warn) => console.log(`   ${warn}`));
+      }
+
+      // Write config files
+      const { files } = await writeConfigFiles(config, options.output);
+
+      console.log(chalk.green('\n✅ Configuration generated'));
+      console.log('\nConfiguration:');
+      console.log(`   Model:     ${chalk.cyan(config.baseModel)}`);
+      console.log(`   Algorithm: ${chalk.cyan(config.hyperparameters.algorithm)}`);
+      console.log(`   LR:        ${chalk.cyan(config.hyperparameters.learningRate.toString())}`);
+      console.log(`   Epochs:    ${chalk.cyan(config.hyperparameters.epochs.toString())}`);
+      console.log(`   GPU:       ${chalk.cyan(`${config.resources.numGpus}x ${config.resources.gpuType}`)}`);
+
+      console.log('\nGenerated files:');
+      files.forEach((f) => console.log(`   ${chalk.gray(f)}`));
+
+      console.log(`\nNext steps:`);
+      console.log(`   1. Create a RunPod instance with ${config.resources.gpuType}`);
+      console.log(`   2. Upload your data and these config files`);
+      console.log(`   3. Run: source ${options.output}/training-env.sh`);
+      console.log(`   4. Run: bash scripts/openrlhf/train.sh`);
+    } catch (error) {
+      console.error(chalk.red('Error:'), error);
+      process.exit(1);
+    }
+  });
+
+openrlhf
+  .command('presets')
+  .description('List available training presets')
+  .action(() => {
+    console.log(chalk.blue('\n▶ OpenRLHF Training Presets\n'));
+
+    const presets = listPresets();
+
+    presets.forEach((preset) => {
+      console.log(chalk.cyan.bold(`${preset.name}`));
+      console.log(`   ${chalk.gray(preset.description)}`);
+      console.log(`   Model:     ${preset.model}`);
+      console.log(`   Algorithm: ${preset.algorithm}`);
+      console.log('');
+    });
+
+    console.log(chalk.gray('Use: npm run cli -- openrlhf config -p <preset>'));
+  });
+
+openrlhf
+  .command('info')
+  .description('Show OpenRLHF setup and usage information')
+  .action(() => {
+    console.log(chalk.cyan.bold('\n═══ OpenRLHF + RunPod Training Guide ═══\n'));
+
+    console.log(chalk.bold('What is OpenRLHF?'));
+    console.log('  An open-source RLHF framework that provides an alternative to');
+    console.log('  OpenAI\'s RFT. Uses custom reward functions (LLM-as-judge) to');
+    console.log('  train models with reinforcement learning.\n');
+
+    console.log(chalk.bold('Workflow:'));
+    console.log('  1. Convert your SFT data to OpenRLHF format');
+    console.log('     npm run cli -- openrlhf convert data/ft-train.jsonl data/openrlhf.jsonl\n');
+    console.log('  2. Split into train/validation sets');
+    console.log('     npm run cli -- openrlhf split data/openrlhf.jsonl\n');
+    console.log('  3. Generate training configuration');
+    console.log('     npm run cli -- openrlhf config -p standard -o data/openrlhf-config\n');
+    console.log('  4. Deploy to RunPod and run training');
+    console.log('     - Create A100 instance on RunPod');
+    console.log('     - Upload data and config files');
+    console.log('     - Run setup and training scripts\n');
+
+    console.log(chalk.bold('Supported Algorithms:'));
+    console.log('  • ppo        - Proximal Policy Optimization (classic RLHF)');
+    console.log('  • grpo       - Group Relative Policy Optimization');
+    console.log('  • reinforce  - REINFORCE with baseline (simpler)');
+    console.log('  • rloo       - REINFORCE Leave-One-Out (variance reduction)\n');
+
+    console.log(chalk.bold('GPU Requirements:'));
+    console.log('  • 7B models:  1x A100-40GB ($1.24/hr on RunPod)');
+    console.log('  • 14B models: 1x A100-80GB ($1.99/hr on RunPod)');
+    console.log('  • 70B models: 4x H100 ($3.99/hr each on RunPod)\n');
+
+    console.log(chalk.bold('Documentation:'));
+    console.log('  • OpenRLHF:  https://github.com/OpenRLHF/OpenRLHF');
+    console.log('  • RunPod:    https://runpod.io/');
+    console.log('  • See:       scripts/openrlhf/README.md');
+  });
+
 // Parse and execute
 program.parse();

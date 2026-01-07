@@ -106,7 +106,7 @@ You must return a JSON object with this exact structure:
 ### analyze_contract
 - **Dates must be MM/DD/YYYY format** (e.g., 02/01/2026)
 - Check that term_months is positive and reasonable
-- Ensure billing_period is a valid enum value (e.g., "MONTHLY", "ANNUAL")
+- Ensure billing_period is a valid enum value (e.g., "MONTHLY", "ANNUALLY")
 - Confirm service dates align with contract terms
 - POB labels should be UPPERCASE format
 
