@@ -3522,12 +3522,19 @@ openrlhf
     console.log('     npm run cli -- openrlhf convert data/ft-train.jsonl data/openrlhf.jsonl\n');
     console.log('  2. Split into train/validation sets');
     console.log('     npm run cli -- openrlhf split data/openrlhf.jsonl\n');
-    console.log('  3. Generate training configuration');
+    console.log('  3. Validate the OpenRLHF JSONL format');
+    console.log('     npm run cli -- openrlhf validate data/openrlhf-train.jsonl\n');
+    console.log('  4. Generate training configuration');
     console.log('     npm run cli -- openrlhf config -p standard -o data/openrlhf-config\n');
-    console.log('  4. Deploy to RunPod and run training');
+    console.log('  5. Deploy to RunPod and run training');
     console.log('     - Create A100 instance on RunPod');
-    console.log('     - Upload data and config files');
+    console.log('     - Upload data + config directory to the pod');
     console.log('     - Run setup and training scripts\n');
+
+    console.log(chalk.bold('Notes:'));
+    console.log('  • WandB is enabled by default in train.sh; set WANDB_API_KEY or disable it.');
+    console.log('  • For REWARD_PROVIDER=vllm, start a vLLM server and set REWARD_API_BASE.');
+    console.log('  • For gated HF models, set HF_TOKEN or run huggingface-cli login.\n');
 
     console.log(chalk.bold('Supported Algorithms:'));
     console.log('  • ppo        - Proximal Policy Optimization (classic RLHF)');
