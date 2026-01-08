@@ -139,17 +139,13 @@ For each line, populate:
 - **Mode A (Per-period unit pricing; default for recurring):**
   - `Ext List Price = Unit List Price × Ordered Qty × Num Periods`
   - `Ext Sell Price = Unit Sell Price × Ordered Qty × Num Periods`
-- **Mode B (Full-term unit pricing):**
-  - `Ext List Price = Unit List Price × Ordered Qty`
-  - `Ext Sell Price = Unit Sell Price × Ordered Qty`
 
-4) **Hard consistency rule:**
+1) **Hard consistency rule:**
 Once `Ext Sell Price`/`Ext List Price` are set, **all dependent “extended” fields must mirror the same basis** (e.g., `Ext SSP Price`, `Ext Allocated Price`, `Unreleased Revenue`, SSP weighting if computed). **Never multiply by term months in some extended fields but not others.**
 
-5) **Validation step (must do before final output):**
+1) **Validation step (must do before final output):**
 - Recompute `Ext Sell Price` from the chosen mode and confirm it matches.
 - If Mode A is used, confirm `Ext Sell Price ÷ Num Periods = Unit Sell Price × Qty`.
-- If Mode B is used, confirm `Ext Sell Price ÷ (Unit Sell Price × Qty) = 1`.
 - Keep `Terms Months` as the contractual duration; **do not use it as a multiplier unless it equals `Num Periods` for the selected Billing Period.**
 
 ## Allocation Calculations

@@ -168,7 +168,8 @@ function buildJudgeUserMessage(
     `Review the output above for errors, inconsistencies, or quality issues. If you are changing`,
     `an ENUM field, IT MUST BE A VALID VALUE.`,
     `If you find issues with HIGH CONFIDENCE corrections, apply them to corrected_output.`,
-    `If no changes needed, return the original output unchanged with made_changes: false.`
+    `If no changes needed, return the original output unchanged with made_changes: false.`,
+    `YOU SHOULD ONLY BE MAKING CHANGES THAT ARE CLEAR AND OBVIOUS ERRORS. DON'T JUST CHANGE NAMES ALL WILLY NILLY OR SOMETHING.`
   );
 
   return parts.join('\n');

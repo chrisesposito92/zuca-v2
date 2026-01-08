@@ -4,7 +4,7 @@
 version: "1.0"
 
 # Master switch - can be overridden by JUDGE_ENABLED env var
-enabled: false
+enabled: true
 
 # Default settings applied to all steps
 defaults:
