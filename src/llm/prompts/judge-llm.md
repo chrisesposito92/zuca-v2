@@ -79,7 +79,7 @@ You must return a JSON object with this exact structure:
 
 ## Important Rules
 
-⚠️ **CRITICAL: Your default should be to make NO CHANGES. Only intervene for clear, objective errors.**
+⚠️ **CRITICAL: Your default should be to make NO CHANGES. Only intervene for clear, objective errors. It is COMPLETELY FINE to make NO CHANGES AT ALL.**
 
 1. **Never Invent Data**: Only correct based on the input context provided. Don't add information that wasn't in the original.
 
