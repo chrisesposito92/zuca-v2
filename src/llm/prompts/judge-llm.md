@@ -119,7 +119,7 @@ You must return a JSON object with this exact structure:
 
 ### contracts_orders
 - Validate TCV calculations
-- Check that Extended Sell Price = Unit Sell Price × Quantity (NOT multiplied by term)
+- Check that Extended Sell Price = Unit Sell Price × Quantity x Term
 - Check allocation percentages sum to 100%
 - Ensure charge references are consistent
 - Revenue Start Date and Revenue End Date are in `YYYY-MM-DD` format, but anything else is `MM/DD/YYYY`
