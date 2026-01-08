@@ -107,15 +107,15 @@ Extract fields using these priorities:
 
 ### When SSP Method = "None" OR Allocation Eligible Flag = "N"
 No allocation is performed:
-- SSP Price = Ext Sell Price / Ordered Qty
+- SSP Price = Ext Sell Price / Ordered Qty / Terms Months
 - Ext SSP Price = Ext Sell Price
 - Ext Allocated Price = Ext Sell Price
 
 ### When Allocation IS Required (Allocation Eligible Flag = "Y")
 
 **Step 1: Determine SSP Price per SSP Method**
-- **List Price**: SSP Price = Ext List Price / Ordered Qty
-- **Sell Price**: SSP Price = Ext Sell Price / Ordered Qty
+- **List Price**: SSP Price = Ext List Price / Ordered Qty / Terms Months
+- **Sell Price**: SSP Price = Ext Sell Price / Ordered Qty / Terms Months
 - **Custom Formula**: Apply the provided formula
 
 **Step 2: Calculate Ext SSP Price**

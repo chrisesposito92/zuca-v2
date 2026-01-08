@@ -49,8 +49,8 @@ criteria:
     check:
       type: numeric
       rule: |
-        Ext Sell Price = Unit Sell Price × Ordered Qty
-        Ext List Price = Unit List Price × Ordered Qty
+        Ext Sell Price = Unit Sell Price x Ordered Qty x Terms Months
+        Ext List Price = Unit List Price x Ordered Qty x Terms Months
         These calculations must be accurate for each line item.
       threshold: 0.01
 
@@ -125,8 +125,8 @@ criteria:
       type: numeric
       rule: |
         When is_allocations = true:
-        1. SSP Percent = (Ext SSP Price / Total Ext SSP) × 100
-        2. Ext Allocated Price = Total Transaction Price × (SSP Percent / 100)
+        1. SSP Percent = (Ext SSP Price / Total Ext SSP) x 100
+        2. Ext Allocated Price = Total Transaction Price x (SSP Percent / 100)
         3. Sum of all Ext Allocated Price = Sum of all Ext Sell Price
         Allocation must redistribute transaction price by SSP ratios.
       threshold: 0.01

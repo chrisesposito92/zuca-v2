@@ -57,7 +57,7 @@ For each ramp segment row:
    - Do **not** convert an annual total into a monthly unit price (or vice versa) unless the Subscription spec explicitly provides that converted rate.
 
 3) **Extended amount must represent ONLY that segment’s total:**
-   - If your load convention enforces `Ext = Unit × Ordered Qty`, then set `Ordered Qty` to the **number of billing periods in the segment** (e.g., 12 for one year of monthly billing; 3 for a quarter; 6 for Jan–Jun) so `Ext Sell Price` equals the segment total.
+   - If your load convention enforces `Ext = Unit × Ordered Qty x Terms Months`, then set `Ordered Qty` to the **number of billing periods in the segment** (e.g., 12 for one year of monthly billing; 3 for a quarter; 6 for Jan–Jun) so `Ext Sell Price` equals the segment total.
    - Never let a segment row’s `Ext Sell Price` include amounts from other segments.
 
 4) **Optional alignment field:** If present/required, set `Term Months` (or equivalent) to the **segment length**, not the full contract length.
@@ -97,8 +97,8 @@ For each line, populate:
 - `Ordered Qty`: From charge quantity (default 1)
 - `Unit List Price`: From charge listPrice
 - `Unit Sell Price`: From charge sellPrice
-- `Ext List Price`: Qty × Unit List Price
-- `Ext Sell Price`: Qty × Unit Sell Price
+- `Ext List Price`: Qty × Unit List Price x Terms Months
+- `Ext Sell Price`: Qty × Unit Sell Price X Terms Months
 
 **Allocation (see below):**
 - `SSP Price`: Unit SSP (typically = Unit List Price unless override)
@@ -297,15 +297,15 @@ Return JSON with ALL fields populated:
       "Revenue End Date": "2026-12-31",
       "Unit List Price": 1200,
       "Unit Sell Price": 1000,
-      "Ext List Price": 1200,
-      "Ext Sell Price": 1000,
+      "Ext List Price": 14400,
+      "Ext Sell Price": 12000,
       "SSP Price": 1200,
-      "Ext SSP Price": 1200,
+      "Ext SSP Price": 12000,
       "SSP Percent": 100,
-      "Ext Allocated Price": 1000,
+      "Ext Allocated Price": 10000,
       "Carves Adjustment": 0,
       "Allocation Eligible Flag": true,
-      "Unreleased Revenue": 1000,
+      "Unreleased Revenue": 10000,
       "Released Revenue": 0,
       "Customer Name": "Acme Corp",
       "POB IDENTIFIER": "BK-OT-RATABLE",
