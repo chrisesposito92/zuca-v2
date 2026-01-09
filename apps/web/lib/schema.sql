@@ -36,10 +36,19 @@ CREATE TABLE IF NOT EXISTS sessions (
     llm_model VARCHAR(50),             -- 'gpt-5.2' | 'gemini-3-pro-preview' | 'gemini-3-flash-preview'
     input JSONB NOT NULL,              -- ZucaInput or UCGeneratorInput
     result JSONB,                      -- ZucaOutput or UCGeneratorOutput
-    status VARCHAR(20) DEFAULT 'pending', -- pending | running | completed | failed
+    status VARCHAR(20) DEFAULT 'pending', -- pending | running | awaiting_clarification | completed | failed
     current_step INTEGER DEFAULT 0,
     error_message TEXT,
-    user_id UUID REFERENCES auth_users(id) ON DELETE SET NULL
+    user_id UUID REFERENCES auth_users(id) ON DELETE SET NULL,
+    clarification_state JSONB          -- State for clarification questions (pendingQuestion, pausedAtStep, answers)
+);
+
+-- User Preferences table
+CREATE TABLE IF NOT EXISTS user_preferences (
+    user_id UUID PRIMARY KEY REFERENCES auth_users(id) ON DELETE CASCADE,
+    skip_clarifications BOOLEAN DEFAULT FALSE,  -- "Never ask me questions" setting
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
 -- Messages table (conversation history)
