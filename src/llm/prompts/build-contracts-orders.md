@@ -244,6 +244,57 @@ When one billing charge creates multiple revenue lines:
 - "Bundle explosion applied to [charge name]"
 - "SSP percentages: License 60%, Support 30%, Training 10%"
 
+---
+
+## Requesting Clarification (Interactive Mode)
+
+You may request clarification from the user **ONLY** when ALL of these conditions are met:
+
+1. **Critical ambiguity** — The input is genuinely unclear about SSP values, allocation method, or pricing that will significantly affect revenue allocation
+2. **Multiple valid interpretations** — At least 2 plausible allocation approaches exist with materially different outcomes
+3. **Cannot be inferred** — The decision cannot be reasonably made from subscription spec, POB mapping, or standard allocation rules
+
+### When NOT to Ask
+
+**DO NOT** request clarification for:
+- Standard SSP = List Price assignments (this is the default)
+- Allocation calculations that follow the documented rules
+- Ramp deal averaging when clearly specified in input
+- Bundle explosion when component SSPs are provided
+- Minor rounding or period alignment questions
+- Anything that can be noted in `open_questions` instead of blocking progress
+
+### How to Request Clarification
+
+If you determine clarification is needed, set these fields in your output:
+
+```json
+{
+  "needs_clarification": true,
+  "clarification_question": "How should SSP be determined for the implementation services charge?",
+  "clarification_context": "The implementation fee of $10,000 has no list price equivalent. SSP affects how the $50,000 total transaction price is allocated across all lines.",
+  "clarification_options": [
+    {"id": "cost_plus", "label": "Cost-plus margin (estimated cost + 25%)", "description": "SSP = $8,000 based on estimated delivery cost"},
+    {"id": "residual", "label": "Residual approach", "description": "Allocate SSP after other observable prices"},
+    {"id": "standalone", "label": "Use contract amount as SSP", "description": "SSP = $10,000 (contract price = fair value)"}
+  ],
+  "clarification_priority": "important"
+}
+```
+
+### Clarification Guidelines
+
+- **Question**: 1-2 sentences, specific and actionable
+- **Context**: Brief explanation of why this matters for allocation
+- **Options**: 2-4 concrete choices with clear allocation implications
+- **Priority**: `critical` (blocks allocation), `important` (affects accuracy), `helpful` (nice to know)
+
+### After User Responds
+
+If the user provides a clarification answer (shown in "User Clarification" section), use that information to complete the allocation. Do NOT ask another clarification question — proceed with your best interpretation.
+
+---
+
 ### Contract Modifications
 
 **New Contract (Version 1):**

@@ -255,6 +255,55 @@ When one billing line has multiple POBs:
 
 ---
 
+## Requesting Clarification (Interactive Mode)
+
+You may request clarification from the user **ONLY** when ALL of these conditions are met:
+
+1. **Critical ambiguity** — The input is genuinely unclear about a decision that will significantly affect billing structure or revenue recognition
+2. **Multiple valid interpretations** — At least 2 plausible design approaches exist with materially different outcomes
+3. **Cannot be inferred** — The decision cannot be reasonably made from context, matched golden use cases, or industry standards
+
+### When NOT to Ask
+
+**DO NOT** request clarification for:
+- Minor details that can use standard defaults (e.g., missing billing day → default to 1st)
+- Information that is clearly stated or strongly implied in the contract intel
+- Questions where the golden use case matches provide clear guidance
+- POB selection when the template matrix gives an obvious answer
+- Charge naming conventions or formatting choices
+- Anything that can be noted in `open_questions` instead of blocking progress
+
+### How to Request Clarification
+
+If you determine clarification is needed, set these fields in your output:
+
+```json
+{
+  "needs_clarification": true,
+  "clarification_question": "Should the platform fee be modeled as a single recurring charge or split into base + usage components?",
+  "clarification_context": "The contract mentions both a 'platform fee' and 'API transactions' but doesn't specify if they're bundled or separate. This affects charge structure and POB assignment.",
+  "clarification_options": [
+    {"id": "single", "label": "Single platform fee (flat recurring)", "description": "One BK-OT-RATABLE charge covering all access"},
+    {"id": "split", "label": "Base fee + usage charge", "description": "Recurring base + EVT-PIT-CONSUMP-USAGE for API calls"},
+    {"id": "ppdd", "label": "Prepaid drawdown model", "description": "Prepayment charge + drawdown for consumption"}
+  ],
+  "clarification_priority": "critical"
+}
+```
+
+### Clarification Guidelines
+
+- **Question**: 1-2 sentences, specific and actionable
+- **Context**: Brief explanation of why this matters for subscription/POB design
+- **Options**: 2-4 concrete choices representing likely design approaches (use clear `id` values)
+- **Priority**: `critical` (blocks design), `important` (affects accuracy), `helpful` (nice to know)
+
+### After User Responds
+
+If the user provides a clarification answer (shown in "User Clarification" section), use that information to complete the design. Do NOT ask another clarification question — proceed with your best interpretation.
+
+---
+
 ## Output
 
 Return JSON with complete structure. Every charge MUST have a corresponding POB mapping.
