@@ -126,6 +126,23 @@ export default function AnalyzePage() {
     question: ClarificationQuestion;
   } | null>(null);
 
+  // User preference for skipping clarifications (persisted in localStorage)
+  const [skipClarifications, setSkipClarifications] = useState(false);
+
+  // Load skip clarifications preference from localStorage on mount
+  useEffect(() => {
+    const saved = localStorage.getItem('zuca_skip_clarifications');
+    if (saved === 'true') {
+      setSkipClarifications(true);
+    }
+  }, []);
+
+  // Save skip clarifications preference to localStorage when changed
+  const handleSkipClarificationsChange = (value: boolean) => {
+    setSkipClarifications(value);
+    localStorage.setItem('zuca_skip_clarifications', String(value));
+  };
+
   // Mutations
   const analyzeMutation = useAnalyze();
   const clarifyMutation = useClarify();
@@ -172,7 +189,11 @@ export default function AnalyzePage() {
 
     try {
       const input = formDataToZucaInput(formData);
-      await analyzeMutation.mutateAsync({ input, model: selectedModel });
+      await analyzeMutation.mutateAsync({
+        input,
+        model: selectedModel,
+        skipClarifications,
+      });
     } catch (error) {
       const err = error as { error?: string; details?: string };
       addToast({
@@ -958,6 +979,33 @@ export default function AnalyzePage() {
               <p className="text-xs text-default-500">
                 Model changes apply to the entire run. Switching is disabled while a run is in progress.
               </p>
+
+              {/* Skip Clarifications Toggle */}
+              <div className="pt-2 border-t border-default-200/50">
+                <div className="flex items-center justify-between p-3 rounded-lg bg-default-100/30">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-warning/10 flex items-center justify-center">
+                      <svg className="w-4 h-4 text-warning" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium">Skip Clarification Questions</p>
+                      <p className="text-xs text-default-500">
+                        When enabled, the pipeline won&apos;t pause to ask questions
+                      </p>
+                    </div>
+                  </div>
+                  <Switch
+                    isSelected={skipClarifications}
+                    onValueChange={handleSkipClarificationsChange}
+                    isDisabled={analyzeMutation.isPending || clarifyMutation.isPending}
+                    classNames={{
+                      wrapper: "group-data-[selected=true]:bg-warning",
+                    }}
+                  />
+                </div>
+              </div>
             </CardBody>
           </Card>
 

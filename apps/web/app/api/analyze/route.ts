@@ -35,6 +35,7 @@ export async function POST(request: NextRequest) {
     const input = (body?.input ?? body) as unknown;
     const model = body?.model as string | undefined;
     const modelResult = model ? LlmModelSchema.safeParse(model) : null;
+    const clientSkipClarifications = body?.skipClarifications as boolean | undefined;
 
     if (modelResult && !modelResult.success) {
       return NextResponse.json(
@@ -64,10 +65,14 @@ export async function POST(request: NextRequest) {
     await updateSessionStatus(session.id, 'running', 0);
 
     try {
-      // Check if user has opted out of clarification questions
-      const skipClarifications = user?.userId
-        ? await shouldSkipClarifications(user.userId)
-        : false;
+      // Check if clarifications should be skipped:
+      // 1. Client can explicitly pass skipClarifications
+      // 2. Otherwise, check user preference in database (if logged in)
+      const skipClarifications = clientSkipClarifications !== undefined
+        ? clientSkipClarifications
+        : user?.userId
+          ? await shouldSkipClarifications(user.userId)
+          : false;
 
       // Run the pipeline with interactive mode enabled (web UI)
       const pipelineResult = await runPipeline(validatedInput, {

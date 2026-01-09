@@ -1,5 +1,32 @@
 # Clarification Questions Feature - Implementation Plan
 
+## Implementation Status: COMPLETE
+
+All phases implemented as of January 2026.
+
+### Completed:
+- [x] Phase 1: Core Infrastructure (types, DB schema, migration)
+- [x] Phase 2: Orchestrator Changes (clarification pause/resume, rate limiting)
+- [x] Phase 3: Step Integration (analyze-contract with clarification support)
+- [x] Phase 4: API & UI (clarify endpoint, UI component, analyze page integration)
+- [x] Phase 5: User Preferences (skip toggle in UI, localStorage persistence)
+
+### Files Created/Modified:
+- `src/types/clarification.ts` - Clarification types and schemas
+- `src/pipeline/orchestrator.ts` - Clarification pause/resume logic
+- `src/pipeline/steps/analyze-contract.ts` - Step with clarification support
+- `src/llm/prompts/analyze-contract.md` - Prompt with clarification guidelines
+- `apps/web/app/api/sessions/[id]/clarify/route.ts` - Clarify endpoint
+- `apps/web/app/api/analyze/route.ts` - Updated for clarification handling
+- `apps/web/components/ClarificationQuestion.tsx` - UI component
+- `apps/web/hooks/useAnalyze.ts` - Hooks for clarification responses
+- `apps/web/app/(main)/analyze/page.tsx` - UI integration
+- `apps/web/lib/db.ts` - DB helpers for clarification state
+- `apps/web/lib/schema.sql` - Schema with clarification columns
+- `src/cli/index.ts` - CLI skips clarifications automatically
+
+---
+
 ## Overview
 
 Add the ability for LLM pipeline steps to pause execution and ask the user clarification questions before continuing. Questions are presented with:

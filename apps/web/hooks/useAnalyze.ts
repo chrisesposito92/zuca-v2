@@ -38,6 +38,7 @@ interface AnalyzeError {
 interface AnalyzeRequest {
   input: ZucaInput;
   model?: string;
+  skipClarifications?: boolean;
 }
 
 async function runAnalysis(payload: AnalyzeRequest): Promise<AnalyzeResponse> {
