@@ -24,6 +24,11 @@ import { formatPobTemplatesForContext } from '../../data/loader';
 import { debugLog } from '../../config';
 import { getDocContext, isIndexReady } from '../../rag';
 import { getCorrectionsContext } from '../../self-learn';
+import {
+  StepClarificationRequest,
+  transformClarificationOutput,
+  clarificationOutputJsonSchema,
+} from '../../types/clarification';
 
 /**
  * Combined output from subscription design
@@ -212,6 +217,8 @@ export function buildSubscriptionDesignJsonSchema(pobTemplates: PobTemplate[]) {
       assumptions: { type: 'array', items: { type: 'string' } },
       open_questions: { type: 'array', items: { type: 'string' } },
       mapping_notes: { type: 'array', items: { type: 'string' } },
+      // Optional clarification fields - set needs_clarification: true to request user input
+      ...clarificationOutputJsonSchema.properties,
     },
     required: ['subscription', 'rate_plans', 'usage', 'charge_pob_map', 'assumptions', 'open_questions', 'mapping_notes'],
     additionalProperties: false,
@@ -369,11 +376,20 @@ interface CombinedOutput {
   assumptions: string[];
   open_questions: string[];
   mapping_notes: string[];
+  // Optional clarification fields
+  needs_clarification?: boolean;
+  clarification_question?: string;
+  clarification_context?: string;
+  clarification_options?: Array<{ id: string; label: string; description?: string }>;
+  clarification_priority?: 'critical' | 'important' | 'helpful';
 }
 
 /**
  * Execute combined subscription design
  * Creates subscription spec AND assigns POB templates in a single LLM call
+ *
+ * May return a StepClarificationRequest if the model needs user input on
+ * a critical ambiguity (only in interactive mode, controlled by orchestrator)
  */
 export async function designSubscription(
   input: ZucaInput,
@@ -382,11 +398,14 @@ export async function designSubscription(
   contextSubs: GoldenSubscription[],
   contextRpcs: GoldenRatePlanChargesDoc[],
   pobTemplates: PobTemplate[],
+  clarificationContext?: string, // Context from user's clarification answer
   previousDesign?: SubscriptionDesignOutput,
   reasoningEffort: ReasoningEffort = 'high', // Complex design task needs thorough reasoning
   model?: LlmModel
-): Promise<SubscriptionDesignOutput> {
-  debugLog('Designing subscription (combined subscription spec + POB mapping)');
+): Promise<SubscriptionDesignOutput | StepClarificationRequest> {
+  debugLog('Designing subscription (combined subscription spec + POB mapping)', {
+    hasClarificationContext: !!clarificationContext,
+  });
 
   // Retrieve relevant documentation if RAG index is available
   // Query using use case + rev rec notes to find charge models and POB info
@@ -445,6 +464,11 @@ export async function designSubscription(
     userMessage = `Previous Results:\n${JSON.stringify(flatPrevious, null, 2)}\n\nUser Query:\n${userMessage}`;
   }
 
+  // Include clarification context if user provided an answer
+  if (clarificationContext) {
+    userMessage = `${userMessage}\n\n---\n\n## User Clarification\n${clarificationContext}`;
+  }
+
   // Build schema dynamically with valid POB identifiers
   const subscriptionDesignJsonSchema = buildSubscriptionDesignJsonSchema(pobTemplates);
 
@@ -460,6 +484,27 @@ export async function designSubscription(
 
   if (!result.structured) {
     throw new Error('Failed to design subscription: no structured output');
+  }
+
+  // Check if the model is requesting clarification
+  if (result.structured.needs_clarification) {
+    const clarificationRequest = transformClarificationOutput('design_subscription', {
+      needs_clarification: result.structured.needs_clarification,
+      clarification_question: result.structured.clarification_question,
+      clarification_context: result.structured.clarification_context,
+      clarification_options: result.structured.clarification_options,
+      clarification_priority: result.structured.clarification_priority,
+    });
+
+    if (clarificationRequest) {
+      debugLog('Subscription design requesting clarification:', {
+        question: clarificationRequest.question.question,
+        optionCount: clarificationRequest.question.options.length,
+      });
+      return clarificationRequest;
+    }
+    // If transform failed (invalid options), fall through to normal output
+    debugLog('Clarification request was invalid, proceeding with design');
   }
 
   // Split the combined result into separate outputs

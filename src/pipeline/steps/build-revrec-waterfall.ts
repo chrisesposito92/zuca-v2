@@ -14,6 +14,11 @@ import { formatContractIntelForContext } from './contract-intel';
 import { debugLog } from '../../config';
 import { getDocContext, isIndexReady } from '../../rag';
 import { getCorrectionsContext } from '../../self-learn';
+import {
+  StepClarificationRequest,
+  transformClarificationOutput,
+  clarificationOutputJsonSchema,
+} from '../../types/clarification';
 
 /**
  * JSON schema for Rev Rec Waterfall structured output
@@ -51,6 +56,8 @@ export const revRecWaterfallJsonSchema = {
     },
     assumptions: { type: 'array', items: { type: 'string' } },
     open_questions: { type: 'array', items: { type: 'string' } },
+    // Optional clarification fields - set needs_clarification: true to request user input
+    ...clarificationOutputJsonSchema.properties,
   },
   required: ['zr_revrec', 'assumptions', 'open_questions'],
   additionalProperties: false,
@@ -141,17 +148,23 @@ function buildUserMessage(
 /**
  * Execute the Build Rev Rec Waterfall step
  * Generates monthly revenue recognition schedule
+ *
+ * May return a StepClarificationRequest if the model needs user input on
+ * a critical ambiguity (only in interactive mode, controlled by orchestrator)
  */
 export async function buildRevRecWaterfall(
   contractsOrders: ContractsOrdersOutput,
   pobMapping: PobMappingOutput,
   contractIntel: ContractIntel,
   pobTemplates: PobTemplate[],
+  clarificationContext?: string, // Context from user's clarification answer
   previousOutput?: RevRecWaterfallOutput,
   reasoningEffort: ReasoningEffort = 'high', // Complex rev rec calculations need thorough reasoning
   model?: LlmModel
-): Promise<RevRecWaterfallOutput> {
-  debugLog('Building Rev Rec Waterfall');
+): Promise<RevRecWaterfallOutput | StepClarificationRequest> {
+  debugLog('Building Rev Rec Waterfall', {
+    hasClarificationContext: !!clarificationContext,
+  });
 
   // Retrieve relevant documentation if RAG index is available
   // Query focuses on revenue recognition, POB, SSP, and ratable methods
@@ -190,7 +203,18 @@ export async function buildRevRecWaterfall(
     userMessage = `Previous Results:\n${JSON.stringify(previousOutput, null, 2)}\n\nUser Query:\n${userMessage}`;
   }
 
-  const result = await complete<RevRecWaterfallOutput>({
+  // Include clarification context if user provided an answer
+  if (clarificationContext) {
+    userMessage = `${userMessage}\n\n---\n\n## User Clarification\n${clarificationContext}`;
+  }
+
+  const result = await complete<RevRecWaterfallOutput & {
+    needs_clarification?: boolean;
+    clarification_question?: string;
+    clarification_context?: string;
+    clarification_options?: Array<{ id: string; label: string; description?: string }>;
+    clarification_priority?: 'critical' | 'important' | 'helpful';
+  }>({
     systemPrompt,
     userMessage,
     responseSchema: revRecWaterfallJsonSchema,
@@ -202,6 +226,27 @@ export async function buildRevRecWaterfall(
 
   if (!result.structured) {
     throw new Error('Failed to build Rev Rec Waterfall: no structured output');
+  }
+
+  // Check if the model is requesting clarification
+  if (result.structured.needs_clarification) {
+    const clarificationRequest = transformClarificationOutput('revrec_waterfall', {
+      needs_clarification: result.structured.needs_clarification,
+      clarification_question: result.structured.clarification_question,
+      clarification_context: result.structured.clarification_context,
+      clarification_options: result.structured.clarification_options,
+      clarification_priority: result.structured.clarification_priority,
+    });
+
+    if (clarificationRequest) {
+      debugLog('Rev Rec Waterfall requesting clarification:', {
+        question: clarificationRequest.question.question,
+        optionCount: clarificationRequest.question.options.length,
+      });
+      return clarificationRequest;
+    }
+    // If transform failed (invalid options), fall through to normal output
+    debugLog('Clarification request was invalid, proceeding with build');
   }
 
   // Validate with Zod
