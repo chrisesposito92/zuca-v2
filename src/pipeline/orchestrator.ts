@@ -326,29 +326,46 @@ export async function runPipeline(
 
     // Step 1: Analyze Contract (COMBINED - replaces contract_intel + detect_capabilities)
     // Single LLM call extracts contract parameters AND detects capabilities together
+    // This step supports clarification questions in interactive mode
     if (!skipSteps.has('analyze_contract') && (!result.contract_intel || !result.detected_capabilities)) {
-      const step = await executeStep<ContractAnalysisOutput>('analyze_contract', () =>
-        analyzeContract(
-          validatedInput,
-          goldenData.capabilities,
-          goldenData.keyTerms,
-          undefined,
-          undefined,
-          selectedModel
-        )
+      const stepResult = await executeStepWithClarification<ContractAnalysisOutput>(
+        'analyze_contract',
+        (clarificationContext) =>
+          analyzeContract(
+            validatedInput,
+            goldenData.capabilities,
+            goldenData.keyTerms,
+            clarificationContext,
+            undefined, // previousAnalysis
+            'medium',
+            selectedModel
+          ),
+        options
       );
+
+      // Check if step returned a clarification request
+      if (stepResult.type === 'clarification') {
+        debugLog('Pipeline pausing for clarification at analyze_contract');
+        return {
+          status: 'awaiting_clarification',
+          question: stepResult.request.question,
+          pausedAtStep: 'analyze_contract',
+          partialResult: result,
+          sessionId,
+        };
+      }
 
       // Apply judge validation (using NESTED schema that matches ContractAnalysisOutput)
       const judgeResult = await withJudge(
         'analyze_contract',
-        step.data,
+        stepResult.data,
         contractAnalysisNestedJsonSchema,
         buildInputContext(validatedInput)
       );
 
       result.contract_intel = judgeResult.output.contractIntel;
       result.detected_capabilities = judgeResult.output.detectedCapabilities;
-      stepTimings.analyze_contract = step.durationMs + judgeResult.judgeDurationMs;
+      stepTimings.analyze_contract = stepResult.durationMs + judgeResult.judgeDurationMs;
 
       if (judgeResult.judgeApplied) {
         debugLog('Judge applied corrections to analyze_contract', judgeResult.judgeDetails);

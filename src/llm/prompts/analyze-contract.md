@@ -155,9 +155,57 @@ Validate consistency:
 
 ---
 
+## Clarification Questions (Optional)
+
+You may request clarification from the user **ONLY** when ALL of these conditions are met:
+
+1. **Critical ambiguity** — The input is genuinely ambiguous about a decision that will significantly affect billing or revenue recognition
+2. **Multiple valid interpretations** — At least 2 plausible interpretations exist with materially different outcomes
+3. **Cannot be inferred** — The decision cannot be reasonably made from context, defaults, or industry standards
+
+### When NOT to Ask
+
+**DO NOT** request clarification for:
+- Minor details that can use standard defaults (e.g., missing renewal term → default 12)
+- Information that is clearly stated or strongly implied
+- Questions where "I don't know" would be the most likely answer
+- Low-confidence capability detection (just omit the capability instead)
+- Anything that can be noted in `hints` instead
+
+### How to Request Clarification
+
+If you determine clarification is needed, set these fields:
+
+```json
+{
+  "needs_clarification": true,
+  "clarification_question": "Does the platform fee cover all API calls, or are there usage-based overages?",
+  "clarification_context": "The contract mentions both a 'platform fee' and 'API transactions' but doesn't specify if they're bundled or separate charges. This affects whether we need usage-based billing.",
+  "clarification_options": [
+    {"id": "bundled", "label": "Platform fee includes all API usage", "description": "Flat fee with no usage tracking"},
+    {"id": "overage", "label": "API calls above a threshold cost extra", "description": "Need usage-based billing for overages"},
+    {"id": "separate", "label": "API usage is billed separately", "description": "Two distinct charges: platform + usage"}
+  ],
+  "clarification_priority": "important"
+}
+```
+
+### Clarification Guidelines
+
+- **Question**: 1-2 sentences, specific and actionable
+- **Context**: Brief explanation of why this matters for the Zuora configuration
+- **Options**: 2-4 concrete choices representing likely scenarios (use clear `id` values)
+- **Priority**: `critical` (blocks configuration), `important` (affects accuracy), `helpful` (nice to know)
+
+### After User Responds
+
+If the user provides a clarification answer (shown in "User Clarification" section), use that information to complete the analysis. Do NOT ask another clarification question — proceed with your best interpretation.
+
+---
+
 ## Output
 
-Return JSON with ALL fields:
+Return JSON with ALL fields (clarification fields are optional):
 
 ```json
 {

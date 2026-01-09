@@ -21,8 +21,14 @@ import {
   Tooltip,
   addToast,
 } from "@heroui/react";
-import { useState, useRef } from "react";
-import { useAnalyze, formDataToZucaInput } from "@/hooks/useAnalyze";
+import { useState, useRef, useEffect } from "react";
+import {
+  useAnalyze,
+  useClarify,
+  formDataToZucaInput,
+  isAnalyzeClarificationResponse,
+  isClarifyClarificationResponse,
+} from "@/hooks/useAnalyze";
 import { useUCGenerator } from "@/hooks/useUCGenerator";
 import { useFunFacts } from "@/hooks/useFunFacts";
 import { useCompanyFunFacts } from "@/hooks/useCompanyFunFacts";
@@ -35,6 +41,8 @@ import {
   AlignmentType,
 } from "docx";
 import type { UCGeneratorInput, GeneratedUseCase, UCRevRecNote, CallTranscript } from "@zuca/types/uc-generator";
+import type { ClarificationQuestion, ClarificationAnswer } from "@zuca/types/clarification";
+import { ClarificationQuestionCard } from "@/components/ClarificationQuestion";
 
 const currencies = [
   { key: "USD", label: "USD - US Dollar" },
@@ -112,9 +120,35 @@ export default function AnalyzePage() {
   const [callTranscripts, setCallTranscripts] = useState<CallTranscriptUpload[]>([]);
   const [transcriptsLoading, setTranscriptsLoading] = useState(false);
 
+  // Clarification state
+  const [pendingClarification, setPendingClarification] = useState<{
+    sessionId: string;
+    question: ClarificationQuestion;
+  } | null>(null);
+
   // Mutations
   const analyzeMutation = useAnalyze();
+  const clarifyMutation = useClarify();
   const ucGeneratorMutation = useUCGenerator();
+
+  // Update clarification state when analyze or clarify mutation returns a clarification
+  useEffect(() => {
+    if (analyzeMutation.data && isAnalyzeClarificationResponse(analyzeMutation.data)) {
+      setPendingClarification({
+        sessionId: analyzeMutation.data.session_id,
+        question: analyzeMutation.data.question,
+      });
+    }
+  }, [analyzeMutation.data]);
+
+  useEffect(() => {
+    if (clarifyMutation.data && isClarifyClarificationResponse(clarifyMutation.data)) {
+      setPendingClarification({
+        sessionId: clarifyMutation.data.session_id,
+        question: clarifyMutation.data.question,
+      });
+    }
+  }, [clarifyMutation.data]);
 
   // Fun facts for loading screen - rotates every 10 seconds
   const { currentFact } = useFunFacts({ interval: 10000 });
@@ -133,6 +167,9 @@ export default function AnalyzePage() {
     const formData = new FormData(e.currentTarget);
     formData.set("is_allocations", String(isAllocations));
 
+    // Clear any previous clarification state
+    setPendingClarification(null);
+
     try {
       const input = formDataToZucaInput(formData);
       await analyzeMutation.mutateAsync({ input, model: selectedModel });
@@ -140,6 +177,26 @@ export default function AnalyzePage() {
       const err = error as { error?: string; details?: string };
       addToast({
         title: "Analysis Failed",
+        description: err.details || err.error || "An error occurred",
+        color: "danger",
+      });
+    }
+  };
+
+  const handleClarificationAnswer = async (answer: ClarificationAnswer) => {
+    if (!pendingClarification) return;
+
+    try {
+      await clarifyMutation.mutateAsync({
+        sessionId: pendingClarification.sessionId,
+        answer,
+      });
+      // Note: clarifyMutation handles navigation on completion
+      // and useEffect handles new clarification questions
+    } catch (error) {
+      const err = error as { error?: string; details?: string };
+      addToast({
+        title: "Failed to submit answer",
         description: err.details || err.error || "An error occurred",
         color: "danger",
       });
@@ -564,8 +621,26 @@ export default function AnalyzePage() {
         </Button>
       </div>
 
-      {/* Analysis in progress */}
-      {analyzeMutation.isPending && (
+      {/* Clarification Question */}
+      {pendingClarification && !clarifyMutation.isPending && (
+        <div className="animate-fade-in-up">
+          <div className="text-center mb-4">
+            <h2 className="text-xl font-semibold text-foreground">We need a bit more information</h2>
+            <p className="text-default-500 text-sm mt-1">
+              The analysis found an ambiguity that could affect the result
+            </p>
+          </div>
+          <ClarificationQuestionCard
+            question={pendingClarification.question}
+            sessionId={pendingClarification.sessionId}
+            onAnswer={handleClarificationAnswer}
+            isSubmitting={clarifyMutation.isPending}
+          />
+        </div>
+      )}
+
+      {/* Analysis in progress (initial or after clarification) */}
+      {(analyzeMutation.isPending || clarifyMutation.isPending) && (
         <Card className="glass-card-elevated border-primary/30 overflow-hidden animate-fade-in-up">
           <div className="h-1 bg-gradient-to-r from-primary via-secondary to-primary animate-pulse" />
           <CardBody className="p-6">
@@ -577,8 +652,14 @@ export default function AnalyzePage() {
                 <div className="absolute inset-0 bg-primary/20 rounded-full blur-xl" />
               </div>
               <div>
-                <h3 className="font-semibold text-lg">Running Analysis Pipeline</h3>
-                <p className="text-default-500">Processing your use case through all pipeline steps...</p>
+                <h3 className="font-semibold text-lg">
+                  {clarifyMutation.isPending ? "Resuming Analysis Pipeline" : "Running Analysis Pipeline"}
+                </h3>
+                <p className="text-default-500">
+                  {clarifyMutation.isPending
+                    ? "Continuing analysis with your answer..."
+                    : "Processing your use case through all pipeline steps..."}
+                </p>
               </div>
             </div>
             <Progress

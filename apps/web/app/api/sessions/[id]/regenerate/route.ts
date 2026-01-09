@@ -14,7 +14,7 @@ import {
   addMessage,
   updateSessionModel,
 } from '@/lib/db';
-import { runPipeline } from '@zuca/pipeline';
+import { runPipeline, isPipelineClarificationPause } from '@zuca/pipeline';
 import { runUCGenerator } from '@zuca/pipeline/uc-generator';
 import type { ZucaInput } from '@zuca/types';
 import type { UCGeneratorInput } from '@zuca/types/uc-generator';
@@ -77,11 +77,20 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
           await updateSessionInput(id, updatedInput);
         }
 
-        // Run full pipeline (no previousResult = fresh run)
+        // Run full pipeline (no previousResult = fresh run, non-interactive mode)
         const result = await runPipeline(updatedInput, {
           sessionId: id,
           model: selectedModel,
+          interactiveMode: false,
         });
+
+        // Regenerate mode shouldn't get clarification pauses since interactiveMode is false
+        if (isPipelineClarificationPause(result)) {
+          return NextResponse.json(
+            { error: 'Unexpected clarification pause in regenerate mode' },
+            { status: 500 }
+          );
+        }
 
         // Persist result
         await updateSessionResult(id, result);
