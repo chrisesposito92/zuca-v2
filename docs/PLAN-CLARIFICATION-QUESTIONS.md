@@ -150,33 +150,41 @@ export interface PipelineOptions {
   previousResult?: Partial<ZucaOutput>;
   sessionId?: string;
   model?: LlmModel;
-  // NEW
+  // NEW - Clarification support
+  interactiveMode?: boolean;  // true = web UI, false = CLI/API (default false)
   clarificationAnswers?: ClarificationAnswer[];  // Answers from user
-  maxClarificationsPerStep?: number;  // Default 1
+  skipAllClarifications?: boolean;  // User preference to never ask
 }
 
 // Modified step execution
 async function executeStepWithClarification<T>(
   stepName: string,
-  fn: () => Promise<StepResult<T>>,
+  fn: (opts?: { skipClarification?: boolean }) => Promise<StepResult<T>>,
   options: PipelineOptions
 ): Promise<{ output: T } | { clarification: StepClarificationRequest }> {
 
-  // Check if we already asked for clarification on this step
+  // Skip clarifications entirely if:
+  // - Not in interactive mode (CLI/API)
+  // - User preference is to skip all
+  const shouldSkipClarifications =
+    !options.interactiveMode ||
+    options.skipAllClarifications;
+
+  // Check if we already asked for clarification on this step (1 max)
   const alreadyAsked = options.clarificationAnswers?.some(
     a => a.questionId.startsWith(`${stepName}:`)
   );
 
-  const result = await fn();
+  // Run step with skip flag if appropriate
+  const result = await fn({
+    skipClarification: shouldSkipClarifications || alreadyAsked
+  });
 
   if (isClarificationRequest(result)) {
-    // If we already asked once on this step, use best-effort instead
-    if (alreadyAsked) {
-      debugLog(`Skipping second clarification for ${stepName}, using assumptions`);
-      // Re-run step with instruction to proceed without asking
-      return executeStepWithClarification(stepName, () =>
-        fn({ proceedWithoutClarification: true }), options
-      );
+    // If skipping clarifications, re-run with explicit skip
+    if (shouldSkipClarifications || alreadyAsked) {
+      debugLog(`Auto-skipping clarification for ${stepName}`);
+      return { output: await fn({ skipClarification: true }) as T };
     }
     return { clarification: result };
   }
@@ -457,10 +465,10 @@ The analyze page will check the API response for `status: 'awaiting_clarificatio
 15. Build `ClarificationQuestion` UI component
 16. Integrate into analyze page flow
 
-### Phase 5: Polish & Extension
-17. Add clarification to other steps as needed
-18. Add analytics/tracking for clarification usage
-19. Create skip-all option for power users
+### Phase 5: User Preferences & Polish
+17. Add user preference for "skip all clarifications" in settings
+18. Ensure CLI/API calls skip clarifications automatically
+19. Add clarification to other steps as needed (optional)
 20. Document the feature
 
 ---
@@ -485,6 +493,9 @@ A:
 ### Q: Can we make this work with streaming?
 A: Not in current architecture. Would need significant refactoring. Clarification works fine with current sync model.
 
+### Q: What about CLI and direct API usage?
+A: Non-interactive mode by default. When `interactiveMode: false` (the default), the pipeline auto-skips all clarification questions and proceeds with best-effort assumptions. These assumptions are noted in `open_questions`. Only the web UI passes `interactiveMode: true`.
+
 ---
 
 ## Files to Create/Modify
@@ -495,14 +506,15 @@ A: Not in current architecture. Would need significant refactoring. Clarificatio
 - `apps/web/components/clarification-question.tsx` - UI component
 
 ### Modified Files
-- `apps/web/lib/schema.sql` - Add clarification_state column
-- `apps/web/lib/db.ts` - Add clarification state helpers
+- `apps/web/lib/schema.sql` - Add clarification_state column + user preferences
+- `apps/web/lib/db.ts` - Add clarification state helpers + user pref helpers
 - `src/types/output.ts` - Add clarification types
-- `src/pipeline/orchestrator.ts` - Handle clarification flow
+- `src/pipeline/orchestrator.ts` - Handle clarification flow with interactiveMode
 - `src/pipeline/steps/analyze-contract.ts` - Add clarification support
 - `src/llm/prompts/analyze-contract.md` - Add clarification guidelines
-- `apps/web/app/api/analyze/route.ts` - Return clarification status
+- `apps/web/app/api/analyze/route.ts` - Pass interactiveMode=true, check user prefs
 - `apps/web/app/(main)/analyze/page.tsx` - Show clarification UI
+- `apps/web/app/(main)/settings/page.tsx` - Add "skip clarifications" toggle
 
 ---
 
@@ -527,9 +539,12 @@ A: Not in current architecture. Would need significant refactoring. Clarificatio
 
 ---
 
-## Open Questions for Discussion
+## Decisions Made
 
-1. Should we show partial results while waiting for clarification?
-2. Should power users have a "never ask me questions" setting?
-3. Should clarifications feed into the self-learning correction system?
-4. How should we handle clarifications in batch/API mode (non-interactive)?
+1. **Show partial results while waiting?** → **No.** Keep the UI simple - show the question, not partial data.
+
+2. **"Never ask me questions" setting?** → **Yes.** Add a user preference to skip all clarifications. Power users who know what they're doing can enable this.
+
+3. **Feed into self-learning corrections?** → **No (for now).** Keep clarifications separate from the correction system. May revisit later if we see patterns.
+
+4. **CLI/API mode handling?** → **Auto-skip all clarifications.** Treat any non-web-UI invocation as "never ask" mode. The pipeline proceeds with best-effort assumptions and notes them in `open_questions`.
