@@ -12,8 +12,12 @@ export {
   listSessions,
   deleteSession,
   quickAnalysis,
+  isPipelineClarificationPause,
+  createClarificationState,
   type PipelineOptions,
   type PipelineSession,
+  type PipelineResult,
+  type PipelineClarificationPause,
 } from './orchestrator';
 
 // Follow-up processing (for serverless/database-backed contexts)

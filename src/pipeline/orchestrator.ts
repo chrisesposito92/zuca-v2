@@ -16,6 +16,14 @@
 import { v4 as uuidv4 } from 'uuid';
 import { ZucaInput, validateZucaInput } from '../types/input';
 import { ZucaOutput, DetectedCapabilities, MatchGoldenUseCasesOutput } from '../types/output';
+import {
+  ClarificationAnswer,
+  ClarificationState,
+  StepClarificationRequest,
+  isClarificationRequest,
+  getClarificationAnswerForStep,
+  formatClarificationAnswerForPrompt,
+} from '../types/clarification';
 import { loadGoldenUseCasesData, GoldenSubscription, GoldenRatePlanCharge } from '../data/loader';
 import { config, debugLog } from '../config';
 import type { LlmModel } from '../types/llm';
@@ -63,6 +71,58 @@ export interface PipelineOptions {
   sessionId?: string;
   /** LLM model override */
   model?: LlmModel;
+  /** Enable interactive mode for clarification questions (web UI only) */
+  interactiveMode?: boolean;
+  /** Answers to previous clarification questions */
+  clarificationAnswers?: ClarificationAnswer[];
+  /** User preference to skip all clarifications */
+  skipAllClarifications?: boolean;
+}
+
+/**
+ * Result returned when pipeline pauses for clarification
+ */
+export interface PipelineClarificationPause {
+  status: 'awaiting_clarification';
+  question: StepClarificationRequest['question'];
+  pausedAtStep: string;
+  partialResult: Partial<ZucaOutput>;
+  sessionId: string;
+}
+
+/**
+ * Pipeline can return either completed output or a clarification pause
+ */
+export type PipelineResult = ZucaOutput | PipelineClarificationPause;
+
+/**
+ * Type guard to check if pipeline result is a clarification pause
+ */
+export function isPipelineClarificationPause(
+  result: PipelineResult
+): result is PipelineClarificationPause {
+  return (
+    typeof result === 'object' &&
+    result !== null &&
+    'status' in result &&
+    result.status === 'awaiting_clarification'
+  );
+}
+
+/**
+ * Create a ClarificationState object for DB storage from a pipeline pause
+ */
+export function createClarificationState(
+  pause: PipelineClarificationPause,
+  existingAnswers: ClarificationAnswer[] = []
+): ClarificationState {
+  return {
+    pendingQuestion: pause.question,
+    pausedAtStep: pause.pausedAtStep,
+    partialResult: pause.partialResult as Record<string, unknown>,
+    askedAt: new Date().toISOString(),
+    answers: existingAnswers,
+  };
 }
 
 /**
@@ -119,17 +179,129 @@ async function executeStep<T>(
 }
 
 /**
+ * Check if clarifications should be skipped for this pipeline run
+ */
+function shouldSkipClarifications(options: PipelineOptions): boolean {
+  // Skip if not in interactive mode (CLI/API calls)
+  if (!options.interactiveMode) return true;
+  // Skip if user preference is set
+  if (options.skipAllClarifications) return true;
+  return false;
+}
+
+/**
+ * Get clarification context string for a step (from previous user answers)
+ */
+function getClarificationContext(
+  stepName: string,
+  answers?: ClarificationAnswer[]
+): string | undefined {
+  if (!answers || answers.length === 0) return undefined;
+
+  const answer = getClarificationAnswerForStep(stepName, answers);
+  if (!answer) return undefined;
+
+  return formatClarificationAnswerForPrompt(answer);
+}
+
+/**
+ * Check if we already asked a clarification question for this step
+ */
+function hasAskedClarificationForStep(
+  stepName: string,
+  answers?: ClarificationAnswer[]
+): boolean {
+  if (!answers || answers.length === 0) return false;
+  return answers.some((a) => a.questionId.startsWith(`${stepName}:`));
+}
+
+/**
+ * Result of step execution with clarification support
+ */
+type StepWithClarificationResult<T> =
+  | { type: 'output'; data: T; durationMs: number }
+  | { type: 'clarification'; request: StepClarificationRequest };
+
+/**
+ * Execute a step that may return a clarification request
+ * Handles the logic of when to ask vs skip clarifications
+ */
+async function executeStepWithClarification<T>(
+  stepName: string,
+  fn: (clarificationContext?: string) => Promise<T | StepClarificationRequest>,
+  options: PipelineOptions
+): Promise<StepWithClarificationResult<T>> {
+  const startTime = Date.now();
+  debugLog(`Starting step with clarification support: ${stepName}`);
+
+  // Determine if we should skip clarifications
+  const skipClarifications = shouldSkipClarifications(options);
+  const alreadyAsked = hasAskedClarificationForStep(stepName, options.clarificationAnswers);
+
+  // Get any previous clarification answer context
+  const clarificationContext = getClarificationContext(stepName, options.clarificationAnswers);
+
+  try {
+    // Execute the step
+    const result = await fn(clarificationContext);
+    const durationMs = Date.now() - startTime;
+
+    // Check if step returned a clarification request
+    if (isClarificationRequest(result)) {
+      // If we should skip clarifications or already asked, re-run without asking
+      if (skipClarifications || alreadyAsked) {
+        debugLog(`Auto-skipping clarification for ${stepName} (skipClarifications=${skipClarifications}, alreadyAsked=${alreadyAsked})`);
+        // Re-run the step with a "skip" context that tells it to make assumptions
+        const skipContext = clarificationContext
+          ? `${clarificationContext}\n\nNote: Proceed with your best judgment, do not ask for clarification.`
+          : 'Note: Proceed with your best judgment, do not ask for clarification.';
+        const retryResult = await fn(skipContext);
+
+        // If it still returns a clarification, something is wrong - but continue anyway
+        if (isClarificationRequest(retryResult)) {
+          debugLog(`Step ${stepName} still requesting clarification after skip - this shouldn't happen`);
+          throw new Error(`Step ${stepName} requires clarification but clarifications are disabled`);
+        }
+
+        const retryDurationMs = Date.now() - startTime;
+        debugLog(`Completed step (skipped clarification): ${stepName} (${retryDurationMs}ms)`);
+        return { type: 'output', data: retryResult as T, durationMs: retryDurationMs };
+      }
+
+      // Return the clarification request to pause the pipeline
+      debugLog(`Step ${stepName} requesting clarification`);
+      return { type: 'clarification', request: result };
+    }
+
+    debugLog(`Completed step: ${stepName} (${durationMs}ms)`);
+    return { type: 'output', data: result as T, durationMs };
+  } catch (error) {
+    const durationMs = Date.now() - startTime;
+    debugLog(`Failed step: ${stepName} (${durationMs}ms)`, error);
+    throw error;
+  }
+}
+
+/**
  * Run the full pipeline for a new use case
+ *
+ * Returns either a completed ZucaOutput or a PipelineClarificationPause if
+ * a step requests user clarification (only in interactive mode).
  */
 export async function runPipeline(
   input: ZucaInput,
   options: PipelineOptions = {}
-): Promise<ZucaOutput> {
+): Promise<PipelineResult> {
   const sessionId = options.sessionId || uuidv4();
   const skipSteps = new Set(options.skipSteps || []);
   const selectedModel = options.model || (config.openai.model as LlmModel);
 
-  debugLog('Starting pipeline', { sessionId, customerName: input.customer_name });
+  debugLog('Starting pipeline', {
+    sessionId,
+    customerName: input.customer_name,
+    interactiveMode: options.interactiveMode ?? false,
+    hasClarificationAnswers: (options.clarificationAnswers?.length ?? 0) > 0,
+  });
 
   // Validate input
   const validatedInput = validateZucaInput(input);
@@ -422,16 +594,23 @@ export async function handleFollowUp(
       use_case_description: `${session.input.use_case_description}\n\nAdditional context: ${query}`,
     };
 
-    const updatedResult = await runPipeline(updatedInput, {
+    const pipelineResult = await runPipeline(updatedInput, {
       sessionId,
       previousResult: session.result,
       model: selectedModel,
+      // Follow-ups don't need clarification questions - they're adding context
+      interactiveMode: false,
     });
 
-    session.result = updatedResult;
+    // Handle clarification pause (shouldn't happen with interactiveMode: false)
+    if (isPipelineClarificationPause(pipelineResult)) {
+      throw new Error('Unexpected clarification request during follow-up');
+    }
+
+    session.result = pipelineResult;
     session.lastUpdatedAt = new Date();
 
-    return { type: 'updated_result', data: updatedResult };
+    return { type: 'updated_result', data: pipelineResult };
   }
 }
 
