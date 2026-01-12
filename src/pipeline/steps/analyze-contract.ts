@@ -326,6 +326,16 @@ export async function analyzeContract(
     throw new Error('Failed to analyze contract: no structured output');
   }
 
+  // Debug: Log clarification fields from LLM response to diagnose why questions aren't being asked
+  debugLog('Analyze contract - clarification fields from LLM:', {
+    needs_clarification: result.structured.needs_clarification,
+    has_question: !!result.structured.clarification_question,
+    question_preview: result.structured.clarification_question?.substring(0, 100),
+    has_options: !!result.structured.clarification_options,
+    options_count: result.structured.clarification_options?.length,
+    priority: result.structured.clarification_priority,
+  });
+
   // Check if the model is requesting clarification
   if (result.structured.needs_clarification) {
     const clarificationRequest = transformClarificationOutput('analyze_contract', {
