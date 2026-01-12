@@ -63,6 +63,30 @@ const DEFAULT_CONFIG: JudgeConfig = {
 
 let cachedConfig: JudgeConfig | null = null;
 
+function findConfigPath(): string | null {
+  const envPath = process.env.JUDGE_CONFIG_PATH;
+  if (envPath) {
+    const resolved = join(process.cwd(), envPath);
+    if (existsSync(resolved)) return resolved;
+    if (existsSync(envPath)) return envPath;
+  }
+
+  let currentDir = process.cwd();
+  const visited = new Set<string>();
+
+  while (!visited.has(currentDir)) {
+    visited.add(currentDir);
+    const candidate = join(currentDir, 'config', 'judge.yaml');
+    if (existsSync(candidate)) return candidate;
+
+    const parent = join(currentDir, '..');
+    if (parent === currentDir) break;
+    currentDir = parent;
+  }
+
+  return null;
+}
+
 /**
  * Load judge configuration from YAML file
  * Falls back to defaults if file not found or invalid
@@ -70,10 +94,10 @@ let cachedConfig: JudgeConfig | null = null;
 export function loadJudgeConfig(): JudgeConfig {
   if (cachedConfig) return cachedConfig;
 
-  const configPath = join(process.cwd(), 'config', 'judge.yaml');
+  const configPath = findConfigPath();
 
   try {
-    if (!existsSync(configPath)) {
+    if (!configPath) {
       debugLog('Judge config file not found, using defaults', { path: configPath });
       cachedConfig = DEFAULT_CONFIG;
       return cachedConfig;
