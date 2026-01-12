@@ -50,6 +50,8 @@ export type ClarificationQuestion = z.infer<typeof ClarificationQuestionSchema>;
 export const ClarificationAnswerSchema = z.object({
   questionId: z.string(),
   selectedOptionId: z.string().optional(),
+  selectedOptionLabel: z.string().optional(),
+  selectedOptionDescription: z.string().optional(),
   freeTextResponse: z.string().optional(),
   skipped: z.boolean(),
   answeredAt: z.string().optional(), // ISO timestamp
@@ -270,8 +272,18 @@ export function formatClarificationAnswerForPrompt(answer: ClarificationAnswer):
 
   const parts: string[] = [];
 
-  if (answer.selectedOptionId) {
-    parts.push(`User selected option: "${answer.selectedOptionId}"`);
+  if (answer.selectedOptionId || answer.selectedOptionLabel) {
+    const label = answer.selectedOptionLabel ?? answer.selectedOptionId;
+    const suffix =
+      answer.selectedOptionId && label && label !== answer.selectedOptionId
+        ? ` (id: "${answer.selectedOptionId}")`
+        : '';
+    if (label) {
+      parts.push(`User selected option: "${label}"${suffix}`);
+    }
+    if (answer.selectedOptionDescription) {
+      parts.push(`Option details: "${answer.selectedOptionDescription}"`);
+    }
   }
 
   if (answer.freeTextResponse) {

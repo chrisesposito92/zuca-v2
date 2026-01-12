@@ -73,14 +73,29 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       );
     }
 
-    // Add timestamp to answer
+    // Add timestamp and option context to answer (preserve meaning beyond ID)
+    const selectedOption = answer.selectedOptionId
+      ? clarificationState.pendingQuestion.options.find((opt) => opt.id === answer.selectedOptionId)
+      : undefined;
     const answeredAnswer: ClarificationAnswer = {
       ...answer,
       answeredAt: new Date().toISOString(),
+      selectedOptionLabel: selectedOption?.label,
+      selectedOptionDescription: selectedOption?.description,
     };
 
-    // Update answers list
-    const updatedAnswers = [...clarificationState.answers, answeredAnswer];
+    // Update answers list (upsert by questionId to avoid duplicates)
+    const existingAnswerIndex = clarificationState.answers.findIndex(
+      (existing) => existing.questionId === answeredAnswer.questionId
+    );
+    const updatedAnswers =
+      existingAnswerIndex === -1
+        ? [...clarificationState.answers, answeredAnswer]
+        : [
+            ...clarificationState.answers.slice(0, existingAnswerIndex),
+            answeredAnswer,
+            ...clarificationState.answers.slice(existingAnswerIndex + 1),
+          ];
 
     // Mark session as running
     await updateSessionStatus(id, 'running');
@@ -89,37 +104,59 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     const input = session.input as ZucaInput;
     const model = session.llm_model as LlmModel | undefined;
 
-    const pipelineResult = await runPipeline(input, {
-      sessionId: id,
-      previousResult: clarificationState.partialResult as Partial<ZucaOutput>,
-      model,
-      interactiveMode: true, // Still in interactive mode
-      clarificationAnswers: updatedAnswers,
-    });
+    try {
+      const pipelineResult = await runPipeline(input, {
+        sessionId: id,
+        previousResult: clarificationState.partialResult as Partial<ZucaOutput>,
+        model,
+        interactiveMode: true, // Still in interactive mode
+        clarificationAnswers: updatedAnswers,
+      });
 
-    // Check if we need another clarification (different step)
-    if (isPipelineClarificationPause(pipelineResult)) {
-      // Update clarification state with new question
-      const newState = createClarificationState(pipelineResult, updatedAnswers);
-      await updateSessionClarificationState(id, newState);
+      // Check if we need another clarification (different step)
+      if (isPipelineClarificationPause(pipelineResult)) {
+        // Update clarification state with new question
+        const newState = createClarificationState(pipelineResult, updatedAnswers);
+        await updateSessionClarificationState(id, newState);
+
+        return NextResponse.json({
+          status: 'awaiting_clarification',
+          session_id: id,
+          question: pipelineResult.question,
+          paused_at_step: pipelineResult.pausedAtStep,
+        });
+      }
+
+      // Pipeline completed - save results
+      await clearSessionClarificationState(id, 'completed');
+      await updateSessionResult(id, pipelineResult as ZucaOutput);
 
       return NextResponse.json({
-        status: 'awaiting_clarification',
+        status: 'completed',
         session_id: id,
-        question: pipelineResult.question,
-        paused_at_step: pipelineResult.pausedAtStep,
+        result: pipelineResult,
       });
+    } catch (error) {
+      console.error('Error processing clarification:', error);
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      try {
+        const restoredState: ClarificationState = {
+          ...clarificationState,
+          answers: updatedAnswers,
+        };
+        await updateSessionClarificationState(id, restoredState);
+        await updateSessionStatus(id, 'awaiting_clarification', undefined, message);
+      } catch (restoreError) {
+        console.error('Error restoring clarification state:', restoreError);
+      }
+      return NextResponse.json(
+        {
+          error: 'Failed to process clarification',
+          details: message,
+        },
+        { status: 500 }
+      );
     }
-
-    // Pipeline completed - save results
-    await clearSessionClarificationState(id, 'completed');
-    await updateSessionResult(id, pipelineResult as ZucaOutput);
-
-    return NextResponse.json({
-      status: 'completed',
-      session_id: id,
-      result: pipelineResult,
-    });
   } catch (error) {
     console.error('Error processing clarification:', error);
     return NextResponse.json(
