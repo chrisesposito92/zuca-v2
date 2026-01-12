@@ -339,7 +339,8 @@ Set these fields together:
 
 - **Question**: 1-2 sentences, specific and actionable
 - **Context**: Brief explanation of why this matters for revenue recognition timing
-- **Options**: 2-4 concrete choices with clear P&L impact
+- **Options**: 2-4 concrete choices with clear P&L impact.
+  **Do NOT** include vague options like "Other", "Provide details", or "It depends" since the user can always use the free-text response.
 - **Priority**: `critical` (blocks recognition), `important` (affects accuracy), `helpful` (nice to know)
 
 ### After User Responds

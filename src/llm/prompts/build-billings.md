@@ -259,7 +259,8 @@ Set these fields together:
 
 - **Question**: 1-2 sentences, specific and actionable
 - **Context**: Brief explanation of why this matters for billing accuracy
-- **Options**: 2-4 concrete choices with clear invoice implications
+- **Options**: 2-4 concrete choices with clear invoice implications.
+  **Do NOT** include vague options like "Other", "Provide details", or "It depends" since the user can always use the free-text response.
 - **Priority**: `critical` (blocks billing), `important` (affects accuracy), `helpful` (nice to know)
 
 ### After User Responds

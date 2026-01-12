@@ -225,7 +225,8 @@ For minimal inputs, ask about the **most critical unknown** that affects the bil
 
 - **Question**: 1-2 sentences, specific and actionable
 - **Context**: Brief explanation of why this matters for the Zuora configuration
-- **Options**: 2-4 concrete choices representing likely scenarios (use clear `id` values)
+- **Options**: 2-4 concrete choices representing likely scenarios (use clear `id` values).
+  **Do NOT** include vague options like "Other", "Provide details", or "It depends" since the user can always use the free-text response.
 - **Priority**: `critical` (blocks configuration), `important` (affects accuracy), `helpful` (nice to know)
 
 ### After User Responds

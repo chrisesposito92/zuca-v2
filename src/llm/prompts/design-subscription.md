@@ -84,25 +84,6 @@ When creating **Zuora Revenue POB Mappings**, you MUST set `charge_pob_map[*].re
 - For every `charge_pob_map` entry, assert: `recognition_window.start/end` equals the mapped charge’s `effectiveStartDate/effectiveEndDate` (ratable) or equals the PIT delivery date.
 - If any mismatch exists, fix the charge dates/segmentation or update the recognition_window so they match, and briefly note the correction in an internal reasoning step (not in the final JSON).
 
-### DS-008 Guardrail — Sell Price Accuracy (No Manufactured Pricing)
-
-Before creating any rate plans/charges, build a **Commercial Terms Ledger** from the input/contract summary:
-- For each contracted line item, capture: `chargeName`, `chargeType`, `billingPeriod`, `effectiveStart/end (if stated)`, and **explicit price(s) by period** (e.g., “$500/mo Jan–Dec”, “$0 for first 2 months then $100/mo”, “$2,000 one-time upon go-live”).
-- **Only** create charges that appear in this ledger. If a product/fee is not explicitly present (even if “common” like support/onboarding/storage), **do not add it**.
-
-**SellPrice rules (hard):**
-1) Every charge (and every segment of a segmented charge) must set `sellPrice` to an amount **explicitly stated** in the ledger for that exact time period. Never estimate, prorate, or average unless the contract explicitly states the prorated/averaged amount.
-2) **No derived discount/credit lines** unless the contract explicitly states either:
-   - a discount amount/percent, **or**
-   - a bundle/total consideration amount that differs from the sum of explicitly priced components.
-   If neither is explicitly stated, do not create a discount line; model only the explicitly priced items.
-3) If the contract provides **only a bundle total** (no component prices), model **one bundle charge** with `sellPrice = bundle total` for the applicable period. Do not split into components with invented sell prices.
-4) If a componentized model is required for allocation and the contract provides a **bundle total plus component list/SSP**, keep components at their stated list/SSP and add **one** discount line to reconcile to the explicit bundle total.
-
-**Output validation (must pass):**
-- Provide a short `SellPrice Audit` table listing each charge/segment with: `sellPrice`, `ledger source`, and (if a bundle total exists) `sum(charges) = stated total`.
-- If any required price is missing from inputs, output `NEEDS_CLARIFICATION` for that charge instead of inventing a number.
-
 ### Charge Fields Required
 
 | Field | Recurring | OneTime | Usage |
@@ -303,7 +284,8 @@ Set these fields together:
 
 - **Question**: 1-2 sentences, specific and actionable
 - **Context**: Brief explanation of why this matters for subscription/POB design
-- **Options**: 2-4 concrete choices representing likely design approaches (use clear `id` values)
+- **Options**: 2-4 concrete choices representing likely design approaches (use clear `id` values).
+  **Do NOT** include vague options like "Other", "Provide details", or "It depends" since the user can always use the free-text response.
 - **Priority**: `critical` (blocks design), `important` (affects accuracy), `helpful` (nice to know)
 
 ### After User Responds
@@ -416,4 +398,3 @@ Return JSON with complete structure. Every charge MUST have a corresponding POB 
 - Bundle Explosion: https://docs.zuora.com/en/zuora-revenue/advanced-revenue-operations/bundle-explosion
 - POB Templates: https://docs.zuora.com/en/zuora-revenue/getting-started/policy-management/performance-obligations-processing/create-pob-template
 - POB Ratable Methods: https://docs.zuora.com/en/zuora-revenue/getting-started/policy-management/performance-obligations-processing/predefined-pob-ratable-methods
-
