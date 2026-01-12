@@ -16,6 +16,14 @@
 import { v4 as uuidv4 } from 'uuid';
 import { ZucaInput, validateZucaInput } from '../types/input';
 import { ZucaOutput, DetectedCapabilities, MatchGoldenUseCasesOutput } from '../types/output';
+import {
+  ClarificationAnswer,
+  ClarificationState,
+  StepClarificationRequest,
+  isClarificationRequest,
+  getClarificationAnswerForStep,
+  formatClarificationAnswerForPrompt,
+} from '../types/clarification';
 import { loadGoldenUseCasesData, GoldenSubscription, GoldenRatePlanCharge } from '../data/loader';
 import { config, debugLog } from '../config';
 import type { LlmModel } from '../types/llm';
@@ -63,6 +71,58 @@ export interface PipelineOptions {
   sessionId?: string;
   /** LLM model override */
   model?: LlmModel;
+  /** Enable interactive mode for clarification questions (web UI only) */
+  interactiveMode?: boolean;
+  /** Answers to previous clarification questions */
+  clarificationAnswers?: ClarificationAnswer[];
+  /** User preference to skip all clarifications */
+  skipAllClarifications?: boolean;
+}
+
+/**
+ * Result returned when pipeline pauses for clarification
+ */
+export interface PipelineClarificationPause {
+  status: 'awaiting_clarification';
+  question: StepClarificationRequest['question'];
+  pausedAtStep: string;
+  partialResult: Partial<ZucaOutput>;
+  sessionId: string;
+}
+
+/**
+ * Pipeline can return either completed output or a clarification pause
+ */
+export type PipelineResult = ZucaOutput | PipelineClarificationPause;
+
+/**
+ * Type guard to check if pipeline result is a clarification pause
+ */
+export function isPipelineClarificationPause(
+  result: PipelineResult
+): result is PipelineClarificationPause {
+  return (
+    typeof result === 'object' &&
+    result !== null &&
+    'status' in result &&
+    result.status === 'awaiting_clarification'
+  );
+}
+
+/**
+ * Create a ClarificationState object for DB storage from a pipeline pause
+ */
+export function createClarificationState(
+  pause: PipelineClarificationPause,
+  existingAnswers: ClarificationAnswer[] = []
+): ClarificationState {
+  return {
+    pendingQuestion: pause.question,
+    pausedAtStep: pause.pausedAtStep,
+    partialResult: pause.partialResult as Record<string, unknown>,
+    askedAt: new Date().toISOString(),
+    answers: existingAnswers,
+  };
 }
 
 /**
@@ -119,17 +179,129 @@ async function executeStep<T>(
 }
 
 /**
+ * Check if clarifications should be skipped for this pipeline run
+ */
+function shouldSkipClarifications(options: PipelineOptions): boolean {
+  // Skip if not in interactive mode (CLI/API calls)
+  if (!options.interactiveMode) return true;
+  // Skip if user preference is set
+  if (options.skipAllClarifications) return true;
+  return false;
+}
+
+/**
+ * Get clarification context string for a step (from previous user answers)
+ */
+function getClarificationContext(
+  stepName: string,
+  answers?: ClarificationAnswer[]
+): string | undefined {
+  if (!answers || answers.length === 0) return undefined;
+
+  const answer = getClarificationAnswerForStep(stepName, answers);
+  if (!answer) return undefined;
+
+  return formatClarificationAnswerForPrompt(answer);
+}
+
+/**
+ * Check if we already asked a clarification question for this step
+ */
+function hasAskedClarificationForStep(
+  stepName: string,
+  answers?: ClarificationAnswer[]
+): boolean {
+  if (!answers || answers.length === 0) return false;
+  return answers.some((a) => a.questionId.startsWith(`${stepName}:`));
+}
+
+/**
+ * Result of step execution with clarification support
+ */
+type StepWithClarificationResult<T> =
+  | { type: 'output'; data: T; durationMs: number }
+  | { type: 'clarification'; request: StepClarificationRequest };
+
+/**
+ * Execute a step that may return a clarification request
+ * Handles the logic of when to ask vs skip clarifications
+ */
+async function executeStepWithClarification<T>(
+  stepName: string,
+  fn: (clarificationContext?: string) => Promise<T | StepClarificationRequest>,
+  options: PipelineOptions
+): Promise<StepWithClarificationResult<T>> {
+  const startTime = Date.now();
+  debugLog(`Starting step with clarification support: ${stepName}`);
+
+  // Determine if we should skip clarifications
+  const skipClarifications = shouldSkipClarifications(options);
+  const alreadyAsked = hasAskedClarificationForStep(stepName, options.clarificationAnswers);
+
+  // Get any previous clarification answer context
+  const clarificationContext = getClarificationContext(stepName, options.clarificationAnswers);
+
+  try {
+    // Execute the step
+    const result = await fn(clarificationContext);
+    const durationMs = Date.now() - startTime;
+
+    // Check if step returned a clarification request
+    if (isClarificationRequest(result)) {
+      // If we should skip clarifications or already asked, re-run without asking
+      if (skipClarifications || alreadyAsked) {
+        debugLog(`Auto-skipping clarification for ${stepName} (skipClarifications=${skipClarifications}, alreadyAsked=${alreadyAsked})`);
+        // Re-run the step with a "skip" context that tells it to make assumptions
+        const skipContext = clarificationContext
+          ? `${clarificationContext}\n\nNote: Proceed with your best judgment, do not ask for clarification.`
+          : 'Note: Proceed with your best judgment, do not ask for clarification.';
+        const retryResult = await fn(skipContext);
+
+        // If it still returns a clarification, something is wrong - but continue anyway
+        if (isClarificationRequest(retryResult)) {
+          debugLog(`Step ${stepName} still requesting clarification after skip - this shouldn't happen`);
+          throw new Error(`Step ${stepName} requires clarification but clarifications are disabled`);
+        }
+
+        const retryDurationMs = Date.now() - startTime;
+        debugLog(`Completed step (skipped clarification): ${stepName} (${retryDurationMs}ms)`);
+        return { type: 'output', data: retryResult as T, durationMs: retryDurationMs };
+      }
+
+      // Return the clarification request to pause the pipeline
+      debugLog(`Step ${stepName} requesting clarification`);
+      return { type: 'clarification', request: result };
+    }
+
+    debugLog(`Completed step: ${stepName} (${durationMs}ms)`);
+    return { type: 'output', data: result as T, durationMs };
+  } catch (error) {
+    const durationMs = Date.now() - startTime;
+    debugLog(`Failed step: ${stepName} (${durationMs}ms)`, error);
+    throw error;
+  }
+}
+
+/**
  * Run the full pipeline for a new use case
+ *
+ * Returns either a completed ZucaOutput or a PipelineClarificationPause if
+ * a step requests user clarification (only in interactive mode).
  */
 export async function runPipeline(
   input: ZucaInput,
   options: PipelineOptions = {}
-): Promise<ZucaOutput> {
+): Promise<PipelineResult> {
   const sessionId = options.sessionId || uuidv4();
   const skipSteps = new Set(options.skipSteps || []);
   const selectedModel = options.model || (config.openai.model as LlmModel);
 
-  debugLog('Starting pipeline', { sessionId, customerName: input.customer_name });
+  debugLog('Starting pipeline', {
+    sessionId,
+    customerName: input.customer_name,
+    interactiveMode: options.interactiveMode ?? false,
+    hasClarificationAnswers: (options.clarificationAnswers?.length ?? 0) > 0,
+  });
 
   // Validate input
   const validatedInput = validateZucaInput(input);
@@ -154,29 +326,46 @@ export async function runPipeline(
 
     // Step 1: Analyze Contract (COMBINED - replaces contract_intel + detect_capabilities)
     // Single LLM call extracts contract parameters AND detects capabilities together
+    // This step supports clarification questions in interactive mode
     if (!skipSteps.has('analyze_contract') && (!result.contract_intel || !result.detected_capabilities)) {
-      const step = await executeStep<ContractAnalysisOutput>('analyze_contract', () =>
-        analyzeContract(
-          validatedInput,
-          goldenData.capabilities,
-          goldenData.keyTerms,
-          undefined,
-          undefined,
-          selectedModel
-        )
+      const stepResult = await executeStepWithClarification<ContractAnalysisOutput>(
+        'analyze_contract',
+        (clarificationContext) =>
+          analyzeContract(
+            validatedInput,
+            goldenData.capabilities,
+            goldenData.keyTerms,
+            clarificationContext,
+            undefined, // previousAnalysis
+            'medium',
+            selectedModel
+          ),
+        options
       );
+
+      // Check if step returned a clarification request
+      if (stepResult.type === 'clarification') {
+        debugLog('Pipeline pausing for clarification at analyze_contract');
+        return {
+          status: 'awaiting_clarification',
+          question: stepResult.request.question,
+          pausedAtStep: 'analyze_contract',
+          partialResult: result,
+          sessionId,
+        };
+      }
 
       // Apply judge validation (using NESTED schema that matches ContractAnalysisOutput)
       const judgeResult = await withJudge(
         'analyze_contract',
-        step.data,
+        stepResult.data,
         contractAnalysisNestedJsonSchema,
         buildInputContext(validatedInput)
       );
 
       result.contract_intel = judgeResult.output.contractIntel;
       result.detected_capabilities = judgeResult.output.detectedCapabilities;
-      stepTimings.analyze_contract = step.durationMs + judgeResult.judgeDurationMs;
+      stepTimings.analyze_contract = stepResult.durationMs + judgeResult.judgeDurationMs;
 
       if (judgeResult.judgeApplied) {
         debugLog('Judge applied corrections to analyze_contract', judgeResult.judgeDetails);
@@ -203,130 +392,289 @@ export async function runPipeline(
 
     // Step 3: Design Subscription (COMBINED - replaces subscription_spec + pob_mapping)
     // Single LLM call creates subscription AND assigns POB templates together
+    // This step supports clarification questions in interactive mode
     if (!skipSteps.has('design_subscription') && (!result.subscription_spec || !result.pob_mapping)) {
-      const step = await executeStep<SubscriptionDesignOutput>('design_subscription', () =>
-        designSubscription(
-          validatedInput,
-          result.contract_intel!,
-          result.matched_golden_use_cases!,
-          contextSubs,
-          contextRpcs,
-          goldenData.pobTemplates,
-          undefined,
-          undefined,
-          selectedModel
-        )
+      const stepResult = await executeStepWithClarification<SubscriptionDesignOutput>(
+        'design_subscription',
+        (clarificationContext) =>
+          designSubscription(
+            validatedInput,
+            result.contract_intel!,
+            result.matched_golden_use_cases!,
+            contextSubs,
+            contextRpcs,
+            goldenData.pobTemplates,
+            clarificationContext,
+            undefined, // previousDesign
+            'high',
+            selectedModel
+          ),
+        options
       );
+
+      // Check if step returned a clarification request
+      if (stepResult.type === 'clarification') {
+        debugLog('Pipeline pausing for clarification at design_subscription');
+        return {
+          status: 'awaiting_clarification',
+          question: stepResult.request.question,
+          pausedAtStep: 'design_subscription',
+          partialResult: result,
+          sessionId,
+        };
+      }
 
       // Build dynamic NESTED schema with POB templates for judge validation
       const designNestedSchema = buildSubscriptionDesignNestedJsonSchema(goldenData.pobTemplates);
       const judgeResult = await withJudge(
         'design_subscription',
-        step.data,
+        stepResult.data,
         designNestedSchema,
         buildInputContext(validatedInput, `Contract: ${result.contract_intel?.term_months} months, Start: ${result.contract_intel?.service_start_mdy}`)
       );
 
       result.subscription_spec = judgeResult.output.subscriptionSpec;
       result.pob_mapping = judgeResult.output.pobMapping;
-      stepTimings.design_subscription = step.durationMs + judgeResult.judgeDurationMs;
+      stepTimings.design_subscription = stepResult.durationMs + judgeResult.judgeDurationMs;
 
       if (judgeResult.judgeApplied) {
         debugLog('Judge applied corrections to design_subscription', judgeResult.judgeDetails);
       }
     }
 
-    // Step 4: Build Contracts/Orders AND Billings (PARALLEL)
-    // These steps don't depend on each other, so run them simultaneously
-    const parallelSteps: Promise<void>[] = [];
+    // Step 4: Build Contracts/Orders AND Billings
+    // In interactive mode, run sequentially to support clarification pauses
+    // Otherwise, run in parallel for performance
+    const runContractsOrders = !skipSteps.has('contracts_orders') && !result.contracts_orders;
+    const runBillings = !skipSteps.has('billings') && !result.billings;
 
-    if (!skipSteps.has('contracts_orders') && !result.contracts_orders) {
-      parallelSteps.push(
-        executeStep('contracts_orders', () =>
-          buildContractsOrders(
-            validatedInput,
-            result.subscription_spec!,
-            result.pob_mapping!,
-            result.contract_intel!,
-            undefined,
-            undefined,
-            selectedModel
-          )
-        ).then(async (step) => {
-          // Apply judge validation
-          const judgeResult = await withJudge(
-            'contracts_orders',
-            step.data,
-            contractsOrdersJsonSchema,
-            buildInputContext(validatedInput, `Subscription: ${result.subscription_spec?.rate_plans?.length || 0} rate plans`)
-          );
-          result.contracts_orders = judgeResult.output;
-          stepTimings.contracts_orders = step.durationMs + judgeResult.judgeDurationMs;
-          if (judgeResult.judgeApplied) {
-            debugLog('Judge applied corrections to contracts_orders', judgeResult.judgeDetails);
-          }
-        })
-      );
-    }
+    if (options.interactiveMode && !shouldSkipClarifications(options)) {
+      // Sequential execution with clarification support
+      if (runContractsOrders) {
+        const stepResult = await executeStepWithClarification(
+          'contracts_orders',
+          (clarificationContext) =>
+            buildContractsOrders(
+              validatedInput,
+              result.subscription_spec!,
+              result.pob_mapping!,
+              result.contract_intel!,
+              clarificationContext,
+              undefined, // previousOutput
+              'high',
+              selectedModel
+            ),
+          options
+        );
 
-    if (!skipSteps.has('billings') && !result.billings) {
-      parallelSteps.push(
-        executeStep('billings', () =>
-          buildBillings(
-            validatedInput,
-            result.subscription_spec!,
-            result.contract_intel!,
-            undefined,
-            undefined,
-            selectedModel
-          )
-        ).then(async (step) => {
-          // Apply judge validation
-          const judgeResult = await withJudge(
-            'billings',
-            step.data,
-            billingsJsonSchema,
-            buildInputContext(validatedInput, `Billing period: ${result.contract_intel?.billing_period}`)
-          );
-          result.billings = judgeResult.output;
-          stepTimings.billings = step.durationMs + judgeResult.judgeDurationMs;
-          if (judgeResult.judgeApplied) {
-            debugLog('Judge applied corrections to billings', judgeResult.judgeDetails);
-          }
-        })
-      );
-    }
+        if (stepResult.type === 'clarification') {
+          debugLog('Pipeline pausing for clarification at contracts_orders');
+          return {
+            status: 'awaiting_clarification',
+            question: stepResult.request.question,
+            pausedAtStep: 'contracts_orders',
+            partialResult: result,
+            sessionId,
+          };
+        }
 
-    // Wait for parallel steps to complete
-    if (parallelSteps.length > 0) {
-      debugLog('Running contracts_orders and billings in PARALLEL');
-      await Promise.all(parallelSteps);
+        const judgeResult = await withJudge(
+          'contracts_orders',
+          stepResult.data,
+          contractsOrdersJsonSchema,
+          buildInputContext(validatedInput, `Subscription: ${result.subscription_spec?.rate_plans?.length || 0} rate plans`)
+        );
+        result.contracts_orders = judgeResult.output;
+        stepTimings.contracts_orders = stepResult.durationMs + judgeResult.judgeDurationMs;
+        if (judgeResult.judgeApplied) {
+          debugLog('Judge applied corrections to contracts_orders', judgeResult.judgeDetails);
+        }
+      }
+
+      if (runBillings) {
+        const stepResult = await executeStepWithClarification(
+          'billings',
+          (clarificationContext) =>
+            buildBillings(
+              validatedInput,
+              result.subscription_spec!,
+              result.contract_intel!,
+              clarificationContext,
+              undefined, // previousOutput
+              'medium',
+              selectedModel
+            ),
+          options
+        );
+
+        if (stepResult.type === 'clarification') {
+          debugLog('Pipeline pausing for clarification at billings');
+          return {
+            status: 'awaiting_clarification',
+            question: stepResult.request.question,
+            pausedAtStep: 'billings',
+            partialResult: result,
+            sessionId,
+          };
+        }
+
+        const judgeResult = await withJudge(
+          'billings',
+          stepResult.data,
+          billingsJsonSchema,
+          buildInputContext(validatedInput, `Billing period: ${result.contract_intel?.billing_period}`)
+        );
+        result.billings = judgeResult.output;
+        stepTimings.billings = stepResult.durationMs + judgeResult.judgeDurationMs;
+        if (judgeResult.judgeApplied) {
+          debugLog('Judge applied corrections to billings', judgeResult.judgeDetails);
+        }
+      }
+    } else {
+      // Parallel execution (non-interactive mode or clarifications skipped)
+      const parallelSteps: Promise<void>[] = [];
+
+      if (runContractsOrders) {
+        parallelSteps.push(
+          executeStep('contracts_orders', async () => {
+            const stepOutput = await buildContractsOrders(
+              validatedInput,
+              result.subscription_spec!,
+              result.pob_mapping!,
+              result.contract_intel!,
+              undefined, // clarificationContext
+              undefined, // previousOutput
+              'high',
+              selectedModel
+            );
+            // In non-interactive mode, if we get a clarification request, skip it
+            if (isClarificationRequest(stepOutput)) {
+              debugLog('contracts_orders requested clarification in non-interactive mode, re-running with skip context');
+              const retryOutput = await buildContractsOrders(
+                validatedInput,
+                result.subscription_spec!,
+                result.pob_mapping!,
+                result.contract_intel!,
+                'Note: Proceed with your best judgment, do not ask for clarification.',
+                undefined,
+                'high',
+                selectedModel
+              );
+              if (isClarificationRequest(retryOutput)) {
+                throw new Error('contracts_orders step requires clarification but clarifications are disabled');
+              }
+              return retryOutput;
+            }
+            return stepOutput;
+          }).then(async (step) => {
+            const judgeResult = await withJudge(
+              'contracts_orders',
+              step.data,
+              contractsOrdersJsonSchema,
+              buildInputContext(validatedInput, `Subscription: ${result.subscription_spec?.rate_plans?.length || 0} rate plans`)
+            );
+            result.contracts_orders = judgeResult.output;
+            stepTimings.contracts_orders = step.durationMs + judgeResult.judgeDurationMs;
+            if (judgeResult.judgeApplied) {
+              debugLog('Judge applied corrections to contracts_orders', judgeResult.judgeDetails);
+            }
+          })
+        );
+      }
+
+      if (runBillings) {
+        parallelSteps.push(
+          executeStep('billings', async () => {
+            const stepOutput = await buildBillings(
+              validatedInput,
+              result.subscription_spec!,
+              result.contract_intel!,
+              undefined, // clarificationContext
+              undefined, // previousOutput
+              'medium',
+              selectedModel
+            );
+            // In non-interactive mode, if we get a clarification request, skip it
+            if (isClarificationRequest(stepOutput)) {
+              debugLog('billings requested clarification in non-interactive mode, re-running with skip context');
+              const retryOutput = await buildBillings(
+                validatedInput,
+                result.subscription_spec!,
+                result.contract_intel!,
+                'Note: Proceed with your best judgment, do not ask for clarification.',
+                undefined,
+                'medium',
+                selectedModel
+              );
+              if (isClarificationRequest(retryOutput)) {
+                throw new Error('billings step requires clarification but clarifications are disabled');
+              }
+              return retryOutput;
+            }
+            return stepOutput;
+          }).then(async (step) => {
+            const judgeResult = await withJudge(
+              'billings',
+              step.data,
+              billingsJsonSchema,
+              buildInputContext(validatedInput, `Billing period: ${result.contract_intel?.billing_period}`)
+            );
+            result.billings = judgeResult.output;
+            stepTimings.billings = step.durationMs + judgeResult.judgeDurationMs;
+            if (judgeResult.judgeApplied) {
+              debugLog('Judge applied corrections to billings', judgeResult.judgeDetails);
+            }
+          })
+        );
+      }
+
+      if (parallelSteps.length > 0) {
+        debugLog('Running contracts_orders and billings in PARALLEL');
+        await Promise.all(parallelSteps);
+      }
     }
 
     // Step 5: Build Rev Rec Waterfall (depends on contracts_orders)
+    // This step supports clarification questions in interactive mode
     if (!skipSteps.has('revrec_waterfall') && !result.revrec_waterfall) {
-      const step = await executeStep('revrec_waterfall', () =>
-        buildRevRecWaterfall(
-          result.contracts_orders!,
-          result.pob_mapping!,
-          result.contract_intel!,
-          goldenData.pobTemplates,
-          undefined,
-          undefined,
-          selectedModel
-        )
+      const stepResult = await executeStepWithClarification(
+        'revrec_waterfall',
+        (clarificationContext) =>
+          buildRevRecWaterfall(
+            result.contracts_orders!,
+            result.pob_mapping!,
+            result.contract_intel!,
+            goldenData.pobTemplates,
+            clarificationContext,
+            undefined, // previousOutput
+            'high',
+            selectedModel
+          ),
+        options
       );
+
+      // Check if step returned a clarification request
+      if (stepResult.type === 'clarification') {
+        debugLog('Pipeline pausing for clarification at revrec_waterfall');
+        return {
+          status: 'awaiting_clarification',
+          question: stepResult.request.question,
+          pausedAtStep: 'revrec_waterfall',
+          partialResult: result,
+          sessionId,
+        };
+      }
 
       // Apply judge validation
       const judgeResult = await withJudge(
         'revrec_waterfall',
-        step.data,
+        stepResult.data,
         revRecWaterfallJsonSchema,
         buildInputContext(validatedInput, `Orders: ${result.contracts_orders?.zr_contracts_orders?.length || 0} line items`)
       );
 
       result.revrec_waterfall = judgeResult.output;
-      stepTimings.revrec_waterfall = step.durationMs + judgeResult.judgeDurationMs;
+      stepTimings.revrec_waterfall = stepResult.durationMs + judgeResult.judgeDurationMs;
 
       if (judgeResult.judgeApplied) {
         debugLog('Judge applied corrections to revrec_waterfall', judgeResult.judgeDetails);
@@ -422,16 +770,23 @@ export async function handleFollowUp(
       use_case_description: `${session.input.use_case_description}\n\nAdditional context: ${query}`,
     };
 
-    const updatedResult = await runPipeline(updatedInput, {
+    const pipelineResult = await runPipeline(updatedInput, {
       sessionId,
       previousResult: session.result,
       model: selectedModel,
+      // Follow-ups don't need clarification questions - they're adding context
+      interactiveMode: false,
     });
 
-    session.result = updatedResult;
+    // Handle clarification pause (shouldn't happen with interactiveMode: false)
+    if (isPipelineClarificationPause(pipelineResult)) {
+      throw new Error('Unexpected clarification request during follow-up');
+    }
+
+    session.result = pipelineResult;
     session.lastUpdatedAt = new Date();
 
-    return { type: 'updated_result', data: updatedResult };
+    return { type: 'updated_result', data: pipelineResult };
   }
 }
 

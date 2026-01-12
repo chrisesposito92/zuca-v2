@@ -155,9 +155,89 @@ Validate consistency:
 
 ---
 
+## Clarification Questions (Interactive Mode)
+
+You may request clarification from the user **ONLY** when ALL of these conditions are met:
+
+1. **Critical ambiguity** — The input is genuinely ambiguous about a decision that will significantly affect billing or revenue recognition
+2. **Multiple valid interpretations** — At least 2 plausible interpretations exist with materially different outcomes
+3. **Cannot be inferred** — The decision cannot be reasonably made from context, defaults, or industry standards
+
+### IMPORTANT: Minimal or Vague Inputs
+
+**When the input is extremely brief or lacks core commercial details**, you SHOULD ask for clarification. Examples of inputs that warrant clarification:
+
+- Just a few words like "Min Commit", "SaaS subscription", "Usage billing"
+- Missing pricing information (no amounts, no rates)
+- Missing term/duration information
+- Unclear charge model (can't tell if it's flat fee, usage-based, prepaid, etc.)
+- Unclear what the customer is actually buying
+
+For minimal inputs, ask about the **most critical unknown** that affects the billing/revenue model:
+- "What is the structure of the minimum commitment?" (flat annual fee vs usage with floor vs prepaid credits)
+- "What is the pricing model?" (per-seat, per-usage, flat subscription, tiered)
+- "What is being delivered?" (software license, platform access, professional services, API calls)
+
+**Do NOT just silently apply defaults when the input is too vague to understand the commercial intent.**
+
+### When NOT to Ask
+
+**DO NOT** request clarification for:
+- Minor details that can use standard defaults **when the core model is clear**
+- Information that is clearly stated or strongly implied
+- Questions where "I don't know" would be the most likely answer
+- Low-confidence capability detection (just omit the capability instead)
+- Anything that can be noted in `hints` instead
+
+### How to Request Clarification
+
+**CRITICAL OUTPUT REQUIREMENT**: You MUST always output ALL clarification fields in your response.
+
+**When you DO need clarification** (set `needs_clarification: true`):
+```json
+{
+  "needs_clarification": true,
+  "clarification_question": "Does the platform fee cover all API calls?",
+  "clarification_options": [
+    {"id": "bundled", "label": "Platform fee includes all API usage"},
+    {"id": "overage", "label": "API calls above threshold cost extra"},
+    {"id": "separate", "label": "API usage is billed separately"}
+  ],
+  "clarification_context": "Contract mentions both 'platform fee' and 'API transactions'...",
+  "clarification_priority": "important"
+}
+```
+
+**When you DON'T need clarification** (set `needs_clarification: false`):
+```json
+{
+  "needs_clarification": false,
+  "clarification_question": null,
+  "clarification_options": null,
+  "clarification_context": null,
+  "clarification_priority": null
+}
+```
+
+**NEVER omit these fields.** Always include them with either real values or null.
+
+### Clarification Guidelines
+
+- **Question**: 1-2 sentences, specific and actionable
+- **Context**: Brief explanation of why this matters for the Zuora configuration
+- **Options**: 2-4 concrete choices representing likely scenarios (use clear `id` values).
+  **Do NOT** include vague options like "Other", "Provide details", or "It depends" since the user can always use the free-text response.
+- **Priority**: `critical` (blocks configuration), `important` (affects accuracy), `helpful` (nice to know)
+
+### After User Responds
+
+If the user provides a clarification answer (shown in "User Clarification" section), use that information to complete the analysis. Do NOT ask another clarification question — proceed with your best interpretation.
+
+---
+
 ## Output
 
-Return JSON with ALL fields:
+Return JSON with ALL fields (clarification fields are REQUIRED, use null when not needed):
 
 ```json
 {
@@ -173,7 +253,12 @@ Return JSON with ALL fields:
   "billing_caps": ["RECURRING", "PRORATION"],
   "revenue_caps": ["ALLOCATION"],
   "hints": ["annual subscription → RECURRING", "SSP mentioned → ALLOCATION"],
-  "confidence": 0.85
+  "confidence": 0.85,
+  "needs_clarification": false,
+  "clarification_question": null,
+  "clarification_options": null,
+  "clarification_context": null,
+  "clarification_priority": null
 }
 ```
 

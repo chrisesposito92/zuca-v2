@@ -21,8 +21,14 @@ import {
   Tooltip,
   addToast,
 } from "@heroui/react";
-import { useState, useRef } from "react";
-import { useAnalyze, formDataToZucaInput } from "@/hooks/useAnalyze";
+import { useState, useRef, useEffect } from "react";
+import {
+  useAnalyze,
+  useClarify,
+  formDataToZucaInput,
+  isAnalyzeClarificationResponse,
+  isClarifyClarificationResponse,
+} from "@/hooks/useAnalyze";
 import { useUCGenerator } from "@/hooks/useUCGenerator";
 import { useFunFacts } from "@/hooks/useFunFacts";
 import { useCompanyFunFacts } from "@/hooks/useCompanyFunFacts";
@@ -35,6 +41,8 @@ import {
   AlignmentType,
 } from "docx";
 import type { UCGeneratorInput, GeneratedUseCase, UCRevRecNote, CallTranscript } from "@zuca/types/uc-generator";
+import type { ClarificationQuestion, ClarificationAnswer } from "@zuca/types/clarification";
+import { ClarificationQuestionCard } from "@/components/ClarificationQuestion";
 
 const currencies = [
   { key: "USD", label: "USD - US Dollar" },
@@ -112,9 +120,54 @@ export default function AnalyzePage() {
   const [callTranscripts, setCallTranscripts] = useState<CallTranscriptUpload[]>([]);
   const [transcriptsLoading, setTranscriptsLoading] = useState(false);
 
+  // Clarification state
+  const [pendingClarification, setPendingClarification] = useState<{
+    sessionId: string;
+    question: ClarificationQuestion;
+  } | null>(null);
+
+  // User preference for skipping clarifications (persisted in localStorage)
+  const [skipClarifications, setSkipClarifications] = useState(false);
+
+  // Load skip clarifications preference from localStorage on mount
+  useEffect(() => {
+    const saved = localStorage.getItem('zuca_skip_clarifications');
+    if (saved === 'true') {
+      setSkipClarifications(true);
+    }
+  }, []);
+
+  // Save skip clarifications preference to localStorage when changed
+  const handleSkipClarificationsChange = (value: boolean) => {
+    setSkipClarifications(value);
+    localStorage.setItem('zuca_skip_clarifications', String(value));
+  };
+
   // Mutations
   const analyzeMutation = useAnalyze();
+  const clarifyMutation = useClarify();
   const ucGeneratorMutation = useUCGenerator();
+  const pipelineLocked =
+    analyzeMutation.isPending || clarifyMutation.isPending || pendingClarification !== null;
+
+  // Update clarification state when analyze or clarify mutation returns a clarification
+  useEffect(() => {
+    if (analyzeMutation.data && isAnalyzeClarificationResponse(analyzeMutation.data)) {
+      setPendingClarification({
+        sessionId: analyzeMutation.data.session_id,
+        question: analyzeMutation.data.question,
+      });
+    }
+  }, [analyzeMutation.data]);
+
+  useEffect(() => {
+    if (clarifyMutation.data && isClarifyClarificationResponse(clarifyMutation.data)) {
+      setPendingClarification({
+        sessionId: clarifyMutation.data.session_id,
+        question: clarifyMutation.data.question,
+      });
+    }
+  }, [clarifyMutation.data]);
 
   // Fun facts for loading screen - rotates every 10 seconds
   const { currentFact } = useFunFacts({ interval: 10000 });
@@ -133,13 +186,40 @@ export default function AnalyzePage() {
     const formData = new FormData(e.currentTarget);
     formData.set("is_allocations", String(isAllocations));
 
+    // Clear any previous clarification state
+    setPendingClarification(null);
+
     try {
       const input = formDataToZucaInput(formData);
-      await analyzeMutation.mutateAsync({ input, model: selectedModel });
+      await analyzeMutation.mutateAsync({
+        input,
+        model: selectedModel,
+        skipClarifications,
+      });
     } catch (error) {
       const err = error as { error?: string; details?: string };
       addToast({
         title: "Analysis Failed",
+        description: err.details || err.error || "An error occurred",
+        color: "danger",
+      });
+    }
+  };
+
+  const handleClarificationAnswer = async (answer: ClarificationAnswer) => {
+    if (!pendingClarification) return;
+
+    try {
+      await clarifyMutation.mutateAsync({
+        sessionId: pendingClarification.sessionId,
+        answer,
+      });
+      // Note: clarifyMutation handles navigation on completion
+      // and useEffect handles new clarification questions
+    } catch (error) {
+      const err = error as { error?: string; details?: string };
+      addToast({
+        title: "Failed to submit answer",
         description: err.details || err.error || "An error occurred",
         color: "danger",
       });
@@ -553,6 +633,7 @@ export default function AnalyzePage() {
           color="secondary"
           size="lg"
           className="border-2 border-secondary/50 hover:border-secondary hover:bg-secondary/10 transition-all"
+          isDisabled={pipelineLocked}
           startContent={
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
@@ -564,8 +645,26 @@ export default function AnalyzePage() {
         </Button>
       </div>
 
-      {/* Analysis in progress */}
-      {analyzeMutation.isPending && (
+      {/* Clarification Question */}
+      {pendingClarification && !clarifyMutation.isPending && (
+        <div className="animate-fade-in-up">
+          <div className="text-center mb-4">
+            <h2 className="text-xl font-semibold text-foreground">We need a bit more information</h2>
+            <p className="text-default-500 text-sm mt-1">
+              The analysis found an ambiguity that could affect the result
+            </p>
+          </div>
+          <ClarificationQuestionCard
+            question={pendingClarification.question}
+            sessionId={pendingClarification.sessionId}
+            onAnswer={handleClarificationAnswer}
+            isSubmitting={clarifyMutation.isPending}
+          />
+        </div>
+      )}
+
+      {/* Analysis in progress (initial or after clarification) */}
+      {(analyzeMutation.isPending || clarifyMutation.isPending) && (
         <Card className="glass-card-elevated border-primary/30 overflow-hidden animate-fade-in-up">
           <div className="h-1 bg-gradient-to-r from-primary via-secondary to-primary animate-pulse" />
           <CardBody className="p-6">
@@ -577,8 +676,14 @@ export default function AnalyzePage() {
                 <div className="absolute inset-0 bg-primary/20 rounded-full blur-xl" />
               </div>
               <div>
-                <h3 className="font-semibold text-lg">Running Analysis Pipeline</h3>
-                <p className="text-default-500">Processing your use case through all pipeline steps...</p>
+                <h3 className="font-semibold text-lg">
+                  {clarifyMutation.isPending ? "Resuming Analysis Pipeline" : "Running Analysis Pipeline"}
+                </h3>
+                <p className="text-default-500">
+                  {clarifyMutation.isPending
+                    ? "Continuing analysis with your answer..."
+                    : "Processing your use case through all pipeline steps..."}
+                </p>
               </div>
             </div>
             <Progress
@@ -595,9 +700,26 @@ export default function AnalyzePage() {
                 &ldquo;{currentFact}&rdquo;
               </p>
             </div>
-            <p className="text-xs text-default-400 mt-3">
-              You&apos;ll be redirected when complete.
-            </p>
+            <div className="flex items-center justify-between mt-3">
+              <p className="text-xs text-default-400">
+                You&apos;ll be redirected when complete.
+              </p>
+              <Button
+                size="sm"
+                variant="flat"
+                color="danger"
+                onPress={() => {
+                  if (clarifyMutation.isPending) {
+                    clarifyMutation.reset();
+                  } else {
+                    analyzeMutation.reset();
+                  }
+                  setPendingClarification(null);
+                }}
+              >
+                Cancel
+              </Button>
+            </div>
           </CardBody>
         </Card>
       )}
@@ -628,7 +750,7 @@ export default function AnalyzePage() {
                   labelPlacement="outside"
                   variant="bordered"
                   size="lg"
-                  isDisabled={analyzeMutation.isPending}
+                  isDisabled={pipelineLocked}
                   classNames={{
                     inputWrapper: "border-default-200 hover:border-primary/50 focus-within:border-primary",
                   }}
@@ -642,7 +764,7 @@ export default function AnalyzePage() {
                   labelPlacement="outside"
                   variant="bordered"
                   size="lg"
-                  isDisabled={analyzeMutation.isPending}
+                  isDisabled={pipelineLocked}
                   classNames={{
                     inputWrapper: "border-default-200 hover:border-primary/50 focus-within:border-primary",
                   }}
@@ -658,7 +780,7 @@ export default function AnalyzePage() {
                 labelPlacement="outside"
                 variant="bordered"
                 size="lg"
-                isDisabled={analyzeMutation.isPending}
+                isDisabled={pipelineLocked}
                 classNames={{
                   inputWrapper: "border-default-200 hover:border-primary/50 focus-within:border-primary",
                 }}
@@ -690,7 +812,7 @@ export default function AnalyzePage() {
                   labelPlacement="outside"
                   variant="bordered"
                   size="lg"
-                  isDisabled={analyzeMutation.isPending}
+                  isDisabled={pipelineLocked}
                   classNames={{
                     inputWrapper: "border-default-200 hover:border-primary/50 focus-within:border-primary",
                   }}
@@ -704,7 +826,7 @@ export default function AnalyzePage() {
                   labelPlacement="outside"
                   variant="bordered"
                   size="lg"
-                  isDisabled={analyzeMutation.isPending}
+                  isDisabled={pipelineLocked}
                   classNames={{
                     trigger: "border-default-200 hover:border-primary/50 data-[focus=true]:border-primary",
                   }}
@@ -724,7 +846,7 @@ export default function AnalyzePage() {
                   labelPlacement="outside"
                   variant="bordered"
                   size="lg"
-                  isDisabled={analyzeMutation.isPending}
+                  isDisabled={pipelineLocked}
                   classNames={{
                     trigger: "border-default-200 hover:border-primary/50 data-[focus=true]:border-primary",
                   }}
@@ -770,7 +892,7 @@ export default function AnalyzePage() {
                 <Switch
                   isSelected={isAllocations}
                   onValueChange={setIsAllocations}
-                  isDisabled={analyzeMutation.isPending}
+                  isDisabled={pipelineLocked}
                   classNames={{
                     wrapper: "group-data-[selected=true]:bg-primary",
                   }}
@@ -790,7 +912,7 @@ export default function AnalyzePage() {
                     onSelectionChange={(keys) =>
                       setAllocationMethod(Array.from(keys)[0] as string)
                     }
-                    isDisabled={analyzeMutation.isPending}
+                    isDisabled={pipelineLocked}
                     classNames={{
                       trigger: "border-default-200 hover:border-primary/50 data-[focus=true]:border-primary",
                     }}
@@ -810,7 +932,7 @@ export default function AnalyzePage() {
                       labelPlacement="outside"
                       variant="bordered"
                       size="lg"
-                      isDisabled={analyzeMutation.isPending}
+                      isDisabled={pipelineLocked}
                       classNames={{
                         inputWrapper: "border-default-200 hover:border-primary/50 focus-within:border-primary",
                       }}
@@ -828,7 +950,7 @@ export default function AnalyzePage() {
                 labelPlacement="outside"
                 variant="bordered"
                 size="lg"
-                isDisabled={analyzeMutation.isPending}
+                isDisabled={pipelineLocked}
                 classNames={{
                   inputWrapper: "border-default-200 hover:border-primary/50 focus-within:border-primary",
                 }}
@@ -857,7 +979,7 @@ export default function AnalyzePage() {
                 labelPlacement="outside"
                 variant="bordered"
                 size="lg"
-                isDisabled={analyzeMutation.isPending}
+                isDisabled={pipelineLocked}
                 classNames={{
                   trigger: "border-default-200 hover:border-primary/50 data-[focus=true]:border-primary",
                 }}
@@ -877,6 +999,33 @@ export default function AnalyzePage() {
               <p className="text-xs text-default-500">
                 Model changes apply to the entire run. Switching is disabled while a run is in progress.
               </p>
+
+              {/* Skip Clarifications Toggle */}
+              <div className="pt-2 border-t border-default-200/50">
+                <div className="flex items-center justify-between p-3 rounded-lg bg-default-100/30">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-warning/10 flex items-center justify-center">
+                      <svg className="w-4 h-4 text-warning" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium">Skip Clarification Questions</p>
+                      <p className="text-xs text-default-500">
+                        When enabled, the pipeline won&apos;t pause to ask questions
+                      </p>
+                    </div>
+                  </div>
+                  <Switch
+                    isSelected={skipClarifications}
+                    onValueChange={handleSkipClarificationsChange}
+                    isDisabled={pipelineLocked}
+                    classNames={{
+                      wrapper: "group-data-[selected=true]:bg-warning",
+                    }}
+                  />
+                </div>
+              </div>
             </CardBody>
           </Card>
 
@@ -888,7 +1037,7 @@ export default function AnalyzePage() {
               size="lg"
               className="px-8 border-2 border-default-300 hover:border-default-400"
               onPress={handleClear}
-              isDisabled={analyzeMutation.isPending}
+              isDisabled={pipelineLocked}
             >
               Clear Form
             </Button>
@@ -897,6 +1046,7 @@ export default function AnalyzePage() {
               color="primary"
               size="lg"
               className="px-8 font-semibold teal-glow-subtle"
+              isDisabled={pipelineLocked}
               isLoading={analyzeMutation.isPending}
             >
               {analyzeMutation.isPending ? "Analyzing..." : "Analyze Use Case"}

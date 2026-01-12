@@ -16,6 +16,12 @@ import { formatCapabilitiesForContext, formatKeyTermsForContext } from '../../da
 import { debugLog } from '../../config';
 import { getDocContext, isIndexReady } from '../../rag';
 import { getCorrectionsContext } from '../../self-learn';
+import {
+  StepClarificationRequest,
+  transformClarificationOutput,
+  clarificationOutputJsonSchema,
+  clarificationRequiredFields,
+} from '../../types/clarification';
 
 /**
  * Combined output from contract analysis
@@ -28,6 +34,7 @@ export interface ContractAnalysisOutput {
 /**
  * JSON schema for combined contract analysis structured output (FLAT)
  * Used for LLM structured output - the model returns all fields at root level
+ * Includes optional clarification fields for when the model needs user input
  */
 export const contractAnalysisJsonSchema = {
   type: 'object',
@@ -70,6 +77,8 @@ export const contractAnalysisJsonSchema = {
       maximum: 1,
       description: 'Confidence score based on how explicit the text is',
     },
+    // Clarification fields - REQUIRED with nullable values
+    ...clarificationOutputJsonSchema.properties,
   },
   required: [
     // Contract Intel required
@@ -87,6 +96,8 @@ export const contractAnalysisJsonSchema = {
     'revenue_caps',
     'hints',
     'confidence',
+    // Clarification fields - REQUIRED (use null when not needed)
+    ...clarificationRequiredFields,
   ],
   additionalProperties: false,
 };
@@ -218,16 +229,22 @@ function buildUserMessage(
 /**
  * Execute combined contract analysis
  * Extracts contract intel AND detects capabilities in a single LLM call
+ *
+ * May return a StepClarificationRequest if the model needs user input on
+ * a critical ambiguity (only in interactive mode, controlled by orchestrator)
  */
 export async function analyzeContract(
   input: ZucaInput,
   capabilities: GoldenUseCaseCapability[],
   keyTerms: KeyTerm[],
+  clarificationContext?: string, // Context from user's clarification answer
   previousAnalysis?: ContractAnalysisOutput,
   reasoningEffort: ReasoningEffort = 'medium', // Combined task needs solid reasoning
   model?: LlmModel
-): Promise<ContractAnalysisOutput> {
-  debugLog('Analyzing contract (combined contract intel + capability detection)');
+): Promise<ContractAnalysisOutput | StepClarificationRequest> {
+  debugLog('Analyzing contract (combined contract intel + capability detection)', {
+    hasClarificationContext: !!clarificationContext,
+  });
 
   // Retrieve relevant documentation if RAG index is available
   let docContext: string | undefined;
@@ -270,6 +287,11 @@ export async function analyzeContract(
     userMessage = `Previous Results:\n${JSON.stringify(flatPrevious, null, 2)}\n\nUser Query:\n${userMessage}`;
   }
 
+  // Include clarification context if user provided an answer
+  if (clarificationContext) {
+    userMessage = `${userMessage}\n\n---\n\n## User Clarification\n${clarificationContext}`;
+  }
+
   const result = await complete<{
     // Contract Intel
     service_start_mdy: string;
@@ -286,6 +308,12 @@ export async function analyzeContract(
     revenue_caps: string[];
     hints: string[];
     confidence: number;
+    // Optional clarification fields
+    needs_clarification?: boolean;
+    clarification_question?: string;
+    clarification_context?: string;
+    clarification_options?: Array<{ id: string; label: string; description?: string }>;
+    clarification_priority?: 'critical' | 'important' | 'helpful';
   }>({
     systemPrompt,
     userMessage,
@@ -298,6 +326,37 @@ export async function analyzeContract(
 
   if (!result.structured) {
     throw new Error('Failed to analyze contract: no structured output');
+  }
+
+  // Debug: Log clarification fields from LLM response to diagnose why questions aren't being asked
+  debugLog('Analyze contract - clarification fields from LLM:', {
+    needs_clarification: result.structured.needs_clarification,
+    has_question: !!result.structured.clarification_question,
+    question_preview: result.structured.clarification_question?.substring(0, 100),
+    has_options: !!result.structured.clarification_options,
+    options_count: result.structured.clarification_options?.length,
+    priority: result.structured.clarification_priority,
+  });
+
+  // Check if the model is requesting clarification
+  if (result.structured.needs_clarification) {
+    const clarificationRequest = transformClarificationOutput('analyze_contract', {
+      needs_clarification: result.structured.needs_clarification,
+      clarification_question: result.structured.clarification_question,
+      clarification_context: result.structured.clarification_context,
+      clarification_options: result.structured.clarification_options,
+      clarification_priority: result.structured.clarification_priority,
+    });
+
+    if (clarificationRequest) {
+      debugLog('Contract analysis requesting clarification:', {
+        question: clarificationRequest.question.question,
+        optionCount: clarificationRequest.question.options.length,
+      });
+      return clarificationRequest;
+    }
+    // If transform failed (invalid options), fall through to normal output
+    debugLog('Clarification request was invalid, proceeding with analysis');
   }
 
   // Split the combined result into separate outputs

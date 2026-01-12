@@ -22,12 +22,19 @@ import {
   getTrainingStats,
   setTrainingDataPath,
 } from './exporter';
+import { resetCorrectionsBackend } from '../corrections';
 import type { TrainingExample, TrainingDataset } from './types';
 
 // Test file paths
 const TEST_DATA_DIR = path.join(process.cwd(), 'data', 'test-training');
 const TEST_TRAINING_PATH = path.join(TEST_DATA_DIR, 'test-training-data.json');
 const TEST_EXPORT_PATH = path.join(TEST_DATA_DIR, 'test-export.jsonl');
+
+beforeEach(() => {
+  process.env.USE_POSTGRES_CORRECTIONS = 'false';
+  delete process.env.POSTGRES_URL;
+  resetCorrectionsBackend();
+});
 
 /**
  * Create a mock training example

@@ -21,6 +21,7 @@ import type {
   TemplateValidationRequest,
   TemplateValidationOutput,
 } from '@zuca/types/html-template';
+import type { ClarificationState } from '@zuca/types/clarification';
 
 // ============================================================================
 // Types
@@ -43,7 +44,7 @@ type HTMLBuilderOutput =
   | { mode: 'groupby'; result: GroupByWizardOutput }
   | { mode: 'sample-data'; result: SampleDataOutput }
   | { mode: 'validate'; result: TemplateValidationOutput };
-export type SessionStatus = 'pending' | 'running' | 'completed' | 'failed';
+export type SessionStatus = 'pending' | 'running' | 'awaiting_clarification' | 'completed' | 'failed';
 export type MessageRole = 'user' | 'assistant';
 
 export interface DbSession {
@@ -58,6 +59,14 @@ export interface DbSession {
   error_message: string | null;
   user_id: string | null;
   llm_model: string | null;
+  clarification_state: ClarificationState | null;
+}
+
+export interface DbUserPreferences {
+  user_id: string;
+  skip_clarifications: boolean;
+  created_at: Date;
+  updated_at: Date;
 }
 
 export interface DbMessage {
@@ -867,4 +876,135 @@ export async function getDocChunkCount(): Promise<number> {
 export async function isRagIndexReady(): Promise<boolean> {
   const count = await getDocChunkCount();
   return count > 0;
+}
+
+// ============================================================================
+// Clarification State Operations
+// ============================================================================
+
+/**
+ * Update session with clarification state (when pipeline pauses for a question)
+ */
+export async function updateSessionClarificationState(
+  id: string,
+  clarificationState: ClarificationState
+): Promise<void> {
+  await sql`
+    UPDATE sessions
+    SET
+      status = 'awaiting_clarification',
+      clarification_state = ${JSON.stringify(clarificationState)},
+      updated_at = NOW()
+    WHERE id = ${id}
+  `;
+}
+
+/**
+ * Clear clarification state (when resuming pipeline)
+ */
+export async function clearSessionClarificationState(
+  id: string,
+  newStatus: SessionStatus = 'running'
+): Promise<void> {
+  await sql`
+    UPDATE sessions
+    SET
+      status = ${newStatus},
+      clarification_state = NULL,
+      updated_at = NOW()
+    WHERE id = ${id}
+  `;
+}
+
+/**
+ * Get sessions awaiting clarification for a user
+ */
+export async function getSessionsAwaitingClarification(
+  userId?: string | null
+): Promise<DbSession[]> {
+  if (userId) {
+    const result = await sql<DbSession>`
+      SELECT * FROM sessions
+      WHERE user_id = ${userId}
+        AND status = 'awaiting_clarification'
+      ORDER BY updated_at DESC
+    `;
+    return result.rows;
+  }
+
+  const result = await sql<DbSession>`
+    SELECT * FROM sessions
+    WHERE status = 'awaiting_clarification'
+    ORDER BY updated_at DESC
+  `;
+  return result.rows;
+}
+
+// ============================================================================
+// User Preferences Operations
+// ============================================================================
+
+/**
+ * Get user preferences (creates default if not exists)
+ */
+export async function getUserPreferences(userId: string): Promise<DbUserPreferences> {
+  // Try to get existing preferences
+  const result = await sql<DbUserPreferences>`
+    SELECT * FROM user_preferences WHERE user_id = ${userId}
+  `;
+
+  if (result.rows[0]) {
+    return result.rows[0];
+  }
+
+  // Create default preferences
+  const insertResult = await sql<DbUserPreferences>`
+    INSERT INTO user_preferences (user_id, skip_clarifications)
+    VALUES (${userId}, false)
+    ON CONFLICT (user_id) DO NOTHING
+    RETURNING *
+  `;
+
+  // Handle race condition - if insert failed due to conflict, fetch again
+  if (!insertResult.rows[0]) {
+    const retryResult = await sql<DbUserPreferences>`
+      SELECT * FROM user_preferences WHERE user_id = ${userId}
+    `;
+    return retryResult.rows[0] ?? {
+      user_id: userId,
+      skip_clarifications: false,
+      created_at: new Date(),
+      updated_at: new Date(),
+    };
+  }
+
+  return insertResult.rows[0];
+}
+
+/**
+ * Update user preference for skipping clarifications
+ */
+export async function setSkipClarifications(
+  userId: string,
+  skipClarifications: boolean
+): Promise<DbUserPreferences> {
+  const result = await sql<DbUserPreferences>`
+    INSERT INTO user_preferences (user_id, skip_clarifications)
+    VALUES (${userId}, ${skipClarifications})
+    ON CONFLICT (user_id) DO UPDATE SET
+      skip_clarifications = EXCLUDED.skip_clarifications,
+      updated_at = NOW()
+    RETURNING *
+  `;
+  return result.rows[0];
+}
+
+/**
+ * Check if user has skip clarifications enabled
+ */
+export async function shouldSkipClarifications(userId: string | null): Promise<boolean> {
+  if (!userId) return false;
+
+  const prefs = await getUserPreferences(userId);
+  return prefs.skip_clarifications;
 }

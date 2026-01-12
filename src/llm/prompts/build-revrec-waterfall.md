@@ -290,6 +290,65 @@ PPDD has two recognition patterns based on POB template:
 
 ---
 
+## Requesting Clarification (Interactive Mode)
+
+You may request clarification from the user **ONLY** when ALL of these conditions are met:
+
+1. **Critical ambiguity** — The input is genuinely unclear about recognition timing, event dates, or POB pattern that will significantly affect revenue recognition
+2. **Multiple valid interpretations** — At least 2 plausible recognition approaches exist with materially different waterfall outcomes
+3. **Cannot be inferred** — The decision cannot be reasonably made from contracts/orders, POB mapping, or standard rev rec rules
+
+### When NOT to Ask
+
+**DO NOT** request clarification for:
+- Standard ratable calculations (daily rate × days in month)
+- Point-in-time recognition when trigger event is clear
+- Event-driven charges with no events (just show $0 and note in open_questions)
+- Missing usage data for consumption charges (show $0, note in open_questions)
+- Ramp deal averaging when segments are clearly specified
+- Minor rounding differences
+- Anything that can be noted in `open_questions` instead of blocking progress
+
+### How to Request Clarification
+
+**CRITICAL**: If you set `needs_clarification: true`, you MUST also provide ALL of these fields:
+- `clarification_question` (required string)
+- `clarification_options` (required array with 2-4 options)
+- `clarification_context` (optional but recommended)
+- `clarification_priority` (optional, defaults to "important")
+
+If any required field is missing, the clarification request will be ignored.
+
+Set these fields together:
+
+```json
+{
+  "needs_clarification": true,
+  "clarification_question": "When should the implementation revenue be recognized?",
+  "clarification_context": "The implementation fee is $15,000 with EVT-PIT template, but no go-live or acceptance date is specified. This determines when the $15,000 hits the P&L.",
+  "clarification_options": [
+    {"id": "contract_start", "label": "Recognize at contract start", "description": "Jan 2026: $15,000 (assumes immediate delivery)"},
+    {"id": "golive_q2", "label": "Recognize at expected go-live (Q2)", "description": "Apr 2026: $15,000 (typical implementation timeline)"},
+    {"id": "ratable", "label": "Spread over implementation period", "description": "Jan-Mar 2026: $5,000/month (change to OT template)"}
+  ],
+  "clarification_priority": "critical"
+}
+```
+
+### Clarification Guidelines
+
+- **Question**: 1-2 sentences, specific and actionable
+- **Context**: Brief explanation of why this matters for revenue recognition timing
+- **Options**: 2-4 concrete choices with clear P&L impact.
+  **Do NOT** include vague options like "Other", "Provide details", or "It depends" since the user can always use the free-text response.
+- **Priority**: `critical` (blocks recognition), `important` (affects accuracy), `helpful` (nice to know)
+
+### After User Responds
+
+If the user provides a clarification answer (shown in "User Clarification" section), use that information to complete the waterfall. Do NOT ask another clarification question — proceed with your best interpretation.
+
+---
+
 ## Output
 
 Generate one row per Line Item per Period:

@@ -22,6 +22,7 @@ import {
   handleFollowUp,
   quickAnalysis,
   getSession,
+  isPipelineClarificationPause,
 } from '../pipeline/index';
 import { runUCGenerator, mapToZucaInput } from '../pipeline/uc-generator/index';
 import {
@@ -309,7 +310,18 @@ async function interactiveCommand(options: { model?: string } = {}): Promise<voi
     console.log(chalk.blue('Processing use case...'));
     console.log('');
 
-    const result = await runPipeline(input, { model: selectedModel });
+    const result = await runPipeline(input, {
+      model: selectedModel,
+      interactiveMode: false, // CLI skips all clarifications
+    });
+
+    // In CLI mode with interactiveMode: false, we should never get a clarification pause
+    if (isPipelineClarificationPause(result)) {
+      console.log(chalk.yellow('Warning: Pipeline paused for clarification but CLI mode auto-skips these.'));
+      console.log(chalk.yellow('This may indicate a bug in the pipeline.'));
+      return;
+    }
+
     sessionId = result.session_id;
 
     printResult(result);

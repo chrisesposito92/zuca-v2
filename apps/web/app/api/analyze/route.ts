@@ -3,12 +3,26 @@
  *
  * Run the main ZUCA pipeline to analyze a use case.
  * Stores the session and result in the database.
+ *
+ * In interactive mode, the pipeline may pause to request clarification
+ * from the user. In this case, the response will have status 'awaiting_clarification'
+ * and the client should show the question to the user.
  */
 
 import { NextRequest, NextResponse } from 'next/server';
 import { validateZucaInput, LlmModelSchema } from '@zuca/types';
-import { runPipeline } from '@zuca/pipeline';
-import { createSession, updateSessionResult, updateSessionStatus, addMessage } from '@/lib/db';
+import {
+  runPipeline,
+  isPipelineClarificationPause,
+  createClarificationState,
+} from '@zuca/pipeline';
+import {
+  createSession,
+  updateSessionResult,
+  updateSessionStatus,
+  updateSessionClarificationState,
+  shouldSkipClarifications,
+} from '@/lib/db';
 import { getCurrentUser } from '@/lib/auth';
 
 export async function POST(request: NextRequest) {
@@ -21,6 +35,7 @@ export async function POST(request: NextRequest) {
     const input = (body?.input ?? body) as unknown;
     const model = body?.model as string | undefined;
     const modelResult = model ? LlmModelSchema.safeParse(model) : null;
+    const clientSkipClarifications = body?.skipClarifications as boolean | undefined;
 
     if (modelResult && !modelResult.success) {
       return NextResponse.json(
@@ -50,16 +65,45 @@ export async function POST(request: NextRequest) {
     await updateSessionStatus(session.id, 'running', 0);
 
     try {
-      // Run the pipeline
-      const result = await runPipeline(validatedInput, { model: modelResult?.data });
+      // Check if clarifications should be skipped:
+      // 1. Client can explicitly pass skipClarifications
+      // 2. Otherwise, check user preference in database (if logged in)
+      const skipClarifications = clientSkipClarifications !== undefined
+        ? clientSkipClarifications
+        : user?.userId
+          ? await shouldSkipClarifications(user.userId)
+          : false;
 
-      // Store the result
-      await updateSessionResult(session.id, result);
+      // Run the pipeline with interactive mode enabled (web UI)
+      const pipelineResult = await runPipeline(validatedInput, {
+        sessionId: session.id,
+        model: modelResult?.data,
+        interactiveMode: true, // Web UI is interactive
+        skipAllClarifications: skipClarifications,
+      });
+
+      // Check if pipeline is pausing for clarification
+      if (isPipelineClarificationPause(pipelineResult)) {
+        // Save clarification state to database
+        const clarificationState = createClarificationState(pipelineResult);
+        await updateSessionClarificationState(session.id, clarificationState);
+
+        return NextResponse.json({
+          status: 'awaiting_clarification',
+          session_id: session.id,
+          question: pipelineResult.question,
+          paused_at_step: pipelineResult.pausedAtStep,
+        });
+      }
+
+      // Pipeline completed - store the result
+      await updateSessionResult(session.id, pipelineResult);
 
       return NextResponse.json({
         success: true,
+        status: 'completed',
         session_id: session.id,
-        result,
+        result: pipelineResult,
       });
     } catch (error: unknown) {
       console.error('Pipeline error:', error);

@@ -97,8 +97,8 @@ For each line, populate:
 - `Ordered Qty`: From charge quantity (default 1)
 - `Unit List Price`: From charge listPrice
 - `Unit Sell Price`: From charge sellPrice
-- `Ext List Price`: Qty × Unit List Price x Terms Months
-- `Ext Sell Price`: Qty × Unit Sell Price X Terms Months
+- `Ext List Price`: Qty × Unit List Price x Num of Periods
+- `Ext Sell Price`: Qty × Unit Sell Price X Num of Periods
 
 **Allocation (see below):**
 - `SSP Price`: Unit SSP (typically = Unit List Price unless override)
@@ -243,6 +243,66 @@ When one billing charge creates multiple revenue lines:
 **Document in assumptions:**
 - "Bundle explosion applied to [charge name]"
 - "SSP percentages: License 60%, Support 30%, Training 10%"
+
+---
+
+## Requesting Clarification (Interactive Mode)
+
+You may request clarification from the user **ONLY** when ALL of these conditions are met:
+
+1. **Critical ambiguity** — The input is genuinely unclear about SSP values, allocation method, or pricing that will significantly affect revenue allocation
+2. **Multiple valid interpretations** — At least 2 plausible allocation approaches exist with materially different outcomes
+3. **Cannot be inferred** — The decision cannot be reasonably made from subscription spec, POB mapping, or standard allocation rules
+
+### When NOT to Ask
+
+**DO NOT** request clarification for:
+- Standard SSP = List Price assignments (this is the default)
+- Allocation calculations that follow the documented rules
+- Ramp deal averaging when clearly specified in input
+- Bundle explosion when component SSPs are provided
+- Minor rounding or period alignment questions
+- Anything that can be noted in `open_questions` instead of blocking progress
+
+### How to Request Clarification
+
+**CRITICAL**: If you set `needs_clarification: true`, you MUST also provide ALL of these fields:
+- `clarification_question` (required string)
+- `clarification_options` (required array with 2-4 options)
+- `clarification_context` (optional but recommended)
+- `clarification_priority` (optional, defaults to "important")
+
+If any required field is missing, the clarification request will be ignored.
+
+Set these fields together:
+
+```json
+{
+  "needs_clarification": true,
+  "clarification_question": "How should SSP be determined for the implementation services charge?",
+  "clarification_context": "The implementation fee of $10,000 has no list price equivalent. SSP affects how the $50,000 total transaction price is allocated across all lines.",
+  "clarification_options": [
+    {"id": "cost_plus", "label": "Cost-plus margin (estimated cost + 25%)", "description": "SSP = $8,000 based on estimated delivery cost"},
+    {"id": "residual", "label": "Residual approach", "description": "Allocate SSP after other observable prices"},
+    {"id": "standalone", "label": "Use contract amount as SSP", "description": "SSP = $10,000 (contract price = fair value)"}
+  ],
+  "clarification_priority": "important"
+}
+```
+
+### Clarification Guidelines
+
+- **Question**: 1-2 sentences, specific and actionable
+- **Context**: Brief explanation of why this matters for allocation
+- **Options**: 2-4 concrete choices with clear allocation implications.
+  **Do NOT** include vague options like "Other", "Provide details", or "It depends" since the user can always use the free-text response.
+- **Priority**: `critical` (blocks allocation), `important` (affects accuracy), `helpful` (nice to know)
+
+### After User Responds
+
+If the user provides a clarification answer (shown in "User Clarification" section), use that information to complete the allocation. Do NOT ask another clarification question — proceed with your best interpretation.
+
+---
 
 ### Contract Modifications
 

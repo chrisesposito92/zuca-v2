@@ -21,7 +21,8 @@ if (!process.env.POSTGRES_URL_TEST && !process.env.POSTGRES_URL) {
 const baseUrl = process.env.POSTGRES_URL_TEST || process.env.POSTGRES_URL || '';
 const isLocalhost = baseUrl.includes('localhost');
 const isPooled = baseUrl.includes('-pooler.');
-const hasDb = Boolean(baseUrl) && (isLocalhost || isPooled);
+const runDbTests = process.env.RUN_DB_TESTS === 'true';
+const hasDb = runDbTests && Boolean(baseUrl) && (isLocalhost || isPooled);
 
 let db: DbModule | null = null;
 let adminPool: ReturnType<typeof createPool> | null = null;

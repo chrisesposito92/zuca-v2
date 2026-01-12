@@ -15,6 +15,12 @@ import { formatContractIntelForContext } from './contract-intel';
 import { debugLog } from '../../config';
 import { getDocContext, isIndexReady } from '../../rag';
 import { getCorrectionsContext } from '../../self-learn';
+import {
+  StepClarificationRequest,
+  transformClarificationOutput,
+  clarificationOutputJsonSchema,
+  clarificationRequiredFields,
+} from '../../types/clarification';
 
 /**
  * JSON schema for Contracts/Orders structured output
@@ -104,8 +110,10 @@ export const contractsOrdersJsonSchema = {
     },
     assumptions: { type: 'array', items: { type: 'string' } },
     open_questions: { type: 'array', items: { type: 'string' } },
+    // Clarification fields - REQUIRED with nullable values
+    ...clarificationOutputJsonSchema.properties,
   },
-  required: ['zr_contracts_orders', 'assumptions', 'open_questions'],
+  required: ['zr_contracts_orders', 'assumptions', 'open_questions', ...clarificationRequiredFields],
   additionalProperties: false,
 };
 
@@ -160,17 +168,23 @@ function buildUserMessage(
 /**
  * Execute the Build Contracts/Orders Table step
  * Generates ZR contracts/orders table with allocated prices
+ *
+ * May return a StepClarificationRequest if the model needs user input on
+ * a critical ambiguity (only in interactive mode, controlled by orchestrator)
  */
 export async function buildContractsOrders(
   input: ZucaInput,
   subscriptionSpec: SubscriptionSpec,
   pobMapping: PobMappingOutput,
   contractIntel: ContractIntel,
+  clarificationContext?: string, // Context from user's clarification answer
   previousOutput?: ContractsOrdersOutput,
   reasoningEffort: ReasoningEffort = 'high', // Complex allocation calculations need thorough reasoning
   model?: LlmModel
-): Promise<ContractsOrdersOutput> {
-  debugLog('Building Contracts/Orders table');
+): Promise<ContractsOrdersOutput | StepClarificationRequest> {
+  debugLog('Building Contracts/Orders table', {
+    hasClarificationContext: !!clarificationContext,
+  });
 
   // Retrieve relevant documentation if RAG index is available
   // Query focuses on order actions, allocations, and POB concepts
@@ -216,7 +230,18 @@ export async function buildContractsOrders(
     userMessage = `Previous Results:\n${JSON.stringify(previousOutput, null, 2)}\n\nUser Query:\n${userMessage}`;
   }
 
-  const result = await complete<ContractsOrdersOutput>({
+  // Include clarification context if user provided an answer
+  if (clarificationContext) {
+    userMessage = `${userMessage}\n\n---\n\n## User Clarification\n${clarificationContext}`;
+  }
+
+  const result = await complete<ContractsOrdersOutput & {
+    needs_clarification?: boolean;
+    clarification_question?: string;
+    clarification_context?: string;
+    clarification_options?: Array<{ id: string; label: string; description?: string }>;
+    clarification_priority?: 'critical' | 'important' | 'helpful';
+  }>({
     systemPrompt,
     userMessage,
     responseSchema: contractsOrdersJsonSchema,
@@ -228,6 +253,27 @@ export async function buildContractsOrders(
 
   if (!result.structured) {
     throw new Error('Failed to build Contracts/Orders table: no structured output');
+  }
+
+  // Check if the model is requesting clarification
+  if (result.structured.needs_clarification) {
+    const clarificationRequest = transformClarificationOutput('contracts_orders', {
+      needs_clarification: result.structured.needs_clarification,
+      clarification_question: result.structured.clarification_question,
+      clarification_context: result.structured.clarification_context,
+      clarification_options: result.structured.clarification_options,
+      clarification_priority: result.structured.clarification_priority,
+    });
+
+    if (clarificationRequest) {
+      debugLog('Contracts/Orders requesting clarification:', {
+        question: clarificationRequest.question.question,
+        optionCount: clarificationRequest.question.options.length,
+      });
+      return clarificationRequest;
+    }
+    // If transform failed (invalid options), fall through to normal output
+    debugLog('Clarification request was invalid, proceeding with build');
   }
 
   // Validate with Zod

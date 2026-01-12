@@ -7,7 +7,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { getSession, updateSessionInput, updateSessionResult, updateSessionStatus } from '@/lib/db';
-import { runPipeline } from '@zuca/pipeline';
+import { runPipeline, isPipelineClarificationPause } from '@zuca/pipeline';
 import type { ZucaInput, ZucaOutput } from '@zuca/types';
 
 interface RouteParams {
@@ -155,12 +155,21 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       const defaultModel = (process.env.LLM_MODEL || process.env.OPENAI_MODEL || 'gpt-5.2') as 'gpt-5.2' | 'gemini-3-pro-preview' | 'gemini-3-flash-preview';
       const selectedModel = (session.llm_model as typeof defaultModel) || defaultModel;
 
-      // Re-run pipeline with previous partial result
+      // Re-run pipeline with previous partial result (non-interactive mode skips clarifications)
       const result = await runPipeline(updatedInput, {
         sessionId: id,
         previousResult,
         model: selectedModel,
+        interactiveMode: false,
       });
+
+      // Edit mode shouldn't get clarification pauses since interactiveMode is false
+      if (isPipelineClarificationPause(result)) {
+        return NextResponse.json(
+          { error: 'Unexpected clarification pause in edit mode' },
+          { status: 500 }
+        );
+      }
 
       // Persist updated result
       await updateSessionResult(id, result);

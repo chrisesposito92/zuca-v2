@@ -13,6 +13,12 @@ import { formatContractIntelForContext } from './contract-intel';
 import { debugLog } from '../../config';
 import { getDocContext, isIndexReady } from '../../rag';
 import { getCorrectionsContext } from '../../self-learn';
+import {
+  StepClarificationRequest,
+  transformClarificationOutput,
+  clarificationOutputJsonSchema,
+  clarificationRequiredFields,
+} from '../../types/clarification';
 
 /**
  * JSON schema for Billings structured output
@@ -67,8 +73,10 @@ export const billingsJsonSchema = {
     },
     assumptions: { type: 'array', items: { type: 'string' } },
     open_questions: { type: 'array', items: { type: 'string' } },
+    // Clarification fields - REQUIRED with nullable values
+    ...clarificationOutputJsonSchema.properties,
   },
-  required: ['zb_billings', 'assumptions', 'open_questions'],
+  required: ['zb_billings', 'assumptions', 'open_questions', ...clarificationRequiredFields],
   additionalProperties: false,
 };
 
@@ -117,16 +125,22 @@ function buildUserMessage(
 /**
  * Execute the Build Billings Table step
  * Generates complete billing schedule based on subscription spec
+ *
+ * May return a StepClarificationRequest if the model needs user input on
+ * a critical ambiguity (only in interactive mode, controlled by orchestrator)
  */
 export async function buildBillings(
   input: ZucaInput,
   subscriptionSpec: SubscriptionSpec,
   contractIntel: ContractIntel,
+  clarificationContext?: string, // Context from user's clarification answer
   previousOutput?: BillingsOutput,
   reasoningEffort: ReasoningEffort = 'medium', // Date calculations need solid reasoning
   model?: LlmModel
-): Promise<BillingsOutput> {
-  debugLog('Building Billings table');
+): Promise<BillingsOutput | StepClarificationRequest> {
+  debugLog('Building Billings table', {
+    hasClarificationContext: !!clarificationContext,
+  });
 
   // Retrieve relevant documentation if RAG index is available
   // Query focuses on invoice items, proration, and billing patterns
@@ -171,7 +185,18 @@ export async function buildBillings(
     userMessage = `Previous Results:\n${JSON.stringify(previousOutput, null, 2)}\n\nUser Query:\n${userMessage}`;
   }
 
-  const result = await complete<BillingsOutput>({
+  // Include clarification context if user provided an answer
+  if (clarificationContext) {
+    userMessage = `${userMessage}\n\n---\n\n## User Clarification\n${clarificationContext}`;
+  }
+
+  const result = await complete<BillingsOutput & {
+    needs_clarification?: boolean;
+    clarification_question?: string;
+    clarification_context?: string;
+    clarification_options?: Array<{ id: string; label: string; description?: string }>;
+    clarification_priority?: 'critical' | 'important' | 'helpful';
+  }>({
     systemPrompt,
     userMessage,
     responseSchema: billingsJsonSchema,
@@ -183,6 +208,27 @@ export async function buildBillings(
 
   if (!result.structured) {
     throw new Error('Failed to build Billings table: no structured output');
+  }
+
+  // Check if the model is requesting clarification
+  if (result.structured.needs_clarification) {
+    const clarificationRequest = transformClarificationOutput('billings', {
+      needs_clarification: result.structured.needs_clarification,
+      clarification_question: result.structured.clarification_question,
+      clarification_context: result.structured.clarification_context,
+      clarification_options: result.structured.clarification_options,
+      clarification_priority: result.structured.clarification_priority,
+    });
+
+    if (clarificationRequest) {
+      debugLog('Billings requesting clarification:', {
+        question: clarificationRequest.question.question,
+        optionCount: clarificationRequest.question.options.length,
+      });
+      return clarificationRequest;
+    }
+    // If transform failed (invalid options), fall through to normal output
+    debugLog('Clarification request was invalid, proceeding with build');
   }
 
   // Validate with Zod

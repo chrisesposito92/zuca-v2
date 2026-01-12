@@ -49,8 +49,8 @@ criteria:
     check:
       type: numeric
       rule: |
-        Ext Sell Price = Unit Sell Price x Ordered Qty x Terms Months
-        Ext List Price = Unit List Price x Ordered Qty x Terms Months
+        Ext Sell Price = Unit Sell Price x Ordered Qty x Num of Periods
+        Ext List Price = Unit List Price x Ordered Qty x Num of Periods
         These calculations must be accurate for each line item.
       threshold: 0.01
 

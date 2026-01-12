@@ -3,7 +3,7 @@ import { NextRequest } from 'next/server';
 
 import { POST } from '@/app/api/sessions/[id]/edit/route';
 import { getSession, updateSessionInput, updateSessionResult, updateSessionStatus } from '@/lib/db';
-import { runPipeline } from '@zuca/pipeline';
+import { runPipeline, isPipelineClarificationPause } from '@zuca/pipeline';
 
 vi.mock('@/lib/db', () => ({
   getSession: vi.fn(),
@@ -14,6 +14,7 @@ vi.mock('@/lib/db', () => ({
 
 vi.mock('@zuca/pipeline', () => ({
   runPipeline: vi.fn(),
+  isPipelineClarificationPause: vi.fn(),
 }));
 
 const getSessionMock = vi.mocked(getSession);
@@ -21,6 +22,7 @@ const updateSessionInputMock = vi.mocked(updateSessionInput);
 const updateSessionResultMock = vi.mocked(updateSessionResult);
 const updateSessionStatusMock = vi.mocked(updateSessionStatus);
 const runPipelineMock = vi.mocked(runPipeline);
+const isPipelineClarificationPauseMock = vi.mocked(isPipelineClarificationPause);
 
 describe('POST /api/sessions/[id]/edit', () => {
   beforeEach(() => {
@@ -29,6 +31,7 @@ describe('POST /api/sessions/[id]/edit', () => {
     updateSessionResultMock.mockReset();
     updateSessionStatusMock.mockReset();
     runPipelineMock.mockReset();
+    isPipelineClarificationPauseMock.mockReset();
     process.env.LLM_MODEL = 'gpt-5.2';
   });
 
@@ -108,6 +111,7 @@ describe('POST /api/sessions/[id]/edit', () => {
     });
 
     runPipelineMock.mockResolvedValue({ summary: { output: 'updated' } } as any);
+    isPipelineClarificationPauseMock.mockReturnValue(false);
 
     const request = new NextRequest('http://localhost/api/sessions/session-2/edit', {
       method: 'POST',

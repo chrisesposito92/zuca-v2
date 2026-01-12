@@ -5,11 +5,28 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import type { ZucaInput, ZucaOutput } from "@zuca/types";
+import type { ClarificationQuestion, ClarificationAnswer } from "@zuca/types/clarification";
 
-interface AnalyzeResponse {
+interface AnalyzeCompletedResponse {
   success: boolean;
   session_id: string;
   result: ZucaOutput;
+  status?: 'completed';
+}
+
+interface AnalyzeClarificationResponse {
+  status: 'awaiting_clarification';
+  session_id: string;
+  question: ClarificationQuestion;
+  paused_at_step: string;
+}
+
+export type AnalyzeResponse = AnalyzeCompletedResponse | AnalyzeClarificationResponse;
+
+export function isAnalyzeClarificationResponse(
+  response: AnalyzeResponse
+): response is AnalyzeClarificationResponse {
+  return 'status' in response && response.status === 'awaiting_clarification';
 }
 
 interface AnalyzeError {
@@ -21,6 +38,7 @@ interface AnalyzeError {
 interface AnalyzeRequest {
   input: ZucaInput;
   model?: string;
+  skipClarifications?: boolean;
 }
 
 async function runAnalysis(payload: AnalyzeRequest): Promise<AnalyzeResponse> {
@@ -28,6 +46,48 @@ async function runAnalysis(payload: AnalyzeRequest): Promise<AnalyzeResponse> {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw data as AnalyzeError;
+  }
+
+  return data;
+}
+
+interface ClarifyRequest {
+  sessionId: string;
+  answer: ClarificationAnswer;
+}
+
+interface ClarifyCompletedResponse {
+  status: 'completed';
+  session_id: string;
+  result: ZucaOutput;
+}
+
+interface ClarifyClarificationResponse {
+  status: 'awaiting_clarification';
+  session_id: string;
+  question: ClarificationQuestion;
+  paused_at_step: string;
+}
+
+export type ClarifyResponse = ClarifyCompletedResponse | ClarifyClarificationResponse;
+
+export function isClarifyClarificationResponse(
+  response: ClarifyResponse
+): response is ClarifyClarificationResponse {
+  return response.status === 'awaiting_clarification';
+}
+
+async function submitClarification(payload: ClarifyRequest): Promise<ClarifyResponse> {
+  const response = await fetch(`/api/sessions/${payload.sessionId}/clarify`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ answer: payload.answer }),
   });
 
   const data = await response.json();
@@ -48,8 +108,30 @@ export function useAnalyze() {
     onSuccess: (data) => {
       // Invalidate sessions list to show new session
       queryClient.invalidateQueries({ queryKey: ["sessions"] });
-      // Navigate to solution page
-      router.push(`/solution/${data.session_id}`);
+      // Only navigate if analysis completed (not awaiting clarification)
+      if (!isAnalyzeClarificationResponse(data)) {
+        router.push(`/solution/${data.session_id}`);
+      }
+    },
+  });
+}
+
+/**
+ * Hook for submitting clarification answers
+ */
+export function useClarify() {
+  const router = useRouter();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: submitClarification,
+    onSuccess: (data) => {
+      // Invalidate sessions list
+      queryClient.invalidateQueries({ queryKey: ["sessions"] });
+      // Navigate to solution page if completed
+      if (!isClarifyClarificationResponse(data)) {
+        router.push(`/solution/${data.session_id}`);
+      }
     },
   });
 }
