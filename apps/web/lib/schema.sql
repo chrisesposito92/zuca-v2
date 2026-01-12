@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS sessions (
     llm_model VARCHAR(50),             -- 'gpt-5.2' | 'gemini-3-pro-preview' | 'gemini-3-flash-preview'
     input JSONB NOT NULL,              -- ZucaInput or UCGeneratorInput
     result JSONB,                      -- ZucaOutput or UCGeneratorOutput
-    status VARCHAR(20) DEFAULT 'pending', -- pending | running | awaiting_clarification | completed | failed
+    status VARCHAR(30) DEFAULT 'pending', -- pending | running | awaiting_clarification | completed | failed
     current_step INTEGER DEFAULT 0,
     error_message TEXT,
     user_id UUID REFERENCES auth_users(id) ON DELETE SET NULL,

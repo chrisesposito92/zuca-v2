@@ -697,9 +697,26 @@ export default function AnalyzePage() {
                 &ldquo;{currentFact}&rdquo;
               </p>
             </div>
-            <p className="text-xs text-default-400 mt-3">
-              You&apos;ll be redirected when complete.
-            </p>
+            <div className="flex items-center justify-between mt-3">
+              <p className="text-xs text-default-400">
+                You&apos;ll be redirected when complete.
+              </p>
+              <Button
+                size="sm"
+                variant="flat"
+                color="danger"
+                onPress={() => {
+                  if (clarifyMutation.isPending) {
+                    clarifyMutation.reset();
+                  } else {
+                    analyzeMutation.reset();
+                  }
+                  setPendingClarification(null);
+                }}
+              >
+                Cancel
+              </Button>
+            </div>
           </CardBody>
         </Card>
       )}
