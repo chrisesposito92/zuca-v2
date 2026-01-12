@@ -191,29 +191,35 @@ For minimal inputs, ask about the **most critical unknown** that affects the bil
 
 ### How to Request Clarification
 
-**CRITICAL**: If you set `needs_clarification: true`, you MUST also provide ALL of these fields:
-- `clarification_question` (required string)
-- `clarification_options` (required array with 2-4 options)
-- `clarification_context` (optional but recommended)
-- `clarification_priority` (optional, defaults to "important")
+**CRITICAL OUTPUT REQUIREMENT**: You MUST always output ALL clarification fields in your response.
 
-If any required field is missing, the clarification request will be ignored and the pipeline will proceed with defaults.
-
-Set these fields together:
-
+**When you DO need clarification** (set `needs_clarification: true`):
 ```json
 {
   "needs_clarification": true,
-  "clarification_question": "Does the platform fee cover all API calls, or are there usage-based overages?",
-  "clarification_context": "The contract mentions both a 'platform fee' and 'API transactions' but doesn't specify if they're bundled or separate charges. This affects whether we need usage-based billing.",
+  "clarification_question": "Does the platform fee cover all API calls?",
   "clarification_options": [
-    {"id": "bundled", "label": "Platform fee includes all API usage", "description": "Flat fee with no usage tracking"},
-    {"id": "overage", "label": "API calls above a threshold cost extra", "description": "Need usage-based billing for overages"},
-    {"id": "separate", "label": "API usage is billed separately", "description": "Two distinct charges: platform + usage"}
+    {"id": "bundled", "label": "Platform fee includes all API usage"},
+    {"id": "overage", "label": "API calls above threshold cost extra"},
+    {"id": "separate", "label": "API usage is billed separately"}
   ],
+  "clarification_context": "Contract mentions both 'platform fee' and 'API transactions'...",
   "clarification_priority": "important"
 }
 ```
+
+**When you DON'T need clarification** (set `needs_clarification: false`):
+```json
+{
+  "needs_clarification": false,
+  "clarification_question": null,
+  "clarification_options": null,
+  "clarification_context": null,
+  "clarification_priority": null
+}
+```
+
+**NEVER omit these fields.** Always include them with either real values or null.
 
 ### Clarification Guidelines
 
@@ -230,7 +236,7 @@ If the user provides a clarification answer (shown in "User Clarification" secti
 
 ## Output
 
-Return JSON with ALL fields (clarification fields are optional):
+Return JSON with ALL fields (clarification fields are REQUIRED, use null when not needed):
 
 ```json
 {
@@ -246,7 +252,12 @@ Return JSON with ALL fields (clarification fields are optional):
   "billing_caps": ["RECURRING", "PRORATION"],
   "revenue_caps": ["ALLOCATION"],
   "hints": ["annual subscription → RECURRING", "SSP mentioned → ALLOCATION"],
-  "confidence": 0.85
+  "confidence": 0.85,
+  "needs_clarification": false,
+  "clarification_question": null,
+  "clarification_options": null,
+  "clarification_context": null,
+  "clarification_priority": null
 }
 ```
 

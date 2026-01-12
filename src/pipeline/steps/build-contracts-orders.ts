@@ -19,6 +19,7 @@ import {
   StepClarificationRequest,
   transformClarificationOutput,
   clarificationOutputJsonSchema,
+  clarificationRequiredFields,
 } from '../../types/clarification';
 
 /**
@@ -109,10 +110,10 @@ export const contractsOrdersJsonSchema = {
     },
     assumptions: { type: 'array', items: { type: 'string' } },
     open_questions: { type: 'array', items: { type: 'string' } },
-    // Optional clarification fields - set needs_clarification: true to request user input
+    // Clarification fields - REQUIRED with nullable values
     ...clarificationOutputJsonSchema.properties,
   },
-  required: ['zr_contracts_orders', 'assumptions', 'open_questions'],
+  required: ['zr_contracts_orders', 'assumptions', 'open_questions', ...clarificationRequiredFields],
   additionalProperties: false,
 };
 

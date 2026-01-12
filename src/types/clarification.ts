@@ -123,24 +123,29 @@ export type PipelineClarificationResult = z.infer<typeof PipelineClarificationRe
 /**
  * JSON schema fragment for LLM structured output
  * Add this to step schemas to enable clarification requests
+ *
+ * IMPORTANT: These fields are REQUIRED in the schema to ensure LLMs always provide them.
+ * When no clarification is needed, set needs_clarification: false and leave others null/empty.
  */
 export const clarificationOutputJsonSchema = {
   type: 'object',
   properties: {
     needs_clarification: {
       type: 'boolean',
-      description: 'Set to true if you need to ask the user a clarification question',
+      description:
+        'REQUIRED. Set to true ONLY if you need to ask the user a clarification question AND you have filled in clarification_question and clarification_options below. Set to false otherwise.',
     },
     clarification_question: {
-      type: 'string',
-      description: 'The question to ask the user (1-2 sentences)',
+      type: ['string', 'null'],
+      description:
+        'REQUIRED when needs_clarification is true. The question to ask the user (1-2 sentences). Set to null if needs_clarification is false.',
     },
     clarification_context: {
-      type: 'string',
-      description: 'Brief context explaining why this matters',
+      type: ['string', 'null'],
+      description: 'Brief context explaining why this matters. Set to null if not needed.',
     },
     clarification_options: {
-      type: 'array',
+      type: ['array', 'null'],
       items: {
         type: 'object',
         properties: {
@@ -151,46 +156,78 @@ export const clarificationOutputJsonSchema = {
         required: ['id', 'label'],
         additionalProperties: false,
       },
-      minItems: 2,
-      maxItems: 4,
-      description: '2-4 concrete options representing the most likely scenarios',
+      description:
+        'REQUIRED when needs_clarification is true. 2-4 concrete options representing the most likely scenarios. Set to null if needs_clarification is false.',
     },
     clarification_priority: {
-      type: 'string',
-      enum: ['critical', 'important', 'helpful'],
-      description: 'How important is this clarification',
+      type: ['string', 'null'],
+      enum: ['critical', 'important', 'helpful', null],
+      description: 'How important is this clarification. Set to null if not needed.',
     },
   },
+  // These fields are REQUIRED in the schema - LLM must always output them
+  required: [
+    'needs_clarification',
+    'clarification_question',
+    'clarification_options',
+  ],
 };
 
 /**
+ * Required fields from clarification schema to spread into step schemas
+ * Use: required: [...otherFields, ...clarificationRequiredFields]
+ */
+export const clarificationRequiredFields = clarificationOutputJsonSchema.required;
+
+/**
  * Raw clarification output from LLM (flat structure before transformation)
+ * All fields are nullable - when needs_clarification is false, others should be null
  */
 export interface RawClarificationOutput {
-  needs_clarification?: boolean;
-  clarification_question?: string;
-  clarification_context?: string;
+  needs_clarification?: boolean | null;
+  clarification_question?: string | null;
+  clarification_context?: string | null;
   clarification_options?: Array<{
     id: string;
     label: string;
     description?: string;
-  }>;
-  clarification_priority?: 'critical' | 'important' | 'helpful';
+  }> | null;
+  clarification_priority?: 'critical' | 'important' | 'helpful' | null;
 }
 
 /**
  * Transform raw LLM clarification output to structured format
+ * Returns null if the clarification request is invalid or not needed
  */
 export function transformClarificationOutput(
   stepName: string,
   raw: RawClarificationOutput
 ): StepClarificationRequest | null {
-  if (!raw.needs_clarification || !raw.clarification_question || !raw.clarification_options) {
+  // Check if clarification is needed
+  if (!raw.needs_clarification) {
     return null;
   }
 
-  // Validate options
+  // Validate required companion fields
+  if (!raw.clarification_question || raw.clarification_question.trim() === '') {
+    console.warn(
+      `[${stepName}] Clarification requested but clarification_question is missing/empty`
+    );
+    return null;
+  }
+
+  if (!raw.clarification_options || !Array.isArray(raw.clarification_options)) {
+    console.warn(
+      `[${stepName}] Clarification requested but clarification_options is missing/not an array`
+    );
+    return null;
+  }
+
+  // Validate options count
   if (raw.clarification_options.length < 2 || raw.clarification_options.length > 4) {
+    console.warn(
+      `[${stepName}] Clarification options count invalid: ${raw.clarification_options.length} (need 2-4)`
+    );
     return null;
   }
 
@@ -200,7 +237,7 @@ export function transformClarificationOutput(
       questionId: `${stepName}:${Date.now()}`,
       stepName,
       question: raw.clarification_question,
-      context: raw.clarification_context,
+      context: raw.clarification_context ?? undefined, // Convert null to undefined
       options: raw.clarification_options.map((opt) => ({
         id: opt.id,
         label: opt.label,
@@ -208,7 +245,7 @@ export function transformClarificationOutput(
       })),
       allowSkip: true,
       allowFreeText: true,
-      priority: raw.clarification_priority || 'important',
+      priority: raw.clarification_priority ?? 'important', // Convert null to default
     },
   };
 }

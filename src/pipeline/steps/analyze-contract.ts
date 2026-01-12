@@ -20,6 +20,7 @@ import {
   StepClarificationRequest,
   transformClarificationOutput,
   clarificationOutputJsonSchema,
+  clarificationRequiredFields,
 } from '../../types/clarification';
 
 /**
@@ -76,7 +77,7 @@ export const contractAnalysisJsonSchema = {
       maximum: 1,
       description: 'Confidence score based on how explicit the text is',
     },
-    // Optional clarification fields - set needs_clarification: true to request user input
+    // Clarification fields - REQUIRED with nullable values
     ...clarificationOutputJsonSchema.properties,
   },
   required: [
@@ -95,7 +96,8 @@ export const contractAnalysisJsonSchema = {
     'revenue_caps',
     'hints',
     'confidence',
-    // Note: clarification fields are NOT required - only used when needs_clarification is true
+    // Clarification fields - REQUIRED (use null when not needed)
+    ...clarificationRequiredFields,
   ],
   additionalProperties: false,
 };

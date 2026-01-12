@@ -28,6 +28,7 @@ import {
   StepClarificationRequest,
   transformClarificationOutput,
   clarificationOutputJsonSchema,
+  clarificationRequiredFields,
 } from '../../types/clarification';
 
 /**
@@ -217,10 +218,10 @@ export function buildSubscriptionDesignJsonSchema(pobTemplates: PobTemplate[]) {
       assumptions: { type: 'array', items: { type: 'string' } },
       open_questions: { type: 'array', items: { type: 'string' } },
       mapping_notes: { type: 'array', items: { type: 'string' } },
-      // Optional clarification fields - set needs_clarification: true to request user input
+      // Clarification fields - REQUIRED with nullable values
       ...clarificationOutputJsonSchema.properties,
     },
-    required: ['subscription', 'rate_plans', 'usage', 'charge_pob_map', 'assumptions', 'open_questions', 'mapping_notes'],
+    required: ['subscription', 'rate_plans', 'usage', 'charge_pob_map', 'assumptions', 'open_questions', 'mapping_notes', ...clarificationRequiredFields],
     additionalProperties: false,
   };
 }
