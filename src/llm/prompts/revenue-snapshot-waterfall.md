@@ -114,8 +114,8 @@ No allocation is performed:
 ### When Allocation IS Required (Allocation Eligible Flag = "Y")
 
 **Step 1: Determine SSP Price per SSP Method**
-- **List Price**: SSP Price = Ext List Price / Ordered Qty / Terms Months
-- **Sell Price**: SSP Price = Ext Sell Price / Ordered Qty / Terms Months
+- **List Price**: SSP Price = Ext List Price / Ordered Qty / Num of Periods
+- **Sell Price**: SSP Price = Ext Sell Price / Ordered Qty / Num of Periods
 - **Custom Formula**: Apply the provided formula
 
 **Step 2: Calculate Ext SSP Price**

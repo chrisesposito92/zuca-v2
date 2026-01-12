@@ -24,9 +24,38 @@ export function formatSubscriptionSpecForContext(spec: SubscriptionSpec): string
 
   const chargeInfo = spec.rate_plans.flatMap((rp) =>
     rp.charges.map(
-      (c) =>
-        `  - ${rp.productName}/${rp.ratePlanName}/${c.name}: ${c.type}/${c.model}, ` +
-        `${c.billingPeriod || 'N/A'} ${c.billingTiming || ''}, trigger=${c.triggerEvent}`
+      (c) => {
+        const pricingParts: string[] = [];
+        if (c.quantity !== null && c.quantity !== undefined) {
+          pricingParts.push(`qty=${c.quantity}`);
+        }
+        if (c.sellPrice !== null && c.sellPrice !== undefined) {
+          pricingParts.push(`sellPrice=${c.sellPrice}`);
+        } else if (c.listPrice !== null && c.listPrice !== undefined) {
+          pricingParts.push(`listPrice=${c.listPrice}`);
+        } else if (c.price !== null && c.price !== undefined) {
+          pricingParts.push(`price=${c.price}`);
+        }
+        if (c.listPriceBase) {
+          pricingParts.push(`priceBase=${c.listPriceBase}`);
+        }
+        if (c.uom) {
+          pricingParts.push(`uom=${c.uom}`);
+        }
+        if (c.effectiveStartDate) {
+          pricingParts.push(`effectiveStart=${c.effectiveStartDate}`);
+        }
+        if (c.effectiveEndDate) {
+          pricingParts.push(`effectiveEnd=${c.effectiveEndDate}`);
+        }
+        const pricingSuffix = pricingParts.length > 0 ? `, ${pricingParts.join(', ')}` : '';
+
+        return (
+          `  - ${rp.productName}/${rp.ratePlanName}/${c.name}: ${c.type}/${c.model}, ` +
+          `${c.billingPeriod || 'N/A'} ${c.billingTiming || ''}, trigger=${c.triggerEvent}` +
+          pricingSuffix
+        );
+      }
     )
   );
 

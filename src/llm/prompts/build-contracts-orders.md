@@ -97,8 +97,8 @@ For each line, populate:
 - `Ordered Qty`: From charge quantity (default 1)
 - `Unit List Price`: From charge listPrice
 - `Unit Sell Price`: From charge sellPrice
-- `Ext List Price`: Qty × Unit List Price x Terms Months
-- `Ext Sell Price`: Qty × Unit Sell Price X Terms Months
+- `Ext List Price`: Qty × Unit List Price x Num of Periods
+- `Ext Sell Price`: Qty × Unit Sell Price X Num of Periods
 
 **Allocation (see below):**
 - `SSP Price`: Unit SSP (typically = Unit List Price unless override)
