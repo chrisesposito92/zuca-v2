@@ -147,6 +147,8 @@ export default function AnalyzePage() {
   const analyzeMutation = useAnalyze();
   const clarifyMutation = useClarify();
   const ucGeneratorMutation = useUCGenerator();
+  const pipelineLocked =
+    analyzeMutation.isPending || clarifyMutation.isPending || pendingClarification !== null;
 
   // Update clarification state when analyze or clarify mutation returns a clarification
   useEffect(() => {
@@ -631,6 +633,7 @@ export default function AnalyzePage() {
           color="secondary"
           size="lg"
           className="border-2 border-secondary/50 hover:border-secondary hover:bg-secondary/10 transition-all"
+          isDisabled={pipelineLocked}
           startContent={
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
@@ -747,7 +750,7 @@ export default function AnalyzePage() {
                   labelPlacement="outside"
                   variant="bordered"
                   size="lg"
-                  isDisabled={analyzeMutation.isPending}
+                  isDisabled={pipelineLocked}
                   classNames={{
                     inputWrapper: "border-default-200 hover:border-primary/50 focus-within:border-primary",
                   }}
@@ -761,7 +764,7 @@ export default function AnalyzePage() {
                   labelPlacement="outside"
                   variant="bordered"
                   size="lg"
-                  isDisabled={analyzeMutation.isPending}
+                  isDisabled={pipelineLocked}
                   classNames={{
                     inputWrapper: "border-default-200 hover:border-primary/50 focus-within:border-primary",
                   }}
@@ -777,7 +780,7 @@ export default function AnalyzePage() {
                 labelPlacement="outside"
                 variant="bordered"
                 size="lg"
-                isDisabled={analyzeMutation.isPending}
+                isDisabled={pipelineLocked}
                 classNames={{
                   inputWrapper: "border-default-200 hover:border-primary/50 focus-within:border-primary",
                 }}
@@ -809,7 +812,7 @@ export default function AnalyzePage() {
                   labelPlacement="outside"
                   variant="bordered"
                   size="lg"
-                  isDisabled={analyzeMutation.isPending}
+                  isDisabled={pipelineLocked}
                   classNames={{
                     inputWrapper: "border-default-200 hover:border-primary/50 focus-within:border-primary",
                   }}
@@ -823,7 +826,7 @@ export default function AnalyzePage() {
                   labelPlacement="outside"
                   variant="bordered"
                   size="lg"
-                  isDisabled={analyzeMutation.isPending}
+                  isDisabled={pipelineLocked}
                   classNames={{
                     trigger: "border-default-200 hover:border-primary/50 data-[focus=true]:border-primary",
                   }}
@@ -843,7 +846,7 @@ export default function AnalyzePage() {
                   labelPlacement="outside"
                   variant="bordered"
                   size="lg"
-                  isDisabled={analyzeMutation.isPending}
+                  isDisabled={pipelineLocked}
                   classNames={{
                     trigger: "border-default-200 hover:border-primary/50 data-[focus=true]:border-primary",
                   }}
@@ -889,7 +892,7 @@ export default function AnalyzePage() {
                 <Switch
                   isSelected={isAllocations}
                   onValueChange={setIsAllocations}
-                  isDisabled={analyzeMutation.isPending}
+                  isDisabled={pipelineLocked}
                   classNames={{
                     wrapper: "group-data-[selected=true]:bg-primary",
                   }}
@@ -909,7 +912,7 @@ export default function AnalyzePage() {
                     onSelectionChange={(keys) =>
                       setAllocationMethod(Array.from(keys)[0] as string)
                     }
-                    isDisabled={analyzeMutation.isPending}
+                    isDisabled={pipelineLocked}
                     classNames={{
                       trigger: "border-default-200 hover:border-primary/50 data-[focus=true]:border-primary",
                     }}
@@ -929,7 +932,7 @@ export default function AnalyzePage() {
                       labelPlacement="outside"
                       variant="bordered"
                       size="lg"
-                      isDisabled={analyzeMutation.isPending}
+                      isDisabled={pipelineLocked}
                       classNames={{
                         inputWrapper: "border-default-200 hover:border-primary/50 focus-within:border-primary",
                       }}
@@ -947,7 +950,7 @@ export default function AnalyzePage() {
                 labelPlacement="outside"
                 variant="bordered"
                 size="lg"
-                isDisabled={analyzeMutation.isPending}
+                isDisabled={pipelineLocked}
                 classNames={{
                   inputWrapper: "border-default-200 hover:border-primary/50 focus-within:border-primary",
                 }}
@@ -976,7 +979,7 @@ export default function AnalyzePage() {
                 labelPlacement="outside"
                 variant="bordered"
                 size="lg"
-                isDisabled={analyzeMutation.isPending}
+                isDisabled={pipelineLocked}
                 classNames={{
                   trigger: "border-default-200 hover:border-primary/50 data-[focus=true]:border-primary",
                 }}
@@ -1016,7 +1019,7 @@ export default function AnalyzePage() {
                   <Switch
                     isSelected={skipClarifications}
                     onValueChange={handleSkipClarificationsChange}
-                    isDisabled={analyzeMutation.isPending || clarifyMutation.isPending}
+                    isDisabled={pipelineLocked}
                     classNames={{
                       wrapper: "group-data-[selected=true]:bg-warning",
                     }}
@@ -1034,7 +1037,7 @@ export default function AnalyzePage() {
               size="lg"
               className="px-8 border-2 border-default-300 hover:border-default-400"
               onPress={handleClear}
-              isDisabled={analyzeMutation.isPending}
+              isDisabled={pipelineLocked}
             >
               Clear Form
             </Button>
@@ -1043,6 +1046,7 @@ export default function AnalyzePage() {
               color="primary"
               size="lg"
               className="px-8 font-semibold teal-glow-subtle"
+              isDisabled={pipelineLocked}
               isLoading={analyzeMutation.isPending}
             >
               {analyzeMutation.isPending ? "Analyzing..." : "Analyze Use Case"}
