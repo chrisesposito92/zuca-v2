@@ -191,7 +191,15 @@ For minimal inputs, ask about the **most critical unknown** that affects the bil
 
 ### How to Request Clarification
 
-If you determine clarification is needed, set these fields:
+**CRITICAL**: If you set `needs_clarification: true`, you MUST also provide ALL of these fields:
+- `clarification_question` (required string)
+- `clarification_options` (required array with 2-4 options)
+- `clarification_context` (optional but recommended)
+- `clarification_priority` (optional, defaults to "important")
+
+If any required field is missing, the clarification request will be ignored and the pipeline will proceed with defaults.
+
+Set these fields together:
 
 ```json
 {

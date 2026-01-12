@@ -231,7 +231,15 @@ You may request clarification from the user **ONLY** when ALL of these condition
 
 ### How to Request Clarification
 
-If you determine clarification is needed, set these fields in your output:
+**CRITICAL**: If you set `needs_clarification: true`, you MUST also provide ALL of these fields:
+- `clarification_question` (required string)
+- `clarification_options` (required array with 2-4 options)
+- `clarification_context` (optional but recommended)
+- `clarification_priority` (optional, defaults to "important")
+
+If any required field is missing, the clarification request will be ignored.
+
+Set these fields together:
 
 ```json
 {
