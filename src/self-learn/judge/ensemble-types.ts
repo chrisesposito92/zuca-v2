@@ -147,7 +147,11 @@ export function createEnsembleConfig(
     parallel: options.parallel ?? true,
     tolerateFailures: options.tolerateFailures ?? true,
     // minJudgesRequired should never exceed the number of judges
-    // With 1 judge: require 1, with 2: require 2, with 3+: require majority
-    minJudgesRequired: options.minJudgesRequired ?? Math.min(models.length, Math.max(1, Math.ceil(models.length / 2))),
+    // With 1 judge: require 1, with 2+: require at least 2, then ceil(n/2)
+    minJudgesRequired: options.minJudgesRequired ?? (() => {
+      if (models.length <= 1) return models.length;
+      const defaultMin = Math.max(2, Math.ceil(models.length / 2));
+      return Math.min(models.length, defaultMin);
+    })(),
   };
 }

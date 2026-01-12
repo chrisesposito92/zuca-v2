@@ -3,8 +3,14 @@ import { NextRequest } from 'next/server';
 
 import { POST } from '@/app/api/analyze/route';
 import { getCurrentUser } from '@/lib/auth';
-import { createSession, updateSessionResult, updateSessionStatus } from '@/lib/db';
-import { runPipeline } from '@zuca/pipeline';
+import {
+  createSession,
+  updateSessionResult,
+  updateSessionStatus,
+  updateSessionClarificationState,
+  shouldSkipClarifications,
+} from '@/lib/db';
+import { runPipeline, isPipelineClarificationPause, createClarificationState } from '@zuca/pipeline';
 
 vi.mock('@/lib/auth', () => ({
   getCurrentUser: vi.fn(),
@@ -14,17 +20,25 @@ vi.mock('@/lib/db', () => ({
   createSession: vi.fn(),
   updateSessionResult: vi.fn(),
   updateSessionStatus: vi.fn(),
+  updateSessionClarificationState: vi.fn(),
+  shouldSkipClarifications: vi.fn(),
 }));
 
 vi.mock('@zuca/pipeline', () => ({
   runPipeline: vi.fn(),
+  isPipelineClarificationPause: vi.fn(),
+  createClarificationState: vi.fn(),
 }));
 
 const getCurrentUserMock = vi.mocked(getCurrentUser);
 const createSessionMock = vi.mocked(createSession);
 const updateSessionStatusMock = vi.mocked(updateSessionStatus);
 const updateSessionResultMock = vi.mocked(updateSessionResult);
+const updateSessionClarificationStateMock = vi.mocked(updateSessionClarificationState);
+const shouldSkipClarificationsMock = vi.mocked(shouldSkipClarifications);
 const runPipelineMock = vi.mocked(runPipeline);
+const isPipelineClarificationPauseMock = vi.mocked(isPipelineClarificationPause);
+const createClarificationStateMock = vi.mocked(createClarificationState);
 
 describe('POST /api/analyze', () => {
   beforeEach(() => {
@@ -32,7 +46,11 @@ describe('POST /api/analyze', () => {
     createSessionMock.mockReset();
     updateSessionStatusMock.mockReset();
     updateSessionResultMock.mockReset();
+    updateSessionClarificationStateMock.mockReset();
+    shouldSkipClarificationsMock.mockReset();
     runPipelineMock.mockReset();
+    isPipelineClarificationPauseMock.mockReset();
+    createClarificationStateMock.mockReset();
   });
 
   it('rejects invalid model selections', async () => {
@@ -65,6 +83,8 @@ describe('POST /api/analyze', () => {
 
   it('creates a session and stores results on success', async () => {
     getCurrentUserMock.mockResolvedValue({ userId: 'user-1' } as any);
+    shouldSkipClarificationsMock.mockResolvedValue(false);
+    isPipelineClarificationPauseMock.mockReturnValue(false);
     createSessionMock.mockResolvedValue({
       id: 'session-1',
       session_type: 'analyze',
@@ -108,6 +128,8 @@ describe('POST /api/analyze', () => {
 
   it('marks session failed when pipeline throws', async () => {
     getCurrentUserMock.mockResolvedValue({ userId: 'user-1' } as any);
+    shouldSkipClarificationsMock.mockResolvedValue(false);
+    isPipelineClarificationPauseMock.mockReturnValue(false);
     createSessionMock.mockResolvedValue({
       id: 'session-2',
       session_type: 'analyze',

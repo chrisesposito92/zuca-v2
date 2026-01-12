@@ -126,6 +126,7 @@ describe('POST /api/feedback', () => {
       'summary',
       'positive',
       'user-123',
+      undefined,
       undefined
     );
   });
@@ -171,6 +172,7 @@ describe('POST /api/feedback', () => {
       'contracts',
       'negative',
       'user-123',
+      undefined,
       'The data was incorrect'
     );
   });
