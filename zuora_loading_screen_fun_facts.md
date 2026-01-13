@@ -397,5 +397,3 @@
 199. Behind every clean dashboard is someone who finally standardized their data.  
 
 200. This app is here so that when your business changes, your billing doesn’t panic.  
-
-*Written with Glean Assistant*  
