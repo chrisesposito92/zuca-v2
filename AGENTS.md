@@ -54,7 +54,9 @@ Automated feedback loop where the pipeline learns from evaluation failures:
 - **Evaluation Criteria** (`data/evaluation-criteria/*.yaml`) - Behavioral rules per step
 - **LLM Judge** (`src/self-learn/judge/`) - Evaluates outputs against criteria
 - **Corrections Store** - Dual backend: JSON (local dev) or Postgres (production)
-- **Injector** (`src/self-learn/injector/`) - Injects corrections as few-shot examples
+- **Injector** (`src/self-learn/injector/`) - Injects corrections as contrastive few-shot examples
+- **Maintenance** (`src/self-learn/corrections/maintenance.ts`) - Correction lifecycle: decay, archive, promote
+- **Active Learning** (`src/self-learn/active-learning/`) - Uncertainty sampling + review queue
 - **Evolution** (`src/self-learn/evolution/`) - Pattern analysis + prompt improvement suggestions (dual backend: JSON/Postgres)
 
 ### Key Files
@@ -77,25 +79,197 @@ USE_CORRECTIONS_EMBEDDINGS=false
 ```
 
 ### CLI Commands
+
+> **Note:** When passing flags to CLI commands, use `--` to separate npm args from script args:
+> `npm run cli -- <command> --flag` (not `npm run cli <command> --flag`)
+
 ```bash
+# Benchmarking (cross-model comparison)
+npm run cli -- benchmark                    # Run with all models
+npm run cli -- benchmark -s golden-quick    # Specific test suite
+npm run cli -- benchmark --models gpt-5.2,zuca-gpt-nano  # Specific models
+npm run cli -- benchmark -o results.json    # Export JSON results
+npm run cli -- benchmark --markdown report.md  # Generate markdown report
+npm run cli -- benchmark --skip-evaluation  # Speed-only (no quality eval)
+npm run cli -- benchmark -v                 # Verbose progress output
+npm run cli -- benchmark --judge-model gpt-5.2  # Specific judge model
+
 # Evaluation
-npm run cli evaluate              # Run evaluation suite
-npm run cli evaluate --corrections # Generate corrections for failures
-npm run cli evaluate -m gemini-3-flash-preview  # Use specific model
+npm run cli -- evaluate              # Run evaluation suite
+npm run cli -- evaluate --corrections # Generate corrections for failures
+npm run cli -- evaluate --capture-training  # Capture passing outputs as training data
+npm run cli -- evaluate -m gemini-3-flash-preview  # Use specific model
+npm run cli -- evaluate --ensemble   # Use multi-judge ensemble evaluation
+npm run cli -- evaluate --ensemble --ensemble-models gpt-5.2,gemini-3-pro-preview  # Custom judges
 
 # Corrections Management
-npm run cli corrections list      # List stored corrections
-npm run cli corrections summary   # Show pattern statistics
+npm run cli -- corrections list      # List stored corrections
+npm run cli -- corrections summary   # Show pattern statistics
+npm run cli -- corrections cluster <step>  # Cluster similar corrections
+npm run cli -- corrections cluster <step> --threshold 0.9  # Custom similarity
+npm run cli -- corrections maintain  # Run lifecycle maintenance (decay/archive/promote)
+npm run cli -- corrections maintain --dry-run  # Preview without changes
+npm run cli -- corrections archived  # List archived corrections
+npm run cli -- corrections restore <id>  # Restore an archived correction
+
+# Active Learning / Review Queue
+npm run cli -- review list           # List items flagged for review
+npm run cli -- review list --status pending  # Filter by status
+npm run cli -- review show <id>      # Show item details
+npm run cli -- review approve <id>   # Mark item as reviewed (correct output)
+npm run cli -- review dismiss <id>   # Dismiss item (not worth reviewing)
+npm run cli -- review stats          # Show queue statistics
+npm run cli -- review clear          # Clear all items from queue
 
 # Pattern Analysis & Prompt Evolution (Phase 4)
-npm run cli prompts analyze       # Analyze failure patterns
-npm run cli prompts suggest <step> "<pattern>"  # Generate suggestion
-npm run cli prompts list          # View pending suggestions
-npm run cli prompts approve <id>  # Approve a suggestion
+npm run cli -- prompts analyze       # Analyze failure patterns
+npm run cli -- prompts suggest <step> "<pattern>"  # Generate suggestion
+npm run cli -- prompts list          # View pending suggestions
+npm run cli -- prompts approve <id>  # Approve a suggestion
+npm run cli -- prompts apply <id>    # Auto-apply approved suggestion
+npm run cli -- prompts rollback <id> <backupPath>  # Rollback to backup
+npm run cli -- prompts backups       # List all prompt backups
 
 # Self-Improvement Loop
-npm run cli self-improve          # Run evaluation + pattern analysis
-npm run cli self-improve --auto-suggest  # Auto-generate suggestions
+npm run cli -- self-improve          # Run evaluation + pattern analysis
+npm run cli -- self-improve --auto-suggest  # Auto-generate suggestions
+
+# Fine-Tune Evaluation (compare base vs fine-tuned models)
+npm run cli -- ft-eval run baseline-gpt4.1 --model gpt-4.1 -v  # Run baseline eval
+npm run cli -- ft-eval run ft-nano-v1 --model ft:gpt-4.1-nano:personal:... -v  # Eval fine-tuned model
+npm run cli -- ft-eval quick gpt-4.1 -v         # Quick eval (5 test cases)
+npm run cli -- ft-eval quick ft:gpt-4.1-nano:... -c 3  # Quick eval with custom count
+npm run cli -- ft-eval list                      # List all saved runs
+npm run cli -- ft-eval show <name-or-id>         # Show details of a run
+npm run cli -- ft-eval compare baseline-gpt4.1 ft-nano-v1  # Compare two runs
+npm run cli -- ft-eval compare baseline ft-v1 --markdown report.md  # Export comparison
+
+# Training Data Export (for SLM fine-tuning)
+npm run cli -- training stats        # Show training data statistics
+npm run cli -- training sync         # Sync corrections to training data
+npm run cli -- training list         # List training examples
+npm run cli -- training export data/zuora-training.jsonl  # Export to JSONL
+npm run cli -- training export data/zuora-training.jsonl --format huggingface  # HuggingFace format
+
+# Training Data Consolidation (combine sources for fine-tuning)
+npx tsx scripts/consolidate-training-data.ts --stats  # Show all source stats
+npx tsx scripts/consolidate-training-data.ts output.jsonl --shuffle  # Consolidate all
+npx tsx scripts/consolidate-training-data.ts output.jsonl --only pipeline-outputs --shuffle  # Pipeline only
+npx tsx scripts/consolidate-training-data.ts output.jsonl --only pipeline-outputs,zuora-revenue --shuffle
+npx tsx scripts/consolidate-training-data.ts output.jsonl --exclude slack-data,zendesk-data --shuffle
+npx tsx scripts/consolidate-training-data.ts output.jsonl --only-category pipeline --shuffle
+
+# Synthetic Test Generation
+npm run cli -- testgen from-failures <step>  # Generate tests from step failures
+npm run cli -- testgen from-failures billings -c 5  # Generate 5 tests
+npm run cli -- testgen from-failures billings -a  # Adversarial edge cases
+npm run cli -- testgen from-failures billings -o generated-tests  # Write to suite
+npm run cli -- testgen from-failures billings -o generated-tests --append  # Append to existing
+npm run cli -- testgen from-pattern "<pattern>" <step>  # Generate from pattern
+npm run cli -- testgen from-correction <correctionId>  # Generate from correction
+npm run cli -- testgen stats         # Show generated test statistics
+npm run cli -- testgen list          # List suites with generated tests
+```
+
+### Training Data for SLM Fine-Tuning
+The self-learning system can export training data for fine-tuning small language models:
+
+**Key Files:**
+- `src/self-learn/training/` - Training data module
+- `data/training-data.json` - Stored training examples
+- `data/training-sources/` - All training data sources
+- `scripts/consolidate-training-data.ts` - Consolidation script
+
+**Training Sources (in `data/training-sources/`):**
+- `pipeline-outputs.json` - Task-specific pipeline input→output pairs (recommended for task-specific fine-tuning)
+- `zuora-*.jsonl` - Zuora documentation Q&A (billing, developer, platform, revenue)
+- `glean-qa.jsonl`, `slack-data.jsonl`, `zendesk-data.jsonl` - Internal knowledge
+- `pob-templates-qa.jsonl`, `zuca-training-qa.jsonl` - Custom ZUCA training
+
+**Workflow:**
+1. Run evaluations with training capture: `npm run cli -- evaluate --suite golden-scenarios --capture-training`
+   - Passing outputs are automatically saved as training examples
+2. Optionally sync corrections: `npm run cli -- training sync`
+   - Corrections with `example_fix` become additional training examples
+3. Consolidate sources for fine-tuning: `npx tsx scripts/consolidate-training-data.ts output.jsonl --only pipeline-outputs --shuffle`
+   - Use `--only` to select specific sources (recommended: start with `pipeline-outputs` only)
+   - Use `--exclude` to remove noisy sources like `slack-data`
+   - Use `--stats` to see example counts per source
+
+**Output Format (JSONL):**
+```json
+{"messages": [{"role": "system", "content": "..."}, {"role": "user", "content": "..."}, {"role": "assistant", "content": "..."}]}
+```
+
+Compatible with HuggingFace TRL/SFTTrainer and Unsloth.
+
+### Correction Lifecycle Management
+Corrections are automatically managed through decay, archiving, and promotion:
+
+**Decay**: Corrections that haven't been applied recently lose confidence over time
+- After 30 days without use + fewer than 3 applies → confidence × 0.9
+
+**Archive**: Low-performing corrections are archived (hidden from injection)
+- Requires 10+ applies with <20% success rate → moved to archive
+- Archived corrections can be restored with `npm run cli -- corrections restore <id>`
+
+**Promote**: High-performing corrections gain confidence
+- Requires 5+ applies with >80% success rate → confidence × 1.1 (max 1.0)
+
+Run maintenance manually with `npm run cli -- corrections maintain` or use `--dry-run` to preview changes.
+
+### Contrastive Examples
+Corrections are injected as contrastive examples showing both incorrect and correct outputs:
+
+```
+## 🔧 Past Mistake: Missing discount validation
+
+**Scenario:** Usage-based subscription with promotional discounts
+
+### ❌ INCORRECT OUTPUT (What NOT to do):
+Applied discount to usage charges without checking eligibility...
+
+### ✅ CORRECT OUTPUT (What to produce):
+Validated discount eligibility before application...
+
+**Lesson:** Always validate discount applicability for charge types
+```
+
+This format helps the LLM understand boundaries by showing both what to avoid and what to produce.
+
+### Active Learning / Uncertainty Sampling
+Outputs are assessed for uncertainty using two signals:
+
+1. **Self-Assessment**: LLM rates its own confidence (0-1)
+2. **Novelty Score**: How different from known patterns (0-1)
+
+Combined uncertainty = (1 - confidence) × 0.6 + novelty × 0.4
+
+When combined uncertainty exceeds threshold (default 0.6), items are added to the review queue for human evaluation.
+
+**Configuration:**
+```bash
+ENABLE_ACTIVE_LEARNING=true              # Enable uncertainty sampling
+ACTIVE_LEARNING_THRESHOLD=0.6            # Combined uncertainty threshold
+ACTIVE_LEARNING_NOVELTY_WEIGHT=0.4       # Weight for novelty score
+ACTIVE_LEARNING_CONFIDENCE_WEIGHT=0.6    # Weight for confidence
+ACTIVE_LEARNING_MODEL=gpt-5.2            # Model for self-assessment
+ACTIVE_LEARNING_SELF_ASSESSMENT=true     # Enable LLM self-assessment
+ACTIVE_LEARNING_NOVELTY=true             # Enable novelty scoring
+```
+
+**Review queue storage:** `data/review-queue.json` (local development)
+
+### Fine-Tune Evaluation
+Compares baseline models vs fine-tuned models. See `docs/SELF-LEARNING-CLI.md` for full documentation.
+
+**Key Files:** `src/evals/`, `data/ft-evals/`
+
+**Quick Reference:**
+```bash
+npm run cli -- ft-eval run baseline --model gpt-4.1 -v    # Baseline eval
+npm run cli -- ft-eval run ft-v1 --model ft:gpt-4.1-nano:... -v  # Fine-tuned eval
+npm run cli -- ft-eval compare baseline ft-v1             # Compare results
 ```
 
 ### Adding New Criteria
