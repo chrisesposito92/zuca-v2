@@ -154,3 +154,5 @@ data/training-sources/*
 data/training-sources/pipeline-outputs.json
 data/ft-*
 data/openrlhf*
+data/consolidated-*
+data/openai*
