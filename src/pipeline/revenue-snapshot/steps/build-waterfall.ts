@@ -780,7 +780,8 @@ export async function buildSnapshotWaterfall(
   source: RevenueSnapshotSource,
   previousOutput?: RevenueSnapshotTableOutput,
   reasoningEffort: ReasoningEffort = 'high',
-  model?: LlmModel
+  model?: LlmModel,
+  iterationContext?: string
 ): Promise<RevenueSnapshotTableOutput> {
   debugLog('Building Revenue Snapshot Waterfall (combined allocations + periodization)');
 
@@ -802,6 +803,11 @@ export async function buildSnapshotWaterfall(
 
   if (previousOutput) {
     userMessage = 'Previous Results:\n' + JSON.stringify(previousOutput, null, 2) + '\n\n' + userMessage;
+  }
+
+  // Add iteration context from Ralph self-improvement
+  if (iterationContext) {
+    userMessage = iterationContext + '\n\n' + userMessage;
   }
 
   // Build schema with dynamic period fields

@@ -363,6 +363,37 @@ The MCP server must support Streamable HTTP or SSE for OpenAI. For Gemini, the M
 
 Set `DEBUG=true` in your environment to see tool usage in the logs.
 
+### Ralph: Self-Improvement Iteration
+
+ZUCA includes "Ralph" - an iterative self-improvement system where LLM steps evaluate their own output and can iterate to improve quality.
+
+**How it works:**
+1. Each LLM step executes and produces output
+2. The same model evaluates its own output (self-critique)
+3. Based on confidence, it decides to:
+   - **Done**: Accept output (confidence ≥85%)
+   - **Iterate**: Re-run with specific feedback about what to fix
+   - **Clarify**: Ask the user a question (interactive mode only)
+4. Steps can iterate up to 3 times (configurable) before accepting the best output
+
+**Configuration** (`config/ralph.yaml`):
+```yaml
+enabled: true
+defaultMaxIterations: 3
+
+steps:
+  analyze_contract:
+    enabled: true
+    maxIterations: 3
+    allowClarifications: true
+```
+
+**Environment overrides:**
+- `RALPH_ENABLED=true/false` - Global toggle
+- `RALPH_MAX_ITERATIONS=N` - Override max iterations for all steps
+
+Ralph is applied to all LLM steps in both the main analysis pipeline and the Revenue Snapshot pipeline.
+
 ## License
 
 MIT

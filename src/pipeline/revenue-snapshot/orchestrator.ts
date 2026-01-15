@@ -5,15 +5,20 @@ import {
   RevenueSnapshotOutput,
   RevenueSnapshotSource,
   RevenueSnapshotSourceCounts,
+  RevenueSnapshotTableOutput,
+  RevenueSnapshotSummary,
 } from '../../types/revenue-snapshot';
 import {
   buildSnapshotWaterfall,
   summarizeSnapshot,
 } from './steps';
+import { withRalph } from '../ralph';
 
 export interface RevenueSnapshotOptions {
   sessionId?: string;
   model?: LlmModel;
+  /** Override Ralph enabled setting */
+  ralphEnabled?: boolean;
 }
 
 function buildSourceCounts(source: RevenueSnapshotSource): RevenueSnapshotSourceCounts {
@@ -38,9 +43,27 @@ export async function runRevenueSnapshotPipeline(
   const sessionId = options.sessionId || uuidv4();
   const selectedModel = options.model;
 
-  // Single step handles allocations + periodization
-  const revrec = await buildSnapshotWaterfall(input, source, undefined, 'high', selectedModel);
-  const summary = await summarizeSnapshot(input, source, revrec, undefined, 'high', selectedModel);
+  // Step 1: Build waterfall (allocations + periodization)
+  const waterfallResult = await withRalph<RevenueSnapshotTableOutput>({
+    stepName: 'snapshot_waterfall',
+    originalInput: { input, source },
+    stepFn: (iterationContext) =>
+      buildSnapshotWaterfall(input, source, undefined, 'high', selectedModel, iterationContext),
+    model: selectedModel,
+    interactiveMode: false, // Revenue Snapshot is non-interactive
+  });
+  const revrec = waterfallResult.output;
+
+  // Step 2: Summarize
+  const summaryResult = await withRalph<RevenueSnapshotSummary>({
+    stepName: 'snapshot_summary',
+    originalInput: { input, source, revrec },
+    stepFn: (iterationContext) =>
+      summarizeSnapshot(input, source, revrec, undefined, 'high', selectedModel, iterationContext),
+    model: selectedModel,
+    interactiveMode: false,
+  });
+  const summary = summaryResult.output;
 
   return {
     session_id: sessionId,

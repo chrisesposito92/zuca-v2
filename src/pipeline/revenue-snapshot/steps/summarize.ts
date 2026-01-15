@@ -46,13 +46,19 @@ export async function summarizeSnapshot(
   revrec: RevenueSnapshotTableOutput,
   previousOutput?: RevenueSnapshotSummary,
   reasoningEffort: ReasoningEffort = 'high',
-  model?: LlmModel
+  model?: LlmModel,
+  iterationContext?: string
 ): Promise<RevenueSnapshotSummary> {
   const systemPrompt = await loadPrompt(PROMPTS.SNAPSHOT_SUMMARY);
   let userMessage = buildUserMessage(input, source, revrec);
 
   if (previousOutput) {
     userMessage = `Previous Summary:\n${JSON.stringify(previousOutput, null, 2)}\n\n${userMessage}`;
+  }
+
+  // Add iteration context from Ralph self-improvement
+  if (iterationContext) {
+    userMessage = iterationContext + '\n\n' + userMessage;
   }
 
   const result = await complete<RevenueSnapshotSummary>({

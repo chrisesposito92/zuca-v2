@@ -45,3 +45,14 @@ steps:
     enabled: true
     maxIterations: 3
     allowClarifications: true
+
+  # Revenue Snapshot pipeline steps
+  snapshot_waterfall:
+    enabled: true
+    maxIterations: 3
+    allowClarifications: false  # Revenue Snapshot is non-interactive
+
+  snapshot_summary:
+    enabled: true
+    maxIterations: 2
+    allowClarifications: false

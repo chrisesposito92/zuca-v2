@@ -12,11 +12,15 @@ import { RalphConfigSchema, type RalphConfig } from '../../types/ralph';
  * Steps that can be wrapped with Ralph self-improvement
  */
 export const RALPH_ENABLED_STEPS = [
+  // Main analysis pipeline
   'analyze_contract',
   'design_subscription',
   'contracts_orders',
   'billings',
   'revrec_waterfall',
+  // Revenue snapshot pipeline
+  'snapshot_waterfall',
+  'snapshot_summary',
 ] as const;
 
 export type RalphEnabledStep = (typeof RALPH_ENABLED_STEPS)[number];
