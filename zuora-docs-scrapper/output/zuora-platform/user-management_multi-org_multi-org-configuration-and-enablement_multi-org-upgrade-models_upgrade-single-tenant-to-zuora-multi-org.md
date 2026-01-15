@@ -2,7 +2,7 @@
 title: "Upgrade single tenant to Zuora Multi-Org"
 url: "https://docs.zuora.com/en/zuora-platform/user-management/multi-org/multi-org-configuration-and-enablement/multi-org-upgrade-models/upgrade-single-tenant-to-zuora-multi-org"
 product: "zuora-platform"
-scraped_at: "2025-12-24T05:18:40.845Z"
+scraped_at: "2026-01-15T21:59:56.766Z"
 ---
 
 # Upgrade single tenant to Zuora Multi-Org

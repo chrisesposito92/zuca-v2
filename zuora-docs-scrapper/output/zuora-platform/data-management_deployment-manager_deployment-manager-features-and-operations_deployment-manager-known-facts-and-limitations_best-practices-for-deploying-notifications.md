@@ -2,7 +2,7 @@
 title: "Best practices for deploying notifications"
 url: "https://docs.zuora.com/en/zuora-platform/data-management/deployment-manager/deployment-manager-features-and-operations/deployment-manager-known-facts-and-limitations/best-practices-for-deploying-notifications"
 product: "zuora-platform"
-scraped_at: "2025-12-24T05:12:34.680Z"
+scraped_at: "2026-01-15T21:59:11.268Z"
 ---
 
 # Best practices for deploying notifications

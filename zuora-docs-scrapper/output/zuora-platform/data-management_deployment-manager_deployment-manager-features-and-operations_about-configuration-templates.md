@@ -2,7 +2,7 @@
 title: "About configuration templates"
 url: "https://docs.zuora.com/en/zuora-platform/data-management/deployment-manager/deployment-manager-features-and-operations/about-configuration-templates"
 product: "zuora-platform"
-scraped_at: "2025-12-24T05:11:53.767Z"
+scraped_at: "2026-01-15T21:58:41.686Z"
 ---
 
 # About configuration templates
@@ -21,7 +21,7 @@ Note: Configuration Templates feature is available for administrators by default
 
 Configuration Templates automate the deployment of non-transactional objects (components). Using templates, you can deploy the same subset of configurations across multiple tenants and environments.
 
-![Flow of configuration template](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/335d9bee-f51c-41a4-a682-02ec473c095b?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjMzNWQ5YmVlLWY1MWMtNDFhNC1hNjgyLTAyZWM0NzNjMDk1YiIsImV4cCI6MTc2NjYzOTUxMiwianRpIjoiYTU1NTI4YjEzMzE0NDRkN2FiNWJlYjUzNTY2MWU4YzUiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.xdyDQQq00pd-sRfNFdnSoVoA4yQFd1skWzlVeiGls8A)
+![Flow of configuration template](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/335d9bee-f51c-41a4-a682-02ec473c095b?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjMzNWQ5YmVlLWY1MWMtNDFhNC1hNjgyLTAyZWM0NzNjMDk1YiIsImV4cCI6MTc2ODYwMDcxNywianRpIjoiNjRmOGQ4ZTYxMTIzNGQ4YWEwN2M2OGI5ZjdhZmI2MzgiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiI4RWFZRjVFNjZLaVRYdnNmS3N5NSJ9.2GPQIXSnepZCTR7IsoEjtTslS_6qYzgoDkf3h3savzI)
 
 ## Access Configuration Template
 

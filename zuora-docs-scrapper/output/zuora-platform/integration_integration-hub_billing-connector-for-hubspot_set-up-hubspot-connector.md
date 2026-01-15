@@ -2,7 +2,7 @@
 title: "Set up HubSpot connector"
 url: "https://docs.zuora.com/en/zuora-platform/integration/integration-hub/billing-connector-for-hubspot/set-up-hubspot-connector"
 product: "zuora-platform"
-scraped_at: "2025-12-24T08:26:08.735Z"
+scraped_at: "2026-01-15T22:01:01.911Z"
 ---
 
 # Set up HubSpot connector
@@ -14,7 +14,7 @@ Follow the steps to configure HubSpot connector in Zuora and install the HubSpot
     If the HubSpot connector is not listed, contact [Zuora Global Support](https://support.zuora.com/) to install it.
 
 2.  Enter the HubSpot Portal ID of your HubSpot account.
-3.  Authenticate to Zuora using the provided Client ID and Client Secret.
+3.  Authenticate to Zuora using the provided Client ID and Client Secret. See [Create an OAuth client for a user](/zuora-platform/system-management/administrator-settings/manage-users/create-an-oauth-client-for-a-user).
     1.  Set the environment to the REST Zuora endpoint. For example, rest.apisandbox.zuora.com.
     2.  Generate Zuora credentials.
 4.  Enter the Zuora environment endpoint. For example, rest.apisandbox.zuora.com in the Zuora\_host field.

@@ -2,7 +2,7 @@
 title: "Set up your e-invoicing service provider through the Zuora UI"
 url: "https://docs.zuora.com/en/zuora-billing/bill-your-customer/leverage-advanced-capabilities/e-invoicing/e-invoicing-feature-configuration/e-invoicing-service-providers-configuration/set-up-your-e-invoicing-service-provider-through-the-zuora-ui"
 product: "zuora-billing"
-scraped_at: "2025-12-24T18:30:40.881Z"
+scraped_at: "2026-01-15T21:56:34.435Z"
 ---
 
 # Set up your e-invoicing service provider through the Zuora UI
@@ -20,7 +20,7 @@ To set up your e-invoicing service provider through the Zuora UI, perform the fo
 
         -   Sovos: Provides e-invoice compliance solutions in countries such as India, Italy, Saudi Arabia, and others. You must follow Sovos' configuration steps to set up e-invoicing configurations on the Sovos side. The result fields might be different by country. For more information, see [Manage country-specific configurations](/zuora-billing/bill-your-customer/leverage-advanced-capabilities/e-invoicing/country-specific-configurations-management).
 
-        -   PEPPOL: Provides PEPPOL-compliant e-invoice files for countries utilizing the PEPPOL standard or its derivatives. For more information, see [E-invoicing with PEPPOL](/zuora-billing/bill-your-customer/leverage-advanced-capabilities/e-invoicing/e-invoicing-with-peppol).
+        -   PEPPOL: Provides PEPPOL-compliant e-invoice files for countries utilizing the PEPPOL standard or its derivatives. For more information, see [E-invoicing with PEPPOL Extract](/zuora-billing/bill-your-customer/leverage-advanced-capabilities/e-invoicing/e-invoicing-with-peppol-extract).
         -   Avalara: Provides e-invoice compliance solutions in the following countries:
             -   Countries as part of the Peppol network, such as Australia.
             -   Countries not part of the Peppol network but follow country-specific invoice clearance processes, such as Mexico.
@@ -45,4 +45,4 @@ Your e-invoicing service provider is set up.
 
 To update information about your e-invoicing service provider, click the Edit icon in the upper right of the corresponding service provider section.
 
-You are now ready to configure a business region for your e-invoicing service provider. For more information, see Configure e-invoicing business regions .
+You are now ready to configure a business region for your e-invoicing service provider. For more information, see [E-invoicing business regions configuration](/zuora-billing/bill-your-customer/leverage-advanced-capabilities/e-invoicing/e-invoicing-feature-configuration/e-invoicing-business-regions-configuration).

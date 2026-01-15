@@ -2,7 +2,7 @@
 title: "Custom fields deployment behavior"
 url: "https://docs.zuora.com/en/zuora-platform/data-management/deployment-manager/deployment-manager-features-and-operations/deployment-manager-known-facts-and-limitations/custom-fields-deployment-behavior"
 product: "zuora-platform"
-scraped_at: "2025-12-24T05:12:29.666Z"
+scraped_at: "2026-01-15T21:58:47.034Z"
 ---
 
 # Custom fields deployment behavior
@@ -27,7 +27,7 @@ Deployment Manager seamlessly facilitates end-to-end deployments of:
 
     -   Custom Fields are selected by default when the user selects any of the above-mentioned components. However, the user has the option to deselect/disable the component if custom fields have been deployed previously.
 
-![Custom fields Deployment Manager](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/63904964-8e2f-4ac0-b6f7-6afc1625b681?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjYzOTA0OTY0LThlMmYtNGFjMC1iNmY3LTZhZmMxNjI1YjY4MSIsImV4cCI6MTc2NjYzOTU0NywianRpIjoiYjUzYzIwOGRmZWZmNGJmOGFkYzMzYWRiOTA1ZjAxODciLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.KjIf9bsr9J0biWXEdQGJX4xSW-A7HwLVKnnEZCYbHs0)
+![Custom fields Deployment Manager](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/63904964-8e2f-4ac0-b6f7-6afc1625b681?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjYzOTA0OTY0LThlMmYtNGFjMC1iNmY3LTZhZmMxNjI1YjY4MSIsImV4cCI6MTc2ODYwMDcyNCwianRpIjoiYjgyZjNhODE5OGE1NDM0Nzg5YzdhNTczZGVlZDI1OWQiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiI4RWFZRjVFNjZLaVRYdnNmS3N5NSJ9.5akg8riFAS60gahdPJcJVxF0ij5xFN0SytlDp_MFmr0)
 
 -   Indexed custom fields cannot be updated to non-indexed; non-indexed custom fields cannot be updated to indexed.
 -   Custom fields associated with Accounting Codes cannot be deployed in the target.

@@ -2,7 +2,7 @@
 title: "Edit a child org unit"
 url: "https://docs.zuora.com/en/zuora-platform/user-management/multi-org/multi-org-configuration-and-enablement/add-a-child-org-unit/edit-a-child-org-unit"
 product: "zuora-platform"
-scraped_at: "2025-12-24T05:19:03.843Z"
+scraped_at: "2026-01-15T22:00:12.196Z"
 ---
 
 # Edit a child org unit

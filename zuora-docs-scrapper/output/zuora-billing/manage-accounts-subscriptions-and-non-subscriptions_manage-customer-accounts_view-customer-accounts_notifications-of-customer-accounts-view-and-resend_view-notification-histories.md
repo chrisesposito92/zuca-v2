@@ -2,7 +2,7 @@
 title: "View notification histories"
 url: "https://docs.zuora.com/en/zuora-billing/manage-accounts-subscriptions-and-non-subscriptions/manage-customer-accounts/view-customer-accounts/notifications-of-customer-accounts-view-and-resend/view-notification-histories"
 product: "zuora-billing"
-scraped_at: "2025-12-24T05:17:14.698Z"
+scraped_at: "2026-01-15T21:55:49.446Z"
 ---
 
 # View notification histories

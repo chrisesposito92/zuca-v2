@@ -2,7 +2,7 @@
 title: "Custom event and scheduled event deployment rules"
 url: "https://docs.zuora.com/en/zuora-platform/data-management/deployment-manager/deployment-manager-features-and-operations/deployment-manager-known-facts-and-limitations/custom-event-and-scheduled-event-deployment-rules"
 product: "zuora-platform"
-scraped_at: "2025-12-24T05:12:31.553Z"
+scraped_at: "2026-01-15T21:59:11.400Z"
 ---
 
 # Custom event and scheduled event deployment rules

@@ -2,7 +2,7 @@
 title: "Create POB template"
 url: "https://docs.zuora.com/en/zuora-revenue/getting-started/policy-management/performance-obligations-processing/create-pob-template"
 product: "zuora-revenue"
-scraped_at: "2025-12-24T04:24:09.561Z"
+scraped_at: "2026-01-15T22:03:04.147Z"
 ---
 
 # Create POB template
@@ -40,7 +40,7 @@ Complete the following steps to create a POB template:
 7.  (Optional): Define the following information that is associated with the POB template and click the save icon on each tab.
 
     -   In the Cost Treatment tab, enable the appropriate cost type to associate the cost with this POB template and specify the cost recognition pattern for each cost type. For more information, see [Cost Processing](/zuora-revenue/advanced-revenue-operations/cost-processing) .
-    -   In the VC Assignment tab, enable the appropriate VC rules for the POB template. For more information, see [Variable Consideration ProcessingNo Content found for /db/organizations/zuora/repositories/prod-sitemap/content/documents/external\_publications/revenue/E\_Advanced\_revenue\_operation/topics/cost\_setup\_old.dita](/db/organizations/zuora/repositories/prod-sitemap/content/documents/external_publications/revenue/E_Advanced_revenue_operation/topics/cost_setup_old.dita) .
+    -   In the VC Assignment tab, enable the appropriate VC rules for the POB template. For more information, see [Variable Consideration Processing](/zuora-revenue/day-to-day-operation/variable-consideration-processing) .
     -   In the POB Dependency tab, add the parent POB template and specify the dependency type. For more information, see [POB dependency](/db/organizations/zuora/repositories/prod-sitemap/content/documents/external_publications/revenue/A_get_started/topics/create_pob_template.dita) .
 
     The POB template is created and listed on the POB Templates page.

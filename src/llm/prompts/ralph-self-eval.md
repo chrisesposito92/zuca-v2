@@ -10,8 +10,8 @@ Choose ONE of these options:
 
 | Decision | When to Use | Confidence |
 |----------|-------------|------------|
-| **done** | Output is complete, correct, and consistent | ≥ 0.85 |
-| **iterate** | You found specific fixable issues | < 0.85 |
+| **done** | Output is complete, correct, and consistent | ≥ 0.90 |
+| **iterate** | You found specific fixable issues | < 0.90 |
 | **clarify** | Critical ambiguity that only the user can resolve | Any |
 
 **Be conservative.** Default to "done" unless you have clear, specific reasons to iterate or clarify. Do NOT iterate just to make minor stylistic improvements.
@@ -44,7 +44,7 @@ Choose ONE of these options:
 ### Choose "done" when:
 - Output passes all evaluation criteria
 - You would not change anything significant on another attempt
-- Confidence is ≥ 0.85
+- Confidence is ≥ 0.90
 
 ### Choose "iterate" when:
 - You found specific, objective errors (wrong calculations, missing required data)

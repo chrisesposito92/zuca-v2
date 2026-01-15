@@ -2,7 +2,7 @@
 title: "Multi-Org activation and initial setup"
 url: "https://docs.zuora.com/en/zuora-platform/user-management/multi-org/multi-org-configuration-and-enablement/multi-org-activation-and-initial-setup"
 product: "zuora-platform"
-scraped_at: "2025-12-24T05:18:36.143Z"
+scraped_at: "2026-01-15T21:59:56.259Z"
 ---
 
 # Multi-Org activation and initial setup

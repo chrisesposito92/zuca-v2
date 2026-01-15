@@ -2,7 +2,7 @@
 title: "Accounting period deployment behavior"
 url: "https://docs.zuora.com/en/zuora-platform/data-management/deployment-manager/deployment-manager-features-and-operations/deployment-manager-known-facts-and-limitations/accounting-period-deployment-behavior"
 product: "zuora-platform"
-scraped_at: "2025-12-24T05:12:24.382Z"
+scraped_at: "2026-01-15T21:58:56.921Z"
 ---
 
 # Accounting period deployment behavior

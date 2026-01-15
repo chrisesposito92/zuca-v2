@@ -2,7 +2,7 @@
 title: "Procedure"
 url: "https://docs.zuora.com/en/zuora-revenue/month-end-process/close-current-period-from-close-process-dashboard/procedure"
 product: "zuora-revenue"
-scraped_at: "2025-12-24T04:29:08.176Z"
+scraped_at: "2026-01-15T22:03:20.530Z"
 ---
 
 # Procedure
@@ -28,4 +28,4 @@ Complete the following steps to close the current period and open the next one:
 
     If there are unposted schedules, review the unposted accounting and run the RevPro3.0 Sweep Unposted Schedules program.
 
-6.  To close the current period and open the next one, click Submit and confirm the action in the popup window. ![submit-close.png](/db/organizations/zuora/repositories/prod-sitemap/content/documents/external_publications/revenue/C_Perform_month_end_process/media/submit-close.png)
+6.  To close the current period and open the next one, click Submit and confirm the action in the popup window. ![submit-close.png](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/a649e4bb-8b90-47bf-9a61-7a51c366a923?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImE2NDllNGJiLThiOTAtNDdiZi05YTYxLTdhNTFjMzY2YTkyMyIsImV4cCI6MTc2ODYwMDk5NSwianRpIjoiZTAyNjU0ZWQ1NzIwNGE1YjkzY2UwNWUyODNiYmJjZjQiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiI4RWFZRjVFNjZLaVRYdnNmS3N5NSJ9.7xE41cmM-LbfqSIZX61Hx499K8Yx-W-ewancIbk7hD4)

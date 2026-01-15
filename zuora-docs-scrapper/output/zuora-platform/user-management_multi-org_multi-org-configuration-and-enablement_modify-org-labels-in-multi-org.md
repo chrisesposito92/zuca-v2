@@ -1,11 +1,11 @@
 ---
-title: "Modify org labels in Multi Org"
+title: "Modify org labels in Multi-Org"
 url: "https://docs.zuora.com/en/zuora-platform/user-management/multi-org/multi-org-configuration-and-enablement/modify-org-labels-in-multi-org"
 product: "zuora-platform"
-scraped_at: "2025-12-24T05:19:14.150Z"
+scraped_at: "2026-01-15T22:00:12.234Z"
 ---
 
-# Modify org labels in Multi Org
+# Modify org labels in Multi-Org
 
 This guide introduces the prerequisites and best practices for modifying an org label.
 
@@ -15,7 +15,7 @@ Note:
 
 Please proceed with these changes only after all associated subscriptions are inactive, appropriate data backups have been created, and all connected downstream systems (such as ERP, Revenue, and Reporting) have been updated and confirmed to be in sync.
 
-## Modifying Multi Org labels
+## Modifying Multi-Org labels
 
 Zuora’s Multi-Org setup supports evolving business needs, such as realignment by region or product category, or adjustments to test organizations. When updating configuration to align with changing requirements, ensure all potential downstream impacts are considered and managed.
 
@@ -26,7 +26,7 @@ Advanced Multi-Org setups utilize a parent-child hierarchy, allowing organizatio
 -   Before moving Orgs set up for testing from lower environments to production, review and adjust their configuration to ensure data and settings are accurate and consistent with production requirements.
 
 
-## Prerequisites for modifying org labels in a multi org setup
+## Prerequisites for modifying org labels in a Multi-Org setup
 
 Before modifying Org Labels, ensure every step in this checklist is completed in sequence:
 

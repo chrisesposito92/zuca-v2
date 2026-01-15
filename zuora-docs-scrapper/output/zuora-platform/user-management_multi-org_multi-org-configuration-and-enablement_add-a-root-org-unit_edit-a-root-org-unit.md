@@ -2,7 +2,7 @@
 title: "Edit a root org unit"
 url: "https://docs.zuora.com/en/zuora-platform/user-management/multi-org/multi-org-configuration-and-enablement/add-a-root-org-unit/edit-a-root-org-unit"
 product: "zuora-platform"
-scraped_at: "2025-12-24T05:18:58.837Z"
+scraped_at: "2026-01-15T22:00:12.391Z"
 ---
 
 # Edit a root org unit

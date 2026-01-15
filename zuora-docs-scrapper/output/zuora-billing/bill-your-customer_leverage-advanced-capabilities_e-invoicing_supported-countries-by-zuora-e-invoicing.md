@@ -2,7 +2,7 @@
 title: "Supported countries by Zuora e-invoicing"
 url: "https://docs.zuora.com/en/zuora-billing/bill-your-customer/leverage-advanced-capabilities/e-invoicing/supported-countries-by-zuora-e-invoicing"
 product: "zuora-billing"
-scraped_at: "2025-12-24T18:31:21.446Z"
+scraped_at: "2026-01-15T21:56:35.391Z"
 ---
 
 # Supported countries by Zuora e-invoicing
@@ -43,7 +43,7 @@ Note:
 | Belgium | B2G mandatory; B2B mandate in phases | Peppol eDelivery | B2G mandatory since 2020; B2B from Jan 2026.* | ✔️ | ✔️ |
 | Benin | B2B/B2C fiscalization | Clearance | 2021 | ❌ | ❌ |
 | Bosnia and Herzegovina | B2G, Fiscalization/e-reporting (entities) | Clearance (near real-time) | Phased since ~2010. | ❌ | ❌ |
-| Brazil | B2B/B2C/B2G (by doc type: NF-e, NFS-e, CT-e; NFCom telecom) | Clearance (SEFAZ/state + municipal); national NFS-e standard; NFCom telecom | NFS-e national standard mandatory 1 Jan 2026*; NFCom mandatory 1 Nov 2025.* | ❌ | ✔️ |
+| Brazil* | B2B/B2C/B2G (by doc type: NF-e, NFS-e, CT-e; NFCom telecom) | Clearance (SEFAZ/state + municipal); national NFS-e standard; NFCom telecom | NFS-e national standard mandatory 1 Jan 2026*; NFCom mandatory 1 Nov 2025.* | ❌ | ✔️ |
 | Bulgaria | B2G mandatory; B2B voluntary | Post-audit (moving to Clearance) | B2G: 2019; B2B: 2026 (phased)*. | ❌ | ✔️ |
 | Burundi | B2B/B2C (fiscalization) | Clearance | 2022 | ❌ | ❌ |
 | Cameroon | B2B/B2C fiscalization | Clearance | 2021 (phased) | ❌ | ❌ |

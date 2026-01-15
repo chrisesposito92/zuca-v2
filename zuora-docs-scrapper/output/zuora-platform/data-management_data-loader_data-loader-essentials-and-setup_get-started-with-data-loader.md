@@ -2,7 +2,7 @@
 title: "Get started with  Data Loader"
 url: "https://docs.zuora.com/en/zuora-platform/data-management/data-loader/data-loader-essentials-and-setup/get-started-with-data-loader"
 product: "zuora-platform"
-scraped_at: "2025-12-24T05:11:10.471Z"
+scraped_at: "2026-01-15T21:56:34.793Z"
 ---
 
 # Get started with Data Loader

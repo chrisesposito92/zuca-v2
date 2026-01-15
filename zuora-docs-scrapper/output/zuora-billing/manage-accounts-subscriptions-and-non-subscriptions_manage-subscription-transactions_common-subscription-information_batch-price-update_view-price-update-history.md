@@ -2,12 +2,12 @@
 title: "View price update history"
 url: "https://docs.zuora.com/en/zuora-billing/manage-accounts-subscriptions-and-non-subscriptions/manage-subscription-transactions/common-subscription-information/batch-price-update/view-price-update-history"
 product: "zuora-billing"
-scraped_at: "2025-12-24T05:18:00.646Z"
+scraped_at: "2026-01-15T21:56:01.855Z"
 ---
 
 # View price update history
 
-This article explains how to view the history of batch price updates, including execution dates, charge names, and status details.
+This topic explains how to view the history of batch price updates, including execution dates, charge names, and status details.
 
 This section retains temporary information lasting 90 days in the production environment but 45 days in the sandbox environment.
 
@@ -26,6 +26,6 @@ To view Batch Price Update history:
     | Effective Date | The date when the new price takes effect. |
     | Number Of Subscriptions | The number of subscriptions in the selected batches of the subscription cohort tried to be applied with the new price. |
     | Number Of Failures | The number of subscriptions in the selected batches of the subscription cohort failed with the new price update. |
-    | Status | The status of the new price update process. The value can be QUEUED , PROCESSING , STOPPING , or FINISHED .Note : The status does not indicate whether the new price is successfully applied to the subscriptions in the selected batches of the subscription cohort. |
+    | Status | The status of the new price update process. The value can be QUEUED, PROCESSING, STOPPING, or FINISHED.Note: The status does not indicate whether the new price is successfully applied to the subscriptions in the selected batches of the subscription cohort. |
 
-4.  If Zuora finds one or more subscriptions associated with the selected charge, no matter whether the price is applied to the subscriptions successfully, once the Status turns to FINISHED, the Download Result turns blue. In this case, you can click Download Result to download detailed subscription information for each price update.
+4.  If Zuora finds one or more subscriptions associated with the selected charge, irrespective of whether the price is applied to the subscriptions successfully, once the Status turns to FINISHED, the Download Result turns blue. In this case, you can click Download Result to download detailed subscription information for each price update.

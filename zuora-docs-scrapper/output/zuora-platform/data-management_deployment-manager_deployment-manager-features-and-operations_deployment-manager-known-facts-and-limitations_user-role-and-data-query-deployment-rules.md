@@ -2,7 +2,7 @@
 title: "User role and data query deployment rules"
 url: "https://docs.zuora.com/en/zuora-platform/data-management/deployment-manager/deployment-manager-features-and-operations/deployment-manager-known-facts-and-limitations/user-role-and-data-query-deployment-rules"
 product: "zuora-platform"
-scraped_at: "2025-12-24T05:12:37.363Z"
+scraped_at: "2026-01-15T21:59:10.665Z"
 ---
 
 # User role and data query deployment rules

@@ -2,7 +2,7 @@
 title: "Create an Org hierarchy"
 url: "https://docs.zuora.com/en/zuora-platform/user-management/multi-org/multi-org-configuration-and-enablement/create-an-org-hierarchy"
 product: "zuora-platform"
-scraped_at: "2025-12-24T05:18:53.523Z"
+scraped_at: "2026-01-15T21:59:44.926Z"
 ---
 
 # Create an Org hierarchy

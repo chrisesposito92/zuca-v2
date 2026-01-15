@@ -2,7 +2,7 @@
 title: "Configure a HTTP processor"
 url: "https://docs.zuora.com/en/zuora-platform/extensibility/mediation/meter-components/http-processor/configure-a-http-processor"
 product: "zuora-platform"
-scraped_at: "2025-12-24T05:30:05.129Z"
+scraped_at: "2026-01-15T22:00:44.203Z"
 ---
 
 # Configure a HTTP processor
@@ -17,26 +17,11 @@ The HTTP processor enables real-time data enrichment by calling external APIs wi
 4.  In the HTTP settings page, enter a Name for the processor.
     A unique Operator ID for this processor component is displayed. This unique ID is used for event logging. You can copy this ID to be used in external applications.
 
-    ![HTTP processor settings](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/8b15bdca-c1cf-40b4-a9b6-8bd71eee4755?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjhiMTViZGNhLWMxY2YtNDBiNC1hOWI2LThiZDcxZWVlNDc1NSIsImV4cCI6MTc2NjY0MDYwMywianRpIjoiMjEzNWM0MDNhN2FlNDE5MGE2MDgyZGM0NjcyMmJjODkiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.vdtWT5j6jW6KAk-1I8m236Ae2P9GQmvOUIJ_DTd6PdE)
+    ![HTTP processor settings](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/8b15bdca-c1cf-40b4-a9b6-8bd71eee4755?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjhiMTViZGNhLWMxY2YtNDBiNC1hOWI2LThiZDcxZWVlNDc1NSIsImV4cCI6MTc2ODYwMDgzOCwianRpIjoiNDMxZDcyOWRhNDY3NDMwOGE2NGJmN2UwNzdiMWZjODUiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiI4RWFZRjVFNjZLaVRYdnNmS3N5NSJ9.IVntr7f-c2-Z05S6V1q--kg3REzL7d71coxWpOClL4s)
 
 5.  From the Method drop-down list, select the method to be used for the API call.
 6.  Select the Connection to be used to access the resource.
-    When configuring the HTTP Operator, you must select an existing connection from the Connection dropdown list. This connection defines the base URL, authentication, and headers used in your HTTP requests. If the connection you need is not visible in the dropdown, it may not yet be registered in your environment.
-
-    To include a connection or host in the list, submit a request to [Zuora Global Support](https://www.zuora.com/support-center/). Include the following information in your request:
-
-    -   The connection name as you want it to appear in the dropdown.
-
-    -   Base URL of the target service.
-
-    -   Authentication type (API key, Basic Auth and Bearer Auth).
-
-    -   Authentication details.
-
-    -   Any required headers or parameters.
-
-
-    The Zuora Support team will add the connection to your tenant configuration. Once added, the connection will automatically appear in the dropdown for selection.
+    When configuring the HTTP Operator, you must select an existing connection from the Connection dropdown list. This connection defines the base URL, authentication, and headers used in your HTTP requests. Use the Manage Connections button under Mediation > Meters to create a connection.
 
 7.  If needed, you can enter the Path to the specific resource.
     You can use variables in this path.

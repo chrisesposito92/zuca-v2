@@ -2,7 +2,7 @@
 title: "E-Invoicing Overview"
 url: "https://docs.zuora.com/en/zuora-billing/bill-your-customer/leverage-advanced-capabilities/e-invoicing/e-invoicing-overview"
 product: "zuora-billing"
-scraped_at: "2025-12-24T08:39:58.818Z"
+scraped_at: "2026-01-15T21:56:24.764Z"
 ---
 
 # E-Invoicing Overview
@@ -27,13 +27,13 @@ The E-Invoicing feature provides the following capabilities:
 
 -   [E-invoicing with Sovos](/zuora-billing/bill-your-customer/leverage-advanced-capabilities/e-invoicing/e-invoicing-with-sovos) is generally available.
 -   [E-invoicing with Avalara](/zuora-billing/bill-your-customer/leverage-advanced-capabilities/e-invoicing/e-invoicing-with-avalara) is in the Early Availability phase.
--   [E-invoicing with PEPPOL](/zuora-billing/bill-your-customer/leverage-advanced-capabilities/e-invoicing/e-invoicing-with-peppol) is in the Early Availability phase.
+-   [E-invoicing with PEPPOL Extract](/zuora-billing/bill-your-customer/leverage-advanced-capabilities/e-invoicing/e-invoicing-with-peppol-extract) is generally available.
 
 We are actively soliciting feedback from a small set of Early Availability features before releasing them as generally available. If you want to join this early adopter program, submit a request at [Zuora Global Support](http://support.zuora.com/).
 
 To use the E-Invoicing feature, ensure the following:
 
--   Ensure that you have the [Invoice Settlement](/zuora-billing/bill-your-customer/invoice-settlement/get-started-with-invoice-settlement/get-started-with-invoice-settlement) feature enabled.
+-   The [Invoice Settlement](/zuora-billing/bill-your-customer/invoice-settlement/get-started-with-invoice-settlement/get-started-with-invoice-settlement) feature enabled.
 -   Check the following known restrictions and limitations of the E-Invoicing feature.
 -   Submit a request at [Zuora Global Support](http://support.zuora.com/).
 

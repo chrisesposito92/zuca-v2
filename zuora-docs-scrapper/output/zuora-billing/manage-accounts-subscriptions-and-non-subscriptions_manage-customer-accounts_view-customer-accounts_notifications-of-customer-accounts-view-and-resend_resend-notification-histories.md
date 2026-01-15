@@ -2,7 +2,7 @@
 title: "Resend notification histories"
 url: "https://docs.zuora.com/en/zuora-billing/manage-accounts-subscriptions-and-non-subscriptions/manage-customer-accounts/view-customer-accounts/notifications-of-customer-accounts-view-and-resend/resend-notification-histories"
 product: "zuora-billing"
-scraped_at: "2025-12-24T05:17:17.323Z"
+scraped_at: "2026-01-15T21:55:50.444Z"
 ---
 
 # Resend notification histories

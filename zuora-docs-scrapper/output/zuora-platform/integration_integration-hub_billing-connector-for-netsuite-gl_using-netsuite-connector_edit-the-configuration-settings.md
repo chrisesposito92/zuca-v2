@@ -2,7 +2,7 @@
 title: "Edit the configuration settings"
 url: "https://docs.zuora.com/en/zuora-platform/integration/integration-hub/billing-connector-for-netsuite-gl/using-netsuite-connector/edit-the-configuration-settings"
 product: "zuora-platform"
-scraped_at: "2025-12-24T08:25:50.935Z"
+scraped_at: "2026-01-15T22:01:02.282Z"
 ---
 
 # Edit the configuration settings

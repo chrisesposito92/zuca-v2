@@ -2,7 +2,7 @@
 title: "Data Loader and Generic API Loader Matrix"
 url: "https://docs.zuora.com/en/zuora-platform/integration/integration-hub/transitioning-from-developer-tools-to-data-loader/data-loader-and-generic-api-loader-matrix"
 product: "zuora-platform"
-scraped_at: "2025-12-24T05:46:42.165Z"
+scraped_at: "2026-01-15T22:01:02.970Z"
 ---
 
 # Data Loader and Generic API Loader Matrix
@@ -35,8 +35,8 @@ Object and functions
 | Invoice Payment | NA | The object is not supported. Please contact your Account Executive for Onboarding Invoice Settlement |
 | Invoice Split | NA | The object is not supported. You can split the Invoice, see Invoice management. |
 | Invoice Split Item | NA | The object is not supported. You can split the Invoice, see Invoice management. |
-| Payment | Import, Update, Delete, CancelPayments can be unapplied as an update action | Programmatic Rest APIs |
-| Payment Method | NA | NA |
+| Payment | Import, Update, Delete, CancelPayments can be applied and unapplied as an update action | Programmatic Rest APIs |
+| Payment Method | Not Supported | Programmatic Rest APIs |
 | Payment Method Snapshot | NA | Programmatic Rest APIs Data Query |
 | Payment Method Transaction Log | NA | Programmatic Rest APIs Data Query |
 | Product | Import, Update, Delete | Deployment Manager for migrating configurations tenant to tenantProgrammatic Rest APIs |

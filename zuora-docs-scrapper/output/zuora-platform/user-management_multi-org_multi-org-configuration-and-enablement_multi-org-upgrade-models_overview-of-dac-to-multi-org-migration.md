@@ -2,7 +2,7 @@
 title: "Overview of DAC to Multi-Org migration"
 url: "https://docs.zuora.com/en/zuora-platform/user-management/multi-org/multi-org-configuration-and-enablement/multi-org-upgrade-models/overview-of-dac-to-multi-org-migration"
 product: "zuora-platform"
-scraped_at: "2025-12-24T05:18:43.599Z"
+scraped_at: "2026-01-15T21:59:57.368Z"
 ---
 
 # Overview of DAC to Multi-Org migration
@@ -24,7 +24,7 @@ There are 2 use cases where a business would want to migrate to Multi-Org from t
 
 This section explains Use Case 1 in detail on how a business that has an existing DAC-enabled tenant can upgrade to Zuora Multi-Org using the same tag hierarchy created in DAC with a 1:1 mapping. For more information see [DAC upgrade to Multi-Org](/zuora-platform/user-management/multi-org/multi-org-configuration-and-enablement/multi-org-upgrade-models/upgrade-data-access-control-tenant-to-zuora-multi-org-through-apis).
 
-![DAC Tag Hierarchy 1:1 mapping to Multi-Org hierarchy](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/4ea6e750-691f-4ad2-a858-9001641bd671?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjRlYTZlNzUwLTY5MWYtNGFkMi1hODU4LTkwMDE2NDFiZDY3MSIsImV4cCI6MTc2NjYzOTkyMSwianRpIjoiYzJhZjE4NGYyY2UwNDFkZjg3Yjc5OTk1MWU1YTg2ODMiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.7Q8AvM6OCGVA84-JdNnKCQ0iR6nyb1-43tkKE3oKluE)
+![DAC Tag Hierarchy 1:1 mapping to Multi-Org hierarchy](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/4ea6e750-691f-4ad2-a858-9001641bd671?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjRlYTZlNzUwLTY5MWYtNGFkMi1hODU4LTkwMDE2NDFiZDY3MSIsImV4cCI6MTc2ODYwMDc5MSwianRpIjoiZDRmNmYxM2VmODdlNDMwYWI4NGZmMDlkNjcxYTVmZmMiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiI4RWFZRjVFNjZLaVRYdnNmS3N5NSJ9.N70v4grqRR5fSXPYhshBlCgPoBJOe52rbA9FkQnRdxI)
 
 ## Terms and concepts of DAC
 

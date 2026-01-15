@@ -2,7 +2,7 @@
 title: "Assign users to one or more Org units"
 url: "https://docs.zuora.com/en/zuora-platform/user-management/multi-org/multi-org-configuration-and-enablement/assign-users-to-one-or-more-org-units"
 product: "zuora-platform"
-scraped_at: "2025-12-24T05:19:06.503Z"
+scraped_at: "2026-01-15T22:00:12.418Z"
 ---
 
 # Assign users to one or more Org units

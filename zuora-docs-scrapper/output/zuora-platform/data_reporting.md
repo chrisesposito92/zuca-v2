@@ -2,7 +2,7 @@
 title: "Reporting"
 url: "https://docs.zuora.com/en/zuora-platform/data/reporting"
 product: "zuora-platform"
-scraped_at: "2025-12-24T18:40:56.897Z"
+scraped_at: "2026-01-15T22:02:33.086Z"
 ---
 
 # Reporting

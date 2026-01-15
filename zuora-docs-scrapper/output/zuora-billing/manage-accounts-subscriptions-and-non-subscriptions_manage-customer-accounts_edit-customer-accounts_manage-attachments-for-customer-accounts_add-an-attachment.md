@@ -2,12 +2,12 @@
 title: "Add an attachment"
 url: "https://docs.zuora.com/en/zuora-billing/manage-accounts-subscriptions-and-non-subscriptions/manage-customer-accounts/edit-customer-accounts/manage-attachments-for-customer-accounts/add-an-attachment"
 product: "zuora-billing"
-scraped_at: "2025-12-24T05:16:18.408Z"
+scraped_at: "2026-01-15T21:55:39.004Z"
 ---
 
 # Add an attachment
 
-This topic explains how to add an attachment on a Customer Account, Subscription, Invoice, Credit Memo, or Debit Memo detail page.
+This task topic explains how to add an attachment on a Customer Account, Subscription, Invoice, Credit Memo, or Debit Memo detail page.
 
 To add an attachment:
 

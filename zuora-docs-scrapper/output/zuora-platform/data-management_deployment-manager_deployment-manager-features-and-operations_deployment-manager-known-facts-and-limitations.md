@@ -2,7 +2,7 @@
 title: "Deployment Manager known facts and limitations"
 url: "https://docs.zuora.com/en/zuora-platform/data-management/deployment-manager/deployment-manager-features-and-operations/deployment-manager-known-facts-and-limitations"
 product: "zuora-platform"
-scraped_at: "2025-12-24T05:12:14.346Z"
+scraped_at: "2026-01-15T21:58:56.387Z"
 ---
 
 # Deployment Manager known facts and limitations

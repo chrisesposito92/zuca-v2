@@ -2,7 +2,7 @@
 title: "Taxation component deployment behavior"
 url: "https://docs.zuora.com/en/zuora-platform/data-management/deployment-manager/deployment-manager-features-and-operations/deployment-manager-known-facts-and-limitations/taxation-component-deployment-behavior"
 product: "zuora-platform"
-scraped_at: "2025-12-24T05:12:27.025Z"
+scraped_at: "2026-01-15T21:58:56.830Z"
 ---
 
 # Taxation component deployment behavior
@@ -17,7 +17,7 @@ Taxation component has the following behaviors and a list of best practices:
 
     The following diagram depicts the deployment flow of the taxation components.
 
-    ![Taxation components](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/43d3f545-406d-4bd6-ae51-e25ebaaea40b?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjQzZDNmNTQ1LTQwNmQtNGJkNi1hZTUxLWUyNWViYWFlYTQwYiIsImV4cCI6MTc2NjYzOTU0NCwianRpIjoiMmQ3ZDQyZGYwMWYxNGU0YjgzM2IyNjk3YzJkYjRhY2QiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.GjAnQRJ2aKErjV4KW-NlFzVDY3KJ4ny_lnNaj2WODXQ)
+    ![Taxation components](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/43d3f545-406d-4bd6-ae51-e25ebaaea40b?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjQzZDNmNTQ1LTQwNmQtNGJkNi1hZTUxLWUyNWViYWFlYTQwYiIsImV4cCI6MTc2ODYwMDczMSwianRpIjoiM2YxZDVkZmY3ZjQwNGNiOGJmMDM5YWJlMzMwNzZhYzgiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiI4RWFZRjVFNjZLaVRYdnNmS3N5NSJ9.6bEfQM6EljcKKVfhq9d-cokiDyGP3WppOg4J9Hl1dUs)
 
 -   Perform the following actions to deploy taxation component from source to target tenant:
 

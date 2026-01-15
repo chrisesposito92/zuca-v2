@@ -2,7 +2,7 @@
 title: "Country-specific configurations management"
 url: "https://docs.zuora.com/en/zuora-billing/bill-your-customer/leverage-advanced-capabilities/e-invoicing/country-specific-configurations-management"
 product: "zuora-billing"
-scraped_at: "2025-12-24T18:31:23.931Z"
+scraped_at: "2026-01-15T21:56:34.765Z"
 ---
 
 # Country-specific configurations management
@@ -14,9 +14,9 @@ Except common e-invoicing configurations including configuring service providers
 The following country-specific configurations are classified for different service providers. These countries are countries Zuora pre-integrated for corresponding service providers.
 
 -   Sovos:
-    -   Manage country-specific configurations for India
-    -   Manage country-specific configurations for Italy
-    -   Manage country-specific configurations for Saudi Arabia
+    -   [Country-specific configurations for India](/zuora-billing/bill-your-customer/leverage-advanced-capabilities/e-invoicing/country-specific-configurations-management/country-specific-configurations-for-india)
+    -   [Country-specific configurations for Italy](/zuora-billing/bill-your-customer/leverage-advanced-capabilities/e-invoicing/country-specific-configurations-management/country-specific-configurations-for-italy)
+    -   [Country-specific configurations for Saudi Arabia](/zuora-billing/bill-your-customer/leverage-advanced-capabilities/e-invoicing/country-specific-configurations-management/country-specific-configurations-for-saudi-arabia)
 -   Avalara:
-    -   Manage country-specific configurations for Mexico
-    -   Manage country-specific configurations for Australia
+    -   [Country-specific configurations for Mexico](/zuora-billing/bill-your-customer/leverage-advanced-capabilities/e-invoicing/country-specific-configurations-management/country-specific-configurations-for-mexico)
+    -   [Country-specific configurations for Australia](/zuora-billing/bill-your-customer/leverage-advanced-capabilities/e-invoicing/country-specific-configurations-management/country-specific-configurations-for-australia)

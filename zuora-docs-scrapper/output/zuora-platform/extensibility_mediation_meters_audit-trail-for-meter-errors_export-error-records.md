@@ -2,7 +2,7 @@
 title: "Export error records"
 url: "https://docs.zuora.com/en/zuora-platform/extensibility/mediation/meters/audit-trail-for-meter-errors/export-error-records"
 product: "zuora-platform"
-scraped_at: "2025-12-24T05:28:25.509Z"
+scraped_at: "2026-01-15T22:00:43.922Z"
 ---
 
 # Export error records
@@ -29,8 +29,8 @@ Error exports are visible for both Live and Test runs and are scoped to error re
 
 8.  If the number of error rows is > 100,000:
     1.  A message is displayed indicating that the export will be processed as a background job and might take time to complete.
-    2.  Confirm the export request.
-        Zuora creates a background export job for the error records.
+    2.  Select the record types you want to download and click the Export button.
+        You can export a combination of success and error records, or error records only. Zuora creates a background export job for the export.
 
     3.  After you confirm, you are redirected to the Download Center, where you can track progress of the export job.
     4.  In the Download Center, locate the export job for your run and check the Status, Count of Records, and Exported At time.

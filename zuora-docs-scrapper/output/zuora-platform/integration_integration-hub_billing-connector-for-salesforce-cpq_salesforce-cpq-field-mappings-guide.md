@@ -2,7 +2,7 @@
 title: "Salesforce CPQ field mappings guide"
 url: "https://docs.zuora.com/en/zuora-platform/integration/integration-hub/billing-connector-for-salesforce-cpq/salesforce-cpq-field-mappings-guide"
 product: "zuora-platform"
-scraped_at: "2025-12-24T08:27:21.587Z"
+scraped_at: "2026-01-15T22:00:48.796Z"
 ---
 
 # Salesforce CPQ field mappings guide
@@ -94,7 +94,7 @@ The following table outlines the mapping of non-usage-based subscription charges
 |  |  |  | Quote Business Type |  |  | Type field on the Quote object |
 |  |  |  | Quote Type |  |  | Type field on the Quote object |
 |  |  | PO_Number__c | InvoiceGroupNumber |  |  | Create a custom field on the subscription object in Salesforce and add this mapping in the connector configuration to sync the invoice group numbers. |
-|  |  | Billing Frequency |  |  | Billing Period | Map this in the connector field mapping configuration. |
+|  |  | Billing Frequency |  |  | Billing Period | The API names of the billing frequency field must match the billing period values in Zuora. Map this field explicitly in the connector configuration from SBQQ__BillingFrequency__c to billingPeriod on the subscription to subscription rate plan charge custom field mapping option. |
 
 ## Usage-based charge subscription
 
@@ -122,7 +122,7 @@ When the order product in Salesforce does not have an associated Subscription ob
 | --- | --- | --- | --- |
 | ORDER | ORDER PRODUCT | ORDER LINE ITEM |  |
 |  | Product Name | Item Name | The product's name, as indicated by the Product2 object. |
-|  | Zuora Status | Item State | If you want to create a custom field on the Salesforce Order Product object, name it Zuora_Status__c. Make sure it is a picklist type and the values align with Zuora options. By default, set the value to "SentToBilling". |
+|  | Zuora Status | Item State | By default, configure the value to "SentToBilling", but if you want to configure a different status, create a custom field on the Salesforce Order Product object, called Zuora_Status__c. Ensure it is a picklist type and the values align with Zuora options.Then map Zuora_Status__c to itemState in the connector configuration on the Order Item to Order Line Item mapping configuration |
 |  | Quantity | Quantity |  |
 |  | Product ID | Product CodeProduct Rate Plan Charge ID | The ID of the Product2 in the Order Product.The corresponding one-time charge from the product catalog is used. |
 | Effective Date |  | Transaction Start Date |  |

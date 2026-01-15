@@ -2,7 +2,7 @@
 title: "Limitations of configuration templates"
 url: "https://docs.zuora.com/en/zuora-platform/data-management/deployment-manager/deployment-manager-features-and-operations/about-configuration-templates/limitations-of-configuration-templates"
 product: "zuora-platform"
-scraped_at: "2025-12-24T05:12:01.483Z"
+scraped_at: "2026-01-15T21:58:42.327Z"
 ---
 
 # Limitations of configuration templates

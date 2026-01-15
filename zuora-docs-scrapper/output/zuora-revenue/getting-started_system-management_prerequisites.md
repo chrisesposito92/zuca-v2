@@ -1,11 +1,11 @@
 ---
-title: "Set up data augmentation rule"
+title: "Data augmentation rule"
 url: "https://docs.zuora.com/en/zuora-revenue/getting-started/system-management/prerequisites"
 product: "zuora-revenue"
-scraped_at: "2025-12-24T04:23:22.745Z"
+scraped_at: "2026-01-15T22:03:05.040Z"
 ---
 
-# Set up data augmentation rule
+# Data augmentation rule
 
 Learn how to set up data augmentation rules in Zuora Revenue to modify transaction source data before collection, including advanced, clear value, constant, formulae, and lookup rules.
 
@@ -29,13 +29,13 @@ Before you set up the data augmentation rule, complete the following steps:
     3.  To add a processor, click the New Processor icon.
     4.  In the New Processor window, specify a unique procedure name, select RC\_COLLECT for the Object Type field.
 
-        ![new-processor.png](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/ea64c25e-7899-4727-8142-c014b8cd8d81?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImVhNjRjMjVlLTc4OTktNDcyNy04MTQyLWMwMTRiOGNkOGQ4MSIsImV4cCI6MTc2NjYzNjYwMSwianRpIjoiMmFjZWU2NjZkZTUwNDMxNmJiODRlNmE5NzUwYzk4ZDQiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.rNMwkWxxK1mxr0nogV5CtVFPFSXomQYpC5O5Kh-PjkM)
+        ![new-processor.png](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/ea64c25e-7899-4727-8142-c014b8cd8d81?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImVhNjRjMjVlLTc4OTktNDcyNy04MTQyLWMwMTRiOGNkOGQ4MSIsImV4cCI6MTc2ODYwMDk3OSwianRpIjoiNWZjNDNkZjRkNzVjNDJjYWE4NTk2MjIwZTFmOTBjZDkiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiI4RWFZRjVFNjZLaVRYdnNmS3N5NSJ9.r1BFhlnlgYjrNJGXxVQ9FoOyk1rsDVrThcXwrH3tFkw)
 
     5.  Ensure the Enable switch is toggled to Yes and then click the save icon .
     6.  Click the Processor Mapping tab to add a procedure.
     7.  Click to add a row. Select Procedure for the Processor Type column, enter RPRO\_RC\_TRNSLTR\_RULE\_PKG.trnsltr\_rule\_wrapper in the Processor Object column and select Before Validate for the Stage Name column.
 
-        ![processor-mapping.png](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/006ed368-6b08-433c-92dd-85ec561572a4?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjAwNmVkMzY4LTZiMDgtNDMzYy05MmRkLTg1ZWM1NjE1NzJhNCIsImV4cCI6MTc2NjYzNjYwMSwianRpIjoiMzE5YzVhZWIxZTMzNGJiODhkYWViNWJmNDNlMzk0NjEiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.vb5t622k38r4TPk3uDu-kG9OX8F2542RiPJOUO_4-hQ)
+        ![processor-mapping.png](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/006ed368-6b08-433c-92dd-85ec561572a4?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjAwNmVkMzY4LTZiMDgtNDMzYy05MmRkLTg1ZWM1NjE1NzJhNCIsImV4cCI6MTc2ODYwMDk3OSwianRpIjoiZDhkMzg0ZWUzMDJjNDhhZjliZDhkYzM0ZWZjMmVjYmUiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiI4RWFZRjVFNjZLaVRYdnNmS3N5NSJ9.tbYfPeV8F8ogBxMg4TON7B53hUVxY9pV7cQb_2cmGEQ)
 
     8.  Click the Save icon and close the window.
 2.  Enable the CUSTOM\_CODE\_ALLOWED profile.

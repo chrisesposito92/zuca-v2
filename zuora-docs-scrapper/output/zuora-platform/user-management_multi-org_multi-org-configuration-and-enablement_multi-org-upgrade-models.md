@@ -2,7 +2,7 @@
 title: "Multi-Org upgrade models"
 url: "https://docs.zuora.com/en/zuora-platform/user-management/multi-org/multi-org-configuration-and-enablement/multi-org-upgrade-models"
 product: "zuora-platform"
-scraped_at: "2025-12-24T05:18:38.195Z"
+scraped_at: "2026-01-15T21:59:56.540Z"
 ---
 
 # Multi-Org upgrade models

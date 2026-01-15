@@ -2,7 +2,7 @@
 title: "Configure and apply filters in Deployment Manager"
 url: "https://docs.zuora.com/en/zuora-platform/data-management/deployment-manager/deployment-manager-features-and-operations/configure-and-apply-filters-in-deployment-manager"
 product: "zuora-platform"
-scraped_at: "2025-12-24T05:12:04.034Z"
+scraped_at: "2026-01-15T21:58:30.904Z"
 ---
 
 # Configure and apply filters in Deployment Manager
@@ -16,7 +16,7 @@ Configuring a quick filter involves selecting the source component(s), applying 
 1.  Select a metadata object for validation and deployment by initiating a new deployment run.
 2.  Click Next to view the selected source components.
 
-    ![Configure filter in source component](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/b7d5d5ff-7313-4efd-9e0a-e81997f14037?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImI3ZDVkNWZmLTczMTMtNGVmZC05ZTBhLWU4MTk5N2YxNDAzNyIsImV4cCI6MTc2NjYzOTUyMiwianRpIjoiM2U1OThkMjFkYjJhNGEyYjhjYjQxMzZjYWQyMGRiNGQiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.HX-IBWp1fyVnHpBD3rFMeo_4yjlOarUUuqZwkd0iqiI)
+    ![Configure filter in source component](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/b7d5d5ff-7313-4efd-9e0a-e81997f14037?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImI3ZDVkNWZmLTczMTMtNGVmZC05ZTBhLWU4MTk5N2YxNDAzNyIsImV4cCI6MTc2ODYwMDcwOSwianRpIjoiZjY4ZGIzZmM1MTk1NDAwZGEzNWQ0ZTdjOGY2MGY2ODMiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiI4RWFZRjVFNjZLaVRYdnNmS3N5NSJ9.iCy2TJvypaRzKoYYEUJWVN0kyhuoNRxbXi06wgdwsx0)
 
     To apply a quick filter to the source components, complete the following steps:
 

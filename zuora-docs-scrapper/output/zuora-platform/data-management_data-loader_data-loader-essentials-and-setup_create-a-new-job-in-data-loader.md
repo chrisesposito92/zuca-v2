@@ -2,7 +2,7 @@
 title: "Create a new job in Data Loader"
 url: "https://docs.zuora.com/en/zuora-platform/data-management/data-loader/data-loader-essentials-and-setup/create-a-new-job-in-data-loader"
 product: "zuora-platform"
-scraped_at: "2025-12-24T05:11:12.863Z"
+scraped_at: "2026-01-15T21:56:29.044Z"
 ---
 
 # Create a new job in Data Loader
@@ -17,7 +17,7 @@ Learn how to create a new job in Data Loader for data migration tasks.
 
     The Create Import Job screen appears.
 
-    ![Create import job](/db/organizations/zuora/repositories/prod-sitemap/content/documents/external_publications/platform/data_management/data_loader/_media/DL_OV_Create_a_new_job.png)
+    ![Create import job](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/9776eb35-1980-4584-bf35-5ceadac7c171?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6Ijk3NzZlYjM1LTE5ODAtNDU4NC1iZjM1LTVjZWFkYWM3YzE3MSIsImV4cCI6MTc2ODYwMDU4NiwianRpIjoiOTI0NWNlNzE0ZTQyNDI1YmE4OGE4NGQ1OGMxN2Y4MjciLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiI4RWFZRjVFNjZLaVRYdnNmS3N5NSJ9.859EV70XMapCQThbI4p_1Zj-XanHTIJ3zQYmvKdoeXo)
 
     Note: The stepper at top of the window shows the progress of the job workflow.
 
@@ -53,7 +53,7 @@ Learn how to create a new job in Data Loader for data migration tasks.
 
     Use the typeahead search in the drop-down lists to quickly find target fields. Click on the header field for a preview. The Data Preview section on the right of the screen also allows you to preview the data type supported by the field.
 
-    ![Field mapping](/db/organizations/zuora/repositories/prod-sitemap/content/documents/external_publications/platform/data_management/data_loader/_media/Zuora_Field_Mapping.png)
+    ![Field mapping](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/3c318342-faf9-4223-ac8e-0a06f128b574?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjNjMzE4MzQyLWZhZjktNDIyMy1hYzhlLTBhMDZmMTI4YjU3NCIsImV4cCI6MTc2ODYwMDU4NiwianRpIjoiYThjYzY0NGI2ZWU2NDZlMzg2OGE5YzY2NDhkNjRmZjUiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiI4RWFZRjVFNjZLaVRYdnNmS3N5NSJ9.8fsxjG9XQJXnMRFmdsQou0fv7g3OIltlLdkNvXt-VTI)
 
     1.  Adjust the mappings if necessary and click Next.
 5.  Preview and Submit the job.
@@ -68,4 +68,4 @@ Learn how to create a new job in Data Loader for data migration tasks.
     The job is listed on the Data Loader page with the status as Submitted. Select Refresh to update the job status.
 
 
-click [job status No Content found for /db/organizations/zuora/repositories/prod-sitemap/content/documents/external\_publications/platform/data\_management/data\_loader/topics/view\_data\_loader\_jobs\_and\_status.dita](/db/organizations/zuora/repositories/prod-sitemap/content/documents/external_publications/platform/data_management/data_loader/topics/view_data_loader_jobs_and_status.dita)to know about workflow details.
+click [job status](/zuora-platform/data-management/data-loader/data-loader-essentials-and-setup/data-loader-job-status-and-result-details) to know about workflow details.

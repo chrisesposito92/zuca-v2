@@ -2,7 +2,7 @@
 title: "Reports in Deployment Manager"
 url: "https://docs.zuora.com/en/zuora-platform/data-management/deployment-manager/deployment-manager-features-and-operations/deployment-manager-known-facts-and-limitations/reports-in-deployment-manager"
 product: "zuora-platform"
-scraped_at: "2025-12-24T05:12:39.690Z"
+scraped_at: "2026-01-15T21:59:11.980Z"
 ---
 
 # Reports in Deployment Manager

@@ -2,7 +2,7 @@
 title: "E-Invoice statuses"
 url: "https://docs.zuora.com/en/zuora-billing/bill-your-customer/leverage-advanced-capabilities/e-invoicing/e-invoice-files-generation-for-billing-documents/e-invoice-statuses"
 product: "zuora-billing"
-scraped_at: "2025-12-24T18:33:05.757Z"
+scraped_at: "2026-01-15T21:56:34.749Z"
 ---
 
 # E-Invoice statuses
@@ -11,13 +11,13 @@ This reference provides an overview of e-invoice statuses, their meanings, and t
 
 This section provides an overview of the different statuses associated with an e-invoice, what each status means, and how these statuses transition throughout the invoice lifecycle. A flowchart is also included to illustrate possible transitions and response flows.
 
-![E-invoice process flowchart](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/86a2b342-ea8c-463c-afbf-1c7a7fd33b2d?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6Ijg2YTJiMzQyLWVhOGMtNDYzYy1hZmJmLTFjN2E3ZmQzM2IyZCIsImV4cCI6MTc2NjY4NzU4MywianRpIjoiNzg4Zjk3NDFhN2Q0NDk3YTllNmNhOGI0MmEzZjQzMDciLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.O18f8X4lGbxB8s2XcvUxh4Xqh4eDddfdyYUMz4Iaq9k)
+![E-invoice process flowchart](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/86a2b342-ea8c-463c-afbf-1c7a7fd33b2d?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6Ijg2YTJiMzQyLWVhOGMtNDYzYy1hZmJmLTFjN2E3ZmQzM2IyZCIsImV4cCI6MTc2ODYwMDU4OSwianRpIjoiNTA2MjIyYTcyYmFlNGIwYThmNjg0NThmMDRkNzM1NWEiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiI4RWFZRjVFNjZLaVRYdnNmS3N5NSJ9.i_geCzeWL58pFx8P_1maCAvxtUGg8Q5CRC5tC21v1nk)
 
 The E-Invoice Status field reflects the current state of the e-invoicing process for a given invoice. Below are the possible statuses and their meanings:
 
 -   Processing - Indicates that the e-invoice process has started. This is typically the initial status before file generation or submission to the tax authority.
--   Retrieve Timeout - Indicates that the responses from tax vendors such as Sovos or Avalara are taking too long. Once the vendor responds successfully, you can use the 'Resync E-Invoice Status' action.
--   Generated - Indicates that the e-invoice file was successfully generated. At this point, the eInvoiceField contains the ID of the generated e-invoice file. This is applicable only when you use PEPPOL as your service provider. See E-Invoicing with PEPPOL.
+-   Retrieve Timeout - Indicates that the responses from tax vendors such as Sovos or Avalara are taking too long. Once the vendor responds successfully, you can use the Resync E-Invoice Status action.
+-   Generated - Indicates that the e-invoice file was successfully generated. At this point, the eInvoiceField contains the ID of the generated e-invoice file. This is applicable only when you use PEPPOL as your service provider. See [E-invoicing with PEPPOL Extract](/zuora-billing/bill-your-customer/leverage-advanced-capabilities/e-invoicing/e-invoicing-with-peppol-extract).
 -   Failed - Indicates that an error occurred during the e-invoice file generation process. In this case, the status is set to Failed.
 -   ConditionalSuccess - The e-invoice file generation completed with warnings or partial success. This status is applicable only when using Sovos.
 -   ApprovedByAuthority - The e-invoice has been approved by the tax authority but may still require further validation by the end customer. The invoice will eventually transition to either Success or Rejected, depending on the final decision from the customer or downstream system. In most cases, except for Italy, the Approved by Authority status is skipped, as Sovos returns the final status (Success or Failed) in the same response. As a result, the status moves directly to Success or Failed. This status is applicable only when using Sovos.

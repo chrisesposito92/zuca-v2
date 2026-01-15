@@ -2,7 +2,7 @@
 title: "Split invoices overview"
 url: "https://docs.zuora.com/en/zuora-billing/bill-your-customer/invoice-management/split-invoices/split-invoices-overview"
 product: "zuora-billing"
-scraped_at: "2025-12-24T08:32:19.279Z"
+scraped_at: "2026-01-15T21:56:24.755Z"
 ---
 
 # Split invoices overview
@@ -11,13 +11,13 @@ Splitting invoices allows customers to distribute payments across multiple invoi
 
 Splitting an invoice lets a customer spread out payments for a single invoice across multiple invoices. You can split an original draft invoice into multiple invoices, allocating all original charges across the new invoices on a percentage basis of your choosing. This capability is useful if you have a large original invoice that you agree to let a customer pay in several installments.
 
-You can split invoices from the Zuora UI or through SOAP API. This article explains how to split an invoice into multiple installments from the Zuora UI. For SOAP API, see Splitting an invoice to use flexible payment terms for information.
+You can split invoices from the Zuora UI or through SOAP API. This article explains how to split an invoice into multiple installments from the Zuora UI.
 
 ## How splitting an invoice works
 
 Suppose a customer has an invoice that totals $100,000. The customer wants to make four payments spread across multiple billing periods on the invoice. You can split that invoice into four separate invoices, each for a specific percentage of the original amount. These percentages can be any amount that you want to set as long as the collection of split invoices total 100% of the original invoice. In our example, you can set the first split invoice to 40% ($40,000), then each successive split invoice to 30% ($30,000), 20% ($20,000), and 10% ($10,000).
 
-If you turn on the [Flexible Billing](/zuora-billing/bill-your-customer/leverage-advanced-capabilities/flexible-billing/overview-of-flexible-billing) feature, you can split a draft invoice that originates from a subscription with [Flexible Billing Attributes](/zuora-billing/bill-your-customer/leverage-advanced-capabilities/flexible-billing/flexible-billing-attributes/overview-of-flexible-billing-attributes). The split invoices retain the billing attributes from the subscription. You can also choose not to retain the payment term, in this case, you need to update the payment term while splitting the draft invoice. See Use case of working with Flexible Billing.
+If you turn on the [Flexible Billing](/zuora-billing/bill-your-customer/leverage-advanced-capabilities/flexible-billing/overview-of-flexible-billing) feature, you can split a draft invoice that originates from a subscription with [Flexible Billing Attributes](/zuora-billing/bill-your-customer/leverage-advanced-capabilities/flexible-billing/flexible-billing-attributes/overview-of-flexible-billing-attributes). The split invoices retain the billing attributes from the subscription. You can also choose not to retain the payment term, in this case, you need to update the payment term while splitting the draft invoice. See [Use case of working with Flexible Billing](/zuora-billing/bill-your-customer/invoice-management/split-invoices/use-case-of-working-with-flexible-billing).
 
 If you add a new invoice to the billing period, Zuora will automatically distribute it across the split invoices.
 
@@ -80,6 +80,12 @@ Once you apply a payment or an adjustment to any of the posted invoices, you can
 
 ## Cancel and delete split invoices
 
-When canceling split invoices, they are treated as a group. If you cancel any of the split invoices, then all of the invoices will be canceled.
+Split invoices are managed as a group when you cancel them. If you cancel any split invoice, Zuora automatically cancels all related invoices, including the original invoice. The original invoice's status changes from Split to Canceled.
 
-However, you can delete a single split invoice without deleting all related split invoices. You can only delete an invoice that has been canceled.
+You can delete a split invoice individually, without deleting the other related invoices. However, you can delete an invoice only after it has been canceled.
+
+## Invoice in Split status
+
+After you split an invoice, its status changes from Draft to Split. The newly created split invoices maintain a reference to the original invoice.
+
+When an invoice is in Split status, you cannot perform standard invoice operations such as posting, canceling, or reversing. However, you can still update custom fields and add or edit notes on the invoice.

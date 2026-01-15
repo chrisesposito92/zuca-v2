@@ -2,7 +2,7 @@
 title: "Upload exchange rates to Zuora Revenue"
 url: "https://docs.zuora.com/en/zuora-revenue/month-end-process/reports/upload-exchange-rates-to-zuora-revenue"
 product: "zuora-revenue"
-scraped_at: "2025-12-24T04:28:52.846Z"
+scraped_at: "2026-01-15T22:03:20.510Z"
 ---
 
 # Upload exchange rates to Zuora Revenue
@@ -29,7 +29,7 @@ Before you start uploading the exchange rate, make sure the following requiremen
 
 ## Procedure
 
-Complete the procedure [explained hereNo Content found for /db/organizations/zuora/repositories/prod-sitemap/content/documents/external\_publications/revenue/C\_Perform\_month\_end\_process/topics/procedure.dita](/db/organizations/zuora/repositories/prod-sitemap/content/documents/external_publications/revenue/C_Perform_month_end_process/topics/procedure.dita) to upload the exchange rate to Zuora Revenue:
+Complete the procedure [explained here](/zuora-revenue/month-end-process/reports/upload-exchange-rates-to-zuora-revenue/procedure-to-upload-exchange-rate) to upload the exchange rate to Zuora Revenue:
 
 ## What to do next
 

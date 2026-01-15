@@ -2,7 +2,7 @@
 title: "Create a deployment"
 url: "https://docs.zuora.com/en/zuora-platform/data-management/deployment-manager/deployment-manager-features-and-operations/about-configuration-templates/create-a-deployment"
 product: "zuora-platform"
-scraped_at: "2025-12-24T05:11:59.026Z"
+scraped_at: "2026-01-15T21:58:41.828Z"
 ---
 
 # Create a deployment

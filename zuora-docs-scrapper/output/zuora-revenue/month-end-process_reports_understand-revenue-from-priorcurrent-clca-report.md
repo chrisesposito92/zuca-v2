@@ -2,7 +2,7 @@
 title: "Understand Revenue from Prior/Current CL/CA Report"
 url: "https://docs.zuora.com/en/zuora-revenue/month-end-process/reports/understand-revenue-from-priorcurrent-clca-report"
 product: "zuora-revenue"
-scraped_at: "2025-12-24T04:28:34.729Z"
+scraped_at: "2026-01-15T22:03:20.354Z"
 ---
 
 # Understand Revenue from Prior/Current CL/CA Report
@@ -97,8 +97,8 @@ When Total Additions and Total Release from the RC Rollforward Report are calcul
 
 ## Related articles
 
--   For detailed explanations of the key data points that are involved in this report, see Key data points..
+-   For detailed explanations of the key data points that are involved in this report, see [Key data points](/zuora-revenue/month-end-process/reports/understand-revenue-from-priorcurrent-clca-report/key-data-points).
 
--   To understand the internal calculation logic of this report, see Calculation logic.
+-   To understand the internal calculation logic of this report, see [Calculation logic](/zuora-revenue/month-end-process/reports/understand-revenue-from-priorcurrent-clca-report/calculation-logic).
 
--   A sample revenue contract is provided to show how the report is generated. For more information, see Revenue contract example.
+-   A sample revenue contract is provided to show how the report is generated. For more information, see [Revenue contract example](/zuora-revenue/month-end-process/reports/understand-revenue-from-priorcurrent-clca-report/revenue-contract-example).
