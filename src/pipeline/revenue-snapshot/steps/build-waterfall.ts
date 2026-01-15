@@ -44,6 +44,7 @@ const GEMINI_VALUE_SCHEMA = { type: 'string', nullable: true } as const;
 const PERIOD_FORMAT = new Intl.DateTimeFormat('en-US', {
   month: 'short',
   year: '2-digit',
+  timeZone: 'UTC',
 });
 
 const MONTH_INDEX: Record<string, number> = {
@@ -162,6 +163,52 @@ function collectRecordDates(record: Record<string, unknown>): Date[] {
   return dates;
 }
 
+/**
+ * Collect only revenue-specific dates from a record.
+ * Per docs/booking-template-revenue-field-mappings.csv:
+ * - CurrentStartDate → Revenue Start Date
+ * - CurrentEndDate → Revenue End Date
+ */
+function collectRevenueDates(record: Record<string, unknown>): Date[] {
+  const dates: Date[] = [];
+  // Revenue date fields from Zuora BookingTransaction API
+  const revenueDateFields = [
+    'currentstartdate', 'currentenddate',
+    'revenuestartdate', 'revenueenddate',
+  ];
+
+  for (const [key, raw] of Object.entries(record)) {
+    const normalizedKey = normalizeKey(key);
+    if (!revenueDateFields.includes(normalizedKey)) continue;
+    const parsed = parseDate(raw);
+    if (parsed) dates.push(parsed);
+  }
+  return dates;
+}
+
+/**
+ * Collect revenue-specific dates from all source buckets.
+ * Used to determine period range based on actual revenue dates, not lifecycle dates.
+ */
+function collectSourceRevenueDates(source: RevenueSnapshotSource): Date[] {
+  const buckets = [
+    source.booking_transactions,
+    source.billing_transactions,
+    source.revenue_recognition_events,
+  ];
+
+  const dates: Date[] = [];
+  buckets.forEach((records) => {
+    if (!Array.isArray(records)) return;
+    records.forEach((record) => {
+      if (record && typeof record === 'object') {
+        dates.push(...collectRevenueDates(record as Record<string, unknown>));
+      }
+    });
+  });
+  return dates;
+}
+
 function collectSourceDates(source: RevenueSnapshotSource): Date[] {
   const buckets = [
     source.booking_transactions,
@@ -189,7 +236,14 @@ function collectSourceDates(source: RevenueSnapshotSource): Date[] {
 }
 
 function buildPeriodFields(source: RevenueSnapshotSource): string[] {
-  const dates = collectSourceDates(source);
+  // First try revenue-specific dates (actual revenue recognition periods)
+  let dates = collectSourceRevenueDates(source);
+
+  // Fall back to all dates only if no revenue dates found
+  if (dates.length === 0) {
+    dates = collectSourceDates(source);
+  }
+
   let start: Date;
   let end: Date;
 
