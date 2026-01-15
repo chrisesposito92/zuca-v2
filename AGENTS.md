@@ -87,7 +87,7 @@ USE_CORRECTIONS_EMBEDDINGS=false
 # Benchmarking (cross-model comparison)
 npm run cli -- benchmark                    # Run with all models
 npm run cli -- benchmark -s golden-quick    # Specific test suite
-npm run cli -- benchmark --models gpt-5.2,zuca-gpt-nano  # Specific models
+npm run cli -- benchmark --models gpt-5.2,gemini-3-flash-preview  # Specific models
 npm run cli -- benchmark -o results.json    # Export JSON results
 npm run cli -- benchmark --markdown report.md  # Generate markdown report
 npm run cli -- benchmark --skip-evaluation  # Speed-only (no quality eval)
@@ -135,13 +135,13 @@ npm run cli -- self-improve          # Run evaluation + pattern analysis
 npm run cli -- self-improve --auto-suggest  # Auto-generate suggestions
 
 # Fine-Tune Evaluation (compare base vs fine-tuned models)
-npm run cli -- ft-eval run baseline-gpt4.1 --model gpt-4.1 -v  # Run baseline eval
-npm run cli -- ft-eval run ft-nano-v1 --model ft:gpt-4.1-nano:personal:... -v  # Eval fine-tuned model
-npm run cli -- ft-eval quick gpt-4.1 -v         # Quick eval (5 test cases)
-npm run cli -- ft-eval quick ft:gpt-4.1-nano:... -c 3  # Quick eval with custom count
+npm run cli -- ft-eval run baseline --model gpt-5.2 -v  # Run baseline eval
+npm run cli -- ft-eval run gemini-baseline --model gemini-3-flash-preview -v  # Eval another model
+npm run cli -- ft-eval quick gpt-5.2 -v         # Quick eval (5 test cases)
+npm run cli -- ft-eval quick gemini-3-flash-preview -c 3  # Quick eval with custom count
 npm run cli -- ft-eval list                      # List all saved runs
 npm run cli -- ft-eval show <name-or-id>         # Show details of a run
-npm run cli -- ft-eval compare baseline-gpt4.1 ft-nano-v1  # Compare two runs
+npm run cli -- ft-eval compare baseline gemini-baseline  # Compare two runs
 npm run cli -- ft-eval compare baseline ft-v1 --markdown report.md  # Export comparison
 
 # Training Data Export (for SLM fine-tuning)
@@ -267,9 +267,9 @@ Compares baseline models vs fine-tuned models. See `docs/SELF-LEARNING-CLI.md` f
 
 **Quick Reference:**
 ```bash
-npm run cli -- ft-eval run baseline --model gpt-4.1 -v    # Baseline eval
-npm run cli -- ft-eval run ft-v1 --model ft:gpt-4.1-nano:... -v  # Fine-tuned eval
-npm run cli -- ft-eval compare baseline ft-v1             # Compare results
+npm run cli -- ft-eval run baseline --model gpt-5.2 -v    # Baseline eval
+npm run cli -- ft-eval run gemini --model gemini-3-flash-preview -v  # Compare another model
+npm run cli -- ft-eval compare baseline gemini             # Compare results
 ```
 
 ### Adding New Criteria

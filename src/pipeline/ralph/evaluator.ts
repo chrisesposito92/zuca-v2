@@ -46,7 +46,7 @@ export async function selfEvaluate<T>(
     );
 
     // Use the same model that ran the step
-    const resolvedModel = resolveModelId(model || 'gpt-4.1');
+    const resolvedModel = resolveModelId(model || 'gpt-5.2');
 
     debugLog('Ralph self-evaluation starting', {
       stepName,

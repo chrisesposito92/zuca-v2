@@ -512,7 +512,7 @@ npx tsx scripts/consolidate-training-data.ts --stats
 npx tsx scripts/consolidate-training-data.ts --stats --only pipeline-outputs
 
 # Pipeline outputs only (recommended for task-specific fine-tuning)
-npx tsx scripts/consolidate-training-data.ts data/gpt-4.1-training.jsonl --only pipeline-outputs --shuffle
+npx tsx scripts/consolidate-training-data.ts data/training.jsonl --only pipeline-outputs --shuffle
 
 # Pipeline + revenue docs
 npx tsx scripts/consolidate-training-data.ts data/training.jsonl --only pipeline-outputs,zuora-revenue --shuffle
@@ -732,35 +732,34 @@ npm run cli -- ft-eval compare <baseline> <candidate> [options]
 
 ```bash
 # Quick sanity check with a model
-npm run cli -- ft-eval quick gpt-4.1 -v
+npm run cli -- ft-eval quick gpt-5.2 -v
 
-# Quick check with fine-tuned model
-npm run cli -- ft-eval quick ft:gpt-4.1-nano:personal:my-tuned:abc123 -v
+# Quick check with another model
+npm run cli -- ft-eval quick gemini-3-flash-preview -v
 
 # Run full baseline evaluation
-npm run cli -- ft-eval run baseline-gpt4.1 --model gpt-4.1 -v
+npm run cli -- ft-eval run baseline --model gpt-5.2 -v
 
-# Run full evaluation on fine-tuned model
-npm run cli -- ft-eval run ft-nano-v1 --model ft:gpt-4.1-nano:personal:my-tuned:abc123 -v
+# Run full evaluation on another model
+npm run cli -- ft-eval run gemini-eval --model gemini-3-flash-preview -v
 
 # List saved runs
 npm run cli -- ft-eval list
 
 # Show details of a run
-npm run cli -- ft-eval show baseline-gpt4.1
+npm run cli -- ft-eval show baseline
 
-# Compare baseline vs fine-tuned
-npm run cli -- ft-eval compare baseline-gpt4.1 ft-nano-v1
+# Compare two models
+npm run cli -- ft-eval compare baseline gemini-eval
 
 # Export comparison as markdown
-npm run cli -- ft-eval compare baseline-gpt4.1 ft-nano-v1 --markdown comparison-report.md
+npm run cli -- ft-eval compare baseline gemini-eval --markdown comparison-report.md
 ```
 
 #### Model Support
 
-- **Standard models**: `gpt-5.2`, `gpt-4.1`, `gemini-3-pro-preview`, `gemini-3-flash-preview`, `zuca-gpt-nano`, `zuca-gpt-mini`
-- **Fine-tuned models**: Any OpenAI fine-tuned model ID (e.g., `ft:gpt-4.1-nano:personal:my-tuned:abc123`)
-- **Unknown models**: Will show a warning but proceed (OpenAI API validates)
+- **Standard models**: `gpt-5.2`, `gemini-3-pro-preview`, `gemini-3-flash-preview`
+- **Unknown models**: Will show a warning but proceed (API validates)
 
 #### File Locations
 
@@ -800,7 +799,7 @@ npm run cli -- benchmark [options]
 npm run cli -- benchmark
 
 # Benchmark specific models
-npm run cli -- benchmark --models gpt-5.2,gpt-4.1
+npm run cli -- benchmark --models gpt-5.2,gemini-3-flash-preview
 
 # Use specific test suite
 npm run cli -- benchmark -s golden-scenarios
@@ -864,7 +863,7 @@ Use `scripts/consolidate-training-data.ts` to combine multiple training sources 
 npx tsx scripts/consolidate-training-data.ts --stats
 
 # Pipeline outputs only (recommended for task-specific fine-tuning)
-npx tsx scripts/consolidate-training-data.ts data/gpt-4.1-training.jsonl --only pipeline-outputs --shuffle
+npx tsx scripts/consolidate-training-data.ts data/training.jsonl --only pipeline-outputs --shuffle
 
 # Pipeline + revenue docs (if model needs Zuora concepts)
 npx tsx scripts/consolidate-training-data.ts data/training.jsonl --only pipeline-outputs,zuora-revenue --shuffle
@@ -937,40 +936,34 @@ npx tsx scripts/consolidate-training-data.ts --stats
 npx tsx scripts/consolidate-training-data.ts data/ft-training.jsonl --only pipeline-outputs --shuffle
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# STEP 2: Run Baseline Evaluation (BEFORE fine-tuning)
+# STEP 2: Run Baseline Evaluation
 # ═══════════════════════════════════════════════════════════════════════════════
 
 # Quick sanity check
-npm run cli -- ft-eval quick gpt-4.1 -v
+npm run cli -- ft-eval quick gpt-5.2 -v
 
 # Full baseline evaluation (save for comparison)
-npm run cli -- ft-eval run baseline-gpt4.1 --model gpt-4.1 -v
+npm run cli -- ft-eval run baseline --model gpt-5.2 -v
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# STEP 3: Fine-tune on OpenAI (done externally)
-# ═══════════════════════════════════════════════════════════════════════════════
-# Upload ft-training.jsonl to OpenAI and create fine-tuning job
-# Note your fine-tuned model ID: ft:gpt-4.1-nano:personal:my-tuned:abc123
-
-# ═══════════════════════════════════════════════════════════════════════════════
-# STEP 4: Evaluate Fine-Tuned Model
+# STEP 3: Evaluate Other Models
 # ═══════════════════════════════════════════════════════════════════════════════
 
-# Quick sanity check on fine-tuned model
-npm run cli -- ft-eval quick ft:gpt-4.1-nano:personal:my-tuned:abc123 -v
+# Quick sanity check on another model
+npm run cli -- ft-eval quick gemini-3-flash-preview -v
 
-# Full evaluation on fine-tuned model
-npm run cli -- ft-eval run ft-nano-v1 --model ft:gpt-4.1-nano:personal:my-tuned:abc123 -v
+# Full evaluation on another model
+npm run cli -- ft-eval run gemini-eval --model gemini-3-flash-preview -v
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# STEP 5: Compare Results
+# STEP 4: Compare Results
 # ═══════════════════════════════════════════════════════════════════════════════
 
-# Compare baseline vs fine-tuned
-npm run cli -- ft-eval compare baseline-gpt4.1 ft-nano-v1
+# Compare models
+npm run cli -- ft-eval compare baseline gemini-eval
 
 # Export comparison report
-npm run cli -- ft-eval compare baseline-gpt4.1 ft-nano-v1 --markdown comparison.md
+npm run cli -- ft-eval compare baseline gemini-eval --markdown comparison.md
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # STEP 6: Interpret Results

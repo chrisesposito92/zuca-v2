@@ -644,7 +644,7 @@ async function completeOpenAI<T = unknown>(
 
   // Some models don't support web_search:
   // - Fine-tuned models (ft:*)
-  // - Nano/mini models (gpt-4.1-nano, gpt-4.1-mini, etc.)
+  // - Nano/mini models (models containing 'nano' or 'mini' in the name)
   const isFineTunedModel = model.startsWith('ft:');
   const isSmallModel = model.includes('nano') || model.includes('mini');
   const supportsWebSearch = !isFineTunedModel && !isSmallModel;
@@ -999,7 +999,7 @@ export async function complete<T = unknown>(
   options: CompletionOptions
 ): Promise<CompletionResult<T>> {
   const requestedModel = options.model || config.openai.model;
-  // Resolve friendly model names (e.g., 'zuca-gpt-nano') to actual API model IDs
+  // Resolve model names to API model IDs (currently passthrough)
   const resolvedModel = resolveModelId(requestedModel);
   const reasoningEffort = options.reasoningEffort || config.openai.reasoningEffort;
   const provider = getProviderForModel(resolvedModel);
