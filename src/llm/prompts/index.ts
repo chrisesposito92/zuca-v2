@@ -65,6 +65,8 @@ export const PROMPTS = {
   SELF_LEARN_JUDGE: 'self-learn-judge',
   // Judge LLM validation prompts
   JUDGE_LLM: 'judge-llm',
+  // Ralph self-improvement prompts
+  RALPH_SELF_EVAL: 'ralph-self-eval',
 } as const;
 
 export type PromptName = typeof PROMPTS[keyof typeof PROMPTS];

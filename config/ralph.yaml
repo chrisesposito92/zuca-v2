@@ -1,0 +1,47 @@
+# Ralph Wiggum Self-Improvement Configuration
+#
+# Controls the iterative self-improvement feature where pipeline steps
+# evaluate their own output and can iterate, ask clarifications, or complete.
+#
+# Environment variable overrides:
+#   RALPH_ENABLED=true/false - Global enable/disable
+#   RALPH_MAX_ITERATIONS=N - Override default max iterations
+#   RALPH_CONFIG_PATH=/path/to/ralph.yaml - Custom config path (default: config/ralph.yaml)
+
+# Global toggle (can be overridden by RALPH_ENABLED env var)
+enabled: true
+
+# Default maximum iterations per step before forcing completion
+defaultMaxIterations: 3
+
+# Per-step configuration
+steps:
+  # Contract analysis - higher complexity, benefits from iteration
+  analyze_contract:
+    enabled: true
+    maxIterations: 3
+    allowClarifications: true
+
+  # Subscription design - complex POB mapping, benefits from iteration
+  design_subscription:
+    enabled: true
+    maxIterations: 3
+    allowClarifications: true
+
+  # Contracts/Orders table - more structured, less iteration needed
+  contracts_orders:
+    enabled: true
+    maxIterations: 3
+    allowClarifications: true
+
+  # Billing records - structured output, limited iteration
+  billings:
+    enabled: true
+    maxIterations: 3
+    allowClarifications: true
+
+  # Revenue recognition waterfall - complex calculations, iteration helpful
+  revrec_waterfall:
+    enabled: true
+    maxIterations: 3
+    allowClarifications: true

@@ -40,8 +40,12 @@ CREATE TABLE IF NOT EXISTS sessions (
     current_step INTEGER DEFAULT 0,
     error_message TEXT,
     user_id UUID REFERENCES auth_users(id) ON DELETE SET NULL,
-    clarification_state JSONB          -- State for clarification questions (pendingQuestion, pausedAtStep, answers)
+    clarification_state JSONB,         -- State for clarification questions (pendingQuestion, pausedAtStep, answers)
+    ralph_state JSONB                  -- Ralph self-improvement iteration state (stepStates per step)
 );
+
+-- Migration: Add ralph_state column if table already exists
+ALTER TABLE sessions ADD COLUMN IF NOT EXISTS ralph_state JSONB;
 
 -- User Preferences table
 CREATE TABLE IF NOT EXISTS user_preferences (
