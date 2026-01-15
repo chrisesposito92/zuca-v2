@@ -10,6 +10,7 @@ import {
   Link,
 } from "@heroui/react";
 import Image from "next/image";
+import NextLink from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -158,6 +159,18 @@ export default function LoginPage() {
                   input: "text-base",
                 }}
               />
+
+              {mode === "login" && (
+                <div className="flex justify-end -mt-2">
+                  <Link
+                    as={NextLink}
+                    href="/forgot-password"
+                    className="text-sm text-primary"
+                  >
+                    Forgot password?
+                  </Link>
+                </div>
+              )}
 
               {mode === "register" && (
                 <Input

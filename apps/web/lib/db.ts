@@ -1008,3 +1008,78 @@ export async function shouldSkipClarifications(userId: string | null): Promise<b
   const prefs = await getUserPreferences(userId);
   return prefs.skip_clarifications;
 }
+
+// ============================================================================
+// Password Reset Token Operations
+// ============================================================================
+
+export interface DbPasswordResetToken {
+  id: string;
+  user_id: string;
+  token_hash: string;
+  expires_at: Date;
+  used_at: Date | null;
+  created_at: Date;
+}
+
+/**
+ * Create a password reset token (invalidates any existing tokens for the user)
+ */
+export async function createPasswordResetToken(
+  userId: string,
+  tokenHash: string,
+  expiresAt: Date
+): Promise<DbPasswordResetToken> {
+  // Invalidate existing unused tokens for this user
+  await sql`
+    DELETE FROM password_reset_tokens
+    WHERE user_id = ${userId} AND used_at IS NULL
+  `;
+
+  const result = await sql<DbPasswordResetToken>`
+    INSERT INTO password_reset_tokens (user_id, token_hash, expires_at)
+    VALUES (${userId}, ${tokenHash}, ${expiresAt.toISOString()})
+    RETURNING *
+  `;
+  return result.rows[0];
+}
+
+/**
+ * Find a valid (unexpired, unused) password reset token by hash
+ */
+export async function findValidPasswordResetToken(
+  tokenHash: string
+): Promise<DbPasswordResetToken | null> {
+  const result = await sql<DbPasswordResetToken>`
+    SELECT * FROM password_reset_tokens
+    WHERE token_hash = ${tokenHash}
+      AND expires_at > NOW()
+      AND used_at IS NULL
+  `;
+  return result.rows[0] ?? null;
+}
+
+/**
+ * Mark a password reset token as used
+ */
+export async function markPasswordResetTokenUsed(tokenId: string): Promise<void> {
+  await sql`
+    UPDATE password_reset_tokens
+    SET used_at = NOW()
+    WHERE id = ${tokenId}
+  `;
+}
+
+/**
+ * Update user password hash
+ */
+export async function updateUserPassword(
+  userId: string,
+  passwordHash: string
+): Promise<void> {
+  await sql`
+    UPDATE auth_users
+    SET password_hash = ${passwordHash}
+    WHERE id = ${userId}
+  `;
+}

@@ -9,7 +9,16 @@
 import { SignJWT, jwtVerify } from 'jose';
 import { cookies } from 'next/headers';
 import bcrypt from 'bcryptjs';
-import { getUserById, getUserByEmail, createUser } from './db';
+import crypto from 'crypto';
+import {
+  getUserById,
+  getUserByEmail,
+  createUser,
+  createPasswordResetToken,
+  findValidPasswordResetToken,
+  markPasswordResetTokenUsed,
+  updateUserPassword,
+} from './db';
 
 // ============================================================================
 // Constants
@@ -235,4 +244,125 @@ export async function handleOAuthCallback(
   // 3. Create or find user in our DB
   // 4. Create JWT and set cookie
   return { success: false, error: 'SSO not yet implemented' };
+}
+
+// ============================================================================
+// Password Reset Operations
+// ============================================================================
+
+const RESET_TOKEN_EXPIRY_HOURS = 1;
+
+/**
+ * Generate a secure random token and its hash
+ */
+export function generateResetToken(): { token: string; hash: string } {
+  const token = crypto.randomBytes(32).toString('hex'); // 64 char hex string
+  const hash = crypto.createHash('sha256').update(token).digest('hex');
+  return { token, hash };
+}
+
+/**
+ * Hash a token for lookup
+ */
+export function hashToken(token: string): string {
+  return crypto.createHash('sha256').update(token).digest('hex');
+}
+
+/**
+ * Create a password reset request
+ * Returns the token to be sent via email (or null if user not found)
+ */
+export async function createPasswordResetRequest(email: string): Promise<string | null> {
+  const user = await getUserByEmail(email);
+  if (!user) {
+    return null; // Don't reveal if email exists
+  }
+
+  const { token, hash } = generateResetToken();
+  const expiresAt = new Date(Date.now() + RESET_TOKEN_EXPIRY_HOURS * 60 * 60 * 1000);
+
+  await createPasswordResetToken(user.id, hash, expiresAt);
+
+  return token;
+}
+
+/**
+ * Validate a password reset token
+ * Returns the user ID if valid, null otherwise
+ */
+export async function validateResetToken(token: string): Promise<string | null> {
+  const hash = hashToken(token);
+  const resetToken = await findValidPasswordResetToken(hash);
+
+  if (!resetToken) {
+    return null;
+  }
+
+  return resetToken.user_id;
+}
+
+/**
+ * Reset password using a valid token
+ */
+export async function resetPassword(
+  token: string,
+  newPassword: string
+): Promise<AuthResult> {
+  // Validate password strength
+  if (newPassword.length < 8) {
+    return { success: false, error: 'Password must be at least 8 characters' };
+  }
+
+  const hash = hashToken(token);
+  const resetToken = await findValidPasswordResetToken(hash);
+
+  if (!resetToken) {
+    return { success: false, error: 'Invalid or expired reset link' };
+  }
+
+  // Hash new password and update
+  const passwordHash = await bcrypt.hash(newPassword, SALT_ROUNDS);
+  await updateUserPassword(resetToken.user_id, passwordHash);
+
+  // Mark token as used
+  await markPasswordResetTokenUsed(resetToken.id);
+
+  return { success: true, userId: resetToken.user_id };
+}
+
+/**
+ * Change password for authenticated user
+ */
+export async function changePassword(
+  userId: string,
+  currentPassword: string,
+  newPassword: string
+): Promise<AuthResult> {
+  // Validate new password strength
+  if (newPassword.length < 8) {
+    return { success: false, error: 'New password must be at least 8 characters' };
+  }
+
+  // Get user and verify current password
+  const user = await getUserById(userId);
+  if (!user || !user.password_hash) {
+    return { success: false, error: 'User not found' };
+  }
+
+  const passwordValid = await bcrypt.compare(currentPassword, user.password_hash);
+  if (!passwordValid) {
+    return { success: false, error: 'Current password is incorrect' };
+  }
+
+  // Check new password isn't same as current
+  const samePassword = await bcrypt.compare(newPassword, user.password_hash);
+  if (samePassword) {
+    return { success: false, error: 'New password must be different from current password' };
+  }
+
+  // Hash and update
+  const passwordHash = await bcrypt.hash(newPassword, SALT_ROUNDS);
+  await updateUserPassword(userId, passwordHash);
+
+  return { success: true, userId };
 }

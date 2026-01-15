@@ -242,3 +242,22 @@ CREATE TRIGGER update_prompt_suggestions_updated_at
     BEFORE UPDATE ON prompt_suggestions
     FOR EACH ROW
     EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================================================
+-- Password Reset Tokens Table
+-- ============================================================================
+
+-- Password Reset Tokens table (for forgot password flow)
+CREATE TABLE IF NOT EXISTS password_reset_tokens (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID NOT NULL REFERENCES auth_users(id) ON DELETE CASCADE,
+    token_hash VARCHAR(64) NOT NULL,  -- SHA-256 hash of the token
+    expires_at TIMESTAMPTZ NOT NULL,
+    used_at TIMESTAMPTZ,              -- NULL until used
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Indexes for password reset tokens
+CREATE INDEX IF NOT EXISTS idx_password_reset_tokens_user_id ON password_reset_tokens(user_id);
+CREATE INDEX IF NOT EXISTS idx_password_reset_tokens_token_hash ON password_reset_tokens(token_hash);
+CREATE INDEX IF NOT EXISTS idx_password_reset_tokens_expires ON password_reset_tokens(expires_at);
