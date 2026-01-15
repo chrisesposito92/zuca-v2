@@ -167,27 +167,60 @@ export async function buildRevRecWaterfall(
     hasClarificationContext: !!clarificationContext,
   });
 
+  // Decode POB template names into searchable Zuora concepts
+  // POB names like "BK-OT-RATABLE" encode: trigger (BK=booking), timing (OT=over-time), method (RATABLE)
+  const pobCodeMap: Record<string, string> = {
+    'BK': 'booking-based',
+    'BL': 'billing-based',
+    'EVT': 'event-based',
+    'OT': 'over-time recognition',
+    'PIT': 'point-in-time recognition',
+    'RATABLE': 'ratable method',
+    'CONSUMP': 'consumption-based',
+    'PAYGO': 'pay-as-you-go',
+    'USAGE': 'usage-based',
+    'INVRATABLE': 'invoice ratable',
+    'CURRENT_PERIOD': 'current period',
+    'STARTDATE': 'start date trigger',
+    'COMPLETION': 'completion event',
+    'ACCEPTAN': 'acceptance event',
+    'GOLIVE': 'go-live event',
+    'PM': 'prior month',
+    'VC': 'variable consideration',
+    'POC': 'percentage of completion',
+    'QTY': 'quantity-based',
+    'HOURS': 'hours-based',
+    'AMOUNT': 'amount-based',
+    'CUMPERCENT': 'cumulative percentage',
+    'DELIVERY': 'delivery event',
+  };
+
+  const decodePobName = (pobName: string): string => {
+    const parts = pobName.split('-');
+    return parts
+      .map((part) => pobCodeMap[part] || '')
+      .filter(Boolean)
+      .join(' ');
+  };
+
+  const pobKeywords = pobMapping.charge_pob_map
+    ?.map((m) => decodePobName(m.pob_name))
+    .filter(Boolean)
+    .join(', ') || '';
+  const ragQuery = `Zuora Revenue recognition waterfall ${pobKeywords} SSP allocation`;
+
   // Retrieve relevant documentation if RAG index is available
-  // Query focuses on revenue recognition, POB, SSP, and ratable methods
   let docContext: string | undefined;
   if (await isIndexReady()) {
     debugLog('RAG index available, retrieving docs for rev rec waterfall...');
-    const query = 'Zuora Revenue recognition waterfall POB SSP allocation ratable method release event';
-    docContext = await getDocContext(query, { limit: 3, minScore: 0.3 });
+    docContext = await getDocContext(ragQuery, { limit: 3, minScore: 0.3 });
     debugLog('Retrieved doc context', { length: docContext?.length || 0 });
   }
 
-  // Retrieve learned corrections for this step
-  const inputSummary = [
-    `Line Items: ${contractsOrders.zr_contracts_orders?.length || 0}`,
-    `POBs: ${pobMapping.charge_pob_map?.map((m) => m.pob_name).join(', ')}`,
-    `Service Period: ${contractIntel.service_start_mdy} to ${contractIntel.service_end_mdy}`,
-    `Billing Period: ${contractIntel.billing_period}`,
-  ].join('\n');
-
+  // Retrieve learned corrections for this step (using capability keywords, not customer context)
   const correctionsResult = await getCorrectionsContext({
     stepName: 'revrec_waterfall',
-    inputSummary,
+    inputSummary: ragQuery,
   });
   if (correctionsResult.count > 0) {
     debugLog('Injecting corrections context', {

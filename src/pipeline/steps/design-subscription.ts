@@ -22,7 +22,7 @@ import { GoldenSubscription, GoldenRatePlanChargesDoc, PobTemplate } from '../..
 import { formatMatchResultsForContext } from './match-golden-use-cases';
 import { formatPobTemplatesForContext } from '../../data/loader';
 import { debugLog } from '../../config';
-import { getDocContext, isIndexReady } from '../../rag';
+import { getDocContext, isIndexReady, extractRagKeywords } from '../../rag';
 import { getCorrectionsContext } from '../../self-learn';
 import {
   StepClarificationRequest,
@@ -408,29 +408,23 @@ export async function designSubscription(
     hasClarificationContext: !!clarificationContext,
   });
 
+  // Extract capability keywords for targeted RAG + corrections search
+  const ragQuery = await extractRagKeywords(input.use_case_description, {
+    revRecNotes: input.rev_rec_notes,
+  });
+
   // Retrieve relevant documentation if RAG index is available
-  // Query using use case + rev rec notes to find charge models and POB info
   let docContext: string | undefined;
   if (await isIndexReady()) {
     debugLog('RAG index available, retrieving docs for subscription design...');
-    const query = input.rev_rec_notes
-      ? `${input.use_case_description} ${input.rev_rec_notes}`
-      : input.use_case_description;
-    docContext = await getDocContext(query, { limit: 3, minScore: 0.3 });
+    docContext = await getDocContext(ragQuery, { limit: 3, minScore: 0.3 });
     debugLog('Retrieved doc context', { length: docContext?.length || 0 });
   }
 
-  // Retrieve learned corrections for this step
-  const inputSummary = [
-    `Customer: ${input.customer_name}`,
-    `Description: ${input.use_case_description?.substring(0, 200)}`,
-    `Billing Period: ${input.billing_period}`,
-    `Rev Rec Notes: ${input.rev_rec_notes?.substring(0, 100) || 'none'}`,
-  ].join('\n');
-
+  // Retrieve learned corrections for this step (using capability keywords, not customer context)
   const correctionsResult = await getCorrectionsContext({
     stepName: 'design_subscription',
-    inputSummary,
+    inputSummary: ragQuery,
   });
   if (correctionsResult.count > 0) {
     debugLog('Injecting corrections context', {

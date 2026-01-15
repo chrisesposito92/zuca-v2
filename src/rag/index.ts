@@ -34,6 +34,9 @@ export type { DocChunk, EmbeddingIndex, SearchOptions, SearchResult, ZuoraProduc
 // Re-export utilities
 export { buildIndex, loadEmbeddingIndex, embedQuery, chunkAllDocs, chunkDocument, loadAllDocs, ZuoraDocsSearch, createSearchInstance };
 
+// Re-export query extraction
+export { extractRagKeywords } from './query-extractor';
+
 // Default paths
 const DEFAULT_DOCS_DIR = path.join(process.cwd(), 'zuora-docs-scrapper', 'output');
 const DEFAULT_INDEX_PATH = path.join(process.cwd(), 'data', 'zuora-docs-index.json');

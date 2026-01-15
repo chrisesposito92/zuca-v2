@@ -13,7 +13,7 @@ import { formatSubscriptionSpecForContext } from './generate-subscription';
 import { formatPobMappingForContext } from './assign-pob-templates';
 import { formatContractIntelForContext } from './contract-intel';
 import { debugLog } from '../../config';
-import { getDocContext, isIndexReady } from '../../rag';
+import { getDocContext, isIndexReady, extractRagKeywords } from '../../rag';
 import { getCorrectionsContext } from '../../self-learn';
 import {
   StepClarificationRequest,
@@ -186,27 +186,21 @@ export async function buildContractsOrders(
     hasClarificationContext: !!clarificationContext,
   });
 
+  // Extract capability keywords for targeted RAG + corrections search
+  const ragQuery = await extractRagKeywords(input.use_case_description);
+
   // Retrieve relevant documentation if RAG index is available
-  // Query focuses on order actions, allocations, and POB concepts
   let docContext: string | undefined;
   if (await isIndexReady()) {
     debugLog('RAG index available, retrieving docs for contracts/orders...');
-    const query = `Zuora Revenue order actions allocations SSP POB ${input.is_allocations ? 'revenue allocation' : ''}`;
-    docContext = await getDocContext(query, { limit: 3, minScore: 0.3 });
+    docContext = await getDocContext(ragQuery, { limit: 3, minScore: 0.3 });
     debugLog('Retrieved doc context', { length: docContext?.length || 0 });
   }
 
-  // Retrieve learned corrections for this step
-  const inputSummary = [
-    `Customer: ${input.customer_name}`,
-    `Description: ${input.use_case_description?.substring(0, 200)}`,
-    `Billing: ${input.billing_period}`,
-    `Allocations: ${input.is_allocations ? 'Yes' : 'No'}`,
-  ].join('\n');
-
+  // Retrieve learned corrections for this step (using capability keywords, not customer context)
   const correctionsResult = await getCorrectionsContext({
     stepName: 'contracts_orders',
-    inputSummary,
+    inputSummary: ragQuery,
   });
   if (correctionsResult.count > 0) {
     debugLog('Injecting corrections context', {

@@ -14,7 +14,7 @@ import { ZucaInput } from '../../types/input';
 import { GoldenUseCaseCapability, KeyTerm } from '../../types/golden-use-cases';
 import { formatCapabilitiesForContext, formatKeyTermsForContext } from '../../data/loader';
 import { debugLog } from '../../config';
-import { getDocContext, isIndexReady } from '../../rag';
+import { getDocContext, isIndexReady, extractRagKeywords } from '../../rag';
 import { getCorrectionsContext } from '../../self-learn';
 import {
   StepClarificationRequest,
@@ -246,27 +246,21 @@ export async function analyzeContract(
     hasClarificationContext: !!clarificationContext,
   });
 
+  // Extract capability keywords for targeted RAG + corrections search
+  const ragQuery = await extractRagKeywords(input.use_case_description);
+
   // Retrieve relevant documentation if RAG index is available
   let docContext: string | undefined;
   if (await isIndexReady()) {
     debugLog('RAG index available, retrieving docs for contract analysis...');
-    // Query using the use case description to find relevant billing/revenue concepts
-    docContext = await getDocContext(input.use_case_description, { limit: 3, minScore: 0.3 });
+    docContext = await getDocContext(ragQuery, { limit: 3, minScore: 0.3 });
     debugLog('Retrieved doc context', { length: docContext?.length || 0 });
   }
 
-  // Retrieve learned corrections for this step
-  const inputSummary = [
-    `Customer: ${input.customer_name}`,
-    `Use Case: ${input.use_case_description?.substring(0, 300)}`,
-    `Terms: ${input.terms_months} months`,
-    `Billing Period: ${input.billing_period}`,
-    `Start Date: ${input.contract_start_date}`,
-  ].join('\n');
-
+  // Retrieve learned corrections for this step (using capability keywords, not customer context)
   const correctionsResult = await getCorrectionsContext({
     stepName: 'analyze_contract',
-    inputSummary,
+    inputSummary: ragQuery,
   });
   if (correctionsResult.count > 0) {
     debugLog('Injecting corrections context', {
