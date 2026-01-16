@@ -337,7 +337,7 @@ Return JSON with ALL fields populated:
       "POB Template": "BK-OT-RATABLE",
       "POB Satisfied": "Over Time",
       "Release Event": "Upon Booking (Full Booking Release)",
-      "Billing Period": "Month",
+      "Billing Period": "Month | Annual | Semi-Annual | Quarter etc.",
       "Billing Timing": "InAdvance",
       "Terms Months": 12,
       "Trigger Event": "ContractEffective",
@@ -382,13 +382,3 @@ Return JSON with ALL fields populated:
 5. POB identifiers match the POB mapping exactly
 6. Unreleased + Released = Ext Allocated Price for each line
 7. For bundles: Sum(child Ext Allocated Price) = Parent bundle price
-
----
-
-## Reference Documentation
-
-- SSP Allocation: https://docs.zuora.com/en/zuora-revenue/advanced-revenue-operations/ssp-assignment-and-allocation
-- Ramp Deals: https://docs.zuora.com/en/zuora-revenue/day-to-day-operation/ramp-deals
-- VC Processing: https://docs.zuora.com/en/zuora-revenue/day-to-day-operation/variable-consideration-processing
-- Contract Modifications: https://docs.zuora.com/en/zuora-revenue/advanced-revenue-operations/contract-modifications
-- Bundle Explosion: https://docs.zuora.com/en/zuora-revenue/advanced-revenue-operations/bundle-explosion

@@ -389,13 +389,3 @@ Generate one row per Line Item per Period:
 2. Periods cover Revenue Start to Revenue End with no gaps
 3. Event-driven charges show $0 when no events provided
 4. POB Name and Event Name match the POB mapping
-
----
-
-## Reference Documentation
-
-- Revenue Waterfall: https://docs.zuora.com/en/zuora-revenue/day-to-day-operation/waterfall-summary
-- Contract Modifications: https://docs.zuora.com/en/zuora-revenue/advanced-revenue-operations/contract-modifications
-- Ramp Deals: https://docs.zuora.com/en/zuora-revenue/day-to-day-operation/ramp-deals
-- VC Processing: https://docs.zuora.com/en/zuora-revenue/day-to-day-operation/variable-consideration-processing
-- Prepaid with Drawdown: https://docs.zuora.com/en/zuora-billing/manage-subscriptions/prepaid-with-drawdown

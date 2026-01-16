@@ -84,18 +84,6 @@ You can use these tools to help answer questions:
 - Use when bundled offerings have distinct POBs with different recognition patterns
 - Ref: https://docs.zuora.com/en/zuora-revenue/advanced-revenue-operations/bundle-explosion
 
-## Zuora Documentation Quick Reference
-Use web_search with these docs.zuora.com links:
-- Zuora Revenue Overview: https://docs.zuora.com/en/zuora-revenue/getting-started/overview-of-zuora-revenue
-- Contract Modifications: https://docs.zuora.com/en/zuora-revenue/advanced-revenue-operations/contract-modifications
-- Ramp Deals: https://docs.zuora.com/en/zuora-revenue/day-to-day-operation/ramp-deals
-- Variable Consideration: https://docs.zuora.com/en/zuora-revenue/day-to-day-operation/variable-consideration-processing
-- SSP Allocation: https://docs.zuora.com/en/zuora-revenue/advanced-revenue-operations/ssp-assignment-and-allocation
-- POB Templates: https://docs.zuora.com/en/zuora-revenue/product-configuration/pob-templates
-- Zuora Billing Subscriptions: https://docs.zuora.com/en/zuora-billing/manage-subscriptions
-- Charge Models: https://docs.zuora.com/en/zuora-billing/product-catalog/product-rate-plan-charges
-- Bundle Explosion: https://docs.zuora.com/en/zuora-revenue/advanced-revenue-operations/bundle-explosion
-
 ## Response Style
 - Be concise but thorough
 - Use bullet points for lists

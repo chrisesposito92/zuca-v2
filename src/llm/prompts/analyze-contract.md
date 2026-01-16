@@ -261,15 +261,3 @@ Return JSON with ALL fields (clarification fields are REQUIRED, use null when no
   "clarification_priority": null
 }
 ```
-
----
-
-## Reference Documentation
-
-- Billing Timing: https://docs.zuora.com/en/zuora-billing/manage-bill-runs/billing-timing
-- Charge Models: https://docs.zuora.com/en/zuora-billing/manage-product-catalog/product-catalog-configurations/create-product-rate-plan-charges
-- Usage Charges: https://docs.zuora.com/en/zuora-billing/manage-product-catalog/charge-model-configurations/tiered-with-overage-charges
-- Orders: https://docs.zuora.com/en/zuora-billing/manage-orders/orders-overview
-- Variable Consideration: https://docs.zuora.com/en/zuora-revenue/day-to-day-operation/variable-consideration-processing
-- Ramp Deals: https://docs.zuora.com/en/zuora-revenue/day-to-day-operation/ramp-deals
-- Contract Modifications: https://docs.zuora.com/en/zuora-revenue/advanced-revenue-operations/contract-modifications

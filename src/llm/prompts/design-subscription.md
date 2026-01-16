@@ -384,17 +384,3 @@ Return JSON with complete structure. Every charge MUST have a corresponding POB 
   "mapping_notes": ["POB-specific notes if any"]
 }
 ```
-
----
-
-## Reference Documentation
-
-- Subscriptions: https://docs.zuora.com/en/zuora-billing/manage-orders/order-actions/create-subscriptions
-- Rate Plan Charges: https://docs.zuora.com/en/zuora-billing/manage-product-catalog/product-catalog-configurations/create-product-rate-plan-charges
-- Tiered Pricing: https://docs.zuora.com/en/zuora-billing/manage-product-catalog/charge-model-configurations/tiered-pricing
-- Volume Pricing: https://docs.zuora.com/en/zuora-billing/manage-product-catalog/charge-model-configurations/volume-pricing
-- Prepaid with Drawdown: https://docs.zuora.com/en/zuora-billing/manage-subscriptions/prepaid-with-drawdown
-- Contract Modifications: https://docs.zuora.com/en/zuora-revenue/advanced-revenue-operations/contract-modifications
-- Bundle Explosion: https://docs.zuora.com/en/zuora-revenue/advanced-revenue-operations/bundle-explosion
-- POB Templates: https://docs.zuora.com/en/zuora-revenue/getting-started/policy-management/performance-obligations-processing/create-pob-template
-- POB Ratable Methods: https://docs.zuora.com/en/zuora-revenue/getting-started/policy-management/performance-obligations-processing/predefined-pob-ratable-methods

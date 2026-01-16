@@ -242,9 +242,3 @@ Before returning, validate:
 5. ✓ All required fields present on every row
 6. ✓ Month columns cover full range from earliest start to latest end
 7. ✓ No month columns are missing (even if $0)
-
-## Zuora Documentation References
-- SSP Allocation: https://docs.zuora.com/en/zuora-revenue/advanced-revenue-operations/ssp-assignment-and-allocation
-- Revenue Waterfall: https://docs.zuora.com/en/zuora-revenue/day-to-day-operation/waterfall-summary
-- POB Templates: https://docs.zuora.com/en/zuora-revenue/configuration/pob-templates
-- Ramp Deals: https://docs.zuora.com/en/zuora-revenue/day-to-day-operation/ramp-deals
