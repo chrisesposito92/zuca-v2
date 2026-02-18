@@ -10,6 +10,16 @@ import { getSession, updateSessionInput, updateSessionResult, updateSessionStatu
 import { runPipeline, isPipelineClarificationPause } from '@zuca/pipeline';
 import type { ZucaInput, ZucaOutput } from '@zuca/types';
 
+const USE_AGENTS = process.env.USE_AGENTS_PIPELINE === 'true';
+
+async function getRunPipelineFn() {
+  if (USE_AGENTS) {
+    const { runAgentsPipeline } = await import('@zuca/pipeline-agents');
+    return runAgentsPipeline;
+  }
+  return runPipeline;
+}
+
 interface RouteParams {
   params: Promise<{ id: string }>;
 }
@@ -156,7 +166,8 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       const selectedModel = (session.llm_model as typeof defaultModel) || defaultModel;
 
       // Re-run pipeline with previous partial result (non-interactive mode skips clarifications)
-      const result = await runPipeline(updatedInput, {
+      const runFn = await getRunPipelineFn();
+      const result = await runFn(updatedInput, {
         sessionId: id,
         previousResult,
         model: selectedModel,

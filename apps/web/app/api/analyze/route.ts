@@ -25,6 +25,16 @@ import {
 } from '@/lib/db';
 import { getCurrentUser } from '@/lib/auth';
 
+const USE_AGENTS = process.env.USE_AGENTS_PIPELINE === 'true';
+
+async function getRunPipelineFn() {
+  if (USE_AGENTS) {
+    const { runAgentsPipeline } = await import('@zuca/pipeline-agents');
+    return runAgentsPipeline;
+  }
+  return runPipeline;
+}
+
 export async function POST(request: NextRequest) {
   try {
     // Get current user (optional - sessions can be anonymous)
@@ -75,7 +85,8 @@ export async function POST(request: NextRequest) {
           : false;
 
       // Run the pipeline with interactive mode enabled (web UI)
-      const pipelineResult = await runPipeline(validatedInput, {
+      const runFn = await getRunPipelineFn();
+      const pipelineResult = await runFn(validatedInput, {
         sessionId: session.id,
         model: modelResult?.data,
         interactiveMode: true, // Web UI is interactive

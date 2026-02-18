@@ -20,6 +20,8 @@ export default defineConfig({
       { find: /^@zuca\/pipeline\/(.*)$/, replacement: `${path.resolve(__dirname, 'src/pipeline')}/$1` },
       { find: /^@zuca\/self-learn$/, replacement: path.resolve(__dirname, 'src/self-learn/index.ts') },
       { find: /^@zuca\/self-learn\/(.*)$/, replacement: `${path.resolve(__dirname, 'src/self-learn')}/$1` },
+      { find: /^@zuca\/pipeline-agents$/, replacement: path.resolve(__dirname, 'src/pipeline-agents/index.ts') },
+      { find: /^@zuca\/pipeline-agents\/(.*)$/, replacement: `${path.resolve(__dirname, 'src/pipeline-agents')}/$1` },
     ],
   },
 });

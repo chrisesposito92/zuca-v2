@@ -23,6 +23,16 @@ import type { ZucaInput, ZucaOutput } from '@zuca/types';
 import type { ClarificationAnswer, ClarificationState } from '@zuca/types/clarification';
 import type { LlmModel } from '@zuca/types/llm';
 
+const USE_AGENTS = process.env.USE_AGENTS_PIPELINE === 'true';
+
+async function getRunPipelineFn() {
+  if (USE_AGENTS) {
+    const { runAgentsPipeline } = await import('@zuca/pipeline-agents');
+    return runAgentsPipeline;
+  }
+  return runPipeline;
+}
+
 interface RouteParams {
   params: Promise<{ id: string }>;
 }
@@ -105,7 +115,8 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     const model = session.llm_model as LlmModel | undefined;
 
     try {
-      const pipelineResult = await runPipeline(input, {
+      const runFn = await getRunPipelineFn();
+      const pipelineResult = await runFn(input, {
         sessionId: id,
         previousResult: clarificationState.partialResult as Partial<ZucaOutput>,
         model,

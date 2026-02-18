@@ -36,6 +36,12 @@
       ],
       "@zuca/pipeline/*": [
         "../../src/pipeline/*"
+      ],
+      "@zuca/pipeline-agents": [
+        "../../src/pipeline-agents/index.ts"
+      ],
+      "@zuca/pipeline-agents/*": [
+        "../../src/pipeline-agents/*"
       ]
     },
     "baseUrl": ".",
