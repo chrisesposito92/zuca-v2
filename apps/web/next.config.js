@@ -2,6 +2,8 @@
 const nextConfig = {
   // Enable importing from the root src/ directory
   transpilePackages: ['zod'],
+  // Keep @openai/agents out of the bundle — resolved at runtime via Node.js require
+  serverExternalPackages: ['@openai/agents', '@openai/agents-core'],
   experimental: {
     // Allow importing TypeScript files from outside the app directory
     externalDir: true,
