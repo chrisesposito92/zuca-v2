@@ -210,7 +210,7 @@ export async function summarizeResults(
   // Validate with Zod
   const validation = SummaryOutputSchema.safeParse(result.structured);
   if (!validation.success) {
-    debugLog('Summary validation failed:', validation.error.errors);
+    debugLog('Summary validation failed:', validation.error.issues);
   }
 
   debugLog('Summary generated:', {

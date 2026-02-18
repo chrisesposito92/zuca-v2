@@ -284,7 +284,7 @@ export const htmlTemplateExpressionJsonSchema = {
 export function validateHTMLTemplateRequest(input: unknown): HTMLTemplateRequest {
   const result = HTMLTemplateRequestSchema.safeParse(input);
   if (!result.success) {
-    const errors = result.error.errors.map((e) => `${e.path.join('.')}: ${e.message}`);
+    const errors = result.error.issues.map((e) => `${e.path.join('.')}: ${e.message}`);
     throw new Error(`Invalid HTML Template request: ${errors.join(', ')}`);
   }
   return result.data;
@@ -296,7 +296,7 @@ export function validateHTMLTemplateRequest(input: unknown): HTMLTemplateRequest
 export function validateHTMLTemplateCodeOutput(data: unknown): HTMLTemplateCodeOutput {
   const result = HTMLTemplateCodeOutputSchema.safeParse(data);
   if (!result.success) {
-    const errors = result.error.errors.map((e) => `${e.path.join('.')}: ${e.message}`);
+    const errors = result.error.issues.map((e) => `${e.path.join('.')}: ${e.message}`);
     throw new Error(`Invalid template code output: ${errors.join(', ')}`);
   }
   return result.data;
@@ -308,7 +308,7 @@ export function validateHTMLTemplateCodeOutput(data: unknown): HTMLTemplateCodeO
 export function validateHTMLTemplateExpressionOutput(data: unknown): HTMLTemplateExpressionOutput {
   const result = HTMLTemplateExpressionOutputSchema.safeParse(data);
   if (!result.success) {
-    const errors = result.error.errors.map((e) => `${e.path.join('.')}: ${e.message}`);
+    const errors = result.error.issues.map((e) => `${e.path.join('.')}: ${e.message}`);
     throw new Error(`Invalid expression output: ${errors.join(', ')}`);
   }
   return result.data;
@@ -487,7 +487,7 @@ export const templateValidationJsonSchema = {
 export function validateTemplateValidationOutput(data: unknown): TemplateValidationOutput {
   const result = TemplateValidationOutputSchema.safeParse(data);
   if (!result.success) {
-    const errors = result.error.errors.map((e) => `${e.path.join('.')}: ${e.message}`);
+    const errors = result.error.issues.map((e) => `${e.path.join('.')}: ${e.message}`);
     throw new Error(`Invalid validation output: ${errors.join(', ')}`);
   }
   return result.data;
@@ -726,7 +726,7 @@ export const groupByWizardJsonSchema = {
 export function validateGroupByWizardRequest(input: unknown): GroupByWizardRequest {
   const result = GroupByWizardRequestSchema.safeParse(input);
   if (!result.success) {
-    const errors = result.error.errors.map((e) => `${e.path.join('.')}: ${e.message}`);
+    const errors = result.error.issues.map((e) => `${e.path.join('.')}: ${e.message}`);
     throw new Error(`Invalid GroupBy Wizard request: ${errors.join(', ')}`);
   }
   return result.data;
@@ -738,7 +738,7 @@ export function validateGroupByWizardRequest(input: unknown): GroupByWizardReque
 export function validateGroupByWizardOutput(data: unknown): GroupByWizardOutput {
   const result = GroupByWizardOutputSchema.safeParse(data);
   if (!result.success) {
-    const errors = result.error.errors.map((e) => `${e.path.join('.')}: ${e.message}`);
+    const errors = result.error.issues.map((e) => `${e.path.join('.')}: ${e.message}`);
     throw new Error(`Invalid GroupBy Wizard output: ${errors.join(', ')}`);
   }
   return result.data;
@@ -829,7 +829,7 @@ export type SampleDataRequest = z.infer<typeof SampleDataRequestSchema>;
  */
 export const SampleDataOutputSchema = z.object({
   /** Generated JSON data matching the template structure */
-  data: z.record(z.unknown()),
+  data: z.record(z.string(), z.unknown()),
 
   /** Fields extracted from the template */
   fields_extracted: z.array(ExtractedFieldSchema),
@@ -876,7 +876,7 @@ export const sampleDataJsonSchema = {
 export function validateSampleDataRequest(input: unknown): SampleDataRequest {
   const result = SampleDataRequestSchema.safeParse(input);
   if (!result.success) {
-    const errors = result.error.errors.map((e) => `${e.path.join('.')}: ${e.message}`);
+    const errors = result.error.issues.map((e) => `${e.path.join('.')}: ${e.message}`);
     throw new Error(`Invalid Sample Data request: ${errors.join(', ')}`);
   }
   return result.data;
@@ -888,7 +888,7 @@ export function validateSampleDataRequest(input: unknown): SampleDataRequest {
 export function validateSampleDataOutput(data: unknown): SampleDataOutput {
   const result = SampleDataOutputSchema.safeParse(data);
   if (!result.success) {
-    const errors = result.error.errors.map((e) => `${e.path.join('.')}: ${e.message}`);
+    const errors = result.error.issues.map((e) => `${e.path.join('.')}: ${e.message}`);
     throw new Error(`Invalid Sample Data output: ${errors.join(', ')}`);
   }
   return result.data;
@@ -1069,7 +1069,7 @@ export const templateDesignJsonSchema = {
 export function validateTemplateDesignRequest(input: unknown): TemplateDesignRequest {
   const result = TemplateDesignRequestSchema.safeParse(input);
   if (!result.success) {
-    const errors = result.error.errors.map((e) => `${e.path.join('.')}: ${e.message}`);
+    const errors = result.error.issues.map((e) => `${e.path.join('.')}: ${e.message}`);
     throw new Error(`Invalid Template Design request: ${errors.join(', ')}`);
   }
   return result.data;
@@ -1081,7 +1081,7 @@ export function validateTemplateDesignRequest(input: unknown): TemplateDesignReq
 export function validateTemplateDesignOutput(data: unknown): TemplateDesignOutput {
   const result = TemplateDesignOutputSchema.safeParse(data);
   if (!result.success) {
-    const errors = result.error.errors.map((e) => `${e.path.join('.')}: ${e.message}`);
+    const errors = result.error.issues.map((e) => `${e.path.join('.')}: ${e.message}`);
     throw new Error(`Invalid Template Design output: ${errors.join(', ')}`);
   }
   return result.data;

@@ -376,12 +376,12 @@ export async function analyzeContract(
   // Validate with Zod
   const contractValidation = ContractIntelSchema.safeParse(contractIntel);
   if (!contractValidation.success) {
-    debugLog('Contract intel validation failed:', contractValidation.error.errors);
+    debugLog('Contract intel validation failed:', contractValidation.error.issues);
   }
 
   const capsValidation = DetectedCapabilitiesSchema.safeParse(detectedCapabilities);
   if (!capsValidation.success) {
-    debugLog('Capabilities validation failed:', capsValidation.error.errors);
+    debugLog('Capabilities validation failed:', capsValidation.error.issues);
   }
 
   debugLog('Contract analysis complete:', {

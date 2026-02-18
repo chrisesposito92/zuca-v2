@@ -122,7 +122,7 @@ export type StepIterationState<T = unknown> = Omit<
  * Session-level Ralph state tracking all steps
  */
 export const RalphSessionStateSchema = z.object({
-  stepStates: z.record(StepIterationStateSchema),
+  stepStates: z.record(z.string(), StepIterationStateSchema),
 });
 
 export type RalphSessionState = z.infer<typeof RalphSessionStateSchema>;
@@ -148,7 +148,7 @@ export type RalphStepConfig = z.infer<typeof RalphStepConfigSchema>;
 export const RalphConfigSchema = z.object({
   enabled: z.boolean().default(false),
   defaultMaxIterations: z.number().int().min(1).max(10).default(3),
-  steps: z.record(RalphStepConfigSchema.partial()).default({}),
+  steps: z.record(z.string(), RalphStepConfigSchema.partial()).default({}),
 });
 
 export type RalphConfig = z.infer<typeof RalphConfigSchema>;

@@ -1038,7 +1038,7 @@ export async function completeWithSchema<T>(
     // Validate against Zod schema
     const validation = schema.safeParse(result.structured);
     if (!validation.success) {
-      debugLog('Schema validation failed:', validation.error.errors);
+      debugLog('Schema validation failed:', validation.error.issues);
       // Return raw result but clear structured to indicate validation failure
       return { ...result, structured: undefined };
     }
@@ -1144,7 +1144,7 @@ export function getZuoraMcpTools(): McpTool[] {
 export function zodToJsonSchema(schema: z.ZodSchema): Record<string, unknown> {
   // This is a simplified implementation
   // For production, consider using zod-to-json-schema library
-  return schema._def as Record<string, unknown>;
+  return (schema as any)._zod.def as Record<string, unknown>;
 }
 
 // =============================================================================

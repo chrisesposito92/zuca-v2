@@ -577,7 +577,7 @@ export const generatedUseCasesJsonSchema = {
 export function validateUCGeneratorInput(input: unknown): UCGeneratorInput {
   const result = UCGeneratorInputSchema.safeParse(input);
   if (!result.success) {
-    const errors = result.error.errors.map((e) => `${e.path.join('.')}: ${e.message}`);
+    const errors = result.error.issues.map((e) => `${e.path.join('.')}: ${e.message}`);
     throw new Error(`Invalid UC Generator input: ${errors.join(', ')}`);
   }
   return result.data;
@@ -589,7 +589,7 @@ export function validateUCGeneratorInput(input: unknown): UCGeneratorInput {
 export function validateCustomerResearch(data: unknown): CustomerResearch {
   const result = CustomerResearchSchema.safeParse(data);
   if (!result.success) {
-    const errors = result.error.errors.map((e) => `${e.path.join('.')}: ${e.message}`);
+    const errors = result.error.issues.map((e) => `${e.path.join('.')}: ${e.message}`);
     throw new Error(`Invalid customer research: ${errors.join(', ')}`);
   }
   return result.data;
@@ -601,7 +601,7 @@ export function validateCustomerResearch(data: unknown): CustomerResearch {
 export function validateGeneratedUseCases(data: unknown): GeneratedUseCases {
   const result = GeneratedUseCasesSchema.safeParse(data);
   if (!result.success) {
-    const errors = result.error.errors.map((e) => `${e.path.join('.')}: ${e.message}`);
+    const errors = result.error.issues.map((e) => `${e.path.join('.')}: ${e.message}`);
     throw new Error(`Invalid generated use cases: ${errors.join(', ')}`);
   }
   return result.data;

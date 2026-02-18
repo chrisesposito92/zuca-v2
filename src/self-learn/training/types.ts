@@ -65,8 +65,8 @@ export const TrainingDatasetSchema = z.object({
   /** Statistics about the dataset */
   stats: z.object({
     total_examples: z.number(),
-    by_step: z.record(z.number()),
-    by_source: z.record(z.number()),
+    by_step: z.record(z.string(), z.number()),
+    by_source: z.record(z.string(), z.number()),
   }),
 
   /** The training examples */

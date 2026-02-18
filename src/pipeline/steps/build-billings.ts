@@ -228,7 +228,7 @@ export async function buildBillings(
   // Validate with Zod
   const validation = BillingsOutputSchema.safeParse(result.structured);
   if (!validation.success) {
-    debugLog('Billings validation failed:', validation.error.errors);
+    debugLog('Billings validation failed:', validation.error.issues);
   }
 
   debugLog('Billings table built:', {

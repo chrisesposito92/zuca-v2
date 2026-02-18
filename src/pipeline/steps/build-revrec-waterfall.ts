@@ -286,7 +286,7 @@ export async function buildRevRecWaterfall(
   // Validate with Zod
   const validation = RevRecWaterfallOutputSchema.safeParse(result.structured);
   if (!validation.success) {
-    debugLog('Rev Rec Waterfall validation failed:', validation.error.errors);
+    debugLog('Rev Rec Waterfall validation failed:', validation.error.issues);
   }
 
   debugLog('Rev Rec Waterfall built:', {

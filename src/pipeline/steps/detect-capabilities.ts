@@ -108,7 +108,7 @@ export async function detectCapabilities(
   // Validate with Zod
   const validation = DetectedCapabilitiesSchema.safeParse(result.structured);
   if (!validation.success) {
-    debugLog('Capabilities validation failed:', validation.error.errors);
+    debugLog('Capabilities validation failed:', validation.error.issues);
   }
 
   debugLog('Capabilities detected:', {

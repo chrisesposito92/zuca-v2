@@ -519,12 +519,12 @@ export async function designSubscription(
   // Validate with Zod
   const subValidation = SubscriptionSpecSchema.safeParse(subscriptionSpec);
   if (!subValidation.success) {
-    debugLog('Subscription spec validation failed:', subValidation.error.errors);
+    debugLog('Subscription spec validation failed:', subValidation.error.issues);
   }
 
   const pobValidation = PobMappingOutputSchema.safeParse(pobMapping);
   if (!pobValidation.success) {
-    debugLog('POB mapping validation failed:', pobValidation.error.errors);
+    debugLog('POB mapping validation failed:', pobValidation.error.issues);
   }
 
   debugLog('Subscription design complete:', {

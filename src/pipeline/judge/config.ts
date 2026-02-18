@@ -35,8 +35,13 @@ const JudgeConfigSchema = z.object({
       timeout_ms: z.number().positive().default(30000),
       reasoning_effort: z.enum(['low', 'medium', 'high']).default('low'),
     })
-    .default({}),
-  steps: z.record(JudgeStepConfigSchema).default({}),
+    .default({
+      model: 'gemini-3-flash-preview',
+      confidence_threshold: 0.9,
+      timeout_ms: 30000,
+      reasoning_effort: 'low',
+    }),
+  steps: z.record(z.string(), JudgeStepConfigSchema).default({}),
 });
 
 export type JudgeConfig = z.infer<typeof JudgeConfigSchema>;

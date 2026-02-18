@@ -98,7 +98,7 @@ export function isClarificationRequest<T>(
 export const ClarificationStateSchema = z.object({
   pendingQuestion: ClarificationQuestionSchema,
   pausedAtStep: z.string(),
-  partialResult: z.record(z.unknown()), // Partial<ZucaOutput>
+  partialResult: z.record(z.string(), z.unknown()), // Partial<ZucaOutput>
   askedAt: z.string(), // ISO timestamp
   answers: z.array(ClarificationAnswerSchema), // All answers in this session
 });
@@ -112,7 +112,7 @@ export const PipelineClarificationResultSchema = z.object({
   status: z.literal('awaiting_clarification'),
   question: ClarificationQuestionSchema,
   pausedAtStep: z.string(),
-  partialResult: z.record(z.unknown()),
+  partialResult: z.record(z.string(), z.unknown()),
   sessionId: z.string(),
 });
 

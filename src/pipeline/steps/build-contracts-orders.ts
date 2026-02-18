@@ -273,7 +273,7 @@ export async function buildContractsOrders(
   // Validate with Zod
   const validation = ContractsOrdersOutputSchema.safeParse(result.structured);
   if (!validation.success) {
-    debugLog('Contracts/Orders validation failed:', validation.error.errors);
+    debugLog('Contracts/Orders validation failed:', validation.error.issues);
   }
 
   debugLog('Contracts/Orders table built:', {

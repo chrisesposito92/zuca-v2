@@ -87,7 +87,7 @@ export async function generateUseCases(
   // Validate with Zod
   const validation = GeneratedUseCasesSchema.safeParse(result.structured);
   if (!validation.success) {
-    debugLog('Generated use cases validation warnings:', validation.error.errors);
+    debugLog('Generated use cases validation warnings:', validation.error.issues);
     // Return raw result anyway, let caller decide how to handle
   }
 
