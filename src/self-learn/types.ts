@@ -169,7 +169,7 @@ export const TestCaseSchema = z.object({
   id: z.string(),
   name: z.string().optional(),
   description: z.string().optional(),
-  input: z.record(z.unknown()), // ZucaInput as record
+  input: z.record(z.string(), z.unknown()), // ZucaInput as record
   focus_steps: z.array(z.string()).optional(), // Which steps to evaluate
   expected_patterns: z.array(z.string()).optional(), // Patterns that should be detected
   tags: z.array(z.string()).optional(),
@@ -221,7 +221,7 @@ export const EffectivenessSummarySchema = z.object({
   helped: z.number(),
   didNotHelp: z.number(),
   effectivenessRate: z.number(), // helped / totalApplied
-  byStep: z.record(z.object({
+  byStep: z.record(z.string(), z.object({
     applied: z.number(),
     helped: z.number(),
     rate: z.number(),

@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
     // Validate request body
     const parseResult = GroupByWizardRequestSchema.safeParse(body);
     if (!parseResult.success) {
-      const errors = parseResult.error.errors
+      const errors = parseResult.error.issues
         .map((e) => `${e.path.join('.')}: ${e.message}`)
         .join(', ');
       return NextResponse.json(

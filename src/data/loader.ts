@@ -62,7 +62,7 @@ async function loadJsonFile<T>(
       // Validate as array of items
       const arrayResult = z.array(schema).safeParse(parsed);
       if (!arrayResult.success) {
-        debugLog(`Validation warning for ${filePath}:`, arrayResult.error.errors);
+        debugLog(`Validation warning for ${filePath}:`, arrayResult.error.issues);
         // Return parsed data without strict validation for flexibility
         return Array.isArray(parsed) ? parsed : [];
       }
@@ -71,7 +71,7 @@ async function loadJsonFile<T>(
       // Validate as single item
       const result = schema.safeParse(parsed);
       if (!result.success) {
-        debugLog(`Validation warning for ${filePath}:`, result.error.errors);
+        debugLog(`Validation warning for ${filePath}:`, result.error.issues);
         return parsed;
       }
       return [result.data];

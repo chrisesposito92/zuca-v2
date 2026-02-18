@@ -161,7 +161,7 @@ export type GoldenRatePlanChargesDoc = z.infer<typeof GoldenRatePlanChargesDocSc
 // Golden Use Cases - ZR Tables
 // ============================================================================
 
-export const GoldenZRTableRowSchema = z.object({
+export const GoldenZRTableRowSchema = z.looseObject({
   'Use Case Id': z.string(),
   'Line Item Num': z.string().optional(),
   'POB Name': z.string().optional(),
@@ -172,7 +172,7 @@ export const GoldenZRTableRowSchema = z.object({
   'Ext Sell Price': z.number().optional(),
   'Ext Allocated Price': z.number().optional(),
   // Dynamic month columns like "Jan-25", "Feb-25", etc.
-}).passthrough();
+});
 
 export type GoldenZRTableRow = z.infer<typeof GoldenZRTableRowSchema>;
 

@@ -469,7 +469,7 @@ export const ProductRatePlanChargeSchema = z.object({
   commitmentType: z.enum(['UNIT', 'AMOUNT']).nullish(),
 
   // Custom fields placeholder
-  customFields: z.record(z.any()).nullish(),
+  customFields: z.record(z.string(), z.any()).nullish(),
 });
 
 export type ProductRatePlanCharge = z.infer<typeof ProductRatePlanChargeSchema>;
@@ -493,7 +493,7 @@ export const ProductRatePlanSchema = z.object({
   externallyManagedPlanIds: z.array(z.string()).nullish(),
 
   // Custom fields placeholder
-  customFields: z.record(z.any()).nullish(),
+  customFields: z.record(z.string(), z.any()).nullish(),
 });
 
 export type ProductRatePlan = z.infer<typeof ProductRatePlanSchema>;
@@ -537,7 +537,7 @@ export const ContactSchema = z.object({
   taxRegion: z.string().nullish(),
 
   // Custom fields placeholder
-  customFields: z.record(z.any()).nullish(),
+  customFields: z.record(z.string(), z.any()).nullish(),
 });
 
 export type Contact = z.infer<typeof ContactSchema>;
@@ -564,7 +564,7 @@ export const PaymentMethodSchema = z.object({
   isDefault: z.boolean().nullish(),
 
   // Custom fields placeholder
-  customFields: z.record(z.any()).nullish(),
+  customFields: z.record(z.string(), z.any()).nullish(),
 });
 
 export type PaymentMethod = z.infer<typeof PaymentMethodSchema>;
@@ -628,7 +628,7 @@ export const AccountSchema = z.object({
   additionalEmailAddresses: z.array(z.string()).nullish(),
 
   // Custom fields placeholder
-  customFields: z.record(z.any()).nullish(),
+  customFields: z.record(z.string(), z.any()).nullish(),
 });
 
 export type Account = z.infer<typeof AccountSchema>;
@@ -702,7 +702,7 @@ export const ChargeOverrideSchema = z.object({
   revenueRecognitionRuleName: z.string().nullish(),
 
   // Custom fields
-  customFields: z.record(z.any()).nullish(),
+  customFields: z.record(z.string(), z.any()).nullish(),
 });
 
 export type ChargeOverride = z.infer<typeof ChargeOverrideSchema>;
@@ -725,7 +725,7 @@ export const SubscriptionRatePlanSchema = z.object({
   externallyManagedPlanId: z.string().nullish(),
 
   // Custom fields
-  customFields: z.record(z.any()).nullish(),
+  customFields: z.record(z.string(), z.any()).nullish(),
 });
 
 export type SubscriptionRatePlan = z.infer<typeof SubscriptionRatePlanSchema>;
@@ -778,7 +778,7 @@ export const EnhancedSubscriptionSchema = z.object({
   externallyManagedBy: z.string().nullish(),
 
   // Custom fields
-  customFields: z.record(z.any()).nullish(),
+  customFields: z.record(z.string(), z.any()).nullish(),
 });
 
 export type EnhancedSubscription = z.infer<typeof EnhancedSubscriptionSchema>;
@@ -860,7 +860,7 @@ export const OrderSchema = z.object({
   }).nullish(),
 
   // Custom fields
-  customFields: z.record(z.any()).nullish(),
+  customFields: z.record(z.string(), z.any()).nullish(),
 });
 
 export type Order = z.infer<typeof OrderSchema>;
@@ -935,7 +935,7 @@ export const EnhancedBillingsRowSchema = z.object({
   'Applied To Invoice Item Id': z.string().nullish(), // For credits/discounts
 
   // Custom fields
-  customFields: z.record(z.any()).nullish(),
+  customFields: z.record(z.string(), z.any()).nullish(),
 });
 
 export type EnhancedBillingsRow = z.infer<typeof EnhancedBillingsRowSchema>;

@@ -82,7 +82,7 @@ export async function researchCustomer(
   // Validate with Zod
   const validation = CustomerResearchSchema.safeParse(result.structured);
   if (!validation.success) {
-    debugLog('Customer research validation warnings:', validation.error.errors);
+    debugLog('Customer research validation warnings:', validation.error.issues);
     // Return raw result anyway, let caller decide how to handle
   }
 

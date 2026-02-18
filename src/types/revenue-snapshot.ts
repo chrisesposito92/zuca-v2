@@ -22,22 +22,22 @@ export type RevenueSnapshotInput = z.infer<typeof RevenueSnapshotInputSchema>;
 
 export const RevenueSnapshotSourceSchema = z.object({
   otr_enabled: z.boolean(),
-  booking_transactions: z.array(z.record(z.any())).optional(),
-  billing_transactions: z.array(z.record(z.any())).optional(),
-  revenue_recognition_events: z.array(z.record(z.any())).optional(),
-  subscriptions: z.array(z.record(z.any())).optional(),
-  orders: z.array(z.record(z.any())).optional(),
-  invoices: z.array(z.record(z.any())).optional(),
-  credit_memos: z.array(z.record(z.any())).optional(),
-  rate_plan_charges: z.array(z.record(z.any())).optional(),
-  usage: z.array(z.record(z.any())).optional(),
-  pob_criteria_map: z.record(z.string().nullable()).optional(),
+  booking_transactions: z.array(z.record(z.string(), z.any())).optional(),
+  billing_transactions: z.array(z.record(z.string(), z.any())).optional(),
+  revenue_recognition_events: z.array(z.record(z.string(), z.any())).optional(),
+  subscriptions: z.array(z.record(z.string(), z.any())).optional(),
+  orders: z.array(z.record(z.string(), z.any())).optional(),
+  invoices: z.array(z.record(z.string(), z.any())).optional(),
+  credit_memos: z.array(z.record(z.string(), z.any())).optional(),
+  rate_plan_charges: z.array(z.record(z.string(), z.any())).optional(),
+  usage: z.array(z.record(z.string(), z.any())).optional(),
+  pob_criteria_map: z.record(z.string(), z.string().nullable()).optional(),
 });
 
 export type RevenueSnapshotSource = z.infer<typeof RevenueSnapshotSourceSchema>;
 
 export const RevenueSnapshotTableOutputSchema = z.object({
-  rows: z.array(z.record(z.any())),
+  rows: z.array(z.record(z.string(), z.any())),
   assumptions: z.array(z.string()),
   open_questions: z.array(z.string()),
 });

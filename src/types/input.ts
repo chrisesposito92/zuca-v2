@@ -136,7 +136,7 @@ export function formatISODate(date: Date): string {
 export function validateZucaInput(input: unknown): ZucaInput {
   const result = ZucaInputSchema.safeParse(input);
   if (!result.success) {
-    const errors = result.error.errors.map((e) => `${e.path.join('.')}: ${e.message}`);
+    const errors = result.error.issues.map((e) => `${e.path.join('.')}: ${e.message}`);
     throw new Error(`Invalid input: ${errors.join(', ')}`);
   }
   return result.data;
