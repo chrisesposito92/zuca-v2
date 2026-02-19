@@ -19,6 +19,17 @@ import { runUCGenerator } from '@zuca/pipeline/uc-generator';
 import type { ZucaInput } from '@zuca/types';
 import type { UCGeneratorInput } from '@zuca/types/uc-generator';
 import { LlmModelSchema } from '@zuca/types';
+import { isOpenAIModel } from '@zuca/types/llm';
+
+const USE_AGENTS = process.env.USE_AGENTS_PIPELINE === 'true';
+
+async function getRunPipelineFn(model?: string) {
+  if (USE_AGENTS && (!model || isOpenAIModel(model))) {
+    const { runAgentsPipeline } = await import('@zuca/pipeline-agents');
+    return runAgentsPipeline;
+  }
+  return runPipeline;
+}
 
 interface RouteParams {
   params: Promise<{ id: string }>;
@@ -78,7 +89,8 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
         }
 
         // Run full pipeline (no previousResult = fresh run, non-interactive mode)
-        const result = await runPipeline(updatedInput, {
+        const runFn = await getRunPipelineFn(selectedModel);
+        const result = await runFn(updatedInput, {
           sessionId: id,
           model: selectedModel,
           interactiveMode: false,

@@ -9,6 +9,17 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getSession, updateSessionInput, updateSessionResult, updateSessionStatus } from '@/lib/db';
 import { runPipeline, isPipelineClarificationPause } from '@zuca/pipeline';
 import type { ZucaInput, ZucaOutput } from '@zuca/types';
+import { isOpenAIModel } from '@zuca/types/llm';
+
+const USE_AGENTS = process.env.USE_AGENTS_PIPELINE === 'true';
+
+async function getRunPipelineFn(model?: string) {
+  if (USE_AGENTS && (!model || isOpenAIModel(model))) {
+    const { runAgentsPipeline } = await import('@zuca/pipeline-agents');
+    return runAgentsPipeline;
+  }
+  return runPipeline;
+}
 
 interface RouteParams {
   params: Promise<{ id: string }>;
@@ -156,7 +167,8 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       const selectedModel = (session.llm_model as typeof defaultModel) || defaultModel;
 
       // Re-run pipeline with previous partial result (non-interactive mode skips clarifications)
-      const result = await runPipeline(updatedInput, {
+      const runFn = await getRunPipelineFn(selectedModel);
+      const result = await runFn(updatedInput, {
         sessionId: id,
         previousResult,
         model: selectedModel,
