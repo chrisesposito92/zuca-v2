@@ -1,22 +1,6 @@
-import { z } from 'zod';
-
-/**
- * Shared clarification fields merged into each step's output schema.
- * When the LLM needs user input, it sets needs_clarification to true.
- */
-export const ClarificationFieldsSchema = z.object({
-  needs_clarification: z.boolean().describe('Set to true if user clarification is needed before producing a confident result'),
-  clarification_question: z.string().nullable().describe('The question to ask the user. Null if needs_clarification is false'),
-  clarification_context: z.string().nullable().describe('Why this clarification is needed. Null if needs_clarification is false'),
-  clarification_options: z.array(z.object({
-    id: z.string(),
-    label: z.string(),
-    description: z.string().optional(),
-  })).nullable().describe('2-4 options for the user to choose from. Null if needs_clarification is false'),
-  clarification_priority: z.enum(['critical', 'important', 'helpful']).nullable().describe('How important is this clarification. Null if needs_clarification is false'),
-});
-
-export type ClarificationFields = z.infer<typeof ClarificationFieldsSchema>;
+// Re-export clarification schema (lives in its own file to avoid circular deps with step schemas)
+export { ClarificationFieldsSchema } from './clarification';
+export type { ClarificationFields } from './clarification';
 
 // Re-export all step schemas
 export { AnalyzeContractOutputSchema } from './analyze-contract';

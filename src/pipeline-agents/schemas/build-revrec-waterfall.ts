@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { RevRecWaterfallOutputSchema } from '../../types/output';
-import { ClarificationFieldsSchema } from './index';
+import { ClarificationFieldsSchema } from './clarification';
 
 /**
  * Output schema for Build Rev Rec Waterfall step.

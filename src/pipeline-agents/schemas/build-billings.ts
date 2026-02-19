@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { BillingsOutputSchema } from '../../types/output';
-import { ClarificationFieldsSchema } from './index';
+import { ClarificationFieldsSchema } from './clarification';
 
 /**
  * Output schema for Build Billings step.

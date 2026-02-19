@@ -4,7 +4,7 @@ import {
   RatePlanSchema,
   UsageRecordSchema,
 } from '../../types/output';
-import { ClarificationFieldsSchema } from './index';
+import { ClarificationFieldsSchema } from './clarification';
 import type { PobTemplate } from '../../types/golden-use-cases';
 
 /**

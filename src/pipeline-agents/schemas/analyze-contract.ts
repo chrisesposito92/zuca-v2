@@ -3,7 +3,7 @@ import {
   ContractIntelSchema,
   DetectedCapabilitiesSchema,
 } from '../../types/output';
-import { ClarificationFieldsSchema } from './index';
+import { ClarificationFieldsSchema } from './clarification';
 
 /**
  * Nested Zod output schema for the Analyze Contract step.
