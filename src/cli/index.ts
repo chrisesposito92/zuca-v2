@@ -15,7 +15,7 @@ import { existsSync } from 'fs';
 import { createInterface } from 'readline';
 import * as yaml from 'yaml';
 import { ZucaInput } from '../types/input';
-import { LlmModelSchema, type LlmModel } from '../types/llm';
+import { LlmModelSchema, type LlmModel, resolveModelId } from '../types/llm';
 import { UCGeneratorInput, NumUseCases } from '../types/uc-generator';
 import {
   runPipeline,
@@ -117,7 +117,7 @@ const program = new Command();
 
 function parseModelOption(model?: string): LlmModel | undefined {
   if (!model) return undefined;
-  const parsed = LlmModelSchema.safeParse(model);
+  const parsed = LlmModelSchema.safeParse(resolveModelId(model));
   if (!parsed.success) {
     console.error(
       chalk.red(`Invalid model: "${model}". Allowed: ${LlmModelSchema.options.join(', ')}`)
@@ -2656,7 +2656,7 @@ async function benchmarkCommand(options: {
 
     // Validate models
     for (const model of modelList) {
-      const parsed = LlmModelSchema.safeParse(model);
+      const parsed = LlmModelSchema.safeParse(resolveModelId(model));
       if (!parsed.success) {
         console.error(chalk.red(`Invalid model: ${model}`));
         console.error(chalk.gray(`Available models: ${LLM_MODELS.join(', ')}`));
@@ -2667,7 +2667,7 @@ async function benchmarkCommand(options: {
     // Validate judge model if specified
     let judgeModel: LlmModel | undefined;
     if (options.judgeModel) {
-      const parsed = LlmModelSchema.safeParse(options.judgeModel);
+      const parsed = LlmModelSchema.safeParse(resolveModelId(options.judgeModel));
       if (!parsed.success) {
         console.error(chalk.red(`Invalid judge model: ${options.judgeModel}`));
         process.exit(1);
@@ -2761,7 +2761,7 @@ async function ftEvalRunCommand(
   try {
     // ft-eval accepts any model string (including fine-tuned model IDs like ft:...)
     // Show a warning for non-standard models (but don't block)
-    const modelParsed = LlmModelSchema.safeParse(options.model);
+    const modelParsed = LlmModelSchema.safeParse(resolveModelId(options.model));
     if (!modelParsed.success && !options.model.startsWith('ft:')) {
       console.log(
         chalk.yellow(`⚠ Model "${options.model}" not in standard list. Proceeding anyway...`)
@@ -2844,7 +2844,7 @@ async function ftEvalQuickCommand(
   try {
     // ft-eval accepts any model string (including fine-tuned model IDs like ft:...)
     // Show a warning for non-standard models (but don't block)
-    const modelParsed = LlmModelSchema.safeParse(model);
+    const modelParsed = LlmModelSchema.safeParse(resolveModelId(model));
     if (!modelParsed.success && !model.startsWith('ft:')) {
       console.log(
         chalk.yellow(`⚠ Model "${model}" not in standard list. Proceeding anyway...`)
