@@ -92,7 +92,6 @@ export interface AgentsPipelineOptions {
   skipAllClarifications?: boolean;
   ralphEnabled?: boolean;
   ralphState?: RalphSessionState;
-  ralphClarificationAnswer?: ClarificationAnswer;
 }
 
 // ============================================================================
@@ -566,7 +565,6 @@ export async function runAgentsPipeline(
     clarificationAnswers: options.clarificationAnswers || [],
     ralphEnabled: useRalph,
     ralphState,
-    ralphClarificationAnswer: options.ralphClarificationAnswer,
     stepTimings,
   };
 
@@ -600,7 +598,7 @@ export async function runAgentsPipeline(
         },
         pipelineContext: ctx,
         previousState: ralphState.stepStates['analyze_contract'] as StepIterationState<AnalyzeContractOutput> | undefined,
-        clarificationAnswer: options.ralphClarificationAnswer,
+        clarificationAnswer: getClarificationAnswerForStep('analyze_contract', options.clarificationAnswers || []),
       });
 
       ralphState.stepStates['analyze_contract'] = ralphResult.state;
@@ -672,7 +670,7 @@ export async function runAgentsPipeline(
         },
         pipelineContext: ctx,
         previousState: ralphState.stepStates['design_subscription'] as StepIterationState<DesignSubscriptionOutput> | undefined,
-        clarificationAnswer: options.ralphClarificationAnswer,
+        clarificationAnswer: getClarificationAnswerForStep('design_subscription', options.clarificationAnswers || []),
       });
 
       ralphState.stepStates['design_subscription'] = ralphResult.state;
@@ -721,7 +719,7 @@ export async function runAgentsPipeline(
         },
         pipelineContext: ctx,
         previousState: ralphState.stepStates['contracts_orders'] as StepIterationState<ContractsOrdersOutput> | undefined,
-        clarificationAnswer: options.ralphClarificationAnswer,
+        clarificationAnswer: getClarificationAnswerForStep('contracts_orders', options.clarificationAnswers || []),
       });
 
       ralphState.stepStates['contracts_orders'] = ralphResult.state;
@@ -761,7 +759,7 @@ export async function runAgentsPipeline(
         },
         pipelineContext: ctx,
         previousState: ralphState.stepStates['billings'] as StepIterationState<BillingsOutput> | undefined,
-        clarificationAnswer: options.ralphClarificationAnswer,
+        clarificationAnswer: getClarificationAnswerForStep('billings', options.clarificationAnswers || []),
       });
 
       ralphState.stepStates['billings'] = ralphResult.state;
@@ -808,7 +806,7 @@ export async function runAgentsPipeline(
         },
         pipelineContext: ctx,
         previousState: ralphState.stepStates['revrec_waterfall'] as StepIterationState<RevRecWaterfallOutput> | undefined,
-        clarificationAnswer: options.ralphClarificationAnswer,
+        clarificationAnswer: getClarificationAnswerForStep('revrec_waterfall', options.clarificationAnswers || []),
       });
 
       ralphState.stepStates['revrec_waterfall'] = ralphResult.state;
