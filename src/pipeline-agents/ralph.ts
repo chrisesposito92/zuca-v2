@@ -282,7 +282,6 @@ export async function withRalphAgent<T>(options: WithRalphAgentOptions<T>): Prom
 
         state = {
           ...state,
-          currentIteration: state.currentIteration + 1,
           clarifications: [...state.clarifications, clarification],
           status: 'awaiting_clarification',
         };
