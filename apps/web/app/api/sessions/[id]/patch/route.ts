@@ -10,6 +10,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getSession, updateSessionResult, addMessage } from '@/lib/db';
 import { applyPatch, getValueAtPath } from '@zuca/pipeline/patch';
 import type { ZucaInput, ZucaOutput } from '@zuca/types';
+import { resolveModelId } from '@zuca/types';
 
 interface RouteParams {
   params: Promise<{ id: string }>;
@@ -90,7 +91,8 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     // Apply the patch
     type LlmModel = 'gpt-5.2' | 'gemini-3.1-pro-preview' | 'gemini-3-flash-preview';
     const defaultModel: LlmModel = (process.env.LLM_MODEL || process.env.OPENAI_MODEL || 'gpt-5.2') as LlmModel;
-    const selectedModel: LlmModel = (session.llm_model as LlmModel) || defaultModel;
+    const resolvedSessionModel = session.llm_model ? resolveModelId(session.llm_model as string) as LlmModel : undefined;
+    const selectedModel: LlmModel = resolvedSessionModel || defaultModel;
 
     const patchResult = await applyPatch(
       currentInput,

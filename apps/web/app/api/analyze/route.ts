@@ -10,7 +10,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { validateZucaInput, LlmModelSchema, isOpenAIModel } from '@zuca/types';
+import { validateZucaInput, LlmModelSchema, isOpenAIModel, resolveModelId } from '@zuca/types';
 import {
   runPipeline,
   isPipelineClarificationPause,
@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
     // Parse and validate input
     const body = await request.json();
     const input = (body?.input ?? body) as unknown;
-    const model = body?.model as string | undefined;
+    const model = body?.model ? resolveModelId(body.model as string) : undefined;
     const modelResult = model ? LlmModelSchema.safeParse(model) : null;
     const clientSkipClarifications = body?.skipClarifications as boolean | undefined;
 

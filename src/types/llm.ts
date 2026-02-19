@@ -7,11 +7,19 @@ export const LLM_MODELS = [
 ] as const;
 
 /**
+ * Legacy model IDs that should be transparently mapped to their replacements.
+ * Handles pre-migration sessions stored in the database.
+ */
+const LEGACY_MODEL_ALIASES: Record<string, LlmModel> = {
+  'gemini-3-pro-preview': 'gemini-3.1-pro-preview',
+};
+
+/**
  * Resolve a model name to its actual API model ID.
- * Returns the input unchanged (kept for backwards compatibility).
+ * Maps legacy/renamed model IDs to their current equivalents.
  */
 export function resolveModelId(model: string): string {
-  return model;
+  return LEGACY_MODEL_ALIASES[model] ?? model;
 }
 
 export type LlmModel = (typeof LLM_MODELS)[number];

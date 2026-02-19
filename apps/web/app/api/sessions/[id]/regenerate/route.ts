@@ -18,7 +18,7 @@ import { runPipeline, isPipelineClarificationPause } from '@zuca/pipeline';
 import { runUCGenerator } from '@zuca/pipeline/uc-generator';
 import type { ZucaInput } from '@zuca/types';
 import type { UCGeneratorInput } from '@zuca/types/uc-generator';
-import { LlmModelSchema } from '@zuca/types';
+import { LlmModelSchema, resolveModelId } from '@zuca/types';
 import { isOpenAIModel } from '@zuca/types/llm';
 
 const USE_AGENTS = process.env.USE_AGENTS_PIPELINE === 'true';
@@ -42,7 +42,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
 
     // Optional: allow updating input fields before regeneration
     const inputUpdates = body.input_updates || {};
-    const model = body.model as string | undefined;
+    const model = body.model ? resolveModelId(body.model as string) : undefined;
     const modelResult = model ? LlmModelSchema.safeParse(model) : null;
 
     if (modelResult && !modelResult.success) {
@@ -65,11 +65,12 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     await addMessage(id, 'user', '[Requested full regeneration]');
 
     type LlmModel = 'gpt-5.2' | 'gemini-3.1-pro-preview' | 'gemini-3-flash-preview';
+    const resolvedSessionModel = session.llm_model ? resolveModelId(session.llm_model as string) as LlmModel : undefined;
 
     try {
       if (session.session_type === 'analyze') {
         const defaultModel: LlmModel = (process.env.LLM_MODEL || process.env.OPENAI_MODEL || 'gpt-5.2') as LlmModel;
-        const selectedModel: LlmModel = modelResult?.data || (session.llm_model as LlmModel) || defaultModel;
+        const selectedModel: LlmModel = modelResult?.data || resolvedSessionModel || defaultModel;
 
         if (modelResult?.data) {
           await updateSessionModel(id, selectedModel);
@@ -118,7 +119,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
         });
       } else if (session.session_type === 'uc-generate') {
         const defaultModel: LlmModel = (process.env.LLM_MODEL || process.env.OPENAI_MODEL || 'gpt-5.2') as LlmModel;
-        const selectedModel: LlmModel = modelResult?.data || (session.llm_model as LlmModel) || defaultModel;
+        const selectedModel: LlmModel = modelResult?.data || resolvedSessionModel || defaultModel;
 
         if (modelResult?.data) {
           await updateSessionModel(id, selectedModel);

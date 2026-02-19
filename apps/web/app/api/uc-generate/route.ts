@@ -7,7 +7,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { validateUCGeneratorInput } from '@zuca/types/uc-generator';
-import { LlmModelSchema } from '@zuca/types';
+import { LlmModelSchema, resolveModelId } from '@zuca/types';
 import { runUCGenerator } from '@zuca/pipeline/uc-generator';
 import { createSession, updateSessionResult, updateSessionStatus } from '@/lib/db';
 import { getCurrentUser } from '@/lib/auth';
@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
     // Parse and validate input
     const body = await request.json();
     const input = (body?.input ?? body) as unknown;
-    const model = body?.model as string | undefined;
+    const model = body?.model ? resolveModelId(body.model as string) : undefined;
     const modelResult = model ? LlmModelSchema.safeParse(model) : null;
 
     if (modelResult && !modelResult.success) {

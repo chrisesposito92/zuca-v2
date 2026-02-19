@@ -9,7 +9,7 @@ import {
   GroupByWizardRequestSchema,
   GroupByWizardOutput,
 } from '@zuca/types/html-template';
-import { LlmModelSchema } from '@zuca/types';
+import { LlmModelSchema, resolveModelId } from '@zuca/types';
 import { generateGroupByCode } from '@zuca/pipeline/steps/html-template-groupby';
 import { createSession, updateSessionResult, updateSessionStatus } from '@/lib/db';
 import { getCurrentUser } from '@/lib/auth';
@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
 
     // Parse and validate input
     const body = await request.json();
-    const model = body?.model as string | undefined;
+    const model = body?.model ? resolveModelId(body.model as string) : undefined;
     const modelResult = model ? LlmModelSchema.safeParse(model) : null;
 
     if (modelResult && !modelResult.success) {

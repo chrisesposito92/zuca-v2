@@ -8,7 +8,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getSession, addMessage, getMessages } from '@/lib/db';
 import { processFollowUp, type FollowUpContext } from '@zuca/pipeline/follow-up';
-import { LlmModelSchema } from '@zuca/types';
+import { LlmModelSchema, resolveModelId } from '@zuca/types';
 import type { ZucaInput, ZucaOutput } from '@zuca/types';
 
 interface RouteParams {
@@ -21,7 +21,8 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     const body = await request.json();
     const { query, model } = body as { query?: string; model?: string };
 
-    const modelResult = model ? LlmModelSchema.safeParse(model) : null;
+    const resolvedModel = model ? resolveModelId(model) : undefined;
+    const modelResult = resolvedModel ? LlmModelSchema.safeParse(resolvedModel) : null;
     if (modelResult && !modelResult.success) {
       return NextResponse.json(
         { error: 'Invalid model', details: `Model must be one of: ${LlmModelSchema.options.join(', ')}` },
@@ -72,7 +73,8 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
 
     type LlmModel = 'gpt-5.2' | 'gemini-3.1-pro-preview' | 'gemini-3-flash-preview';
     const defaultModel: LlmModel = (process.env.LLM_MODEL || process.env.OPENAI_MODEL || 'gpt-5.2') as LlmModel;
-    const selectedModel: LlmModel = modelResult?.data || (session.llm_model as LlmModel) || defaultModel;
+    const resolvedSessionModel = session.llm_model ? resolveModelId(session.llm_model as string) as LlmModel : undefined;
+    const selectedModel: LlmModel = modelResult?.data || resolvedSessionModel || defaultModel;
     const response = await processFollowUp(query, context, selectedModel);
 
     // 5. Save assistant response to database

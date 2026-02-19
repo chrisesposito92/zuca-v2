@@ -21,7 +21,7 @@ import {
 } from '@zuca/pipeline';
 import type { ZucaInput, ZucaOutput } from '@zuca/types';
 import type { ClarificationAnswer, ClarificationState } from '@zuca/types/clarification';
-import { type LlmModel, isOpenAIModel } from '@zuca/types/llm';
+import { type LlmModel, isOpenAIModel, resolveModelId } from '@zuca/types/llm';
 
 const USE_AGENTS = process.env.USE_AGENTS_PIPELINE === 'true';
 
@@ -112,7 +112,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
 
     // Resume pipeline with the answer
     const input = session.input as ZucaInput;
-    const model = session.llm_model as LlmModel | undefined;
+    const model = (session.llm_model ? resolveModelId(session.llm_model as string) : undefined) as LlmModel | undefined;
 
     try {
       const runFn = await getRunPipelineFn(model);

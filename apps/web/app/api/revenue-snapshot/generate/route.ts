@@ -12,7 +12,7 @@ import { getCurrentUser } from '@/lib/auth';
 import { getActiveZuoraConnection, getZuoraConnectionById } from '@/lib/db';
 import { decryptSecret } from '@/lib/crypto';
 import { fetchZuoraAccessToken, fetchOtrSnapshotData, fetchNonOtrSnapshotData } from '@/lib/zuora';
-import { LlmModelSchema } from '@zuca/types';
+import { LlmModelSchema, resolveModelId } from '@zuca/types';
 
 export async function POST(request: NextRequest) {
   try {
@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const input = (body?.input ?? body) as unknown;
     const connectionId = body?.connection_id as string | undefined;
-    const model = body?.model as string | undefined;
+    const model = body?.model ? resolveModelId(body.model as string) : undefined;
     const modelResult = model ? LlmModelSchema.safeParse(model) : null;
 
     if (modelResult && !modelResult.success) {

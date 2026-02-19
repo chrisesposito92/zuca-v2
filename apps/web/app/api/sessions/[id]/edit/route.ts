@@ -9,6 +9,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getSession, updateSessionInput, updateSessionResult, updateSessionStatus } from '@/lib/db';
 import { runPipeline, isPipelineClarificationPause } from '@zuca/pipeline';
 import type { ZucaInput, ZucaOutput } from '@zuca/types';
+import { resolveModelId } from '@zuca/types';
 import { isOpenAIModel } from '@zuca/types/llm';
 
 const USE_AGENTS = process.env.USE_AGENTS_PIPELINE === 'true';
@@ -164,7 +165,8 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
 
     try {
       const defaultModel = (process.env.LLM_MODEL || process.env.OPENAI_MODEL || 'gpt-5.2') as 'gpt-5.2' | 'gemini-3.1-pro-preview' | 'gemini-3-flash-preview';
-      const selectedModel = (session.llm_model as typeof defaultModel) || defaultModel;
+      const resolvedSessionModel = session.llm_model ? resolveModelId(session.llm_model as string) as typeof defaultModel : undefined;
+      const selectedModel = resolvedSessionModel || defaultModel;
 
       // Re-run pipeline with previous partial result (non-interactive mode skips clarifications)
       const runFn = await getRunPipelineFn(selectedModel);
