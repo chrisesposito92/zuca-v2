@@ -261,7 +261,7 @@ export const MODEL_CAPABILITIES: Record<LlmModel, ModelCapabilities> = {
     isFineTuned: false,
     pricing: { inputPer1k: 0.005, outputPer1k: 0.015 },
   },
-  'gemini-3-pro-preview': {
+  'gemini-3.1-pro-preview': {
     supportsWebSearch: true,
     supportsCodeInterpreter: true,
     supportsMcp: false,

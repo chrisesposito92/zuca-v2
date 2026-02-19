@@ -413,20 +413,20 @@ program
   .command('analyze <input>')
   .description('Analyze a use case from a JSON file')
   .option('-o, --output <file>', 'Save results to a JSON file')
-  .option('-m, --model <model>', 'LLM model (gpt-5.2 | gemini-3-pro-preview | gemini-3-flash-preview)')
+  .option('-m, --model <model>', 'LLM model (gpt-5.2 | gemini-3.1-pro-preview | gemini-3-flash-preview)')
   .action(analyzeCommand);
 
 program
   .command('interactive')
   .alias('i')
   .description('Start interactive mode for multi-turn conversation')
-  .option('-m, --model <model>', 'LLM model (gpt-5.2 | gemini-3-pro-preview | gemini-3-flash-preview)')
+  .option('-m, --model <model>', 'LLM model (gpt-5.2 | gemini-3.1-pro-preview | gemini-3-flash-preview)')
   .action(interactiveCommand);
 
 program
   .command('quick <description>')
   .description('Quick capability detection and matching')
-  .option('-m, --model <model>', 'LLM model (gpt-5.2 | gemini-3-pro-preview | gemini-3-flash-preview)')
+  .option('-m, --model <model>', 'LLM model (gpt-5.2 | gemini-3.1-pro-preview | gemini-3-flash-preview)')
   .action(quickCommand);
 
 // =============================================================================
@@ -815,7 +815,7 @@ program
   .option('-n, --notes <text>', 'Additional notes to guide generation')
   .option('-o, --output <file>', 'Save results to a JSON file')
   .option('-l, --local', 'Use local formatting (faster, no LLM for formatting)')
-  .option('-m, --model <model>', 'LLM model (gpt-5.2 | gemini-3-pro-preview | gemini-3-flash-preview)')
+  .option('-m, --model <model>', 'LLM model (gpt-5.2 | gemini-3.1-pro-preview | gemini-3-flash-preview)')
   .option('-t, --to-suite <file>', 'Append to test suite YAML (creates if missing)')
   .action(generateCommand);
 
@@ -823,7 +823,7 @@ program
   .command('generate-interactive')
   .alias('gi')
   .description('Interactive mode for use case generation')
-  .option('-m, --model <model>', 'LLM model (gpt-5.2 | gemini-3-pro-preview | gemini-3-flash-preview)')
+  .option('-m, --model <model>', 'LLM model (gpt-5.2 | gemini-3.1-pro-preview | gemini-3-flash-preview)')
   .action(generateInteractiveCommand);
 
 // =============================================================================
@@ -1127,12 +1127,12 @@ program
   .command('evaluate')
   .description('Run evaluation suite against pipeline')
   .option('-s, --suite <name>', 'Test suite name')
-  .option('-m, --model <model>', 'LLM model (gpt-5.2 | gemini-3-pro-preview | gemini-3-flash-preview)')
+  .option('-m, --model <model>', 'LLM model (gpt-5.2 | gemini-3.1-pro-preview | gemini-3-flash-preview)')
   .option('--step <step>', 'Only evaluate specific step')
   .option('--corrections', 'Generate corrections for failures')
   .option('--capture-training', 'Capture successful outputs as training data')
   .option('--ensemble', 'Use multi-judge ensemble evaluation')
-  .option('--ensemble-models <models>', 'Comma-separated list of models for ensemble (e.g., gpt-5.2,gemini-3-pro-preview,gemini-3-flash-preview)')
+  .option('--ensemble-models <models>', 'Comma-separated list of models for ensemble (e.g., gpt-5.2,gemini-3.1-pro-preview,gemini-3-flash-preview)')
   .action(evaluateCommand);
 
 // Corrections subcommand group
@@ -2078,9 +2078,9 @@ program
   .option('-i, --iterations <n>', 'Number of improvement iterations', '1')
   .option('--auto-suggest', 'Automatically generate suggestions for top patterns')
   .option('--capture-training', 'Capture successful outputs as training data')
-  .option('-m, --model <model>', 'LLM model (gpt-5.2 | gemini-3-pro-preview | gemini-3-flash-preview)')
+  .option('-m, --model <model>', 'LLM model (gpt-5.2 | gemini-3.1-pro-preview | gemini-3-flash-preview)')
   .option('--ensemble', 'Use multi-judge ensemble evaluation')
-  .option('--ensemble-models <models>', 'Comma-separated list of models for ensemble (e.g., gpt-5.2,gemini-3-pro-preview,gemini-3-flash-preview)')
+  .option('--ensemble-models <models>', 'Comma-separated list of models for ensemble (e.g., gpt-5.2,gemini-3.1-pro-preview,gemini-3-flash-preview)')
   .action(selfImproveCommand);
 
 // =============================================================================

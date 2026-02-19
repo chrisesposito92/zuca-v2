@@ -184,7 +184,7 @@ workflow:
           model:
             completion_params: {}
             mode: chat
-            name: gemini-3-pro-preview
+            name: gemini-3.1-pro-preview
             provider: langgenius/gemini/google
           prompt_template:
             - id: 8322bbc4-1981-42fa-b41c-54e8d87b5cba
@@ -484,7 +484,7 @@ workflow:
               temperature: 1
               url_context: true
             mode: chat
-            name: gemini-3-pro-preview
+            name: gemini-3.1-pro-preview
             provider: langgenius/gemini/google
           prompt_template:
             - id: 6869d02d-b291-42c0-8688-c0dfee13cdc5
@@ -872,7 +872,7 @@ workflow:
             completion_params:
               temperature: 1
             mode: chat
-            name: gemini-3-pro-preview
+            name: gemini-3.1-pro-preview
             provider: langgenius/gemini/google
           prompt_template:
             - id: 473b9dc3-5d49-4680-b970-9611c86e9d3d

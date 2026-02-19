@@ -64,7 +64,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     // Add regeneration message to conversation history
     await addMessage(id, 'user', '[Requested full regeneration]');
 
-    type LlmModel = 'gpt-5.2' | 'gemini-3-pro-preview' | 'gemini-3-flash-preview';
+    type LlmModel = 'gpt-5.2' | 'gemini-3.1-pro-preview' | 'gemini-3-flash-preview';
 
     try {
       if (session.session_type === 'analyze') {

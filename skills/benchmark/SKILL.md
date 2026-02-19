@@ -1,6 +1,6 @@
 ---
 name: benchmark
-description: Run comparative benchmarks across ZUCA LLM models (generate/analyze pipelines), capture timings and quality metrics, and produce benchmark reports. Use when a user asks to benchmark models, compare performance/quality across gpt-5.2, gemini-3-pro-preview, gemini-3-flash-preview, or wants a benchmark report.
+description: Run comparative benchmarks across ZUCA LLM models (generate/analyze pipelines), capture timings and quality metrics, and produce benchmark reports. Use when a user asks to benchmark models, compare performance/quality across gpt-5.2, gemini-3.1-pro-preview, gemini-3-flash-preview, or wants a benchmark report.
 ---
 
 # Benchmark
@@ -22,8 +22,8 @@ mkdir -p /tmp/benchmark-$TIMESTAMP/{generate,analyze}
 Run sequentially to get accurate wall-clock timing. Capture stdout/stderr for later parsing.
 
 ```bash
-# Models: gpt-5.2, gemini-3-pro-preview, gemini-3-flash-preview
-for model in gpt-5.2 gemini-3-pro-preview gemini-3-flash-preview; do
+# Models: gpt-5.2, gemini-3.1-pro-preview, gemini-3-flash-preview
+for model in gpt-5.2 gemini-3.1-pro-preview gemini-3-flash-preview; do
   time npm run cli -- generate "[customer]" -c 2 -m "$model" -o "/tmp/benchmark-$TIMESTAMP/generate/$model.json" --local 2>&1 | tee "/tmp/benchmark-$TIMESTAMP/generate/$model.log"
 done
 ```
@@ -40,7 +40,7 @@ Save to `/tmp/benchmark-$TIMESTAMP/analyze/input.json`.
 Run sequentially to get accurate wall-clock timing.
 
 ```bash
-for model in gpt-5.2 gemini-3-pro-preview gemini-3-flash-preview; do
+for model in gpt-5.2 gemini-3.1-pro-preview gemini-3-flash-preview; do
   time npm run cli -- analyze "/tmp/benchmark-$TIMESTAMP/analyze/input.json" -m "$model" -o "/tmp/benchmark-$TIMESTAMP/analyze/$model.json" 2>&1 | tee "/tmp/benchmark-$TIMESTAMP/analyze/$model.log"
 done
 ```

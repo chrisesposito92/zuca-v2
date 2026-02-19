@@ -34,7 +34,7 @@ const DEFAULT_MODEL = process.env.NEXT_PUBLIC_DEFAULT_MODEL || "gpt-5.2";
 
 const modelOptions = [
   { key: "gpt-5.2", label: "GPT-5.2", time: "~15s", description: "Best accuracy for complex templates" },
-  { key: "gemini-3-pro-preview", label: "Gemini 3 Pro", time: "~10s", description: "Balanced quality and speed" },
+  { key: "gemini-3.1-pro-preview", label: "Gemini 3.1 Pro", time: "~10s", description: "Balanced quality and speed" },
   { key: "gemini-3-flash-preview", label: "Gemini 3 Flash", time: "~5s", description: "Fastest, good for simple templates" },
 ];
 

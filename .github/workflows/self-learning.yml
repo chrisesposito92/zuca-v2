@@ -11,7 +11,7 @@ on:
         type: choice
         options:
           - gemini-3-flash-preview
-          - gemini-3-pro-preview
+          - gemini-3.1-pro-preview
           - gpt-5.2
       suite:
         description: 'Test suite to run'

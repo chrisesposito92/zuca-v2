@@ -31,7 +31,7 @@ const sspMethodOptions = ["None", "List Price", "Sell Price", "Custom Formula"] 
 const DEFAULT_MODEL = process.env.NEXT_PUBLIC_DEFAULT_MODEL || "gpt-5.2";
 const snapshotModelOptions = [
   { key: "gpt-5.2", label: "GPT-5.2", time: "~7-9 min", description: "Best overall reasoning and accuracy" },
-  { key: "gemini-3-pro-preview", label: "Gemini 3 Pro", time: "~4-5 min", description: "Balanced quality and speed" },
+  { key: "gemini-3.1-pro-preview", label: "Gemini 3.1 Pro", time: "~4-5 min", description: "Balanced quality and speed" },
   { key: "gemini-3-flash-preview", label: "Gemini 3 Flash", time: "~1.5-2 min", description: "Fastest, good for interactive use" },
 ];
 const sortOptions = [

@@ -418,7 +418,7 @@ npm run cli -- evaluate
 npm run cli -- evaluate --step contracts_orders
 
 # Use specific model for evaluation
-npm run cli -- evaluate -m gemini-3-pro-preview
+npm run cli -- evaluate -m gemini-3.1-pro-preview
 ```
 
 ### Managing Corrections
@@ -512,9 +512,9 @@ Generate real-world test cases using the UC generator and convert them to a test
 mkdir -p /tmp/uc
 
 # 2. Generate use cases from real companies
-npm run cli -- generate "Salesforce" -w "https://www.salesforce.com" -c 5 -o /tmp/uc/salesforce.json -m gemini-3-pro-preview
-npm run cli -- generate "Twilio" -w "https://www.twilio.com" -c 5 -o /tmp/uc/twilio.json -m gemini-3-pro-preview
-npm run cli -- generate "Snowflake" -w "https://www.snowflake.com" -c 5 -o /tmp/uc/snowflake.json -m gemini-3-pro-preview
+npm run cli -- generate "Salesforce" -w "https://www.salesforce.com" -c 5 -o /tmp/uc/salesforce.json -m gemini-3.1-pro-preview
+npm run cli -- generate "Twilio" -w "https://www.twilio.com" -c 5 -o /tmp/uc/twilio.json -m gemini-3.1-pro-preview
+npm run cli -- generate "Snowflake" -w "https://www.snowflake.com" -c 5 -o /tmp/uc/snowflake.json -m gemini-3.1-pro-preview
 
 # 3. Convert to test suite
 npm run uc:to-suite -- /tmp/uc/ data/test-suites/real-world-scenarios.yaml

@@ -106,7 +106,7 @@ export interface EnsembleResult {
 export const DEFAULT_ENSEMBLE_CONFIG: EnsembleConfig = {
   judges: [
     { model: 'gpt-5.2', weight: 1.0, label: 'GPT-5.2' },
-    { model: 'gemini-3-pro-preview', weight: 1.0, label: 'Gemini 3 Pro' },
+    { model: 'gemini-3.1-pro-preview', weight: 1.0, label: 'Gemini 3.1 Pro' },
     { model: 'gemini-3-flash-preview', weight: 0.8, label: 'Gemini 3 Flash' },
   ],
   consensusThreshold: 0.66, // 2/3 majority

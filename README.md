@@ -44,7 +44,7 @@ OPENAI_API_KEY=your-openai-api-key
 GEMINI_API_KEY=your-gemini-api-key
 
 # Optional
-LLM_MODEL=gpt-5.2  # gpt-5.2 | gemini-3-pro-preview | gemini-3-flash-preview
+LLM_MODEL=gpt-5.2  # gpt-5.2 | gemini-3.1-pro-preview | gemini-3-flash-preview
 OPENAI_MODEL=gpt-5.2
 OPENAI_REASONING_EFFORT=medium  # low, medium, high - controls gpt-5.2 reasoning depth
 GEMINI_BASE_URL=https://generativelanguage.googleapis.com/v1beta
@@ -75,7 +75,7 @@ npm run cli analyze examples/sample-use-case.json
 npm run cli analyze examples/sample-use-case.json -o results.json
 
 # With model selection
-npm run cli analyze examples/sample-use-case.json -m gemini-3-pro-preview
+npm run cli analyze examples/sample-use-case.json -m gemini-3.1-pro-preview
 
 # Interactive mode
 npm run cli interactive
@@ -94,7 +94,7 @@ npm run cli -- generate <customer_name> -w <website_url> [options]
 
 # Examples
 npm run cli -- generate "Salesforce" -w "https://www.salesforce.com" -c 3
-npm run cli -- generate "Twilio" -w "https://www.twilio.com" -c 2 -m gemini-3-pro-preview
+npm run cli -- generate "Twilio" -w "https://www.twilio.com" -c 2 -m gemini-3.1-pro-preview
 npm run cli -- generate "Datadog" -w "https://www.datadoghq.com" -c 3 -o generated-uc/datadog.json
 
 # Options:
@@ -103,7 +103,7 @@ npm run cli -- generate "Datadog" -w "https://www.datadoghq.com" -c 3 -o generat
 #   -n, --notes <text>      Additional notes to guide generation
 #   -o, --output <file>     Save results to a JSON file
 #   -l, --local             Use local formatting (faster, no LLM for formatting)
-#   -m, --model <model>     LLM model (gpt-5.2 | gemini-3-pro-preview | gemini-3-flash-preview)
+#   -m, --model <model>     LLM model (gpt-5.2 | gemini-3.1-pro-preview | gemini-3-flash-preview)
 
 # Interactive mode (guided prompts)
 npm run cli generate-interactive
@@ -119,7 +119,7 @@ ZUCA includes a self-learning pipeline that evaluates outputs against behavioral
 npm run cli evaluate
 
 # Evaluate with specific model
-npm run cli evaluate -m gemini-3-pro-preview
+npm run cli evaluate -m gemini-3.1-pro-preview
 
 # Evaluate specific step only
 npm run cli evaluate --step contracts_orders

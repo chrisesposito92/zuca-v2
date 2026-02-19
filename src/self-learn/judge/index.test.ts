@@ -270,7 +270,7 @@ describe('createEnsembleConfig', () => {
   });
 
   it('should assign equal weights to all judges', () => {
-    const config = createEnsembleConfig(['gpt-5.2', 'gemini-3-flash-preview', 'gemini-3-pro-preview']);
+    const config = createEnsembleConfig(['gpt-5.2', 'gemini-3-flash-preview', 'gemini-3.1-pro-preview']);
 
     for (const judge of config.judges) {
       expect(judge.weight).toBe(1.0);
@@ -297,11 +297,11 @@ describe('createEnsembleConfig', () => {
     expect(config2.minJudgesRequired).toBe(2);
 
     // 3 judges -> min 2
-    const config3 = createEnsembleConfig(['gpt-5.2', 'gemini-3-flash-preview', 'gemini-3-pro-preview']);
+    const config3 = createEnsembleConfig(['gpt-5.2', 'gemini-3-flash-preview', 'gemini-3.1-pro-preview']);
     expect(config3.minJudgesRequired).toBe(2);
 
     // 4 judges -> min 2 (using duplicates for test since only 3 models exist)
-    const config4 = createEnsembleConfig(['gpt-5.2', 'gemini-3-flash-preview', 'gemini-3-pro-preview', 'gpt-5.2']);
+    const config4 = createEnsembleConfig(['gpt-5.2', 'gemini-3-flash-preview', 'gemini-3.1-pro-preview', 'gpt-5.2']);
     expect(config4.minJudgesRequired).toBe(2);
   });
 
@@ -385,7 +385,7 @@ describe('formatEnsembleResultForDisplay', () => {
       individualResults: [
         createMockSingleResult({ model: 'gpt-5.2', success: true }),
         createMockSingleResult({ model: 'gemini-3-flash-preview', success: true }),
-        createMockSingleResult({ model: 'gemini-3-pro-preview', success: false, error: 'Timeout' }),
+        createMockSingleResult({ model: 'gemini-3.1-pro-preview', success: false, error: 'Timeout' }),
       ],
     });
     const output = formatEnsembleResultForDisplay(result);

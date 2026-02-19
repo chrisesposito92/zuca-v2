@@ -105,7 +105,7 @@ npm run cli -- evaluate --suite golden-scenarios --step billings
 npm run cli -- evaluate --suite golden-scenarios --ensemble
 
 # Custom ensemble judges
-npm run cli -- evaluate --suite golden-scenarios --ensemble --ensemble-models gpt-5.2,gemini-3-pro-preview
+npm run cli -- evaluate --suite golden-scenarios --ensemble --ensemble-models gpt-5.2,gemini-3.1-pro-preview
 ```
 
 #### When to Use
@@ -758,7 +758,7 @@ npm run cli -- ft-eval compare baseline gemini-eval --markdown comparison-report
 
 #### Model Support
 
-- **Standard models**: `gpt-5.2`, `gemini-3-pro-preview`, `gemini-3-flash-preview`
+- **Standard models**: `gpt-5.2`, `gemini-3.1-pro-preview`, `gemini-3-flash-preview`
 - **Unknown models**: Will show a warning but proceed (API validates)
 
 #### File Locations
@@ -914,7 +914,7 @@ npm run cli -- evaluate --suite expanded-tests --corrections
 npm run cli -- evaluate --suite golden-scenarios --ensemble
 
 # Custom judges for specific needs
-npm run cli -- evaluate --suite golden-scenarios --ensemble --ensemble-models gpt-5.2,gemini-3-pro-preview
+npm run cli -- evaluate --suite golden-scenarios --ensemble --ensemble-models gpt-5.2,gemini-3.1-pro-preview
 
 # Ensemble in self-improve loop
 npm run cli -- self-improve --ensemble --auto-suggest
@@ -1011,7 +1011,7 @@ USE_CORRECTIONS_EMBEDDINGS=false
 
 ```
 gpt-5.2                  # OpenAI GPT-5.2 (recommended)
-gemini-3-pro-preview     # Google Gemini 3 Pro
+gemini-3.1-pro-preview     # Google Gemini 3.1 Pro
 gemini-3-flash-preview   # Google Gemini 3 Flash (fastest)
 ```
 

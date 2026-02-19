@@ -339,7 +339,7 @@ steps:
 # config/judge.yaml
 steps:
   design_subscription:
-    model: "gemini-3-pro-preview"  # Use a different model
+    model: "gemini-3.1-pro-preview"  # Use a different model
 ```
 
 ---

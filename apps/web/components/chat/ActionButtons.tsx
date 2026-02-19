@@ -41,7 +41,7 @@ const EDITABLE_FIELDS = [
 
 const MODEL_OPTIONS = [
   { key: "gpt-5.2", label: "GPT-5.2" },
-  { key: "gemini-3-pro-preview", label: "Gemini 3 Pro (preview)" },
+  { key: "gemini-3.1-pro-preview", label: "Gemini 3.1 Pro (preview)" },
   { key: "gemini-3-flash-preview", label: "Gemini 3 Flash (preview)" },
 ];
 

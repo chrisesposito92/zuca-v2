@@ -24,7 +24,7 @@ const DEFAULT_MODEL = process.env.NEXT_PUBLIC_DEFAULT_MODEL || "gpt-5.2";
 // Model options with estimated times from benchmarks
 const ucGeneratorModelOptions = [
   { key: "gpt-5.2", label: "GPT-5.2", time: "~3 min", description: "Most detailed research" },
-  { key: "gemini-3-pro-preview", label: "Gemini 3 Pro", time: "~1 min", description: "Balanced quality and speed" },
+  { key: "gemini-3.1-pro-preview", label: "Gemini 3.1 Pro", time: "~1 min", description: "Balanced quality and speed" },
   { key: "gemini-3-flash-preview", label: "Gemini 3 Flash", time: "~30 sec", description: "Fastest generation" },
 ];
 

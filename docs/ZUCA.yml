@@ -13160,7 +13160,7 @@ workflow:
           completion_params:
             thinking_level: Low
           mode: chat
-          name: gemini-3-pro-preview
+          name: gemini-3.1-pro-preview
           provider: langgenius/gemini/google
         prompt_template:
         - id: 1ebbddfd-e368-4d68-b1ac-1aad500fa5f1
@@ -13365,7 +13365,7 @@ workflow:
           completion_params:
             thinking_level: Low
           mode: chat
-          name: gemini-3-pro-preview
+          name: gemini-3.1-pro-preview
           provider: langgenius/gemini/google
         prompt_template:
         - id: 99382e9f-3ae3-4a9b-8e86-98e72ea6ef67
@@ -13938,7 +13938,7 @@ workflow:
             grounding: true
             url_context: true
           mode: chat
-          name: gemini-3-pro-preview
+          name: gemini-3.1-pro-preview
           provider: langgenius/gemini/google
         prompt_template:
         - id: ebf2e04f-89c8-408c-a3eb-ab27ab06db10
@@ -14536,7 +14536,7 @@ workflow:
         model:
           completion_params: {}
           mode: chat
-          name: gemini-3-pro-preview
+          name: gemini-3.1-pro-preview
           provider: langgenius/gemini/google
         prompt_template:
         - id: 719219ed-ee41-47a8-ad42-607c1f5b901d
@@ -15082,7 +15082,7 @@ workflow:
             grounding: true
             url_context: true
           mode: chat
-          name: gemini-3-pro-preview
+          name: gemini-3.1-pro-preview
           provider: langgenius/gemini/google
         prompt_template:
         - id: e34f7534-194a-48b1-9ecb-b4016c8a2783
@@ -16099,7 +16099,7 @@ workflow:
             grounding: true
             url_context: true
           mode: chat
-          name: gemini-3-pro-preview
+          name: gemini-3.1-pro-preview
           provider: langgenius/gemini/google
         prompt_template:
         - id: e3443cb6-8dda-4f13-b4f9-e4d5011d50de
@@ -16663,7 +16663,7 @@ workflow:
             grounding: true
             url_context: true
           mode: chat
-          name: gemini-3-pro-preview
+          name: gemini-3.1-pro-preview
           provider: langgenius/gemini/google
         prompt_template:
         - id: 3840505b-9884-4af0-8fee-2bdcbdb37bc6
@@ -17161,7 +17161,7 @@ workflow:
             temperature: 1.1
             thinking_level: Low
           mode: chat
-          name: gemini-3-pro-preview
+          name: gemini-3.1-pro-preview
           provider: langgenius/gemini/google
         query_variable_selector:
         - '1763785551576'
@@ -17375,7 +17375,7 @@ workflow:
           completion_params:
             thinking_level: Low
           mode: chat
-          name: gemini-3-pro-preview
+          name: gemini-3.1-pro-preview
           provider: langgenius/gemini/google
         prompt_template:
         - id: c942a662-2cdb-41f4-b8b2-2305624146c6
@@ -17554,7 +17554,7 @@ workflow:
             temperature: 0.7
             url_context: false
           mode: chat
-          name: gemini-3-pro-preview
+          name: gemini-3.1-pro-preview
           provider: langgenius/gemini/google
         prompt_template:
         - id: d8746a89-71bc-44e9-acbd-865b70b2fd11

@@ -100,7 +100,7 @@ npm run cli -- evaluate --corrections # Generate corrections for failures
 npm run cli -- evaluate --capture-training  # Capture passing outputs as training data
 npm run cli -- evaluate -m gemini-3-flash-preview  # Use specific model
 npm run cli -- evaluate --ensemble   # Use multi-judge ensemble evaluation
-npm run cli -- evaluate --ensemble --ensemble-models gpt-5.2,gemini-3-pro-preview  # Custom judges
+npm run cli -- evaluate --ensemble --ensemble-models gpt-5.2,gemini-3.1-pro-preview  # Custom judges
 
 # Corrections Management
 npm run cli -- corrections list      # List stored corrections

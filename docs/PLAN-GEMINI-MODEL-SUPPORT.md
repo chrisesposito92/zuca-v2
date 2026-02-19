@@ -29,7 +29,7 @@ None (decisions resolved).
 - Keep `complete()` as the single entrypoint, but route based on model/provider.
 
 ### 2) Unified Model Selection
-- Add `LLMModel` union type: `gpt-5.2 | gemini-3-pro-preview | gemini-3-flash-preview`.
+- Add `LLMModel` union type: `gpt-5.2 | gemini-3.1-pro-preview | gemini-3-flash-preview`.
 - Add `PipelineOptions.model` (and `UCGeneratorOptions.model`).
 - Propagate model selection to all steps via `CompletionOptions.model`.
 

@@ -253,15 +253,10 @@ function getProviderForModel(model: string): LlmProvider {
 type GeminiThinkingLevel = 'minimal' | 'low' | 'medium' | 'high';
 
 function mapReasoningToGemini(
-  model: string,
+  _model: string,
   reasoningEffort: ReasoningEffort
 ): GeminiThinkingLevel {
-  // Both Pro and Flash: anything not 'low' becomes 'high' for maximum quality
-  // Flash is fast enough to afford high reasoning across all steps
-  if (model.startsWith('gemini-3')) {
-    return reasoningEffort === 'low' ? 'low' : 'high';
-  }
-  // Fallback for other Gemini models
+  // All current Gemini models (3.1 Pro, 3 Flash) support minimal/low/medium/high
   return reasoningEffort as GeminiThinkingLevel;
 }
 

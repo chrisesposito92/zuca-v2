@@ -54,7 +54,7 @@ Located in `/docs/Golden Use Cases/`:
 
 ### Technology Stack
 - **Language**: TypeScript (Node.js)
-- **LLM API**: OpenAI Responses API (gpt-5.2) + Gemini 3 API (gemini-3-pro-preview, gemini-3-flash-preview)
+- **LLM API**: OpenAI Responses API (gpt-5.2) + Gemini 3 API (gemini-3.1-pro-preview, gemini-3-flash-preview)
 - **Tools**:
   - `web_search` - Research Zuora documentation
   - `code_interpreter` - Execute calculations for billings/waterfall
