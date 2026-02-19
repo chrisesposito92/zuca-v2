@@ -26,8 +26,6 @@ export interface PipelineContext {
   /** Ralph self-improvement state */
   ralphEnabled: boolean;
   ralphState: RalphSessionState;
-  ralphClarificationAnswer?: ClarificationAnswer;
-
   /** Step timing tracking */
   stepTimings: Record<string, number>;
 
