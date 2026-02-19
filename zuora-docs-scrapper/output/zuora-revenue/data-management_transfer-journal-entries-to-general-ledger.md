@@ -2,10 +2,12 @@
 title: "Transfer journal entries to general ledger"
 url: "https://docs.zuora.com/en/zuora-revenue/data-management/transfer-journal-entries-to-general-ledger"
 product: "zuora-revenue"
-scraped_at: "2025-12-24T04:26:52.938Z"
+scraped_at: "2026-02-19T03:38:12.397Z"
 ---
 
 # Transfer journal entries to general ledger
+
+Zuora Revenue allows the transfer of both system-generated and manually uploaded journal entries to the general ledger, including netting and reclassification entries.
 
 With Zuora Revenue, you can transfer either the journal entries that are created by Zuora Revenue or the journal entries that are manually uploaded to the general ledger. The netting entries and long-term/short-term reclassification entries can also be transferred during this process.
 
@@ -102,7 +104,7 @@ Complete the following steps to transfer the journal entries from Zuora Revenue 
 
     4.  Make sure the criterion line is enabled. For example, you can add a line as shown in the following graphic to filter out the journal entries with the schedule type being R. So that only the journal entry that satisfies this criterion will be identified and transferred.
 
-        ![transfer-batch-filter.png](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/c35fc04d-861c-470a-a03f-861b5c3594f3?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImMzNWZjMDRkLTg2MWMtNDcwYS1hMDNmLTg2MWI1YzM1OTRmMyIsImV4cCI6MTc2NjYzNjgxMSwianRpIjoiNDU2MmQwNTQ2NmIwNDkwMjllMTYyN2M2YWExZWVmNzEiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9._9oqbrUkDvQoyvc8BSyyt5e5ybvQAoNowlpOX_ayLRc)
+        ![transfer-batch-filter.png](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/c35fc04d-861c-470a-a03f-861b5c3594f3?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImMzNWZjMDRkLTg2MWMtNDcwYS1hMDNmLTg2MWI1YzM1OTRmMyIsImV4cCI6MTc3MTU1ODY4OCwianRpIjoiZmI4YzMzNDkyMDJlNGI4NGJmMjdjMDY4Y2Q2OWE4OWQiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.vS76W9wRmOQh3P80G4araRDzFAxQHF464b_qYEfwoTs)
 
     5.  Repeat the above steps to add as many criteria as you need and use the Seq column to determine the sequence to apply them.
     6.  After you specify all the criteria, click the save icon and close the window.

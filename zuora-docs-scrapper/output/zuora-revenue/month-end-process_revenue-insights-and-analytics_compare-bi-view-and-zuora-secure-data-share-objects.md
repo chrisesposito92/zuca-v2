@@ -2,10 +2,12 @@
 title: "Compare BI view and Zuora secure data share objects"
 url: "https://docs.zuora.com/en/zuora-revenue/month-end-process/revenue-insights-and-analytics/compare-bi-view-and-zuora-secure-data-share-objects"
 product: "zuora-revenue"
-scraped_at: "2025-12-24T04:29:48.960Z"
+scraped_at: "2026-02-19T03:38:55.877Z"
 ---
 
 # Compare BI view and Zuora secure data share objects
+
+Zuora Secure Data Share (ZSDS) and BI view offer methods for syncing and extracting data from Zuora applications, enabling reporting and business intelligence operations.
 
 ## Zuora Secure Data Share (ZSDS)
 

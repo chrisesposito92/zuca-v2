@@ -2,14 +2,14 @@
 title: "Create a subscription using the REST API"
 url: "https://docs.zuora.com/en/zuora-billing/manage-accounts-subscriptions-and-non-subscriptions/manage-subscription-transactions/orders/order-actions-tutorials/orders-tutorials---create-subscriptions/create-a-subscription-using-the-rest-api"
 product: "zuora-billing"
-scraped_at: "2025-12-24T05:22:50.501Z"
+scraped_at: "2026-02-19T03:12:00.908Z"
 ---
 
 # Create a subscription using the REST API
 
 This topic explains how to create a subscription using the REST API by utilizing the "Create an order" operation.
 
-You can use the Create an order operation to create a subscription.
+You can use the [Create an order](https://www.zuora.com/developer/api-references/api/operation/POST_Order/) operation to create a subscription.
 
 Before the Orders feature is enabled, you would have used the "Create subscription", "Subscribe", or "Create account" operation.
 

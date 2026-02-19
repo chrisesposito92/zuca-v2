@@ -2,7 +2,7 @@
 title: "Order Line Items"
 url: "https://docs.zuora.com/en/zuora-billing/manage-accounts-subscriptions-and-non-subscriptions/manage-non-subscription-transactions/order-line-items"
 product: "zuora-billing"
-scraped_at: "2025-12-24T05:36:35.955Z"
+scraped_at: "2026-02-19T03:13:04.386Z"
 ---
 
 # Order Line Items
@@ -58,7 +58,7 @@ As shown in the diagram below, order line items are stored outside of a subscrip
 
 Fulfillments are subordinate objects attached to their related order line item. Fulfillment items are subordinate objects attached to their related fulfillment.
 
-![order-line-item-with-fulfillment](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/3c4ad968-b82a-4238-a770-4629722339bf?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjNjNGFkOTY4LWI4MmEtNDIzOC1hNzcwLTQ2Mjk3MjIzMzliZiIsImV4cCI6MTc2NjY0MDk5MywianRpIjoiYWExNDJjYjJiZGE5NGZjZWEwZDEyZWE4ZTBkOTM5YTkiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.l8EMJggwwcLRqy3UO72uVPx03pPtbwc6U0-dSyAXNPw)
+![order-line-item-with-fulfillment](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/3c4ad968-b82a-4238-a770-4629722339bf?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjNjNGFkOTY4LWI4MmEtNDIzOC1hNzcwLTQ2Mjk3MjIzMzliZiIsImV4cCI6MTc3MTU1NzE4MSwianRpIjoiZGNkNDcwNzVmYzRmNDg0OGE4ZGM3NzA5NTMxM2E5YmUiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.iHznbrsqcXcPk9hGbbVc1fRyLgrYT_ymmyyMkHGX7mE)
 
 Even though order line items are stored outside of a subscription, order line item charges can be sent through the entire order to revenue process, including Invoicing, Payments, Collections, and Revenue.
 

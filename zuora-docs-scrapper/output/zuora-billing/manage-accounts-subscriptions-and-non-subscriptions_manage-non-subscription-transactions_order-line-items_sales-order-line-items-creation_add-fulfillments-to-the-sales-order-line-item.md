@@ -2,7 +2,7 @@
 title: "Add fulfillments to the sales order line item"
 url: "https://docs.zuora.com/en/zuora-billing/manage-accounts-subscriptions-and-non-subscriptions/manage-non-subscription-transactions/order-line-items/sales-order-line-items-creation/add-fulfillments-to-the-sales-order-line-item"
 product: "zuora-billing"
-scraped_at: "2025-12-24T05:37:33.013Z"
+scraped_at: "2026-02-19T03:13:04.582Z"
 ---
 
 # Add fulfillments to the sales order line item
@@ -13,7 +13,7 @@ To add fulfillments to a sales order line item from the UI, complete the followi
 
 1.  In the Sales Order Line Item area of the order details page, click the item name of the sales order line item to which you are to add fulfillments. The order line item details page opens.
 
-    ![sales-orderLineItems-area](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/d456fc07-814e-4d00-8862-85caa54bbcc1?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImQ0NTZmYzA3LTgxNGUtNGQwMC04ODYyLTg1Y2FhNTRiYmNjMSIsImV4cCI6MTc2NjY0MTA1MCwianRpIjoiYTIwMTIyMWIzZTYwNDY2MWFhMGUyNGM0ODBhOTE4NGMiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.WjWh-YE1CYAixhuqE9d-pOQ-6A0FcBqf8xRfFEWZyxI)
+    ![sales-orderLineItems-area](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/d456fc07-814e-4d00-8862-85caa54bbcc1?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImQ0NTZmYzA3LTgxNGUtNGQwMC04ODYyLTg1Y2FhNTRiYmNjMSIsImV4cCI6MTc3MTU1NzE4MSwianRpIjoiNmJjMGI5YmI0NzJlNGIxNGEyZjhjMDBjMzYyZDVhOTUiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.vebFERkRTg-qlUaH3LXklxcsQ0SzvbBFBYfSVqBDZCM)
 
 2.  Click Create Fulfillments at the top right. The Create Fulfillment page opens.
 3.  Provide detailed information about the fulfillment you are to add.
@@ -45,7 +45,7 @@ To add fulfillments to a sales order line item from the UI, complete the followi
 
     3.  In the Description field, enter the description for the fulfillment item.
 
-    4.  Click the save icon ![Image: icon-save](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/fc48d836-4b9f-4fa1-bf03-52198dd7959f?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImZjNDhkODM2LTRiOWYtNGZhMS1iZjAzLTUyMTk4ZGQ3OTU5ZiIsImV4cCI6MTc2NjY0MTA1MCwianRpIjoiM2QyNzAwNmMwZGU4NDlhNTlkNWY5NDliNjAyN2FlNDMiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.VMSgVObrstfP963o4k93zUeo6Lok4NnBweaUPUhlmow) at the right end. A fulfillment item is now added to the fulfillment.
+    4.  Click the save icon ![Image: icon-save](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/fc48d836-4b9f-4fa1-bf03-52198dd7959f?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImZjNDhkODM2LTRiOWYtNGZhMS1iZjAzLTUyMTk4ZGQ3OTU5ZiIsImV4cCI6MTc3MTU1NzE4MSwianRpIjoiNmE2NzZhZTBkNDUzNDU1YTg3MjcyYTY2YWNiZDM2YmQiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.CDRwHtb_-wj2z_qUpCo3CHxhL8eB7RDaR7m4Os9ElC4) at the right end. A fulfillment item is now added to the fulfillment.
 
     5.  Repeat steps a - d to add more fulfillment items as you need in the current fulfillment. The maximum number of fulfillment items allowable in a fulfillment is 100.
 

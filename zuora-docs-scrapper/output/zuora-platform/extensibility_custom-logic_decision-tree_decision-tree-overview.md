@@ -2,7 +2,7 @@
 title: "Decision tree overview"
 url: "https://docs.zuora.com/en/zuora-platform/extensibility/custom-logic/decision-tree/decision-tree-overview"
 product: "zuora-platform"
-scraped_at: "2025-12-24T05:21:46.458Z"
+scraped_at: "2026-02-19T03:25:38.441Z"
 ---
 
 # Decision tree overview
@@ -25,8 +25,10 @@ When an object is created or updated, Zuora evaluates the first if-then statemen
 
 If all if-then statements are skipped, Zuora evaluates the results in the ELSE statement.
 
+`Result.Success` determines the evaluation outcome, and `Result.Message` defines the error messages displayed on associated object pages in the Zuora UI.
+
 ## Example
 
-![decision tree](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/d5a08684-22f5-4ce3-af62-cf66c0532c50?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImQ1YTA4Njg0LTIyZjUtNGNlMy1hZjYyLWNmNjZjMDUzMmM1MCIsImV4cCI6MTc2NjY0MDEwNCwianRpIjoiMTc3MDM4MjY0MGI2NGEyODhjNTQwMjMwY2VkNDMyMjUiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.gVRmph3YWUzEdviYM29v6FgkGuD8HQGliS-uwqWi38s)
+![decision tree](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/d5a08684-22f5-4ce3-af62-cf66c0532c50?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImQ1YTA4Njg0LTIyZjUtNGNlMy1hZjYyLWNmNjZjMDUzMmM1MCIsImV4cCI6MTc3MTU1NzkzMywianRpIjoiNjhjY2IwYTY5ZWZkNGE3MDk0MTdmZjc4NGM0NWEwNDIiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.Cg3UZ71qx3YYVlQsHWpI4utE12h5rOk9IhNLFRiVQTA)
 
 In this example, when an account object is created or updated, if the `CustomerBalance__c` custom field of this account is greater than or equal to `0`, the evaluation succeeds and Zuora will create or update the account object. Otherwise, the evaluation fails and Zuora will not create or update the account object.

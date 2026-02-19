@@ -2,7 +2,7 @@
 title: "FilterByValue function"
 url: "https://docs.zuora.com/en/zuora-billing/bill-your-customer/billing-document-templates-configuration/configure-html-templates-for-billing-documents/merge-field-syntax-for-html-templates/functions-used-in-merge-fields/filterbyvalue-function"
 product: "zuora-billing"
-scraped_at: "2025-12-24T05:45:46.907Z"
+scraped_at: "2026-02-19T03:13:32.676Z"
 ---
 
 # FilterByValue function
@@ -34,6 +34,8 @@ This function supports the following operators:
 -   `IS_NULL` : for example, `InvoiceItems|FilterByValue(Description,IS_NULL)`
 
 -   `NOT_NULL` : for example, `InvoiceItems|FilterByValue(Description,NOT_NULL)`
+
+    Note: The `FilterByValue` function does not currently support the `IS_NULL` and `NOT_NULL` operators when querying custom object records.
 
 
 ## Remarks

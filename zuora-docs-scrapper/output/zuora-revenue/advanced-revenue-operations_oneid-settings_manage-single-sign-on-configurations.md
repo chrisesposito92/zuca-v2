@@ -2,12 +2,12 @@
 title: "Manage single sign-on configurations"
 url: "https://docs.zuora.com/en/zuora-revenue/advanced-revenue-operations/oneid-settings/manage-single-sign-on-configurations"
 product: "zuora-revenue"
-scraped_at: "2025-12-24T04:44:36.464Z"
+scraped_at: "2026-02-19T03:40:48.210Z"
 ---
 
 # Manage single sign-on configurations
 
-This article describes how to manage your organization’s single sign-on (SSO) configurations in OneID. For more information about SSO in OneID, see [Configure single sign-on for OneID](/zuora-revenue/advanced-revenue-operations/configure-single-sign-on-for-oneid) .
+This article describes how to manage your organization's single sign-on (SSO) configurations in OneID. For more information about SSO in OneID, see [Configure single sign-on for OneID](/zuora-revenue/advanced-revenue-operations/configure-single-sign-on-for-oneid)
 
 ## Manage SSO SAML metadata URL
 

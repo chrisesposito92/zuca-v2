@@ -2,10 +2,12 @@
 title: "Create a new subscription"
 url: "https://docs.zuora.com/en/zuora-billing/bill-your-customer/usage-billing/prepaid-with-drawdown/create-prepayment-charge-with-rollover/create-prepayment-charge-with-rollover---zuora-ui/create-a-new-subscription"
 product: "zuora-billing"
-scraped_at: "2025-12-24T08:29:40.696Z"
+scraped_at: "2026-02-19T03:14:21.802Z"
 ---
 
 # Create a new subscription
+
+Learn how to manage subscription validity periods and usage records to optimize prepaid unit utilization.
 
 1.  On the subscription details page, locate the three validity periods from the dropdown list in the upper right corner of the Prepayment Balance section.
 2.  Select 01/01/2022 ~ 02/01/2022 from the Validity Period list.

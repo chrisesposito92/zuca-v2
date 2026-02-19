@@ -2,7 +2,7 @@
 title: "About configuration templates"
 url: "https://docs.zuora.com/en/zuora-platform/data-management/deployment-manager/deployment-manager-features-and-operations/about-configuration-templates"
 product: "zuora-platform"
-scraped_at: "2026-01-15T21:58:41.686Z"
+scraped_at: "2026-02-19T03:18:09.432Z"
 ---
 
 # About configuration templates
@@ -21,12 +21,15 @@ Note: Configuration Templates feature is available for administrators by default
 
 Configuration Templates automate the deployment of non-transactional objects (components). Using templates, you can deploy the same subset of configurations across multiple tenants and environments.
 
-![Flow of configuration template](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/335d9bee-f51c-41a4-a682-02ec473c095b?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjMzNWQ5YmVlLWY1MWMtNDFhNC1hNjgyLTAyZWM0NzNjMDk1YiIsImV4cCI6MTc2ODYwMDcxNywianRpIjoiNjRmOGQ4ZTYxMTIzNGQ4YWEwN2M2OGI5ZjdhZmI2MzgiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiI4RWFZRjVFNjZLaVRYdnNmS3N5NSJ9.2GPQIXSnepZCTR7IsoEjtTslS_6qYzgoDkf3h3savzI)
+![Flow of configuration template](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/335d9bee-f51c-41a4-a682-02ec473c095b?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjMzNWQ5YmVlLWY1MWMtNDFhNC1hNjgyLTAyZWM0NzNjMDk1YiIsImV4cCI6MTc3MTU1NzQ4NSwianRpIjoiYTA5ZGYzYTdlNTNhNDlmMjgxODIzMzMzZmVkMDI3YzgiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.kaHqELoGbwAmqv0qrWV0D_S1rg5IEKOznPIhsWRiogk)
 
 ## Access Configuration Template
 
 To access the Configuration template, log in to the target tenant, navigate to Administration > Configuration Templates.
 
 You can create, download, validate and deploy templates via UI and API. For more information, see
+
+-   [Create and download template via UI and API](/zuora-platform/data-management/deployment-manager/deployment-manager-features-and-operations/about-configuration-templates/create-and-download-source-template)
+-   [Create a deployment via UI and API](/zuora-platform/data-management/deployment-manager/deployment-manager-features-and-operations/about-configuration-templates/create-a-deployment)
 
 For more information on using configuration templates via APIs, see [API references](https://knowledgecenter.zuora.com/Zuora_Platform/Data_Management/Deployment_Manager/CA_Configuration_Templates/Using_Configuration_Templates).

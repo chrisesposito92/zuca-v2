@@ -2,7 +2,7 @@
 title: "User access"
 url: "https://docs.zuora.com/en/zuora-revenue/getting-started/user-management/user-access"
 product: "zuora-revenue"
-scraped_at: "2025-12-24T04:24:53.041Z"
+scraped_at: "2026-02-19T03:37:58.201Z"
 ---
 
 # User access
@@ -32,7 +32,7 @@ In this page:
 6.  Click the save icon. The role is created.
 7.  To assign different permissions for the role, complete the following steps:
     1.  Click the Role Privileges tab. All categories on the main menu are listed as the MENU type. Expand each category to view the menu options listed as SUB MENU type under the category. The Privilege column displays the current permission assigned, which can be NONE, READ ONLY, PARTIAL ACCESS, or FULL ACCESS.
-        ![role-privileges.png](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/9687f728-0f7d-4fef-9478-5e3779cc6972?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6Ijk2ODdmNzI4LTBmN2QtNGZlZi05NDc4LTVlMzc3OWNjNjk3MiIsImV4cCI6MTc2NjYzNjY5MSwianRpIjoiNTkwY2FiMGVlZDY0NDRhN2E1YzM1Yzk4ZTFhMjQzZGUiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.Pqsg6xrAAbPW4P3IJ_6ivildIHL0EO93w1dET_AeYUI)
+        ![role-privileges.png](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/9687f728-0f7d-4fef-9478-5e3779cc6972?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6Ijk2ODdmNzI4LTBmN2QtNGZlZi05NDc4LTVlMzc3OWNjNjk3MiIsImV4cCI6MTc3MTU1ODY3MiwianRpIjoiNzZiNjViNTA3MDdjNGQ2N2ExNjU2N2ZkN2Y5ZGFhOGYiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.qnpA9K-RLUPs7XxnNiCjYAAhYpwVb6u9jFyY6C2gXd0)
 
     2.  Locate the line that you want to change the permission.
 

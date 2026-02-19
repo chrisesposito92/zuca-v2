@@ -2,7 +2,7 @@
 title: "Product mid-interval updates on ramp deals addition"
 url: "https://docs.zuora.com/en/zuora-billing/manage-accounts-subscriptions-and-non-subscriptions/manage-subscription-transactions/orders/ramps-and-ramp-metrics/product-mid-interval-updates-on-ramp-deals-addition"
 product: "zuora-billing"
-scraped_at: "2025-12-24T05:28:12.652Z"
+scraped_at: "2026-02-19T03:12:13.774Z"
 ---
 
 # Product mid-interval updates on ramp deals addition

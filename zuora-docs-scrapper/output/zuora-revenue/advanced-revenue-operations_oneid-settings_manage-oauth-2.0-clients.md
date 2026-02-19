@@ -2,10 +2,12 @@
 title: "Manage OAuth 2.0 clients"
 url: "https://docs.zuora.com/en/zuora-revenue/advanced-revenue-operations/oneid-settings/manage-oauth-2.0-clients"
 product: "zuora-revenue"
-scraped_at: "2025-12-24T04:44:26.509Z"
+scraped_at: "2026-02-19T03:40:47.753Z"
 ---
 
 # Manage OAuth 2.0 clients
+
+This guide explains how to create or delete OAuth 2.0 clients to obtain access tokens for the OneID SCIM API using client credentials or authorization code grant types.
 
 This article describes creating or deleting OAuth 2.0 clients that provide client credentials. You can use these credentials to request access tokens for the OneID SCIM API following the OAuth 2.0 authorization flow.
 

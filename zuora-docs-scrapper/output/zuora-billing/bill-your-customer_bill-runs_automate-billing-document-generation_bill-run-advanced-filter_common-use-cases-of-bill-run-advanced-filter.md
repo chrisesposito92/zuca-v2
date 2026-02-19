@@ -2,7 +2,7 @@
 title: "Common use cases of Bill Run Advanced Filter"
 url: "https://docs.zuora.com/en/zuora-billing/bill-your-customer/bill-runs/automate-billing-document-generation/bill-run-advanced-filter/common-use-cases-of-bill-run-advanced-filter"
 product: "zuora-billing"
-scraped_at: "2025-12-24T08:26:10.276Z"
+scraped_at: "2026-02-19T03:14:04.512Z"
 ---
 
 # Common use cases of Bill Run Advanced Filter
@@ -15,7 +15,7 @@ This case shows you how to create bill runs for customers in the United States u
 
 Use UI
 
-![Advanced Filter Example](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/63d39dbf-87f3-40fd-b10b-346807ed8d97?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjYzZDM5ZGJmLTg3ZjMtNDBmZC1iMTBiLTM0NjgwN2VkOGQ5NyIsImV4cCI6MTc2NjY1MTE2OCwianRpIjoiOTY1NDBlN2U0NmI3NDEyZGI2N2NlY2JmODkyMDRkYzQiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.kZDobR3X_9T1LyM8wt_k5wYf8C8lS2wSYUmIVW5EKGg)
+![Advanced Filter Example](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/63d39dbf-87f3-40fd-b10b-346807ed8d97?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjYzZDM5ZGJmLTg3ZjMtNDBmZC1iMTBiLTM0NjgwN2VkOGQ5NyIsImV4cCI6MTc3MTU1NzIzOCwianRpIjoiMDQxYTQ2MjJjNzcyNDM5OTk2YzRmNmI1Y2E5MmI1MDUiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.R2BxE9J1nrd14Q5wnE4Q1ElhHPtSE3G3SAtiHSYaR9c)
 
 The Billing Batch field is a standard field of the Account object, and the Custom Channel field is a custom field of the Account object. Bath2 contains customer accounts in the United States, and Apple Store contains customer accounts who use the Apple Store. Because the AND operator is selected for the composite condition for the Account Filter , between the conditions or condition groups that form the composite condition, the AND logic exists. Therefore, the customer accounts that are in the United States ( Batch = Batch 2) and use the Apple Store ( Customer Channel \= Apple Store) are selected. You can then bill the customers selected by this custom filter.
 
@@ -42,7 +42,7 @@ The subscription type can be Professional Services or License. This case shows y
 
 Use UI
 
-![Advanced Filter Example](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/1c7cc63a-b7ba-4b44-99c9-b6480ba8443c?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjFjN2NjNjNhLWI3YmEtNGI0NC05OWM5LWI2NDgwYmE4NDQzYyIsImV4cCI6MTc2NjY1MTE2OCwianRpIjoiNzA4ODE4ZjZmZTY2NDE2NmJkMDQ0NzQzZTYyOTU1NDciLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.TO7aIoeFmox60Xx_PT7kstjl0Xu-I-gOTDaM9hdDExY)
+![Advanced Filter Example](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/1c7cc63a-b7ba-4b44-99c9-b6480ba8443c?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjFjN2NjNjNhLWI3YmEtNGI0NC05OWM5LWI2NDgwYmE4NDQzYyIsImV4cCI6MTc3MTU1NzIzOCwianRpIjoiOTU1ZGVmNTY2MzI5NDkyNDk2NWUwMWY1ZGQ2Yjg2YjQiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.Y88MbkAmEhzyPZbUDvS5fqcY9WXTwRg3FqZemWvERWc)
 
 The Billing Batch field is a standard field of the Account object, and the Subscription Type field is a custom field of the Subscription object. Bath2 contains customer accounts in the United States, and Professional Service contains subscriptions that provide professional service. Adding the Subscription Filter in addition to the Account Filter forms the AND logic between the composite condition defined for the Subscription Filter and the composite condition defined for the Account Filter . Therefore, all customer accounts in the United States ( Batch = Batch 2) are selected first. Then, Zuora filters all subscriptions within these accounts to include only those that provide professional services ( Subscription Type = Professional Service).
 
@@ -67,7 +67,7 @@ The example shows you how to create bill runs for customer accounts whose Bill C
 
 Use UI
 
-![Advanced Filter Example](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/efb68bc3-ffdd-4fb8-b5e3-68f595b0340f?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImVmYjY4YmMzLWZmZGQtNGZiOC1iNWUzLTY4ZjU5NWIwMzQwZiIsImV4cCI6MTc2NjY1MTE2OCwianRpIjoiZjJhNDIyYmNiYzMyNDA3NWJmMTdmYzFmNjhlYjMxNDUiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.uN5y6-0O13nyEXc7GSSHeW8HdUrJtPkkFuscSyNBxd0)
+![Advanced Filter Example](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/efb68bc3-ffdd-4fb8-b5e3-68f595b0340f?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImVmYjY4YmMzLWZmZGQtNGZiOC1iNWUzLTY4ZjU5NWIwMzQwZiIsImV4cCI6MTc3MTU1NzIzOCwianRpIjoiNzBlY2JiZDFhMDM2NDEzZjgxZGE0Y2MwY2IxMGViNzUiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.rUuWEgBDNtR5US2b7FLsIFqz5JmMDKj1CwJiU4VSaVM)
 
 Note:
 
@@ -84,4 +84,21 @@ Request Payload:
 Response Payload:
 
 | Response Body | { "id": "8ad0980c93258a450193261aa8d310d2", "autoEmail": false, "autoPost": true, "autoRenewal": false, "billCycleDay": "AllBillCycleDays", "billRunNumber": "BR-00018096", "name": "", "invoiceDate": "2024-11-06", "noEmailForZeroAmountInvoice": false, "status": "Pending", "targetDate": "2024-11-06", "targetDateOffset": null, "invoiceDateOffset": null, "scheduledExecutionTime": null, "createdById": "2c92c0947a182890017a315d00de2c3e", "createdDate": "2024-11-13 07:18:21", "updatedById": "2c92c0947a182890017a315d00de2c3e", "updatedDate": "2024-11-13 07:18:21", "batches": [ "AllBatches" ], "chargeTypeToExclude": null, "billRunFilters": [ { "filterType": "FilterCondition", "accountId": null, "subscriptionId": null, "invoiceScheduleId": null, "invoiceScheduleItemId": null } ], "schedule": null, "invoiceDateMonthOffset": null, "invoiceDateDayOfMonth": null, "targetDateMonthOffset": null, "targetDateDayOfMonth": null, "success": true } |
+| --- | --- |
+
+## Case 4: Bill subscriptions matched the dynamic invoice date
+
+The use case demos Bill subscriptions matched the dynamic invoice date.
+
+Use API
+
+Request Payload:
+
+| Request | POST /v1/bill-runs |
+| --- | --- |
+| Request Body | { "batches": null, "billRunFilters": [ { "filterType": "FilterCondition", "objectType": "Subscription", "condition": { "relation": "and", "conditions": [ { "field": "billRunEffectiveDate__c", "operator": "lte", "value": "{{ InvoiceDate }}" } ] } } ], "autoRenewal": false, "noEmailForZeroAmountInvoice": false, "autoPost": false, "autoEmail": false, "chargeTypeToExclude": [], "billCycleDay": null, "invoiceDate": "2025-06-01", "targetDate": "2025-06-01", "name": "Bill subscriptions matched the dynamic invoice date 2025-06-01" } |
+
+Response Payload:
+
+| Response Body | { "id": "8a90ff929bb9d7c0019bbc7d34ec2c5f", "autoEmail": false, "autoPost": false, "autoRenewal": false, "billCycleDay": "AllBillCycleDays", "billRunNumber": "BR-00007954", "name": "Bill subscriptions matched the dynamic invoice date 2025-06-01", "invoiceDate": "2025-06-01", "noEmailForZeroAmountInvoice": false, "status": "Pending", "targetDate": "2025-06-01", "targetDateOffset": null, "invoiceDateOffset": null, "scheduledExecutionTime": null, "createdById": "e1187a1f28c8487ca6b40c40ffb10853", "createdDate": "2026-01-14 04:31:20", "updatedById": "e1187a1f28c8487ca6b40c40ffb10853", "updatedDate": "2026-01-14 04:31:20", "batches": [ "AllBatches" ], "chargeTypeToExclude": null, "billRunFilters": [ { "filterType": "FilterCondition", "accountId": null, "subscriptionId": null, "invoiceScheduleId": null, "invoiceScheduleItemId": null, "objectType": "Subscription", "condition": { "field": null, "operator": null, "value": null, "conditions": [ { "field": "billRunEffectiveDate__c", "operator": "lte", "value": "{{ InvoiceDate }}", "conditions": [], "relation": null } ], "relation": "and" } } ], "schedule": null, "invoiceDateMonthOffset": null, "invoiceDateDayOfMonth": null, "targetDateMonthOffset": null, "targetDateDayOfMonth": null, "includeSubscriptions": true, "includeOrderLineItems": true, "success": true } |
 | --- | --- |

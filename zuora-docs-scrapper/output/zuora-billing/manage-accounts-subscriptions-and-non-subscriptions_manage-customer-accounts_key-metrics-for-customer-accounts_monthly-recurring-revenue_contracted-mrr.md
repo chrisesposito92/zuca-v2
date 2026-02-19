@@ -2,7 +2,7 @@
 title: "Contracted MRR"
 url: "https://docs.zuora.com/en/zuora-billing/manage-accounts-subscriptions-and-non-subscriptions/manage-customer-accounts/key-metrics-for-customer-accounts/monthly-recurring-revenue/contracted-mrr"
 product: "zuora-billing"
-scraped_at: "2025-12-24T05:15:33.145Z"
+scraped_at: "2026-02-19T03:10:53.268Z"
 ---
 
 # Contracted MRR

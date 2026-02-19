@@ -2,10 +2,12 @@
 title: "Data Warehouse Connectors Object Schema Definition"
 url: "https://docs.zuora.com/en/zuora-platform/integration/integration-hub/zuora-connectors-for-data-warehouses/billing-objects-supported-for-zuora-connectors-for-data-warehouses/data-warehouse-connectors-object-schema-definition"
 product: "zuora-platform"
-scraped_at: "2025-12-24T08:39:17.218Z"
+scraped_at: "2026-02-19T03:31:58.752Z"
 ---
 
 # Data Warehouse Connectors Object Schema Definition
+
+Learn about the schema structure of Zuora's Data Warehouse Connectors and how it facilitates data export to external systems.
 
 Zuora offers multiple ways to export your data to external systems. Understanding the schema structure is key to getting accurate and consistent insights. Zuora’s [Data Warehouse Connectors](/zuora-platform/integration/integration-hub/zuora-connectors-for-data-warehouses/available-connectors) for example Redshift, BigQuery, SQL Server, use a schema modeled after the AQuA schema similar to what's used in AQuA API. This enables a familiar experience when working with your exported data.
 

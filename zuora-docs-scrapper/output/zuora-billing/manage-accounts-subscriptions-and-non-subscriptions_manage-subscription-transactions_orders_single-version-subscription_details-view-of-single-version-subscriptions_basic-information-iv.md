@@ -2,10 +2,12 @@
 title: "Basic Information IV"
 url: "https://docs.zuora.com/en/zuora-billing/manage-accounts-subscriptions-and-non-subscriptions/manage-subscription-transactions/orders/single-version-subscription/details-view-of-single-version-subscriptions/basic-information-iv"
 product: "zuora-billing"
-scraped_at: "2025-12-24T05:29:52.315Z"
+scraped_at: "2026-02-19T03:12:27.888Z"
 ---
 
 # Basic Information IV
+
+This topic provides details on scheduled actions, including cancellation, resumption, and suspension dates for subscriptions.
 
 Scheduled actions information includes:
 

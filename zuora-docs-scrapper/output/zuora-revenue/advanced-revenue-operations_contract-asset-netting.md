@@ -2,10 +2,12 @@
 title: "Contract Asset Netting"
 url: "https://docs.zuora.com/en/zuora-revenue/advanced-revenue-operations/contract-asset-netting"
 product: "zuora-revenue"
-scraped_at: "2025-12-24T04:33:59.437Z"
+scraped_at: "2026-02-19T03:39:42.671Z"
 ---
 
 # Contract Asset Netting
+
+The netting process in Zuora Revenue involves moving over-recognized amounts from contract liability to contract asset, ensuring accurate balance sheet reporting. This process can be executed at the transaction line or application level, with specific system configurations required.
 
 The accounting entries booked in Zuora Revenue are always on the Contract Liability side unless the Right to Bill flag is set to Yes for the line. In this circumstance, for the balance sheet to be correctly reported, the over-recognized amount needs to be moved from contract liability (CL) to contract asset (CA). To accomplish this goal, you must run the netting process in Zuora Revenue. The netting process can be done at two levels:
 
@@ -35,7 +37,7 @@ Note:
 
 -   Setups > Application > Revenue Books
 
-    -   ![clipboard_ee5f04402ec77cecd8a5d0e5ae39ad692.png](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/f38a2a81-8696-40a5-bcdd-6f1deaf7a5c8?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImYzOGEyYTgxLTg2OTYtNDBhNS1iY2RkLTZmMWRlYWY3YTVjOCIsImV4cCI6MTc2NjYzNzIzNywianRpIjoiODZkMzA1OWFlYjZiNGM4MjlkNTU5MmRlMDY0NDJhZWQiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.vbWqmnswpfv5rvPLYd08FWK3xqKSpev0kvrgyLjoWC0)
+    -   ![clipboard_ee5f04402ec77cecd8a5d0e5ae39ad692.png](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/f38a2a81-8696-40a5-bcdd-6f1deaf7a5c8?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImYzOGEyYTgxLTg2OTYtNDBhNS1iY2RkLTZmMWRlYWY3YTVjOCIsImV4cCI6MTc3MTU1ODc3NCwianRpIjoiZWU3MmM1YTcyMWYxNDk3NTgzZGZkZDI3ZTc1MzZhNTgiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.Ub5SLbd2z-F6NASdeaQ1M739Eqm0dbmQGtGylYbitqk)
 
 -   Setups > Application > Accounting Setup > Account Type
 

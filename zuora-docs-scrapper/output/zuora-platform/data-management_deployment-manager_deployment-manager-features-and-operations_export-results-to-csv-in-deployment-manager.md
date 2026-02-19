@@ -2,7 +2,7 @@
 title: "Export  results to CSV in Deployment Manager"
 url: "https://docs.zuora.com/en/zuora-platform/data-management/deployment-manager/deployment-manager-features-and-operations/export-results-to-csv-in-deployment-manager"
 product: "zuora-platform"
-scraped_at: "2026-01-15T21:58:56.377Z"
+scraped_at: "2026-02-19T03:18:23.733Z"
 ---
 
 # Export results to CSV in Deployment Manager

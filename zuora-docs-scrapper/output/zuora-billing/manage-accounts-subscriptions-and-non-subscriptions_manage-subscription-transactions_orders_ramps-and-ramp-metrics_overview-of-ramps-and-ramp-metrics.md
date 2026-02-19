@@ -2,7 +2,7 @@
 title: "Overview of Ramps and Ramp Metrics"
 url: "https://docs.zuora.com/en/zuora-billing/manage-accounts-subscriptions-and-non-subscriptions/manage-subscription-transactions/orders/ramps-and-ramp-metrics/overview-of-ramps-and-ramp-metrics"
 product: "zuora-billing"
-scraped_at: "2025-12-24T05:27:49.881Z"
+scraped_at: "2026-02-19T03:12:14.547Z"
 ---
 
 # Overview of Ramps and Ramp Metrics
@@ -13,7 +13,7 @@ This topic explains about ramp deals, their metrics, and how to manage them usin
 
 A ramp deal is a multi-year deal in which products can vary in price, quantity, or discount over different ramp intervals (time-based periods) or can remain flat for the entire duration of the subscription term. For example, in the diagram below, you can see a ramp deal for a 3-year subscription which has 3 Ramp Intervals. Product A has a different price for each Ramp Interval, Product B shows the same price for all 3 Ramp Intervals, and Product C is only relevant for Ramp Interval 1.
 
-![RampDeal](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/b82b7fc3-b362-4682-85e0-acbd7a4acd56?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImI4MmI3ZmMzLWIzNjItNDY4Mi04NWUwLWFjYmQ3YTRhY2Q1NiIsImV4cCI6MTc2NjY0MDQ2NywianRpIjoiYmM2OWFmMWIzYmFiNDhjZmI5MThlYTY5MDI4YjM5OWYiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.jLUA7-IhxvZ7wQ-t1-dX9bKrTCMGTLQJq1xySbXu-Bk)
+![RampDeal](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/b82b7fc3-b362-4682-85e0-acbd7a4acd56?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImI4MmI3ZmMzLWIzNjItNDY4Mi04NWUwLWFjYmQ3YTRhY2Q1NiIsImV4cCI6MTc3MTU1NzEyOSwianRpIjoiZGExMWVjYWM1MWFiNGRiNGExM2M5MjFhOTNhMDE2MzEiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.oRkvhGi28gW48rSXmqo3KXf0UGSNFrMm5QlU-ZR-HgE)
 
 Ramp deals are supported end-to-end from Zuora CPQ to Zuora Revenue. If you are a CPQ customer, see Manage Ramp Deals for the use cases on how you can create and manage ramp deals in CPQ.
 

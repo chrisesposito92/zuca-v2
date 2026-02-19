@@ -2,7 +2,7 @@
 title: "Callout notification overview"
 url: "https://docs.zuora.com/en/zuora-platform/extensibility/events-and-notifications/notifications/callout-notification-overview"
 product: "zuora-platform"
-scraped_at: "2025-12-24T05:27:09.471Z"
+scraped_at: "2026-02-19T03:25:53.958Z"
 ---
 
 # Callout notification overview
@@ -63,7 +63,7 @@ Zuora uses the HTTP response code to determine whether to retry callouts. Zuora 
 
 Note that if the custom request body of callout notifications is invalid, a `-2000` response code is returned, and Zuora will neither send the callout notification nor retry it. For more information about Custom request entity body, see [Create a callout template](/zuora-platform/extensibility/events-and-notifications/callout-templates/create-a-callout-template).
 
-Additionally, if Confirm success by parsing response content is enabled in callout settings, Zuora retries a callout if the response code is `200` and the response body contains a `success` field that is set to `false`. See [Configure callout settings](/zuora-platform/extensibility/events-and-notifications/configure-callout-settings) for more information.
+Additionally, if Confirm success by parsing response content is enabled in callout templates, Zuora retries a callout if the response code is `200` and the response body contains a `success` field that is set to `false`. See [Create a callout template](/zuora-platform/extensibility/events-and-notifications/callout-templates/create-a-callout-template) for more information.
 
 Note:
 
@@ -92,7 +92,7 @@ The default message sequence for callout notifications with basic authentication
 
 Figure 1.
 
-![Default message sequence for callout notifications with basic authentication](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/918b3287-98b1-4774-af2b-23c5ad7f88fb?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjkxOGIzMjg3LTk4YjEtNDc3NC1hZjJiLTIzYzVhZDdmODhmYiIsImV4cCI6MTc2NjY0MDQyNywianRpIjoiZTdkNTMwOTNlYWFmNDY1OGFkYzE5ODZhNGUyZjk3MzciLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.a7EIG6kYXgnJififlE27iL_aIb_Oa-HtcM_pvU6UWSo)
+![Default message sequence for callout notifications with basic authentication](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/918b3287-98b1-4774-af2b-23c5ad7f88fb?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjkxOGIzMjg3LTk4YjEtNDc3NC1hZjJiLTIzYzVhZDdmODhmYiIsImV4cCI6MTc3MTU1Nzk0OCwianRpIjoiNzUwNDA2NzU5Mzk3NDZlOWI0ZmJlZWUzZDEwMjMxZjEiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.D8InnBKcBoFiAkFnoxsHCQKjPCpQG37Ap7lC6VoxLiY)
 
 If you want Zuora to provide the `Authorization` field in the first HTTP request, enable the Enable Preemptive Authentication setting in the associated callout template. For more information, see [Create a callout template](/zuora-platform/extensibility/events-and-notifications/callout-templates/create-a-callout-template).
 

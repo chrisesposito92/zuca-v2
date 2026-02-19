@@ -2,7 +2,7 @@
 title: "Charge level proration option for a recurring charge"
 url: "https://docs.zuora.com/en/zuora-billing/set-up-zuora-billing/build-product-and-prices/set-up-product-catalog/create-product-rate-plan-charges/charge-level-proration-option-for-a-recurring-charge"
 product: "zuora-billing"
-scraped_at: "2025-12-24T04:48:12.662Z"
+scraped_at: "2026-02-19T03:09:38.536Z"
 ---
 
 # Charge level proration option for a recurring charge

@@ -2,14 +2,20 @@
 title: "Import Usage Data"
 url: "https://docs.zuora.com/en/zuora-billing/bill-your-customer/usage-billing/import-usage-data"
 product: "zuora-billing"
-scraped_at: "2025-12-24T08:28:26.940Z"
+scraped_at: "2026-02-19T03:14:04.246Z"
 ---
 
 # Import Usage Data
 
 Learn how to import usage data through the Zuora UI or APIs, including downloading templates, editing files, and submitting them for processing.
 
-You can add usage data by either importing a file through the Zuora UI or through APIs. To import usage data using the UI:
+You can add usage data by either importing a file through the Zuora UI or through APIs.
+
+Note:
+
+Legacy Billing usage import supports only standard usage charges. If a usage file includes rows that will be associated with a dynamic pricing usage charge, those rows fail validation and are not imported. Usage for dynamic pricing usage charges must be sent through Mediation, which ingests, enriches, and rates the events before they are passed into Billing.
+
+To import usage data using the UI:
 
 1.  Navigate to Billing > Usage in the left-hand navigation section.
 2.  At the upper-right corner of the page, click add usage records.

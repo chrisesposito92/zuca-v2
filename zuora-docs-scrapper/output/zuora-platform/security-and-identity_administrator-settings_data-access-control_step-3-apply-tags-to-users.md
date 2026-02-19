@@ -1,0 +1,20 @@
+---
+title: "Step 3: Apply tags to users"
+url: "https://docs.zuora.com/en/zuora-platform/security-and-identity/administrator-settings/data-access-control/step-3-apply-tags-to-users"
+product: "zuora-platform"
+scraped_at: "2026-02-19T03:20:14.151Z"
+---
+
+# Step 3: Apply tags to users
+
+Learn how to apply tags to users as part of the Data Access Control implementation process.
+
+-   A tag hierarchy has been created. See [Create a tag hierarchy](/zuora-platform/security-and-identity/administrator-settings/data-access-control/step-1-create-a-tag-hierarchy).
+
+-   Tags have been applied to objects. See [Apply tags to objects](/zuora-platform/security-and-identity/administrator-settings/data-access-control/step-2-apply-tags-to-objects).
+
+
+1.  Navigate to .
+2.  Select the user for which you want to apply the tag.
+3.  Click edit. The Data Access Control tag hierarchy you created will display as a drop-down list.
+4.  Click save.

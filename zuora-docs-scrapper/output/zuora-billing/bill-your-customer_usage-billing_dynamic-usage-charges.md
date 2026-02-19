@@ -2,7 +2,7 @@
 title: "Dynamic Usage Charges"
 url: "https://docs.zuora.com/en/zuora-billing/bill-your-customer/usage-billing/dynamic-usage-charges"
 product: "zuora-billing"
-scraped_at: "2025-12-24T08:30:52.405Z"
+scraped_at: "2026-02-19T03:14:20.676Z"
 ---
 
 # Dynamic Usage Charges
@@ -28,7 +28,13 @@ The prerequisites for using a dynamic usage charge are as follows:
 -   There should be a regular usage charge defined in the product catalog.
 
 
-You do not create subscriptions or orders to create a dynamic usage charge. Instead, you create a dynamic usage charge directly from the product catalog by uploading a usage record with a product rate plan charge number specified. You can upload a usage record through the UI or using APIs. For more information, see [Import usage data](/zuora-billing/bill-your-customer/usage-billing/import-usage-data) and [CRUD: Create a usage record](https://developer.zuora.com/v1-api-reference/api/operation/Object_POSTUsage/).
+You do not create subscriptions or orders to create a dynamic usage charge. Instead, you create a dynamic usage charge directly from the product catalog by uploading a usage record with a product rate plan charge number specified.
+
+-   For standard usage charges, you can upload usage records through the Billing UI or usage APIs.
+
+    For more information, see [Import usage data](/zuora-billing/bill-your-customer/usage-billing/import-usage-data) and [CRUD: Create a usage record](https://developer.zuora.com/v1-api-reference/api/operation/Object_POSTUsage/).
+
+-   For dynamic pricing usage charges, usage must be ingested and rated through Mediation. Legacy Billing usage upload methods (UI/CSV import or Usage APIs) do not support sending usage that is associated with a dynamic pricing usage charge and will reject those records.
 
 If a dynamic usage charge of the same product type exists in the account, the uploaded usage record will be guided to the existing dynamic usage charge.
 

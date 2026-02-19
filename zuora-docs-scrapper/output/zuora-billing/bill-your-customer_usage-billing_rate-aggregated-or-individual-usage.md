@@ -2,10 +2,12 @@
 title: "Rate aggregated or individual usage"
 url: "https://docs.zuora.com/en/zuora-billing/bill-your-customer/usage-billing/rate-aggregated-or-individual-usage"
 product: "zuora-billing"
-scraped_at: "2025-12-24T08:28:34.435Z"
+scraped_at: "2026-02-19T03:14:03.331Z"
 ---
 
 # Rate aggregated or individual usage
+
+Learn how to rate usage charges by choosing between aggregated billing period calculations or individual usage record pricing.
 
 When rating usage charges, you can choose whether to calculate a price for usage records in a billing period or for each usage record.
 

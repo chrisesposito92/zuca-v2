@@ -2,10 +2,12 @@
 title: "Data reconciliation between Zuora Billing and Zuora Revenue"
 url: "https://docs.zuora.com/en/zuora-revenue/advanced-revenue-operations/data-reconciliation-between-zuora-billing-and-zuora-revenue"
 product: "zuora-revenue"
-scraped_at: "2025-12-24T04:36:43.275Z"
+scraped_at: "2026-02-19T03:40:14.125Z"
 ---
 
 # Data reconciliation between Zuora Billing and Zuora Revenue
+
+Automate the reconciliation of transaction data between Zuora Billing and Zuora Revenue using specialized reports to identify mismatches and underlying issues efficiently.
 
 Data reconciliation can be a complicated process that usually takes hours of effort to compare transaction data between two systems. To save you from the error-prone and time-consuming reconciliation work, Billing - Revenue Integration offers you the following reports for automated reconciliation:
 

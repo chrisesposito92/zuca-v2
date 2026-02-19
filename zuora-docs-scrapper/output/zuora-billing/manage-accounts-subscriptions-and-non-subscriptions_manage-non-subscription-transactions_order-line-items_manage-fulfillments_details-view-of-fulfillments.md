@@ -2,7 +2,7 @@
 title: "Details view of fulfillments"
 url: "https://docs.zuora.com/en/zuora-billing/manage-accounts-subscriptions-and-non-subscriptions/manage-non-subscription-transactions/order-line-items/manage-fulfillments/details-view-of-fulfillments"
 product: "zuora-billing"
-scraped_at: "2025-12-24T05:39:07.022Z"
+scraped_at: "2026-02-19T03:13:16.846Z"
 ---
 
 # Details view of fulfillments

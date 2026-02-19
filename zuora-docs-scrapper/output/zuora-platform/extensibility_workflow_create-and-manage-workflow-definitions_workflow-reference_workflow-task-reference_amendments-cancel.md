@@ -2,12 +2,14 @@
 title: "Amendments: Cancel"
 url: "https://docs.zuora.com/en/zuora-platform/extensibility/workflow/create-and-manage-workflow-definitions/workflow-reference/workflow-task-reference/amendments-cancel"
 product: "zuora-platform"
-scraped_at: "2025-12-24T05:35:47.417Z"
+scraped_at: "2026-02-19T03:27:25.038Z"
 ---
 
 # Amendments: Cancel
 
-The cancel task cancels an active subscription. The task provides two groups of options based on the set of Zuora APIs being used (SOAP or REST).
+The cancel task terminates an active subscription, offering options for SOAP or REST APIs, and supports credit memo generation if Invoice Settlement is enabled.
+
+The task provides two groups of options based on the set of Zuora APIs being used (SOAP or REST).
 
 For details about canceling a subscription, see [Cancellations](/zuora-billing/manage-accounts-subscriptions-and-non-subscriptions/manage-subscription-transactions/subscribe-and-amend/amend-subscriptions/subscriptions-cancelation/canceling-a-subscription). To learn more about specific data fields, see [Amendment object](/zuora-platform/integration/apis/soap-api/soap-api-object-reference/amendment) for SOAP and [API Reference](https://developer.zuora.com/v1-api-reference/api/operation/PUT_CancelSubscription/) for REST.
 

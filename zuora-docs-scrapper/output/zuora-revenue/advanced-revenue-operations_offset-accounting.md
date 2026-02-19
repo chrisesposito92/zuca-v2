@@ -2,10 +2,12 @@
 title: "Offset accounting"
 url: "https://docs.zuora.com/en/zuora-revenue/advanced-revenue-operations/offset-accounting"
 product: "zuora-revenue"
-scraped_at: "2025-12-24T04:34:02.132Z"
+scraped_at: "2026-02-19T03:39:42.230Z"
 ---
 
 # Offset accounting
+
+Offset accounting in Zuora Revenue involves reclassifying initial accounting entries to Deferred Offset or Revenue Offset accounts during billing, ensuring accurate financial reporting.
 
 Offset accounting usually refers to the cancellation of an accounting entry with an equal but opposite entry. In Zuora Revenue, the initial accounting entries created can be reclassified to either Deferred Offset account or Revenue Offset account for offset accounting. The following general rules apply to offset accounting in Zuora Revenue:
 

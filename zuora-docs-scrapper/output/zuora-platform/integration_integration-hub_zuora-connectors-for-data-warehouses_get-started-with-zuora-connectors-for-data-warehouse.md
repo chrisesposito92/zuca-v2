@@ -2,7 +2,7 @@
 title: "Get started with Zuora Connectors for Data Warehouse"
 url: "https://docs.zuora.com/en/zuora-platform/integration/integration-hub/zuora-connectors-for-data-warehouses/get-started-with-zuora-connectors-for-data-warehouse"
 product: "zuora-platform"
-scraped_at: "2025-12-24T08:39:10.145Z"
+scraped_at: "2026-02-19T03:31:58.335Z"
 ---
 
 # Get started with Zuora Connectors for Data Warehouse
@@ -45,4 +45,4 @@ Your data could be located in any one of the following locations:
 
 ## Data refresh rate
 
-The connector refreshes data every 24 hours.
+The connector supports latency options 12 and 24 hours.

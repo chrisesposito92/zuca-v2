@@ -2,10 +2,12 @@
 title: "Reporting summarization"
 url: "https://docs.zuora.com/en/zuora-revenue/month-end-process/reports/reporting-summarization"
 product: "zuora-revenue"
-scraped_at: "2025-12-24T04:28:09.416Z"
+scraped_at: "2026-02-19T03:38:27.358Z"
 ---
 
 # Reporting summarization
+
+Zuora Revenue's reporting functionality relies on summarization processes to generate accurate reports from aggregated transaction data. Understanding and executing the correct summarization programs at appropriate times is essential for accurate reporting.
 
 Reporting is one of the most important functionalities in Zuora Revenue. As a revenue user, a lot of reporting and reconciliation work is involved in their daily accounting practices. In Zuora Revenue, the reporting framework is closely related to the predefined summarization programs. It is because most reports are generated based on summarized data rather than the raw transaction data. For reports to be generated with correct data, you must know which summarization program is to be started and when is the best time to start summarization before you run the reports.
 

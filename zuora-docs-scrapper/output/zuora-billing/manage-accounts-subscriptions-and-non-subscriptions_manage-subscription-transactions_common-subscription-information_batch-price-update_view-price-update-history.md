@@ -2,16 +2,14 @@
 title: "View price update history"
 url: "https://docs.zuora.com/en/zuora-billing/manage-accounts-subscriptions-and-non-subscriptions/manage-subscription-transactions/common-subscription-information/batch-price-update/view-price-update-history"
 product: "zuora-billing"
-scraped_at: "2026-01-15T21:56:01.855Z"
+scraped_at: "2026-02-19T03:11:07.846Z"
 ---
 
 # View price update history
 
-This topic explains how to view the history of batch price updates, including execution dates, charge names, and status details.
+This task topic explains how to view the history of batch price updates, including execution dates, charge names, and status details.
 
 This section retains temporary information lasting 90 days in the production environment but 45 days in the sandbox environment.
-
-To view Batch Price Update history:
 
 1.  Click the Batch Price Update drop-down button on the Subscriptions page.
 2.  Select View Batch History to open the Price Update History page.

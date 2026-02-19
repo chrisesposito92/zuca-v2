@@ -2,10 +2,12 @@
 title: "Calculate SSP with Analyzer"
 url: "https://docs.zuora.com/en/zuora-revenue/day-to-day-operation/calculate-ssp-with-analyzer"
 product: "zuora-revenue"
-scraped_at: "2025-12-24T04:31:20.705Z"
+scraped_at: "2026-02-19T03:39:10.102Z"
 ---
 
 # Calculate SSP with Analyzer
+
+The SSP Analyzer in Zuora Revenue uses historical transaction data to determine the SSP for goods and services when direct upload is unavailable.
 
 If the SSP is not available to be directly uploaded to Zuora Revenue, the SSP Analyzer is provided to use the historical transaction data that you uploaded to Zuora Revenue to determine the SSP for your goods and services.
 

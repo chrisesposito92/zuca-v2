@@ -2,7 +2,7 @@
 title: "Associate event with POB template"
 url: "https://docs.zuora.com/en/zuora-revenue/data-management/event-processing/associate-event-with-pob-template"
 product: "zuora-revenue"
-scraped_at: "2025-12-24T04:26:37.621Z"
+scraped_at: "2026-02-19T03:38:10.254Z"
 ---
 
 # Associate event with POB template
@@ -20,11 +20,9 @@ A revenue event or cost event must be associated with a POB template before the 
 
 Make sure that the revenue or cost event type is defined in Zuora Revenue. For more information about how to define a revenue or cost event, see [Event setup](/zuora-revenue/data-management/event-processing/event-setup) .
 
-It is assumed that target POB template has been created in Zuora Revenue in the following procedure. If the POB template with which you want to associate the event, create the POB template. For more information, see [Create POB template](/db/organizations/zuora/repositories/prod-sitemap/content/documents/external_publications/revenue/A_get_started/topics/create_pob_template.dita) .
+It is assumed that target POB template has been created in Zuora Revenue in the following procedure. If the POB template with which you want to associate the event, create the POB template. For more information, see [Create POB template](/zuora-revenue/getting-started/policy-management/performance-obligations-processing/create-pob-template) .
 
 ## Procedure
-
-Complete the following steps to associate an event with a POB template:
 
 1.  Navigate to Policies > Performance Obligations.
 

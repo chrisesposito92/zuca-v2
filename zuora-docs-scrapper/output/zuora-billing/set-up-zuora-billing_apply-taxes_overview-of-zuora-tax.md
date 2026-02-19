@@ -2,7 +2,7 @@
 title: "Overview of Zuora Tax"
 url: "https://docs.zuora.com/en/zuora-billing/set-up-zuora-billing/apply-taxes/overview-of-zuora-tax"
 product: "zuora-billing"
-scraped_at: "2025-12-24T05:05:32.308Z"
+scraped_at: "2026-02-19T03:09:59.076Z"
 ---
 
 # Overview of Zuora Tax

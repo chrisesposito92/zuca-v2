@@ -2,7 +2,7 @@
 title: "Set up vertex advantage tax app v2"
 url: "https://docs.zuora.com/en/zuora-billing/set-up-zuora-billing/apply-taxes/configurable-tax-apps/direct-integration-tax-apps/vertex-advantage-tax-app-v2/set-up-vertex-advantage-tax-app-v2"
 product: "zuora-billing"
-scraped_at: "2025-12-24T05:06:33.572Z"
+scraped_at: "2026-02-19T03:10:20.312Z"
 ---
 
 # Set up vertex advantage tax app v2
@@ -22,7 +22,16 @@ Follow these steps to streamline your tax compliance process:
         2.  Authentication Type - The type of authentication required. To integrate with Vertex Advantage, use your tax vendor account credentials (Username and Password) for Private Token authentication. Access your dashboard and uncover the hidden private token to obtain API tokens.
 
 
-    5.  Enter the following in the Company and Seller Information section:
+    5.  In the General Settings section, select a value from the Void Call Handling drop-down list. This setting specifies how Zuora handles calls to the tax vendor when a transaction (such as an invoice or credit memo) is voided. The supported options are:
+
+        -   Enable (default) - Allows Zuora to send a void request to the tax vendor. The tax vendor either processes the void or returns an error. Select this option if you want full synchronization between Zuora and the tax vendor when transactions are voided.
+
+        -   Pass Through - Allows the void operation to proceed in Zuora without sending a void request to the tax vendor. Select this option if you want to void transactions in Zuora without impacting tax records in the external tax system.
+
+        -   Block - Prevents the void operation from proceeding and returns an error. Select this option if you want to prevent voiding transactions that have already been reported to the tax vendor.
+
+
+    6.  Enter the following in the Company and Seller Information section:
 
         1.  Company Code - A unique identifier for the company in the AvaTax system, used to link billing information to the appropriate business entity. This field is critical for ensuring the correct company is referenced in tax calculations.
 
@@ -31,7 +40,7 @@ Follow these steps to streamline your tax compliance process:
         3.  Add Company \- The option to add new company details.
 
 
-    6.  Toggle to enable Advanced Settings and adjust the settings.
+    7.  Toggle to enable Advanced Settings and adjust the settings.
 
         | Field | Description |
         | --- | --- |
@@ -41,7 +50,7 @@ Follow these steps to streamline your tax compliance process:
         | Network: TimeoutNet Read Timeout | The timeout period for tax requests. The available options are 1 minute, 2 minutes, 5 minutes, and 10 minutes. |
         | Request Headers | Additional headers to tax requests are beneficial in scenarios requiring authentication through firewalls or other specific cases. |
 
-    7.  Click Save .
+    8.  Click Save .
 2.  Create and Activate Tax Code:
     1.  To do this, follow the steps in Set Up Tax Codes - Zuora.
 3.  Associate Product Rate Plan Charge with Tax Code

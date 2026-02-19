@@ -2,10 +2,12 @@
 title: "Transaction processing"
 url: "https://docs.zuora.com/en/zuora-revenue/data-management/transaction-processing"
 product: "zuora-revenue"
-scraped_at: "2025-12-24T04:25:26.274Z"
+scraped_at: "2026-02-19T03:37:57.822Z"
 ---
 
 # Transaction processing
+
+Transaction processing in Zuora Revenue is crucial for managing revenue workflows, whether integrated with upstream systems or requiring manual data uploads.
 
 In Zuora Revenue, transaction processing is a very critical process and the starting point in the revenue management workflow. If Zuora Revenue is not integrated with any upstream system, you will have to manually update transaction lines as data files to Zuora Revenue for processing. If Zuora Revenue is integrated with the upstream system, you might skip the manual transaction upload. However, it is important for you to understand the accounting behaviors after the supported types of transactions are collected in Zuora Revenue.
 

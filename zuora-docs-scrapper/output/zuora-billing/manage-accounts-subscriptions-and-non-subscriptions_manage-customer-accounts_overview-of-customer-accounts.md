@@ -2,7 +2,7 @@
 title: "Overview of customer accounts"
 url: "https://docs.zuora.com/en/zuora-billing/manage-accounts-subscriptions-and-non-subscriptions/manage-customer-accounts/overview-of-customer-accounts"
 product: "zuora-billing"
-scraped_at: "2025-12-24T05:14:29.341Z"
+scraped_at: "2026-02-19T03:10:53.025Z"
 ---
 
 # Overview of customer accounts

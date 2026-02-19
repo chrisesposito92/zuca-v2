@@ -2,7 +2,7 @@
 title: "Supported countries"
 url: "https://docs.zuora.com/en/zuora-billing/bill-your-customer/leverage-advanced-capabilities/e-invoicing/e-invoicing-with-sovos/supported-countries"
 product: "zuora-billing"
-scraped_at: "2025-12-24T08:40:06.708Z"
+scraped_at: "2026-02-19T03:14:33.939Z"
 ---
 
 # Supported countries
@@ -22,11 +22,12 @@ The following table lists all pre-integrated countries:
 
 | Country | Default e-invoicing file template for Invoice | Default e-invoicing file template for Credit Memo | Default e-invoicing file template for Debit Memo | Country specific configurations |
 | --- | --- | --- | --- | --- |
-| India | Yes | Yes | Yes | See Country-specific configurations for India |
-| Italy | Yes | Yes | Yes | See Country-specific configurations for Italy |
-| Saudi Arabia | Yes | Yes | Yes | See Country-specific configurations for Saudi Arabia |
-| Mexico | Yes | Yes | Yes | See Country-specific configurations Sovos for Mexico |
-| Brazil | Yes | Yes | Yes | See Country-specific configurations Sovos for Brazil |
+| India | Yes | Yes | Yes | See Country-specific configurations in Sovos for India |
+| Italy | Yes | Yes | Yes | See Country-specific configurations in Sovos for Italy |
+| Saudi Arabia | Yes | Yes | Yes | See Country-specific configurations in Sovos for Saudi Arabia |
+| Mexico | Yes | Yes | Yes | See Country-specific configurations in Sovos for Mexico |
+| Brazil | Yes | Yes | Yes | See Country-specific configurations in Sovos for Brazil |
+| Poland | Yes | Yes | Yes | See Country-specific configurations in Sovos for Poland |
 
 You can issue e-invoices in any country supported by Sovos, even if it is not pre-integrated with Zuora.
 

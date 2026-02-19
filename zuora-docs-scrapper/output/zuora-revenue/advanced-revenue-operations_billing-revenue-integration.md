@@ -2,14 +2,14 @@
 title: "Billing - Revenue Integration"
 url: "https://docs.zuora.com/en/zuora-revenue/advanced-revenue-operations/billing---revenue-integration"
 product: "zuora-revenue"
-scraped_at: "2025-12-24T04:35:52.291Z"
+scraped_at: "2026-02-19T03:39:57.923Z"
 ---
 
 # Billing - Revenue Integration
 
 Zuora Billing and Revenue integration offers seamless data exchange and synchronization, enhancing the user experience by providing a unified solution.
 
-One of the biggest benefits of using both Zuora Billing and Zuora Revenue together is that they are seamlessly integrated. Zuora’s Billing and Revenue integration allows seamless data exchange and synchronization between the two modules. For more information about Revenue-Billing integration, see Overview of Billing - Revenue integration enablement. and Billing - Revenue Integration infrastructure overview .
+One of the biggest benefits of using both Zuora Billing and Zuora Revenue together is that they are seamlessly integrated. Zuora’s Billing and Revenue integration allows seamless data exchange and synchronization between the two modules. For more information about Revenue-Billing integration, see [Overview of Billing - Revenue integration enablement.](/zuora-revenue/advanced-revenue-operations/billing---revenue-integration/overview-of-billing---revenue-integration-enablement) and [Billing - Revenue Integration infrastructure overview](/zuora-revenue/advanced-revenue-operations/billing---revenue-integration-infrastructure-overview) .
 
 Note:
 

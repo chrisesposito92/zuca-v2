@@ -2,14 +2,14 @@
 title: "Mediation overview"
 url: "https://docs.zuora.com/en/zuora-platform/extensibility/mediation/mediation-overview"
 product: "zuora-platform"
-scraped_at: "2025-12-24T05:28:10.197Z"
+scraped_at: "2026-02-19T03:26:07.931Z"
 ---
 
 # Mediation overview
 
 Mediation simplifies the loading of service consumption events into Zuora by automating data processing steps, enabling effortless, reliable, and cost-effective consumption-based billing.
 
-Mediation is a feature designed to simplify loading of service consumption events into Zuora. With Mediation, you can create Meters that automate a set of data processing steps that otherwise need to be performed manually and repetitively, resulting in metrics that can easily be rated and billed for. This documentation describes how to define events and run meters in Mediation.
+With Mediation, you can create Meters that automate a set of data processing steps that otherwise need to be performed manually and repetitively, resulting in metrics that can easily be rated and billed for. This documentation describes how to define events and run meters in Mediation.
 
 Customers send millions of usage records monthly and align them all to Zuora IDs. Customers can only create usage by creating a usage record, and all such records are intended to be a billable event. Mediation allows customers to load data in their format that represents their service usage/events seamlessly into Zuora.
 
@@ -26,7 +26,7 @@ To load data into the Zuora system:
 
 Mediation is placed in the left navigation panel in the Zuora UI.
 
-![Mediation option in the Zuora UI](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/1f0e152a-3e35-497e-aafe-8ea57e4e0d65?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjFmMGUxNTJhLTNlMzUtNDk3ZS1hYWZlLThlYTU3ZTRlMGQ2NSIsImV4cCI6MTc2NjY0MDQ4OCwianRpIjoiZmQ1NjRlZmJmYjQ1NDZjZjgxNWRkOTdkMjNmZTE1MzMiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.SLEmjaDLcPkoWl6d5G6u3_dCY31ifmY86hszM_rL3fw)
+![Mediation option in the Zuora UI](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/1f0e152a-3e35-497e-aafe-8ea57e4e0d65?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjFmMGUxNTJhLTNlMzUtNDk3ZS1hYWZlLThlYTU3ZTRlMGQ2NSIsImV4cCI6MTc3MTU1Nzk2MywianRpIjoiMWQ5NWQwZWU1MzA2NDgzNWJjYzU2ZjcxMjhjZmNhYzciLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.iOsPi-w7bA_YMpxIz4Yd83ZozcLCeKRsEKVUcpTR0BM)
 
 ## Mediation user personas
 

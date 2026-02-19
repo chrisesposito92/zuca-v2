@@ -2,7 +2,7 @@
 title: "Manual journal entries"
 url: "https://docs.zuora.com/en/zuora-revenue/month-end-process/manual-journal-entries"
 product: "zuora-revenue"
-scraped_at: "2025-12-24T04:29:10.691Z"
+scraped_at: "2026-02-19T03:38:16.755Z"
 ---
 
 # Manual journal entries
@@ -15,4 +15,6 @@ In Zuora Revenue, you must complete certain setups before revenue can be release
 
 For information about how to upload MJE to Zuora Revenue, see [MJE upload](/zuora-revenue/month-end-process/manual-journal-entries/mje-upload). For information about how to fix the data validation errors for an MJE upload, see [MJE validation error messages](/zuora-revenue/month-end-process/manual-journal-entries/mje-validation-error-messages) .
 
-After MJE is successfully uploaded, you can approve or reject the MJE. When MJE schedules are created, you can also review or reverse the MJE. For more information, see [Approve or reject MJE](/zuora-revenue/month-end-process/manual-journal-entries/approve-or-reject-mje).
+After MJE is successfully uploaded, you can approve or reject the MJE. When MJE schedules are created, you can also review or reverse the MJE. For more information, see [Approve or reject MJE](/zuora-revenue/month-end-process/manual-journal-entries/mje-approval-process).
+
+A Revenue Contract–linked MJE associates a journal entry with an existing Revenue Contract without linking it to a specific contract line. For more information, see [Manual Journal Entry (MJE) Linkage options](/zuora-revenue/month-end-process/manual-journal-entries/manual-journal-entry-linkage-options).

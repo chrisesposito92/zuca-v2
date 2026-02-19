@@ -2,7 +2,7 @@
 title: "Zuora Revenue data object model"
 url: "https://docs.zuora.com/en/zuora-revenue/month-end-process/zuora-revenue-data-object-model"
 product: "zuora-revenue"
-scraped_at: "2025-12-24T04:29:51.480Z"
+scraped_at: "2026-02-19T03:38:56.317Z"
 ---
 
 # Zuora Revenue data object model
@@ -13,7 +13,7 @@ Workflow data model bundles all the revenue data, which can be extracted as the 
 
 ## Revenue object data model
 
-The following diagram is a high-level view of how key data objects are related to one another within Zuora Revenue. ![Revenue Data object model.png](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/0e31877e-68d1-4015-b8e2-3ac64b40adc9?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjBlMzE4NzdlLTY4ZDEtNDAxNS1iOGUyLTNhYzY0YjQwYWRjOSIsImV4cCI6MTc2NjYzNjk4OSwianRpIjoiYzAwMmY3OTNkM2FiNGJhYjljYTZjZTJiMzU5NzZkOTIiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.bBchMJBbqSs2xwAwSfeJouPXhOB1uChg3GGdxxLDJnI)
+The following diagram is a high-level view of how key data objects are related to one another within Zuora Revenue. ![Revenue Data object model.png](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/0e31877e-68d1-4015-b8e2-3ac64b40adc9?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjBlMzE4NzdlLTY4ZDEtNDAxNS1iOGUyLTNhYzY0YjQwYWRjOSIsImV4cCI6MTc3MTU1ODczMSwianRpIjoiM2JmNGY5M2M5ZmY0NGU4YWJlYTFkNjc1NjUxZTRhM2EiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.vQE2O5ax5ED6uV_FElgiIHegm_HNwyeuCWYo9eYSD6s)
 
 ## Revenue objects and descriptions
 
@@ -63,7 +63,7 @@ The following objects are present in the data model. Click the name of each obje
 
 [RCROLLFORWARDDETAILS](/zuora-revenue/month-end-process/zuora-revenue-data-object-model/revenuecontractrollforward-object) - Use this object to access the Roll forward report directly from your data warehouse.
 
-Note: The [Revenue Objects Data Dictionary](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/426d1a47-5b5e-426b-be34-53bacc66ff5a?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjQyNmQxYTQ3LTViNWUtNDI2Yi1iZTM0LTUzYmFjYzY2ZmY1YSIsImV4cCI6MTc2NjYzNjk4OSwianRpIjoiODM1MTU3MDZkODk5NDBlN2FiOWU5Y2E3YTExZDRiNmEiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.R7FdnzknPkvvMsQCCY6g4ZqDeKqL2cIb_g3CrVXQKjY&response-content-disposition=attachment%3B+filename%3D%22Revenue_Objects_Data_Dictionary.xlsx%22) provides you with the following information:
+Note: The [Revenue Objects Data Dictionary](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/426d1a47-5b5e-426b-be34-53bacc66ff5a?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjQyNmQxYTQ3LTViNWUtNDI2Yi1iZTM0LTUzYmFjYzY2ZmY1YSIsImV4cCI6MTc3MTU1ODczMSwianRpIjoiNTAxNWNmNmQyMWY2NGRjZTk3OTk2YmNmODI4OWM4YWUiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.Ehfu7lLHPfhdKWxL0W6SKtTkjpzdtKyUZtV0NuOi8Sw&response-content-disposition=attachment%3B+filename%3D%22Revenue_Objects_Data_Dictionary.xlsx%22) provides you with the following information:
 
 -   Object and field level details between Revenue Objects and BI Views Object to help you transition from BI View Objects to the new Revenue Object Model.
 -   Field-level definitions of revenue objects.

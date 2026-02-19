@@ -2,7 +2,7 @@
 title: "Procedure: Unapply credit memos from invoices and debit memos"
 url: "https://docs.zuora.com/en/zuora-billing/bill-your-customer/invoice-settlement/credit-memos-and-debit-memos/management-of-debit-and-credit-memos/unapply-credit-memos-from-invoices-and-debit-memos/procedure-unapply-credit-memos-from-invoices-and-debit-memos"
 product: "zuora-billing"
-scraped_at: "2025-12-24T08:35:02.163Z"
+scraped_at: "2026-02-19T03:14:20.400Z"
 ---
 
 # Procedure: Unapply credit memos from invoices and debit memos
@@ -15,14 +15,14 @@ To unapply a credit memo through the Zuora UI, complete the following steps.
 
 1.  Navigate to Billing > Credit and Debit Memos in the left-hand navigation.
 2.  On the Credit and Debit Memos page, click the target memo number in the Credit Memo tab. The credit memo detail page opens.
-3.  Click the more actions icon on the right, and then click Unapply This Credit Memo .
-4.  In the Effective Date field, specify when the unapply operation takes effect. The default value of the effective date is today's date.
+3.  Click the more actions icon on the right, and then click Unapply This Credit Memo.
+4.  In the Effective Date field, specify when the unapply operation takes effect. The default value of the effective date is latest credit memo application's effective date.
 
     Note:
 
     The following validation takes place at the system level on the effective date:
 
-    The effective date fed by the customer should be greater than or equal to the maximum value of Refund application effective date and Payment application effective date.
+    The effective date fed by the customer should be greater than or equal to the maximum value of Refund application effective date and Credit Memo application effective date.
 
 5.  If you want to unapply all the amount of this memo from the invoices and debit memos, select the Unapply from all check box.
 6.  In the Apply Credit Memo section, select the invoices and debit memos you want to unapply.

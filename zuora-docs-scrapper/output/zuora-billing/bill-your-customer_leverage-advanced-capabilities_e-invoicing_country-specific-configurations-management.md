@@ -2,7 +2,7 @@
 title: "Country-specific configurations management"
 url: "https://docs.zuora.com/en/zuora-billing/bill-your-customer/leverage-advanced-capabilities/e-invoicing/country-specific-configurations-management"
 product: "zuora-billing"
-scraped_at: "2026-01-15T21:56:34.765Z"
+scraped_at: "2026-02-19T03:14:34.020Z"
 ---
 
 # Country-specific configurations management
@@ -14,9 +14,12 @@ Except common e-invoicing configurations including configuring service providers
 The following country-specific configurations are classified for different service providers. These countries are countries Zuora pre-integrated for corresponding service providers.
 
 -   Sovos:
-    -   [Country-specific configurations for India](/zuora-billing/bill-your-customer/leverage-advanced-capabilities/e-invoicing/country-specific-configurations-management/country-specific-configurations-for-india)
-    -   [Country-specific configurations for Italy](/zuora-billing/bill-your-customer/leverage-advanced-capabilities/e-invoicing/country-specific-configurations-management/country-specific-configurations-for-italy)
-    -   [Country-specific configurations for Saudi Arabia](/zuora-billing/bill-your-customer/leverage-advanced-capabilities/e-invoicing/country-specific-configurations-management/country-specific-configurations-for-saudi-arabia)
+    -   [Country-specific configurations in Sovos for India](/zuora-billing/bill-your-customer/leverage-advanced-capabilities/e-invoicing/country-specific-configurations-management/country-specific-configurations-in-sovos-for-india)
+    -   [Country-specific configurations in Sovos for Italy](/zuora-billing/bill-your-customer/leverage-advanced-capabilities/e-invoicing/country-specific-configurations-management/country-specific-configurations-in-sovos-for-italy)
+    -   [Country-specific configurations in Sovos for Saudi Arabia](/zuora-billing/bill-your-customer/leverage-advanced-capabilities/e-invoicing/country-specific-configurations-management/country-specific-configurations-in-sovos-for-saudi-arabia)
+    -   [Country-specific configurations in Sovos for Mexico](/zuora-billing/bill-your-customer/leverage-advanced-capabilities/e-invoicing/country-specific-configurations-management/country-specific-configurations-in-sovos-for-mexico)
+    -   [Country-specific configurations in Sovos for Brazil](/zuora-billing/bill-your-customer/leverage-advanced-capabilities/e-invoicing/country-specific-configurations-management/country-specific-configurations-in-sovos-for-brazil)
+    -   [Country-specific configurations in Sovos for Poland](/zuora-billing/bill-your-customer/leverage-advanced-capabilities/e-invoicing/country-specific-configurations-management/country-specific-configurations-in-sovos-for-poland)
 -   Avalara:
-    -   [Country-specific configurations for Mexico](/zuora-billing/bill-your-customer/leverage-advanced-capabilities/e-invoicing/country-specific-configurations-management/country-specific-configurations-for-mexico)
-    -   [Country-specific configurations for Australia](/zuora-billing/bill-your-customer/leverage-advanced-capabilities/e-invoicing/country-specific-configurations-management/country-specific-configurations-for-australia)
+    -   [Country-specific configurations in Avalara for Mexico](/zuora-billing/bill-your-customer/leverage-advanced-capabilities/e-invoicing/country-specific-configurations-management/country-specific-configurations-in-avalara-for-mexico)
+    -   [Country-specific configurations in Avalara for Australia](/zuora-billing/bill-your-customer/leverage-advanced-capabilities/e-invoicing/country-specific-configurations-management/country-specific-configurations-in-avalara-for-australia)

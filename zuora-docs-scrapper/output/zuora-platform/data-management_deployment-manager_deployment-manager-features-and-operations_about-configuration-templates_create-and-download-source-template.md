@@ -2,7 +2,7 @@
 title: "Create and download source template"
 url: "https://docs.zuora.com/en/zuora-platform/data-management/deployment-manager/deployment-manager-features-and-operations/about-configuration-templates/create-and-download-source-template"
 product: "zuora-platform"
-scraped_at: "2026-01-15T21:58:41.445Z"
+scraped_at: "2026-02-19T03:18:09.072Z"
 ---
 
 # Create and download source template

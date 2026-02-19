@@ -1,0 +1,20 @@
+---
+title: "Central sandbox and Developer sandbox refresh"
+url: "https://docs.zuora.com/en/zuora-platform/security-and-identity/oneid/access-zuora-tenants-through-the-oneid-portal/central-sandbox-and-developer-sandbox-refresh"
+product: "zuora-platform"
+scraped_at: "2026-02-19T03:20:45.506Z"
+---
+
+# Central sandbox and Developer sandbox refresh
+
+This topic explains how to access and perform administrative actions in the central and developer sandbox environments post-refresh, following integration with Zuora OneID.
+
+This section explains the changes to user access in the central sandbox (CSBX) and developer sandbox (DSBX) environments post refresh process after integrating with Zuora OneID. It outlines how the CSBX refresh process affects user accounts, access roles, and administrative actions in various scenarios. Key differences between behavior before and after OneID implementation are highlighted to guide administrators in managing user access effectively.
+
+| Use Case | Central Sandbox refresh process | Before OneID | With OneID | Admin actions |
+| --- | --- | --- | --- | --- |
+| Users have access to the Production Tenant but don't have access to CSBX | The refresh process will copy the user accounts from the Production tenant and will create those user accounts in the CSBX tenants as new accounts. Existing user accounts in CSBX will be erased. | New user accounts will be created in the CSBX tenants for the production users. | Users who had access to only the Production tenants in OneID now will also have access to the CSBX tenants, with the role defined in the Production tenant. The users will see a new tile for the CSBX in the MyApps page.Direct Tenant Access: Admins can turn-off the toggle in the user details page in OneID to remove the access for the CSBX tenant.Group provisioning mode: This will have no impact, users won’t see the CSBX tile in the MyApps page. But the user account will still be in active state in the CSBX tenant as a result of the refresh process. | Direct Tenant Access: Turn off the toggle in OneID user details page to revoke CSBX access.Group Provisioning Mode:No changes required.Users won’t see the CSBX tile in MyApps, but their accounts in CSBX remain active. |
+| Users have access to only CSBX but not to the Production tenant. | The refresh process will erase all the existing user accounts in the CSBX. | Users will lose access to the CSBX tenants, and the Admin has to create all the user accounts again locally in the CSBX tenant. | Admins have to update the access for the impacted users in OneID.Direct Tenant Access: Admins must turn-on the toggle in the user details page in OneID to give the access again for the CSBX tenant.Group provisioning mode: Admins have to sync the Group again to give access again to the CSBX tenant for the impacted users. | Direct Tenant Access: Turn on the toggle in OneID user details page to re-enable CSBX access.Group Provisioning Mode: Re-sync the group to restore CSBX access for impacted users. |
+| Users have access to both Production and the CSBX tenants but assigned with different Billing roles | The existing user accounts will be erased, and the user accounts from Production tenants will be copied to the CSBX, along with the roles designed in the Production tenant. | Users’ roles will be changed according to the role defined in the Production tenant, Admin has to update the roles manually for the users locally in the CSBX tenant. | No change required, when the users click on the CSBX tile in the MyApps page, automatically their role will be reset in the CSBX that’s defined in OneID. | Direct Tenant Access: No action required. When users click the CSBX tile in MyApps, their roles align automatically with those defined in OneID.Group Provisioning Mode: No additional action needed; roles sync automatically. |
+
+To understand more on the data being scrubbed from the central sandbox and developer sandbox, see [Zuora Billing testing environments](/basics/environments/zuora-billing-testing-environments)

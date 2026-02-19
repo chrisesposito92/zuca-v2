@@ -2,10 +2,12 @@
 title: "Predefined data tables for credit memos"
 url: "https://docs.zuora.com/en/zuora-billing/bill-your-customer/billing-document-templates-configuration/configure-html-templates-for-billing-documents/additional-resources-on-html-templates/predefined-data-tables-for-credit-memos"
 product: "zuora-billing"
-scraped_at: "2025-12-24T05:44:32.973Z"
+scraped_at: "2026-02-19T03:13:17.600Z"
 ---
 
 # Predefined data tables for credit memos
+
+An overview of predefined data tables for credit memos, including details on the Credit Memo Details and Tax Summary components
 
 The online HTML template editor provides the Credit Memo Details and Tax Summary component with predefined data tables for credit memos.
 

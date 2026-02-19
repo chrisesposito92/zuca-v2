@@ -2,14 +2,14 @@
 title: "Manage billing document configuration"
 url: "https://docs.zuora.com/en/zuora-billing/set-up-zuora-billing/billing-settings-configuration/billing-document-settings/manage-billing-document-configuration"
 product: "zuora-billing"
-scraped_at: "2025-12-24T05:05:11.966Z"
+scraped_at: "2026-02-19T03:09:59.402Z"
 ---
 
 # Manage billing document configuration
 
 Zuora allows you to configure the automatic generation of billing document files, including invoices, credit memos, and debit memos, through the Zuora UI.
 
-Zuora offers the ability to configure whether to automatically generate files for billing documents through the Zuora UI. Billing documents include invoices, credit memos, and debit memos. Credit and debit memos are available only if you have the Invoice Settlement feature enabled.
+Zuora offers the ability to configure whether to automatically generate files for billing documents through the Zuora UI. Billing documents include invoices, credit memos, and debit memos. Credit and debit memos are available only if you have the [Invoice Settlement](/zuora-billing/bill-your-customer/invoice-settlement/get-started-with-invoice-settlement/get-started-with-invoice-settlement/invoice-settlement-overview) feature enabled.
 
 1.  Navigate to .
 
@@ -22,9 +22,7 @@ Zuora offers the ability to configure whether to automatically generate files fo
 
         By default, this check box is selected, indicating Zuora generates files for billing documents.
 
-        Note:
-
-        If the function of automatically generate files for billing documents is enabled, you can easily create and manage your billing document templates. The billing document templates are used to generate PDF invoices for your bills. You can also customize the format of the numbers for billing documents.
+        Note: If the function of automatically generate files for billing documents is enabled, you can easily create and manage your billing document templates. The billing document templates are used to generate PDF invoices for your bills. You can also customize the format of the numbers for billing documents.
 
         If you want to configure specifically when PDFs are generated, then there are 3 cases that you can select:
 
@@ -36,9 +34,9 @@ Zuora offers the ability to configure whether to automatically generate files fo
 
         -   Auto-generate PDF for draft billing documents — When disabled, PDFs will not be automatically generated for all billing documents that are created or in Draft status. However, you can manually trigger regeneration from the UI or API to generate PDFs for billing documents in Draft status. When enabled, this field automatically generates PDFs for all billing documents that are created or in Draft status. However, it is visible only when the Allow PDF generation for draft billing documents option is enabled.
 
-        -   Allow PDF generation for billing documents being posted — When the setting is enabled, PDF generation occurs automatically. However, if the setting is disabled, PDFs will not be generated automatically when billing documents move to the Posted status. Nevertheless, you can manually generate PDFs through the UI, API, or Email, regardless of the status of the settings, even when the billing document is in the Posted status.
+        -   Auto Generate PDF for billing documents being posted — When the setting is enabled, PDF generation occurs automatically. However, if the setting is disabled, PDFs will not be generated automatically when billing documents move to the Posted status. Nevertheless, you can manually generate PDFs through the UI, API, or Email, regardless of the status of the settings, even when the billing document is in the Posted status.
 
-        -   Allow PDF generation for billing documents when Payments and Refunds are applied — This setting serves multiple purposes; one involves the background generation of PDFs, and the other involves triggering the UI via the View PDF via UI button. You can configure the setting to one of the following:
+        -   Allow PDF generation for posted billing documents — This setting serves multiple purposes; one involves the background generation of PDFs, and the other involves triggering the UI via the View PDF via UI button. You can configure the setting to one of the following:
 
             -   When this setting is enabled, accessing the PDF through the user interface will trigger its generation if it's not already available.
 
@@ -51,7 +49,7 @@ Zuora offers the ability to configure whether to automatically generate files fo
 
         The following table lists the expected behaviours upon trigger events after automatically generating files for billing documents is enabled. Each column operates on the assumption that enabling one sub-configuration automatically disables the others.
 
-        | Triggers | When:Enable Billing Document Generation = True and Allow PDF generation for draft billing documents = true Is the PDF file generated? (Yes/No) | When:Enable Billing Document Generation = True and Allow PDF generation for billing documents being posted = true Is the PDF file generated? (Yes/No) | When:Enable BillingDocument Generation= True and Allow PDFgeneration forbilling documentswhen Payments,Refunds, etc. areapplied = true Isthe PDF filegenerated? (Yes/No) |
+        | Triggers | When:Enable Billing Document Generation = True and Allow PDF generation for draft billing documents = true Is the PDF file generated? (Yes/No) | When:Enable Billing Document Generation = True and Auto-generate PDF for billing documents being posted = true Is the PDF file generated? (Yes/No) | When:Enable BillingDocument Generation= True and Allow PDFgeneration forbilling documentswhen Payments,Refunds, etc. areapplied = true Isthe PDF filegenerated? (Yes/No) |
         | --- | --- | --- | --- |
         | Invoice Generated in Draft status | NoNote:If the auto-generate PDF for draft billing documents option is enabled, PDFs are automatically generated. | No | No |
         | Invoice Posted | No | Yes | No |
@@ -85,24 +83,22 @@ Zuora offers the ability to configure whether to automatically generate files fo
 4.  To manage billing document templates:
     1.  Click the Manage Invoice Rules and Templates tab to view your list of existing invoice templates and create new templates.
 
-        Note: If you have the Invoice Settlement feature enabled, the Manage Invoice, Credit/Debit Memo Templates tab is displayed. You can also manage credit and debit memo templates in this setting.
+        Note: If you have the [Invoice Settlement](/zuora-billing/bill-your-customer/invoice-settlement/get-started-with-invoice-settlement/get-started-with-invoice-settlement/invoice-settlement-overview) feature enabled, the Manage Invoice, Credit/Debit Memo Templates tab is displayed. You can also manage credit and debit memo templates in this setting.
 
         You can use template Actions to set a template as your default, edit, preview, or remove a template. You can also show the ID of a template. Template IDs are used with the Zuora API. Billing document templates are set at the customer level, not at the product level.
 
 5.  To set the default invoice template for Customer Accounts:
 
-    -   Configure invoice templates for customers via Zuora UI
+    -   Configure invoice templates for customers via Zuora UI.
 
-    -   Configure invoice templates for customers via API
+    -   Configure invoice templates for customers via API.
 
 
-    For more information about custom invoice templates, see Create custom HTML templates for invoices .
-
-    For more information about managing memo templates, see Generate memo PDFs with custom memo template .
+    For more information, see [Select default template for billing documents](/zuora-billing/bill-your-customer/billing-document-templates-configuration/configure-html-templates-for-billing-documents/select-default-template-for-billing-documents), [Create HTML templates](/zuora-billing/bill-your-customer/billing-document-templates-configuration/configure-html-templates-for-billing-documents/manage-html-templates/create-html-templates), and [Generate memo PDFs with custom memo template](/zuora-billing/bill-your-customer/invoice-settlement/credit-memos-and-debit-memos/generate-memo-pdfs-with-custom-memo-template).
 
     Note:
 
-    The format of default billing document template is HTML. You can see that a template called System Default Template as the system default one the Manage Invoice, Credit/Debit Memo Templates tab. After understanding the relationship between the system default template and default custom invoice template , you might either change the default custom invoice template, or edit the system default template or the copied one.
+    The format of default billing document template is HTML. You can see that a template called System Default Template as the system default one the Manage Invoice, Credit/Debit Memo Templates tab. After understanding [the relationship between the system default template and default custom invoice template](/zuora-billing/bill-your-customer/billing-document-templates-configuration/configure-html-templates-for-billing-documents/select-default-template-for-billing-documents), you might either change the default custom invoice template, or edit the system default template or the copied one.
 
 6.  To enable JavaScript for HTML templates:
     1.  Click the Settings tab.
@@ -111,4 +107,4 @@ Zuora offers the ability to configure whether to automatically generate files fo
         Note: When this setting is enabled, existing HTML templates that were previously error-free may be disrupted and require remediation of new errors if existing templates are to be used to generate documents.
 
 
-See Prefix and Numbering Configuration for Billing Documents for more information.
+See [Prefix and Numbering Configuration for Billing Documents](/zuora-billing/set-up-zuora-billing/billing-settings-configuration/billing-document-settings/configuration-of-prefix-and-numbering-for-billing-documents) for more information.

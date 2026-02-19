@@ -2,7 +2,7 @@
 title: "Connection configuration references"
 url: "https://docs.zuora.com/en/zuora-platform/extensibility/mediation/meter-components/http-processor/connection-configuration-references"
 product: "zuora-platform"
-scraped_at: "2025-12-24T05:30:07.733Z"
+scraped_at: "2026-02-19T03:27:08.841Z"
 ---
 
 # Connection configuration references
@@ -66,7 +66,5 @@ Zuora currently supports the following authentication types for HTTP connections
 | Parameter | Description |
 | --- | --- |
 | Basic Auth | Uses a username and password encoded in the HTTP header |
-| Header-based Auth | Custom authentication key/value pair added to request headers |
 | Bearer Token Auth | Uses a bearer token (example: Authorization: Bearer <token>) |
 | No Auth | Sends requests without authentication (for open/public APIs) |
-| Internal Zuora Auth | Used for secure calls between Zuora services within the same tenant |

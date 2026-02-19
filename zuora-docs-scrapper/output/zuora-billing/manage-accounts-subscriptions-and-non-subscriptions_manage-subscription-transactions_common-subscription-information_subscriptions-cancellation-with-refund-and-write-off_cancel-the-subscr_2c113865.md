@@ -2,14 +2,14 @@
 title: "Cancel the subscription on the date of write-off"
 url: "https://docs.zuora.com/en/zuora-billing/manage-accounts-subscriptions-and-non-subscriptions/manage-subscription-transactions/common-subscription-information/subscriptions-cancellation-with-refund-and-write-off/cancel-the-subscription-on-the-date-of-write-off"
 product: "zuora-billing"
-scraped_at: "2026-01-15T21:56:24.508Z"
+scraped_at: "2026-02-19T03:11:33.059Z"
 ---
 
 # Cancel the subscription on the date of write-off
 
 This task topic explains how to cancel a subscription on the date of write-off, a process suitable for companies with varying collection periods, and manage the financial implications using invoice adjustments or settlements.
 
-Use this option when your company has a long collections period prior to write-off, such as in most B2B companies. There is a need to differentiate between services delivered, but unpaid and services not delivered. This option is a 2-step process. Use this option when your company has a short collections period prior to write-off, such as in most B2C companies.
+Use this option when your company has long collections period prior to write-off, such as in most B2B companies. There is a need to differentiate between services delivered, but unpaid and services not delivered. This option is a 2-step process. Use this option when your company has a short collections period prior to write-off, such as in most B2C companies.
 
 In this option, the subscription is canceled using the date of the write-off. This approach is more complex to implement, but provides an option to partially write-off an invoice. Additionally, the subscription terms will reflect the true subscription terms.
 

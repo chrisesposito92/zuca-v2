@@ -2,10 +2,12 @@
 title: "Attachments management on subscriptions"
 url: "https://docs.zuora.com/en/zuora-billing/manage-accounts-subscriptions-and-non-subscriptions/manage-subscription-transactions/common-subscription-information/attachments-management-on-subscriptions"
 product: "zuora-billing"
-scraped_at: "2025-12-24T05:20:25.195Z"
+scraped_at: "2026-02-19T03:11:34.353Z"
 ---
 
 # Attachments management on subscriptions
+
+This topic explains how to manage attachments in Zuora to associate additional information with accounts, subscriptions, invoices, and memos.
 
 Use attachments in Zuora to upload documents of various formats to associate additional information with accounts, subscriptions, invoices, credit memos, or debit memos. Example attachments could be purchase orders (PO's), tax exemption documents, or ownership transfer forms. Credit memos or debit memos are available if you have the Invoice Settlement feature enabled.
 

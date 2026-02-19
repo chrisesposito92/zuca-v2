@@ -2,7 +2,7 @@
 title: "MJE setups"
 url: "https://docs.zuora.com/en/zuora-revenue/month-end-process/manual-journal-entries/mje-setups"
 product: "zuora-revenue"
-scraped_at: "2025-12-24T04:29:13.180Z"
+scraped_at: "2026-02-19T03:38:41.484Z"
 ---
 
 # MJE setups
@@ -19,15 +19,15 @@ Based on your business needs, the following configuration might be required for 
 
 Go through the sections below to complete required MJE setups as necessary.
 
--   [Define MJE related lookups](#concept-lehekyty__title-822) .
+-   [Define MJE related lookups](#concept-lehekyty__title-822)
 
--   [Configure MJE profiles](#concept-lehekyty__title-831) .
+-   [Configure MJE profiles](#concept-lehekyty__title-831)
 
--   [Create MJE approval rules](#concept-lehekyty__title-827) .
+-   [Create MJE approval rules](#concept-lehekyty__title-827)
 
--   [Set up accounting segments](#concept-lehekyty__title-830) .
+-   [Set up accounting segments](#concept-lehekyty__title-830)
 
--   [Upload SOB information](#concept-lehekyty__title-831) .
+-   [Upload SOB information](#concept-lehekyty__title-831)
 
 
 ## Define MJE related lookups
@@ -202,6 +202,18 @@ Complete the following steps to upload the SOB information to Zuora Revenue:
 7.  In the New Custom Upload Template window, enter JE SOB Upload in the Name field and select CSV for the File Type field.
 8.  Click the save icon. The JE SOB Upload template is created.
 9.  Click the Field Mapping tab to add the following fields to the template. The SET\_OF\_BOOKS\_ID, NAME, and CURRENCY\_CODE are required fields. Other fields are optional.
+
+    Click the Field Mapping tab to add the following fields to the template. The SET\_OF\_BOOKS\_ID, NAME, and CURRENCY\_CODE are required fields. Other fields are optional.
+    | Input value label | Input value type |
+    | --- | --- |
+    | SET_OF_BOOKS_ID | Number |
+    | NAME | Character |
+    | CURRENCY_CODE | Character |
+    | SHORT_NAME | Character |
+    | CHART_OF_ACCOUNTS_ID | Character |
+    | DAILY_TRANSLATION_RATE_TYPE | Character |
+    | ACTION | Character |
+
 10.  Click the padlock icon to freeze the template and then click the downward pointing arrow icon to download the template
 11.  In the downloaded file, fill in data according to definitions in the upstream system.
 12.  Hover the mouse over the JE SOB Upload template and then click the upward pointing arrow icon to upload the file.

@@ -2,7 +2,7 @@
 title: "Upload transaction lines"
 url: "https://docs.zuora.com/en/zuora-revenue/data-management/transaction-processing/upload-transactions/upload-transaction-lines"
 product: "zuora-revenue"
-scraped_at: "2025-12-24T04:25:33.839Z"
+scraped_at: "2026-02-19T03:37:57.933Z"
 ---
 
 # Upload transaction lines
@@ -32,7 +32,7 @@ Before the transaction data is uploaded, you must configure an RC grouping templ
     | Input Value Label | The label name of the custom field that you defined in Zuora Billing. You must enter the source object and the custom field label defined in Zuora Billing. You must keep the blank space in Zuora Billing object names and the custom fields.For example, to add the Subscription Owner custom field, which is defined on the Order Action object in Zuora Billing, specify OrderAction.Subscription Owner for the Input Value Label column.For information about how to obtain the exact custom field names in Zuora Billing, see Manage Custom Fields . For information about the Zuora Billing objects whose custom fields can be supported by Zuora Revenue, see Supported Zuora Custom Fields in Zuora Revenue. |
     | Input Value Type | The data type of the custom field. Supported data types are as follows:CharacterNumberDateNote:The Picklist data type of Zuora Billing cannot be supported by Zuora Revenue. |
     | Count | Select the Count checkbox to count the number of lines that are uploaded. |
-    | Sum |  |
+    | Sum | Select the Sum checkbox to calculate the total value for a particular field. |
 
 6.  After the template is defined, save the changes and close the New Transaction Upload Template window. The template that you created is displayed in the Templates list on the Transactions/Cost page.
 7.  To freeze the template for further changes, click the template line and then click Freeze icon.

@@ -2,17 +2,15 @@
 title: "Configure Amazon S3 as a source"
 url: "https://docs.zuora.com/en/zuora-platform/extensibility/mediation/meter-components/configure-amazon-s3-as-a-source"
 product: "zuora-platform"
-scraped_at: "2025-12-24T05:29:16.460Z"
+scraped_at: "2026-02-19T03:26:23.217Z"
 ---
 
 # Configure Amazon S3 as a source
 
 Learn how to configure a custom meter using an Amazon S3 bucket as the source for event data.
 
-A custom meter can use the data from an Amazon S3 bucket as the source for event data. To create a meter with Amazon S3 as a source:
-
-1.  Create a Custom Meter. For more information, see Create a new meter using custom method.
-2.  Select Amazon S3 as the source. The Amazon S3 settings page is displayed. ![Amazon S3 source settings](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/204c9395-79a5-48e4-95ef-5a6169b1bb1c?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjIwNGM5Mzk1LTc5YTUtNDhlNC05NWVmLTVhNjE2OWIxYmIxYyIsImV4cCI6MTc2NjY0MDU1NCwianRpIjoiYjQxZTQ2MTQ1MmJlNDU2YTkxZTU2MjFiNDNjZjg3MjIiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.UCIZ0xX72PpDdYxbVdQzu80jNYzP-D71MThi5FBTDbo)
+1.  Create a Custom Meter.
+2.  Select Amazon S3 as the source. The Amazon S3 settings page is displayed. ![Amazon S3 source settings](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/204c9395-79a5-48e4-95ef-5a6169b1bb1c?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjIwNGM5Mzk1LTc5YTUtNDhlNC05NWVmLTVhNjE2OWIxYmIxYyIsImV4cCI6MTc3MTU1Nzk3NywianRpIjoiZWE4Nzk5OGNmMmZlNGNlYmEwMjc3NzE5YmU4N2MwMzIiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.A28FdD_CBFoNJvAHfba0cqYkyci5m-1ch1DvqQ_ofyo)
 3.  Click Select to select an Event Definition. You can create or select an existing Event Definition, or import an Event Definition.
 4.  Under the Amazon S3 Settings section, configure the following settings:
 
@@ -24,5 +22,3 @@ A custom meter can use the data from an Amazon S3 bucket as the source for event
     | File Format | Click the File Format drop-down list to select a file format. Note that all of the files in the folder you chose must be in the same format, or the ingestion of a file in a different format will fail. |
 
 5.  Click Save to save the Amazon S3 source settings.
-
-The meter is configured to us an Amazon S3 bucket as the source.

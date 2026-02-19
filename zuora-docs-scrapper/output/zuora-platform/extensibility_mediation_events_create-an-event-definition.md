@@ -2,7 +2,7 @@
 title: "Create an event definition"
 url: "https://docs.zuora.com/en/zuora-platform/extensibility/mediation/events/create-an-event-definition"
 product: "zuora-platform"
-scraped_at: "2025-12-24T05:28:50.811Z"
+scraped_at: "2026-02-19T03:26:08.175Z"
 ---
 
 # Create an event definition
@@ -22,12 +22,13 @@ An event definition is a data schema based on the business process and describes
 7.  For each field, enter the Field Name and select the Field Type.
 8.  If this is a required field in the definition, that is the event data must contain data for this field, select the Required check box.
 9.  Use \+ Add Field to include all the fields for the event definition.
-10.  Under Specify Event Id, select one of the fields that will be the unique identifier for each event.
-     Customer ID.
+10.  Under Specify Event Id, select the field that will uniquely identify each event when this event definition is used with an Event Store.
+
+     When an event definition is attached to an Event Store, the selected Event Id field must uniquely identify each event to ensure correct storage and processing. For example, if an event payload includes a field such as `event_uuid` or `transaction_id`, that field can be used as the Event Id. The Event Store treats this value as the primary key and upserts records when multiple events share the same Event Id.
+
+     If the event definition is not attached to an Event Store (for example, used only with a Count Meter), Mediation ignores this setting and does not enforce uniqueness.
 
 11.  Under Specify Event Time, select one of the fields of type DateTime that will be used to indicate the time stamp for for each event.
      If a field is not selected, the ingestion time will be used.
 
 12.  Click Create.
-
-The event definition is created.

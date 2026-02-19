@@ -2,7 +2,7 @@
 title: "Terms and conditions of ramp deals changes"
 url: "https://docs.zuora.com/en/zuora-billing/manage-accounts-subscriptions-and-non-subscriptions/manage-subscription-transactions/orders/ramps-and-ramp-metrics/terms-and-conditions-of-ramp-deals-changes"
 product: "zuora-billing"
-scraped_at: "2025-12-24T05:28:05.004Z"
+scraped_at: "2026-02-19T03:12:11.703Z"
 ---
 
 # Terms and conditions of ramp deals changes

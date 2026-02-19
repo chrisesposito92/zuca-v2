@@ -2,7 +2,7 @@
 title: "Overview of Invoice Item Adjustments"
 url: "https://docs.zuora.com/en/zuora-billing/bill-your-customer/invoice-item-adjustments/overview-of-invoice-item-adjustments"
 product: "zuora-billing"
-scraped_at: "2025-12-24T08:38:03.485Z"
+scraped_at: "2026-02-19T03:14:33.663Z"
 ---
 
 # Overview of Invoice Item Adjustments
@@ -32,6 +32,8 @@ The following applies to invoice item adjustments:
 Note:
 
 The Invoice Settlement feature is a replacement for Invoice Item Adjustments. We recommend that you enable Invoice Settlement to take advantage of the improved functionalities. After Invoice Settlement is enabled, the Invoice Item Adjustments feature will be deprecated for your tenant, and invoice item adjustments are not presented in the UI. If you need to export data for invoice item adjustments, use Data Source, Data Query, or [REST API](https://www.zuora.com/developer/api-references/older-api/tag/Invoice-Item-Adjustments). See Invoice Settlement migration checklist and guide for more information.
+
+Invoice Item Adjustments remain viewable and exportable even after Invoice Settlement or Invoice Settlement Harmonization is enabled.
 
 ## View invoice item adjustments
 

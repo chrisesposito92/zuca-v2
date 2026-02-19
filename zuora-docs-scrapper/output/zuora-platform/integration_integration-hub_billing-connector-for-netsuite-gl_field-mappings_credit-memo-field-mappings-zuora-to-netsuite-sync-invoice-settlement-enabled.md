@@ -1,0 +1,18 @@
+---
+title: "Credit Memo Field Mappings: Zuora to NetSuite Sync (Invoice Settlement Enabled)"
+url: "https://docs.zuora.com/en/zuora-platform/integration/integration-hub/billing-connector-for-netsuite-gl/field-mappings/credit-memo-field-mappings-zuora-to-netsuite-sync-invoice-settlement-enabled"
+product: "zuora-platform"
+scraped_at: "2026-02-19T03:30:26.922Z"
+---
+
+# Credit Memo Field Mappings: Zuora to NetSuite Sync (Invoice Settlement Enabled)
+
+This document outlines the mappings for Credit Memo sync from Zuora to NetSuite with Invoice Settlement enabled, highlighting potential differences in Source and Destination field associations.
+
+Note:
+
+This feature is currently in development and is subject to change without advance notice. We are actively soliciting feedback from a small set of early adopters.
+
+This reference describes the mappings of the Credit Memo sync from Zuora to NetSuite when Invoice Settlement is enabled for your Zuora tenant.
+
+In some cases, the Source and Destination fields are associated with different objects.

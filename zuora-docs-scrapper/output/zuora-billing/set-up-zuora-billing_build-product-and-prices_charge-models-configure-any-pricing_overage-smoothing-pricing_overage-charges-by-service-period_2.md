@@ -2,10 +2,12 @@
 title: "Example of rollover"
 url: "https://docs.zuora.com/en/zuora-billing/set-up-zuora-billing/build-product-and-prices/charge-models---configure-any-pricing/overage-smoothing-pricing/overage-charges-by-service-period_2"
 product: "zuora-billing"
-scraped_at: "2025-12-24T04:59:00.659Z"
+scraped_at: "2026-02-19T03:09:48.936Z"
 ---
 
 # Example of rollover
+
+This section outlines a monthly service plan with rollover minutes, detailing rate plans, overage charges, and a year-long usage example.
 
 Suppose you provide a monthly service:
 

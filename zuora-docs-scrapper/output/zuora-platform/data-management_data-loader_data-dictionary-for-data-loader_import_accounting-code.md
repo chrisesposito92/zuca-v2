@@ -2,7 +2,7 @@
 title: "Accounting code"
 url: "https://docs.zuora.com/en/zuora-platform/data-management/data-loader/data-dictionary-for-data-loader/import/accounting-code"
 product: "zuora-platform"
-scraped_at: "2026-01-15T21:56:45.617Z"
+scraped_at: "2026-02-19T03:16:16.372Z"
 ---
 
 # Accounting code

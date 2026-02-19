@@ -2,7 +2,7 @@
 title: "Data migration in Zuora Billing"
 url: "https://docs.zuora.com/en/zuora-platform/data-management/zuora-devops/data-migration-in-zuora-billing"
 product: "zuora-platform"
-scraped_at: "2025-12-24T05:13:38.108Z"
+scraped_at: "2026-02-19T03:19:11.133Z"
 ---
 
 # Data migration in Zuora Billing
@@ -15,7 +15,7 @@ Zuora offers self-service data migration tools.
 
 The Application Lifecycle Management framework in the Zuora Billing Platform provides guidance on the best practices for using Zuora CPQ and Zuora Connect for Salesforce.
 
-## MetaData Deployments
+## Metadata Deployments
 
 Zuora offers multiple ways to replicate configurations from source to target tenants.
 
@@ -23,7 +23,7 @@ Zuora offers multiple ways to replicate configurations from source to target ten
 
 -   Configuration Templates: Enables you to create dynamic configuration templates for deploying metadata. These templates are reusable allowing numerous deployments across all environments. You can download these templates in JSON format for easy storage in GIT repositories or any CICD pipeline repository for automation. You may save configurations from your Golden tenant as a template, which can be utilized for multiple deployments. The developers can save a subset of configurations from production in a template, upload it to developer orgs, test their changes, and release them upstream.
 
--   Metadata Deployments with APIs: Metadata APIs enable developers and administrators to programmatically access and deploy configurations from source to target tenants. etadata Deployments with APIs: Metadata APIs enable developers and administrators to programmatically access and deploy configurations from source to target tenants.
+-   Metadata Deployments with APIs: Metadata APIs enable developers and administrators to programmatically access and deploy configurations from source to target tenants.
 
 
 ## Transactional Data

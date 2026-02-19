@@ -2,22 +2,20 @@
 title: "Configure a HTTP processor"
 url: "https://docs.zuora.com/en/zuora-platform/extensibility/mediation/meter-components/http-processor/configure-a-http-processor"
 product: "zuora-platform"
-scraped_at: "2026-01-15T22:00:44.203Z"
+scraped_at: "2026-02-19T03:26:52.779Z"
 ---
 
 # Configure a HTTP processor
 
 Learn how to configure an HTTP processor to enable real-time data enrichment by calling external APIs within a mediation flow.
 
-The HTTP processor enables real-time data enrichment by calling external APIs within a mediation flow. To configure a HTTP processor:
-
 1.  Navigate to Mediation > Meters.
-2.  Create a new Custom meter.
+2.  Create a Custom meter.
 3.  Select and drag the HTTP processor type on to the meter stream page.
 4.  In the HTTP settings page, enter a Name for the processor.
     A unique Operator ID for this processor component is displayed. This unique ID is used for event logging. You can copy this ID to be used in external applications.
 
-    ![HTTP processor settings](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/8b15bdca-c1cf-40b4-a9b6-8bd71eee4755?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjhiMTViZGNhLWMxY2YtNDBiNC1hOWI2LThiZDcxZWVlNDc1NSIsImV4cCI6MTc2ODYwMDgzOCwianRpIjoiNDMxZDcyOWRhNDY3NDMwOGE2NGJmN2UwNzdiMWZjODUiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiI4RWFZRjVFNjZLaVRYdnNmS3N5NSJ9.IVntr7f-c2-Z05S6V1q--kg3REzL7d71coxWpOClL4s)
+    ![HTTP processor settings](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/8b15bdca-c1cf-40b4-a9b6-8bd71eee4755?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjhiMTViZGNhLWMxY2YtNDBiNC1hOWI2LThiZDcxZWVlNDc1NSIsImV4cCI6MTc3MTU1ODAwNywianRpIjoiNmJmM2QzZTBiMGRhNGY4YWJiOGQxYWQzMzJmNGViNmQiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.pKGHYvCb75s6ow_EfoijIu7NGEM8HGc97PtVAAewJ5I)
 
 5.  From the Method drop-down list, select the method to be used for the API call.
 6.  Select the Connection to be used to access the resource.
@@ -43,5 +41,3 @@ The HTTP processor enables real-time data enrichment by calling external APIs wi
 
 16.  If you want to pipeline processing to continue even if the HTTP call fails, select the Pass on event in case of error check box.
 17.  After configuring the processor, click Save.
-
-The HTTP processor is configured for the custom meter.

@@ -2,7 +2,7 @@
 title: "Tax code and set tax mode"
 url: "https://docs.zuora.com/en/zuora-billing/set-up-zuora-billing/apply-taxes/tax-code-and-set-tax-mode"
 product: "zuora-billing"
-scraped_at: "2025-12-24T05:05:52.919Z"
+scraped_at: "2026-02-19T03:09:58.051Z"
 ---
 
 # Tax code and set tax mode
@@ -12,6 +12,8 @@ This topic covers usage of tax codes and set tax modes for product rate plan cha
 ## Overview
 
 In the product catalog, you can associate a product rate plan charge with a tax code and specify a tax mode for the product rate plan charge. When adding a product to a subscription, you can also update the tax code and the tax mode for the corresponding subscription rate plan charge.
+
+For information on specifying tax code in a rate plan, see [Set a tax code for a rate plan](/zuora-billing/set-up-zuora-billing/apply-taxes/tax-code-and-set-tax-mode/specify-tax-code-and-tax-mode-in-a-product-rate-plan).
 
 ## Use tax modes
 
@@ -41,8 +43,8 @@ For example:
 
 You can have multiple taxes for each tax code. However, the following limitations apply:
 
--   When using inclusive tax, you can only have one flat fee tax rate within your tax code. However, you can have multiple tax rate percentages if the Redistribute Zuora Tax rounding differences billing setting is set to No .
+-   When using inclusive tax, you can only have one flat fee tax rate within your tax code. However, you can have multiple tax rate percentages if the [Redistribute Zuora Tax rounding differences](/zuora-billing/set-up-zuora-billing/apply-taxes/additional-resources-on-taxes/redistribute-zuora-tax-rounding-differences) billing setting is set to No .
 
 -   When using inclusive tax, your tax codes cannot include flat taxes.
 
--   The Redistribute Zuora Tax rounding differences setting does not support multiple tax rates yet. When the Redistribute Zuora Tax rounding differences billing rule is set to Yes , multiple tax rates will not work and thus cannot be applied correctly. For more information about this setting, see Redistribute Zuora tax rounding differences .
+-   The Redistribute Zuora Tax rounding differences setting does not support multiple tax rates yet. When the Redistribute Zuora Tax rounding differences billing rule is set to Yes , multiple tax rates will not work and thus cannot be applied correctly. For more information about this setting, see [Redistribute Zuora tax rounding differences](/zuora-billing/set-up-zuora-billing/apply-taxes/additional-resources-on-taxes/redistribute-zuora-tax-rounding-differences) .

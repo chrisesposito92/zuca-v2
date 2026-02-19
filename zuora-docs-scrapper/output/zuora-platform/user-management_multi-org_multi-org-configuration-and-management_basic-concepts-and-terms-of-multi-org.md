@@ -2,7 +2,7 @@
 title: "Basic concepts and terms of Multi-Org"
 url: "https://docs.zuora.com/en/zuora-platform/user-management/multi-org/multi-org-configuration-and-management/basic-concepts-and-terms-of-multi-org"
 product: "zuora-platform"
-scraped_at: "2026-01-15T21:59:26.782Z"
+scraped_at: "2026-02-19T03:24:56.099Z"
 ---
 
 # Basic concepts and terms of Multi-Org
@@ -35,7 +35,7 @@ Org Context Switcher
 
 The Org Context Switcher is a UI widget that lists all the Org Units created in the Multi-Org hierarchy. After you log in from the Zuora UI, you can switch context between the Org Units that you have permission to access using the Org Context Switcher.
 
-![Org context switcher home page](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/59e29bbc-90c0-4380-8362-c891c75ee6a3?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjU5ZTI5YmJjLTkwYzAtNDM4MC04MzYyLWM4OTFjNzVlZTZhMyIsImV4cCI6MTc2ODYwMDc2MiwianRpIjoiY2FmYjM4ODU2YzMwNDlkMmE1YWE0NjA3YzdhZDk1NGIiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiI4RWFZRjVFNjZLaVRYdnNmS3N5NSJ9.ugUWfg0KF-hCwDnvLcNvZclVnc58wLBx1-6kNxkVlzg)
+![Org context switcher home page](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/59e29bbc-90c0-4380-8362-c891c75ee6a3?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjU5ZTI5YmJjLTkwYzAtNDM4MC04MzYyLWM4OTFjNzVlZTZhMyIsImV4cCI6MTc3MTU1Nzg5MCwianRpIjoiMmRiNzQzMmFjZmE3NGZiZWE1MThjOTFmY2U2ZGJjNTMiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.Mp8mWKQg_cBCCUSugNQ6pRfsL3QX-n2VMmfJN1pMIR8)
 
 The Org Context Switcher is located in the upper-right corner of the page, next to your username. Clicking the current Org display name opens the Multi-Org hierarchy. From here, you can select one or more Org Units to set your data-access scope, depending on your assigned permissions. You can also search for an Org Unit by its display name using the search field. Org Units that you do not have permission to access will appear but cannot be selected. For example, if a user only has access to the leaf Org (Acme UK), the branch Org Units will still be visible in the hierarchy but will not be selectable.
 
@@ -48,7 +48,7 @@ The Org Context Switcher is used to define your working context by selecting one
 1.  List Page - On list pages for objects such as Customer Accounts or Products, only the objects that are accessible within the current org context are displayed. For example, if Acme France and Acme Spain are selected in the Org Context Switcher, the Customer Accounts list page will show only the accounts associated with those two Org Units.
 2.  When creating or editing objects such as Customer Accounts or Products, you must explicitly assign the Org Units that the object should be associated with. This is done through the Org Picker.
 
-    ![Org selection](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/0082ccf9-d9d0-4939-ac4f-ac1b620d954a?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjAwODJjY2Y5LWQ5ZDAtNDkzOS1hYzRmLWFjMWI2MjBkOTU0YSIsImV4cCI6MTc2ODYwMDc2MiwianRpIjoiZjNlZWM0MzQ2MmU0NGQyOTk1ZThjNGRhZDhlNmU1ODciLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiI4RWFZRjVFNjZLaVRYdnNmS3N5NSJ9.lD72JpuehGCZ__yh_gaJLdaUcGulR0sC3GiDo7gHEXo)
+    ![Org selection](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/0082ccf9-d9d0-4939-ac4f-ac1b620d954a?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjAwODJjY2Y5LWQ5ZDAtNDkzOS1hYzRmLWFjMWI2MjBkOTU0YSIsImV4cCI6MTc3MTU1Nzg5MCwianRpIjoiNzFjMTc1ZGNjZDZiNGQ3ZTllMzM4YzlhYmU2ZjNkMjUiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.9p8utiiBEPA8gC-oFFZeDe6UxJE_0SIshXoRlT8HvSs)
 
     The Org Picker displays a sub-tree of the org hierarchy, limited to the Org Units that are available in your current org context. For example, when creating a new Product in the Product Catalog, the Org Picker will allow selection only from the Org Units chosen in the Org Context Switcher. Selecting specific Org Units in the Org Picker makes the Product available to those Org Units.
 
@@ -57,7 +57,7 @@ Org Picker
 
 Similar to the Org Context Switcher, the Org Picker appears throughout the Billing UI and allows you to select one or more Org Units where applicable. For example, when creating a customer account, you must assign it to exactly one Org Unit. In contrast, during user creation, a user can be assigned to one or more Org Units using the Org Picker.
 
-![Org picker UI](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/030a076c-486d-4d54-99d8-b3b91aa4c43f?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjAzMGEwNzZjLTQ4NmQtNGQ1NC05OWQ4LWIzYjkxYWE0YzQzZiIsImV4cCI6MTc2ODYwMDc2MiwianRpIjoiNGU5NjEwNTY2ZDU2NDZiNDg1YzI3YmM3ZGUzZmI5NDQiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiI4RWFZRjVFNjZLaVRYdnNmS3N5NSJ9.FW6D2NT8OWgzclLC3UTfJ5sIDxto7V2R4i0Tzi1tAhw)
+![Org picker UI](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/030a076c-486d-4d54-99d8-b3b91aa4c43f?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjAzMGEwNzZjLTQ4NmQtNGQ1NC05OWQ4LWIzYjkxYWE0YzQzZiIsImV4cCI6MTc3MTU1Nzg5MCwianRpIjoiZjFkM2I3MDEzYjRkNDc0YjlmMjhmYmQ2MDUyNjllMDEiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.rdi3fQsDDtjvyW03x8OqcdWoq306M76W5ZhD9nRWj2g)
 
 ## Currency
 
@@ -76,3 +76,31 @@ The Functional Currency is used by each org unit for its own financial reporting
 Transaction Currency
 
 The Transaction Currency is used in the product catalog and customer accounts. It is inherited from the product rate plan charge and remains consistent across Zuora processes such as Invoices, Payments, Credits, and Debit Memos. As an exception, Transaction APIs allow creating transactions in a different currency than the billing account or product rate plan charge. In these cases, the Transaction Currency is the currency specified in the API request.
+
+## Multi-Org considerations
+
+-   Zuora Analytics does not support Multi-Org.
+
+-   When the Enhanced OTR feature is enabled, accounting periods cannot be configured at the org level in Zuora Revenue. In integrated Zuora Revenue environments, accounting periods must be consistent across all org units.
+
+-   Zuora 360 supports integration with only a single Salesforce environment. Currently, a 1:1 mapping is enforced between a Zuora Multi-Org tenant and a single Salesforce org.
+
+-   Zuora Mediation does not segment events based on Org configuration.
+
+-   For Marketplace/Connect Apps hosted on the Connect Framework, each app instance is visible to all Org units as this is a tenant level setting. For example, Promo Code App, Zuora Collections.
+
+-   Tenant-level settings (example, numbering/SKU formats, tax engine, accounting codes) are shared by all org units; per–org unit overrides are not available. .
+
+-   If using Multi-entity, Multi-Org can be enabled at the leaf entity level. See [Multi-Org upgrade path](/zuora-platform/user-management/multi-org/multi-org-configuration-and-management/multi-org-upgrade-models) for more information on the co-existence of Zuora Multi-Org as a leaf entity in the Zuora Multi-entity environment.
+
+-   Multi‑Org does not support intercompany transactions between org units (upstream, downstream, or lateral). Any intercompany activity across org units must be processed outside of Multi‑Org.
+
+-   Multi‑Org does not support a many‑to‑many relationship between customer accounts and org units. Each customer account must be assigned to exactly one org unit at any given time.
+
+-   Files generated from Zuora Billing such as Data Sources Exports (DSE), AQuA, and reports are not labeled with org tags and therefore are not automatically segmented by org unit in their output.
+
+-   Multi-Org does not support configuring Custom Objects or their records at the org level. Custom Objects do not carry org labels and cannot be segmented natively by org unit.
+
+-   Zuora Collections supports data synchronization for Multi-Org tenants; however, it does not support org-level data labeling. All synchronized data is handled the same across the tenant, and org hierarchy or labels are not applied within Collections.
+
+-   Orders are created at a single org unit. Each order is associated with exactly one org unit, and you cannot combine order lines from multiple org units into a single consolidated order.

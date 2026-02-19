@@ -2,10 +2,12 @@
 title: "Manage user provisioning with user groups"
 url: "https://docs.zuora.com/en/zuora-revenue/advanced-revenue-operations/manage-user-and-group-provisioning-in-oneid/manage-user-provisioning-with-user-groups"
 product: "zuora-revenue"
-scraped_at: "2025-12-24T04:44:49.452Z"
+scraped_at: "2026-02-19T03:40:36.762Z"
 ---
 
 # Manage user provisioning with user groups
+
+This guide explains how to manage user provisioning by adding, viewing, and editing user groups in OneID, specifically for organization admins.
 
 This article describes how to add, view, or edit user groups in OneID. These operations apply only to organization admins.
 

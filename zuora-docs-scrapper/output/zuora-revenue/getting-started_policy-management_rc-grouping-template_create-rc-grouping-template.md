@@ -2,18 +2,16 @@
 title: "Create RC grouping template"
 url: "https://docs.zuora.com/en/zuora-revenue/getting-started/policy-management/rc-grouping-template/create-rc-grouping-template"
 product: "zuora-revenue"
-scraped_at: "2025-12-24T04:23:56.725Z"
+scraped_at: "2026-02-19T03:37:41.081Z"
 ---
 
 # Create RC grouping template
 
 Create and configure an RC grouping template in Zuora Revenue to organize transaction lines into revenue contracts.
 
-Complete the following steps to create and configure an RC grouping template in Zuora Revenue:
-
 1.  From the main menu, navigate to Policies > RC Grouping Template .
 2.  On the RC Grouping Template page, to create an RC grouping template, click the add new icon. The New Grouping Template window is displayed.
-3.  In the Definition tab, provide the following information and then click the save icon. The RC grouping template is created. ![rc-grouping-template.png](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/24704980-0076-42c9-98d7-5d3d8352b213?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjI0NzA0OTgwLTAwNzYtNDJjOS05OGQ3LTVkM2Q4MzUyYjIxMyIsImV4cCI6MTc2NjYzNjYzNCwianRpIjoiNGEwMmZjMWQ1NGE3NGY2NzlkZTEzMmY5NzQ3NTkyODQiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.3-AFZEnb7d9herguvWuMXP4Qqva-g4as01M196Cto08)
+3.  In the Definition tab, provide the following information and then click the save icon. The RC grouping template is created. ![rc-grouping-template.png](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/24704980-0076-42c9-98d7-5d3d8352b213?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjI0NzA0OTgwLTAwNzYtNDJjOS05OGQ3LTVkM2Q4MzUyYjIxMyIsImV4cCI6MTc3MTU1ODY1NSwianRpIjoiZWRlMDAwYzc2YWE0NGQyNjgwMjc0YmQ5M2MyOWE3M2UiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.Pv9HWhbQ9uQvESIvqaDj0uGoM8X0DvJuMCUy458Jgtw)
 
     -   A unique name for the new template in the Template Name field (Required).
     -   The effective start date of the template in the Start Date field.
@@ -48,7 +46,7 @@ Complete the following steps to create and configure an RC grouping template in 
     3.  Make sure the Enabled column is set to Yes .
     4.  Click the '+' icon to add as many filters as you need.
     5.  Click the save icon to save your configuration.
-7.  (Optional): To set up the SSP hierarchy, complete the following steps on the SSP Hierarchy tab. For information about SSP setup, see [SSP SetupNo Content found for /db/organizations/zuora/repositories/prod-sitemap/content/documents/external\_publications/revenue/E\_Advanced\_revenue\_operation/topics/ssp\_setup.dita](/db/organizations/zuora/repositories/prod-sitemap/content/documents/external_publications/revenue/E_Advanced_revenue_operation/topics/ssp_setup.dita) .
+7.  (Optional): To set up the SSP hierarchy, complete the following steps on the SSP Hierarchy tab. For information about SSP setup, see [SSP Setup](/zuora-revenue/day-to-day-operation/ssp-setup) .
     1.  Click the add new icon to add a hierarchy.
     2.  Select appropriate values for SSP Template, SP Below Range, SP Above Range, and SP Within Range columns.
     3.  Make sure the Enabled column is set to Yes.

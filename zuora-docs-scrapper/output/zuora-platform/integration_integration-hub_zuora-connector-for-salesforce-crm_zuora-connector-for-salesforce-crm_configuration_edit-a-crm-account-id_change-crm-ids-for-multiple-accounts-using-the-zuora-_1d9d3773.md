@@ -2,12 +2,12 @@
 title: "Grant custom object permissions to a profile"
 url: "https://docs.zuora.com/en/zuora-platform/integration/integration-hub/zuora-connector-for-salesforce-crm/zuora-connector-for-salesforce-crm/configuration/edit-a-crm-account-id/change-crm-ids-for-multiple-accounts-using-the-zuora-api/grant-custom-object-permissions-to-a-profile"
 product: "zuora-platform"
-scraped_at: "2025-12-24T08:31:53.204Z"
+scraped_at: "2026-02-19T03:31:38.979Z"
 ---
 
 # Grant custom object permissions to a profile
 
-To grant the Custom Object permissions to a profile :
+Learn how to grant custom object permissions to a profile by navigating through the setup and editing profile settings.
 
 1.  Navigate to .
 2.  Click the profile to whom you want to grant permissions.

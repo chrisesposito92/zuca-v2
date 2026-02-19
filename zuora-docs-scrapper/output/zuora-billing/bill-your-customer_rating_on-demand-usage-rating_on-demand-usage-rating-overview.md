@@ -2,7 +2,7 @@
 title: "On-demand usage rating overview"
 url: "https://docs.zuora.com/en/zuora-billing/bill-your-customer/rating/on-demand-usage-rating/on-demand-usage-rating-overview"
 product: "zuora-billing"
-scraped_at: "2025-12-24T08:27:20.328Z"
+scraped_at: "2026-02-19T03:14:03.732Z"
 ---
 
 # On-demand usage rating overview
@@ -22,6 +22,8 @@ The on-demand rating option allows you to bill for usage immediately after it is
 To use on-demand rating, first, check whether your charge model is supported, then go to the product catalog charge and under Timing of Charge , select the Usage Records Rating Option called On Demand.
 
 You can also use the UsageRecordRatingOption field of the RatePlanCharge object to set this value when using the Zuora Commerce API to create a rate plan charge.
+
+Note: When the Unbilled Usage feature is enabled and a usage charge uses On-demand usage rating with a billing period that is not monthly or weekly-based (for example, Specific Days), bill runs ignore the on-demand rating option for partial billing periods. In this scenario, a bill run only bills the partial billing period if the Target Date is set to the last day of that billing period; otherwise, no invoice item is generated. For more information, including an example, see [Unbilled Usage](/zuora-billing/bill-your-customer/usage-billing/unbilled-usage).
 
 ## Sample use case
 

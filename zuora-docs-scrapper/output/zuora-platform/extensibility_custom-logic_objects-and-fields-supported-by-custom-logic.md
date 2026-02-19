@@ -2,7 +2,7 @@
 title: "Objects and fields supported by Custom Logic"
 url: "https://docs.zuora.com/en/zuora-platform/extensibility/custom-logic/objects-and-fields-supported-by-custom-logic"
 product: "zuora-platform"
-scraped_at: "2025-12-24T05:22:22.007Z"
+scraped_at: "2026-02-19T03:25:27.808Z"
 ---
 
 # Objects and fields supported by Custom Logic

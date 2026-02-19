@@ -2,10 +2,12 @@
 title: "Mapping between Zuora Billing and Zuora Revenue"
 url: "https://docs.zuora.com/en/zuora-revenue/advanced-revenue-operations/mapping-between-zuora-billing-and-zuora-revenue"
 product: "zuora-revenue"
-scraped_at: "2025-12-24T04:37:08.919Z"
+scraped_at: "2026-02-19T03:40:14.391Z"
 ---
 
 # Mapping between Zuora Billing and Zuora Revenue
+
+This document provides an overview of the integration between Zuora Billing and Zuora Revenue, focusing on the mapping of transaction types and data fields between the two systems.
 
 With Billing - Revenue Integration, source data from Zuora Billing can be extracted, transformed, and populated into Zuora Revenue. Considering the differences between the two systems, it is important to understand the mapping between Billing and Zuora Revenue in terms of transaction types and data fields.
 
@@ -15,7 +17,7 @@ With Billing - Revenue Integration, source data from Zuora Billing can be extrac
 
 -   For information about the predefined field mapping between the two systems, see Standard field mapping :
 
-    -   [Sales order data mapping](/zuora-revenue/advanced-revenue-operations/billing---revenue-integration/sales-order-data-mapping)
+    -   [Sales order data mapping](/zuora-revenue/advanced-revenue-operations/mapping-between-zuora-billing-and-zuora-revenue/sales-order-data-mapping)
 
         .
 

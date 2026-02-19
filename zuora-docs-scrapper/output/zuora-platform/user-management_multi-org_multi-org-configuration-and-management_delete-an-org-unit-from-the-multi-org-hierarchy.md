@@ -2,7 +2,7 @@
 title: "Delete an org unit from the Multi- Org hierarchy"
 url: "https://docs.zuora.com/en/zuora-platform/user-management/multi-org/multi-org-configuration-and-management/delete-an-org-unit-from-the-multi--org-hierarchy"
 product: "zuora-platform"
-scraped_at: "2026-01-15T21:59:40.349Z"
+scraped_at: "2026-02-19T03:25:10.776Z"
 ---
 
 # Delete an org unit from the Multi- Org hierarchy

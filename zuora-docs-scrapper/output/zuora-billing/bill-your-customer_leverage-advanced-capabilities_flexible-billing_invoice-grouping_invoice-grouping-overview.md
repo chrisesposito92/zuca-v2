@@ -2,7 +2,7 @@
 title: "Invoice Grouping overview"
 url: "https://docs.zuora.com/en/zuora-billing/bill-your-customer/leverage-advanced-capabilities/flexible-billing/invoice-grouping/invoice-grouping-overview"
 product: "zuora-billing"
-scraped_at: "2025-12-24T18:39:32.845Z"
+scraped_at: "2026-02-19T03:15:47.713Z"
 ---
 
 # Invoice Grouping overview
@@ -31,6 +31,8 @@ For the same account, Zuora can bill subscriptions and order line items separate
 Note:
 
 Among a group of subscriptions that have the same invoice group number, if the Invoice The Subscription Separately setting is selected on some subscriptions in the group, the setting has a higher priority. Separate invoices are generated for the subscriptions on which the Invoice The Subscription Separately setting is selected.
+
+Invoices group items by Bill To Contact, Payment Term, Invoice Template, and Sequence Set. Sold To and Ship To do not affect grouping.
 
 ## Restriction and limitation
 

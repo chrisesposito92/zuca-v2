@@ -2,17 +2,15 @@
 title: "Configure a Rating processor"
 url: "https://docs.zuora.com/en/zuora-platform/extensibility/mediation/meter-components/rating-processor/configure-a-rating-processor"
 product: "zuora-platform"
-scraped_at: "2025-12-24T05:29:57.421Z"
+scraped_at: "2026-02-19T03:26:53.245Z"
 ---
 
 # Configure a Rating processor
 
 Learn how to transform raw usage data into billable rated records by configuring a Rating processor.
 
-The Rating processor transforms raw usage data into billable rated records. To configure a Rating processor:
-
-1.  Navigate to Mediation > Meters.
-2.  Create a new Custom meter.
+1.  Navigate to
+2.  Create a Custom meter.
 3.  Select and drag the Rating processor type on to the meter stream page.
 4.  In the Rating settings page, enter a Name for the processor.
 5.  Specify the field mappings.
@@ -41,5 +39,3 @@ The Rating processor transforms raw usage data into billable rated records. To c
     | MM/dd/yyyy hh:mm a | 09/08/2025 02:30 PM | US-style date with 12h clock + AM/PM |
 
 6.  Click Save.
-
-The Rating processor is configured for the custom meter.

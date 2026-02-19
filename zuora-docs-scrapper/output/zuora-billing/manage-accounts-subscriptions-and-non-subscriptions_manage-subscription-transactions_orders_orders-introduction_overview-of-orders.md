@@ -2,7 +2,7 @@
 title: "Overview of Orders"
 url: "https://docs.zuora.com/en/zuora-billing/manage-accounts-subscriptions-and-non-subscriptions/manage-subscription-transactions/orders/orders-introduction/overview-of-orders"
 product: "zuora-billing"
-scraped_at: "2025-12-24T05:21:05.609Z"
+scraped_at: "2026-02-19T03:11:47.095Z"
 ---
 
 # Overview of Orders
@@ -17,11 +17,11 @@ An order represents the transaction record. With Orders, you can:
 
 -   Create multiple subscriptions and manage multiple changes to a subscription.
 
-    ![SubscriptionAndOrder](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/13974f89-28c0-4586-8e22-761a6f173e5b?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjEzOTc0Zjg5LTI4YzAtNDU4Ni04ZTIyLTc2MWE2ZjE3M2U1YiIsImV4cCI6MTc2NjY0MDA2MywianRpIjoiNWRjNDQzMWM2MWEwNDIzMzgzN2RiYTU1OTdiYTlmZTIiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.T2DERu1MxhpiJyjK90KS9vdc0_OKzzSPI6JDVUZ36iY)
+    ![SubscriptionAndOrder](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/13974f89-28c0-4586-8e22-761a6f173e5b?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjEzOTc0Zjg5LTI4YzAtNDU4Ni04ZTIyLTc2MWE2ZjE3M2U1YiIsImV4cCI6MTc3MTU1NzEwMiwianRpIjoiMmJiYjViY2RmOGZkNDg0YmE5NGJjMDgxODRmZjVhOGIiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.cuc-fdrgfhILWzNYohwy-fhSEfERgsO7n4d5seDeupc)
 
 -   Create multiple order line items, update order line items, and manage the state of each order line item based on your business needs.
 
--   ![OrderLineItem_Order_OrderDeltaMetrics](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/5538475c-74cb-4465-8543-f18494dbff3f?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjU1Mzg0NzVjLTc0Y2ItNDQ2NS04NTQzLWYxODQ5NGRiZmYzZiIsImV4cCI6MTc2NjY0MDA2MywianRpIjoiMzRlYThhYmEwNGQwNDM0MWJjMThjMGQ0ZjY0ZjkwN2IiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9._-FfUoBQY_eJcT7jDPPxwUByaGF3WEut1mtno0M2nYw)
+-   ![OrderLineItem_Order_OrderDeltaMetrics](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/5538475c-74cb-4465-8543-f18494dbff3f?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjU1Mzg0NzVjLTc0Y2ItNDQ2NS04NTQzLWYxODQ5NGRiZmYzZiIsImV4cCI6MTc3MTU1NzEwMiwianRpIjoiNGEwMzJhZTRmOGFmNGUwNmIwOWQ2N2VmM2IxYjM4MjQiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.ngsKRcyGJSvvohrh8d6nJccjqF3xBfJc-YcT7TPqqK4)
 
     View Order Delta Metrics to see the impact of every change made to subscriptions and order line items.
 
@@ -140,7 +140,7 @@ Note:
 
 As of Zuora Billing Release 306, Order Metrics is no longer available. See Order Delta Metrics . If you are an existing Subscribe and Amend customer and want Order Delta Metrics only, you can turn on Orders Harmonization . Join the Orders Harmonization community group for more information. You can still keep the existing Subscribe and Amend API integrations and UI to create and manage subscriptions.
 
-The following information is for the existing Zuora Subscribe and Amend customers who have enabled Order Metrics only (not full Orders).
+The following information is for the existing Zuora Subscribe and Amend customers who have enabled Order Metrics only (not Orders).
 
 If you are an existing Subscribe and Amend customers who have enabled Order Metrics only, an order is auto-generated when you do any of the following operations.
 

@@ -2,7 +2,7 @@
 title: "Supported partners and countries"
 url: "https://docs.zuora.com/en/zuora-billing/bill-your-customer/leverage-advanced-capabilities/e-invoicing/e-invoicing-overview/supported-partners-and-countries"
 product: "zuora-billing"
-scraped_at: "2026-01-15T21:56:24.745Z"
+scraped_at: "2026-02-19T03:14:34.772Z"
 ---
 
 # Supported partners and countries
@@ -27,13 +27,14 @@ Zuora is pre-integrated with the following countries supported by Sovos and Aval
 Note: If you want any other unsupported vendors or countries, you can contact your Account Executive or Customer Success Manager.
 | Partner | Pre-integrated country | Relevant article |
 | --- | --- | --- |
-| Sovos | India | Country-specific configurations for India |
-|  | Italy | Country-specific configurations for Italy |
-|  | Saudi Arabia | Country-specific configurations for Saudi Arabia |
-|  | Mexico | Country-specific configurations Sovos for Mexico |
-|  | Brazil | Country-specific configurations Sovos for Brazil |
-| Avalara | Mexico | Country-specific configurations for Mexico |
-|  | Australia | Country-specific configurations for Australia |
+| Sovos | India | Country-specific configurations in Sovos for India |
+|  | Italy | Country-specific configurations in Sovos for Italy |
+|  | Saudi Arabia | Country-specific configurations in Sovos for Saudi Arabia |
+|  | Mexico | Country-specific configurations in Sovos for Mexico |
+|  | Brazil | Country-specific configurations in Sovos for Brazil |
+|  | Poland | Country-specific configurations in Sovos for Poland |
+| Avalara | Mexico | Country-specific configurations in Avalara for Mexico |
+|  | Australia | Country-specific configurations in Avalara for Australia |
 
 ## Countries not pre-integrated
 

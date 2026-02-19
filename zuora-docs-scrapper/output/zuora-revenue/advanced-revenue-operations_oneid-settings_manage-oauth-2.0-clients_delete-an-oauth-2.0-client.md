@@ -2,10 +2,12 @@
 title: "Delete an OAuth 2.0 client"
 url: "https://docs.zuora.com/en/zuora-revenue/advanced-revenue-operations/oneid-settings/manage-oauth-2.0-clients/delete-an-oauth-2.0-client"
 product: "zuora-revenue"
-scraped_at: "2025-12-24T04:44:34.132Z"
+scraped_at: "2026-02-19T03:40:47.713Z"
 ---
 
 # Delete an OAuth 2.0 client
+
+Learn how to delete an OAuth 2.0 client in OneID by following these steps.
 
 To delete an OAuth 2.0 client in OneID, take the following steps:
 

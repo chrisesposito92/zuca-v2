@@ -2,7 +2,7 @@
 title: "Configure custom fields"
 url: "https://docs.zuora.com/en/zuora-platform/integration/integration-hub/promo-codes/configure-custom-fields"
 product: "zuora-platform"
-scraped_at: "2025-12-24T05:48:04.825Z"
+scraped_at: "2026-02-19T03:30:09.959Z"
 ---
 
 # Configure custom fields
@@ -31,7 +31,7 @@ Take the following steps to create a custom field:
 
     -   If you want to create custom fields at the campaign level, click the Campaigns tab, enter the target campaign, and click Custom Fields .
 
-    -   If you want to create custom fields at the child campaign level, navigate to the target child campaign, and click Custom Fields . See the "Configure child campaign custom fields" section in Configure Promo Codes for more information.
+    -   If you want to create custom fields at the child campaign level, navigate to the target child campaign, and click Custom Fields .
 
 
 3.  Click Add Field .

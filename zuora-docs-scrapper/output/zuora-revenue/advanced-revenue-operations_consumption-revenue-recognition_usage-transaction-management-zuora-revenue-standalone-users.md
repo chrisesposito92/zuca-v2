@@ -2,12 +2,14 @@
 title: "Usage transaction management (Zuora Revenue standalone users)"
 url: "https://docs.zuora.com/en/zuora-revenue/advanced-revenue-operations/consumption-revenue-recognition/usage-transaction-management-zuora-revenue-standalone-users"
 product: "zuora-revenue"
-scraped_at: "2025-12-24T04:34:45.435Z"
+scraped_at: "2026-02-19T03:39:30.692Z"
 ---
 
 # Usage transaction management (Zuora Revenue standalone users)
 
-If you are a Zuora Revenue standalone user, the rated usage transactions must be manually uploaded to Zuora Revenue. For step-by-step instructions, see Manually upload usage transactions .
+Learn how to manually upload rated usage transactions to Zuora Revenue for standalone users.
+
+If you are a Zuora Revenue standalone user, the rated usage transactions must be manually uploaded to Zuora Revenue. For step-by-step instructions, see [Manage usage transactions.](/zuora-revenue/advanced-revenue-operations/manage-usage-transactions).
 
 | Feature | Use case addressed |
 | --- | --- |

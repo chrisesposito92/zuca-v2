@@ -2,7 +2,7 @@
 title: "Tables and columns available in Snowflake"
 url: "https://docs.zuora.com/en/zuora-platform/integration/integration-hub/zuora-secure-data-share-for-snowflake/use-zuora-secure-data-share-for-snowflake-to-access-zuora-data/tables-and-columns-available-in-snowflake"
 product: "zuora-platform"
-scraped_at: "2025-12-24T18:33:21.053Z"
+scraped_at: "2026-02-19T03:34:13.581Z"
 ---
 
 # Tables and columns available in Snowflake
@@ -24,13 +24,13 @@ The following table shows details of each supported table type:
 
 ## Zuora Secure Data Share for Snowflake – Object Schema Definition
 
-Snowflake Secure Share is fully consistent with the schema of Data Query and is designed for customers who want instant, read-only access to Zuora data directly from their Snowflake environment. Similar to Data Query, when new fields are added, they are not automatically reflected in Secure Data Share immediately. Schema changes typically follow Zuora’s regular release cycle. This delay is intentional, whenever a new field is introduced, we first assess the impact of adding it to the shared schema to make sure it won’t break anything for downstream users. Once that’s done, the field gets added as part of the release.
+Snowflake Secure Share is fully consistent with the schema of Data Query and is designed for users who want instant, read-only access to Zuora data directly from their Snowflake environment. Similar to Data Query, when new fields are added, they are not automatically reflected in Secure Data Share immediately. Schema changes typically follow Zuora’s regular release cycle. This delay is intentional, whenever a new field is introduced, we first assess the impact of adding it to the shared schema to make sure it won’t break anything for downstream users. Once that’s done, the field gets added as part of the release.
 
 If you come across a field that is available in Data Query but missing in your Secure Share schema, reach out to Zuora Support.
 
 ## Available Billing objects
 
-Zuora supports syncing both standard and custom objects to Snowflake. Any objects from the list can be added or removed based on an on-demand request. All these objects contribute to the TAR (Total Active Rows) usage.
+Zuora supports syncing both standard and custom objects to Snowflake. Any objects from the list can be added or removed based on an on-demand request. All these objects contribute to the TAR (Total Active Rows) usage. For Billing objects, Zuora supports multiple latency options, including 5 minutes, 15 minutes, 60 minutes, 12 hours, and 24 hours, allowing users to choose the sync frequency that best fits their needs.
 
 Zuora syncs the following basic standard objects to Snowflake by default:
 
@@ -481,7 +481,7 @@ Many to Many Mapping: The following tables have an associated dedicated mapping 
 
 ## Available Revenue objects
 
-Zuora syncs the [Revenue objects](/zuora-revenue/month-end-process/zuora-revenue-data-object-model) to Snowflake by default.
+Zuora syncs the [Revenue objects](/zuora-revenue/month-end-process/zuora-revenue-data-object-model) to Snowflake by default. For Revenue objects, Zuora supports multiple latency options, including 60 minutes, 12 hours, and 24 hours, allowing users to choose the sync frequency that best fits their needs.
 
 ## Tables for monitoring
 

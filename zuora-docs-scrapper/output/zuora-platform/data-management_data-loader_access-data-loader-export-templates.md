@@ -1,24 +1,20 @@
 ---
-title: "Access Data Loader Export templates"
+title: "Access Data Loader export templates"
 url: "https://docs.zuora.com/en/zuora-platform/data-management/data-loader/access-data-loader-export-templates"
 product: "zuora-platform"
-scraped_at: "2026-01-15T21:58:26.698Z"
+scraped_at: "2026-02-19T03:16:14.921Z"
 ---
 
-# Access Data Loader Export templates
+# Access Data Loader export templates
 
 Learn how to access Data Loader Export templates through Zuora Data Query for consistent data management.
 
-Data Loader export templates are aligned with the structure and format of the import templates.
+Data Loader export templates are aligned with the structure and format of the import templates. You can access the exported data through Zuora Data Query.
 
-You can access the exported data through Zuora Data Query:
-
-1.  In your Zuora tenant, navigate to Reporting > Data Query.
+1.  From Zuora tenant, navigate to Reporting > Data Query.
 2.  On the Data Query tab, click TEMPLATES.
 3.  Select Data Loader Exports.
-    The system displays a list of all available export templates.
-
-4.  Click View Template to select the query.
+4.  From the list of available templates, select View Template to view the query.
 
     For more information about Zuora Data Query usage, click [here](/zuora-platform/data/data-query/overview-of-data-query).
 

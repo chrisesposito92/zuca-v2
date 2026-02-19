@@ -2,32 +2,30 @@
 title: "Best practices for import jobs in Data Loader"
 url: "https://docs.zuora.com/en/zuora-platform/data-management/data-loader/data-loader-best-practices-and-scope/best-practices-for-import-jobs-in-data-loader"
 product: "zuora-platform"
-scraped_at: "2026-01-15T21:58:26.097Z"
+scraped_at: "2026-02-19T03:17:57.370Z"
 ---
 
 # Best practices for import jobs in Data Loader
 
 This reference guide outlines best practices for importing records, including file format requirements, header specifications, date formatting, and file size limitations.
 
--   The import file should be a CSV, UTF-8 format.
+-   The import file must be a CSV format encoded in UTF-8.
 
--   Ensure that the file does not contain duplicate or empty headers.
+-   The first row must contain unique and non-empty column headers.
 
--   The first row of the file should contain column headers.
+-   The maximum supported file size is 1 GB.
 
--   Ensure that all the date fields are rightly formatted. The supported date formats are available in the Data Dictionary.
+-   All date fields must use the supported formats defined in the Data Dictionary.
 
--   A maximum file size of 1GB is allowed.
+-   Ensure IsMarker columns are correctly mapped when importing nested objects. For example, Standalone Invoices or Payment Schedules.
 
--   Make sure that the IsMarker Column is mapped right when importing records in a nested object. For example, Standalone Invoices, Payment Schedules etc.
+-   When importing Accounts and Contact:
 
--   When loading records in Accounts and Contact, perform the following:
+    -   Set the communication profile to Silent for Migration.
 
-    -   Change the associated communication profile for Migration to Silent.
+    -   Assign records to a dedicated migration batch.
 
-    -   Change the Batch to a Batch that is created for migration.
-
--   Accounts and Contact will be created in Active state.
+    -   Accounts and Contact are created in Active state.
 
 
-Note: Zuora recommends downloading the template directly from the target tenant because templates are dynamically generated based on tenant-level custom field customizations. Since configuration changes are occasional, you can download the templates as needed from the target tenant, such as a Central Sandbox, Developer Sandbox, or Production environment.
+Note: Zuora recommends downloading the Advanced Multi-Action template directly from the target tenant. Templates are dynamically generated based on tenant-specific custom fields. If tenant configurations change, download a fresh template from the appropriate environment (Central Sandbox, Developer Sandbox, or Production).

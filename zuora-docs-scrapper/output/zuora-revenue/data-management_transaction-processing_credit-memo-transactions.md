@@ -2,10 +2,12 @@
 title: "Credit memo transactions"
 url: "https://docs.zuora.com/en/zuora-revenue/data-management/transaction-processing/credit-memo-transactions"
 product: "zuora-revenue"
-scraped_at: "2025-12-24T04:26:17.333Z"
+scraped_at: "2026-02-19T03:37:46.443Z"
 ---
 
 # Credit memo transactions
+
+Zuora Revenue supports various types of credit memos, which can be uploaded as transactions for data processing. These include invoice-based, SO-based, standalone, CM-C, and CM-R types, each with specific rules and impacts on sales orders and invoices.
 
 Credit memos can be uploaded to Zuora Revenue as transactions ( File Upload > Transactions/Cost ) for data processing. There are multiple types of credit memos that are supported by Zuora Revenue. When you upload credit memo lines to Zuora Revenue, use the Line Type field to distinguish different types of credit memos.
 
@@ -258,4 +260,4 @@ You can perform the following operations using this new option:
 -   Go to RC Workbench drop-down menu, select System / Billing-Void option, and a pop-up window is displayed.
 -   Select one of the eligible Invoices, add a reason for voiding and comment, and submit.
 
-![](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/c487c27e-c135-43bc-8444-f1d527e57375?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImM0ODdjMjdlLWMxMzUtNDNiYy04NDQ0LWYxZDUyN2U1NzM3NSIsImV4cCI6MTc2NjYzNjc3NSwianRpIjoiZjdmZWNlOTA2ODI4NDIxOGE5Y2MwZWIzNDMwNjUwNTQiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.ZA05FafdfMk3Bu64Db4Pxv5AI7op8J0Pav6cUi2_MXI)
+![](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/c487c27e-c135-43bc-8444-f1d527e57375?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImM0ODdjMjdlLWMxMzUtNDNiYy04NDQ0LWYxZDUyN2U1NzM3NSIsImV4cCI6MTc3MTU1ODY2NCwianRpIjoiNGYxYTQwNjI5ZTU5NDBhMGExMmM1MjY4ZTFiZGFhYTAiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.d7wS3G1_HcmK1VQm2BWi9XkRexTkvmxBbPEQos6H0ik)

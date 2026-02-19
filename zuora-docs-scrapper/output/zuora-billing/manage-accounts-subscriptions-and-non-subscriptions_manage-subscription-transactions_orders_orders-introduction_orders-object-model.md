@@ -2,7 +2,7 @@
 title: "Orders object model"
 url: "https://docs.zuora.com/en/zuora-billing/manage-accounts-subscriptions-and-non-subscriptions/manage-subscription-transactions/orders/orders-introduction/orders-object-model"
 product: "zuora-billing"
-scraped_at: "2025-12-24T05:21:10.610Z"
+scraped_at: "2026-02-19T03:11:37.758Z"
 ---
 
 # Orders object model
@@ -13,7 +13,7 @@ This article describes the objects used to support Orders . The objects provide 
 
 The following diagram summarizes the Orders objects and their relationships. For the summary of all Zuora key objects, refer to Zuora Business Object Model .
 
-![Order Objects Relationship-Nov2023](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/07b958e5-8920-4b56-a08e-5374001c6d0c?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjA3Yjk1OGU1LTg5MjAtNGI1Ni1hMDhlLTUzNzQwMDFjNmQwYyIsImV4cCI6MTc2NjY0MDA2OCwianRpIjoiOGZmYWVlMjNiZmYwNGNlMjk2ZmJmOGFiNDkyMDk0ZTUiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.d9Ld3jc5ILb_R8fTfKC7Ob11YmyA-6lRaaw4u2VpZHI)
+![Order Objects Relationship-Nov2023](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/07b958e5-8920-4b56-a08e-5374001c6d0c?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjA3Yjk1OGU1LTg5MjAtNGI1Ni1hMDhlLTUzNzQwMDFjNmQwYyIsImV4cCI6MTc3MTU1NzA5NSwianRpIjoiZmZkNmViZGU0ZGZmNGJhOGExZDExMTljMjdiMDU5OGMiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.Lxi8dgRIUr06XK-7gChWj8Detip1Unz4qY7ZqBiG5PI)
 
 Order actions operate at the subscription level or at the rate plan level.
 

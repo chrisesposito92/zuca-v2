@@ -2,7 +2,7 @@
 title: "Connect Tax Engines"
 url: "https://docs.zuora.com/en/zuora-billing/set-up-zuora-billing/apply-taxes/additional-resources-on-taxes/connect-tax-engines"
 product: "zuora-billing"
-scraped_at: "2025-12-24T05:10:34.395Z"
+scraped_at: "2026-02-19T03:10:53.237Z"
 ---
 
 # Connect Tax Engines
@@ -47,7 +47,7 @@ Your existing system setups:
 -   Product Rate Plan Charge 1 (for U.S. customers): Taxable and is associated with Tax Code 1
 -   Product Rate Plan Charge 2 (for Brazilian customers): Duplicate of Charge 1. Not taxable.
 
-![Single connect tax engine](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/7a9270a4-9506-4b4b-882f-e2512484812e?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjdhOTI3MGE0LTk1MDYtNGI0Yi04ODJmLWUyNTEyNDg0ODEyZSIsImV4cCI6MTc2NjYzOTQzMiwianRpIjoiNjA0MGM0NDQwYzg3NDA4ZDgzZThjNWNiOWI1MjViOWUiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.4r9f_rxbaZ-6mPbjsPTTUwvGNZJJokVVzzehbzw7sL0)
+![Single connect tax engine](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/7a9270a4-9506-4b4b-882f-e2512484812e?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjdhOTI3MGE0LTk1MDYtNGI0Yi04ODJmLWUyNTEyNDg0ODEyZSIsImV4cCI6MTc3MTU1NzA0OCwianRpIjoiMjMwYjM1MjU2MGVhNDBjMjkxMzM3ZDRhN2M4ZTE3MTQiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.tPXUqd9JUaKWLy7L24qHc9HbZch5AaiUwmmw1d1veKs)
 
 Later, you decide to use multiple Connect Tax Engines as the product will become taxable in Brazil. You make the following changes to system setups:
 
@@ -59,7 +59,7 @@ Later, you decide to use multiple Connect Tax Engines as the product will become
 -   Expire Product Rate Plan Charge 2 .
 -   Amend subscriptions of Brazilian customers to remove Product Rate Plan Charge 2 and add Product Rate Plan Charge 1 .
 
-![Multiple connect tax engines](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/269f27fb-d93e-4d94-8bfd-d49c5728c32a?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjI2OWYyN2ZiLWQ5M2UtNGQ5NC04YmZkLWQ0OWM1NzI4YzMyYSIsImV4cCI6MTc2NjYzOTQzMiwianRpIjoiZDNmNWViNTg3ODUwNDAyOWEwZjVkYjBmNzU5N2ZiZGUiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.oUcBZnE9gpdEE3bVg5dd6NyCFIQ4PDKyPE-SXaPW4Aw)
+![Multiple connect tax engines](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/269f27fb-d93e-4d94-8bfd-d49c5728c32a?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjI2OWYyN2ZiLWQ5M2UtNGQ5NC04YmZkLWQ0OWM1NzI4YzMyYSIsImV4cCI6MTc3MTU1NzA0OCwianRpIjoiNWU2NmQ0NzJkNDk2NGU0Yjk4NTJhMjkwYmQ1ZWEyODAiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.6ggBqu88TjIwetNCAiAGc_lDNEVn3wr0AMERfPglkIk)
 
 ## Impact on credit memos
 

@@ -2,7 +2,7 @@
 title: "Troubleshooting usage import failures"
 url: "https://docs.zuora.com/en/zuora-billing/bill-your-customer/usage-billing/troubleshooting-usage-import-failures"
 product: "zuora-billing"
-scraped_at: "2025-12-24T08:28:36.937Z"
+scraped_at: "2026-02-19T03:14:03.919Z"
 ---
 
 # Troubleshooting usage import failures
@@ -57,3 +57,9 @@ Two types of failures may occur when uploading usage information:
 -   The Usage Upload Process was rejected. {} at row: {}
 
 Note: {} indicates the relevant values that will be retrieved and displayed for the specific error.
+
+## Dynamic pricing usage charges
+
+Legacy Billing usage import does not support sending usage to dynamic pricing usage charges. When usage is associated with a dynamic pricing usage charge, Billing blocks operations through these legacy paths.
+
+Remove those rows from the usage file, and use Mediation to ingest usage events for dynamic pricing usage charges instead.

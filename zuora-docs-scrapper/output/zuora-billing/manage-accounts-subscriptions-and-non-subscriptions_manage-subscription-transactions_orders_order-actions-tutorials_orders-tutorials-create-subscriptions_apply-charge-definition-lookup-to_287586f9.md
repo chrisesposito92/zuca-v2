@@ -2,12 +2,12 @@
 title: "Apply charge definition lookup to subscriptions"
 url: "https://docs.zuora.com/en/zuora-billing/manage-accounts-subscriptions-and-non-subscriptions/manage-subscription-transactions/orders/order-actions-tutorials/orders-tutorials---create-subscriptions/apply-charge-definition-lookup-to-subscriptions"
 product: "zuora-billing"
-scraped_at: "2025-12-24T05:22:53.330Z"
+scraped_at: "2026-02-19T03:12:00.789Z"
 ---
 
 # Apply charge definition lookup to subscriptions
 
-This task explains how to apply charge definition lookup to subscriptions through the UI, ensuring accurate pricing based on attribute-based pricing.
+This topic task explains how to apply charge definition lookup to subscriptions through the UI, ensuring accurate pricing based on attribute-based pricing.
 
 Charge definition lookup is supported in API and UI. This article demonstrates how to apply charge definition lookup to subscriptions through UI. If you subscribe to the product rate plan through API as usual after defining the price lookup formula , the charge definition lookup is automatically processed. For more information, see Overview of Attribute-based Pricing .
 
@@ -23,12 +23,12 @@ To enable charge definition lookup, perform the following steps:
 
 1.  Add a custom field on the subscription object. For more information, see Manage custom fields . In this example, you created the soldToRegion custom field and the corresponding API Name value soldToRegion\_\_c for looking up charge definitions during the order action. You configured two values InRegion and Overseas for this custom field.
 
-    ![Custom field setting for ABP](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/a6ee1f0f-f5fd-4310-81bb-9f68b92b557d?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImE2ZWUxZjBmLWY1ZmQtNDMxMC04MWJiLTlmNjhiOTJiNTU3ZCIsImV4cCI6MTc2NjY0MDE3MSwianRpIjoiNzIyMTg3YWQ0YzQ3NDMzMDk1MzllNzNkMjc0YTA0NDQiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.TAluI7oMHzieDxnIk0OD2lZlxXm70mU0a3ES005MBro)
+    ![Custom field setting for ABP](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/a6ee1f0f-f5fd-4310-81bb-9f68b92b557d?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImE2ZWUxZjBmLWY1ZmQtNDMxMC04MWJiLTlmNjhiOTJiNTU3ZCIsImV4cCI6MTc3MTU1NzExNSwianRpIjoiNWFhMzliNTQ2MWMwNGRlMDk5MTc1OGMyN2Y0NDQ3OTAiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.GtBDAV_VFr0dwYwVCBhShuGJi7coZ-1bd8RAT8TDm58)
 
 2.  Enable the Attribute-based Pricing feature.
 3.  For the charge, create the charge definitions and price lookup formula in the Charge Amount section of the charge in the product catalog. In this example, the following two charge definitions are defined for the charge. The formula is as follows:
 
-    ![charge definitions](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/85f32778-2e89-4544-8499-1ac2923c6bf5?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6Ijg1ZjMyNzc4LTJlODktNDU0NC04NDk5LTFhYzI5MjNjNmJmNSIsImV4cCI6MTc2NjY0MDE3MSwianRpIjoiZmFhNmY3NDc5MGQ3NDg4OWEwNGU1MWY0NmIwNTMwNTUiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.HCKDs1fAt3A2b8vEOXN-dPkQXpHei9yiqaVngns52VU)
+    ![charge definitions](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/85f32778-2e89-4544-8499-1ac2923c6bf5?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6Ijg1ZjMyNzc4LTJlODktNDU0NC04NDk5LTFhYzI5MjNjNmJmNSIsImV4cCI6MTc3MTU1NzExNSwianRpIjoiNzdiNDVmYTQyMGJhNGU2Yzk4MDc0Yjk1OWNmM2M4NTAiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.2lXVNTbwtbxN0J2Nz2B61rOi4LEszZYhpoBoec7DmU4)
 
     Note: To avoid lookup failures caused by formula syntax errors, you are recommended to copy our formula example and replace `soldToRegion__c` with your custom field API Name . For more information, see Price lookup in Attribute-based Pricing .
     lookup("soldToRegion\_\_c" = fieldLookup("subscription", "soldToRegion\_\_c"))
@@ -42,7 +42,7 @@ To enable charge definition lookup, perform the following steps:
 
 5.  When you add a product rate plan during the order action, you can identify whether the lookup succeeds or fails.
 
-    -   The following picture indicates a successful lookup. Since you specified the custom field value in this subscription as InRegion and the charge definition CD-00001210 has the same custom field value, this charge definition is successfully looked up based on the error-free formula. In this case, you can perform one of the following steps: ![ABP with formula in orders UI](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/e2683717-41a6-4e0e-8b0b-ed689214e8ce?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImUyNjgzNzE3LTQxYTYtNGUwZS04YjBiLWVkNjg5MjE0ZThjZSIsImV4cCI6MTc2NjY0MDE3MSwianRpIjoiMDlmN2JjMTIyYmI1NGQwMDk0MzkzNmFhNjJhOWIxNmYiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.m_Xv3QPwOzVTmJcUdk6A-AyWHVMQUC8v1mGVWKf_cBU)
+    -   The following picture indicates a successful lookup. Since you specified the custom field value in this subscription as InRegion and the charge definition CD-00001210 has the same custom field value, this charge definition is successfully looked up based on the error-free formula. In this case, you can perform one of the following steps: ![ABP with formula in orders UI](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/e2683717-41a6-4e0e-8b0b-ed689214e8ce?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImUyNjgzNzE3LTQxYTYtNGUwZS04YjBiLWVkNjg5MjE0ZThjZSIsImV4cCI6MTc3MTU1NzExNSwianRpIjoiMWJlODc3OGJhNzg0NGI3ZWE3ODIzODdmY2FkZDhjYjkiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.Cn6rdWPVNq0KJRQuJwtMeB4diTCs5muwb6GT62Ppqxg)
 
         -   Update the subscription rate plan charge price in the Price field.
 
@@ -53,6 +53,6 @@ To enable charge definition lookup, perform the following steps:
     -   The following picture indicates a failed lookup. Identify and resolve the issue by yourself or contact your product catalog manager.
 
 
-    ![CD lookkup failed](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/c1876a2f-1eae-4a2f-bd17-17f80c72603d?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImMxODc2YTJmLTFlYWUtNGEyZi1iZDE3LTE3ZjgwYzcyNjAzZCIsImV4cCI6MTc2NjY0MDE3MSwianRpIjoiY2MwYzYzNTgyZmUyNDZmNDljMTMyZDMwMzFhOGYzYTQiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.W_O2aCIuzJ9thXMnzduBWZKHWI_TJv-nIIshoIehkm8)
+    ![CD lookkup failed](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/c1876a2f-1eae-4a2f-bd17-17f80c72603d?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImMxODc2YTJmLTFlYWUtNGEyZi1iZDE3LTE3ZjgwYzcyNjAzZCIsImV4cCI6MTc3MTU1NzExNSwianRpIjoiOTYzNmQ2MWNjMGI1NDE0MzhkODNkYTk3NzAzNmFlM2QiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.gqZvP1VglZWoaQXlk3CETwPGZ3DsDS5Ie-Z4F4pm2CU)
 
 6.  Review your order and activate the order.

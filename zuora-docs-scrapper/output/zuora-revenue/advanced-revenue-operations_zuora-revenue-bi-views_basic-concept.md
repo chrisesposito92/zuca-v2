@@ -2,10 +2,12 @@
 title: "Basic concept"
 url: "https://docs.zuora.com/en/zuora-revenue/advanced-revenue-operations/zuora-revenue-bi-views/basic-concept"
 product: "zuora-revenue"
-scraped_at: "2025-12-24T04:39:37.657Z"
+scraped_at: "2026-02-19T03:40:30.522Z"
 ---
 
 # Basic concept
+
+Zuora Revenue BI views enable business intelligence professionals to model, extract, and develop analytical insights by understanding data structures and relationships.
 
 As business intelligence (BI) architects, data modelers, ETL business analysts, or report developers, you can use the Zuora Revenue BI views for modeling, extraction, and development of your own analytical business intelligence for your organization.
 
@@ -49,7 +51,7 @@ The following diagram illustrates the relationship between the BI views in Zuora
 
 The following diagram illustrates the relationship between the physical tables used by Zuora Revenue BI views. The physical tables in the dashed line boxes indicate that the tables might be used by multiple roles.
 
-![physical-data-model.png](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/b611c229-1624-4f0b-b1a3-e72db48d0163?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImI2MTFjMjI5LTE2MjQtNGYwYi1iMWEzLWU3MmRiNDhkMDE2MyIsImV4cCI6MTc2NjYzNzU3NSwianRpIjoiZjI3ZjkxYTM3ZjI3NDNhZjhiZjg4MjU5YTQ4MmU2ZmEiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.xrZ6tWgPQjb9xomGU32Eel4ppkM-cwRM9oZT8s-aY8g)
+![physical-data-model.png](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/b611c229-1624-4f0b-b1a3-e72db48d0163?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImI2MTFjMjI5LTE2MjQtNGYwYi1iMWEzLWU3MmRiNDhkMDE2MyIsImV4cCI6MTc3MTU1ODgyMiwianRpIjoiMTFiNDUyMTQyYzc0NGJjYzk2MDk5ZDk5ZjRiMTRkNjYiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.a-FXHwqc1uYlg3WDqwWZWfyqCadLjfsz42mEWtrRD-4)
 
 ## Related articles
 

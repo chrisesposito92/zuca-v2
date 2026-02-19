@@ -2,7 +2,7 @@
 title: "Accounting codes"
 url: "https://docs.zuora.com/en/zuora-billing/set-up-zuora-billing/build-product-and-prices/basic-concepts-and-terms/accounting-codes"
 product: "zuora-billing"
-scraped_at: "2025-12-24T04:05:14.233Z"
+scraped_at: "2026-02-19T03:09:06.172Z"
 ---
 
 # Accounting codes

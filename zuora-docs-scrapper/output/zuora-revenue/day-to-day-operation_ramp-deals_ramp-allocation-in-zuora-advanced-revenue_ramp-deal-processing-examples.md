@@ -2,12 +2,14 @@
 title: "Ramp deal processing examples"
 url: "https://docs.zuora.com/en/zuora-revenue/day-to-day-operation/ramp-deals/ramp-allocation-in-zuora-advanced-revenue/ramp-deal-processing-examples"
 product: "zuora-revenue"
-scraped_at: "2025-12-24T04:31:43.606Z"
+scraped_at: "2026-02-19T03:39:09.853Z"
 ---
 
 # Ramp deal processing examples
 
-Two examples are provided to help you understand how to calculate the ramp allocation amount and validations that are performed during the ramp allocation process. All the data and the involved calculations in the following examples can be downloaded from this [spreadsheet](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/020b334e-7426-4ad2-b317-6e995105862e?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjAyMGIzMzRlLTc0MjYtNGFkMi1iMzE3LTZlOTk1MTA1ODYyZSIsImV4cCI6MTc2NjYzNzEwMiwianRpIjoiYzA3MTNiMjhhYzE4NDE2NWE5ZmVkYzU0NTE1MTY4MjUiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.oOngnaBvt4X2vxDgiB0OJgctKimdJGxua4A0kuV8UW0&response-content-disposition=attachment%3B+filename%3D%22Ramp_deal_processing_examples.xlsx%22).
+This document provides examples to help you understand the calculation of ramp allocation amounts and the validations performed during the ramp allocation process. Download the data and calculations from the provided spreadsheet.
+
+Two examples are provided to help you understand how to calculate the ramp allocation amount and validations that are performed during the ramp allocation process. All the data and the involved calculations in the following examples can be downloaded from this [spreadsheet](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/020b334e-7426-4ad2-b317-6e995105862e?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjAyMGIzMzRlLTc0MjYtNGFkMi1iMzE3LTZlOTk1MTA1ODYyZSIsImV4cCI6MTc3MTU1ODc0NSwianRpIjoiY2FkM2VjM2ViMjA0NGIyMWFmYjcyNjQwZGZiNDYwYTQiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.FZQ8DM7aZgaWxcWnXrIJ6cv3LBVE2N6PAOxwTIkeCAs&response-content-disposition=attachment%3B+filename%3D%22Ramp_deal_processing_examples.xlsx%22).
 
 ## Example 1
 

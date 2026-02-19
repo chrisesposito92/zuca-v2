@@ -2,7 +2,7 @@
 title: "Decision table overview"
 url: "https://docs.zuora.com/en/zuora-platform/extensibility/custom-logic/decision-table/decision-table-overview"
 product: "zuora-platform"
-scraped_at: "2025-12-24T05:21:41.463Z"
+scraped_at: "2026-02-19T03:25:38.489Z"
 ---
 
 # Decision table overview
@@ -29,7 +29,7 @@ There are two column types in a decision table:
 
 -   Condition: A rule on an object field to validate the field value.
 
--   Result: A rule on an object field to set the field value or on the result to control the result status and error message.
+-   Result: A rule on an object field to set the field value or on the result to control the result status and error message displayed on associated object pages in the Zuora UI.
 
 
 You can add one or more conditions or results in one row. All conditions in one row compose the IF part of the if-then statement, while all results in one row compose the THEN part of the if-then statement. The relationship between two conditions or two results is AND.
@@ -44,6 +44,6 @@ If all rows are skipped, Zuora will create or update the object by using the def
 
 ## Example
 
-![decision table](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/88b64a3b-f2ef-44f2-bd79-852baa8d5193?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6Ijg4YjY0YTNiLWYyZWYtNDRmMi1iZDc5LTg1MmJhYThkNTE5MyIsImV4cCI6MTc2NjY0MDA5OSwianRpIjoiYjdmOWNjZmVhODNhNGFjMGIzOTdiYzI0NjI4NzY0YzUiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.ystlpGMXBD-s2z_9GCdYk7ZIiGvznl1FSGUapKcsyYU)
+![decision table](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/88b64a3b-f2ef-44f2-bd79-852baa8d5193?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6Ijg4YjY0YTNiLWYyZWYtNDRmMi1iZDc5LTg1MmJhYThkNTE5MyIsImV4cCI6MTc3MTU1NzkzMywianRpIjoiZTc1MTFhOWY0OWJmNDZiMDg0ODY3NjhlZTM1YTdkMDYiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.LWj6SikM4ykXTAjEEln74N6VA7oafycuII0AKgac8fI)
 
 In this example, when an account object is created or updated, if the `Country__c` custom field of this account is `United States` , the evaluation succeeds and Zuora will create or update the account object and set the `Valid__c` custom field as `true` .

@@ -2,10 +2,12 @@
 title: "Display invoice information in credit memo templates"
 url: "https://docs.zuora.com/en/zuora-billing/bill-your-customer/billing-document-templates-configuration/configure-html-templates-for-billing-documents/common-use-cases-of-html-templates/display-invoice-information-in-credit-memo-templates"
 product: "zuora-billing"
-scraped_at: "2025-12-24T05:43:18.558Z"
+scraped_at: "2026-02-19T03:13:16.869Z"
 ---
 
 # Display invoice information in credit memo templates
+
+Learn how to display invoice information in credit memo templates using specific schemas, without needing to associate credit memos with invoices.
 
 You can view relevant invoice numbers, invoice dates, and charge details (invoice item) directly within a credit memo PDF using schemas, CreditFromInvoiceItem and CreditFromCreditMemoItem , in the HTML template. These schemas serve as structures that enable the display of credit details associated with an invoice and a credit memo, respectively. With this feature, you don’t have to associate credit memos with an invoice to access the corresponding invoice number for a credit memo.
 

@@ -2,7 +2,7 @@
 title: "Set up Azure Delta Lake"
 url: "https://docs.zuora.com/en/zuora-platform/integration/integration-hub/zuora-connectors-for-data-warehouses/zuora-connector-for-delta-lake/set-up-zuora-connector-for-delta-lake/set-up-azure-delta-lake"
 product: "zuora-platform"
-scraped_at: "2026-01-15T22:01:36.304Z"
+scraped_at: "2026-02-19T03:33:35.456Z"
 ---
 
 # Set up Azure Delta Lake
@@ -15,4 +15,4 @@ Setting up Azure Delta Lake includes the following steps:
 
 2.  [Create container and access token](/zuora-platform/integration/integration-hub/zuora-connectors-for-data-warehouses/zuora-connector-for-delta-lake/set-up-zuora-connector-for-delta-lake/set-up-azure-delta-lake/create-container-and-access-token)
 
-3.  [Add your destination](/zuora-platform/integration/integration-hub/zuora-connectors-for-data-warehouses/zuora-connector-for-delta-lake/set-up-zuora-connector-for-delta-lake/set-up-azure-delta-lake/add-your-destination)
+3.  [Add destination for Delta Lake](/zuora-platform/integration/integration-hub/zuora-connectors-for-data-warehouses/zuora-connector-for-delta-lake/set-up-zuora-connector-for-delta-lake/add-destination-for-delta-lake)
