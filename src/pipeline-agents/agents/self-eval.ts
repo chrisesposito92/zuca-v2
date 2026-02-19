@@ -3,10 +3,10 @@ import { loadPrompt, PROMPTS } from '../../llm/prompts/index';
 import { SelfEvalOutputSchema } from '../schemas/self-eval';
 import type { PipelineContext } from '../context';
 
-export function createSelfEvalAgent() {
+export function createSelfEvalAgent(model: string = 'gpt-5.2') {
   return new Agent<PipelineContext, typeof SelfEvalOutputSchema>({
     name: 'ralph-self-eval',
-    model: 'gpt-5.2',
+    model,
     modelSettings: {
       temperature: 0.3,
     },

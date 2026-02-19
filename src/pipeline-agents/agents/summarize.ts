@@ -3,10 +3,10 @@ import { loadPrompt, PROMPTS } from '../../llm/prompts/index';
 import { SummarizeOutputSchema } from '../schemas/summarize';
 import type { PipelineContext } from '../context';
 
-export function createSummarizeAgent() {
+export function createSummarizeAgent(model: string = 'gpt-5.2') {
   return new Agent<PipelineContext, typeof SummarizeOutputSchema>({
     name: 'summarize',
-    model: 'gpt-5.2',
+    model,
     modelSettings: {
       temperature: 0.3,
     },

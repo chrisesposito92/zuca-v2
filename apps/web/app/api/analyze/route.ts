@@ -10,7 +10,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { validateZucaInput, LlmModelSchema } from '@zuca/types';
+import { validateZucaInput, LlmModelSchema, isOpenAIModel } from '@zuca/types';
 import {
   runPipeline,
   isPipelineClarificationPause,
@@ -27,8 +27,8 @@ import { getCurrentUser } from '@/lib/auth';
 
 const USE_AGENTS = process.env.USE_AGENTS_PIPELINE === 'true';
 
-async function getRunPipelineFn() {
-  if (USE_AGENTS) {
+async function getRunPipelineFn(model?: string) {
+  if (USE_AGENTS && (!model || isOpenAIModel(model))) {
     const { runAgentsPipeline } = await import('@zuca/pipeline-agents');
     return runAgentsPipeline;
   }
@@ -85,7 +85,7 @@ export async function POST(request: NextRequest) {
           : false;
 
       // Run the pipeline with interactive mode enabled (web UI)
-      const runFn = await getRunPipelineFn();
+      const runFn = await getRunPipelineFn(modelResult?.data);
       const pipelineResult = await runFn(validatedInput, {
         sessionId: session.id,
         model: modelResult?.data,

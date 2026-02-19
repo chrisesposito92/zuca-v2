@@ -21,12 +21,12 @@ import {
 } from '@zuca/pipeline';
 import type { ZucaInput, ZucaOutput } from '@zuca/types';
 import type { ClarificationAnswer, ClarificationState } from '@zuca/types/clarification';
-import type { LlmModel } from '@zuca/types/llm';
+import { type LlmModel, isOpenAIModel } from '@zuca/types/llm';
 
 const USE_AGENTS = process.env.USE_AGENTS_PIPELINE === 'true';
 
-async function getRunPipelineFn() {
-  if (USE_AGENTS) {
+async function getRunPipelineFn(model?: string) {
+  if (USE_AGENTS && (!model || isOpenAIModel(model))) {
     const { runAgentsPipeline } = await import('@zuca/pipeline-agents');
     return runAgentsPipeline;
   }
@@ -115,7 +115,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     const model = session.llm_model as LlmModel | undefined;
 
     try {
-      const runFn = await getRunPipelineFn();
+      const runFn = await getRunPipelineFn(model);
       const pipelineResult = await runFn(input, {
         sessionId: id,
         previousResult: clarificationState.partialResult as Partial<ZucaOutput>,

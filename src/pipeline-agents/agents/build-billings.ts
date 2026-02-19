@@ -3,10 +3,10 @@ import { loadPrompt, PROMPTS } from '../../llm/prompts/index';
 import { BuildBillingsOutputSchema } from '../schemas/build-billings';
 import type { PipelineContext } from '../context';
 
-export function createBuildBillingsAgent() {
+export function createBuildBillingsAgent(model: string = 'gpt-5.2') {
   return new Agent<PipelineContext, typeof BuildBillingsOutputSchema>({
     name: 'build-billings',
-    model: 'gpt-5.2',
+    model,
     instructions: async (ctx) => {
       const pctx = ctx.context;
       const basePrompt = await loadPrompt(PROMPTS.BUILD_BILLINGS);

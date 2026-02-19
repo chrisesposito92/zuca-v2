@@ -9,13 +9,13 @@ import type { PobTemplate } from '../../types/golden-use-cases';
  * Creates a Design Subscription agent dynamically per-run.
  * The schema depends on POB template identifiers from golden data.
  */
-export function createDesignSubscriptionAgent(pobTemplates: PobTemplate[]) {
+export function createDesignSubscriptionAgent(pobTemplates: PobTemplate[], model: string = 'gpt-5.2') {
   const outputSchema = createDesignSubscriptionOutputSchema(pobTemplates);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return new Agent<PipelineContext, ZodObject<any, any>>({
     name: 'design-subscription',
-    model: 'gpt-5.2',
+    model,
     instructions: async (ctx) => {
       const pctx = ctx.context;
       const basePrompt = await loadPrompt(PROMPTS.DESIGN_SUBSCRIPTION);

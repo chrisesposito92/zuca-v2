@@ -3,10 +3,10 @@ import { loadPrompt, PROMPTS } from '../../llm/prompts/index';
 import { AnalyzeContractOutputSchema } from '../schemas/analyze-contract';
 import type { PipelineContext } from '../context';
 
-export function createAnalyzeContractAgent() {
+export function createAnalyzeContractAgent(model: string = 'gpt-5.2') {
   return new Agent<PipelineContext, typeof AnalyzeContractOutputSchema>({
     name: 'analyze-contract',
-    model: 'gpt-5.2',
+    model,
     instructions: async (ctx) => {
       const pctx = ctx.context;
       const basePrompt = await loadPrompt(PROMPTS.ANALYZE_CONTRACT);

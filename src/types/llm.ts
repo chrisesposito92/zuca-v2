@@ -17,3 +17,11 @@ export function resolveModelId(model: string): string {
 export type LlmModel = (typeof LLM_MODELS)[number];
 
 export const LlmModelSchema = z.enum(LLM_MODELS);
+
+/**
+ * Check if a model is supported by the OpenAI Agent SDK pipeline.
+ * Gemini models require the original pipeline which routes through src/llm/client.ts.
+ */
+export function isOpenAIModel(model: string): boolean {
+  return model.startsWith('gpt-') || model.startsWith('o');
+}

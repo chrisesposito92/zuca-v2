@@ -59,7 +59,7 @@ src/pipeline-agents/
 **Files to create/modify:**
 
 1. **Install dependency**
-   - `npm install @openai/agents` (zod@3 already installed)
+   - `npm install @openai/agents` (Zod already installed, v4)
 
 2. **`src/pipeline-agents/context.ts`** -- PipelineContext type
    ```typescript

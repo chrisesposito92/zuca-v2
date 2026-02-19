@@ -3,10 +3,10 @@ import { loadPrompt, PROMPTS } from '../../llm/prompts/index';
 import { BuildContractsOrdersOutputSchema } from '../schemas/build-contracts-orders';
 import type { PipelineContext } from '../context';
 
-export function createBuildContractsOrdersAgent() {
+export function createBuildContractsOrdersAgent(model: string = 'gpt-5.2') {
   return new Agent<PipelineContext, typeof BuildContractsOrdersOutputSchema>({
     name: 'build-contracts-orders',
-    model: 'gpt-5.2',
+    model,
     instructions: async (ctx) => {
       const pctx = ctx.context;
       const basePrompt = await loadPrompt(PROMPTS.BUILD_CONTRACTS_ORDERS);

@@ -3,10 +3,10 @@ import { loadPrompt, PROMPTS } from '../../llm/prompts/index';
 import { BuildRevRecWaterfallOutputSchema } from '../schemas/build-revrec-waterfall';
 import type { PipelineContext } from '../context';
 
-export function createBuildRevRecWaterfallAgent() {
+export function createBuildRevRecWaterfallAgent(model: string = 'gpt-5.2') {
   return new Agent<PipelineContext, typeof BuildRevRecWaterfallOutputSchema>({
     name: 'build-revrec-waterfall',
-    model: 'gpt-5.2',
+    model,
     instructions: async (ctx) => {
       const pctx = ctx.context;
       const basePrompt = await loadPrompt(PROMPTS.BUILD_REVREC_WATERFALL);

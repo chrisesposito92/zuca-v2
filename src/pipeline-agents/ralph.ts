@@ -52,7 +52,7 @@ function createClarificationFromEval(
   evaluation: SelfEvaluation
 ): ClarificationQuestion {
   return {
-    questionId: `ralph:${stepName}:${Date.now()}`,
+    questionId: `${stepName}:ralph:${Date.now()}`,
     stepName,
     question: evaluation.clarificationQuestion!,
     context: evaluation.clarificationContext,
@@ -158,7 +158,7 @@ export async function withRalphAgent<T>(options: WithRalphAgentOptions<T>): Prom
         state: createInitialIterationState(stepName, 1),
         clarificationRequest: {
           question: {
-            questionId: `step:${stepName}:${Date.now()}`,
+            questionId: `${stepName}:${Date.now()}`,
             stepName,
             question: (output as any).clarification_question,
             context: (output as any).clarification_context,
@@ -221,7 +221,7 @@ export async function withRalphAgent<T>(options: WithRalphAgentOptions<T>): Prom
   });
 
   // Create self-eval agent (reused across iterations)
-  const selfEvalAgent = createSelfEvalAgent();
+  const selfEvalAgent = createSelfEvalAgent(pipelineContext.model);
 
   // Main iteration loop
   while (state.currentIteration <= state.maxIterations) {
@@ -264,7 +264,7 @@ export async function withRalphAgent<T>(options: WithRalphAgentOptions<T>): Prom
     if (isClarificationOutput(stepOutput)) {
       if (interactiveMode && config.allowClarifications) {
         const question: ClarificationQuestion = {
-          questionId: `step:${stepName}:${Date.now()}`,
+          questionId: `${stepName}:${Date.now()}`,
           stepName,
           question: (stepOutput as any).clarification_question,
           context: (stepOutput as any).clarification_context,
@@ -295,6 +295,24 @@ export async function withRalphAgent<T>(options: WithRalphAgentOptions<T>): Prom
         };
       } else {
         debugLog('Ralph skipping step clarification (non-interactive)', { stepName });
+        state = {
+          ...state,
+          currentIteration: state.currentIteration + 1,
+          attempts: [
+            ...state.attempts,
+            {
+              attemptNumber: state.currentIteration,
+              output: undefined as unknown as T,
+              selfEvaluation: {
+                decision: 'iterate' as const,
+                confidence: 0,
+                reasoning: 'Skipped: clarification requested but non-interactive mode',
+              },
+              timestamp: new Date().toISOString(),
+              durationMs: Date.now() - iterationStartTime,
+            },
+          ],
+        };
         continue;
       }
     }

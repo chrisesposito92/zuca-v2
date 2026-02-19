@@ -16,6 +16,10 @@ import type { PobTemplate } from '../../types/golden-use-cases';
 export function createDesignSubscriptionOutputSchema(pobTemplates: PobTemplate[]) {
   const validPobIdentifiers = pobTemplates.map(p => p['POB Identifier']);
 
+  if (validPobIdentifiers.length === 0) {
+    throw new Error('No POB templates loaded — cannot build design-subscription schema');
+  }
+
   const PobMappingItemSchema = z.object({
     chargeName: z.string().describe('Name of the charge being mapped'),
     productName: z.string().nullable().describe('Product name from rate plan'),

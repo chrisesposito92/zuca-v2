@@ -96,6 +96,36 @@ export interface AgentsPipelineOptions {
 }
 
 // ============================================================================
+// Output Sanitization
+// ============================================================================
+
+/** Keys added by ClarificationFieldsSchema that must not leak into ZucaOutput */
+type ClarificationKey =
+  | 'needs_clarification'
+  | 'clarification_question'
+  | 'clarification_options'
+  | 'clarification_context'
+  | 'clarification_priority';
+
+/**
+ * Strip clarification fields from agent output before storing in ZucaOutput.
+ * Step schemas merge ClarificationFieldsSchema for the LLM, but those fields
+ * must not leak into the final pipeline result.
+ */
+function stripClarificationFields<T>(output: T): Omit<T, ClarificationKey> {
+  const obj = output as Record<string, unknown>;
+  const {
+    needs_clarification: _nc,
+    clarification_question: _cq,
+    clarification_options: _co,
+    clarification_context: _cc,
+    clarification_priority: _cp,
+    ...clean
+  } = obj;
+  return clean as Omit<T, ClarificationKey>;
+}
+
+// ============================================================================
 // Context Prefetch Helpers
 // ============================================================================
 
@@ -554,7 +584,7 @@ export async function runAgentsPipeline(
       const ragQuery = await extractRagKeywords(validatedInput.use_case_description);
       await prefetchStepContext(ctx, 'analyze_contract', ragQuery, options.clarificationAnswers);
 
-      const agent = createAnalyzeContractAgent();
+      const agent = createAnalyzeContractAgent(selectedModel);
 
       interface AnalyzeContractOutput {
         contractIntel: ContractIntel;
@@ -626,7 +656,7 @@ export async function runAgentsPipeline(
       });
       await prefetchStepContext(ctx, 'design_subscription', ragQuery, options.clarificationAnswers);
 
-      const agent = createDesignSubscriptionAgent(goldenData.pobTemplates);
+      const agent = createDesignSubscriptionAgent(goldenData.pobTemplates, selectedModel);
 
       interface DesignSubscriptionOutput {
         subscriptionSpec: SubscriptionSpec;
@@ -680,7 +710,7 @@ export async function runAgentsPipeline(
       const ragQuery = await extractRagKeywords(validatedInput.use_case_description);
       await prefetchStepContext(ctx, 'contracts_orders', ragQuery, options.clarificationAnswers);
 
-      const agent = createBuildContractsOrdersAgent();
+      const agent = createBuildContractsOrdersAgent(selectedModel);
 
       const ralphResult = await withRalphAgent<ContractsOrdersOutput>({
         stepName: 'contracts_orders',
@@ -709,7 +739,7 @@ export async function runAgentsPipeline(
         };
       }
 
-      result.contracts_orders = ralphResult.output;
+      result.contracts_orders = stripClarificationFields(ralphResult.output);
       stepTimings.contracts_orders = ralphResult.state.attempts.reduce((sum, a) => sum + a.durationMs, 0);
     }
 
@@ -720,7 +750,7 @@ export async function runAgentsPipeline(
       const ragQuery = await extractRagKeywords(validatedInput.use_case_description);
       await prefetchStepContext(ctx, 'billings', ragQuery, options.clarificationAnswers);
 
-      const agent = createBuildBillingsAgent();
+      const agent = createBuildBillingsAgent(selectedModel);
 
       const ralphResult = await withRalphAgent<BillingsOutput>({
         stepName: 'billings',
@@ -749,7 +779,7 @@ export async function runAgentsPipeline(
         };
       }
 
-      result.billings = ralphResult.output;
+      result.billings = stripClarificationFields(ralphResult.output);
       stepTimings.billings = ralphResult.state.attempts.reduce((sum, a) => sum + a.durationMs, 0);
     }
 
@@ -767,7 +797,7 @@ export async function runAgentsPipeline(
 
       await prefetchStepContext(ctx, 'revrec_waterfall', ragQuery, options.clarificationAnswers);
 
-      const agent = createBuildRevRecWaterfallAgent();
+      const agent = createBuildRevRecWaterfallAgent(selectedModel);
 
       const ralphResult = await withRalphAgent<RevRecWaterfallOutput>({
         stepName: 'revrec_waterfall',
@@ -796,7 +826,7 @@ export async function runAgentsPipeline(
         };
       }
 
-      result.revrec_waterfall = ralphResult.output;
+      result.revrec_waterfall = stripClarificationFields(ralphResult.output);
       stepTimings.revrec_waterfall = ralphResult.state.attempts.reduce((sum, a) => sum + a.durationMs, 0);
     }
 
@@ -833,7 +863,7 @@ export async function runAgentsPipeline(
         result.summary = { assumptions: [], open_questions: [] };
       } else {
         const startTime = Date.now();
-        const agent = createSummarizeAgent();
+        const agent = createSummarizeAgent(selectedModel);
         const userMessage = buildSummarizeMessage(ctx);
         const runResult = await run(agent, userMessage, { context: ctx });
         result.summary = runResult.finalOutput as SummaryOutput;
