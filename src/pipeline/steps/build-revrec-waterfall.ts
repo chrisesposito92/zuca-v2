@@ -160,7 +160,7 @@ export async function buildRevRecWaterfall(
   pobTemplates: PobTemplate[],
   clarificationContext?: string, // Context from user's clarification answer
   previousOutput?: RevRecWaterfallOutput,
-  reasoningEffort: ReasoningEffort = 'high', // Complex rev rec calculations need thorough reasoning
+  reasoningEffort: ReasoningEffort = 'medium', // Rev rec calculations need solid reasoning
   model?: LlmModel
 ): Promise<RevRecWaterfallOutput | StepClarificationRequest> {
   debugLog('Building Rev Rec Waterfall', {

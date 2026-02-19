@@ -401,7 +401,7 @@ export async function designSubscription(
   pobTemplates: PobTemplate[],
   clarificationContext?: string, // Context from user's clarification answer
   previousDesign?: SubscriptionDesignOutput,
-  reasoningEffort: ReasoningEffort = 'high', // Complex design task needs thorough reasoning
+  reasoningEffort: ReasoningEffort = 'medium', // Complex design task needs solid reasoning
   model?: LlmModel
 ): Promise<SubscriptionDesignOutput | StepClarificationRequest> {
   debugLog('Designing subscription (combined subscription spec + POB mapping)', {

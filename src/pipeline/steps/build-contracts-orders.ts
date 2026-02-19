@@ -179,7 +179,7 @@ export async function buildContractsOrders(
   contractIntel: ContractIntel,
   clarificationContext?: string, // Context from user's clarification answer
   previousOutput?: ContractsOrdersOutput,
-  reasoningEffort: ReasoningEffort = 'high', // Complex allocation calculations need thorough reasoning
+  reasoningEffort: ReasoningEffort = 'medium', // Allocation calculations need solid reasoning
   model?: LlmModel
 ): Promise<ContractsOrdersOutput | StepClarificationRequest> {
   debugLog('Building Contracts/Orders table', {
