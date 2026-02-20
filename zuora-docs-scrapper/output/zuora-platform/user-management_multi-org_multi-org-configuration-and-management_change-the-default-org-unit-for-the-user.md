@@ -2,7 +2,7 @@
 title: "Change the default Org unit for the user"
 url: "https://docs.zuora.com/en/zuora-platform/user-management/multi-org/multi-org-configuration-and-management/change-the-default-org-unit-for-the-user"
 product: "zuora-platform"
-scraped_at: "2026-01-15T21:59:40.854Z"
+scraped_at: "2026-02-20T17:47:32.248Z"
 ---
 
 # Change the default Org unit for the user

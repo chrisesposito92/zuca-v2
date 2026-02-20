@@ -2,7 +2,7 @@
 title: "Bundle upload"
 url: "https://docs.zuora.com/en/zuora-revenue/advanced-revenue-operations/bundle-explosion/bundle-upload"
 product: "zuora-revenue"
-scraped_at: "2025-12-24T04:32:54.743Z"
+scraped_at: "2026-02-20T21:19:44.004Z"
 ---
 
 # Bundle upload
@@ -17,10 +17,14 @@ Before you can upload bundle definitions to Zuora Revenue, ensure the following 
 
 -   POB templates are created for children lines of the bundle. For information, see [Create POB template](/zuora-revenue/getting-started/policy-management/performance-obligations-processing) .
 
--   Advanced rules are associated with the appropriate POB templates. For information, see [Advanced Rule](/zuora-revenue/getting-started/policy-management/performance-obligations-processing/define-pob-assignment-rules/advance-rule) .
+-   Advanced rules are associated with the appropriate POB templates. For information, see [Advanced Rule](/zuora-revenue/getting-started/policy-management/performance-obligations-processing/define-pob-assignment-rules/define-and-apply-advance-rules) .
 
 -   The Enable\_Bundle\_Upload profile is set to Yes on the Setups > Application > Profiles page.
 
+
+## Procedure
+
+The procedure to upload a bundle definition is provided [here](/zuora-revenue/advanced-revenue-operations/bundle-explosion/bundle-upload/upload-bundle-definitions).
 
 ## What to do next
 

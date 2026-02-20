@@ -2,14 +2,12 @@
 title: "Adding a product using Zuora Interface"
 url: "https://docs.zuora.com/en/zuora-billing/manage-accounts-subscriptions-and-non-subscriptions/manage-subscription-transactions/subscribe-and-amend/amend-subscriptions/adding-a-product-using-zuora-interface"
 product: "zuora-billing"
-scraped_at: "2025-12-24T05:34:45.179Z"
+scraped_at: "2026-02-20T17:32:04.679Z"
 ---
 
 # Adding a product using Zuora Interface
 
-This article explains how to add a product to a subscription.
-
-Use the following steps for each product you want to add:
+This task topic explains how to add a product to a subscription.
 
 1.  Click on the subscription you want to change.
 2.  Click Amendment.
@@ -17,12 +15,12 @@ Use the following steps for each product you want to add:
 
 3.  Enter an Amendment Name. Optionally, add a Change Description.
 
-    ![amendment2](/db/organizations/zuora/repositories/prod-sitemap/__sandbox/documents/_MT_Content_Migration/Zuora_Billing/Manage_accounts__subscriptions__and_non-subscription_transactions/extra_images/amendment2.png)
+    ![amendment2](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/4de30ba1-9cd6-4c40-b03b-db9733903d02?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjRkZTMwYmExLTljZDYtNGM0MC1iMDNiLWRiOTczMzkwM2QwMiIsImV4cCI6MTc3MTY5NTEyMiwianRpIjoiNTU2NzY4NTQwYjdjNDYzY2EzNmQ0MDdmZDA0NTBhNDAiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.TsbmFwtsWiWL94WSMSojBXOp-ftl_R5sDhOrs6oSbvs)
 
 4.  Select New Product from Amendment Type list and click Save.
 5.  Click Add New Product & Rate Plan. . Using the Select Product drop-down, select the product you want to add, then click Select to choose the rate plan.
 
-    ![add-product](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/90a05eda-9404-4195-a6c8-b68e70eb578d?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjkwYTA1ZWRhLTk0MDQtNDE5NS1hNmM4LWI2OGU3MGViNTc4ZCIsImV4cCI6MTc2NjY0MDg4MywianRpIjoiZWFjYTBjNDlmMDYxNDQ3Mjk3NGMwNmI1MjBmOTg1NTEiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.e38Wa2RWAwtHV6tl6aiMK1n0YIwQhSkiVGckT0hvGK8)
+    ![add-product](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/90a05eda-9404-4195-a6c8-b68e70eb578d?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjkwYTA1ZWRhLTk0MDQtNDE5NS1hNmM4LWI2OGU3MGViNTc4ZCIsImV4cCI6MTc3MTY5NTEyMiwianRpIjoiMDEzNDdjMGE0NWYwNDBhYmI5ODVjYTRjZTVjNWRjODEiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.RJom8bFRm9VgbUa7nQCtjQmzow0wzpeiW_YoenOD0sg)
 
 6.  Click Contract effective, then enter a Contract effective Date and click Save.
 

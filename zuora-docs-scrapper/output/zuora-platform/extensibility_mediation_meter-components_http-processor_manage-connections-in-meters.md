@@ -2,7 +2,7 @@
 title: "Manage connections in meters"
 url: "https://docs.zuora.com/en/zuora-platform/extensibility/mediation/meter-components/http-processor/manage-connections-in-meters"
 product: "zuora-platform"
-scraped_at: "2026-01-15T22:00:43.898Z"
+scraped_at: "2026-02-20T17:49:32.335Z"
 ---
 
 # Manage connections in meters
@@ -25,9 +25,8 @@ The Manage Connections feature in Zuora Mediation lets you create and maintain r
 7.  From the Authentication Type drop-down list, select the authentication scheme to be used when the HTTP processor calls this endpoint.
     Depending on the selected authentication type, additional fields appear, such as user name and password, or header key and value pairs.
     1.  When the endpoint does not require auth headers, select No Auth.
-    2.  To use header-based authentication, select Header Auth and specify values for the Key and Value pair.
-    3.  To use basic authentication, select Basic Auth and specify the User Name and Password.
-    4.  To use bearer token-based authentication, select Bearer Auth and paste the Token.
+    2.  To use basic authentication, select Basic Auth and specify the User Name and Password.
+    3.  To use bearer token-based authentication, select Bearer Auth and paste the Token.
 8.  Click the Test Authentication button to verify that the connection works.
 9.  Click Save.
 

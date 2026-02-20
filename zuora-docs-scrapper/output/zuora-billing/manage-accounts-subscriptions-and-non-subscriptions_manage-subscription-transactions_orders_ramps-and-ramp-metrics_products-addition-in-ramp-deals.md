@@ -2,7 +2,7 @@
 title: "Products addition in ramp deals"
 url: "https://docs.zuora.com/en/zuora-billing/manage-accounts-subscriptions-and-non-subscriptions/manage-subscription-transactions/orders/ramps-and-ramp-metrics/products-addition-in-ramp-deals"
 product: "zuora-billing"
-scraped_at: "2025-12-24T05:27:57.325Z"
+scraped_at: "2026-02-20T17:31:27.558Z"
 ---
 
 # Products addition in ramp deals

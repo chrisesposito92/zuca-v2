@@ -2,7 +2,7 @@
 title: "Zuora Revenue GL Connector for Netsuite"
 url: "https://docs.zuora.com/en/zuora-revenue/advanced-revenue-operations/integration-hub/zuora-revenue-gl-connector-for-netsuite"
 product: "zuora-revenue"
-scraped_at: "2025-12-24T04:35:29.362Z"
+scraped_at: "2026-02-20T21:20:20.103Z"
 ---
 
 # Zuora Revenue GL Connector for Netsuite
@@ -32,6 +32,38 @@ The Revenue GL Connector for NetSuite is a pre-built capability that automates t
 -   Supports summary and detailed posting (up to 2.5M Journal Entries)
 -   Supports multi-subsidiary/multi-currency journal posting
 
+## Key considerations
+
+When using the NetSuite connector, please ensure the following data format and content requirements are met in Revenue:
+
+-   Journal Header Fields (Subsidiary, Currency, Accounting Period): The exact Name (not the display name or entire hierarchy name) must be maintained in Revenue.
+
+-   Journal Line Item Fields:
+
+    -   GL Account: The GL Account Number (not the Account Name, Display Name, or Hierarchy Name) must be maintained in Revenue.
+
+    -   Department, Class, Location, etc.: The exact Name (not the display name or entire hierarchy name) must be maintained in Revenue.
+
+-   Date Fields (e.g., Journal Transaction Date): The format must be YYYY-MM-DD. This is typically configured in the Revenue GL Interface setup using an expression, such as to\_char(schd\_prd\_end\_date,'YYYY-MM-dd').
+
+
+The connector will translate the data value for all the fields listed above into the corresponding NetSuite Internal ID before posting the journal entry to NetSuite.
+
+## Limitations
+
+The connector has the following limitations:
+
+-   It does not automatically translate the Entity and Custom List field values. These fields include Customer, Vendor, Partner, or Employee Name on the NetSuite Journal Object into the required NetSuite Internal IDs.
+
+-   You must ensure that the corresponding NetSuite Internal ID is maintained in Revenue for the following fields:
+
+    -   Entity (Name of the Customer, Vendor, Partner, or Employee)
+
+    -   Any Custom List or Look-up type fields on the NetSuite journal object.
+
+
+It only supports posting Standard and Custom Journal Entry Transactions. Posting to Internal Company Journal Transactions and Statistical Journal Entries is not supported.
+
 ## Prerequisites
 
 Ensure the following conditions are met for the Revenue to NetSuite GL connector.
@@ -43,7 +75,7 @@ Ensure the following conditions are met for the Revenue to NetSuite GL connector
 
 You are required to configure Zuora Revenue and NetSuite. The following flow diagram outlines configuring and executing the Revenue GL connector for NetSuite.
 
-![](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/705c2a44-ee97-4fd9-ab14-5ddcc3464875?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjcwNWMyYTQ0LWVlOTctNGZkOS1hYjE0LTVkZGNjMzQ2NDg3NSIsImV4cCI6MTc2NjYzNzMyNywianRpIjoiODVlYzM1YzM0MmNiNDRmNTllZWYxY2U1YjdjN2ZhZWMiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.tNMpOjvOgtDLvr95t7HuC-wCXQGbZ6KPuknzqN74J8Y)
+![](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/705c2a44-ee97-4fd9-ab14-5ddcc3464875?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjcwNWMyYTQ0LWVlOTctNGZkOS1hYjE0LTVkZGNjMzQ2NDg3NSIsImV4cCI6MTc3MTcwODgxMywianRpIjoiYjEzYzI5NzgwNjQ3NDQyNWJjYTA4M2UxYzQ0MDUyMDQiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.NmgzepGo-PKDIGjkOg04m9LpEgcmVFyoBod6UvmQUAI)
 
 ## Configurations in Zuora Revenue
 
@@ -61,13 +93,17 @@ With version 37.17.05.0, as an admin, you can select the grouping criteria of th
 
 Complete the following steps to configure GL Interface in Zuora Revenue:
 
-1.  Navigate to Setup > Application > Interface Setup
-2.  Click GL Mapping.
-3.  Toggle the Enabled button to Yes for Accounted Dr and Accounted Cr Interface Field Name.
-    Note: You must configure these fields to post journal entries with amounts in functional currency and to avoid failure of journal accounting batch creation after enabling the connectors.
+-   Navigate to Setup > Application > Interface Setup
+-   Click GL Mapping.
+-   Toggle the Enabled button to Yes for Accounted Dr and Accounted Cr Interface Field Name.
 
-4.  Toggle the Enabled button to Yes for Accounting Date Interface Field Name.
-5.  Click Save.
+    Note:
+
+    -   You must configure these fields in Revenue Interface Setup (both GL and MJE tabs) to post journal entries with amounts in the functional currency and to avoid the failure of journal accounting batch creation after enabling the connectors.
+    -   The Connector splits or chunks the Transfer Batch into multiple pieces based on the functional amounts (like Accounted\_CR and Accounted\_DR), not the transactional amounts (Entered\_CR and Entered\_DR). However, the journals can still be posted in the transactional currency to NetSuite through the connector.
+
+-   Toggle the Enabled button to Yes for Accounting Date Interface Field Name.
+-   Click Save.
 
 ## Run Transfer Accounting in Zuora Revenue
 

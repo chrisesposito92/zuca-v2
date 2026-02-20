@@ -1,0 +1,43 @@
+---
+title: "Field descriptions of InvoiceItemAdjustment"
+url: "https://docs.zuora.com/en/zuora-platform/integration/apis/soap-api/soap-api-object-reference/invoiceitemadjustment/field-descriptions-of-invoiceitemadjustment"
+product: "zuora-platform"
+scraped_at: "2026-02-20T21:09:14.536Z"
+---
+
+# Field descriptions of InvoiceItemAdjustment
+
+This reference provides the description of the fields on the InvoiceItemAdjustment object.
+
+| Name | Required to create? | Allowed operations | Description |
+| --- | --- | --- | --- |
+| AccountId | optional | Query Filter | The ID of the account that owns the invoice.Type : zns:IDVersion notes : --Values : inherited from Account.ID for the invoice owner |
+| AccountingCode | optional | Create Query Filter | The accounting code for the invoice item. Accounting codes group transactions that contain similar accounting attributes.Type : stringCharacter limit : 100Version notes : --Values : inherited from InvoiceItem.AccountingCode |
+| AdjustmentDate | required | Create Query Filter | The date when the invoice item adjustment is applied. This date must be the same as the invoice's date or later.Type :date: Supported as of WSDL version 69+dateTime: Supported through WSDL version 68Character limit : 29Version notes : --Values : a valid date and time value |
+| AdjustmentNumber | optional | Create Query Filter | A unique string to identify an individual invoice item adjustment.Type : stringCharacter limit : 255Version notes : --Values : automatically generated |
+| Amount | required | Create Query Filter | The amount of the invoice item adjustment. The value of Amount must be positive. Use the required parameter Type to either credit or charge (debit) this amount on the invoice.Type : decimal (currency)Character limit : 16Version notes : --Values : a valid currency amount |
+| CancelledById | optional | Query Filter | The ID of the Zuora user who canceled the invoice item adjustment. Zuora generates this read-only field only if the adjustment is canceled.Type : zns:IDCharacter limit : 32Version notes : --Values : automatically generated |
+| CancelledDate | optional | Query Filter | The date when the invoice item adjustment is canceled. Zuora generates this read-only field if this adjustment is canceled.Type : dateTimeCharacter limit : 29Version notes : --Values : automatically generated |
+| Comment | optional | Create Query Filter | Use this field to record comments about the invoice item adjustment.Type : stringCharacter limit : 255Version notes : --Values : a string of 255 characters or fewer |
+| CreatedById | optional | Create Query Filter | The user ID of the person who created the invoice item.Type : zns:IDCharacter limit : 32Version notes : WSDL 20.0+Values : automatically generated |
+| CreatedDate | optional | Query Filter | The date the invoice item was created.Type : dateTimeCharacter limit : 29Version notes : WSDL 20.0+Values : automatically generated |
+| CustomerName | optional | Query Filter | The name of the account that owns the associated invoice.Type : string Character limit : 50 Version notes : -- Values : inherited from Account .NameNote : This value changes if Account.Name is updated. The values of UpdatedById and UpdatedDate for the InvoiceItemAdjustment do not change when Account.Name is updated. |
+| CustomerNumber | optional | Query Filter | The unique account number of the customer's account.Type : string Character limit : 70 Version notes : -- Values : inherited from Account .AccountNumberNote : This value changes if Account.AccountNumber is updated. The values of UpdatedById and UpdatedDate for the InvoiceItemAdjustment do not change when Account.AccountNumber is updated. |
+| DeferredRevenueAccount | optional | Create Query Filter | Records the deferred accounting code in the finance system.Type : stringCharacter limit : 100Version notes : WSDL 63.0+V alues : If this field is not passed in, a value from InvoiceItem will be used.Note:This feature is in the Early Adopter phase. If you want to have access to the feature, submit a request at Zuora Global Support . |
+| ExcludeItemBillingFromRevenueAccounting | optional | Create Query Update | Indicates whether the billing item is to be excluded from revenue accounting.Type: booleanCharacter limit: 100Version notes: WSDL 117.0+Values: automatically generated from one of the following: True , False (default)Note : This field is only available if you have the Billing - Revenue Integration feature enabled. |
+| Id | optional | Query Filter | The ID of this object. Upon creation, the ID for this object is InvoiceItemAdjustmentId .Type : zns:IDCharacter limit : 32Version notes : --Values : automatically generated |
+| InvoiceId | required | Create Query Filter | The ID of the invoice associated with the adjustment. The adjustment invoice item is in this invoice. This field is optional if you specify a value for the InvoiceNumber field.Type : zns:IDCharacter limit : 3Version notes : --Values : a valid invoice ID |
+| InvoiceItemName | optional | Query Filter | The name of the invoice item's charge. This field is required in query() calls, but is inherited in other calls.Type : stringCharacter limit : 255Version notes : --Values : inherited from InvoiceItem.ChargeName |
+| InvoiceNumber | required | Create Query Filter | The unique identification number for the invoice that contains the invoice item. This field is optional if you specify a value for the InvoiceId field.Type : stringCharacter limit : 32Version notes : --Values : a valid invoice number |
+| ReasonCode | optional | Create Query Update Filter | A code identifying the reason for the transaction. Must be an existing reason code or empty. If you do not specify a value, Zuora uses the default reason code.Type : stringCharacter limit : 32Version notes : WSDL 47.0+V alues : a valid reason code |
+| RecognizedRevenueAccount | optional | Create Query Filter | Records the recognized accounting code in the finance system.Type : stringCharacter limit : 100Version notes : WSDL 63.0+V alues : If this field is not passed in, a value from InvoiceItem will be used.Note:This feature is in the Early Adopter phase. If you want to have access to the feature, submit a request at Zuora Global Support . |
+| ReferenceId | optional | Create Query Filter | A code to reference an object external to Zuora. For example, you can use this field to reference a case number in an external system.Type : stringCharacter limit : 60Version notes : --Values : a string of 60 characters or fewer |
+| ServiceEndDate | optional | Query Filter | The end date of the service period associated with the invoice item. Service ends one second before the date in this value. This field is required in query() calls.Type :date: Supported as of WSDL version 69+dateTime: Supported through WSDL version 68Character limit : 29Version notes : --Values : a valid date |
+| ServiceStartDate | optional | Query Filter | The start date of the service period associated with the invoice item. Service ends one second before the date in this value. This field is required in query() calls.Type :date: Supported as of WSDL version 69+dateTime: Supported through WSDL version 68Character limit : 29Version notes : --Values : a valid date |
+| SourceId | required | Create Query Filter | The ID of the item specified in the SourceType field.Type : zns:IDCharacter limit : 32Version notes : --Values : a valid invoice item ID or taxation item ID |
+| SourceType | required | Create Query Filter | The type of adjustment.Type : string (enum)Character limit : 13Version notes : --Values : InvoiceDetail, Tax |
+| Status | optional | Query Update Filter | The status of the invoice item adjustment. This field is required in query() calls, but is automatically generated in other calls.Type : string (enum)Character limit : 9Version notes : --Values : Canceled, Processed |
+| TransferredToAccounting | optional | Query Update Filter | Indicates the status of the adjustment's transfer to an external accounting system, such as NetSuite.Type : string (enum)Character limit : 10Version notes : --Values : Processing, Yes, Error, Ignore |
+| Type | required | Create Query Filter | Indicates whether the adjustment credits or debits the invoice item amount.Type : string (enum)Character limit : 6Version notes : --Values : Credit, Charge |
+| UpdatedById | optional | Query Filter | The ID of the user who last updated the invoice item.Type : zns:IDCharacter limit : 32Version notes : WSDL 20.0+Values : automatically generated |
+| UpdatedDate | optional | Query Filter | The date when the invoice item was last updated.Type : dateTimeCharacter limit : 29Version notes : WSDL 20.0+Values : automatically generated |

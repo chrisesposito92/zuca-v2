@@ -2,7 +2,7 @@
 title: "Enable Invoice Settlement for Billing - Revenue Integration"
 url: "https://docs.zuora.com/en/zuora-revenue/advanced-revenue-operations/enable-invoice-settlement-for-billing---revenue-integration"
 product: "zuora-revenue"
-scraped_at: "2025-12-24T04:38:15.333Z"
+scraped_at: "2026-02-20T21:20:37.041Z"
 ---
 
 # Enable Invoice Settlement for Billing - Revenue Integration
@@ -20,4 +20,4 @@ Billing - Revenue Integration supports syncing and transforming the Credit Memo 
 
 ## Procedure
 
-[Click here](/zuora-revenue/advanced-revenue-operations/enable-invoice-settlement-for-billing---revenue-integration/procedure) to understand how to enable invoice settlement.
+[Click here](/zuora-revenue/advanced-revenue-operations/enable-invoice-settlement-for-billing---revenue-integration/enable-invoice-settlement) to understand how to enable invoice settlement.

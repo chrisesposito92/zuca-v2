@@ -2,14 +2,14 @@
 title: "About SAP (Billing) connector"
 url: "https://docs.zuora.com/en/zuora-platform/integration/integration-hub/zuora-connector-for-sap/sap_billing/about-sap-billing-connector"
 product: "zuora-platform"
-scraped_at: "2025-12-24T08:36:41.250Z"
+scraped_at: "2026-02-20T21:12:14.036Z"
 ---
 
 # About SAP (Billing) connector
 
-The SAP GL (Billing) connector automates the integration of Zuora with SAP, facilitating seamless transfer of journal entries and billing documents without the need for custom-built solutions.
+The SAP (Billing) connector automates the integration of Zuora with SAP, facilitating seamless transfer of journal entries and billing documents without the need for custom-built solutions.
 
-The SAP GL (Billing) connector automates the posting of accounts receivable journals to your SAP general ledger. This no-code solution eliminates the need for a custom-built integration between Zuora and SAP.
+The SAP (Billing) connector automates the posting of accounts receivable journals to your SAP general ledger. This no-code solution eliminates the need for a custom-built integration between Zuora and SAP.
 
 The SAP Connector automates the following transfer operations between Zuora and SAP:
 
@@ -53,9 +53,9 @@ This no-code solution eliminates the need for custom-built integrations between 
 
 ## Prerequisites
 
-To use the SAP GL (Billing) connector, ensure the following prerequisites are met:
+To use the SAP (Billing) connector, ensure the following prerequisites are met:
 
--   SAP GL (Billing) is enabled.
+-   SAP (Billing) is enabled.
 
 -   Finance is enabled.
 
@@ -67,17 +67,17 @@ And optionally:
 
 ## Configuration flow
 
-The following flow diagram outlines the steps in configuring the SAP GL (Billing) connector.
+The following flow diagram outlines the steps in configuring the SAP (Billing) connector.
 
 ![SAP configuration for billing](/db/organizations/zuora/repositories/prod-sitemap/content/documents/external_publications/platform/integration_hub/media/SAP_CONN.png)
 
 ## Execution flow
 
-The following flow diagram outlines the steps in executing the SAP GL (Billing) connector.
+The following flow diagram outlines the steps in executing the SAP (Billing) connector.
 
-![SAP Connector_Billing_Execution flow.png](/db/organizations/zuora/repositories/prod-sitemap/content/documents/external_publications/platform/integration_hub/Zuora_connector_for_SAP/media/SAP_Connector_Billing_Execution_flow.png)
+![SAP Connector_Billing_Execution flow.png](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/9f3fcde0-6dea-4632-8c67-b456a757c921?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjlmM2ZjZGUwLTZkZWEtNDYzMi04YzY3LWI0NTZhNzU3YzkyMSIsImV4cCI6MTc3MTcwODMyOCwianRpIjoiNzE3ZmI4ZGQ2YTFlNGNlN2E2NWI2YTI0MTM1Y2I0MmYiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.RkkUWg3Z0sdAfLCQAdNKke3imc3l0pqqcoVuZUHiw6E)
 
-To start using SAP GL (Billing), perform the tasks described in the following sections:
+To start using SAP (Billing), perform the tasks described in the following sections:
 
 -   [Prepare SAP S/4HANA private cloud](/zuora-platform/integration/integration-hub/zuora-connector-for-sap/sap_billing/prepare-sap-s4hana-private-cloud)
 

@@ -2,7 +2,7 @@
 title: "Disable a sync process"
 url: "https://docs.zuora.com/en/zuora-platform/integration/integration-hub/billing-connector-for-netsuite-gl/using-netsuite-connector/disabling-sync-processes/disable-a-sync-process"
 product: "zuora-platform"
-scraped_at: "2026-01-15T22:01:02.567Z"
+scraped_at: "2026-02-20T21:10:39.356Z"
 ---
 
 # Disable a sync process

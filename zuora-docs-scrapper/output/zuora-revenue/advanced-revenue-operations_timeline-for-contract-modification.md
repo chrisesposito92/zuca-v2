@@ -2,10 +2,12 @@
 title: "Timeline for contract modification"
 url: "https://docs.zuora.com/en/zuora-revenue/advanced-revenue-operations/timeline-for-contract-modification"
 product: "zuora-revenue"
-scraped_at: "2025-12-24T04:33:33.741Z"
+scraped_at: "2026-02-20T21:20:01.469Z"
 ---
 
 # Timeline for contract modification
+
+The timeline for contract modification in Zuora Revenue involves setting up initial and revision timelines based on when changes occur to a revenue contract. This setup is crucial for determining the treatment of contract changes.
 
 The timeline of the contract change plays an important role in determining the treatment for a contract. In Zuora Revenue, there are two types of contract timelines that you need to set up based on the time when changes occur to a revenue contract.
 
@@ -14,7 +16,7 @@ The timeline of the contract change plays an important role in determining the t
 
 The following graphic shows the Contract Modification Timeline section that you need to configure on the Contract Modification page. To open the Contract Modification page, click Contract Modifications under the Policies section from the Zuora Revenue main menu.
 
-![cmod-timeline.png](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/d1b57371-6d9b-4cf4-bc92-438a0928827e?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImQxYjU3MzcxLTZkOWItNGNmNC1iYzkyLTQzOGEwOTI4ODI3ZSIsImV4cCI6MTc2NjYzNzIxMiwianRpIjoiMzIwNDlkZTk2MWRmNDY2NGFiMTUwZTIxMTk3MDAwY2QiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.M8P8TpgxiagnAPqhVg3Ek8NpOKnZhB4H_4e7lsRWczA)
+![cmod-timeline.png](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/d1b57371-6d9b-4cf4-bc92-438a0928827e?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImQxYjU3MzcxLTZkOWItNGNmNC1iYzkyLTQzOGEwOTI4ODI3ZSIsImV4cCI6MTc3MTcwODc5NCwianRpIjoiMTlmMzc4OTgxM2UyNDhhMGE4ODBhZGVlNDY1MzAwZmIiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.rnGfKSuQWD7u2glFziXjwrzVSndTvzis6MlIU7EoNO8)
 
 ## Initial contract timeline
 
@@ -67,6 +69,6 @@ For example, the Duration Type settings on the Contract Modification page are as
 
 The accounting calendar is configured as follows in Zuora Revenue. The fiscal year starts in January and ends in December. Each quarter has three periods.
 
-![accounting-calendar.png](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/d4fd399c-42bd-4a1b-af0d-8d99c45d14db?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImQ0ZmQzOTljLTQyYmQtNGExYi1hZjBkLThkOTljNDVkMTRkYiIsImV4cCI6MTc2NjYzNzIxMiwianRpIjoiMWVmNjliM2FmNGY0NDZhYTkzNmVmNDZiNGE4ZWFkMzIiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.1x8r6f0WYF7AjYfpxI4rNwdPrkSdoXfoIkNsnilx1X8)
+![accounting-calendar.png](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/d4fd399c-42bd-4a1b-af0d-8d99c45d14db?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImQ0ZmQzOTljLTQyYmQtNGExYi1hZjBkLThkOTljNDVkMTRkYiIsImV4cCI6MTc3MTcwODc5NCwianRpIjoiMTI0M2E2MTBiZmIwNGYyY2FjYzNmY2ExZmU0MmQ2ODkiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.BBx30fuWLa5MUCuy-7EQGEEXscrquQ66l6o2Yboajng)
 
 If a revenue contract is created in January, it is still in the initial contract timeline. The last period of the initial contract timeline (Quarter #1) is March, which is displayed as Contract Timeline Period Name in the Overview tab of the Revenue Contract Detail page. If this revenue contract is modified in April, which is in the revision timeline (Quarter #2). The Last Contract Mod Period field displays June because June is the last period of the second quarter.

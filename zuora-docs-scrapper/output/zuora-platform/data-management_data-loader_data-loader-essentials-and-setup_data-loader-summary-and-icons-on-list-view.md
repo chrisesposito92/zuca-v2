@@ -2,7 +2,7 @@
 title: "Data Loader summary and icons on list view"
 url: "https://docs.zuora.com/en/zuora-platform/data-management/data-loader/data-loader-essentials-and-setup/data-loader-summary-and-icons-on-list-view"
 product: "zuora-platform"
-scraped_at: "2026-01-15T21:56:45.427Z"
+scraped_at: "2026-02-20T17:36:25.482Z"
 ---
 
 # Data Loader summary and icons on list view
@@ -14,8 +14,6 @@ This reference topic lists icons for various actions, offering a comprehensive s
 The data loader list view user interface icons represent the various actions that can be performed here.
 
 A comprehensive summary of all the jobs is available. This summary provides a consolidated overview of the various tasks and processes that have been executed or are currently in progress. This summary gives you information on the status and progress of each job at a glance, helping you stay updated on the overall progress of all jobs within the system.
-
-![Data Loader list view](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/12c4c9bf-d718-46d2-b13d-d85185a2e149?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjEyYzRjOWJmLWQ3MTgtNDZkMi1iMTNkLWQ4NTE4NWEyZTE0OSIsImV4cCI6MTc2ODYwMDYwMSwianRpIjoiYmYxNTM3MmFhY2FlNGQ3NmI5YjZlZDcwZmJkYTIxYzYiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiI4RWFZRjVFNjZLaVRYdnNmS3N5NSJ9.r8CngUBfLIYsuohytKWgKNz64qP1GZPSyjLwxhsEPTM)
 
 ## Data Loader list view Icons and functions
 

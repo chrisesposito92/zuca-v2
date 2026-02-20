@@ -2,7 +2,7 @@
 title: "Accounts and contacts"
 url: "https://docs.zuora.com/en/zuora-platform/data-management/data-loader/data-dictionary-for-data-loader/import/accounts-and-contacts"
 product: "zuora-platform"
-scraped_at: "2026-01-15T21:56:45.562Z"
+scraped_at: "2026-02-20T17:36:11.591Z"
 ---
 
 # Accounts and contacts
@@ -43,6 +43,7 @@ Note: Fields with an asterisk mark indicate mandatory fields.
 | Class NS | Value of the Class field for the corresponding customer account in NetSuite. Only available if you have installed the Zuora Connector for NetSuite. | String <= 255 characters |
 | Credit Memo Template Id | The unique ID of the credit memo template, configured in Billing Settings(32 character identifier). | Alphanumeric Id |
 | CRM Account Id | CRM account ID for the account, up to 100 characters. | Alphanumeric(CRM12345678) |
+| Communication Profile ID | The communication profile ID linked to this account.You may provide either or both of the communicationProfileId and profileNumber fields. If both are provided, they must refer to the same communication profile, otherwise the request will fail. | String |
 | Communication Profile Name | The name of the communication profile configured. A string of 70 characters. | Alphanumeric |
 | Currency* | A currency as defined in Billing Settings in the Zuora UI. A string of 3 characters(Required field) | Currency values |
 | Debit Memo Template Id | The unique ID of the credit memo template, configured in Billing Settings(32 character identifier). | Alphanumeric Id |

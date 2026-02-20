@@ -2,7 +2,7 @@
 title: "Create account segments"
 url: "https://docs.zuora.com/en/zuora-revenue/getting-started/system-management/configure-accounting-structure_1/create-account-segments"
 product: "zuora-revenue"
-scraped_at: "2025-12-24T04:23:41.626Z"
+scraped_at: "2026-02-20T21:18:00.946Z"
 ---
 
 # Create account segments
@@ -10,8 +10,6 @@ scraped_at: "2025-12-24T04:23:41.626Z"
 Create account segments in Zuora Revenue to structure your account numbers based on geography, business line, or department.
 
 A segment is part of the business that has separate financial information and a separate management strategy. You can create account segments based on geography, the line of business, or department. The number of segments that you create determines the structure of your account number. At least one segment of the natural account type is required in Zuora Revenue. You can create up to 10 different segments in Zuora Revenue.
-
-Complete the following steps to create one or more segments:
 
 1.  Navigate to Setups > Application .
 2.  Click the right pointing arrow to open the side menu and click Accounting Setup . The Account Setup page is displayed.

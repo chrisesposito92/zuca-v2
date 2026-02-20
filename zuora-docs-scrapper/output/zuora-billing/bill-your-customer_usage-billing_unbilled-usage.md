@@ -2,7 +2,7 @@
 title: "Unbilled Usage"
 url: "https://docs.zuora.com/en/zuora-billing/bill-your-customer/usage-billing/unbilled-usage"
 product: "zuora-billing"
-scraped_at: "2025-12-24T08:28:49.752Z"
+scraped_at: "2026-02-20T17:33:28.886Z"
 ---
 
 # Unbilled Usage
@@ -21,9 +21,9 @@ This feature also enables you to retrieve the consumption information, such as t
 
 ## Availability
 
-You need to turn on the Unbilled Usage feature from the self-service interface.
+In Sandbox environments, you can turn on the Unbilled Usage feature from the self-service interface.
 
-Additionally, if you want Unbilled Usage to support your Production environments' Pre-rated and High Water Mark charge models, submit a request at [Zuora Global Support](https://www.zuora.com/support-center/) for both Sandbox and Production environments.
+In Production environments, you cannot enable Unbilled Usage through the self-service interface. To enable Unbilled Usage in Production, submit a request to [Zuora Global Support](https://www.zuora.com/support-center/). If you also want to use Unbilled Usage with the Pre-Rated Pricing or High Water Mark Pricing charge models, include this in the same support request so that Zuora can perform any required checks, migrations, and feature-flag enablement for both Sandbox and Production environments.
 
 ## Supported charge models
 
@@ -129,6 +129,14 @@ The Unbilled Usage feature currently has the following limitations:
 -   Rating Group can only be one of By Billing Period, By Usage Start Date, or By Usage Upload.
 
 -   You must refresh the data if the settings or billing periods are changed after the unbilled usage rating results are generated.
+
+-   When Unbilled Usage is enabled and a usage charge uses On-demand usage rating with a billing period that is not monthly or weekly-based (for example, Specific Days), bill runs ignore the on-demand rating option for partial billing periods. For a partial billing period, a bill run generates an invoice item only if the Target Date is set to the last day of that billing period. If the Target Date is earlier than the last day of the partial billing period, no invoice item is generated.
+
+    -   Example: A usage charge has an effective term from 2026-01-01 to 2026-07-19 (200 days). The charge uses Billing Period = Specific Days (185 days) and Usage Records Rating Option = On Demand.
+
+        -   The first billing period is 2026-01-01 to 2026-07-04 (a full 185-day period). On-demand rating works as usual in this period and you can bill as frequently as needed.
+
+        -   The second billing period is 2026-07-05 to 2026-07-19 (15 days, a partial billing period). For this partial billing period, the bill run generates an invoice item only when the Target Date is set to 2026-07-19, the last day of the billing period.
 
 -   The Change the owner of a subscription order action is allowed if all the guided usage under this subscription is billed. Note that invoice ownership transfer is supported.
 

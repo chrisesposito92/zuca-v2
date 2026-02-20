@@ -2,14 +2,12 @@
 title: "Create a chart"
 url: "https://docs.zuora.com/en/zuora-revenue/getting-started/system-management/custom-dashboard/create-a-chart"
 product: "zuora-revenue"
-scraped_at: "2026-01-15T22:02:49.893Z"
+scraped_at: "2026-02-20T21:17:44.107Z"
 ---
 
 # Create a chart
 
 Learn how to create and configure a chart for your custom dashboard by following these steps.
-
-Complete the following steps to create a chart to be added to your custom dashboard:
 
 1.  Navigate to Setups > Application .
 2.  Click the left pointing arrow to open the side menu and then click Report Setup . All reports are listed.

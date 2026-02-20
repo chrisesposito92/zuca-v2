@@ -2,10 +2,12 @@
 title: "Manage user roles in OneID"
 url: "https://docs.zuora.com/en/zuora-revenue/advanced-revenue-operations/manage-user-roles-in-oneid"
 product: "zuora-revenue"
-scraped_at: "2025-12-24T04:44:21.136Z"
+scraped_at: "2026-02-20T21:21:09.542Z"
 ---
 
 # Manage user roles in OneID
+
+This guide explains how to manage user roles in OneID, including adding, editing, importing, and deleting roles for organization admins.
 
 This article describes how to add, edit, import, or delete user roles in OneID. These operations apply only to organization admins.
 

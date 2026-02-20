@@ -2,7 +2,7 @@
 title: "Orders performance guidance"
 url: "https://docs.zuora.com/en/zuora-billing/manage-accounts-subscriptions-and-non-subscriptions/manage-subscription-transactions/orders/orders-considerations-and-performance/orders-performance-guidance"
 product: "zuora-billing"
-scraped_at: "2025-12-24T05:27:21.487Z"
+scraped_at: "2026-02-20T17:30:58.947Z"
 ---
 
 # Orders performance guidance
@@ -24,7 +24,7 @@ The Orders API timeout limit is 120 seconds. As the following tables show, a num
 -   Number of tiers in one charge (applicable only to the tiered pricing charge model)
 
 
-The following tables provide a summary of performance data for Orders. The summary is also available for downloads as a CSV file: Zuora\_performance\_data\_summary.csv . For a complete set of the performance data, download Zuora\_performance\_data\_complete\_datasheet.csv .
+The following tables provide a summary of performance data for Orders. The summary is also available for downloads as a CSV file: [Zuora\_performance\_data\_summary.csv](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/388ad704-e57a-4d16-b124-a5316a46b2a5?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjM4OGFkNzA0LWU1N2EtNGQxNi1iMTI0LWE1MzE2YTQ2YjJhNSIsImV4cCI6MTc3MTY5NTA1NiwianRpIjoiYTc5Yjc3ZDY4YTUxNGEwOThlNjA3YWI1NjcxZDJkZTMiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.joEMkprxIvzbreA7Z7QQT13LkeEv2MWwyAXlFVYjGJo&response-content-disposition=attachment%3B+filename%3D%22Zuora_performance_data_summary.csv%22) . For a complete set of the performance data, download [Zuora\_performance\_data\_complete\_datasheet.csv](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/f71d9ade-2523-4cdf-a625-b35b2fa86468?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImY3MWQ5YWRlLTI1MjMtNGNkZi1hNjI1LWIzNWIyZmE4NjQ2OCIsImV4cCI6MTc3MTY5NTA1NiwianRpIjoiMzQxZTVmZWVmMzNkNDhiOGFhOTQzZjllODdjNWUyMTMiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.c78ELwTaZIPM3mmclnxEt9mfcjG8H4Qvw-IILZWvTKU&response-content-disposition=attachment%3B+filename%3D%22Zuora_performance_data_complete_datasheet.csv%22) .
 
 Note:
 

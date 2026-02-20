@@ -2,12 +2,12 @@
 title: "Manage Tasks"
 url: "https://docs.zuora.com/en/zuora-platform/integration/integration-hub/manage-tasks"
 product: "zuora-platform"
-scraped_at: "2025-12-24T05:47:22.861Z"
+scraped_at: "2026-02-20T21:10:07.305Z"
 ---
 
 # Manage Tasks
 
-You can view the created tasks of all developer tools in the Tasks tabs. A unique ID is assigned to each task.
+Learn how to view, manage, and configure tasks within developer tools, including task details, cloning, deletion, and user permissions.
 
 ## Manage a Task
 

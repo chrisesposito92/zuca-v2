@@ -2,7 +2,7 @@
 title: "Set up callouts"
 url: "https://docs.zuora.com/en/zuora-platform/integration/integration-hub/promo-codes/manage-promotion-codes/set-up-callouts"
 product: "zuora-platform"
-scraped_at: "2025-12-24T05:47:59.525Z"
+scraped_at: "2026-02-20T21:10:39.431Z"
 ---
 
 # Set up callouts
@@ -10,8 +10,6 @@ scraped_at: "2025-12-24T05:47:59.525Z"
 Learn how to configure callouts in Promo Codes to receive notifications for campaign updates.
 
 To get notified when campaign updates occur, you can set up callouts in Promo Codes. Configured callouts will be triggered when a child campaign is created or updated in the app instance.
-
-Take the following steps to configure a callout:
 
 1.  Launch Promotion Codes from your Zuora tenant.
 2.  Click the Advanced tab.

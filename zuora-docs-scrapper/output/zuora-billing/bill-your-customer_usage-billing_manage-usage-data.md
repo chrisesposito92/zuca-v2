@@ -2,7 +2,7 @@
 title: "Manage usage data"
 url: "https://docs.zuora.com/en/zuora-billing/bill-your-customer/usage-billing/manage-usage-data"
 product: "zuora-billing"
-scraped_at: "2025-12-24T08:28:19.107Z"
+scraped_at: "2026-02-20T17:33:43.492Z"
 ---
 
 # Manage usage data
@@ -24,6 +24,12 @@ You can upload usage information in the following two ways:
 Note that there is no screen to enter individual usage records using the Zuora UI, you can only upload a file or use the API to add usage records. All usage data must be in the Zuora specified format. You must utilize your metering system's reporting features to report the data in the necessary format or utilize an ETL or data mapping tool to convert the metered data to Zuora's format.
 
 Therefore if regular, such as daily, uploads are needed, you should either be prepared to upload a file each day or develop an automated process to do the equivalent using the Zuora API. Use cases on working with the Zuora Usage object can be found in our API documentation.
+
+## Dynamic pricing usage charges
+
+Legacy Billing usage upload options (usage file import, Usage APIs, and UI‑based upload) are designed for standard usage charges. When usage is associated with a dynamic pricing usage charge, Billing blocks create, update, and delete operations through these legacy paths.
+
+For dynamic pricing usage charges, usage data must be ingested and rated through Mediation. Mediation then writes the resulting rated usage into Billing, where it can be billed and reported.
 
 ## Do I need to upload usage daily?
 

@@ -2,14 +2,14 @@
 title: "Re-run a meter with an Event Store source"
 url: "https://docs.zuora.com/en/zuora-platform/extensibility/mediation/events/re-run-a-meter-with-an-event-store-source"
 product: "zuora-platform"
-scraped_at: "2025-12-24T05:29:06.149Z"
+scraped_at: "2026-02-20T17:48:49.136Z"
 ---
 
 # Re-run a meter with an Event Store source
 
 Learn how to re-run a custom meter using an event store as a source to process specific events within a date range.
 
-When a custom meter has an event store as a source, you can re-run the meter to use only specific events between a date range, since the event store contains all the event data. To re-run a meter than has an event store configured as a source:
+When a custom meter has an event store as a source, you can re-run the meter to use only specific events between a date range, since the event store contains all the event data.
 
 1.  Select the meter and click Run in the meter list page or in the meter page.
 2.  Select one of the following as the Event Store Data Scope:
@@ -20,5 +20,3 @@ When a custom meter has an event store as a source, you can re-run the meter to 
 
 
 3.  Click Run.
-
-The meter is re-run with the updated event data.

@@ -2,7 +2,7 @@
 title: "Release Notes of Billing - Revenue Integration"
 url: "https://docs.zuora.com/en/zuora-revenue/advanced-revenue-operations/release-notes-of-billing---revenue-integration"
 product: "zuora-revenue"
-scraped_at: "2025-12-24T04:38:53.789Z"
+scraped_at: "2026-02-20T21:20:52.343Z"
 ---
 
 # Release Notes of Billing - Revenue Integration
@@ -11,7 +11,7 @@ This document summarizes the latest enhancements and resolved issues for Billing
 
 Note:
 
-We no longer maintain a separate Release Notes for Billing - Revenue Integration starting from Zuora Revenue 37.002.01.00. To see the latest updates in Billing - Revenue Integration, see [Zuora Revenue Release Notes](/release-notes/latest-release/2025.q4-release#concept-o3vjk17d) .
+We no longer maintain a separate Release Notes for Billing - Revenue Integration starting from Zuora Revenue 37.002.01.00. To see the latest updates in Billing - Revenue Integration, see [Zuora Revenue Release Notes](/release-notes/previous-release-notes/previous-release-notes/2025.q4-release#concept-o3vjk17d) .
 
 This article provides a summary of enhancements and resolved issues for Billing - Revenue Integration based on the latest version of Zuora Revenue.
 

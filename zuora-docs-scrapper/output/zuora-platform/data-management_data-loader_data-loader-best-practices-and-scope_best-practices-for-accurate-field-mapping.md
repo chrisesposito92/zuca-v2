@@ -2,23 +2,27 @@
 title: "Best practices for accurate field mapping"
 url: "https://docs.zuora.com/en/zuora-platform/data-management/data-loader/data-loader-best-practices-and-scope/best-practices-for-accurate-field-mapping"
 product: "zuora-platform"
-scraped_at: "2026-01-15T21:58:27.057Z"
+scraped_at: "2026-02-20T17:38:31.910Z"
 ---
 
 # Best practices for accurate field mapping
 
 Learn how to facilitate field mapping by matching target fields with CSV column headers.
 
-Zuora Data Loader performs field mapping by matching the fields in the target Zuora object with the column headers in the source CSV file. Data Loader attempts to automatically match field names in Zuora with the column headers in the CSV file based on exact or similar names. For example, if Account Name is the target field and the CSV has a column named Account Name, the tool maps them.
+Zuora Data Loader maps fields by matching the target Zuora object fields with column headers in the source CSV file. Automatic mapping is based on exact or similar field names. For example, the Account Name field is automatically mapped when the CSV includes a column header named Account Name.
 
-![Zuora field mapping](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/3c318342-faf9-4223-ac8e-0a06f128b574?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjNjMzE4MzQyLWZhZjktNDIyMy1hYzhlLTBhMDZmMTI4YjU3NCIsImV4cCI6MTc2ODYwMDcwMSwianRpIjoiNzU4YjcxM2ZkNWRkNGJhMTk0Y2IxMWFkY2UyMzYxNTMiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiI4RWFZRjVFNjZLaVRYdnNmS3N5NSJ9.or0FfGfu68EV16Pgr0J0Qa2xsn3ZmOhYk1-rlKPX5Hg)
+![Zuora field mapping](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/3c318342-faf9-4223-ac8e-0a06f128b574?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjNjMzE4MzQyLWZhZjktNDIyMy1hYzhlLTBhMDZmMTI4YjU3NCIsImV4cCI6MTc3MTY5NTUwNiwianRpIjoiNmZmNjU5MzJlMDk1NDQ5NThhZDA0YzVlMzBlMWIyZjkiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.dgPoTe7uNr9ioS4GyjXrnoQhRs1PINtRucP4tiHRYX8)
 
-The following are some key points to remember while using Zuora field mapping:
+-   Ensure that all required fields are mapped. Unmapped required fields can cause upload failures.
 
--   In the Field Mapping page, required fields are displayed by default. To compare mapped and unmapped fields, click the Field dropdown.
--   Zuora recommends retaining the letter case of any column headers in the CSV template. Modifying the header letter case may prevent Data Loader from correctly recognizing the fields and can cause upload or validation errors.
--   If automatic mapping does not identify all fields, the user can manually map the CSV columns by clicking on the drop-down.
--   If any required field is unmapped, a warning message is displayed to guide the user, as unmapped required fields can cause errors.
--   Data Loader allows users to save field mappings for future uploads. However, if the source CSV file or target fields change, such as by adding a new custom field, the user will need to update the mappings to include the new field.
--   Data Loader supports one-to-one field mapping only. Attempting to map a single source field to multiple target fields will result in errors. In such cases, a warning message is displayed to help resolve the mismatch.
--   If a non-mandatory field needs to be modified, ensure the field is included in the CSV template and properly mapped in the field mapping interface between the target and source columns. For example, consider a custom field like `CollectionAgent_c` on the Product Rate Plan Charge object. Although this field is not mandatory, if records need to be updated for this field, it must be present in the CSV and correctly mapped in the field mapping interface. Proper mapping is essential for the successful creation and update of records.
+-   On the Field Mapping page, required fields are displayed by default. Use the Field dropdown to view and compare both mapped and unmapped fields.
+
+-   Retain the original letter case of column headers in the CSV template. Changing the header case may prevent Data Loader from correctly identifying fields and can result in upload or validation errors.
+
+-   If automatic mapping does not map all fields, you can manually map CSV columns using the dropdown lists.
+
+-   Field mappings can be saved for reuse in future uploads. However, if the CSV structure or target object changes, such as adding a new custom field, you must update the mapping accordingly.
+
+-   Data Loader supports only one-to-one field mappings. Mapping a single source column to multiple target fields is not supported and triggers a validation warning.
+
+-   To update non-mandatory fields, the field must be included as a column in the CSV file and mapped correctly in the field mapping interface. For example, to update the custom field `CollectionAgent__c` on the Product Rate Plan Charge object, the field must be present in the CSV and explicitly mapped. Proper field mapping is required to ensure successful record creation and updates.

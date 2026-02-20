@@ -2,10 +2,12 @@
 title: "Zuora Revenue GL Connector for Workday Financials"
 url: "https://docs.zuora.com/en/zuora-revenue/advanced-revenue-operations/integration-hub/zuora-revenue-gl-connector-for-workday-financials"
 product: "zuora-revenue"
-scraped_at: "2025-12-24T04:35:31.621Z"
+scraped_at: "2026-02-20T21:20:19.732Z"
 ---
 
 # Zuora Revenue GL Connector for Workday Financials
+
+The Zuora Revenue GL Connector for Workday Financials automates revenue journal entry transfers, streamlining financial processes and reducing errors.
 
 Note:
 

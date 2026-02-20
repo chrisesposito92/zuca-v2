@@ -2,7 +2,7 @@
 title: "Currency mapping"
 url: "https://docs.zuora.com/en/zuora-revenue/advanced-revenue-operations/mapping-between-zuora-billing-and-zuora-revenue/currency-mapping"
 product: "zuora-revenue"
-scraped_at: "2025-12-24T04:37:13.972Z"
+scraped_at: "2026-02-20T21:20:36.870Z"
 ---
 
 # Currency mapping
@@ -34,7 +34,7 @@ The Data Sync job populates the currency exchange rate data into exchange rate t
 
 -   For booking data: Billing - Revenue Integration takes the sales order date as the exchange rate date to populate the exchange rate into Zuora Revenue.
 
--   For billing data: Billing - Revenue Integration syncs the exchange rate date and the corresponding exchange rate from Zuora Billing into Zuora Revenue. See Sync exchange rate from Zuora Billing into Zuora Revenue for more information.
+-   For billing data: Billing - Revenue Integration syncs the exchange rate date and the corresponding exchange rate from Zuora Billing into Zuora Revenue. See [Sync exchange rate from Zuora Billing into Zuora Revenue](/zuora-revenue/advanced-revenue-operations/sync-currency-exchange-rate-for-billing-documents) for more information.
 
 
 If the exchange rate on a specific date is not available in the system, Zuora Revenue uses the last available exchange rate.
@@ -53,4 +53,4 @@ For example, a transaction that takes place in Zuora is in a currency different 
 
 In this scenario, the revenue contract is allocated in the functional currency. Therefore, Zuora Revenue populates the functional exchange rate and the corresponding date in this SO line. The exchange rate will be used to convert the contractual value in EUR to the value in USD for allocation.
 
-See [Multi-currency](/zuora-revenue/month-end-process/overview-of-multi-currency-contracts/multi-currency-contracts) contracts for more information on how Zuora Revenue handles multi-currency contracts.
+See [Multi-currency](/zuora-revenue/month-end-process/multi-currency-contracts) contracts for more information on how Zuora Revenue handles multi-currency contracts.

@@ -2,17 +2,17 @@
 title: "Configure an Enrichment processor (Standard Identifiers)"
 url: "https://docs.zuora.com/en/zuora-platform/extensibility/mediation/meter-components/enrichment-processor/configure-an-enrichment-processor-standard-identifiers"
 product: "zuora-platform"
-scraped_at: "2025-12-24T05:29:31.779Z"
+scraped_at: "2026-02-20T17:49:28.768Z"
 ---
 
 # Configure an Enrichment processor (Standard Identifiers)
 
 Learn how to transform raw usage data into billable rated records by configuring a Rating processor.
 
-You can use this method to enrich events by performing a lookup based on identifiers such as account number, charge name, or subscription ID. To configure an Enrichment processor:
+You can use this method to enrich events by performing a lookup based on identifiers such as account number, charge name, or subscription ID.
 
 1.  Navigate to Mediation > Meters.
-2.  Create a new Custom meter.
+2.  Create a Custom meter.
 3.  Select and drag the Enrichment processor type on to the meter stream page.
 4.  On the Enrichment settings page, enter a name for the processor.
 5.  Under Enrichment Options, select Enrich events using Account Number and Charge Name or Subscription Id.
@@ -38,5 +38,3 @@ You can use this method to enrich events by performing a lookup based on identif
     -   Use event time to match charge segment: Uses eventTime to select the charge segment within its effective period. Default: Uses latest timestamp to identify the charge segment, if not provided.
 
 10.  Click Save.
-
-The Enrichment processor is configured for the meter.

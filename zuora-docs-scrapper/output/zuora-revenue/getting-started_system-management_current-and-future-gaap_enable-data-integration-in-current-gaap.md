@@ -2,14 +2,12 @@
 title: "Enable data integration in current GAAP"
 url: "https://docs.zuora.com/en/zuora-revenue/getting-started/system-management/current-and-future-gaap/enable-data-integration-in-current-gaap"
 product: "zuora-revenue"
-scraped_at: "2025-12-24T04:23:31.307Z"
+scraped_at: "2026-02-20T21:18:00.644Z"
 ---
 
 # Enable data integration in current GAAP
 
-Configure Zuora Revenue for data integration between current and future GAAP.
-
-Complete the following procedure to configure the previous version of Zuora Revenue (or RevPro) for data integration from the current GAAP to the future GAAP:
+Configure Zuora Revenue for data integration between current and future GAAP by following this procedure for the previous version of Zuora Revenue (or RevPro).
 
 1.  In Zuora Revenue under the current GAAP (ASC 605), navigate to Setups > Application and click the IT Admin Lookups tab.
 2.  In the Lookup Type field, select COMMON SETUP from the drop-down list. The common setup is displayed.

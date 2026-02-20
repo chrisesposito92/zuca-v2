@@ -2,7 +2,7 @@
 title: "Configure a campaign"
 url: "https://docs.zuora.com/en/zuora-platform/integration/integration-hub/promo-codes/configure-a-campaign"
 product: "zuora-platform"
-scraped_at: "2025-12-24T05:48:07.047Z"
+scraped_at: "2026-02-20T21:10:39.389Z"
 ---
 
 # Configure a campaign
@@ -10,8 +10,6 @@ scraped_at: "2025-12-24T05:48:07.047Z"
 Learn how to configure a campaign in the Promo Codes app within Zuora, including creating parent and child campaigns and utilizing custom fields.
 
 Ensure that the Promotion Codes app is available under Marketplace in the left navigation menu of Zuora.
-
-Take the following steps to create a campaign in Promo Codes:
 
 1.  Launch Promotion Codes from your Zuora tenant.
 2.  In the Campaigns tab, select Actions > New Campaign to create a campaign. The New Campaign dialog is displayed.

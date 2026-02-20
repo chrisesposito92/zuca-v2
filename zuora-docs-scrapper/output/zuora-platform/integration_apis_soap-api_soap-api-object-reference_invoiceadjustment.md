@@ -2,10 +2,12 @@
 title: "InvoiceAdjustment"
 url: "https://docs.zuora.com/en/zuora-platform/integration/apis/soap-api/soap-api-object-reference/invoiceadjustment"
 product: "zuora-platform"
-scraped_at: "2025-12-24T05:41:25.759Z"
+scraped_at: "2026-02-20T21:09:14.491Z"
 ---
 
 # InvoiceAdjustment
+
+Describes the InvoiceAdjustment SOAP API object.
 
 Note:
 

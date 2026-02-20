@@ -2,7 +2,7 @@
 title: "Meter components overview"
 url: "https://docs.zuora.com/en/zuora-platform/extensibility/mediation/meter-components/meter-components-overview"
 product: "zuora-platform"
-scraped_at: "2025-12-24T05:29:11.436Z"
+scraped_at: "2026-02-20T17:49:10.876Z"
 ---
 
 # Meter components overview
@@ -20,8 +20,9 @@ A source component can pull, upload, or ingest data to the meters. You can pull 
 | Streaming API | Streaming API source is used for long-running requests left open so data can be pushed into it. These APIs are used to read data from the web in real-time and provide users with precise and up-to-date information. Streaming API or Kafka Source can handle up to 10K records per second. |
 | Amazon S3 | Amazon S3 source is used to set up the S3 connection, including the S3 bucket, credentials, and base path to ingest data into Meter. To set up a connection and provisioning, contact Zuora Support. The throughput can also reach a max of 10K records per second. |
 | Upload File | Upload File source is used to upload data files into Meter. The Supported formats are CSV, JSON, XML, PARQUET, and AVRO. The maximum size of an uploaded file is 10MB, and the maximum number of lines of an uploaded file is 10K. |
-| Snowflake | Snowflake source is used to set up Snowflake connection, including the connection path, table, or query to ingest data into Meter. To set up a connection and provisioning, contact Zuora Support . The throughput can also reach a max of 10K records per second. |
-| Kafka | Kafka source is used to set up Kafka connection, including the connection path, topic, and data format to ingest data into Meter. To set up a connection and provisioning, contact Zuora Support . The throughput can also reach a max of 10K records per second. |
+| Snowflake | Snowflake source is used to set up Snowflake connection, including the connection path, table, or query to ingest data into Meter. To set up a connection and provisioning, contact Zuora Support. The throughput can also reach a max of 10K records per second. |
+| Kafka | Kafka source is used to set up Kafka connection, including the connection path, topic, and data format to ingest data into Meter. To set up a connection and provisioning, contact Zuora Support. The throughput can also reach a max of 10K records per second. |
+| Event Store | Event Store source reads events from an Event Store that was populated from an event definition so meters can process previously ingested data for scenarios such as multi-region data consolidation, time-shifted processing, and data validation. |
 
 ## Processor components
 
@@ -47,6 +48,8 @@ A target component can export data into a data warehouse or load events such as 
 | Component | Description |
 | --- | --- |
 | Usage Records | Usage Records target is used to take the result events and loads them as Usage Records into Zuora Billing. |
-| Snowflake | Snowflake target is used to set up the connection, including the connection path, table, or query to export the output data in your Snowflake. To set up a connection and provisioning, contact Zuora Support . |
-| Amazon S3 | Amazon S3 target is used to set up the S3 connection, including the S3 bucket, credentials, and base path here to export the output data in your Amazon S3. To set up a connection and provisioning, contact Zuora Support . |
-| Kafka | Kafka target is used to set up the Kafka connection, including the connection path, topic, and data format, to export the output events to your Kafka. To set up a connection and provisioning, contact Zuora Support . |
+| Snowflake | Snowflake target is used to set up the connection, including the connection path, table, or query to export the output data in your Snowflake. To set up a connection and provisioning, contact Zuora Support. |
+| Amazon S3 | Amazon S3 target is used to set up the S3 connection, including the S3 bucket, credentials, and base path here to export the output data in your Amazon S3. To set up a connection and provisioning, contact Zuora Support. |
+| Kafka | Kafka target is used to set up the Kafka connection, including the connection path, topic, and data format, to export the output events to your Kafka. To set up a connection and provisioning, contact Zuora Support. |
+| Event Store | Event Store target writes the resulting events from a meter into an Event Store, based on an event definition, so you can store, validate, reprocess, or reuse the events later as input to other meters or downstream systems. |
+| Empty Sink | Using Empty Sink as a target terminates a branch of the meter without writing data to an external store, while still logging the event in Mediation's audit trail for observability and debugging. |

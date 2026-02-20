@@ -2,7 +2,7 @@
 title: "Release Notes based on RevPro 36.010.00"
 url: "https://docs.zuora.com/en/zuora-revenue/advanced-revenue-operations/release-notes-of-billing---revenue-integration/release-notes-based-on-revpro-36.010.00"
 product: "zuora-revenue"
-scraped_at: "2025-12-24T04:39:01.676Z"
+scraped_at: "2026-02-20T21:20:52.840Z"
 ---
 
 # Release Notes based on RevPro 36.010.00
@@ -21,7 +21,7 @@ The following enhancements are based on RevPro 36.010.11 patch.
 
 If you create ramp deals in Zuora Billing, RevPro provides the ramp allocation functionality to identify the ramp deal lines in a revenue contract and perform allocation based on the ramp percentage that is calculated for each line in a ramp deal group.
 
-For more information, see Ramp deal processing .
+For more information, see [Ramp deal processing](/zuora-revenue/day-to-day-operation).
 
 ## 36.010.09
 
@@ -165,4 +165,4 @@ The following jobs are now available only when you set the ZBILLING\_INTEGRATION
 
 ## Resolved issues
 
-Refer to the [attached CSV file](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/583f541d-e262-499b-b520-36d0eb47f9e9?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjU4M2Y1NDFkLWUyNjItNDk5Yi1iNTIwLTM2ZDBlYjQ3ZjllOSIsImV4cCI6MTc2NjYzNzUzOSwianRpIjoiZjA3MzM2YTI5NWI1NDhkMTlhZmE0YmVjOWVkODI0ZjAiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.1ROJfPmzn0Nlyvbmw9yO0umLY7AC2TRZD5HTT2_fm1Y&response-content-disposition=attachment%3B+filename%3D%22Resolved_Issues_in_Zuora_Billing_RevPro_Integration.csv%22) to get a list of all issues that have been resolved in RevPro version 36.010.00 and the subsequent minor versions.
+Refer to the [attached CSV file](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/583f541d-e262-499b-b520-36d0eb47f9e9?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjU4M2Y1NDFkLWUyNjItNDk5Yi1iNTIwLTM2ZDBlYjQ3ZjllOSIsImV4cCI6MTc3MTcwODg0NiwianRpIjoiYWY3NWU3MjlmZDFmNDIwYWEzY2M3YjllY2U5YzdkNTIiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.PxaGn-tnp0PAd3jWgyGH1ODzVeeBiSinldgW9-zECkY&response-content-disposition=attachment%3B+filename%3D%22Resolved_Issues_in_Zuora_Billing_RevPro_Integration.csv%22) to get a list of all issues that have been resolved in RevPro version 36.010.00 and the subsequent minor versions.

@@ -1,8 +1,8 @@
 ---
-title: "Get started with  Data Loader"
+title: "Get started with Data Loader"
 url: "https://docs.zuora.com/en/zuora-platform/data-management/data-loader/data-loader-essentials-and-setup/get-started-with-data-loader"
 product: "zuora-platform"
-scraped_at: "2026-01-15T21:56:34.793Z"
+scraped_at: "2026-02-20T17:36:07.479Z"
 ---
 
 # Get started with Data Loader
@@ -21,7 +21,7 @@ Using the Data Loader UI, you can upload data files, map fields, validate record
 
 -   Access to Data Loader is available to all the Admin users by default.
 
--   Standard users can access the feature by enabling the Data Loader permission through custom roles. See [Platform roles](/zuora-platform/system-management/administrator-settings/user-roles/platform-roles).
+-   Standard users can access the feature by enabling the Data Loader permission through custom roles. See [Platform roles](/zuora-platform/security-and-identity/administrator-settings/user-roles/platform-roles).
 
 -   Enable the required tenant-level and user-level permissions before initiating a data migration job.
 

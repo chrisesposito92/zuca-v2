@@ -2,7 +2,7 @@
 title: "Price lookup in attribute-based pricing"
 url: "https://docs.zuora.com/en/zuora-billing/set-up-zuora-billing/build-product-and-prices/attribute-based-pricing/price-lookup-in-attribute-based-pricing"
 product: "zuora-billing"
-scraped_at: "2025-12-24T05:00:59.413Z"
+scraped_at: "2026-02-20T17:28:39.689Z"
 ---
 
 # Price lookup in attribute-based pricing
@@ -11,9 +11,9 @@ The Attribute-based Pricing feature allows defining a price lookup formula on th
 
 With the Attribute-based Pricing feature, you can define a price lookup formula on the Product Rate Plan Charge object, which will be used to identify the correct and relevant charge definition based on the context. The price lookup formula is used during order preview to map the lookup attributes from the Account and Subscription objects to the Product Charge Definition object and assign a charge definition to the subscription rate plan charge.
 
-The following graphic shows where to define the lookup formula in the UI. To define the price lookup formula for a product rate plan charge, use the Formula field in the Charge Amount section on the product rate plan charge detail page when you are creating a product rate plan charge.
+The following graphic shows where to define the lookup formula in the UI. To define the price lookup formula for a product rate plan charge, use the Formula field in the Charge Amount section on the product rate plan charge detail page when you are [creating a product rate plan charge](/zuora-billing/set-up-zuora-billing/build-product-and-prices/set-up-product-catalog/create-product-rate-plan-charges).
 
-![charge-formula.png](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/51b68cfd-1a03-4fd4-896a-6635d529375e?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjUxYjY4Y2ZkLTFhMDMtNGZkNC04OTZhLTY2MzVkNTI5Mzc1ZSIsImV4cCI6MTc2NjYzODg1NywianRpIjoiZjY2N2M1ZDA3YmE0NGJiMGI1MTU2ZTlhMDMzNmY2ZDUiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.zYb61NYyN_ocMIllSlDNwZsCdyydSYKCC6VFj-_MeGY)
+![charge-formula.png](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/51b68cfd-1a03-4fd4-896a-6635d529375e?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjUxYjY4Y2ZkLTFhMDMtNGZkNC04OTZhLTY2MzVkNTI5Mzc1ZSIsImV4cCI6MTc3MTY5NDkxNCwianRpIjoiMjc1ZGEzNjRlYjkyNDJlNThlZjVkYmM5YzIyNjRhM2UiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.MGvcfSDuU4fYft_xdhCaQ2A5womD5g_Pb5--MnFe3fo)
 
 ## Price lookup formula
 
@@ -30,7 +30,7 @@ where:
 -   `field_name` is the field name on another object whose value will be mapped to the charge definition object.
 
 
-You can define as many field lookups as you want and separate them by commas. For supported lookup fields by the formula, see Supported lookup fields.
+You can define as many field lookups as you want and separate them by commas. For supported lookup fields by the formula, see [Supported lookup fields](/zuora-billing/set-up-zuora-billing/build-product-and-prices/attribute-based-pricing/price-lookup-in-attribute-based-pricing/supported-lookup-objects-and-fields).
 
 Note:
 
@@ -68,4 +68,4 @@ Based on the formula, the lookup function will map the lookup attributes from co
 
 When the matching charge definition is successfully identified, it will be displayed in the subscription that you are creating. As shown in the following graphic of creating a subscription, the CD-00001210 charge definition is identified and applied.
 
-![charge-definition-in-sub.png](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/182fe2a8-ec59-4195-8ff5-df9f56ae8587?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjE4MmZlMmE4LWVjNTktNDE5NS04ZmY1LWRmOWY1NmFlODU4NyIsImV4cCI6MTc2NjYzODg1NywianRpIjoiODJkODQzNjIyOWY0NDViZWEzZmIwYTRmNjZhZDBlNmIiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.aaAUC_FRtKmPkpNT8Grx_C7hjAV40mhY4ZeBN1l2mfU)
+![charge-definition-in-sub.png](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/182fe2a8-ec59-4195-8ff5-df9f56ae8587?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjE4MmZlMmE4LWVjNTktNDE5NS04ZmY1LWRmOWY1NmFlODU4NyIsImV4cCI6MTc3MTY5NDkxNCwianRpIjoiZDUxNzY0NTgxNjIxNDFiNGEzZjI5YWJiMTM1NTc1OTAiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.Iry3NhOxHEvpfvboJytuODuekCwObZck9R31jcN5V2U)

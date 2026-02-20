@@ -2,10 +2,12 @@
 title: "Add fulfillments to return order line items through API"
 url: "https://docs.zuora.com/en/zuora-billing/manage-accounts-subscriptions-and-non-subscriptions/manage-non-subscription-transactions/order-line-items/manage-fulfillments/fulfillments-addition-to-order-line-items/add-fulfillments-to-return-order-line-items-through-api"
 product: "zuora-billing"
-scraped_at: "2025-12-24T05:38:55.001Z"
+scraped_at: "2026-02-20T17:32:33.015Z"
 ---
 
 # Add fulfillments to return order line items through API
+
+This topic provides an overview on creating and managing fulfillments to return order line items using the API by executing the "Create fulfillments" operation.
 
 Use the Create fulfillments operation to create a return fulfillment. Keep the following points in mind when you run the "Create fulfillments" operation:
 

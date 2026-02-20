@@ -1,11 +1,11 @@
 ---
-title: "Order To Revenue Reconciliation"
+title: "Order to Revenue Reconciliation"
 url: "https://docs.zuora.com/en/zuora-revenue/month-end-process/close-process-dashboard/order-to-revenue-reconciliation"
 product: "zuora-revenue"
-scraped_at: "2026-01-15T22:03:20.232Z"
+scraped_at: "2026-02-20T21:18:41.963Z"
 ---
 
-# Order To Revenue Reconciliation
+# Order to Revenue Reconciliation
 
 Zuora Order to Revenue Transaction Reconciliation allows you to reconcile booking and billing transaction data for the current open accounting period, highlighting any variances in CPD.
 
@@ -13,7 +13,7 @@ Zuora Order to Revenue Transaction Reconciliation enables you to reconcile booki
 
 This job displays any variances in CPD along with the results. (CPD > Bookings and Billings)
 
-Due to OTR’s real-time nature, there could be variances until all the transactions for the current open period are processed.
+Due to OTR's real-time nature, there could be variances until all the transactions for the current open period are processed.
 
 The booking reconciliation uses the combination of the subscription's last booking date within the current accounting period and the exclusion flags between booking transactions and revenue contract lines. On the other hand, the billing reconciliation uses the combination of document date and exclusion flags between billing transactions and revenue contract billings.
 

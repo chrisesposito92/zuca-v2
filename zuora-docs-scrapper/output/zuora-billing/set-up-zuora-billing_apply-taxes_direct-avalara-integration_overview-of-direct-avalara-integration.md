@@ -1,11 +1,11 @@
 ---
-title: "Overview of direct Avalara integration"
+title: "Overview of Direct Avalara integration"
 url: "https://docs.zuora.com/en/zuora-billing/set-up-zuora-billing/apply-taxes/direct-avalara-integration/overview-of-direct-avalara-integration"
 product: "zuora-billing"
-scraped_at: "2025-12-24T05:10:13.720Z"
+scraped_at: "2026-02-20T17:29:37.615Z"
 ---
 
-# Overview of direct Avalara integration
+# Overview of Direct Avalara integration
 
 The direct Avalara integration with Zuora utilizes the AvaTax REST v2 API to streamline tax calculations across multiple jurisdictions, offering enhanced performance and flexibility.
 

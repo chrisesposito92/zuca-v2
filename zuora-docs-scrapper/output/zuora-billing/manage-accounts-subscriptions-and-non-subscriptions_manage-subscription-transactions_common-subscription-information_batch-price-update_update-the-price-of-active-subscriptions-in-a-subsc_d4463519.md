@@ -2,14 +2,12 @@
 title: "Update the price of active subscriptions in a subscription cohort"
 url: "https://docs.zuora.com/en/zuora-billing/manage-accounts-subscriptions-and-non-subscriptions/manage-subscription-transactions/common-subscription-information/batch-price-update/update-the-price-of-active-subscriptions-in-a-subscription-cohort"
 product: "zuora-billing"
-scraped_at: "2026-01-15T21:56:02.296Z"
+scraped_at: "2026-02-20T17:30:08.670Z"
 ---
 
 # Update the price of active subscriptions in a subscription cohort
 
 This task topic explains how to update the price of active subscriptions in a subscription cohort using the Batch Price Update flow.
-
-To update the price of active subscriptions in a subscription cohort through the Batch Price Update flow, perform the following steps:
 
 1.  Click the Batch Price Update drop-down button on the Subscriptions page.
 2.  Select Submit New Batch to open the Batch Price Update for Subscriptions page.
@@ -22,8 +20,8 @@ To update the price of active subscriptions in a subscription cohort through the
     -   Specific value: Enter a new price for the subscription rate plan charges.
     -   Increase by percentage: Enter a positive percentage to increase the price of the subscription rate plan charges.
 
-5.  In the Order Date section, click the calendar icon ![Image: calendar-icon](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/c22b9233-5045-46fe-bab7-0a36361c1dd3?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImMyMmI5MjMzLTUwNDUtNDZmZS1iYWI3LTBhMzYzNjFjMWRkMyIsImV4cCI6MTc2ODYwMDU1NywianRpIjoiZWVlNzQ2MzhjM2UwNDNlYWI0MzgyN2E1YWQ0NjMwZTMiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiI4RWFZRjVFNjZLaVRYdnNmS3N5NSJ9.S3_7KAigalFHBg_xSTF7i5IIBDyGCFI3Td3y7EU0vmc) and select an order date.
-6.  In the Subscription Price Update Effective Policy section, next to Specific Date, click the calendar icon ![Image: calendar-icon](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/c22b9233-5045-46fe-bab7-0a36361c1dd3?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImMyMmI5MjMzLTUwNDUtNDZmZS1iYWI3LTBhMzYzNjFjMWRkMyIsImV4cCI6MTc2ODYwMDU1NywianRpIjoiMjQ3NDcwOTkwMGEwNGU0YjhhZDhiYWQ0NTE3ZGYwODUiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiI4RWFZRjVFNjZLaVRYdnNmS3N5NSJ9.BRRz1CVGnfPsVInMrP9Y9eB25CdMEE78F8qIc_drjes) and select a date.
+5.  In the Order Date section, click the calendar icon ![Image: calendar-icon](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/c22b9233-5045-46fe-bab7-0a36361c1dd3?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImMyMmI5MjMzLTUwNDUtNDZmZS1iYWI3LTBhMzYzNjFjMWRkMyIsImV4cCI6MTc3MTY5NTAwNCwianRpIjoiMTIwODlmMWE5NDE4NDNjNmFiYWQ0MmY2MDdjMWYzN2IiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.QBgj585labp0YorZNLVGnfQ5Op-H9wR6S5PpLf12Y9U) and select an order date.
+6.  In the Subscription Price Update Effective Policy section, next to Specific Date, click the calendar icon ![Image: calendar-icon](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/c22b9233-5045-46fe-bab7-0a36361c1dd3?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImMyMmI5MjMzLTUwNDUtNDZmZS1iYWI3LTBhMzYzNjFjMWRkMyIsImV4cCI6MTc3MTY5NTAwNCwianRpIjoiYWQ1MzZmZWI1ZWYwNDk2NGFkN2M2ZDM2MTVhM2Y5OTEiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.bypmRwsnA_L-uMZDpWj6PZT1D6cf6UBt3M9QlfmJUGo) and select a date.
 7.  In the Subscription Cohort section, you can define a subscription cohort through one of the following methods:
 
     -   Select the Filter Subscriptions option, and filter and group subscriptions of account batches into a subscription cohort as follows:
@@ -39,9 +37,9 @@ To update the price of active subscriptions in a subscription cohort through the
         -   The file must contain only one column of subscription numbers instead of subscription IDs, without a header.
         -   The subscriptions in the file can be under different subscription owners or invoice owners.
 
-8.  If the following custom fields were set, enter the values in the custom fields. For more information, see [Manage Custom Fields](https://docs.zuora.com/en/zuora-platform/extensibility/custom-fields/custom-field-overview) .
+8.  If the following custom fields were set, enter the values in the custom fields. For more information, see [Manage Custom Fields](/zuora-platform/extensibility/custom-fields/custom-field-overview) .
 
-    -   Additional Information of Orders and Additional Information of Update Product Order Action sections: The sections display for the Orders tenant users and the Orders Harmonization tenant users with Orders UI enabled. The new price takes effect on the next Billing Cycle Day (BCD) for generating the new invoice.
+    -   Additional Information of Orders and Additional Information of Update Product Order Action sections: The sections display for the Orders tenant users and the Orders Harmonization tenant users with Orders UI enabled. The new price takes effect in the next Billing Cycle Day (BCD) for generating the new invoice.
     -   Additional Information of Amendment section. Only the Amendment Name displays for the Subscribe and Amend tenant users and the Orders Harmonization tenant users with Orders UI disabled.
 
 9.  Select Notify me via email when finished to enable email notification. The process of Batch Price Update may take hours or longer. If you have enabled the email notification, your subscription account will receive the email notification once the process is complete.

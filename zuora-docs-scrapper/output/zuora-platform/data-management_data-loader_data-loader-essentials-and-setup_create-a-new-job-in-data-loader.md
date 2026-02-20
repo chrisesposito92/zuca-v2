@@ -2,7 +2,7 @@
 title: "Create a new job in Data Loader"
 url: "https://docs.zuora.com/en/zuora-platform/data-management/data-loader/data-loader-essentials-and-setup/create-a-new-job-in-data-loader"
 product: "zuora-platform"
-scraped_at: "2026-01-15T21:56:29.044Z"
+scraped_at: "2026-02-20T17:36:07.581Z"
 ---
 
 # Create a new job in Data Loader
@@ -10,24 +10,17 @@ scraped_at: "2026-01-15T21:56:29.044Z"
 Learn how to create a new job in Data Loader for data migration tasks.
 
 1.  From the main menu, navigate to Administration > Data Loader.
+2.  In the Data Loader page, click \+ New and select Import.
+3.  In the Create Import Job page, select the source file to import.
 
-    Data Loader screen opens.
-
-2.  Click \+ New and select Import.
-
-    The Create Import Job screen appears.
-
-    ![Create import job](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/9776eb35-1980-4584-bf35-5ceadac7c171?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6Ijk3NzZlYjM1LTE5ODAtNDU4NC1iZjM1LTVjZWFkYWM3YzE3MSIsImV4cCI6MTc2ODYwMDU4NiwianRpIjoiOTI0NWNlNzE0ZTQyNDI1YmE4OGE4NGQ1OGMxN2Y4MjciLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiI4RWFZRjVFNjZLaVRYdnNmS3N5NSJ9.859EV70XMapCQThbI4p_1Zj-XanHTIJ3zQYmvKdoeXo)
-
+    ![Create import job](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/9776eb35-1980-4584-bf35-5ceadac7c171?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6Ijk3NzZlYjM1LTE5ODAtNDU4NC1iZjM1LTVjZWFkYWM3YzE3MSIsImV4cCI6MTc3MTY5NTM2MiwianRpIjoiZjIzYjJiNmFmNmU3NDliNzlkYjJjNzM2ZmVmYzhiYjEiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.VWeqPOrFfQ7G-sVc9ur2p2fed-wPEUSz9g0SNb_-DRk)
     Note: The stepper at top of the window shows the progress of the job workflow.
 
-3.  Select Source File to import.
-
-    1.  In the Select Object drop-down, select the object to load data.
+    1.  In the Select Object dropdown, select the object to load data.
 
         All objects supported by the Data Loader is displayed alphabetically.
 
-    2.  Populate the source file with the required fields .
+    2.  Populate the source file with the required fields.
 
         Note: Zuora recommends to download the template file from the target tenant to ensure all fields are available in the template.
 
@@ -45,17 +38,19 @@ Learn how to create a new job in Data Loader for data migration tasks.
         The Source File Header Fields preview area below the stepper shows the header row from the uploaded file so you can verify that you selected the correct file.
 
     4.  Provide a Job Name.
-    5.  (optional) Provide a Description .
-    6.  Select Next
+    5.  (optional) Provide a Description.
+    6.  Select Next.
 4.  Map source and target fields.
 
     Data Loader automatically attempts to map fields from the source file to the target fields. However, you can customize the mapping if the existing fields are not mapped. Data Loader allows only one-one mapping.
 
-    Use the typeahead search in the drop-down lists to quickly find target fields. Click on the header field for a preview. The Data Preview section on the right of the screen also allows you to preview the data type supported by the field.
+    Use the typeahead search in the dropdown lists to quickly find target fields. Click on the header field for a preview. The Data Preview section on the right of the screen also allows you to preview the data type supported by the field.
 
-    ![Field mapping](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/3c318342-faf9-4223-ac8e-0a06f128b574?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjNjMzE4MzQyLWZhZjktNDIyMy1hYzhlLTBhMDZmMTI4YjU3NCIsImV4cCI6MTc2ODYwMDU4NiwianRpIjoiYThjYzY0NGI2ZWU2NDZlMzg2OGE5YzY2NDhkNjRmZjUiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiI4RWFZRjVFNjZLaVRYdnNmS3N5NSJ9.8fsxjG9XQJXnMRFmdsQou0fv7g3OIltlLdkNvXt-VTI)
+    ![Field mapping](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/3c318342-faf9-4223-ac8e-0a06f128b574?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjNjMzE4MzQyLWZhZjktNDIyMy1hYzhlLTBhMDZmMTI4YjU3NCIsImV4cCI6MTc3MTY5NTM2MiwianRpIjoiZGYwMDRlODY4NGY2NDljNThjNmE1YTdiZWUyYjlmYzAiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.GTuSQXA4DeogjB0Y4eDhhpMqAOrB0KsUYU23o0Z7c2g)
 
-    1.  Adjust the mappings if necessary and click Next.
+    -   Adjust the mappings if necessary and click Next.
+
+
 5.  Preview and Submit the job.
     1.  Review the data preview showing the captured source data and mapped fields.
 

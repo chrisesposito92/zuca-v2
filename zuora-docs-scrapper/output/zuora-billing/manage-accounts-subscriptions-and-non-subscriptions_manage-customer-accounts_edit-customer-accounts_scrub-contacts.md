@@ -2,7 +2,7 @@
 title: "Scrub contacts"
 url: "https://docs.zuora.com/en/zuora-billing/manage-accounts-subscriptions-and-non-subscriptions/manage-customer-accounts/edit-customer-accounts/scrub-contacts"
 product: "zuora-billing"
-scraped_at: "2025-12-24T05:16:44.058Z"
+scraped_at: "2026-02-20T17:30:08.605Z"
 ---
 
 # Scrub contacts

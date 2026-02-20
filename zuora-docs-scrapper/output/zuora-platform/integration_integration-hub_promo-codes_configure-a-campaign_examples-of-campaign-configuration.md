@@ -2,7 +2,7 @@
 title: "Examples of campaign configuration"
 url: "https://docs.zuora.com/en/zuora-platform/integration/integration-hub/promo-codes/configure-a-campaign/examples-of-campaign-configuration"
 product: "zuora-platform"
-scraped_at: "2025-12-24T05:48:12.169Z"
+scraped_at: "2026-02-20T21:10:39.040Z"
 ---
 
 # Examples of campaign configuration
@@ -11,7 +11,7 @@ Explore examples of campaign configurations, including a 10-year anniversary cam
 
 To help you better understand how a campaign is configured, an example of the configuration for a campaign that includes multiple child campaigns that hold different types of promotion codes is provided.
 
-Company Z is creating a 10-year anniversary campaign. This campaign starts on September 1st, 2020 to October 31st, 2020. Only the users who live in Georgia are eligible for the discount.
+Company Z is creating a 10-year anniversary campaign. This campaign starts on September 1, 2020, to October 31, 2020. Only the users who live in Georgia are eligible for the discount.
 
 This campaign includes two child campaigns:
 

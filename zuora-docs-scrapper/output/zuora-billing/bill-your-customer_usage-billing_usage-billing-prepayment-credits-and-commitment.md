@@ -2,7 +2,7 @@
 title: "Usage billing - prepayment, credits and commitment"
 url: "https://docs.zuora.com/en/zuora-billing/bill-your-customer/usage-billing/usage-billing---prepayment-credits-and-commitment"
 product: "zuora-billing"
-scraped_at: "2025-12-24T08:28:03.784Z"
+scraped_at: "2026-02-20T17:33:43.069Z"
 ---
 
 # Usage billing - prepayment, credits and commitment
@@ -18,5 +18,4 @@ Your end customers can also pay for usage directly attached to their accounts wi
 Zuora provides the flexibility to also prepay for usage and issue credits (in usage quantity or dollar amount) and manage usage commitments through the following configurations available in the product catalog:
 
 -   Prepaid with Drawdown
--   Prepaid Cash with Drawdown
 -   Minimum Commitment

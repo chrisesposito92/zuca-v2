@@ -2,7 +2,7 @@
 title: "Prepaid with Drawdown overview"
 url: "https://docs.zuora.com/en/zuora-billing/bill-your-customer/usage-billing/prepaid-with-drawdown/prepaid-with-drawdown-overview"
 product: "zuora-billing"
-scraped_at: "2025-12-24T08:28:57.458Z"
+scraped_at: "2026-02-20T17:34:02.162Z"
 ---
 
 # Prepaid with Drawdown overview

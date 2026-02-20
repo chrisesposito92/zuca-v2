@@ -2,7 +2,7 @@
 title: "Order Delta TCV"
 url: "https://docs.zuora.com/en/zuora-billing/manage-accounts-subscriptions-and-non-subscriptions/manage-subscription-transactions/orders/order-delta-metrics-and-order-metrics/order-delta-tcv"
 product: "zuora-billing"
-scraped_at: "2025-12-24T05:26:23.001Z"
+scraped_at: "2026-02-20T17:31:11.467Z"
 ---
 
 # Order Delta TCV
@@ -30,7 +30,7 @@ The value of an Order Delta Tcv metric is the change in TCV of a RatePlanCharge 
 
 For a termed subscription, Order Delta Tcv is generated asynchronously when an Order causes a change to the TCV of one-time or recurring charges. For an evergreen subscription, Order Delta Tcv is generated asynchronously when an Order causes a change to the TCV of one-time charges. The metrics will be associated with the Order Action that causes the change, and the rate plan charges that the action impacts. If there are also Order Line Items in the Order, Order Delta Tcv will be generated for the Order Line Items as well, representing the total contracted value for the Order Line Items.
 
-![Tcv model](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/4b996333-fde3-4d76-b6d1-e5db1ec1674f?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjRiOTk2MzMzLWZkZTMtNGQ3Ni1iNmQxLWU1ZGIxZWMxNjc0ZiIsImV4cCI6MTc2NjY0MDM4MCwianRpIjoiOGFkMzI5YzU0MTIzNGYwYWIzZDZkNGI1MzRmYzFiYWQiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.oFp4SdJlAsBvZX14LVesNL7nQ3hlIc7hOR_2xS6mZLY)
+![Tcv model](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/4b996333-fde3-4d76-b6d1-e5db1ec1674f?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjRiOTk2MzMzLWZkZTMtNGQ3Ni1iNmQxLWU1ZGIxZWMxNjc0ZiIsImV4cCI6MTc3MTY5NTA2NSwianRpIjoiNDQxZjIyZWI2NGJlNGJmZDk5ZGE5ZDU3ZjEyYTVlYmIiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.8DcZGiH0N4-8FYmsi4-i1hzaaQL6lmEPHuokHC2NnM4)
 
 Note:
 

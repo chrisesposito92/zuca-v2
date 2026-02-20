@@ -2,10 +2,12 @@
 title: "Release Notes based on Zuora Revenue 37.001.00.00"
 url: "https://docs.zuora.com/en/zuora-revenue/advanced-revenue-operations/release-notes-of-billing---revenue-integration/release-notes-based-on-zuora-revenue-37.001.00.00"
 product: "zuora-revenue"
-scraped_at: "2025-12-24T04:38:55.813Z"
+scraped_at: "2026-02-20T21:20:52.161Z"
 ---
 
 # Release Notes based on Zuora Revenue 37.001.00.00
+
+This document summarizes the enhancements, UI changes, and resolved issues in Zuora Revenue version 37.001.00.00.
 
 Note:
 
@@ -75,4 +77,4 @@ Navigate to Data Interface > Data Sync , the following UI changes are now availa
 
 ## Resolved issues
 
-Refer to the [attached CSV file](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/ad17bb1b-0cc7-421e-90e2-22a9259c395b?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImFkMTdiYjFiLTBjYzctNDIxZS05MGUyLTIyYTkyNTljMzk1YiIsImV4cCI6MTc2NjYzNzUzNCwianRpIjoiMDY1Zjg3ZWI0OWY2NGMzMmE1MGU5Yjk2MDBiODEyZjAiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.qN0HYPtHpw3WdrtflnJoRyUK-CcqD85IS3U3hh9tjv0&response-content-disposition=attachment%3B+filename%3D%22Resolved_issues_in_37_001_00_00.csv%22) to get a list of all issues that have been resolved in Zuora Revenue version 37.001.00.00 and the subsequent minor versions.
+Refer to the [attached CSV file](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/ad17bb1b-0cc7-421e-90e2-22a9259c395b?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImFkMTdiYjFiLTBjYzctNDIxZS05MGUyLTIyYTkyNTljMzk1YiIsImV4cCI6MTc3MTcwODg0NSwianRpIjoiMTQ5OTQ2YjVlYTA3NGVlNjkzODA0Y2YxODY4NmEzM2UiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.vFphZPB4-m9_uWO_BWxgeOLz9V7NCtSnnCzV4kircMI&response-content-disposition=attachment%3B+filename%3D%22Resolved_issues_in_37_001_00_00.csv%22) to get a list of all issues that have been resolved in Zuora Revenue version 37.001.00.00 and the subsequent minor versions.

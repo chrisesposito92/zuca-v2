@@ -2,7 +2,7 @@
 title: "Event setup"
 url: "https://docs.zuora.com/en/zuora-revenue/data-management/event-processing/event-setup"
 product: "zuora-revenue"
-scraped_at: "2025-12-24T04:26:32.679Z"
+scraped_at: "2026-02-20T21:18:27.947Z"
 ---
 
 # Event setup
@@ -20,11 +20,11 @@ Event setup is to create an event type with detailed definitions, which includes
 
 ## Before you begin
 
-If you are going to create a cost event, make sure the required cost setup is completed. For more information, see [Cost processing](/zuora-revenue/advanced-revenue-operations/advanced-functionalities) .
+If you are going to create a cost event, make sure the required cost setup is completed. For more information, see [Cost processing](/zuora-revenue/advanced-revenue-operations/cost-processing) .
 
 ## Procedure
 
-To create an event type in Zuora Revenue, follow the procedure [provided here](/zuora-revenue/data-management/event-processing/event-setup/procedure).
+To create an event type in Zuora Revenue, follow the procedure [provided here](/zuora-revenue/data-management/event-processing/event-setup/create-an-event-type).
 
 ## Result
 
@@ -34,7 +34,7 @@ The event type is created in Zuora Revenue and will be displayed on appropriate 
 
 Depending on the event type that you create, different steps are required:
 
--   If the event is a revenue or cost event, the next step is to associate the event with the POB template. For more information, see [Associate event with POB template](/db/organizations/zuora/repositories/prod-sitemap/content/documents/external_publications/revenue/A_get_started/topics/create_pob_template.dita) .
+-   If the event is a revenue or cost event, the next step is to associate the event with the POB template. For more information, see [Associate event with POB template](/zuora-revenue/data-management/event-processing/associate-event-with-pob-template) .
 
 -   If the event is a hold event, the next step is to associate the event with a hold or approval. For more information, see Associate event with [revenue holds](/zuora-revenue/getting-started/policy-management/revenue-holds-and-transfer-holds) .
 

@@ -1,11 +1,11 @@
 ---
-title: "cost setup"
+title: "Cost setup"
 url: "https://docs.zuora.com/en/zuora-revenue/advanced-revenue-operations/cost-processing/cost-setup"
 product: "zuora-revenue"
-scraped_at: "2025-12-24T04:33:49.078Z"
+scraped_at: "2026-02-20T21:20:01.330Z"
 ---
 
-# cost setup
+# Cost setup
 
 Zuora Revenue requires specific setups to process and report on costs, including setting up cost-related accounts, creating cost types, and modifying POB templates for cost treatment.
 

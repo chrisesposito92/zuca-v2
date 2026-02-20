@@ -2,14 +2,12 @@
 title: "Create and configure an RC"
 url: "https://docs.zuora.com/en/zuora-revenue/getting-started/policy-management/rc-grouping-template/using-the-pre-configured-rc-grouping-template/create-and-configure-an-rc"
 product: "zuora-revenue"
-scraped_at: "2025-12-24T04:24:04.227Z"
+scraped_at: "2026-02-20T21:18:00.855Z"
 ---
 
 # Create and configure an RC
 
 Learn how to create and configure an RC grouping template in Zuora Revenue by following a series of steps, including selecting a pre-configured template, providing necessary details, and reviewing grouping rules.
-
-Complete the following steps to create and configure an RC grouping template in Zuora Revenue:
 
 1.  Navigate to Policies > RC Grouping Template from the main menu.
 2.  Select the applicable pre-configured grouping template from the following: -

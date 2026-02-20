@@ -2,7 +2,7 @@
 title: "Charge models - configure any pricing"
 url: "https://docs.zuora.com/en/zuora-billing/set-up-zuora-billing/build-product-and-prices/charge-models---configure-any-pricing"
 product: "zuora-billing"
-scraped_at: "2025-12-24T04:49:00.730Z"
+scraped_at: "2026-02-20T17:28:07.674Z"
 ---
 
 # Charge models - configure any pricing

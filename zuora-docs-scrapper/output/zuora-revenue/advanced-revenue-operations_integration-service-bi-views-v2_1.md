@@ -2,7 +2,7 @@
 title: "Integration service (BI Views V2)"
 url: "https://docs.zuora.com/en/zuora-revenue/advanced-revenue-operations/integration-service-bi-views-v2_1"
 product: "zuora-revenue"
-scraped_at: "2025-12-24T04:39:32.047Z"
+scraped_at: "2026-02-20T21:20:52.793Z"
 ---
 
 # Integration service (BI Views V2)

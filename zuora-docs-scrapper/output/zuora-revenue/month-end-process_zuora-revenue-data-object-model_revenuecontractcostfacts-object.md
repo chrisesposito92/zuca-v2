@@ -2,7 +2,7 @@
 title: "RevenueContractCostFacts object"
 url: "https://docs.zuora.com/en/zuora-revenue/month-end-process/zuora-revenue-data-object-model/revenuecontractcostfacts-object"
 product: "zuora-revenue"
-scraped_at: "2025-12-24T04:30:16.578Z"
+scraped_at: "2026-02-20T21:19:11.844Z"
 ---
 
 # RevenueContractCostFacts object

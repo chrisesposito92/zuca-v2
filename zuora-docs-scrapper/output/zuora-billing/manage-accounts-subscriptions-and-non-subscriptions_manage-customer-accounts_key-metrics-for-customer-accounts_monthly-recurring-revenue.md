@@ -2,7 +2,7 @@
 title: "Monthly Recurring Revenue"
 url: "https://docs.zuora.com/en/zuora-billing/manage-accounts-subscriptions-and-non-subscriptions/manage-customer-accounts/key-metrics-for-customer-accounts/monthly-recurring-revenue"
 product: "zuora-billing"
-scraped_at: "2025-12-24T05:15:04.955Z"
+scraped_at: "2026-02-20T17:29:52.470Z"
 ---
 
 # Monthly Recurring Revenue
@@ -139,7 +139,7 @@ Suppose your customer had a termed subscription with two monthly recurring charg
 
 The Gross MRR of Charge 1, Charge 2, and the subscription are shown in the diagram below:
 
-![Subscription Gross MRR](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/afa8b99b-10d2-4e12-9887-06049f3349b5?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImFmYThiOTliLTEwZDItNGUxMi05ODg3LTA2MDQ5ZjMzNDliNSIsImV4cCI6MTc2NjYzOTcwMywianRpIjoiMGRiYjRhMjkzMjAyNDcwZGJiOTAzNjAzOWVkMTkyNWEiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.Cr4qZJCGyl0fbFbjAdreCFuYat2v80yT3aRUQIUbIZs)
+![Subscription Gross MRR](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/afa8b99b-10d2-4e12-9887-06049f3349b5?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImFmYThiOTliLTEwZDItNGUxMi05ODg3LTA2MDQ5ZjMzNDliNSIsImV4cCI6MTc3MTY5NDk4NywianRpIjoiM2M2NjAzN2M4MmQ5NDhjOWE4MjBiZjhjNzY5M2E4MDkiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.e-yLNWHJvtvYcBSAMXlnre4DppwJVgOPyrOdjTzNBEY)
 
 ## Charge-level net MRR
 
@@ -167,7 +167,7 @@ A percentage discount charge of 20% is applied to a regular monthly charge. The 
 
 The following diagram shows the Net MRR calculation for each charge segment of the regular charge:
 
-![Charge level MRR-Sample 1](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/ae13c0f0-bfc2-4f05-9d59-c8b6f28cfce8?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImFlMTNjMGYwLWJmYzItNGYwNS05ZDU5LWM4YjZmMjhjZmNlOCIsImV4cCI6MTc2NjYzOTcwMywianRpIjoiYmNiZTU1YTEyNWQyNGNmYzg1YWU4OTNmNjUzYjYyZTAiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.UWshoc_nTdWfj5TWx9cjX7KQAUAZSszv-dvFvYhB1M0)
+![Charge level MRR-Sample 1](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/ae13c0f0-bfc2-4f05-9d59-c8b6f28cfce8?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImFlMTNjMGYwLWJmYzItNGYwNS05ZDU5LWM4YjZmMjhjZmNlOCIsImV4cCI6MTc3MTY5NDk4NywianRpIjoiZjFkODkwNjgxNjc2NGNjYmFiYjA1YTQ1YmU0YTFmOTAiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.z9_5vld4wyDRlwcZjRqmjr3G8nyP6O7efAven-nY6P8)
 
 In this example, the regular charge has two charge segments. The Net MRR of each charge segment is:
 
@@ -188,7 +188,7 @@ A percentage discount charge of 20% is applied to a regular monthly charge for t
 
 The following diagram shows the Net MRR calculation for each charge segment and each charge period of the regular charge:
 
-![Charge-level Net MRR - Sample 2](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/b56dfe68-d8c2-4660-9b56-f8c7bb7048e3?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImI1NmRmZTY4LWQ4YzItNDY2MC05YjU2LWY4YzdiYjcwNDhlMyIsImV4cCI6MTc2NjYzOTcwMywianRpIjoiMTJjMWUyMDEyNTdjNDViM2FmYjMxZDEyOTM0MmE1NGYiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.I5Nvnq-c_iSpkHbUjbNtnsWSTALBOwiinSLxhVB6EpM)
+![Charge-level Net MRR - Sample 2](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/b56dfe68-d8c2-4660-9b56-f8c7bb7048e3?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImI1NmRmZTY4LWQ4YzItNDY2MC05YjU2LWY4YzdiYjcwNDhlMyIsImV4cCI6MTc3MTY5NDk4NywianRpIjoiYTlkMjdmMTUwZGFkNDZmNGI4MDAwZTU2MGRiNWI3ZWYiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.FPygRwYhPa05J7rY58HH5LHLq1B29feEBwuohB3Ev3Q)
 
 In this example, the regular charge has two charge segments. The second charge segment is segmented by the discount charge into two charge periods.
 
@@ -200,4 +200,4 @@ The Net MRR for each charge segment or each charge period is:
 
 The following diagram shows how a charge segment of a regular charge can be segmented by a discount charge into several charge periods.
 
-![Charge Segment Divided by Discount](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/51006fe0-e9d7-4da8-b9c1-b36bdb45dc74?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjUxMDA2ZmUwLWU5ZDctNGRhOC1iOWMxLWIzNmJkYjQ1ZGM3NCIsImV4cCI6MTc2NjYzOTcwMywianRpIjoiYmRkYjk2NjUwYTMxNDBjYThjMDkwOTJjOWQwYzViYWQiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.tShhq9s42BnOeeHu0WZwJ5ecYcxIRgVO25VxMI0D6rA)
+![Charge Segment Divided by Discount](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/51006fe0-e9d7-4da8-b9c1-b36bdb45dc74?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjUxMDA2ZmUwLWU5ZDctNGRhOC1iOWMxLWIzNmJkYjQ1ZGM3NCIsImV4cCI6MTc3MTY5NDk4NywianRpIjoiOGFhMTkzMDIzYjEwNGE1YzgzMmQ1NTdlMWFlN2FhZmMiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.TajQxsnIYHX31wKbQ9ji7ggGFSAYZF8u0RxG7OmKsJQ)

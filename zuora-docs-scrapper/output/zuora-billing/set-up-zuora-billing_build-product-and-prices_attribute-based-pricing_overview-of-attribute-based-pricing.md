@@ -2,7 +2,7 @@
 title: "Overview of attribute-based pricing"
 url: "https://docs.zuora.com/en/zuora-billing/set-up-zuora-billing/build-product-and-prices/attribute-based-pricing/overview-of-attribute-based-pricing"
 product: "zuora-billing"
-scraped_at: "2025-12-24T05:00:03.994Z"
+scraped_at: "2026-02-20T17:28:39.391Z"
 ---
 
 # Overview of attribute-based pricing
@@ -46,7 +46,7 @@ We are actively soliciting feedback during the Early Adopter phase. If you are i
 
 The Attribute-based Pricing feature adds more objects to the existing Zuora product catalog data model to bring more flexibility to defining price points. Currently, the Product Rate Plan Definition and Product Charge Definition objects are available after this feature is enabled. The following graphic illustrates the relationship between these new objects and other existing product catalog objects.
 
-![ABP-object-model.png](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/b64bc9e3-ba6a-4bd1-9665-8e7803cb86e2?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImI2NGJjOWUzLWJhNmEtNGJkMS05NjY1LThlNzgwM2NiODZlMiIsImV4cCI6MTc2NjYzODgwMSwianRpIjoiMzliMDBmYmFjOTI5NDI5ZmI5NjljMTc4MDlhYTQxYTgiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.Yuj1L9Ejj-kfCPmQ_cspkU3PggPjvMJcdcgV7qym3Pc)
+![ABP-object-model.png](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/b64bc9e3-ba6a-4bd1-9665-8e7803cb86e2?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImI2NGJjOWUzLWJhNmEtNGJkMS05NjY1LThlNzgwM2NiODZlMiIsImV4cCI6MTc3MTY5NDkxMywianRpIjoiODc5YjJlMTczZDkxNDA3Y2I1NmIxMDJjNzYzNGI3MDEiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.pMed7Ckv-xw8pOx6Y0WZiiA_Hg9odCBQL_i4PuWADsw)
 
 From the above diagram, you can see that the Product Rate Plan Definition object decouples product rate plans and product rate plan charges after the Attribute-based Pricing feature is enabled. You can use this object to associate product rate plan charges with any existing or new product rate plans.
 

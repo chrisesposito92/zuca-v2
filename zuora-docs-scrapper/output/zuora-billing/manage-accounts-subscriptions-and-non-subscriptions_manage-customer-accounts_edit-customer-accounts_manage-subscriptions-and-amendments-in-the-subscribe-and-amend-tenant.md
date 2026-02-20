@@ -2,7 +2,7 @@
 title: "Manage subscriptions and amendments in the Subscribe and Amend tenant"
 url: "https://docs.zuora.com/en/zuora-billing/manage-accounts-subscriptions-and-non-subscriptions/manage-customer-accounts/edit-customer-accounts/manage-subscriptions-and-amendments-in-the-subscribe-and-amend-tenant"
 product: "zuora-billing"
-scraped_at: "2026-01-15T21:55:49.982Z"
+scraped_at: "2026-02-20T17:30:08.182Z"
 ---
 
 # Manage subscriptions and amendments in the Subscribe and Amend tenant
@@ -27,4 +27,4 @@ Perform one of the following tasks depending on the tenant type you are using. I
     -   Click Create New Subscription in the Subscriptions-Owned or Subscriptions-Invoiced tab.
     -   Click Create New Amendment in the Pending Amendments or All Amendments tab.
 
-    For more information, see Creating Subscriptions and Create an Amendment.
+    For more information, see [Creating Subscriptions](/zuora-billing/manage-accounts-subscriptions-and-non-subscriptions/manage-subscription-transactions/subscribe-and-amend/create-subscriptions) and [Create an Amendment](/zuora-billing/manage-accounts-subscriptions-and-non-subscriptions/manage-subscription-transactions/subscribe-and-amend/amend-subscriptions/amendments-creation).

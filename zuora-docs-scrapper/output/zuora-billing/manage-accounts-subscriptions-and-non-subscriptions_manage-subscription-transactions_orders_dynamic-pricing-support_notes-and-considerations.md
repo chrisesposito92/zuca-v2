@@ -2,7 +2,7 @@
 title: "Notes and considerations"
 url: "https://docs.zuora.com/en/zuora-billing/manage-accounts-subscriptions-and-non-subscriptions/manage-subscription-transactions/orders/dynamic-pricing-support/notes-and-considerations"
 product: "zuora-billing"
-scraped_at: "2025-12-24T05:32:09.007Z"
+scraped_at: "2026-02-20T17:32:00.638Z"
 ---
 
 # Notes and considerations
@@ -49,6 +49,18 @@ The edit icon in the Order Actions tab is hidden.
     -   One-time
 
     -   Recurring charge types
+
+-   The negotiated price table is designed for usage charges whose sales price depends on dynamic usage records. When you place an order for these usage charges, you cannot determine the sales price in advance. In such cases, you must contact [Zuora Global Support](https://support.zuora.com/auth/v3/signin?brand_id=825826&locale=en-us&return_to=https%3A%2F%2Fsupport.zuora.com%2Fhc%2Fen-us&role=end_user) to enable this feature so that you can create the negotiated price table or rate cards.
+
+    Note:
+
+    Note:
+
+    This feature is currently in the
+
+    Limited Availability phase
+
+    . It was originally built to support specific customer use cases and is now being actively enhanced to cover a broader range of scenarios based on the feedback. Its functionality and behavior may change over time as new improvements are delivered.
 
 
 -   We're still working on the following functionalities:

@@ -2,7 +2,7 @@
 title: "Restrictions and limitations"
 url: "https://docs.zuora.com/en/zuora-billing/bill-your-customer/billing-document-templates-configuration/configure-html-templates-for-billing-documents/get-started-with-html-templates/restrictions-and-limitations"
 product: "zuora-billing"
-scraped_at: "2025-12-24T05:40:16.875Z"
+scraped_at: "2026-02-20T17:32:50.448Z"
 ---
 
 # Restrictions and limitations
@@ -35,13 +35,19 @@ The HTML Templates feature has the following restrictions and limitations, speci
 
 -   Tables
 
+    Note:
+
+    The maximum number of records that can be displayed across tables in a template is 25,000. If the template contains multiple tables, the combined total of all records must not exceed 25,000.
+
+    Support for displaying up to 25,000 rows also depends on the total number of pages generated in the invoice PDF. To help minimize the number of pages, follow the recommendations mentioned in this section.
+
     -   Use a smaller font size for the table data (for example, 8px).
 
-    -   Reduce the padding for the row cells in the table (for example, 3px).
+    -   Reduce the padding for the row cells in the table (for example, 3px padding).
 
-    -   Minimize the number of columns in the table (preferably fewer than 5 columns).
+    -   Minimize the number of columns in the table (keep it to less than 5 columns).
 
-    -   Maintain the top and bottom margins as low as possible.
+    -   Reduce the top and bottom margins to 5mm each for the page.
 
     -   Avoid using images in the header or footer to prevent a significant increase in the PDF file size.
 
@@ -61,7 +67,7 @@ The HTML Templates feature has the following restrictions and limitations, speci
 
 -   Fonts
 
-    -   To make sure uncommon currency symbols displayed on the generated PDF, use the Roboto font from the font family .
+    -   To make sure uncommon currency symbols displayed on the generated PDF, use the Roboto font from the [font family](/zuora-billing/bill-your-customer/billing-document-templates-configuration/configure-html-templates-for-billing-documents/customize-html-templates/configure-fonts-in-html-templates) .
 
 -   Data
 
@@ -73,4 +79,4 @@ The HTML Templates feature has the following restrictions and limitations, speci
 
 -   Generated documents
 
-    -   If the billing document is using HTML Templates, no MS Word Document is generated even though you enable the Generate MS Word Document permission when setting Billing Roles .
+    -   If the billing document is using HTML Templates, no MS Word Document is generated even though you enable the Generate MS Word Document permission when setting [Billing Roles](/zuora-platform/security-and-identity/administrator-settings/user-roles/billing-roles) .

@@ -2,16 +2,16 @@
 title: "Considerations in Order Metrics"
 url: "https://docs.zuora.com/en/zuora-billing/manage-accounts-subscriptions-and-non-subscriptions/manage-subscription-transactions/orders/orders-considerations-and-performance/considerations-in-order-metrics"
 product: "zuora-billing"
-scraped_at: "2025-12-24T05:27:11.485Z"
+scraped_at: "2026-02-20T17:31:11.209Z"
 ---
 
 # Considerations in Order Metrics
 
 This article outlines the limitations of Order Metrics for existing Zuora Subscribe and Amend customers, highlighting unsupported features and conditions for generating metrics.
 
-This section is for the existing Zuora Subscribe and Amend customers who have enabled Order Metrics only (not full Orders).
+This section is for the existing Zuora Subscribe and Amend customers who have enabled Order Metrics only (not Orders).
 
-The table below describes known limitations in Order Metrics for Zuora Billing. Note you must have full Orders turned on to support the Orders integration with Zuora CPQ.
+The table below describes known limitations in Order Metrics for Zuora Billing. Note you must have Orders turned on to support the Orders integration with Zuora CPQ.
 
 | Feature | Limitations |
 | --- | --- |

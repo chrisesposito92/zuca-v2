@@ -2,7 +2,7 @@
 title: "Set up Google Cloud Delta Lake"
 url: "https://docs.zuora.com/en/zuora-platform/integration/integration-hub/zuora-connectors-for-data-warehouses/zuora-connector-for-delta-lake/set-up-zuora-connector-for-delta-lake/set-up-google-cloud-delta-lake"
 product: "zuora-platform"
-scraped_at: "2026-01-15T22:01:36.201Z"
+scraped_at: "2026-02-20T21:13:36.309Z"
 ---
 
 # Set up Google Cloud Delta Lake
@@ -21,4 +21,4 @@ Setting up Google Cloud Delta Lake includes the following steps:
 
     -   [Alternative authentication method](/zuora-platform/integration/integration-hub/zuora-connectors-for-data-warehouses/zuora-connector-for-delta-lake/set-up-zuora-connector-for-delta-lake/set-up-aws-s3-delta-lake/create-policy-and-iam-role/alternative-authentication-method)
 
-3.  [Add your destination](/zuora-platform/integration/integration-hub/zuora-connectors-for-data-warehouses/zuora-connector-for-delta-lake/set-up-zuora-connector-for-delta-lake/set-up-aws-s3-delta-lake/add-your-destination)
+3.  [Add your destination](/zuora-platform/integration/integration-hub/zuora-connectors-for-data-warehouses/zuora-connector-for-delta-lake/set-up-zuora-connector-for-delta-lake/add-destination-for-delta-lake)

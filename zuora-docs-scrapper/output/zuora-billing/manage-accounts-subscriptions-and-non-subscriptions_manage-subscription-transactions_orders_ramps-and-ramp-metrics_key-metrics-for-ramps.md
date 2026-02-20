@@ -2,7 +2,7 @@
 title: "Key metrics for Ramps"
 url: "https://docs.zuora.com/en/zuora-billing/manage-accounts-subscriptions-and-non-subscriptions/manage-subscription-transactions/orders/ramps-and-ramp-metrics/key-metrics-for-ramps"
 product: "zuora-billing"
-scraped_at: "2025-12-24T05:28:20.343Z"
+scraped_at: "2026-02-20T17:31:15.688Z"
 ---
 
 # Key metrics for Ramps

@@ -2,7 +2,7 @@
 title: "Create fulfillments on a return order line item"
 url: "https://docs.zuora.com/en/zuora-billing/manage-accounts-subscriptions-and-non-subscriptions/manage-non-subscription-transactions/order-line-items/order-line-items-return/create-fulfillments-on-a-return-order-line-item"
 product: "zuora-billing"
-scraped_at: "2025-12-24T05:38:05.938Z"
+scraped_at: "2026-02-20T17:32:33.140Z"
 ---
 
 # Create fulfillments on a return order line item
@@ -28,7 +28,7 @@ After activating the return order line item, you can create fulfillments on the 
     | Fulfillment Location | The occurring location of the fulfillment. |
     | External ID | Specify the ID of the fulfillment. The ID is generated based on the external system. |
 
-4.  (Optional) Change the State to a state except Executing to add fulfillment items, click Add Item to add a fulfillment item, and then edit the following fields in the Fulfillment Items area. After editing, click the save icon ![Image: icon-save](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/fc48d836-4b9f-4fa1-bf03-52198dd7959f?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImZjNDhkODM2LTRiOWYtNGZhMS1iZjAzLTUyMTk4ZGQ3OTU5ZiIsImV4cCI6MTc2NjY0MTA4MywianRpIjoiZjYwMjEwMmQ3ODA0NGFlMGJkN2YwMzVjMmIzYjRlZGIiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.Oeo6gaoJC5-oCtOq1WD6hEnBDi-ejBTt5trTwf5qtzg) to finish adding the fulfillment item. You can create multiple fulfillment items, but the number of fulfillment items should not be greater than the value of the Fulfillment Quantity field.
+4.  (Optional) Change the State to a state except Executing to add fulfillment items, click Add Item to add a fulfillment item, and then edit the following fields in the Fulfillment Items area. After editing, click the save icon ![Image: icon-save](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/fc48d836-4b9f-4fa1-bf03-52198dd7959f?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImZjNDhkODM2LTRiOWYtNGZhMS1iZjAzLTUyMTk4ZGQ3OTU5ZiIsImV4cCI6MTc3MTY5NTE0OCwianRpIjoiY2E4MzQxOThkM2M2NDZmZmFmNzAwNTBjNGQxY2JjNDQiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.FM3-Z5-OmyG4PN2yPjeREK2Lfh6de5b8zoBodiU8sbE) to finish adding the fulfillment item. You can create multiple fulfillment items, but the number of fulfillment items should not be greater than the value of the Fulfillment Quantity field.
 
     | Field name | Description |
     | --- | --- |

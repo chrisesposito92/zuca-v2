@@ -2,7 +2,7 @@
 title: "Cost processing"
 url: "https://docs.zuora.com/en/zuora-revenue/advanced-revenue-operations/cost-processing"
 product: "zuora-revenue"
-scraped_at: "2025-12-24T04:33:46.739Z"
+scraped_at: "2026-02-20T21:20:01.801Z"
 ---
 
 # Cost processing
@@ -47,6 +47,6 @@ As mentioned before, you can input costs to Zuora Revenue by using one of the fo
 
 -   For information about how to upload costs to Zuora Revenue, see [Cost upload](/zuora-revenue/advanced-revenue-operations/cost-processing/cost-upload) .
 
--   For information about how to review cost data in Zuora Revenue, see Cost review.
+-   For information about how to review cost data in Zuora Revenue, see [Cost review](/zuora-revenue/advanced-revenue-operations/cost-processing/cost-type).
 
 -   To understand the accounting behaviors for cost processing, see [Accounting entries for cost](/zuora-revenue/advanced-revenue-operations/cost-processing/accounting-entries-for-cost) .

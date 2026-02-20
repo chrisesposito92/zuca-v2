@@ -2,7 +2,7 @@
 title: "Prerequisite activities"
 url: "https://docs.zuora.com/en/zuora-revenue/month-end-process/prerequisite-activities"
 product: "zuora-revenue"
-scraped_at: "2025-12-24T04:27:20.001Z"
+scraped_at: "2026-02-20T21:18:27.711Z"
 ---
 
 # Prerequisite activities
@@ -15,7 +15,7 @@ As the first step in the month-end process, some prerequisite activities must be
 
 Various types of activities are involved in this stage. You must navigate to the appropriate UI to perform different tasks. The following tasks might be involved in preparation for the period-close process:
 
--   Run reports To run a report, navigate to Reports > Run Reports . See [Run reports](/zuora-revenue/month-end-process/reports) .
+-   Run reports To run a report, navigate to Reports > Run Reports . See [Run reports](/zuora-revenue/month-end-process/reports/work-with-reports) .
 
 -   Start a predefined program To start a program, navigate to Reports > Schedule Jobs . [See Schedule jobs](/zuora-revenue/month-end-process/reports/schedule-jobs) .
 
@@ -34,7 +34,7 @@ Soft freeze can ensure that there is no discrepancy in the closing balance. When
 
 ## Procedure
 
-Complete the steps provided [hereNo Content found for /db/organizations/zuora/repositories/prod-sitemap/content/documents/external\_publications/revenue/C\_Perform\_month\_end\_process/topics/procedure\_1.dita](/db/organizations/zuora/repositories/prod-sitemap/content/documents/external_publications/revenue/C_Perform_month_end_process/topics/procedure_1.dita) to prepare to close a period.
+Complete the steps provided [here](/zuora-revenue/month-end-process/prerequisite-activities/prepare-to-close-a-financial-period) to prepare to close a period.
 
 ## What to do next
 

@@ -2,7 +2,7 @@
 title: "Order Delta Metrics"
 url: "https://docs.zuora.com/en/zuora-billing/manage-accounts-subscriptions-and-non-subscriptions/manage-subscription-transactions/orders/order-delta-metrics-and-order-metrics/overview-of-order-delta-metrics/order-delta-metrics"
 product: "zuora-billing"
-scraped_at: "2025-12-24T05:25:43.961Z"
+scraped_at: "2026-02-20T17:31:11.817Z"
 ---
 
 # Order Delta Metrics
@@ -32,7 +32,7 @@ The value of an Order Delta Mrr metric is the change in MRR of a RatePlanCharge 
 
 After 3 months, you use an Update Product order action to increase the quantity to 13 units, so that the new MRR of the recurring charge is $65.00 = 13 units × $5.00. Zuora then creates an Order MRR metric for the recurring charge. The value of the Order MRR metric is $15.00 = $65.00 − $50.00 and the duration of the Order MRR metric is 9 = 12 − 3 months.
 
-![Order Delta Metrics3](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/7f75fa3d-7485-4f4c-98cd-c8424146e374?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjdmNzVmYTNkLTc0ODUtNGY0Yy05OGNkLWM4NDI0MTQ2ZTM3NCIsImV4cCI6MTc2NjY0MDM0MiwianRpIjoiNzRmMjU0YjhiYTQwNDkyZGFlNTJmZTlmYWFiZjJmOWEiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.ok3K7dbqzbNfDjgljGvqwD2SNOAL0Zfw8FKcc3cH3fo)
+![Order Delta Metrics3](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/7f75fa3d-7485-4f4c-98cd-c8424146e374?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjdmNzVmYTNkLTc0ODUtNGY0Yy05OGNkLWM4NDI0MTQ2ZTM3NCIsImV4cCI6MTc3MTY5NTA2NSwianRpIjoiNDlkZDA1ZDA2YzM4NDViNjhhNDE1ODYyNmY5MjJkOWYiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.dKUvxXNJt4hSrNTYvhjqhuPLsqz31TJjaD0unSbJi5g)
 
 See Example 2 in Order Delta Mrr for a more detailed explanation of this scenario.
 
@@ -46,7 +46,7 @@ After 9 months, you use an Update Product order action to increase the quantity 
 
 Assuming with the Product update example, there is also a one-off service charge of $20 that occurred on the transaction day, represented by the Order Line Item as in the following diagram. An Order Delta Tcv metric is generated for that $20 with start and end dates being the same as the transaction day.
 
-![Order Delta Metrics4](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/b449d308-e6f7-417a-96a6-553407b66c05?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImI0NDlkMzA4LWU2ZjctNDE3YS05NmE2LTU1MzQwN2I2NmMwNSIsImV4cCI6MTc2NjY0MDM0MiwianRpIjoiNGM2ZmQ0ZGVkOWMzNDQ1ODhlOGYxNWE1M2E0NjE1YzEiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.nhXKRjEzFA-2t9qlMtvFygAITGW1GZfjffwhnKz6QSA)
+![Order Delta Metrics4](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/b449d308-e6f7-417a-96a6-553407b66c05?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImI0NDlkMzA4LWU2ZjctNDE3YS05NmE2LTU1MzQwN2I2NmMwNSIsImV4cCI6MTc3MTY5NTA2NSwianRpIjoiMTY1YmU3MjA4ZTExNGMxZDlmMDRhNDQ2MDlhOTUxYTIiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.Ll937Asv5TRo1jg3GWQKckCf2q7cnUI0f3iOKI8T2h4)
 
 When calculating TCV for Rate Plan Charges, Zuora prorates partial months based on the number of days in each partial month. Zuora does not prorate partial months according to the billing configuration of your Zuora tenant. This is because TCV is meant to be a metric representing the total booked value, and is not impacted by how it will actually be billed.
 
@@ -77,7 +77,7 @@ After 3 months, you use an Update Product order action to increase the quantity 
 
 Assuming with the product update example, there is also a one-off service charge of $20 that occurred on the transaction day, represented by the Order Line Item. An Order Delta Tcb metric is generated for that $20 with start and end dates being the same as the transaction day.
 
-![Order Delta Metrics5](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/6631871b-53c2-4566-a54c-7258837937de?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjY2MzE4NzFiLTUzYzItNDU2Ni1hNTRjLTcyNTg4Mzc5MzdkZSIsImV4cCI6MTc2NjY0MDM0MiwianRpIjoiZmMwZWIzNGQ3NjE2NDFmYTg0ZmI0YTY5YzU4M2E1ODUiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.uHTuiBMrrOL-2ValtYISFmx-iaJW_Dg1RB6UfRlYgjs)
+![Order Delta Metrics5](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/6631871b-53c2-4566-a54c-7258837937de?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjY2MzE4NzFiLTUzYzItNDU2Ni1hNTRjLTcyNTg4Mzc5MzdkZSIsImV4cCI6MTc3MTY5NTA2NSwianRpIjoiMzYxNzljMTg1Y2YwNDg0YWE1NTcxMWU2M2QxMTAxYjIiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.6BMaGqjGIlio1O0CrjeBEVdN0fR0EEa-YYCJBPWK2QE)
 
 When calculating TCB, Zuora prorates partial months according to the billing configuration of your Zuora tenant. See Proration and Calculating Total Amount with Partial Period Proration for more information.
 
@@ -91,7 +91,7 @@ The value of an Order Delta Quantity metric is the change in quantity of a RateP
 
 For example, suppose that your customer has subscribed to 20 units of product for 12 months, with a list price of $5.00 per unit per month. The subscription starts from 2024-01-01 and is renewed on 2025-01-01. Your customer decides to increase the quantity to 30 units of product on 2025-07-01 and you perform the corresponding Update Product order action. Zuora then creates the Order Delta Quantity metrics for each charge segment for each order action shown in the following diagram.
 
-![order delta quantity-increase quantity](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/8d894cf0-8d4b-41e9-9ad4-d3ae2ca8404a?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjhkODk0Y2YwLThkNGItNDFlOS05YWQ0LWQzYWUyY2E4NDA0YSIsImV4cCI6MTc2NjY0MDM0MiwianRpIjoiNGQ3ZmFlODc1Y2RhNDMxOGE0ZDdmNTU4NTBiMjk5YzUiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.jXVJlA9PpsH-A9qlxhQZRib9p4Es7NAFCU3PjA-nUks)
+![order delta quantity-increase quantity](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/8d894cf0-8d4b-41e9-9ad4-d3ae2ca8404a?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjhkODk0Y2YwLThkNGItNDFlOS05YWQ0LWQzYWUyY2E4NDA0YSIsImV4cCI6MTc3MTY5NTA2NSwianRpIjoiZGY5OGVjYWU1YTQ3NGZkZjgyMWE1ZGJhMjYyMGJjMWMiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.sn0K25AYa1b3NL20gS4QSwY3jBunrJgut_ORw74AoaQ)
 
 In the above example, for the Update Product order action, the order delta quantity for charge segment PRC-2 between 2025–07-01 and 2026-01-01 is -20 due to the shrinking of the rate plan, and the order delta quantity for charge segment PRC-3 between 2025–07-01 and 2026-01-01 is 30 due to the updated quantity.
 

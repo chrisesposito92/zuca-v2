@@ -2,7 +2,7 @@
 title: "Manage subscriptions, orders, and amendments in the Orders Harmonization tenant"
 url: "https://docs.zuora.com/en/zuora-billing/manage-accounts-subscriptions-and-non-subscriptions/manage-customer-accounts/edit-customer-accounts/manage-subscriptions-orders-and-amendments-in-the-orders-harmonization-tenant"
 product: "zuora-billing"
-scraped_at: "2026-01-15T21:55:49.480Z"
+scraped_at: "2026-02-20T17:30:07.470Z"
 ---
 
 # Manage subscriptions, orders, and amendments in the Orders Harmonization tenant
@@ -26,4 +26,6 @@ If you are an Orders Harmonization tenant user, complete the following steps to 
     -   Click Create New Subscription in the Subscriptions-Ownedtab.
     -   Click Create Order in the Orders tab.
 
-    For more information, see Orders Tutorials.
+    Note:
+
+    For more information, see [Orders Tutorials](/zuora-billing/manage-accounts-subscriptions-and-non-subscriptions/manage-subscription-transactions/orders/orders-tutorials).

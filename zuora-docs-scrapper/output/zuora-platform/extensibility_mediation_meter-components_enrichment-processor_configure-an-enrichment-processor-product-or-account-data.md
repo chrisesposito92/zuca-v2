@@ -2,20 +2,20 @@
 title: "Configure an Enrichment processor (Product or Account data)"
 url: "https://docs.zuora.com/en/zuora-platform/extensibility/mediation/meter-components/enrichment-processor/configure-an-enrichment-processor-product-or-account-data"
 product: "zuora-platform"
-scraped_at: "2025-12-24T05:29:29.300Z"
+scraped_at: "2026-02-20T17:49:28.436Z"
 ---
 
 # Configure an Enrichment processor (Product or Account data)
 
 Learn how to configure an Enrichment processor to enhance events with product or account data.
 
-You can use this method for enrichment based on standard Zuora metadata such as product catalog, accounts, subscriptions, and charges. To configure an Enrichment processor:
+You can use this method for enrichment based on standard Zuora metadata such as product catalog, accounts, subscriptions, and charges.
 
-1.  Navigate to Mediation > Meters.
-2.  Create a new Custom meter.
+1.  Navigate to
+2.  Create a Custom meter.
 3.  Select and drag the Enrichment processor type on to the meter stream page. The enrichment settings page is displayed.
 
-    ![Enrichment processor settings](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/d0497ceb-35d8-4941-b43c-0a9800ce1e2a?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImQwNDk3Y2ViLTM1ZDgtNDk0MS1iNDNjLTBhOTgwMGNlMWUyYSIsImV4cCI6MTc2NjY0MDU2NywianRpIjoiNTA5NTgyZjIwYzFlNGQyMGE4NTllNGRiNGY5YzIzMGIiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.AwZNXEOg8yvrvnKZHBKr9JBHt4wr8sG-j_BGYQwzV-A)
+    ![Enrichment processor settings](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/d0497ceb-35d8-4941-b43c-0a9800ce1e2a?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImQwNDk3Y2ViLTM1ZDgtNDk0MS1iNDNjLTBhOTgwMGNlMWUyYSIsImV4cCI6MTc3MTY5NjE2MSwianRpIjoiMDYwMzFhNTYyN2Q1NDhhYjliNjE3OTRmMDI1OWVhZmEiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.wEXY7di2NySocnv92Ab9GBM-VJ07u3Vn9hzUVTI8Dtw)
 
 4.  On the Enrichment settings page, enter a name for the processor.
 5.  Under Enrichment Options, select Enrich events using Product or Account data.
@@ -55,5 +55,3 @@ You can use this method for enrichment based on standard Zuora metadata such as 
     If the Use event time to match charge segment checkbox is enabled and availableTime is chosen as, say November 2024, the system picks $1. If the checkbox is disabled, the system picks $2.
 
 10.  Click Save.
-
-The Enrichment processor is configured for the custom meter.

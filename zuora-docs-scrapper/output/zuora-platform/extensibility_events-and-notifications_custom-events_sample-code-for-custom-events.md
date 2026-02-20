@@ -2,7 +2,7 @@
 title: "Sample code for custom events"
 url: "https://docs.zuora.com/en/zuora-platform/extensibility/events-and-notifications/custom-events/sample-code-for-custom-events"
 product: "zuora-platform"
-scraped_at: "2025-12-24T05:24:53.426Z"
+scraped_at: "2026-02-20T17:48:30.836Z"
 ---
 
 # Sample code for custom events
@@ -34,3 +34,11 @@ You can use the following request sample to create a custom event that will be t
 You can use the following request sample to create a custom event that will be triggered when certain custom object records are updated for the `Entitlement` custom object.
 
 { "active": true, "baseObject": "default\_\_entitlement", "condition": "changeType == 'UPDATE' && default\_\_entitlement.Usage\_\_c >= default\_\_entitlement.Entitled\_\_c && default\_\_entitlement.Status != 'Trial'", "description": "Generate an event when an entitlement record is updated, if the usage equals to or greater than the entitlement and the entitlement status is not trial", "eventType": { "name": "EntitlementUpdated", "displayName": "Entitlement Updated", "description": "Generate an event when an entitlement record is updated, if the usage equals to or greater than the entitlement and the entitlement status is not trial" } }
+
+## Order Action for subscription cancellation created
+
+You can use the following request sample to create a custom event that is triggered when a subscription cancellation order action is created and its cancellation effective date matches the order action creation date.
+
+Because `OrderAction.CreatedDate` is a timestamp field and `OrderAction.CancellationEffectiveDate` is a date field, they cannot be compared directly, so the sample uses the built-in `toLocalDate()` function to convert the timestamp to a date before performing the comparison.
+
+{ "active": true, "baseObject": "OrderAction", "condition": "changeType == 'INSERT' && OrderAction.CreatedDate.toLocalDate() == OrderAction.CancellationEffectiveDate", "description": "Trigger an event when a subscription cancellation order action is created and its cancellation effective date matches the order action creation date.", "eventType": { "name": "SucscriptionCancellationOrderActionCreated", "displayName": "Subscription Cancellation Order Action Created", "description": "Trigger an event when a subscription cancellation order action is created and its cancellation effective date matches the order action creation date." } }

@@ -2,7 +2,7 @@
 title: "Order Delta TCB"
 url: "https://docs.zuora.com/en/zuora-billing/manage-accounts-subscriptions-and-non-subscriptions/manage-subscription-transactions/orders/order-delta-metrics-and-order-metrics/order-delta-tcb"
 product: "zuora-billing"
-scraped_at: "2025-12-24T05:26:04.350Z"
+scraped_at: "2026-02-20T17:31:11.746Z"
 ---
 
 # Order Delta TCB
@@ -34,7 +34,7 @@ For a termed subscription, Order Delta Tcb is generated asynchronously when an O
 
 If Order Line Items are present in the Order, Order Delta TCB is generated for the Order Line Items as well, representing the total estimated billing amount for the Order Line Items. Gross and Net amount of Order Delta Tcb will always equal to Order Delta Tcv that is associated with the same Order Line Item.
 
-![Tcb model](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/631a10ed-b736-4464-bb87-e5eb984ac809?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjYzMWExMGVkLWI3MzYtNDQ2NC1iYjg3LWU1ZWI5ODRhYzgwOSIsImV4cCI6MTc2NjY0MDM2MSwianRpIjoiNzQ1MWE0ZjAyMDFhNDQ3NmE5MjRkZjhiZjNkMjhjMmUiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.YYFr-jVL5Om2r8StKVmcbB53K3_4_kP6ehx9rJyN6BI)
+![Tcb model](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/631a10ed-b736-4464-bb87-e5eb984ac809?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjYzMWExMGVkLWI3MzYtNDQ2NC1iYjg3LWU1ZWI5ODRhYzgwOSIsImV4cCI6MTc3MTY5NTA2NSwianRpIjoiNzIzMzc1ZDYyMDRmNGZhYzk2ZmQ2OGU2YjA2YjQxNGYiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.Zz_sfvApdmW0VQGunFXDw-nbZ0lI3bpgqq4-mtywPcw)
 
 Note:
 

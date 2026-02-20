@@ -2,7 +2,7 @@
 title: "ProductRatePlan"
 url: "https://docs.zuora.com/en/zuora-platform/integration/apis/soap-api/soap-api-object-reference/productrateplan"
 product: "zuora-platform"
-scraped_at: "2025-12-24T05:43:05.552Z"
+scraped_at: "2026-02-20T21:09:18.899Z"
 ---
 
 # ProductRatePlan
@@ -15,7 +15,7 @@ Don't confuse a product rate plan and a rate plan. A product rate plan is a rate
 
 Topaz, Ruby, and Diamond are examples of product rate plans in the following diagram:
 
-![Sample product rate plan diagram](/db/organizations/zuora/repositories/prod-sitemap/content/documents/external_publications/platform/api/SOAP_API_object_reference/_topics/ProductRatePlan/productrateplan-diagram.png)
+![Sample product rate plan diagram](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/41efc48f-c911-4b01-a3bb-285ad903e0e1?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjQxZWZjNDhmLWM5MTEtNGIwMS1hM2JiLTI4NWFkOTAzZTBlMSIsImV4cCI6MTc3MTcwODE1NywianRpIjoiZjE5YzZhZDMxOGQyNDcyM2I3ZWMwOGMyNWE3ZDM3ZmQiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.3dZyik5jzToqi-Hb5F8zu6jn-jtJ8tttLZjPJsNxaa4)
 
 For more information on this example, review the Product object.
 

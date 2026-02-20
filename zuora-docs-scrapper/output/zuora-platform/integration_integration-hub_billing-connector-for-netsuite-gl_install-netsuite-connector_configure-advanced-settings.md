@@ -2,7 +2,7 @@
 title: "Configure advanced settings"
 url: "https://docs.zuora.com/en/zuora-platform/integration/integration-hub/billing-connector-for-netsuite-gl/install-netsuite-connector/configure-advanced-settings"
 product: "zuora-platform"
-scraped_at: "2026-01-15T22:01:02.462Z"
+scraped_at: "2026-02-20T21:10:39.576Z"
 ---
 
 # Configure advanced settings
@@ -13,11 +13,11 @@ Learn how to configure advanced settings
 
 In the Advanced Settings screen, configure cutover dates and whether to disable sync operations for specific processes. Click Submit to make your settings effective for your NetSuite Connector instance.
 
--   See the following screenshot for the available advanced settings when Invoice Settlement is not enabled in your Zuora tenant. ![Connector_IV](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/19a07a4d-185c-437d-96f5-96ec5d1285fd?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjE5YTA3YTRkLTE4NWMtNDM3ZC05NmY1LTk2ZWM1ZDEyODVmZCIsImV4cCI6MTc2ODYwMDg1NSwianRpIjoiYzAxZWIyYjI0ZDQyNGNjZDhhNWE1NGEwMzMwYjYzYjEiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiI4RWFZRjVFNjZLaVRYdnNmS3N5NSJ9.9W11-tP4-y8_K4BcAVBJK948ZLG3yPLlC9KCxrnOJAw)
+-   See the following screenshot for the available advanced settings when Invoice Settlement is not enabled in your Zuora tenant. ![Connector_IV](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/19a07a4d-185c-437d-96f5-96ec5d1285fd?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjE5YTA3YTRkLTE4NWMtNDM3ZC05NmY1LTk2ZWM1ZDEyODVmZCIsImV4cCI6MTc3MTcwODIzMiwianRpIjoiYTJmNzA0ZjM3ZWIyNDYwOGE5ZmY0MWMyMWQzNTc2MTUiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.AGq87lWGBt4CVYGxasUx8hINthMovhmBDbEmc4iwWmQ)
 
 -   See the following screenshot for the available advanced settings when Invoice Settlement is enabled in your Zuora tenant.
     Note: This feature is currently in development and is subject to change without advance notice. We are actively soliciting feedback from a small set of early adopters.
-    ![clipboard_e356f7384f369068285ea8812e7885067.png](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/e6af746e-24ee-4ece-baf5-8292c818994b?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImU2YWY3NDZlLTI0ZWUtNGVjZS1iYWY1LTgyOTJjODE4OTk0YiIsImV4cCI6MTc2ODYwMDg1NSwianRpIjoiMmMyNTMwNTM1NDc5NDEzMjhjZDVjODhhYTFmMzRkMjUiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiI4RWFZRjVFNjZLaVRYdnNmS3N5NSJ9.U0J9OfYlPgrhdNvnzKW7mrTK1oBlYX5KRL_4l1OnWA4)
+    ![clipboard_e356f7384f369068285ea8812e7885067.png](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/e6af746e-24ee-4ece-baf5-8292c818994b?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImU2YWY3NDZlLTI0ZWUtNGVjZS1iYWY1LTgyOTJjODE4OTk0YiIsImV4cCI6MTc3MTcwODIzMiwianRpIjoiMWI4ZGMxMzNiZmVkNDdiOGJlZTQ1N2E1MDc5NDZhNzkiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.tSyi141nZPRU6q_RVau3T9l2EO6hjGMoBNBklgLEkak)
 
 
 ## Transaction cutover dates

@@ -2,7 +2,7 @@
 title: "Standard events for Zuora Billing"
 url: "https://docs.zuora.com/en/zuora-platform/extensibility/events-and-notifications/standard-events/standard-events-for-zuora-billing"
 product: "zuora-platform"
-scraped_at: "2025-12-24T05:24:13.296Z"
+scraped_at: "2026-02-20T17:48:31.173Z"
 ---
 
 # Standard events for Zuora Billing
@@ -20,10 +20,10 @@ Describes the standard events supported by Zuora Billing.
 | Suspend Subscription | AmendmentProcessed | A Suspend Subscription amendment has been submitted and processed.Note:The AmendmentProcessed notification for Suspend Subscription amendment is in Limited Availability. If you already have Suspend and Resume feature enabled, this notification is available automatically. Submit a request at Zuora Global Support only if you wish to have access to Suspend and Resume feature. |
 | TermsAndConditions | AmendmentProcessed | A term and condition amendment has been submitted and processed. |
 | UpdateProduct | AmendmentProcessed | An update product amendment has been submitted and processed. |
-| Completed Status | Bill Run Completion | A bill run has completed successfully. |
-| Error Status | Bill Run Completion | A bill run has not completed successfully. |
-| Completed Status | Billing Preview Run Completion | A billing preview run has completed successfully. |
-| Error Status | Billing Preview Run Completion | A billing preview run has completed with error. |
+| Billing Run Completion - Success (formerly known as Completed Status) | Bill Run Completion | A bill run has completed successfully. |
+| Billing Run Completion - Error (formerly known as Error Status) | Bill Run Completion | A bill run has not completed successfully. |
+| Billing Preview Run Completion - Success (formerly known as Completed Status) | Billing Preview Run Completion | A billing preview run has completed successfully. |
+| Billing Preview Run Completion - Error (formerly known as Error Status) | Billing Preview Run Completion | A billing preview run has completed with error. |
 | Day(s) Before/After Invoice Due Date | Invoice Due | This event sends a notification for each invoice that matches the criteria for the Invoice Due Date. You can choose the number of days before or after the invoice due date to send the notification, and you can create multiple notifications. For example, you can send notifications at 5, 7, and 10 days past due.This notification is triggered by a scheduled job at 4:15 am UTC time for tenants in EU Cloud Data Center and US Cloud Data Center 1, or 4:15 am Los Angeles time (UTC-07:00 or UTC-08:00 depending on the time of the year) for tenants in US Cloud Data Center 2. For more information about data centers, see Zuora data centers.Please also see Invoices Past Due, Account Summary notification for an Account-level notification of all overdue invoices on an account. |
 | Invoice Posted Manually | Invoice Posted | Generate an event when a draft invoice is posted manually from the invoice detail page.This event will trigger a notification when you click post in a Bill run page. This also allows you to manually trigger a notification when you click post invoice from the individual (draft) invoice's page in the Zuora UI. |
 | Invoice Posted via API | Invoice Posted | Generate an event when a draft invoice is posted via API. |

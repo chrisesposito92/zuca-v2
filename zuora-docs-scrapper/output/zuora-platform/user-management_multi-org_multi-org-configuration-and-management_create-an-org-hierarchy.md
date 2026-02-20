@@ -2,7 +2,7 @@
 title: "Create an Org hierarchy"
 url: "https://docs.zuora.com/en/zuora-platform/user-management/multi-org/multi-org-configuration-and-management/create-an-org-hierarchy"
 product: "zuora-platform"
-scraped_at: "2026-01-15T21:59:16.028Z"
+scraped_at: "2026-02-20T17:47:14.105Z"
 ---
 
 # Create an Org hierarchy
@@ -13,7 +13,7 @@ This operation would typically be performed by your Org Super Admin or any other
 
 1.  To enable activate currencies,navigate to Billing > Customize Currencies to activate currencies that you plan to use as reporting, functional, and transactional currencies.
 
-    -   Ensure the required Functional Currency is added to the list of currencies.
+    -   Ensure the required Functional Currency is added to the list of currencies. To add a new currency, see [Customize currencies](/zuora-billing/set-up-zuora-billing/billing-settings-configuration/system-settings/customization-of-currencies) .
     -   Ensure that the Functional Currency you want to select is set to Active.
 
     Currency Settings Limitation:Currently, you can only have a tenant-level currency setting, which will be shared by all the org units.

@@ -2,10 +2,12 @@
 title: "Configure custom fields"
 url: "https://docs.zuora.com/en/zuora-platform/integration/integration-hub/zuora-connector-for-sap/sap_billing/prepare-zuora-billing/configure-custom-fields"
 product: "zuora-platform"
-scraped_at: "2025-12-24T08:37:23.257Z"
+scraped_at: "2026-02-20T21:12:13.884Z"
 ---
 
 # Configure custom fields
+
+Learn how to extend objects with custom fields for SAP data reconciliation.
 
 Extend the Journal Entry object with the following custom fields that will be used by the connector to record values from SAP for reconciliation purposes:
 

@@ -2,7 +2,7 @@
 title: "Overview of Flexible Billing Attributes"
 url: "https://docs.zuora.com/en/zuora-billing/bill-your-customer/leverage-advanced-capabilities/flexible-billing/flexible-billing-attributes/overview-of-flexible-billing-attributes"
 product: "zuora-billing"
-scraped_at: "2025-12-24T18:37:58.711Z"
+scraped_at: "2026-02-20T17:35:49.963Z"
 ---
 
 # Overview of Flexible Billing Attributes
@@ -28,7 +28,19 @@ This feature is applicable in the following business scenarios, including but no
 -   Your customers have different contacts on their accounts, and want to be billed with different bill-to contacts for some purchases. For example, the bill-to contact can be anyone in the family.
 -   You can provide personalized, consistent, and brand-aligned experiences across customer segments by assigning a communication profile at the Subscription, Order Line Item (OLI), and Standalone Invoice levels.
 
-With the Invoice Grouping feature, you can separate invoices for subscriptions and order line items for the same order or account using custom criteria such as purchase order numbers or ship-to locations. For more information, see Invoice Grouping .
+With the Invoice Grouping feature, you can separate invoices for subscriptions and order line items for the same order or account using custom criteria such as purchase order numbers or ship-to locations. For more information, see Invoice Grouping
+
+## Billing Rule
+
+The billing rule [Copy billing attributes from accounts to billing documents when no attributes are specified on subscriptions](/zuora-billing/set-up-zuora-billing/billing-settings-configuration/general-billing-settings/define-billing-rules/billing-rules---billing-document#concept-ic1od06a__copy_attributes) controls whether invoice-level fields fall back to account defaults when subscriptions lack explicit billing attribute overrides.
+
+The Invoice Template, Sequence Set, and Communication Profile uses the account default value and if that is not available, then the system default value is used.
+
+Note:
+
+The Invoice.SoldToContactId field is not affected by this billing rule - it remains null regardless of the rule setting, because Sold To is saved at invoice item level when Flexible Billing Attributes feature is enabled.
+
+Consider keeping this rule enabled when using Flexible Billing Attributes to provide complete invoice details, unless you specifically need to differentiate between the account defaults and subscription-level nulls.
 
 ## Common use cases of Flexible Billing Attributes
 

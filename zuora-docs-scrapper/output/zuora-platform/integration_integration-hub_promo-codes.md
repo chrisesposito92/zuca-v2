@@ -2,7 +2,7 @@
 title: "Promo Codes"
 url: "https://docs.zuora.com/en/zuora-platform/integration/integration-hub/promo-codes"
 product: "zuora-platform"
-scraped_at: "2025-12-24T05:47:33.193Z"
+scraped_at: "2026-02-20T21:10:23.130Z"
 ---
 
 # Promo Codes
@@ -44,15 +44,15 @@ As a first step, you must install the Promotion Codes app from your Zuora tenant
 
 ## Set up Promo Codes
 
-After the Promotion Codes app is installed, you must create and configure promotion codes. See [Configure campaigns](/zuora-platform/integration/integration-hub/promo-codes/configure-a-campaign) . for more information.
+After the Promotion Codes app is installed, you must create and configure promotion codes. See [Configure a campaign](/zuora-platform/integration/integration-hub/promo-codes/configure-a-campaign) . for more information.
 
 ## Use Promo Codes
 
 After the promotion codes are created and configured, you can use either the UI or API to use the promotion codes and manage campaigns or child campaigns.
 
--   For using and managing promotion codes or child campaigns through the UI, see Manage campaigns for more information.
+-   For using and managing promotion codes or child campaigns through the UI, see [Manage campaigns](/zuora-platform/integration/integration-hub/promo-codes/manage-promotion-codes/update-child-campaign-configuration) for more information.
 
--   For more information about available API, see Swagger API Docs . The URL and credentials required to make requests are provided in the API Docs tab in your Promotion Codes instance.
+-   For more information about available API, see [Swagger API Docs](https://promotion-codes.apps.zuora.com/api-docs/index.html) . The URL and credentials required to make requests are provided in the API Docs tab in your Promotion Codes instance.
 
 
 ## Constraints

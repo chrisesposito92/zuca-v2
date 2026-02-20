@@ -2,7 +2,7 @@
 title: "Workflow-specific settings"
 url: "https://docs.zuora.com/en/zuora-platform/extensibility/workflow/create-and-manage-workflow-definitions/get-started-with-workflow/configure-the-settings-of-a-workflow-definition/workflow-specific-settings"
 product: "zuora-platform"
-scraped_at: "2025-12-24T05:31:45.902Z"
+scraped_at: "2026-02-20T17:50:18.301Z"
 ---
 
 # Workflow-specific settings
@@ -109,13 +109,13 @@ UI Action - Allows you to quickly install a button enabling Billing users to tri
     -   Subscription List Page
 
 
--   Click the Roles drop-down to select SuperAdmin and Zuora Billing Standard User as a user role group base for approvals. ![clipboard_e47aec3fc7bcf7005db242c92151abf3c.png](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/d8128329-2402-4cf2-bedf-15c0a30b6f68?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImQ4MTI4MzI5LTI0MDItNGNmMi1iZWRmLTE1YzBhMzBiNmY2OCIsImV4cCI6MTc2NjY0MDcwNCwianRpIjoiMDAwMjEwZjRjODRkNDU4OGIyODYwYzkzYTU4NWYyZDgiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.4N6MFvJGVzNELa1e98sKCcOWfRo_z2EsfHjG1yPszds)
+-   Click the Roles drop-down to select SuperAdmin and Zuora Billing Standard User as a user role group base for approvals. ![clipboard_e47aec3fc7bcf7005db242c92151abf3c.png](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/d8128329-2402-4cf2-bedf-15c0a30b6f68?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6ImQ4MTI4MzI5LTI0MDItNGNmMi1iZWRmLTE1YzBhMzBiNmY2OCIsImV4cCI6MTc3MTY5NjIxMiwianRpIjoiNDJhM2FhNWU3ZDk0NDQ5NDg5MDU5NTEwYmZkZDE3NmIiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.BazjEZhGgi3TXFrdBr1UfzNU74l-pbvEd4EXmKM8V_A)
 
 -   Enter the button label in the Button field.
 
--   Once the Workflow is created and activated, the button automatically appears on the designated Billing page. ![Custom account label](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/70c82c3d-bf11-4d1b-a511-cda821d0193b?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjcwYzgyYzNkLWJmMTEtNGQxYi1hNTExLWNkYTgyMWQwMTkzYiIsImV4cCI6MTc2NjY0MDcwNCwianRpIjoiNDFjZjI5M2IzNmFiNGNiYWJjNWYxNzcyNzA0YWExYWEiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.o4BAPdeCL3dqPVodXd2aZzZRROhXyXm2ilwZ3fd3CZA)
+-   Once the Workflow is created and activated, the button automatically appears on the designated Billing page. ![Custom account label](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/70c82c3d-bf11-4d1b-a511-cda821d0193b?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjcwYzgyYzNkLWJmMTEtNGQxYi1hNTExLWNkYTgyMWQwMTkzYiIsImV4cCI6MTc3MTY5NjIxMiwianRpIjoiYjRhZmRiMTU0ZTdmNDJkMWE1ZTdiMTJlMTA5ZmY3OGMiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.Vv60TwhWxAlYOfmtOr2FYDGmxCainAlSkwr94WUok5E)
 
--   You can set up input parameters that are displayed to the administrator when the button is clicked from the Billing page. Input parameters can include files, limited to a 100-second upload timeout. For more information, see [Inputs](#reference-9779__workflow-setting-inputs). ![Account page](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/05eca5ba-3c1f-4396-8a5d-85c5d40a37ff?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjA1ZWNhNWJhLTNjMWYtNDM5Ni04YTVkLTg1YzVkNDBhMzdmZiIsImV4cCI6MTc2NjY0MDcwNCwianRpIjoiNWU3YTk4Mjk2ODBlNDYyNzgzMjMyYTU3N2UwYzY0NDEiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.2AsiwWIVLytzASJoQFc5NJWOrbhkC99CiygR5-4M83E)
+-   You can set up input parameters that are displayed to the administrator when the button is clicked from the Billing page. Input parameters can include files, limited to a 100-second upload timeout. For more information, see [Inputs](#reference-9779__workflow-setting-inputs). ![Account page](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/05eca5ba-3c1f-4396-8a5d-85c5d40a37ff?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjA1ZWNhNWJhLTNjMWYtNDM5Ni04YTVkLTg1YzVkNDBhMzdmZiIsImV4cCI6MTc3MTY5NjIxMiwianRpIjoiODU4MDU2YTA5NWJhNGU5YmFiZTMwN2VmNGM0OTQyNzUiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.6A4ciLU38S8xHlI-hus_YrdgNNIKAzx89q6Y2bR6hlA)
 
 -   For all the detail pages, the object ID is automatically passed into the run-time data payload as `{{Data.UIAction.ObjectId}}` .
 
@@ -128,7 +128,7 @@ Select the triggers for the workflow definition type in the Workflow Triggers se
 
 -   Scheduled - The workflow version will run based on the configured schedule. If this option is selected, configure the running schedule in the Schedule Config section.
 
--   On Billing Event - You can select On Billing Event in Create New Workflow Definition to define the Billing Event and Billing Event Parameters . A scheduled workflow run will be skipped under the following circumstances:
+-   On Billing Event - You can select On Billing Event in Create New Workflow Definition to define the Billing Event and Billing Event Parameters. If a workflow is triggered by a Billing Event, you must also select that same Billing Event as the first step in the branch that starts from the Start node. In the canvas, click the plus (+) icon next to the Start node and choose the Billing Event name (for example, PaymentRunCompletion). That starting step receives the Billing Event payload (such as the payment run ID) and passes it to the downstream tasks. Selecting On Billing Event as the trigger alone does not automatically inject the event payload into your workflow; the starting branch must explicitly include and use the Billing Event name selected from the Start node menu. A scheduled workflow run will be skipped under the following circumstances:
 
     -   Another workflow run is in the Queued or Processing status.
 
@@ -160,6 +160,8 @@ You can reference this parameter using this Liquid statement.
 {{Data.Workflow.paymentId}}
 
 Click Add New Mapping to add a new pair of data fields, and click Update to save the fields and parameters that you enter.
+
+Billing Event Parameters use the same mapping mechanism as callout inputs. When you configure a workflow with an On Billing Event trigger, define the Object and Field Name for each Billing Event parameter so that the value is written to the same Data.<Object>.<Field> location that your tasks expect. For example, if your first task needs the payment run ID as Data.Workflow.paymentRunId, set the Billing Event parameter with Object = Workflow and Field Name = paymentRunId. This way, you can test the workflow by entering paymentRunId manually in the UI or by letting the Billing Event supply it, without changing the task configuration.
 
 ## Always Show Prompt
 

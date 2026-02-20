@@ -2,10 +2,12 @@
 title: "Supported date time formats and time zones in HTML templates"
 url: "https://docs.zuora.com/en/zuora-billing/bill-your-customer/billing-document-templates-configuration/configure-html-templates-for-billing-documents/additional-resources-on-html-templates/supported-date-time-formats-and-time-zones-in-html-templates"
 product: "zuora-billing"
-scraped_at: "2025-12-24T05:44:53.362Z"
+scraped_at: "2026-02-20T17:32:50.315Z"
 ---
 
 # Supported date time formats and time zones in HTML templates
+
+Details of the supported date time formats and time zones in HTML templates, including usage of the `Format` and `ConvertTz` functions.
 
 This article introduces the supported data time formats and time zones (short names and long names) in HTML templates for you to use the `Format` function and the `ConvertTz` function.
 

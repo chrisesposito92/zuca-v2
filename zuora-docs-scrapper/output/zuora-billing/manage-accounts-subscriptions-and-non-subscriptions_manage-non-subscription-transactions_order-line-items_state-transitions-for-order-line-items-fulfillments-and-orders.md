@@ -2,7 +2,7 @@
 title: "State transitions for order line items, fulfillments, and orders"
 url: "https://docs.zuora.com/en/zuora-billing/manage-accounts-subscriptions-and-non-subscriptions/manage-non-subscription-transactions/order-line-items/state-transitions-for-order-line-items-fulfillments-and-orders"
 product: "zuora-billing"
-scraped_at: "2025-12-24T05:36:40.373Z"
+scraped_at: "2026-02-20T17:32:32.802Z"
 ---
 
 # State transitions for order line items, fulfillments, and orders

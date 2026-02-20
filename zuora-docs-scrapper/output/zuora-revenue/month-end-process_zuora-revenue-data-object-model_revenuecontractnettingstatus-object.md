@@ -2,12 +2,12 @@
 title: "RevenueContractNettingStatus object"
 url: "https://docs.zuora.com/en/zuora-revenue/month-end-process/zuora-revenue-data-object-model/revenuecontractnettingstatus-object"
 product: "zuora-revenue"
-scraped_at: "2025-12-24T04:30:31.902Z"
+scraped_at: "2026-02-20T21:19:11.814Z"
 ---
 
 # RevenueContractNettingStatus object
 
-This contains the revenue contract's asset/liability position period-wise. This applies if you use CA/CL Netting in Zuora Revenue.
+The RevenueContractNettingStatus object contains the revenue contract's asset/liability position period-wise. This applies if you use CA/CL Netting in Zuora Revenue.
 
 ## Unique identifiers
 

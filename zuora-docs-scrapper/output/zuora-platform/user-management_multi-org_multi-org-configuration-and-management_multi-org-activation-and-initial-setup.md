@@ -2,7 +2,7 @@
 title: "Multi-Org activation and initial setup"
 url: "https://docs.zuora.com/en/zuora-platform/user-management/multi-org/multi-org-configuration-and-management/multi-org-activation-and-initial-setup"
 product: "zuora-platform"
-scraped_at: "2026-01-15T21:59:26.132Z"
+scraped_at: "2026-02-20T17:47:14.069Z"
 ---
 
 # Multi-Org activation and initial setup
@@ -11,24 +11,12 @@ Learn how to activate Zuora Multi-Org for new or existing tenants.
 
 To get started with Multi-Org, the first step is to activate Zuora Multi-Org for your new tenant or an existing one.
 
-## Activate Zuora Multi-Org for a new tenant
+## Prerequisites
 
-You must contact [Zuora Global Support](https://www.zuora.com/support-center/) and provide the details of your first super admin user to manage the Multi-Org setup. Our team will enable Multi-Org for you in the Zuora Central Sandbox tenant and create your organization's first Multi-Org super admin user account.
+-   Enable [Invoice Settlement](/zuora-billing/bill-your-customer/invoice-settlement/get-started-with-invoice-settlement/get-started-with-invoice-settlement/invoice-settlement-overview) , Orders, and [Orders Harmonization](/zuora-billing/manage-accounts-subscriptions-and-non-subscriptions/manage-subscription-transactions/orders-harmonization) settings.
 
-Initially, this will be the only Multi-Org super admin user account available under your organization in the central Sandbox tenant.
+-   When the Enhanced OTR feature is enabled, accounting periods cannot be configured at the org level in Zuora Revenue. In integrated Zuora Revenue environments, accounting periods must be consistent across all org units.
 
-To create your organization's first Org Super Admin, provide the following details of the user account:
-
--   User name
--   User work email address
--   Login name
-
-On successful account creation of the Super Admin account, the user will receive an activation email to the address provided above with the link to the Sandbox tenant.
-
-After successfully logging into the SBX tenant, the Org Super Admin can perform the following operations:
-
--   Create the Org hierarchy for your company
--   Add users to different org units based on the org hierarchy created
 
 ## Activate Zuora Multi-Org for an existing tenant
 

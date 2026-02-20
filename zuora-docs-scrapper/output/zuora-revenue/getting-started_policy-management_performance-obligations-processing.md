@@ -2,7 +2,7 @@
 title: "Performance obligations processing"
 url: "https://docs.zuora.com/en/zuora-revenue/getting-started/policy-management/performance-obligations-processing"
 product: "zuora-revenue"
-scraped_at: "2025-12-24T04:24:06.891Z"
+scraped_at: "2026-02-20T21:17:49.892Z"
 ---
 
 # Performance obligations processing
@@ -53,7 +53,7 @@ If Zuora Revenue does not find a rule to assign a performance obligation templat
 
 1.  For Zuora Revenue to automatically group transaction lines into POBs within a revenue contract, complete the following tasks:
 
-    1.  Create POB template. For information, see [Create POB template](/db/organizations/zuora/repositories/prod-sitemap/content/documents/external_publications/revenue/A_get_started/topics/create_pob_template.dita).
+    1.  Create POB template. For information, see [Create POB template](/zuora-revenue/getting-started/policy-management/performance-obligations-processing/create-pob-template).
     2.  Define POB assignment rules. For information, see [Define POB assignment rules](/zuora-revenue/getting-started/policy-management/performance-obligations-processing/define-pob-assignment-rules).
 
 

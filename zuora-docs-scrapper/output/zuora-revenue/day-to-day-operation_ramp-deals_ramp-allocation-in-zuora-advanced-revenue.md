@@ -2,7 +2,7 @@
 title: "Ramp allocation in Zuora Advanced Revenue"
 url: "https://docs.zuora.com/en/zuora-revenue/day-to-day-operation/ramp-deals/ramp-allocation-in-zuora-advanced-revenue"
 product: "zuora-revenue"
-scraped_at: "2025-12-24T04:31:41.336Z"
+scraped_at: "2026-02-20T21:19:28.140Z"
 ---
 
 # Ramp allocation in Zuora Advanced Revenue
@@ -113,4 +113,4 @@ Currently, the following limitations apply to Zuora Revenue:
 
 ## Examples
 
-Two sample revenue contracts are provided to explain how ramp allocation is performed within the identified ramp deal groups. In one example, all ramp allocation validations pass. In the other example, validation of the per day per unit rate fails. For more information, see Ramp deal processing examples.
+Two sample revenue contracts are provided to explain how ramp allocation is performed within the identified ramp deal groups. In one example, all ramp allocation validations pass. In the other example, validation of the per day per unit rate fails. For more information, see [Ramp deal processing examples](/zuora-revenue/day-to-day-operation/ramp-deals/ramp-allocation-in-zuora-advanced-revenue/ramp-deal-processing-examples).

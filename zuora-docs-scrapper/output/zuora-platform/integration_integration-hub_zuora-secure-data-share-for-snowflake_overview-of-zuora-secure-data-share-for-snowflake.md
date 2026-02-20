@@ -2,14 +2,12 @@
 title: "Overview of Zuora Secure Data Share for Snowflake"
 url: "https://docs.zuora.com/en/zuora-platform/integration/integration-hub/zuora-secure-data-share-for-snowflake/overview-of-zuora-secure-data-share-for-snowflake"
 product: "zuora-platform"
-scraped_at: "2025-12-24T18:33:15.745Z"
+scraped_at: "2026-02-20T21:14:09.054Z"
 ---
 
 # Overview of Zuora Secure Data Share for Snowflake
 
 Zuora Secure Data Share for Snowflake enables you to access your Zuora data through your organization's Snowflake account.
-
-## Overview
 
 Zuora Secure Data Share for Snowflake enables your organization to access your Zuora data directly from within your organization's own Snowflake account. Secure Data Share eliminates the engineering effort traditionally required to manage data extracts, integrations, and data schema changes. Secure Data Share also provides your team with instant access to Zuora's comprehensive subscription operational and analytical data to make timely data-driven decisions based on data insights.
 

@@ -2,7 +2,7 @@
 title: "Create a callout template"
 url: "https://docs.zuora.com/en/zuora-platform/extensibility/events-and-notifications/callout-templates/create-a-callout-template"
 product: "zuora-platform"
-scraped_at: "2025-12-24T05:26:16.210Z"
+scraped_at: "2026-02-20T17:48:29.993Z"
 ---
 
 # Create a callout template
@@ -54,6 +54,7 @@ Learn how to create callout templates in the Zuora UI.
         | Field | Required? | Description |
         | --- | --- | --- |
         | Retriable |  | Select this checkbox to apply the callout retry rules.The default number of retry attempts is three at intervals of 30 minutes. You can configure the default retry number and intervals. For more information, see Configure callout settings. |
+        | Confirm success by parsing response content |  | Controls how Zuora determines whether callout notifications to your system succeed or fail:If not selected, Zuora determines the result based solely on the HTTP response status code.If selected, and the HTTP response status code is 200, Zuora evaluates the callout response and considers the notification successful only if the Content-Type header is set to application/json, and the response body contains a success field set to true. |
         | HMAC |  | Select this checkbox to enable Hash-based Message Authentication Code (HMAC). For more information, see HMAC authentication. |
         | Algorithm | This field is required if HMAC is selected. | Select the hash function Zuora uses to generate the signed data.Valid options are as follows:MD5SHA-1SHA-224SHA-256SHA-384SHA-512This field is available only if the HMAC checkbox is selected. |
         | Output Text Format | This field is required if HMAC is selected. | Select the format of the signed data.Valid options are as follows:BASE64HEXThis field is available only if the HMAC checkbox is selected. |

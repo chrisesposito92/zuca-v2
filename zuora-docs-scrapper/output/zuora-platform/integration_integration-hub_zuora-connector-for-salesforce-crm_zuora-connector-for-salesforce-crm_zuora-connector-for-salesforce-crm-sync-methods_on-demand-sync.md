@@ -2,10 +2,12 @@
 title: "On-Demand Sync"
 url: "https://docs.zuora.com/en/zuora-platform/integration/integration-hub/zuora-connector-for-salesforce-crm/zuora-connector-for-salesforce-crm/zuora-connector-for-salesforce-crm-sync-methods/on-demand-sync"
 product: "zuora-platform"
-scraped_at: "2025-12-24T08:35:37.397Z"
+scraped_at: "2026-02-20T21:12:15.092Z"
 ---
 
 # On-Demand Sync
+
+On-Demand Sync allows you to trigger data synchronization in Salesforce using the Salesforce SOAP API, either from the Account Detail page UI or programmatically through an Apex global method.
 
 Built using Salesforce SOAP API, On-demand Sync lets you trigger a data synchronization in Salesforce, from the Account Detail page UI or programmatically through an Apex global method.
 
@@ -24,11 +26,11 @@ The following configurations are required before invoking the On-demand Sync fea
 
 ## Zuora Connector for Salesforce CRM Connection Settings
 
-You must configure the endpoint, username, and password on the Connection Setup tab. The endpoint and user credentials will be used to access Zuora application. See Configure Your Connection Settings for setting up the Zuora Connector for Salesforce CRM connection.
+You must configure the endpoint, username, and password on the Connection Setup tab. The endpoint and user credentials will be used to access Zuora application. For more information, see [Configure connection settings](/zuora-platform/integration/integration-hub/zuora-connector-for-salesforce-crm/zuora-connector-for-salesforce-crm/configuration/configure-connection-settings) for Salesforce CRM.
 
 ## Zuora Quotes Connection Settings
 
-The Salesforce org connection must be configured properly. The Salesforce org should be where the on-demand sync request will be initiated and should match the Salesforce org with the Zuora Connector for Salesforce CRM connection setup. See Zuora Connection Settings for setting up the Zuora Quotes connection.
+The Salesforce org connection must be configured properly. The Salesforce org should be where the on-demand sync request will be initiated and should match the Salesforce org with the Zuora Connector for Salesforce CRM connection setup. For more information, see [Configure connection settings](/zuora-platform/integration/integration-hub/zuora-connector-for-salesforce-crm/zuora-connector-for-salesforce-crm/configuration/configure-connection-settings).
 
 ## On-Demand Sync in Multi-entity Environment
 
@@ -36,4 +38,4 @@ To perform on-demand syncs from multiple entities, the Billing Entity (zqu\_\_Bi
 
 ## Limits
 
-Zuora does not limit the number of syncs that you can perform. However, you might encounter Salesforce governor limits. See Zuora 360 Syncs and Salesforce Limits for Salesforce governor limits in regards to On-demand Sync.
+Zuora does not limit the number of syncs that you can perform. However, you might encounter Salesforce governor limits. [Zuora Data Syncs and Salesforce Limits](/zuora-platform/integration/integration-hub/zuora-connector-for-salesforce-crm/zuora-connector-for-salesforce-crm/work-with-zuora-connector-for-salesforce-crm/zuora-data-syncs-and-salesforce-limits)See Zuora 360 Syncs and Salesforce Limits for Salesforce governor limits in regards to On-demand Sync.

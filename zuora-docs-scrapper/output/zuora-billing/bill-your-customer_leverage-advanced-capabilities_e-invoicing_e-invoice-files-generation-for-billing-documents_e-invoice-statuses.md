@@ -2,7 +2,7 @@
 title: "E-Invoice statuses"
 url: "https://docs.zuora.com/en/zuora-billing/bill-your-customer/leverage-advanced-capabilities/e-invoicing/e-invoice-files-generation-for-billing-documents/e-invoice-statuses"
 product: "zuora-billing"
-scraped_at: "2026-01-15T21:56:34.749Z"
+scraped_at: "2026-02-20T17:35:32.015Z"
 ---
 
 # E-Invoice statuses
@@ -11,7 +11,7 @@ This reference provides an overview of e-invoice statuses, their meanings, and t
 
 This section provides an overview of the different statuses associated with an e-invoice, what each status means, and how these statuses transition throughout the invoice lifecycle. A flowchart is also included to illustrate possible transitions and response flows.
 
-![E-invoice process flowchart](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/86a2b342-ea8c-463c-afbf-1c7a7fd33b2d?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6Ijg2YTJiMzQyLWVhOGMtNDYzYy1hZmJmLTFjN2E3ZmQzM2IyZCIsImV4cCI6MTc2ODYwMDU4OSwianRpIjoiNTA2MjIyYTcyYmFlNGIwYThmNjg0NThmMDRkNzM1NWEiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiI4RWFZRjVFNjZLaVRYdnNmS3N5NSJ9.i_geCzeWL58pFx8P_1maCAvxtUGg8Q5CRC5tC21v1nk)
+![E-invoice process flowchart](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/86a2b342-ea8c-463c-afbf-1c7a7fd33b2d?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6Ijg2YTJiMzQyLWVhOGMtNDYzYy1hZmJmLTFjN2E3ZmQzM2IyZCIsImV4cCI6MTc3MTY5NTMyNCwianRpIjoiM2YxNzhlNDE4Yzc5NDlhMDlkYmY3NjYzOWIzNGZmMzYiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.GiO10jOuodGHmD3BHea_zW_taHJB_lD-LJX5bTlvbUE)
 
 The E-Invoice Status field reflects the current state of the e-invoicing process for a given invoice. Below are the possible statuses and their meanings:
 
@@ -34,12 +34,25 @@ Zuora also provides an API called Resync E-Invoice Status, which allows external
 
 Additionally, the Resync E-Invoice Status API or UI action can be triggered for documents in either the Approved by Authority or Processing status and supports Invoices, Credit Memos, and Debit Memos. For Italy, it may take up to 25 days to receive the final Success or Rejected status after the Approved by Authority stage, due to extended processing timelines by the tax authority and end customer.
 
-When responses from tax vendors such as Sovos or Avalara take too long, E-Invoice updates its status to RetrieveTimeOut. Once the vendor responds successfully, you can use the Resync E-Invoice Status action to update the status automatically.
+When responses from tax service providers such as Sovos or Avalara are delayed, the e-invoice status is updated to RetrieveTimeOut. Once the provider responds successfully, you can use the Resync E-Invoice Status action to retrieve the latest notifications and automatically update the document status.
 
-## Regenerate e-invoices
+When resyncing for Sovos, you are prompted to choose one of the following modes:
 
-The Regenerate E-Invoice action is available for documents in a Failed status and supports Invoices, Credit Memos, and Debit Memos. Once you fix the errors and trigger the regeneration, the document will be resubmitted to the e-invoicing service provider, and its status will update to Processing.
+-   Refresh latest unacknowledged notifications (default): Retrieves and processes only the most recent notifications that have not yet been acknowledged.
+-   Full re-sync: Reprocesses all notifications from the beginning. This option is useful in scenarios where incremental requests return incomplete results, such as after notifications have been recreated in Sovos.
+
+Note: The resync mode selection is available only for Sovos. For Avalara, the resync operation continues to run without user prompts.
+
+Zuora supports resyncing e-invoice statuses for both Avalara and Sovos. You can trigger Resync E-Invoice Status from the UI or API when an invoice is in RetrieveTimeOut or Processing status. Zuora continues polling until the invoice reaches Success, Failed, or ApprovedByTaxAuthority, ensuring smoother handling of delayed tax authority responses and avoiding unnecessary resubmissions.
+
+## Regenerate or Resync E-invoices
+
+The Regenerate E-Invoice action is available for documents in a Failed status and supports Invoices, Credit Memos, and Debit Memos. After you fix the underlying errors and trigger regeneration, the document is resubmitted to the e-invoicing service provider, and its status updates to Processing.
+
+The Resync E-Invoice action is also available for documents in a Failed status. This option allows Zuora to resubmit the existing document to the e-invoicing service provider without regenerating it. In certain scenarios, such as when the service provider has corrected the failure on their end, resyncing can resolve the issue more efficiently than regeneration.
+
+By providing both Resync and Regenerate actions, you can choose the most appropriate approach based on the cause of the failure
 
 Note:
 
-For the PEPPOL service provider, the Regenerate E-Invoice action is available in a Generated status.
+For the PEPPOL service provider, the Regenerate E-Invoice action is available when the document is in Generated status.

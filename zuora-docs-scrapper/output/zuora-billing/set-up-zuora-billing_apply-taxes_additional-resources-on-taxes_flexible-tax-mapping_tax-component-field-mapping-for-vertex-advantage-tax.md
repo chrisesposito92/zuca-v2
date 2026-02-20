@@ -2,12 +2,12 @@
 title: "Tax component field mapping for Vertex advantage tax"
 url: "https://docs.zuora.com/en/zuora-billing/set-up-zuora-billing/apply-taxes/additional-resources-on-taxes/flexible-tax-mapping/tax-component-field-mapping-for-vertex-advantage-tax"
 product: "zuora-billing"
-scraped_at: "2025-12-24T05:11:25.423Z"
+scraped_at: "2026-02-20T17:29:54.372Z"
 ---
 
 # Tax component field mapping for Vertex advantage tax
 
-This document outlines the support for Vertex advantage tax\_component field mapping, facilitating flexible access to relevant data within billing responses.
+The document provides an overview of the tax component field mapping for the Vertex advantage tax, highlighting its early adopter phase, tax calculation response, and billing response transformation.
 
 Note:
 
@@ -35,7 +35,7 @@ Due to the flattening of tax\_components within the transaction fields, accessin
 
 Below is a screenshot demonstrating the ease of accessing these fields:
 
-![Field Mappings](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/41370112-3e8d-45b8-ac01-50cddf9e5611?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjQxMzcwMTEyLTNlOGQtNDViOC1hYzAxLTUwY2RkZjllNTYxMSIsImV4cCI6MTc2NjYzOTQ4MywianRpIjoiNjNlZTQ4NjgyM2VhNDE4YjgzMTJiMjMwNWRlZTQ5MzQiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.6mhnllukRWsgynHBF0Qoud9MbcR02xFAtYce--QI5oA)
+![Field Mappings](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/41370112-3e8d-45b8-ac01-50cddf9e5611?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjQxMzcwMTEyLTNlOGQtNDViOC1hYzAxLTUwY2RkZjllNTYxMSIsImV4cCI6MTc3MTY5NDk4NiwianRpIjoiMGEyMGMyNWFhY2Y0NDBhZTk4YzIwOTM0YjVmZTE0NjQiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.Jy1IoBuBa_XEpPAQPAN3V_5x-5GcqltdtohWSkTJsow)
 
 ## Refund call (credit memo) response
 

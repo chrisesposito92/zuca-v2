@@ -2,10 +2,12 @@
 title: "Test Zuora Revenue network connectivity"
 url: "https://docs.zuora.com/en/zuora-revenue/advanced-revenue-operations/test-zuora-revenue-network-connectivity"
 product: "zuora-revenue"
-scraped_at: "2025-12-24T04:35:46.958Z"
+scraped_at: "2026-02-20T21:20:20.061Z"
 ---
 
 # Test Zuora Revenue network connectivity
+
+Learn how to test the network connection to the Zuora Revenue application, integration, and SFTP servers after completing network configuration.
 
 After you complete network configuration for Zuora Revenue, it is recommended to test your network connection to the Zuora Revenue application server, integration server, and the secure file transfer (SFTP) server.
 

@@ -2,10 +2,12 @@
 title: "Reporting"
 url: "https://docs.zuora.com/en/zuora-platform/data/reporting"
 product: "zuora-platform"
-scraped_at: "2026-01-15T22:02:33.086Z"
+scraped_at: "2026-02-20T21:17:44.815Z"
 ---
 
 # Reporting
+
+Learn about Zuora Reporting
 
 Reporting includes the following topics:
 

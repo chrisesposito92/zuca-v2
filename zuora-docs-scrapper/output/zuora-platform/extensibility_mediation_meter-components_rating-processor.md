@@ -2,14 +2,14 @@
 title: "Rating processor"
 url: "https://docs.zuora.com/en/zuora-platform/extensibility/mediation/meter-components/rating-processor"
 product: "zuora-platform"
-scraped_at: "2025-12-24T05:29:54.933Z"
+scraped_at: "2026-02-20T17:49:43.665Z"
 ---
 
 # Rating processor
 
-The Rating processor in Zuora Mediation calculates rated amounts for usage events, transforming raw data into billable records. It supports tiered pricing models by evaluating accumulated usage to ensure accurate billing.
+The Rating processor in Zuora Mediation calculates rated amounts for usage events, transforming raw data into billable records.
 
-The Rating processor in Zuora Mediation calculates the rated amount for each usage event by evaluating usage quantity against the configured pricing in Zuora’s product catalog. You can use this processor to transform raw usage data into billable rated records.
+The processor calculates the rated amount for each usage event by evaluating usage quantity against the configured pricing in Zuora’s product catalog. It supports tiered pricing models by evaluating accumulated usage to ensure accurate billing.
 
 Note: The Rating processor is currently in the Early Availability phase. Please contact your Zuora account representative to enable this feature.
 

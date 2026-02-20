@@ -2,7 +2,7 @@
 title: "Create stage validation rules"
 url: "https://docs.zuora.com/en/zuora-revenue/data-management/data-validation-process/stage-validation-rules/create-stage-validation-rules"
 product: "zuora-revenue"
-scraped_at: "2026-01-15T22:03:04.916Z"
+scraped_at: "2026-02-20T21:18:14.431Z"
 ---
 
 # Create stage validation rules
@@ -33,5 +33,3 @@ Create and configure stage validation rules in Zuora Revenue to ensure data inte
 6.  Add as many conditions as you need in the Conditions tab and click the save icon to save them.
 7.  (Optional): To define simple filters that are to be applied for all the defined conditions, click the Filters tab and specify the field name, operator, and operands. The validation rules are applied to the filtered transactions only.
 8.  After you are finished, click the save icon and close the window.
-
-When the source data is uploaded to Zuora Revenue, it is validated against all the enabled validation rules in the staging tables. If all the validations succeed, the source data will be picked up by the subsequent data collection process. Otherwise, the problematic transaction data remain in the staging tables and cannot be picked up by the data collection process. Use the displayed error codes and messages to fix the source data and then upload them again

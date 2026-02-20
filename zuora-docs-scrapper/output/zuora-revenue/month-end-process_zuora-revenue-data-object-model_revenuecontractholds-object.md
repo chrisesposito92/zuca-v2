@@ -2,7 +2,7 @@
 title: "RevenueContractHolds object"
 url: "https://docs.zuora.com/en/zuora-revenue/month-end-process/zuora-revenue-data-object-model/revenuecontractholds-object"
 product: "zuora-revenue"
-scraped_at: "2025-12-24T04:30:19.347Z"
+scraped_at: "2026-02-20T21:19:12.632Z"
 ---
 
 # RevenueContractHolds object

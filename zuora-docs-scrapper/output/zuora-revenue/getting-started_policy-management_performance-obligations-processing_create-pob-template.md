@@ -2,7 +2,7 @@
 title: "Create POB template"
 url: "https://docs.zuora.com/en/zuora-revenue/getting-started/policy-management/performance-obligations-processing/create-pob-template"
 product: "zuora-revenue"
-scraped_at: "2026-01-15T22:03:04.147Z"
+scraped_at: "2026-02-20T21:18:14.556Z"
 ---
 
 # Create POB template
@@ -18,7 +18,7 @@ Complete the following steps to create a POB template:
     -   A unique template name in the Name field.
     -   The template effective start date in the Start Date field.
 
-    -   The revenue trigger event in the Release Event field. Manual, Upon Billing, and Upon Booking are by default provided. You can also create your own event. For more information, see [Associate event with POB template](/zuora-revenue/getting-started/policy-management/performance-obligations-processing) .
+    -   The revenue trigger event in the Release Event field. Manual, Upon Billing, and Upon Booking are by default provided. You can also create your own event. For more information, see [Associate event with POB template](/zuora-revenue/data-management/event-processing/associate-event-with-pob-template) .
     -   The revenue treatment timing in the Ratable Method and Accounting Method fields. The ratable method determines how revenue is to be amortized based on the sales order line duration. The accounting method determines whether the revenue is to be calculated on a daily or partial monthly basis.
     -   Based on your business needs, use the POB Satisfied field to set the timing to be Over Time or Point In Time. This field is a display field, which does not have any impact on the POB functionality.
     -   The method of how to retain released revenue when sales order (SO) line updates are collected in the Retain Method field. Valid values are Retain Percent and Retain Amount. Selecting Retain Percent indicates when there is an increase or decrease in the SO value, the system will retain the release percentage but adjust the unreleased and released amount. Selecting Retain Amount indicates when there is an increase or decrease in the SO value, the system will retain the release amount but adjust the overall release percentage.
@@ -41,6 +41,6 @@ Complete the following steps to create a POB template:
 
     -   In the Cost Treatment tab, enable the appropriate cost type to associate the cost with this POB template and specify the cost recognition pattern for each cost type. For more information, see [Cost Processing](/zuora-revenue/advanced-revenue-operations/cost-processing) .
     -   In the VC Assignment tab, enable the appropriate VC rules for the POB template. For more information, see [Variable Consideration Processing](/zuora-revenue/day-to-day-operation/variable-consideration-processing) .
-    -   In the POB Dependency tab, add the parent POB template and specify the dependency type. For more information, see [POB dependency](/db/organizations/zuora/repositories/prod-sitemap/content/documents/external_publications/revenue/A_get_started/topics/create_pob_template.dita) .
+    -   In the POB Dependency tab, add the parent POB template and specify the dependency type. For more information, see [POB dependency](/zuora-revenue/getting-started/policy-management/performance-obligations-processing/pob-dependency) .
 
     The POB template is created and listed on the POB Templates page.

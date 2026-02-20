@@ -2,7 +2,7 @@
 title: "Invoice Settlement migration checklist and guide"
 url: "https://docs.zuora.com/en/zuora-billing/bill-your-customer/invoice-settlement/get-started-with-invoice-settlement/invoice-settlement-migration-checklist-and-guide"
 product: "zuora-billing"
-scraped_at: "2025-12-24T08:33:40.436Z"
+scraped_at: "2026-02-20T17:34:02.095Z"
 ---
 
 # Invoice Settlement migration checklist and guide
@@ -57,7 +57,7 @@ Note:
 
 ## Zuora Revenue
 
-See [Enable Invoice Settlement for Billing - Revenue Integration](/zuora-revenue/advanced-revenue-operations/billing---revenue-integration/enable-zuora-billing-and-zuora-revenue-integration) for more information.
+See [Enable Invoice Settlement for Billing - Revenue Integration](/zuora-revenue/advanced-revenue-operations/billing---revenue-integration/overview-of-billing---revenue-integration-enablement/enable-zuora-billing-and-zuora-revenue-integration) for more information.
 
 ## Migration checklist and required actions
 
@@ -99,5 +99,9 @@ During the payment migration, the FIFO rules will apply to the invoice line item
 
 
 Before you enable Invoice Settlement and migration, please go through this [checklist](/zuora-billing/bill-your-customer/invoice-settlement/get-started-with-invoice-settlement/invoice-settlement-migration-checklist-and-guide/validate-transactions) and perform the corresponding actions.
+
+Note:
+
+Invoice Item Adjustments do not convert to Credit Memos or Debit Memos during Invoice Settlement Harmonization or Invoice Settlement migration.
 
 For information on the preparation of a one-time product rate plan charge, see [here](/zuora-billing/bill-your-customer/invoice-settlement/get-started-with-invoice-settlement/invoice-settlement-migration-checklist-and-guide/prepare-one-time-product-rate-plan-charge).

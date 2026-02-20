@@ -2,7 +2,7 @@
 title: "Configure Invoice API Generator"
 url: "https://docs.zuora.com/en/zuora-platform/integration/integration-hub/configure-invoice-api-generator"
 product: "zuora-platform"
-scraped_at: "2025-12-24T05:47:16.861Z"
+scraped_at: "2026-02-20T21:10:07.330Z"
 ---
 
 # Configure Invoice API Generator
@@ -30,6 +30,10 @@ To use an Invoice API Generator to create an invoices:
 
 After a CSV file that contains the invoice information is uploaded, the file is parsed and the entries are divided into groups by account and the invoice target date so that all invoices of the same account are in a single thread. Each thread will process one account at a time and generate invoices starting with the earliest entries.
 
+Note:
+
+If the [Invoice Settlement](/zuora-billing/bill-your-customer/invoice-settlement/get-started-with-invoice-settlement/invoice-settlement-migration-checklist-and-guide/enable-invoice-settlement) feature is enabled in your tenant, Invoice API Generator does not work when credit memos need to be generated.
+
 ## Template Fields
 
 To facilitate your understanding of the template, the explanation for each field in the template is provided in the following table:
@@ -44,7 +48,3 @@ To facilitate your understanding of the template, the explanation for each field
 | Invoice.Date | No | date |  | 29 | The format should align with the value for the Date Format field in the Invoice API Generator.If not specified, the value for Invoice.TargetDate will be used. |
 | Invoice.TargetDate | Yes | date |  | 29 | This date is used to determine which charges are to be billed. All charges that are to be billed on this date or prior will be included in this bill run.The format should align with the value for the Date Format field in the Invoice API Generator. |
 | Invoice.Post | Yes | boolean | TRUE, FALSE | 5 | Specifies whether to post this invoice. The default value is FALSE. |
-
-## Known Limitation
-
-If the [Invoice Settlement](/zuora-billing/bill-your-customer/invoice-settlement/get-started-with-invoice-settlement/invoice-settlement-migration-checklist-and-guide/enable-invoice-settlement) feature is enabled in your tenant, Invoice API Generator does not work when credit memos need to be generated.

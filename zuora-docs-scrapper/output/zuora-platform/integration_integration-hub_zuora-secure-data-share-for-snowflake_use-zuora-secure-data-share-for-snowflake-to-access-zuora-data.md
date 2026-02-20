@@ -2,64 +2,54 @@
 title: "Use Zuora Secure Data Share for Snowflake to access Zuora data"
 url: "https://docs.zuora.com/en/zuora-platform/integration/integration-hub/zuora-secure-data-share-for-snowflake/use-zuora-secure-data-share-for-snowflake-to-access-zuora-data"
 product: "zuora-platform"
-scraped_at: "2025-12-24T18:33:18.188Z"
+scraped_at: "2026-02-20T21:13:57.674Z"
 ---
 
 # Use Zuora Secure Data Share for Snowflake to access Zuora data
 
 Learn how to use Zuora Secure Data Share for Snowflake to access Zuora data
 
-## Set up Secure Data Share
+## Set up Secure Data Share (Self-Serve)
 
-Note: To check your eligibility to use Secure Data Share, see
+Note:
 
-[Availability](#concept-fytm98rv__Availability) at the end of this topic
+To check your eligibility for Secure Data Share, see [Availability](https://docs.zuora.com/en/zuora-platform/integration/integration-hub/zuora-secure-data-share-for-snowflake/use-zuora-secure-data-share-for-snowflake-to-access-zuora-data#concept-fytm98rv__Availability) at the end of this topic. Access to Zuora Secure Data Share for Snowflake may require purchasing a paid add-on. Contact your Zuora Account Executive for product details or to schedule a demo. To maintain confidentiality, Zuora recommends not publicly sharing pricing or commercial terms.
 
-.
+Zuora Secure Data Share for Snowflake is now available through a self-serve UI, allowing you to set up the secure share and manage objects directly from the UI without raising a support ticket. This significantly reduces provisioning time and ongoing support dependency.
 
-Access to Zuora Secure Data Share for Snowflake may require purchasing a paid add-on. To get started, please contact your Zuora account representative for more details about the product and to schedule a product demo. In order to maintain confidentiality, Zuora recommends not publicly sharing the pricing information and other terms.
+Note:
 
-Prerequisites
+The self-serve Secure Data Share setup described in this section applies only to Zuora Billing data.
 
-1.  Zuora Tenant ID:Provide the tenant ID of the Zuora tenant from which you want to share data. For more information on locating your tenant ID, see
+For Zuora Revenue, the setup is not fully self-serve. You must coordinate with the Zuora team to provision the connector. In such cases, provide the following details to Zuora to initiate the provisioning process:
 
-    [Managing Your Tenant Profile](/zuora-platform/system-management/administrator-settings/manage-your-tenant-profile).
+-   Zuora tenant ID
 
-    .
-2.  Entity (Optional): If the [Multi-entity](/zuora-platform/user-management/multi-entity/overview-of-multi-entity) feature is enabled in your Zuora tenant, specify the entity from which to share data.
+-   Snowflake account locator
 
+-   Snowflake region
 
-Using the above details, Zuora will enable a UI for you where you can access the Snowflake connector authentication setup tab and complete the setup process yourself.
-
-Required Snowflake account details
-
-To complete the setup, you will need the following information related to your organization's Snowflake account where Zuora tenant data will be shared:
-
-1.  Snowflake Region: Run the following command in your Snowflake account to find your region:
-
-    SELECT CURRENT\_REGION();
-
-2.  Snowflake Edition:
-
-    -   For classic UI: Click the account name in the top right corner and check the edition in account information.
-
-    -   For Snowsight UI: Click the account name in the bottom left corner and hover over the account information to see the edition.
+-   Snowflake edition
 
 
-3.  Snowflake Account Locator: This is the account identifier of your organization's Snowflake account. You can obtain it from the URL of your Snowflake account:
+Complete the following procedures:
 
-    `<account_locator>.snowflakecomputing.com`
+1.  [Access the Secure Data Share UI](/zuora-platform/integration/integration-hub/zuora-secure-data-share-for-snowflake/use-zuora-secure-data-share-for-snowflake-to-access-zuora-data/access-the-secure-data-share-ui)
+
+2.  [Configure and install Secure Data Share](/zuora-platform/integration/integration-hub/zuora-secure-data-share-for-snowflake/use-zuora-secure-data-share-for-snowflake-to-access-zuora-data/configure-and-install-secure-data-share)
 
 
 ## Zuora Snowflake database
 
-Zuora will create a database from your Zuora data and share it with your organization's Snowflake account. The database will be named zuora\_`<tenant_id>`, where `<tenant_id>` is the Zuora tenant ID from which the data is shared. You need to request an individual data share for each tenant. For multi-entity tenants, the same share can include all entities, with each entity represented as a separate database.
+Zuora will create a database from your Zuora data and share it with your organization’s Snowflake account. The database will be named ZUORA\_<TenantID>, where <TenantID> is the Zuora tenant ID from which the data is shared.
 
-Troubleshooting
+You must request a separate Secure Data Share for each Zuora tenant. For multi-entity tenants, a single share can include all entities, with each entity represented as a separate database.
 
-If you encounter any issues during the setup process, please contact your Zuora representative or file a support ticket for assistance.
+Next, [accept the Secure Data Share in Snowflake](/zuora-platform/integration/integration-hub/zuora-secure-data-share-for-snowflake/use-zuora-secure-data-share-for-snowflake-to-access-zuora-data/accept-the-secure-data-share-in-snowflake).
 
-![Snowflake_troubleshooting](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/1fcd3fb5-734d-4478-9552-2a0d0314f3ed?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjFmY2QzZmI1LTczNGQtNDQ3OC05NTUyLTJhMGQwMzE0ZjNlZCIsImV4cCI6MTc2NjY4NzU5NiwianRpIjoiYmJlZDFjNzEwOTQ1NDE4YWJlNjkzYmFiZGVlMDViNTIiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.K9TEUHbysHBYEb1asTnem2afzzYyrE0XSePp6ZwKjrM)
+## Troubleshooting
+
+If you encounter any issues during the setup or onboarding process, contact your Zuora representative or file a support ticket for assistance.
 
 ## Data security
 
@@ -129,7 +119,7 @@ The following table lists the provisioned clouds and regions in alphabetical ord
 
 ## Limitations
 
-EU-US data transfer is not advisable because of legal restrictions. For these types of scenarios, please contact your Zuora account representative to discuss.
+EU-US data transfer is not advisable because of legal restrictions. For these types of scenarios, contact your Zuora account representative to discuss.
 
 ## Zuora Revenue specific limitations
 
@@ -137,4 +127,4 @@ EU-US data transfer is not advisable because of legal restrictions. For these ty
 
 -   Revenue secure share data does not include all the custom objects available through the data query utility.
 
--   Pre-summary and waterfall data objects, available through BI Views, will not be available from revenue secure share.
+-   Pre-summary and waterfall data objects, available through BI Views, will not be available from revenue secure share..

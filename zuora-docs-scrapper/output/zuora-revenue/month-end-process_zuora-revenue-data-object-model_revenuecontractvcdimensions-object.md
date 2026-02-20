@@ -2,7 +2,7 @@
 title: "RevenueContractVCDimensions object"
 url: "https://docs.zuora.com/en/zuora-revenue/month-end-process/zuora-revenue-data-object-model/revenuecontractvcdimensions-object"
 product: "zuora-revenue"
-scraped_at: "2025-12-24T04:30:37.284Z"
+scraped_at: "2026-02-20T21:19:00.162Z"
 ---
 
 # RevenueContractVCDimensions object

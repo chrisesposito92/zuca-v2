@@ -2,16 +2,14 @@
 title: "Enable period open/close for individual organization"
 url: "https://docs.zuora.com/en/zuora-revenue/getting-started/system-management/configure-multiple-organizations/enable-period-openclose-for-individual-organization"
 product: "zuora-revenue"
-scraped_at: "2025-12-24T04:23:17.676Z"
+scraped_at: "2026-02-20T21:18:01.031Z"
 ---
 
 # Enable period open/close for individual organization
 
 Learn how to enable period open/close for individual organizations in Zuora Revenue by configuring the MAINTAIN\_OPEN\_PERIOD profile.
 
-After multiple organizations are defined in Zuora Revenue, use the MAINTAIN\_OPEN\_PERIOD profile to control whether the accounting period is to be closed and opened based on the revenue book or based on the organization.
-
-To open or close the accounting period based on the organization, complete the following steps to set the profile appropriately:
+After multiple organizations are defined in Zuora Revenue, use the MAINTAIN\_OPEN\_PERIOD profile to control whether the accounting period is to be closed and opened based on the revenue book or based on the organization. complete the following steps to set the profile appropriately, to open or close the accounting period based on the organization.
 
 1.  Navigate to Setups > Application .
 2.  Click the left pointing arrow to open the side menu and click Profiles .

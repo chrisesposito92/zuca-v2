@@ -2,7 +2,7 @@
 title: "Edit existing Connect Tax Engine"
 url: "https://docs.zuora.com/en/zuora-billing/set-up-zuora-billing/apply-taxes/configurable-tax-apps/marketplace-apps/vertex-advantage-tax-connector-app-v1/configure-rate-plans/edit-existing-connect-tax-engine"
 product: "zuora-billing"
-scraped_at: "2025-12-24T05:09:20.790Z"
+scraped_at: "2026-02-20T17:29:37.648Z"
 ---
 
 # Edit existing Connect Tax Engine

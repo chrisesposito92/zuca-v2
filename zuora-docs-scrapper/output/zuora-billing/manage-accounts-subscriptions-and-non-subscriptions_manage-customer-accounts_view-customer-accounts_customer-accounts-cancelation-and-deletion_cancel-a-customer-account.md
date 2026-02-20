@@ -2,14 +2,14 @@
 title: "Cancel a customer account"
 url: "https://docs.zuora.com/en/zuora-billing/manage-accounts-subscriptions-and-non-subscriptions/manage-customer-accounts/view-customer-accounts/customer-accounts-cancelation-and-deletion/cancel-a-customer-account"
 product: "zuora-billing"
-scraped_at: "2026-01-15T21:55:42.946Z"
+scraped_at: "2026-02-20T17:30:08.102Z"
 ---
 
 # Cancel a customer account
 
 This task topic explains how to cancel a customer account by first canceling all the associated subscriptions and following the necessary steps in Zuora.
 
-Before you can cancel a customer account, you must [cancel all the subscriptions](https://docs.zuora.com/en/zuora-billing/manage-accounts-subscriptions-and-non-subscriptions/manage-subscription-transactions/subscribe-and-amend/amend-subscriptions/subscriptions-cancelation) associated with that account (you must cancel active and draft subscriptions). When a customer account is canceled, Zuora will not perform any transactions on that account:
+Before you can cancel a customer account, you must [cancel all the subscriptions](/zuora-billing/manage-accounts-subscriptions-and-non-subscriptions/manage-subscription-transactions/orders/order-actions-tutorials/subscriptions-cancelation) associated with that account (you must cancel active and draft subscriptions). When a customer account is canceled, Zuora will not perform any transactions on that account:
 
 -   Zuora will not generate invoices for canceled accounts
 -   You cannot apply payments for canceled accounts

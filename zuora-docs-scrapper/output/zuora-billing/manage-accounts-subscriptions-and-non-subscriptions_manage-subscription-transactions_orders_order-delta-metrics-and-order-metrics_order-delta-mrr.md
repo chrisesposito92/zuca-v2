@@ -2,7 +2,7 @@
 title: "Order Delta MRR"
 url: "https://docs.zuora.com/en/zuora-billing/manage-accounts-subscriptions-and-non-subscriptions/manage-subscription-transactions/orders/order-delta-metrics-and-order-metrics/order-delta-mrr"
 product: "zuora-billing"
-scraped_at: "2025-12-24T05:25:46.113Z"
+scraped_at: "2026-02-20T17:31:11.675Z"
 ---
 
 # Order Delta MRR
@@ -30,7 +30,7 @@ It is recommended that all customers use the new Order Delta Metrics. If you are
 
 The value of an Order Delta Mrr metric is the change in MRR of a RatePlanCharge as the result of an Order. Order Delta Mrr will be generated asynchronously when an Order causes a change to the MRR of recurring charges. The metrics will be associated with the Order Action that causes the change, and the rate plan charges that the action impacts.
 
-![Mrr model](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/4a7c0235-bdb9-43fe-aff3-5d64de07b58c?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjRhN2MwMjM1LWJkYjktNDNmZS1hZmYzLTVkNjRkZTA3YjU4YyIsImV4cCI6MTc2NjY0MDM0NCwianRpIjoiNGQzYTMxZTA3MDEzNGRmZjhjN2E4Y2YwMDQ5MmZiYWUiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJWZHdCeUJjM0lBa01wRU9LSFdxZCJ9.tf5PRf9YDruqj2jaGsETkXOl1VQcKE1q_GNr9hhO57E)
+![Mrr model](https://zuora.deploy.heretto.com/v4/deployments/QPAZk6lsgXwvotedNERE/object/4a7c0235-bdb9-43fe-aff3-5d64de07b58c?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2pvcnNlay5jb20vZXpkX29yZ2FuaXphdGlvbiI6Inp1b3JhIiwiaHR0cHM6Ly9qb3JzZWsuY29tL2V6ZC9vYmplY3RfdXVpZCI6IjRhN2MwMjM1LWJkYjktNDNmZS1hZmYzLTVkNjRkZTA3YjU4YyIsImV4cCI6MTc3MTY5NTA2NSwianRpIjoiZDE2ZjhmNjNmYzg1NDBiZGFjODkzOGJjMDBmOGI2ODkiLCJodHRwczovL2pvcnNlay5jb20vZXpkX2ZpbGVzZXQiOiJPbkFzQUJUb1lNdVNnalRaVHpuUCJ9.QhPouFqlRpFzQzL8U3EASG0rX8g-sntNSmWrTmGbeJA)
 
 Note:
 
