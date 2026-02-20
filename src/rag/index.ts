@@ -23,7 +23,7 @@
 
 import * as path from 'path';
 import { ZuoraDocsSearch, createSearchInstance } from './search';
-import { buildIndex, loadEmbeddingIndex, embedQuery } from './embeddings';
+import { buildIndex, loadEmbeddingIndex, saveEmbeddingIndex, embedQuery } from './embeddings';
 import { chunkAllDocs, chunkDocument, loadAllDocs } from './chunker';
 import type { DocChunk, EmbeddingIndex, SearchOptions, SearchResult, ZuoraProduct } from './types';
 import { searchWithPostgres, isPostgresReady, formatPostgresContext } from './postgres-backend';
@@ -32,7 +32,7 @@ import { searchWithPostgres, isPostgresReady, formatPostgresContext } from './po
 export type { DocChunk, EmbeddingIndex, SearchOptions, SearchResult, ZuoraProduct };
 
 // Re-export utilities
-export { buildIndex, loadEmbeddingIndex, embedQuery, chunkAllDocs, chunkDocument, loadAllDocs, ZuoraDocsSearch, createSearchInstance };
+export { buildIndex, loadEmbeddingIndex, saveEmbeddingIndex, embedQuery, chunkAllDocs, chunkDocument, loadAllDocs, ZuoraDocsSearch, createSearchInstance };
 
 // Re-export query extraction
 export { extractRagKeywords } from './query-extractor';

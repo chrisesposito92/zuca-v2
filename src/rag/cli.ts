@@ -17,7 +17,7 @@ import { config } from 'dotenv';
 // Load environment
 config();
 
-import { buildRagIndex, searchDocs, getDocContext, getRagStats, isIndexReady, loadEmbeddingIndex, chunkAllDocs } from './index';
+import { buildRagIndex, searchDocs, getDocContext, getRagStats, isIndexReady, loadEmbeddingIndex, saveEmbeddingIndex, chunkAllDocs } from './index';
 import { sql } from '@vercel/postgres';
 import * as fs from 'fs';
 import OpenAI from 'openai';
@@ -205,8 +205,8 @@ async function runRepair() {
     chunks: [...existingIndex.chunks, ...newChunks],
   };
 
-  // Save merged index
-  fs.writeFileSync(INDEX_PATH, JSON.stringify(mergedIndex));
+  // Save merged index (streaming write to avoid V8 string limit)
+  saveEmbeddingIndex(mergedIndex, INDEX_PATH);
 
   console.log(`\n✅ Repair complete!`);
   console.log(`   Added: ${newChunks.length} chunks`);
@@ -230,10 +230,13 @@ async function runMigrate() {
     process.exit(1);
   }
 
-  // Load the index
+  // Load the index (buffer-based read to avoid V8 string limit)
   console.log(`Loading index from ${INDEX_PATH}...`);
-  const indexData = fs.readFileSync(INDEX_PATH, 'utf-8');
-  const index: EmbeddingIndex = JSON.parse(indexData);
+  const index = loadEmbeddingIndex(INDEX_PATH);
+  if (!index) {
+    console.error('❌ Could not parse index file.');
+    process.exit(1);
+  }
   console.log(`Found ${index.chunks.length} chunks to migrate\n`);
 
   // Check current count in Postgres

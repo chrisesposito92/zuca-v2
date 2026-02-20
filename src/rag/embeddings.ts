@@ -58,7 +58,9 @@ async function generateEmbeddingsBatch(
 }
 
 /**
- * Load existing embedding index from disk
+ * Load existing embedding index from disk using buffer-based reading.
+ * Reads the file as a raw Buffer (supports ~2GB) to avoid V8's ~512MB
+ * string limit, then parses each chunk individually.
  */
 export function loadEmbeddingIndex(indexPath: string): EmbeddingIndex | null {
   if (!fs.existsSync(indexPath)) {
@@ -66,16 +68,76 @@ export function loadEmbeddingIndex(indexPath: string): EmbeddingIndex | null {
   }
 
   try {
-    const data = fs.readFileSync(indexPath, 'utf-8');
-    const index = JSON.parse(data) as EmbeddingIndex;
+    // Read as raw Buffer (no encoding) to avoid V8 string limit
+    const buf = fs.readFileSync(indexPath);
 
-    // Check version compatibility
-    if (index.version !== INDEX_VERSION) {
-      console.log(`Index version mismatch (${index.version} vs ${INDEX_VERSION}), will regenerate`);
+    // Find the "chunks":[ marker
+    const marker = Buffer.from('"chunks":[');
+    const markerPos = buf.indexOf(marker);
+    if (markerPos === -1) {
+      console.error('Failed to load embedding index: missing chunks array');
       return null;
     }
 
-    return index;
+    // Parse header (version, updatedAt, model) — small enough for a string
+    const headerStr = buf.slice(0, markerPos).toString('utf-8');
+    // Extract fields from partial JSON like {"version":"1.0.0","updatedAt":"...","model":"...",
+    const versionMatch = headerStr.match(/"version"\s*:\s*"([^"]+)"/);
+    const updatedAtMatch = headerStr.match(/"updatedAt"\s*:\s*"([^"]+)"/);
+    const modelMatch = headerStr.match(/"model"\s*:\s*"([^"]+)"/);
+
+    const version = versionMatch?.[1] ?? '';
+    const updatedAt = updatedAtMatch?.[1] ?? '';
+    const model = modelMatch?.[1] ?? '';
+
+    // Check version compatibility
+    if (version !== INDEX_VERSION) {
+      console.log(`Index version mismatch (${version} vs ${INDEX_VERSION}), will regenerate`);
+      return null;
+    }
+
+    // Parse chunks by scanning for { } boundaries (tracking brace depth + string state)
+    const chunks: DocChunk[] = [];
+    const chunksStart = markerPos + marker.length;
+    let depth = 0;
+    let inString = false;
+    let escaped = false;
+    let chunkStart = -1;
+
+    for (let i = chunksStart; i < buf.length; i++) {
+      const byte = buf[i];
+
+      if (escaped) {
+        escaped = false;
+        continue;
+      }
+
+      if (byte === 0x5C /* backslash */ && inString) {
+        escaped = true;
+        continue;
+      }
+
+      if (byte === 0x22 /* " */) {
+        inString = !inString;
+        continue;
+      }
+
+      if (inString) continue;
+
+      if (byte === 0x7B /* { */) {
+        if (depth === 0) chunkStart = i;
+        depth++;
+      } else if (byte === 0x7D /* } */) {
+        depth--;
+        if (depth === 0 && chunkStart !== -1) {
+          const chunkStr = buf.slice(chunkStart, i + 1).toString('utf-8');
+          chunks.push(JSON.parse(chunkStr) as DocChunk);
+          chunkStart = -1;
+        }
+      }
+    }
+
+    return { version, updatedAt, model, chunks };
   } catch (error) {
     console.error('Failed to load embedding index:', error);
     return null;
@@ -83,11 +145,28 @@ export function loadEmbeddingIndex(indexPath: string): EmbeddingIndex | null {
 }
 
 /**
- * Save embedding index to disk
+ * Save embedding index to disk using streaming writes.
+ * Writes each chunk individually to avoid V8's ~512MB string limit
+ * when serializing 17K+ chunks with 1536-dim embeddings.
  */
 export function saveEmbeddingIndex(index: EmbeddingIndex, indexPath: string): void {
   fs.mkdirSync(path.dirname(indexPath), { recursive: true });
-  fs.writeFileSync(indexPath, JSON.stringify(index));
+  const fd = fs.openSync(indexPath, 'w');
+  try {
+    // Write header fields
+    const header = `{"version":${JSON.stringify(index.version)},"updatedAt":${JSON.stringify(index.updatedAt)},"model":${JSON.stringify(index.model)},"chunks":[`;
+    fs.writeSync(fd, header);
+
+    // Write each chunk individually (~30KB each, well within V8 limits)
+    for (let i = 0; i < index.chunks.length; i++) {
+      if (i > 0) fs.writeSync(fd, ',');
+      fs.writeSync(fd, JSON.stringify(index.chunks[i]));
+    }
+
+    fs.writeSync(fd, ']}');
+  } finally {
+    fs.closeSync(fd);
+  }
 }
 
 /**
